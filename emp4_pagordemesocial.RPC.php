@@ -17,27 +17,27 @@ $oRetorno->message = "";
 
 switch ($oParam->method) {
 
-  case "alterarboxesocial":
+  // case "alterarboxesocial":
     
-    $clpagordemEsocial = new cl_pagordem();
+  //   // $clpagordemEsocial = new cl_pagordem();
     
-    $clpagordemEsocial->e50_cattrabalhador            = $oParam->aCattrabalhador;
-    $clpagordemEsocial->e50_cattrabalhadorremurenacao = $oParam->aCattrabalhadorremurenacao;
-    $clpagordemEsocial->e50_empresadesconto           = $oParam->aEmpresadesconto;
-    $clpagordemEsocial->e50_contribuicaoPrev          = $oParam->aContribuicaoPrev;
-    $clpagordemEsocial->e50_valorremuneracao          = $oParam->avalorremuneracao;
-    $clpagordemEsocial->e50_valordesconto             = $oParam->aValordesconto;
-    if ($oParam->aDatacompetencia) {
-      $clpagordemEsocial->e50_datacompetencia         = formateDateReverse($oParam->aDatacompetencia);
-    }
-    $clpagordemEsocial->alterar($oParam->iCodOrdem, null);
-    if ($clpagordemEsocial->erro_status == 1) {
-      $oRetorno->status      = 2;
-      $oRetorno->message = "Incluido com sucesso!";
-    } else {
-      $oRetorno->message = $clpagordemEsocial->erro_msg;
-    }
-    break;
+  //   // $clpagordemEsocial->e50_cattrabalhador            = $oParam->aCattrabalhador;
+  //   // $clpagordemEsocial->e50_cattrabalhadorremurenacao = $oParam->aCattrabalhadorremurenacao;
+  //   // $clpagordemEsocial->e50_empresadesconto           = $oParam->aEmpresadesconto;
+  //   // $clpagordemEsocial->e50_contribuicaoPrev          = $oParam->aContribuicaoPrev;
+  //   // $clpagordemEsocial->e50_valorremuneracao          = $oParam->avalorremuneracao;
+  //   // $clpagordemEsocial->e50_valordesconto             = $oParam->aValordesconto;
+  //   // if ($oParam->aDatacompetencia) {
+  //   //   $clpagordemEsocial->e50_datacompetencia         = formateDateReverse($oParam->aDatacompetencia);
+  //   // }
+  //   // $clpagordemEsocial->alterar($oParam->iCodOrdem, null);
+  //   // if ($clpagordemEsocial->erro_status == 1) {
+  //   //   $oRetorno->status      = 2;
+  //   //   $oRetorno->message = "Incluido com sucesso!";
+  //   // } else {
+  //   //   $oRetorno->message = $clpagordemEsocial->erro_msg;
+  //   // }
+  //   break;
   case "verificaEsocial":
 
     $clpagordemEsocial      = new cl_pagordem;

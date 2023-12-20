@@ -183,7 +183,7 @@ $aDataEmpenho = explode("-", $e60_emiss);
                     $ldesconto = true;
                 }
             }
-            if(isset($e60_vlrliq) && $e60_vlrliq == 0 && !$ldesconto && $e60_anousu >= db_getsession("DB_anousu")){
+            
                 ?>
                 <tr>
                     <td nowrap title="Desdobramentos">
@@ -247,17 +247,7 @@ $aDataEmpenho = explode("-", $e60_emiss);
                         }
                         ?>
                     </td>
-                </tr>
-                <?
-            }else{
-                if(isset($e60_vlrliq) && $e60_vlrliq != 0){
-                    $mensagem = "Você não pode alterar o desdobramento deste empenho porque este já possui valor liquidado. Se realmente for necessária a alteração, anule todas as liquidações";
-                }else if(isset($ldesconto) && $ldesconto){
-                    $mensagem = "Este empenho teve uma operação de desconto e isto inviabiliza a substituição do desdobramento.";
-                }
-
-            }
-            ?>
+            </tr>
             <tr>
                 <td nowrap title="Tipos de despesa">
                     <strong>Tipos de despesa :</strong>
@@ -722,10 +712,10 @@ $aDataEmpenho = explode("-", $e60_emiss);
 
         if (valor != '0') {
             rowProdutorRural.style.display = "table-row";
-            document.form1.efd60_prodoptacp.value = '1';
+            // document.form1.efd60_prodoptacp.value = '1';
         } else {
             rowProdutorRural.style.display = "none";
-            document.form1.efd60_prodoptacp.value = '0';
+            // document.form1.efd60_prodoptacp.value = '0';
         }
     }
     function js_valida()

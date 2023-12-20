@@ -1,4 +1,4 @@
-<?
+<?php
 set_time_limit(0);
 if (!defined('DB_BIBLIOT')) {
 
@@ -220,7 +220,7 @@ class PDF extends FPDF
         $sDataSistema = '  Exerc: ' . db_getsession("DB_anousu") . '   Data: ' . date("d-m-Y", db_getsession("DB_datausu")) . " - " . date("H:i:s");
       }
       $this->Cell(0, 10, $sMenuAcess . "  " . $nome . '   Emissor: ' . substr(ucwords(strtolower($emissor)), 0, 30) . $sDataSistema, "T", 0, 'L');
-      
+
       if($this->lPageFooter){
         $this->Cell(0, 10, 'Pág ' . $this->PageNo() . '/{nb}', 0, 1, 'R');
       }
@@ -302,6 +302,25 @@ class PDF extends FPDF
     // e porque se ele estiver vazio, retorna um pra conta lá
     return count($aNewPalavras) + 1;
   }
-}
 
-//|XX|//
+    public function MultiAlignCell($w,$h,$text,$border=0,$ln=0,$align='L',$fill=false)
+    {
+        // Guarda os valores do eixo (x,y), as posições.
+        $x = $this->GetX() + $w;
+        $y = $this->GetY();
+
+        // Chama o método MultiCell da classe pai FPDF.
+        $this->MultiCell($w,$h,$text,$border,$align,$fill);
+
+        //Guarda a nova posição da direita, como funciona hoje com o método Cell.
+        if( $ln==0 )
+        {
+            $this->SetXY($x,$y);
+        }
+    }
+
+    public function CalculateCellHeight($text_size, $cell_size, $font_variation = 1.8, $height = 5)
+    {
+        return ceil(($text_size / $cell_size) * $font_variation) * $height;
+    }
+}

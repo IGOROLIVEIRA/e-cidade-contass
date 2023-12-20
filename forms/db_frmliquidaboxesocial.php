@@ -7,7 +7,7 @@
       <td>
         <strong>Incide Contribuição Previdenciária:</strong>
       </td>
-      <td>
+      <td >
         <?
         $aIncide = array('1' => 'Sim', '2' => 'Não');
         db_select('aIncide', $aIncide, true, 1, "onchange='mensagemesocial()'");
@@ -31,7 +31,7 @@
       </td>
     </tr>
     <tr>
-      <td id='idcontri'>
+      <td id='idcontri' colspan="2">
         <strong>Indicador de Desconto da Contribuição Previdenciária:</strong>
       </td>
       <td colspan="2">
@@ -175,9 +175,11 @@
     document.getElementById('vlrdesconto1').style.display = "none";
     document.getElementById('idcontri').style.display = "none";
     document.getElementById('contribuicaoPrev').style.display = "none";
-
-    if (document.form1.contribuicaoPrev.value != '') {
+    if (document.form1.contribuicaoPrev.value) {
       document.form1.multiplosvinculos.value = 1;
+      validarVinculos();
+    } else {
+      document.form1.multiplosvinculos.value = 2;
       validarVinculos();
     }
   }
@@ -278,15 +280,15 @@
       document.getElementById('vlrremuneracao').style.display = "table-cell";
       document.getElementById('vlrdesconto').style.display = "table-cell";
       document.getElementById('vlrdesconto1').style.display = "table-cell";
-      document.getElementById('aIncide').style.width = "30%";
-      document.getElementById('ct01_codcategoria').style.width = "30%";
-      document.getElementById('multiplosvinculos').style.width = "30%";
-      document.getElementById('contribuicaoPrev').style.width = "55%";
-      document.getElementById('numempresa').style.width = "30%";
-      document.getElementById('ct01_codcategoriaremuneracao').style.width = "30%";
-      document.getElementById('valorremuneracao').style.width = "30%";
-      document.getElementById('valordesconto').style.width = "30%";
-      document.getElementById('competencia').style.width = "30%";
+      document.getElementById('aIncide').style.width = "100%";
+      document.getElementById('ct01_codcategoria').style.width = "100%";
+      document.getElementById('multiplosvinculos').style.width = "100%";
+      document.getElementById('contribuicaoPrev').style.width = "29.8%";
+      document.getElementById('numempresa').style.width = "100%";
+      document.getElementById('ct01_codcategoriaremuneracao').style.width = "100%";
+      document.getElementById('valorremuneracao').style.width = "100%";
+      document.getElementById('valordesconto').style.width = "100%";
+      document.getElementById('competencia').style.width = "80%";
     }
     if (document.form1.multiplosvinculos.value == '2') {
       document.getElementById('idcontri').style.display = "none";
@@ -329,31 +331,29 @@
       document.form1.valordesconto.value = document.form1.valordesconto.value.substring(0, valordesconto) + virgula.substring(0, 3);
     }
   }
-  function js_alterarEsocial() 
-  {
-    var oParam = new Object();
-    oParam.method = "alterarboxesocial"
-    oParam.iCodOrdem = $('e50_codord').value
-    oParam.aCattrabalhador = $('ct01_codcategoria').value
-    oParam.aCattrabalhadorremurenacao = $('ct01_codcategoriaremuneracao').value
-    oParam.aEmpresadesconto = $('numempresa').value
-    oParam.aContribuicaoPrev = $('contribuicaoPrev').value
-    oParam.avalorremuneracao = $('valorremuneracao').value
-    oParam.aValordesconto = $('valordesconto').value
-    oParam.aDatacompetencia = $('competencia').value
-    url = 'emp4_pagordemesocial.RPC.php';
-    oAjax = new Ajax.Request(
-      url, {
-        method: 'post',
-        parameters: 'json=' + js_objectToJson(oParam)
-      }
-    );
-  }
+  // function js_alterarEsocial() 
+  // {
+  //   var oParam = new Object();
+  //   oParam.method = "alterarboxesocial"
+  //   oParam.iCodOrdem = $('e50_codord').value
+  //   oParam.aCattrabalhador = $('ct01_codcategoria').value
+  //   oParam.aCattrabalhadorremurenacao = $('ct01_codcategoriaremuneracao').value
+  //   oParam.aEmpresadesconto = $('numempresa').value
+  //   oParam.aContribuicaoPrev = $('contribuicaoPrev').value
+  //   oParam.avalorremuneracao = $('valorremuneracao').value
+  //   oParam.aValordesconto = $('valordesconto').value
+  //   oParam.aDatacompetencia = $('competencia').value
+  //   url = 'emp4_pagordemesocial.RPC.php';
+  //   oAjax = new Ajax.Request(
+  //     url, {
+  //       method: 'post',
+  //       parameters: 'json=' + js_objectToJson(oParam)
+  //     }
+  //   );
+  // }
   function js_preencheDadosEsocial(oAjax) 
   {
     obj = eval("(" + oAjax.responseText + ")");
-    console.log("adsd")
-    console.log(oAjax);
     document.form1.ct01_codcategoria.value = obj.e50_cattrabalhador;
     document.form1.contribuicaoPrev.value = obj.e50_contribuicaoPrev;
     document.form1.numempresa.value = obj.e50_empresadesconto;

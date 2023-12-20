@@ -66,6 +66,11 @@ class cl_pagordem {
    var $e50_datacompetencia = null;
    var $e50_retencaoir = null;
    var $e50_naturezabemservico = null;
+   var $e50_dtvencimento = null;
+   var $e50_dtvencimento_dia = null;
+   var $e50_dtvencimento_mes = null;
+   var $e50_dtvencimento_ano = null;
+   var $e50_numliquidacao = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  e50_codord = int4 = Ordem
@@ -86,6 +91,8 @@ class cl_pagordem {
                  e50_datacompetencia = date = Competência
                  e50_retencaoir = bool = Incide Retenção do Imposto de Renda
                  e50_naturezabemservico = int4 = Codigo de Natureza de Bem ou Serviço
+                 e50_dtvencimento = date = Vencimento
+                 e50_numliquidacao = int8 = Número da Liquidação
                  ";
    //funcao construtor da classe
    function cl_pagordem() {
@@ -115,6 +122,14 @@ class cl_pagordem {
             $this->e50_data = $this->e50_data_ano."-".$this->e50_data_mes."-".$this->e50_data_dia;
          }
        }
+       if($this->e50_dtvencimento == ""){
+        $this->e50_dtvencimento_dia = ($this->e50_dtvencimento_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_dtvencimento_dia"]:$this->e50_dtvencimento_dia);
+        $this->e50_dtvencimento_mes = ($this->e50_dtvencimento_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_dtvencimento_mes"]:$this->e50_dtvencimento_mes);
+        $this->e50_dtvencimento_ano = ($this->e50_dtvencimento_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_dtvencimento_ano"]:$this->e50_dtvencimento_ano);
+        if($this->e50_dtvencimento_dia != ""){
+           $this->e50_data = $this->e50_dtvencimento_ano."-".$this->e50_dtvencimento_mes."-".$this->e50_dtvencimento_dia;
+        }
+      }
        $this->e50_obs = ($this->e50_obs == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_obs"]:$this->e50_obs);
        $this->e50_id_usuario = ($this->e50_id_usuario == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_id_usuario"]:$this->e50_id_usuario);
        $this->e50_hora = ($this->e50_hora == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_hora"]:$this->e50_hora);
@@ -129,7 +144,7 @@ class cl_pagordem {
        $this->e50_datacompetencia = ($this->e50_datacompetencia == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_datacompetencia"]:$this->e50_datacompetencia);
        $this->e50_retencaoir = ($this->e50_retencaoir == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_retencaoir"]:$this->e50_retencaoir) == 'sim' ? 1 : 0; 
        $this->e50_naturezabemservico = ($this->e50_naturezabemservico == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_naturezabemservico"]:$this->e50_naturezabemservico);
-       if($this->e50_compdesp == ""){
+       $this->e50_numliquidacao = ($this->e50_numliquidacao == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_numliquidacao"]:$this->e50_numliquidacao);       if($this->e50_compdesp == ""){
         $this->e50_compdesp_dia = ($this->e50_compdesp_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_dia"]:$this->e50_compdesp_dia);
         $this->e50_compdesp_mes = ($this->e50_compdesp_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_mes"]:$this->e50_compdesp_mes);
         $this->e50_compdesp_ano = ($this->e50_compdesp_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_ano"]:$this->e50_compdesp_ano);
@@ -221,7 +236,15 @@ class cl_pagordem {
        $this->erro_status = "0";
        return false;
      }
-
+     if($this->e50_numliquidacao == null ){
+      $this->erro_sql = " Campo Numero da Liquidação nao Informado.";
+      $this->erro_campo = "e50_numliquidacao";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      $sql = "insert into pagordem(
                                        e50_codord
                                       ,e50_numemp
@@ -241,6 +264,8 @@ class cl_pagordem {
                                       ,e50_datacompetencia
                                       ,e50_retencaoir
                                       ,e50_naturezabemservico
+                                      ,e50_dtvencimento
+                                      ,e50_numliquidacao
                        )
                 values (
                                 $this->e50_codord
@@ -261,6 +286,8 @@ class cl_pagordem {
                                ,".($this->e50_datacompetencia == "null" || $this->e50_datacompetencia == ""?"null":"'".$this->e50_datacompetencia."'")."                               
                                ,$this->e50_retencaoir::bool
                                ,".($this->e50_naturezabemservico == "null" || $this->e50_naturezabemservico == ""?"null":"'".$this->e50_naturezabemservico."'")."
+                               ,".($this->e50_dtvencimento == "null" || $this->e50_dtvencimento == ""?"null":"'".$this->e50_dtvencimento."'")."
+                               ,$this->e50_numliquidacao
                       )";
                 //  echo $sql;exit;
      $result = db_query($sql);
@@ -446,29 +473,50 @@ class cl_pagordem {
       if(trim($this->e50_cattrabalhador)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_cattrabalhador"])){
         $sql  .= $virgula." e50_cattrabalhador = $this->e50_cattrabalhador ";
         $virgula = ",";
+      } else {
+        $sql  .= $virgula." e50_cattrabalhador = null ";
+        $virgula = ",";
       }
       if(trim($this->e50_cattrabalhadorremurenacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_cattrabalhadorremurenacao"])){
         $sql  .= $virgula." e50_cattrabalhadorremurenacao = $this->e50_cattrabalhadorremurenacao ";
+        $virgula = ",";
+      } else {
+        $sql  .= $virgula." e50_cattrabalhadorremurenacao = null ";
         $virgula = ",";
       }
       if(trim($this->e50_empresadesconto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_empresadesconto"])){
         $sql  .= $virgula." e50_empresadesconto = $this->e50_empresadesconto ";
         $virgula = ",";
+      } else {
+        $sql  .= $virgula." e50_empresadesconto = null ";
+        $virgula = ",";
       }
       if(trim($this->e50_contribuicaoPrev)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_contribuicaoPrev"])){
         $sql  .= $virgula." e50_contribuicaoPrev = $this->e50_contribuicaoPrev ";
+        $virgula = ",";
+      } else {
+        $sql  .= $virgula." e50_contribuicaoPrev = null ";
         $virgula = ",";
       }
       if(trim($this->e50_valorremuneracao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_valorremuneracao"])){
         $sql  .= $virgula." e50_valorremuneracao = $this->e50_valorremuneracao ";
         $virgula = ",";
+      } else {
+        $sql  .= $virgula." e50_valorremuneracao = null ";
+        $virgula = ",";
       }
       if(trim($this->e50_valordesconto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_valordesconto"])){
         $sql  .= $virgula." e50_valordesconto = $this->e50_valordesconto ";
         $virgula = ",";
+      }else {
+        $sql  .= $virgula." e50_valordesconto = null ";
+        $virgula = ",";
       }
       if(trim($this->e50_datacompetencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_datacompetencia"])){
         $sql  .= $virgula." e50_datacompetencia = '$this->e50_datacompetencia' ";
+        $virgula = ",";
+      } else {
+        $sql  .= $virgula." e50_datacompetencia = null ";
         $virgula = ",";
       }
       
@@ -503,7 +551,7 @@ class cl_pagordem {
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "Ordens de pagamento nao Alterado. Alteracao Abortada.\\n";
+       $this->erro_sql   = $sql."Ordens de pagamento nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->e50_codord;
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -522,7 +570,7 @@ class cl_pagordem {
          return true;
        }else{
          $this->erro_banco = "";
-         $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+         $this->erro_sql = $sql."Alteração efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$this->e50_codord;
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -1657,6 +1705,17 @@ class cl_pagordem {
     }
     return $sSql;
 }
+
+  function pesquisaNumeroOP($iNumemp){
+    $sSql = "select max(e50_numliquidacao) as e50_numliquidacao from pagordem where e50_numemp = {$iNumemp}";
+    $result = db_utils::fieldsMemory(db_query($sSql), 0)->e50_numliquidacao;
+    if($result != null){
+      $e50_numliquidacao = $result;
+    }else{
+      $e50_numliquidacao = 0;
+    }
+    return $e50_numliquidacao;
+  }
 
 }
 ?>

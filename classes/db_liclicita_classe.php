@@ -3583,7 +3583,8 @@ class cl_liclicita
            WHEN l03_pctipocompratribunal = 51 THEN 3
            WHEN l03_pctipocompratribunal = 53 THEN 6
            WHEN l03_pctipocompratribunal = 52 THEN 7
-           WHEN l03_pctipocompratribunal = 50 THEN 5
+           WHEN l03_pctipocompratribunal = 50 and l03_presencial='f' THEN 4
+           WHEN l03_pctipocompratribunal = 50 and l03_presencial='t' THEN 5
            WHEN l03_pctipocompratribunal = 101 THEN 8
            WHEN l03_pctipocompratribunal = 100 THEN 9
            WHEN l03_pctipocompratribunal = 102 THEN 12
@@ -3756,7 +3757,8 @@ class cl_liclicita
                     WHEN l03_pctipocompratribunal = 51 THEN 3
                     WHEN l03_pctipocompratribunal = 53 THEN 6
                     WHEN l03_pctipocompratribunal = 52 THEN 7
-                    WHEN l03_pctipocompratribunal = 50 THEN 5
+                    WHEN l03_pctipocompratribunal = 50 and l03_presencial='t' THEN 5
+                    WHEN l03_pctipocompratribunal = 50 and l03_presencial='f' THEN 4
                     WHEN l03_pctipocompratribunal = 101 THEN 8
                     WHEN l03_pctipocompratribunal = 100 THEN 9
                     WHEN l03_pctipocompratribunal = 102 THEN 12
@@ -4486,5 +4488,26 @@ class cl_liclicita
         where e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' ";
 
         return $sql;
+    }
+
+    public function queryFornecedoresGanhadores(int $codigoLicitacao): string
+    {
+        return "SELECT DISTINCT
+             z01_numcgm,
+             z01_nome,
+             z01_cgccpf
+         FROM liclicita
+         INNER JOIN liclicitem ON l21_codliclicita=l20_codigo
+         INNER JOIN pcorcamitemlic ON pc26_liclicitem=l21_codigo
+         INNER JOIN pcorcamitem ON pc22_orcamitem=pc26_orcamitem
+         INNER JOIN pcorcamjulg ON pc24_orcamitem=pc22_orcamitem
+         INNER JOIN pcorcamforne ON pc21_orcamforne=pc24_orcamforne
+         INNER JOIN pcorcamval ON pc23_orcamitem=pc22_orcamitem
+             AND pc23_orcamforne = pc21_orcamforne
+         INNER JOIN cgm ON z01_numcgm=pc21_numcgm
+         WHERE
+             l20_codigo={$codigoLicitacao}
+             AND pc24_pontuacao = 1
+             ORDER BY z01_nome;";
     }
 }
