@@ -22,13 +22,13 @@ class GerarFLPGO extends GerarAM {
         $this->sArquivo = "FLPGO";
         $this->abreArquivo();
 
-        $sSql = "select * from flpgo102023 where si195_mes = ". $this->iMes ." and si195_inst = ". db_getsession("DB_instit");
+        $sSql = "select * from flpgo102024 where si195_mes = ". $this->iMes ." and si195_inst = ". db_getsession("DB_instit");
         $rsFLPGO10    = db_query($sSql);
 
-        $sSql2 = "select * from flpgo112023 where si196_mes = ". $this->iMes ." and si196_inst = ". db_getsession("DB_instit");
+        $sSql2 = "select * from flpgo112024 where si196_mes = ". $this->iMes ." and si196_inst = ". db_getsession("DB_instit");
         $rsFLPGO11    = db_query($sSql2);
 
-        $sSql3 = "select * from flpgo122023 where si197_mes = ". $this->iMes ." and si197_inst = ". db_getsession("DB_instit");
+        $sSql3 = "select * from flpgo122024 where si197_mes = ". $this->iMes ." and si197_inst = ". db_getsession("DB_instit");
         $rsFLPGO12    = db_query($sSql3);
 
 
@@ -64,7 +64,7 @@ class GerarFLPGO extends GerarAM {
                 }
                 $aCSVFLPGO10['si195_dscdependencia']                         =   substr($aFLPGO10['si195_dscdependencia'], 0, 150);
                 $aCSVFLPGO10['si195_optouafastpreliminar']                   = str_pad($aFLPGO10['si195_optouafastpreliminar'], 1, "", STR_PAD_LEFT);
-                $aCSVFLPGO10['si195_datfastpreliminar']                     =   empty($aFLPGO10['si195_datfastpreliminar']) ? ' ' : $aFLPGO10['si195_datfastpreliminar']; 
+                $aCSVFLPGO10['si195_datfastpreliminar']                     =   empty($aFLPGO10['si195_datfastpreliminar']) ? ' ' : $aFLPGO10['si195_datfastpreliminar'];
 
                 if($aFLPGO10['si195_indsituacaoservidorpensionista'] == '03'){
 
@@ -97,7 +97,7 @@ class GerarFLPGO extends GerarAM {
                         $aCSVFLPGO10['si195_indsalaaula']            =   $aFLPGO10['si195_indsalaaula'];
                         $aCSVFLPGO10['si195_vlrcargahorariasemanal'] = ' ';
                     }
-                    
+
 
                 }else {
 

@@ -1,7 +1,7 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_parelic102023_classe.php");
+require_once ("classes/db_parelic102024_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarPARELIC.model.php");
 
  /**
@@ -10,29 +10,29 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarPARELIC.
   * @package Contabilidade
   */
 class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArquivoBaseCSV {
-  
+
 	/**
-	 * 
+	 *
 	 * Codigo do layout. (db_layouttxt.db50_codigo)
 	 * @var Integer
 	 */
   protected $iCodigoLayout = 159;
-  
+
   /**
-   * 
+   *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'PARELIC';
-  
+
   /**
-   * 
+   *
    * Construtor da classe
    */
   public function __construct() {
-    
+
   }
-  
+
   /**
 	 * Retorna o codigo do layout
 	 *
@@ -41,12 +41,12 @@ class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArqui
   public function getCodigoLayout(){
     return $this->iCodigoLayout;
   }
-  
+
   /**
-   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV 
+   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
   public function getCampos(){
-    
+
     $aElementos = array(
                         "codOrgao",
                         "codUnidadeSub",
@@ -62,36 +62,36 @@ class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArqui
 				    					  "ufCidadeLogra",
 				    					  "cepLogra",
 				    					  "telefone",
-				    					  "email"					  
-                        );			
+				    					  "email"
+                        );
     return $aElementos;
   }
-  
+
   /**
    * Parecer da Licitação do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados() {
-  	
+
   /**
-  	 * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo 
+  	 * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
   	 */
-  	$clparelic102023 = new cl_parelic102023();
-  	
+  	$clparelic102024 = new cl_parelic102024();
+
   	/**
      * excluir informacoes do mes selecioado
      */
-    db_inicio_transacao(); 
-    $result = db_query($clparelic102023->sql_query(NULL,"*",NULL,"si66_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si66_instit=".db_getsession("DB_instit")));
+    db_inicio_transacao();
+    $result = db_query($clparelic102024->sql_query(NULL,"*",NULL,"si66_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si66_instit=".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clparelic102023->excluir(NULL,"si66_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si66_instit=".db_getsession("DB_instit"));
-      if ($clparelic102023->erro_status == 0) {
-    	  throw new Exception($clparelic102023->erro_msg);
+    	$clparelic102024->excluir(NULL,"si66_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si66_instit=".db_getsession("DB_instit"));
+      if ($clparelic102024->erro_status == 0) {
+    	  throw new Exception($clparelic102024->erro_msg);
       }
     }
     //
-    
-  	
+
+
 		 $sSql=" 	SELECT '10' AS tipoRegistro,
          db_config.db21_tipoinstit AS codOrgaoResp,
          (select lpad(db01_orgao,2,0) || lpad(db01_unidade,3,0) from db_departorg where db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu").") as codUnidadeSubResp,
@@ -110,33 +110,33 @@ class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArqui
          AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao)= ".$this->sDataFinal['5'].$this->sDataFinal['6'];
 
 		 $rsResult10 = db_query($sSql);
-    
+
     	for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-      
-	    	$clparelic102023 = new cl_parelic102023();
+
+	    	$clparelic102024 = new cl_parelic102024();
 	    	$oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-	   
-		  $clparelic102023->si66_tiporegistro                 = 10;
-		  $clparelic102023->si66_codorgao                     = $oDados10->codorgaoresp;
-		  $clparelic102023->si66_codunidadesub                = $oDados10->codunidadesubresp;
-		  $clparelic102023->si66_exerciciolicitacao           = $oDados10->exerciciolicitacao;
-		  $clparelic102023->si66_nroprocessolicitatorio       = $oDados10->nroprocessolicitatorio;        
-		  $clparelic102023->si66_dataparecer                  = $oDados10->dataparecer;
-		  $clparelic102023->si66_tipoparecer                  = $oDados10->tipoparecer;
-		  $clparelic102023->si66_nrocpf                       = $oDados10->nrocpf;
-		  $clparelic102023->si66_instit		   		     	  = db_getsession("DB_instit");
-		  $clparelic102023->si66_mes                          = $this->sDataFinal['5'].$this->sDataFinal['6'];
-		  
-		  $clparelic102023->incluir(null);
-		  if ($clparelic102023->erro_status == 0) {
-		  	throw new Exception($clparelic102023->erro_msg);
+
+		  $clparelic102024->si66_tiporegistro                 = 10;
+		  $clparelic102024->si66_codorgao                     = $oDados10->codorgaoresp;
+		  $clparelic102024->si66_codunidadesub                = $oDados10->codunidadesubresp;
+		  $clparelic102024->si66_exerciciolicitacao           = $oDados10->exerciciolicitacao;
+		  $clparelic102024->si66_nroprocessolicitatorio       = $oDados10->nroprocessolicitatorio;
+		  $clparelic102024->si66_dataparecer                  = $oDados10->dataparecer;
+		  $clparelic102024->si66_tipoparecer                  = $oDados10->tipoparecer;
+		  $clparelic102024->si66_nrocpf                       = $oDados10->nrocpf;
+		  $clparelic102024->si66_instit		   		     	  = db_getsession("DB_instit");
+		  $clparelic102024->si66_mes                          = $this->sDataFinal['5'].$this->sDataFinal['6'];
+
+		  $clparelic102024->incluir(null);
+		  if ($clparelic102024->erro_status == 0) {
+		  	throw new Exception($clparelic102024->erro_msg);
 		  }
-    
-  	} 
+
+  	}
  	  db_fim_transacao();
-    
+
     $oGerarPARELIC = new GerarPARELIC();
     $oGerarPARELIC->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
-    $oGerarPARELIC->gerarDados();		
-  }		
-}	
+    $oGerarPARELIC->gerarDados();
+  }
+}

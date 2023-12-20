@@ -1,10 +1,10 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_rsp102023_classe.php");
-require_once ("classes/db_rsp112023_classe.php");
-require_once ("classes/db_rsp202321_classe.php");
-require_once ("classes/db_rsp212023_classe.php");
+require_once ("classes/db_rsp102024_classe.php");
+require_once ("classes/db_rsp112024_classe.php");
+require_once ("classes/db_rsp202024_classe.php");
+require_once ("classes/db_rsp212024_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarRSP.model.php");
 
  /**
@@ -13,57 +13,57 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarRSP.mode
   * @package Contabilidade
   */
 class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBaseCSV {
-  
+
   /**
-   * 
+   *
    * Codigo do layout
    * @var Integer
    */
   protected $iCodigoLayout;
-  
+
   /**
-   * 
+   *
    * Nome do arquivo a ser criado
    * @var unknown_type
    */
   protected $sNomeArquivo = 'RSP';
-  
-  /* 
+
+  /*
    * Contrutor da classe
    */
   public function __construct() {
-    
+
   }
-  
+
   /**
    * retornar o codigo do layout
-   * 
+   *
    *@return Integer
    */
   public function getCodigoLayout(){
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
-   *@return Array 
+   *@return Array
    */
   public function getCampos(){
 
   }
-  
+
   /**
    * selecionar os dados de Leis de Alteração
-   * 
+   *
    */
   public function gerarDados() {
 
-    
-    $clrsp10 = new cl_rsp102023();
-    $clrsp11 = new cl_rsp112023();
-    $clrsp20 = new cl_rsp202321();
-    $clrsp21 = new cl_rsp212023();
-    
+
+    $clrsp10 = new cl_rsp102024();
+    $clrsp11 = new cl_rsp112024();
+    $clrsp20 = new cl_rsp202024();
+    $clrsp21 = new cl_rsp212024();
+
     db_inicio_transacao();
 
         /*
@@ -71,7 +71,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
      */
     $result = $clrsp11->sql_record($clrsp11->sql_query(NULL,"*",NULL,"si113_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si113_instit = ".db_getsession("DB_instit") ));
     if (pg_num_rows($result) > 0) {
-      
+
       $clrsp11->excluir(NULL,"si113_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si113_instit = ".db_getsession("DB_instit"));
       if ($clrsp11->erro_status == 0) {
         throw new Exception($clrsp11->erro_msg);
@@ -99,7 +99,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         throw new Exception($clrsp21->erro_msg);
       }
     }
-    
+
     /*
      * excluir informacoes do mes selecionado registro 20
      */
@@ -110,18 +110,18 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         throw new Exception($clrsp20->erro_msg);
       }
     }
-    
+
     //echo db_getsession("DB_anousu");
 
     //echo $this->sDataFinal;exit;
-    
+
     /*$sSql  = "SELECT si09_codorgaotce AS codorgao
               FROM infocomplementaresinstit
               WHERE si09_instit = ".db_getsession("DB_instit");
-      
+
     $rsResult  = db_query($sSql);
     $sCodorgao = db_utils::fieldsMemory($rsResult, 0)->codorgao;*/
-  
+
     /*
      * selecionar informacoes registro 10
      */
@@ -134,22 +134,22 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
        dtempenho,
        dotorig,
        vlremp as vloriginal,
-       (vlremp - vlranu - vlrliq) as vlsaldoantnaoproc, 
+       (vlremp - vlranu - vlrliq) as vlsaldoantnaoproc,
        (vlrliq - vlrpag) as vlsaldoantproce
- from (select '10' as tiporegistro, 
+ from (select '10' as tiporegistro,
   e60_numemp as codreduzidorsp,
   si09_codorgaotce as codorgao,
         lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) as codunidadesub,
         e60_codemp as nroempenho,
         e60_anousu as exercicioempenho,
-  e60_emiss as dtempenho, 
+  e60_emiss as dtempenho,
   case when e60_anousu >= 2013 then ' ' else
   lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0)||lpad(o58_programa,3,0)||lpad(o58_projativ,4,0)||
   substr(o56_elemento,2,6)||'00' end as dotorig,
                 sum(case when c71_coddoc = 1          then round(c70_valor,2) else 0 end) as vlremp,
                 sum(case when c71_coddoc in (2,31,32) then round(c70_valor,2) else 0 end) as vlranu,
                 sum(case when c71_coddoc in (3,23,33) then round(c70_valor,2)
-                         when c71_coddoc in (4,24,34) then round(c70_valor,2) *-1     
+                         when c71_coddoc in (4,24,34) then round(c70_valor,2) *-1
                          else 0 end) as vlrliq,
                 sum(case when c71_coddoc in (5,35,37) then round(c70_valor,2)
                          when c71_coddoc in (6,36,38) then round(c70_valor,2) *-1
@@ -178,11 +178,11 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
                 z01_nome,
                 e60_numemp,
                 o58_codigo,
-                o58_orgao, 
-                o58_unidade, 
-                o58_funcao, 
-                o58_subfuncao, 
-                o58_programa, 
+                o58_orgao,
+                o58_unidade,
+                o58_funcao,
+                o58_subfuncao,
+                o58_programa,
                 o58_projativ,
                 o56_elemento,
                 o15_codtri,
@@ -190,12 +190,12 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
     where (vlremp - vlranu - vlrliq) != 0 or (vlrliq - vlrpag) != 0;";
 
     $rsResult10 = db_query($sSql);
-    
+
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-      $clrsp10 = new cl_rsp102023();
+      $clrsp10 = new cl_rsp102024();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-      
+
       $clrsp10->si112_tiporegistro                 = 10;
       $clrsp10->si112_codreduzidorsp               = $oDados10->codreduzidorsp;
       $clrsp10->si112_codorgao                     = $oDados10->codorgao;
@@ -209,13 +209,13 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
       $clrsp10->si112_vlsaldoantnaoproc            = $oDados10->vlsaldoantnaoproc;
       $clrsp10->si112_mes                          = $this->sDataFinal['5'].$this->sDataFinal['6'];
       $clrsp10->si112_instit                       = db_getsession("DB_instit");
-      
+
       $clrsp10->incluir(null);
 
       if ($clrsp10->erro_status == 0) {
         throw new Exception($clrsp10->erro_msg);
       }
-      
+
       /*
        * selecionar informacoes registro 11
        */
@@ -223,23 +223,23 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
        codreduzidorsp,
        codfontrecursos,
        vlremp as vloriginal,
-       (vlremp - vlranu - vlrliq) as vlsaldoantnaoproc, 
+       (vlremp - vlranu - vlrliq) as vlsaldoantnaoproc,
        (vlrliq - vlrpag) as vlsaldoantproce
-       from (select '11' as tiporegistro, 
+       from (select '11' as tiporegistro,
         e60_numemp as codreduzidorsp,
         si09_codorgaotce as codorgao,
         lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) as codunidadesub,
         e60_codemp as nroempenho,
         e60_anousu as exercicioempenho,
         e60_emiss as dtempenho,
-        o15_codtri as codfontrecursos,  
+        o15_codtri as codfontrecursos,
         case when e60_anousu = 2013 then ' ' else
         lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0)||lpad(o58_programa,3,0)||lpad(o58_projativ,4,0)||
         substr(o56_elemento,2,6)||'00' end as dotorig,
                 sum(case when c71_coddoc = 1          then round(c70_valor,2) else 0 end) as vlremp,
                 sum(case when c71_coddoc in (2,31,32) then round(c70_valor,2) else 0 end) as vlranu,
                 sum(case when c71_coddoc in (3,23,33) then round(c70_valor,2)
-                         when c71_coddoc in (4,24,34) then round(c70_valor,2) *-1     
+                         when c71_coddoc in (4,24,34) then round(c70_valor,2) *-1
                          else 0 end) as vlrliq,
                 sum(case when c71_coddoc in (5,35,37) then round(c70_valor,2)
                          when c71_coddoc in (6,36,38) then round(c70_valor,2) *-1
@@ -267,11 +267,11 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
                 z01_nome,
                 e60_numemp,
                 o58_codigo,
-                o58_orgao, 
-                o58_unidade, 
-                o58_funcao, 
-                o58_subfuncao, 
-                o58_programa, 
+                o58_orgao,
+                o58_unidade,
+                o58_funcao,
+                o58_subfuncao,
+                o58_programa,
                 o58_projativ,
                 o56_elemento,
                 o15_codtri,
@@ -280,10 +280,10 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 
       $rsResult11 = db_query($sSql);
       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
-        
-        $clrsp11 = new cl_rsp112023();
+
+        $clrsp11 = new cl_rsp112024();
         $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
-        
+
         $clrsp11->si113_tiporegistro           = 11;
         $clrsp11->si113_reg10                  = $clrsp10->si112_sequencial;
         $clrsp11->si113_codreduzidorsp         = $oDados11->codreduzidorsp;
@@ -293,17 +293,17 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         $clrsp11->si113_vlsaldoantnaoprocfonte = $oDados11->vlsaldoantnaoproc;
         $clrsp11->si113_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
         $clrsp11->si113_instit                 = db_getsession("DB_instit");
-        
+
         $clrsp11->incluir(null);
 
         if ($clrsp11->erro_status == 0) {
           throw new Exception($clrsp11->erro_msg);
         }
-        
+
       }
-      
+
     }
-    
+
     /*
      * selecionar informacoes registro 20
      */
@@ -326,7 +326,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
        e94_motivo as justificativa,
        '99' as atocancelamento,
        '99' as dataatocancelamento
-        from conlancamdoc 
+        from conlancamdoc
         join conlancamemp on c71_codlan = c75_codlan
         join empempenho on c75_numemp = e60_numemp
         join conlancam on c70_codlan = c71_codlan
@@ -337,14 +337,14 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         join empanulado on e94_numemp = e60_numemp
         left join infocomplementaresinstit on codigo = si09_instit
         where c71_coddoc in (31,32) and c71_data between '{$this->sDataInicial}' and '{$this->sDataFinal}';";
-        
+
     $rsResult20 = db_query($sSql);
-    
+
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
-      
-      $clrsp20 = new cl_rsp202321();
+
+      $clrsp20 = new cl_rsp202024();
       $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
-      
+
       $clrsp20->si115_tiporegistro                   = 20;
       $clrsp20->si115_codreduzidomov                 = $oDados20->codreduzidomov;
       $clrsp20->si115_codorgao                       = $oDados20->codorgao;
@@ -364,21 +364,21 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
       $clrsp20->si115_dataatocancelamento            = $oDados20->dataatocancelamento;
       $clrsp20->si115_mes                            = $this->sDataFinal['5'].$this->sDataFinal['6'];
       $clrsp20->si115_instit                         = db_getsession("DB_instit");
-      
+
       $clrsp20->incluir(null);
       if ($clrsp20->erro_status == 0) {
         throw new Exception($clrsp20->erro_msg);
       }
-      
+
       /*
        * selecionar informacoes registro 21
        */
 
       $sSql = "select '21' as  tiporegistro,
        e60_numemp as codreduzidomov,
-       o15_codtri as codfontrecursos, 
+       o15_codtri as codfontrecursos,
        c70_valor as vlmovimentacao
-       from conlancamdoc 
+       from conlancamdoc
        join conlancamemp on c71_codlan = c75_codlan
        join empempenho on c75_numemp = e60_numemp
        join conlancam on c70_codlan = c71_codlan
@@ -392,10 +392,10 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 
       $rsResult21 = db_query($sSql);
       for ($iCont21 = 0; $iCont21 < pg_num_rows($rsResult21); $iCont21++) {
-        
-        $clrsp21 = new cl_rsp212023();
+
+        $clrsp21 = new cl_rsp212024();
         $oDados21 = db_utils::fieldsMemory($rsResult21, $iCont21);
-        
+
         $clrsp21->si116_tiporegistro            = 21;
         $clrsp21->si116_reg20                   = $clrsp20->si115_sequencial;
         $clrsp21->si116_codreduzidomov          = $oDados20->codreduzidomov;
@@ -403,22 +403,22 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         $clrsp21->si116_vlmovimentacaofonte     = $oDados21->vlmovimentacaofonte;
         $clrsp21->si116_mes                     = $this->sDataFinal['5'].$this->sDataFinal['6'];
         $clrsp21->si116_instit                  = db_getsession("DB_instit");
-        
+
         $clrsp21->incluir(null);
         if ($clrsp21->erro_status == 0) {
           throw new Exception($clrsp21->erro_msg);
         }
-        
+
       }
-      
+
     }
-    
+
     db_fim_transacao();
-    
+
     $oGerarRSP = new GerarRSP();
     $oGerarRSP->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
     $oGerarRSP->gerarDados();
-    
+
   }
-  
+
 }

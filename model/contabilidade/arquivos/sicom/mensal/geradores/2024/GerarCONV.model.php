@@ -23,22 +23,22 @@ class GerarCONV extends GerarAM
     $this->sArquivo = "CONV";
     $this->abreArquivo();
 
-    $sSql = "select * from conv102023 where si92_mes = " . $this->iMes . " and si92_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from conv102024 where si92_mes = " . $this->iMes . " and si92_instit = " . db_getsession("DB_instit");
     $rsCONV10 = db_query($sSql);
 
-    $sSql2 = "select * from conv112023 where si93_mes = " . $this->iMes . " and si93_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from conv112024 where si93_mes = " . $this->iMes . " and si93_instit = " . db_getsession("DB_instit");
     $rsCONV11 = db_query($sSql2);
 
-    $sSql3 = "select * from conv202023 where si94_mes = " . $this->iMes . " and si94_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from conv202024 where si94_mes = " . $this->iMes . " and si94_instit = " . db_getsession("DB_instit");
     $rsCONV20 = db_query($sSql3);
 
-    $sSql4 = "select * from conv212023 where si232_mes = " . $this->iMes . " and si232_instint = " . db_getsession("DB_instit");
+    $sSql4 = "select * from conv212024 where si232_mes = " . $this->iMes . " and si232_instint = " . db_getsession("DB_instit");
     $rsCONV21 = db_query($sSql4);
 
-    $sSql5 = "select * from conv302023 where si203_mes = " . $this->iMes . " and si203_instit = " . db_getsession("DB_instit");
+    $sSql5 = "select * from conv302024 where si203_mes = " . $this->iMes . " and si203_instit = " . db_getsession("DB_instit");
     $rsCONV30 = db_query($sSql5);
 
-    $sSql6 = "select * from conv312023 where si204_mes = " . $this->iMes . " and si204_instit = " . db_getsession("DB_instit");
+    $sSql6 = "select * from conv312024 where si204_mes = " . $this->iMes . " and si204_instit = " . db_getsession("DB_instit");
     $rsCONV31 = db_query($sSql6);
 
     //echo $sSql."-".$sSql3; exit;
@@ -158,7 +158,7 @@ class GerarCONV extends GerarAM
 
             $this->sLinha = $aCSVCONV30;
             $this->adicionaLinha();
-            
+
             /**
              *
              * Registros 31
@@ -166,10 +166,10 @@ class GerarCONV extends GerarAM
             for ($iCont5 = 0; $iCont5 < pg_num_rows($rsCONV31); $iCont5++) {
 
                 $aCONV31 = pg_fetch_array($rsCONV31, $iCont5);
-                
+
                 if ($aCONV30['si203_codreceita'] == $aCONV31['si204_codreceita']) {
                   $totalregisto30 -= $aCONV31['si204_vlprevisaoconvenio'];
-                  if($totalregisto30 >= 0){  
+                  if($totalregisto30 >= 0){
                     $aCSVCONV31['si204_tiporegistro']                 = $this->padLeftZero($aCONV31['si204_tiporegistro'], 2);
                     $aCSVCONV31['si204_codreceita'] = $aCONV31['si204_codreceita'];
                     $aCSVCONV31['si204_prevorcamentoassin'] = $aCONV31['si204_prevorcamentoassin'];
@@ -179,7 +179,7 @@ class GerarCONV extends GerarAM
 
                     $this->sLinha = $aCSVCONV31;
                     $this->adicionaLinha();
-                  }  
+                  }
                 }
 
             }

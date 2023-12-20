@@ -3,10 +3,10 @@
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
-require_once("classes/db_anl102023_classe.php");
-require_once("classes/db_anl112023_classe.php");
+require_once("classes/db_anl102024_classe.php");
+require_once("classes/db_anl112024_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarANL.model.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarANL.model.php");
 
 /**
  * detalhamento dos empenhos do mês Sicom Acompanhamento Mensal
@@ -97,8 +97,8 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
     {
 
 
-        $regitro10 = new cl_anl102023();
-        $regitro11 = new cl_anl112023();
+        $regitro10 = new cl_anl102024();
+        $regitro11 = new cl_anl112024();
 
         $sSqlUnidade = "select * from infocomplementares where
   	 si08_anousu = " . db_getsession("DB_anousu") . " and si08_instit = " . db_getsession("DB_instit");
@@ -158,7 +158,7 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
                                               ELSE o41_codtri
                                           END),3,0) AS codunidadesub,
                                           c70_codlan,
-            e60_tipodespesa                              
+            e60_tipodespesa
             FROM conlancam
             JOIN conlancamcompl ON c70_codlan = c72_codlan
             JOIN conlancamemp ON c75_codlan = c70_codlan
@@ -221,7 +221,7 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
 
             }
 
-            $oDadosEmpenhoAnulado = new cl_anl102023();
+            $oDadosEmpenhoAnulado = new cl_anl102024();
 
             $oDadosEmpenhoAnulado->si110_tiporegistro = 10;
             $oDadosEmpenhoAnulado->si110_codorgao = str_pad($oEmpenhoAnulado->si09_codorgaotce, 2, "0", STR_PAD_LEFT);
@@ -248,7 +248,7 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
             }
 
 
-            $oDadosEmpenhoAnuladoFonte = new cl_anl112023();
+            $oDadosEmpenhoAnuladoFonte = new cl_anl112024();
 
             $oCodigoAcompanhamento = new ControleOrcamentario();
             $oCodigoAcompanhamento->setTipoDespesa($oEmpenhoAnulado->e60_tipodespesa);

@@ -1,8 +1,8 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_pessoa102023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarPESSOA.model.php");
+require_once("classes/db_pessoa102024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarPESSOA.model.php");
 
 /**
  * gerar arquivo pessoal Sicom Acompanhamento Mensal
@@ -63,7 +63,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-        $clpessoa = new cl_pessoa102023();
+        $clpessoa = new cl_pessoa102024();
 
         /**
          * excluir informacoes do mes selecionado
@@ -108,7 +108,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV
         );
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
-            $clpessoa = new cl_pessoa102023();
+            $clpessoa = new cl_pessoa102024();
             $oDados = db_utils::fieldsMemory($rsResult, $iCont);
 
             $aHash = $oDados->z01_cgccpf;

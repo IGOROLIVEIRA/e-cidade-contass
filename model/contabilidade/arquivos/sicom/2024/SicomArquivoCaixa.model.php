@@ -3,9 +3,9 @@
 
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_caixa102023_classe.php");
-require_once ("classes/db_caixa112023_classe.php");
-require_once ("classes/db_caixa122023_classe.php");
+require_once ("classes/db_caixa102024_classe.php");
+require_once ("classes/db_caixa112024_classe.php");
+require_once ("classes/db_caixa122024_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarCAIXA.model.php");
 
  /**
@@ -14,29 +14,29 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarCAIXA.mo
   * @package Contabilidade
   */
 class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
-  
+
 	/**
-	 * 
+	 *
 	 * Codigo do layout. (db_layouttxt.db50_codigo)
 	 * @var Integer
 	 */
   protected $iCodigoLayout = 165;
-  
+
   /**
-   * 
+   *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'CAIXA';
-  
+
   /**
-   * 
+   *
    * Construtor da classe
    */
   public function __construct() {
-    
+
   }
-  
+
   /**
 	 * Retorna o codigo do layout
 	 *
@@ -45,48 +45,48 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
   public function getCodigoLayout(){
     return $this->iCodigoLayout;
   }
-  
+
   /**
-   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV 
+   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
   public function getCampos(){
-    
-   
+
+
   }
-  
+
   /**
    * selecionar os dados das contas Caixa
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados() {
-  	
-  	
-    $clcaixa122023 = new cl_caixa122023();
-    $clcaixa112023 = new cl_caixa112023();
-    $clcaixa102023 = new cl_caixa102023();
-  	
-    
+
+
+    $clcaixa122024 = new cl_caixa122024();
+    $clcaixa112024 = new cl_caixa112024();
+    $clcaixa102024 = new cl_caixa102024();
+
+
          /*
          * SE JA FOI GERADO ESTA ROTINA UMA VEZ O SISTEMA APAGA OS DADOS DO BANCO E GERA NOVAMENTE
          */
 	    db_inicio_transacao();
-	    $result = $clcaixa102023->sql_record($clcaixa102023->sql_query(NULL,"*",NULL,"si103_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." 
+	    $result = $clcaixa102024->sql_record($clcaixa102024->sql_query(NULL,"*",NULL,"si103_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
 	     and si103_instit = ".db_getsession("DB_instit")));
 	    if (pg_num_rows($result) > 0) {
-	    	
-	    	$clcaixa122023->excluir(NULL,"si105_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." 
+
+	    	$clcaixa122024->excluir(NULL,"si105_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
 	    	and si105_instit = ".db_getsession("DB_instit"));
-	    	$clcaixa112023->excluir(NULL,"si104_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." 
+	    	$clcaixa112024->excluir(NULL,"si104_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
 	    	and si104_instit = ".db_getsession("DB_instit"));
-	    	$clcaixa102023->excluir(NULL,"si103_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." 
+	    	$clcaixa102024->excluir(NULL,"si103_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
 	    	and si103_instit = ".db_getsession("DB_instit"));
-	   
-	      if ($clcaixa102023->erro_status == 0) {
-	    	  throw new Exception($clcaixa102023->erro_msg);
+
+	      if ($clcaixa102024->erro_status == 0) {
+	    	  throw new Exception($clcaixa102024->erro_msg);
 	      }
 	    }
 	    db_fim_transacao();
-	   
+
     /*
      * PEGA TODAS AS CONTAS CAIXA DA INSTIUICAO
      */
@@ -94,59 +94,59 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
     $sSqlContasCaixa .= "conplano join conplanoreduz on c60_codcon = c61_codcon left join  infocomplementaresinstit on c61_instit = si09_instit ";
     $sSqlContasCaixa .= "where c60_codsis = 5 and c60_anousu = ".db_getsession("DB_anousu");
     $sSqlContasCaixa .= " and c61_anousu = ".db_getsession("DB_anousu")." and c61_instit = ".db_getsession("DB_instit");
-    
+
     $rsContasCaixa = db_query($sSqlContasCaixa);
-    
+
     /**
      * percorrer registros de contas retornados do sql acima para pega saldo anterior
      */
-    
+
     for ($iCont = 0;$iCont < pg_num_rows($rsContasCaixa); $iCont++) {
-      	    	
+
     	$oContas = db_utils::fieldsMemory($rsContasCaixa,$iCont);
-    	
+
     	$where  = " c61_instit in (".db_getsession("DB_instit").") and c60_codsis in (5) ";
     	$where .= "and c61_codcon = ".$oContas->c60_codcon;
- 
+
         $rsPlanoContas = db_planocontassaldo(db_getsession("DB_anousu"),$this->sDataInicial,$this->sDataFinal,false,$where);
     	//db_criatabela($rsPlanoContas);
         for ($iContPlano = 0; $iContPlano < pg_num_rows($rsPlanoContas);$iContPlano++) {
-    	  
+
 	      	if (db_utils::fieldsMemory($rsPlanoContas, $iContPlano)->c61_reduz != 0) {
 	      	  $oPlanoContas = db_utils::fieldsMemory($rsPlanoContas, $iContPlano);
 	      	}
-      	
+
         }
 
-             
+
         db_inicio_transacao();
-    	
-         
+
+
 	       if($oPlanoContas->sinal_final == 'C'){
 	       	$nSaldoFinal = $oPlanoContas->saldo_final * -1;
 	       }else{
 	       	$nSaldoFinal = $oPlanoContas->saldo_final;
 	       }
-	       
+
            if($oPlanoContas->sinal_anterior == 'C'){
 	       	$nSaldoInicial = $oPlanoContas->saldo_anterior * -1;
 	       }else{
 	       	$nSaldoInicial = $oPlanoContas->saldo_anterior;
 	       }
-    	
-    	  $oDadosCaixa = new cl_caixa102023();
-    	
+
+    	  $oDadosCaixa = new cl_caixa102024();
+
     	  $oDadosCaixa->si103_tiporegistro    = 10;
     	  $oDadosCaixa->si103_codorgao        = $oContas->si09_codorgaotce;
     	  $oDadosCaixa->si103_vlsaldoinicial  = $nSaldoInicial;
     	  $oDadosCaixa->si103_vlsaldofinal    = $nSaldoFinal;
     	  $oDadosCaixa->si103_mes   	      = $this->sDataFinal['5'].$this->sDataFinal['6'];
     	  $oDadosCaixa->si103_instit          = db_getsession("DB_instit");
-    	  
+
     	  $oDadosCaixa->incluir(null);
-    	  
-    	    	
-    	
+
+
+
     	$sSql = "select  11 as tiporegistro,
 				        c69_codlan as codreduzido ,
 				        1 as tipomovimentacao,
@@ -154,9 +154,9 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
 				             when c71_coddoc in (100) then 1
 				             when c71_coddoc in (140) then 3
 				             when c71_coddoc in (121,131,141,152,153,162,163,6,36,38,101) then 8
-				             else 10 
+				             else 10
 				         end as tipoentrsaida,
-				        case when c71_coddoc not in (100,101,140,121,131,152,153,162,163,6,36,38,5,35,37) then substr(c72_complem,1,50) 
+				        case when c71_coddoc not in (100,101,140,121,131,152,153,162,163,6,36,38,5,35,37) then substr(c72_complem,1,50)
 				             else ' '
 				        end as descrmovimentacao,
 				        c69_valor as valorEntrsaida,
@@ -165,16 +165,16 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
 				        from conlancamval
 				        join conlancamdoc on c71_codlan = c69_codlan
 				   left join conlancamrec on c74_codlan = c69_codlan
-				   left join orcreceita on c74_codrec = o70_codrec and o70_anousu = ".db_getsession("DB_anousu")."     
+				   left join orcreceita on c74_codrec = o70_codrec and o70_anousu = ".db_getsession("DB_anousu")."
 				   left join conplanoreduz on c61_reduz = c69_credito and c61_anousu = ".db_getsession("DB_anousu")."
 				   left join orcfontes on o70_codfon = o57_codfon and o70_anousu = o57_anousu
 				   left join orctiporec on o15_codigo = c61_codigo
 				   left join conlancamcompl on c72_codlan = c71_codlan
 				       where c69_debito = {$oContas->c61_reduz}
 				         and c69_data between '".$this->sDataInicial."' AND '".$this->sDataFinal."'
-				
-				union all 
-				
+
+				union all
+
 				select  11 as tiporegistro,
 				        c69_codlan as codreduzido ,
 				        case when c71_coddoc in (101) and substr(o57_fonte,1,2) = '49' then 1 else 2 end as tipomovimentacao,
@@ -182,10 +182,10 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
 				             when c71_coddoc in (101) and substr(o57_fonte,1,2) = '49' then 1
 				             when c71_coddoc in (140) then 3
 				             when c71_coddoc in (121,131,141,152,153,162,163,6,36,38,101) then 8
-				             when c71_coddoc in (5,35,37) then 6 
-				             else 10 
+				             when c71_coddoc in (5,35,37) then 6
+				             else 10
 				         end as tipoentrsaida,
-				        case when c71_coddoc not in (100,101,140,121,131,152,153,162,163,6,36,38,5,35,37) then substr(c72_complem,1,50) 
+				        case when c71_coddoc not in (100,101,140,121,131,152,153,162,163,6,36,38,5,35,37) then substr(c72_complem,1,50)
 				             else ' '
 				        end as descrmovimentacao,
 				        c69_valor as valorEntrsaida,
@@ -194,18 +194,18 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
 				        from conlancamval
 				        join conlancamdoc on c71_codlan = c69_codlan
 				   left join conlancamrec on c74_codlan = c69_codlan
-				   left join orcreceita on c74_codrec = o70_codrec and o70_anousu = ".db_getsession("DB_anousu")."     
+				   left join orcreceita on c74_codrec = o70_codrec and o70_anousu = ".db_getsession("DB_anousu")."
 				   left join conplanoreduz on c61_reduz = c69_debito and c61_anousu = ".db_getsession("DB_anousu")."
 				   left join orcfontes on o70_codfon = o57_codfon and o70_anousu = o57_anousu
 				   left join orctiporec on o15_codigo = c61_codigo
 				   left join conlancamcompl on c72_codlan = c71_codlan
 				       where c69_credito = {$oContas->c61_reduz}
 				         and c69_data between '".$this->sDataInicial."' AND '".$this->sDataFinal."'";
-		     
+
 		    // echo $sSql;exit;
-		   		
+
     		$rsMovi = db_query($sSql);
-    		
+
     		echo pg_last_error();
     		//db_criatabela($rsMovi);exit;
     		$aDadosAgrupados = array();
@@ -213,27 +213,27 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
     		 * passar os dados do registro 11 para o array $this->aDados
     		 */
     		for ($iCont2 = 0; $iCont2 < pg_num_rows($rsMovi); $iCont2++) {
-    		
+
     		  $oMovi  = db_utils::fieldsMemory($rsMovi, $iCont2);
-    		  
-    		    
+
+
     		  $sHash  = $oMovi->tiporegistro;
     		  $sHash .= $oMovi->tipomovimentacao;
     		  $sHash .= $oMovi->tipoentrsaida;
     		  $sHash .= $oMovi->codctbtransf;
     		  $sHash .= $oMovi->codfontectbtransf;
-    		  
+
     		  if($oMovi->c71_coddoc == 101 && $oMovi->dedu == '49'){
     		  	$nValor = $oMovi->valorentrsaida * -1;
-    		  	
+
     		  }else{
     		  	$nValor = $oMovi->valorentrsaida;
     		  }
-    		      		  
+
     		  if (!isset($aDadosAgrupados[$sHash])) {
-    		  
+
 	    		  $oDadosMovi = new stdClass();
-	    		
+
 	    		  $oDadosMovi->si104_tiporegistro            = $oMovi->tiporegistro;
 	    		  $oDadosMovi->si104_codreduzido             = $oMovi->codreduzido;
 	    		  $oDadosMovi->si104_tipomovimentacao        = $oMovi->tipomovimentacao;
@@ -245,13 +245,13 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
 	    		  $oDadosMovi->si104_mes  				     = $this->sDataFinal['5'].$this->sDataFinal['6'];
 	    		  $oDadosMovi->si104_reg10  			     = $oDadosCaixa->si103_sequencial;
 	    		  $oDadosMovi->registro12                    = array();
-	    		  
+
 	    		  $aDadosAgrupados[$sHash] =  $oDadosMovi;
-    		  
+
     		  } else {
     		  	  $aDadosAgrupados[$sHash]->si104_valorentrsaida += $nValor;
     		  }
-    		  
+
     		$sSql ="select 12 as tiporegistro,
 					       c74_codlan as codreduzdio,
 					       case when substr(o57_fonte,1,2) = '49' then 1
@@ -261,27 +261,27 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
 					            else null
 					        end as ededucaodereceita,
 					       substr(o57_fonte,2,8) as naturezaReceita,
-					       c70_valor as vlrreceitacont       
+					       c70_valor as vlrreceitacont
 					     from conlancamrec
-					     join conlancam on c70_codlan = c74_codlan and c70_anousu = c74_anousu 
-					left join orcreceita on c74_codrec = o70_codrec and o70_anousu = 2023     
+					     join conlancam on c70_codlan = c74_codlan and c70_anousu = c74_anousu
+					left join orcreceita on c74_codrec = o70_codrec and o70_anousu = 2024
 					left join orcfontes on o70_codfon = o57_codfon and o70_anousu = o57_anousu
 					left join orctiporec on o15_codigo = o70_codigo
 					    where c74_codlan = {$oMovi->codreduzido}";
-			    		
+
 			$rsReceita = db_query($sSql);
-    		  
+
 	    	if(pg_num_rows($rsReceita) != 0 ){
     		/*
     		 * SQL PARA PEGAR RECEITAS DOS TIPO ENTRA SAIDA 1 RECEITAS ARRECADADA NO MES
     		 */
-    		
-			    		
+
+
 			    	  $oRecita  = db_utils::fieldsMemory($rsReceita,0);
-		    		  
-			    	 
+
+
 			    	  $oDadosReceita = new stdClass();
-			    		
+
 			    	  $oDadosReceita->si105_tiporegistro                      = $oRecita->tiporegistro;
 			    	  $oDadosReceita->si105_codreduzido                       = $aDadosAgrupados[$sHash]->si104_codreduzido;
 			          $oDadosReceita->si105_ededucaodereceita                 = $oRecita->ededucaodereceita;
@@ -290,73 +290,73 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
 			          $oDadosReceita->si105_vlrreceitacont                    = $oRecita->vlrreceitacont;
 			    	  $oDadosReceita->si105_mes                               = $this->sDataFinal['5'].$this->sDataFinal['6'];
 			    	  $oDadosReceita->si105_reg10                             = $oDadosCaixa->si103_sequencial;
-			    	  
-			    		  		    		  
+
+
 			    	  $aDadosAgrupados[$sHash]->registro12[] = $oDadosReceita;
-		    		  
+
 
 	    		}
-	    	    
+
     		}//fim
     		//echo "<pre>";
     		//	print_r($aDadosAgrupados);
     		foreach ($aDadosAgrupados as $mov) {
-     			
-    			
-    			$clcaixa112023 = new cl_caixa112023();
-    			
-    			$clcaixa112023->si104_tiporegistro            = $mov->si104_tiporegistro;
-	    		$clcaixa112023->si104_codreduzido             = $mov->si104_codreduzido;
-	    		$clcaixa112023->si104_tipomovimentacao        = $mov->si104_tipomovimentacao;
-	    		$clcaixa112023->si104_tipoentrsaida           = $mov->si104_tipoentrsaida;
-	    		$clcaixa112023->si104_descrmovimentacao       = $mov->si104_descrmovimentacao;
-	    		$clcaixa112023->si104_valorentrsaida          = abs($mov->si104_valorentrsaida);
-	    		$clcaixa112023->si104_codctbtransf            = $mov->si104_codctbtransf;
-	    		$clcaixa112023->si104_codfontectbtransf  	  = $mov->si104_codfontectbtransf;
-	    		$clcaixa112023->si104_mes  				      = $mov->si104_mes;
-	    		$clcaixa112023->si104_reg10  			      = $mov->si104_reg10;
-	    		$clcaixa112023->si104_instit                  = db_getsession("DB_instit");
-	    		    			
-    			$clcaixa112023->incluir(null);
-    			
-    		    if ($clcaixa112023->erro_status == 0) {
-					throw new Exception($clcaixa112023->erro_msg);
+
+
+    			$clcaixa112024 = new cl_caixa112024();
+
+    			$clcaixa112024->si104_tiporegistro            = $mov->si104_tiporegistro;
+	    		$clcaixa112024->si104_codreduzido             = $mov->si104_codreduzido;
+	    		$clcaixa112024->si104_tipomovimentacao        = $mov->si104_tipomovimentacao;
+	    		$clcaixa112024->si104_tipoentrsaida           = $mov->si104_tipoentrsaida;
+	    		$clcaixa112024->si104_descrmovimentacao       = $mov->si104_descrmovimentacao;
+	    		$clcaixa112024->si104_valorentrsaida          = abs($mov->si104_valorentrsaida);
+	    		$clcaixa112024->si104_codctbtransf            = $mov->si104_codctbtransf;
+	    		$clcaixa112024->si104_codfontectbtransf  	  = $mov->si104_codfontectbtransf;
+	    		$clcaixa112024->si104_mes  				      = $mov->si104_mes;
+	    		$clcaixa112024->si104_reg10  			      = $mov->si104_reg10;
+	    		$clcaixa112024->si104_instit                  = db_getsession("DB_instit");
+
+    			$clcaixa112024->incluir(null);
+
+    		    if ($clcaixa112024->erro_status == 0) {
+					throw new Exception($clcaixa112024->erro_msg);
 				}
-    			
-    			
-                
+
+
+
     		    if($mov->si104_tipoentrsaida == 1){
-    		    	
-    		    	
-    		    	
+
+
+
     				foreach ($mov->registro12 as $reg12){
-    					 
-    					$clcaixa122023 = new cl_caixa122023();
-    					
-    					$clcaixa122023->si105_tiporegistro                      = $reg12->si105_tiporegistro;
-				    	$clcaixa122023->si105_codreduzido                       = $reg12->si105_codreduzido;
-				    	$clcaixa122023->si105_ededucaodereceita                 = $reg12->si105_ededucaodereceita;
-				    	$clcaixa122023->si105_identificadordeducao              = $reg12->si105_identificadordeducao;
-				    	$clcaixa122023->si105_naturezareceita                   = $reg12->si105_naturezareceita;
-				    	$clcaixa122023->si105_vlrreceitacont                    = $reg12->si105_vlrreceitacont;
-				    	$clcaixa122023->si105_mes                               = $reg12->si105_mes;
-				    	$clcaixa122023->si105_reg10                             = $oDadosCaixa->si103_sequencial;
-				    	$clcaixa122023->si105_instit                            = db_getsession("DB_instit");
-				    		
-				    	$clcaixa122023->incluir(null);
-	    				
+
+    					$clcaixa122024 = new cl_caixa122024();
+
+    					$clcaixa122024->si105_tiporegistro                      = $reg12->si105_tiporegistro;
+				    	$clcaixa122024->si105_codreduzido                       = $reg12->si105_codreduzido;
+				    	$clcaixa122024->si105_ededucaodereceita                 = $reg12->si105_ededucaodereceita;
+				    	$clcaixa122024->si105_identificadordeducao              = $reg12->si105_identificadordeducao;
+				    	$clcaixa122024->si105_naturezareceita                   = $reg12->si105_naturezareceita;
+				    	$clcaixa122024->si105_vlrreceitacont                    = $reg12->si105_vlrreceitacont;
+				    	$clcaixa122024->si105_mes                               = $reg12->si105_mes;
+				    	$clcaixa122024->si105_reg10                             = $oDadosCaixa->si103_sequencial;
+				    	$clcaixa122024->si105_instit                            = db_getsession("DB_instit");
+
+				    	$clcaixa122024->incluir(null);
+
     				}
     			}
     			echo pg_last_error();
-    			
-            }   
-    		db_fim_transacao();	
+
+            }
+    		db_fim_transacao();
             $oGerarCAIXA = new GerarCAIXA();
 		    $oGerarCAIXA->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];;
-		    $oGerarCAIXA->gerarDados();  		
-    	
+		    $oGerarCAIXA->gerarDados();
+
     }
-    	    
+
   }
-		
+
  }

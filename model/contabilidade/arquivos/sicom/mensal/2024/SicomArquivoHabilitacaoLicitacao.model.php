@@ -1,10 +1,10 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_hablic102023_classe.php");
-require_once("classes/db_hablic112023_classe.php");
-require_once("classes/db_hablic202023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarHABLIC.model.php");
+require_once("classes/db_hablic102024_classe.php");
+require_once("classes/db_hablic112024_classe.php");
+require_once("classes/db_hablic202024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarHABLIC.model.php");
 
 
 /**
@@ -134,9 +134,9 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-        $clhablic10 = new cl_hablic102023();
-        $clhablic11 = new cl_hablic112023();
-        $clhablic20 = new cl_hablic202023();
+        $clhablic10 = new cl_hablic102024();
+        $clhablic11 = new cl_hablic112024();
+        $clhablic20 = new cl_hablic202024();
 
 
         /**
@@ -162,12 +162,12 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
         $result = db_query($clhablic20->sql_query(null, "*", null, "si59_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si59_instit=" . db_getsession("DB_instit")));
         if (pg_num_rows($result) > 0) {
             $clhablic20->excluir(null, "si59_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si59_instit=" . db_getsession("DB_instit"));
-            if ($clconsor202023->erro_status == 0) {
+            if ($clconsor202024->erro_status == 0) {
                 throw new Exception($clhablic20->erro_msg);
             }
         }
         /**
-         * Sob solicitação de Igor, o campo nroRegistro foi alterado para pegar o cnpj 04/03/2023
+         * Sob solicitação de Igor, o campo nroRegistro foi alterado para pegar o cnpj 04/03/2024
          */
         $sSql = "select distinct '10' as tipoRegistro,
 	infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
@@ -252,7 +252,7 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
         //exit;
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-            $clhablic10 = new cl_hablic102023();
+            $clhablic10 = new cl_hablic102024();
             $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
             $clhablic10->si57_tiporegistro = 10;
@@ -355,7 +355,7 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
             $rsResult11 = db_query($sSql); //echo $sSql;db_criatabela($rsResult11);
             for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
-                $clhablic11 = new cl_hablic112023();
+                $clhablic11 = new cl_hablic112024();
                 $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
                 //l20_codigo as codlicitacao
                 $clhablic11->si58_tiporegistro = 11;
@@ -412,7 +412,7 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 		END) as tipoDocumento,
 		cgm.z01_cgccpf as nroDocumento,
 		l205_datacred as DataCredenciamento,
-		aberlic112023.si47_nrolote as nroLote,
+		aberlic112024.si47_nrolote as nroLote,
 		(pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem,
 		pcforne.pc60_inscriestadual as nroInscricaoEstadual,
 		pcforne.pc60_uf as ufInscricaoEstadual,
@@ -439,7 +439,7 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 		INNER JOIN solicitempcmater on (solicitem.pc11_codigo = solicitempcmater.pc16_solicitem)
 		INNER JOIN pcmater on (solicitempcmater.pc16_codmater = pcmater.pc01_codmater)
 		INNER JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
-		INNER JOIN aberlic112023 on (liclicitemlote.l04_descricao = aberlic112023.si47_dsclote  and aberlic112023.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
+		INNER JOIN aberlic112024 on (liclicitemlote.l04_descricao = aberlic112024.si47_dsclote  and aberlic112024.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
 		LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
         LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
 		LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
@@ -451,7 +451,7 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 
             for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-                $clhablic20 = new cl_hablic202023();
+                $clhablic20 = new cl_hablic202024();
                 $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
                 $clhablic20->si59_tiporegistro = '20';

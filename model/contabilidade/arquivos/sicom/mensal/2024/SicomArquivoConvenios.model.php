@@ -1,11 +1,11 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_conv102023_classe.php");
-require_once("classes/db_conv112023_classe.php");
-require_once("classes/db_conv202023_classe.php");
-require_once("classes/db_conv212023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarCONV.model.php");
+require_once("classes/db_conv102024_classe.php");
+require_once("classes/db_conv112024_classe.php");
+require_once("classes/db_conv202024_classe.php");
+require_once("classes/db_conv212024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarCONV.model.php");
 
 /**
  * selecionar dados de Convenios Sicom Acompanhamento Mensal
@@ -62,12 +62,12 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
   public function gerarDados()
   {
 
-    $clconv10 = new cl_conv102023();
-    $clconv11 = new cl_conv112023();
-    $clconv20 = new cl_conv202023();
-    $clconv21 = new cl_conv212023();
-    $clconv30 = new cl_conv302023();
-    $clconv31 = new cl_conv312023();
+    $clconv10 = new cl_conv102024();
+    $clconv11 = new cl_conv112024();
+    $clconv20 = new cl_conv202024();
+    $clconv21 = new cl_conv212024();
+    $clconv30 = new cl_conv302024();
+    $clconv31 = new cl_conv312024();
 
     db_inicio_transacao();
 
@@ -163,7 +163,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
     $rsResult10 = db_query($sSql);
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-      $clconv10 = new cl_conv102023();
+      $clconv10 = new cl_conv102024();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
       $clconv10->si92_tiporegistro = 10;
@@ -198,7 +198,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 
       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
-        $clconv11 = new cl_conv112023();
+        $clconv11 = new cl_conv112024();
         $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
 
         $clconv11->si93_tiporegistro = 11;
@@ -233,7 +233,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 
       for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-        $clconv20 = new cl_conv202023();
+        $clconv20 = new cl_conv202024();
         $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
         $clconv20->si94_tiporegistro = 20;
@@ -255,7 +255,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
           throw new Exception($clconv20->erro_msg);
         }
 
-        $clconv21 = new cl_conv212023();
+        $clconv21 = new cl_conv212024();
         $clconv21->si232_tiporegistro = 21;
         $clconv21->si232_codconvaditivo = $oDados20->c206_sequencial.$oDados20->c208_sequencial;
         $clconv21->si232_tipotermoaditivo = $oDados20->c208_tipotermoaditivo;
@@ -311,7 +311,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 
         for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
-            $clconv30 = new cl_conv302023();
+            $clconv30 = new cl_conv302024();
             $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
 
             $clconv30->si203_tiporegistro = 30;
@@ -329,7 +329,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
             }
 
             if ($oDados30->saldo_arrecadado > 0) {
-						
+
 				$sSql31 = " SELECT  o70_codrec,
 									c206_sequencial,
 									c206_nroconvenio,
@@ -338,7 +338,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 									c206_dataassinatura,
 									sum(c229_vlprevisto) AS c229_vlprevisto,
 									sum(valor_arrecadado) as valor_arrecadado
-							FROM 
+							FROM
 								(SELECT	o70_codrec,
 										c206_sequencial,
 										c206_nroconvenio,
@@ -348,13 +348,13 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 										sum(c229_vlprevisto) AS c229_vlprevisto,
 										0 AS valor_arrecadado
 								FROM prevconvenioreceita
-									LEFT JOIN orcreceita ON c229_anousu = o70_anousu AND c229_fonte = o70_codrec 
+									LEFT JOIN orcreceita ON c229_anousu = o70_anousu AND c229_fonte = o70_codrec
 									LEFT JOIN convconvenios ON c206_sequencial = c229_convenio
 								WHERE o70_codigo IN ('15700000', '16310000', '17000000', '16650000', '17130070','15710000','15720000','15750000','16320000','16330000','16360000','17010000','17020000','17030000')
 									AND o70_anousu = {$iAnoUsu}
 									AND o70_instit = {$iInstit}
 									AND o70_valor > 0
-									AND o70_codrec = {$oDados30->o70_codrec}                    
+									AND o70_codrec = {$oDados30->o70_codrec}
 								GROUP BY 1,2,3,4,5
 								UNION
 								SELECT *
@@ -367,7 +367,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 											c206_dataassinatura,
 											0 AS c229_vlprevisto,
 											round(sum(CASE WHEN c71_coddoc = 100 THEN c70_valor ELSE c70_valor * -1 END),2) AS valor_arrecadado
-									FROM orcreceita 
+									FROM orcreceita
 										LEFT JOIN conlancamrec ON c74_anousu = o70_anousu AND c74_codrec = o70_codrec
 										INNER JOIN conlancam ON c70_codlan = c74_codlan
 										LEFT JOIN conlancamdoc ON c74_codlan = c71_codlan
@@ -383,15 +383,15 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 										AND o70_codrec = {$oDados30->o70_codrec}
 										AND c206_sequencial IS NOT NULL
 									GROUP BY 1,2,3,4,5,6) AS x
-								WHERE valor_arrecadado > 0) AS xx GROUP BY 1,2,3,4,5,6 ";						
-				
+								WHERE valor_arrecadado > 0) AS xx GROUP BY 1,2,3,4,5,6 ";
+
 				$rsResult31 = db_query($sSql31);
 
 				if (pg_num_rows($rsResult31) > 0) {
 
 					for ($iCont31 = 0; $iCont31 < pg_num_rows($rsResult31); $iCont31++) {
 
-						$clconv31 = new cl_conv312023();
+						$clconv31 = new cl_conv312024();
 						$oDados31 = db_utils::fieldsMemory($rsResult31, $iCont31);
 
 						$clconv31->si204_tiporegistro = 31;
@@ -410,11 +410,11 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 
 					}
 
-				} 
+				}
 
 			}
 
-			$clconv31 = new cl_conv312023();
+			$clconv31 = new cl_conv312024();
 
 			$clconv31->si204_tiporegistro = 31;
 			$clconv31->si204_codreceita = $oDados30->o70_codrec;

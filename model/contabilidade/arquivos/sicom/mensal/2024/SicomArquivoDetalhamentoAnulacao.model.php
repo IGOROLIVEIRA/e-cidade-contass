@@ -1,10 +1,10 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_alq102023_classe.php");
-require_once("classes/db_alq112023_classe.php");
-require_once("classes/db_alq122023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarALQ.model.php");
+require_once("classes/db_alq102024_classe.php");
+require_once("classes/db_alq112024_classe.php");
+require_once("classes/db_alq122024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarALQ.model.php");
 require_once("model/orcamento/ControleOrcamentario.model.php");
 require_once("model/orcamento/DeParaRecurso.model.php");
 
@@ -31,7 +31,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
   protected $sNomeArquivo = 'ALQ';
 
   /**
-   * @var array Fontes encerradas em 2023
+   * @var array Fontes encerradas em 2024
    */
   protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
@@ -108,11 +108,11 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
 
    $sSql = "SELECT e50_data,
                    CASE
-                       WHEN date_part('year',e50_data) < 2023 THEN e71_codnota::varchar
+                       WHEN date_part('year',e50_data) < 2024 THEN e71_codnota::varchar
                        ELSE (rpad(e71_codnota::varchar,7,'0') ||'0'|| lpad(e71_codord::varchar,7,'0'))
                    END AS codreduzido,
                    CASE
-                       WHEN date_part('year',e50_data) < 2023 THEN e71_codnota::varchar
+                       WHEN date_part('year',e50_data) < 2024 THEN e71_codnota::varchar
                        ELSE (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0'))
                    END AS nroliquidacao,
                    c80_data,
@@ -175,7 +175,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
             WHERE c53_tipo IN (21)
                 AND c70_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
                 AND e60_instit IN (" . db_getsession('DB_instit') . ")
-            GROUP BY e60_numemp, e60_resumo, e60_destin, e60_codemp, e60_emiss, e60_numcgm, z01_nome, z01_cgccpf, z01_munic, e60_vlremp, e60_vlranu, e60_vlrliq, e63_codhist, e40_descr, e60_vlrpag, e60_anousu, 
+            GROUP BY e60_numemp, e60_resumo, e60_destin, e60_codemp, e60_emiss, e60_numcgm, z01_nome, z01_cgccpf, z01_munic, e60_vlremp, e60_vlranu, e60_vlrliq, e63_codhist, e40_descr, e60_vlrpag, e60_anousu,
                      e60_coddot, o58_coddot, o58_orgao, o40_orgao, o40_descr, o58_unidade, o41_descr, o15_codigo, o15_descr, e60_codcom, pc50_descr, c70_data, c70_codlan, c53_tipo, c53_descr, e91_numemp, e71_codnota,
                      c80_data, e50_data, si09_codorgaotce, o41_subunidade, pagordemnota.e71_codord , o40_codtri, orcorgao.o40_orgao, orcunidade.o41_codtri, orcunidade.o41_unidade, o56_elemento, e50_compdesp
             ORDER BY e60_numemp, c70_codlan";
@@ -183,9 +183,9 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
     $rsDetalhamentos = db_query($sSql);
     //    db_criatabela($rsDetalhamentos);echo pg_last_error();
 
-    $clalq10 = new cl_alq102023();
-    $clalq11 = new cl_alq112023();
-    $clalq12 = new cl_alq122023();
+    $clalq10 = new cl_alq102024();
+    $clalq11 = new cl_alq112024();
+    $clalq12 = new cl_alq122024();
 
     /*
      * SE JA FOI GERADO ESTA ROTINA UMA VEZ O SISTEMA APAGA OS DADOS DO BANCO E GERA NOVAMENTE
@@ -305,7 +305,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
 
     foreach ($aDadosAgrupados as $oDadosAgrupados) {
 
-      $oDados10 = new cl_alq102023();
+      $oDados10 = new cl_alq102024();
 
       $oDados10->si121_tiporegistro = 10;
       $oDados10->si121_codreduzido = $oDadosAgrupados->si121_codreduzido;
@@ -328,7 +328,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         throw new Exception($oDados10->erro_msg);
       }
 
-      $oDados11 = new cl_alq112023();
+      $oDados11 = new cl_alq112024();
 
       $oDadosAgrupados->Reg11->si122_codfontrecursos = $this->oDeParaRecurso->getDePara($oDadosAgrupados->Reg11->si122_codfontrecursos);
       $oControleOrcamentario = new ControleOrcamentario();
@@ -356,8 +356,8 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
       $aMatrizDespSentenca = array('3319091', '3319191','3319591','3319691');
 
       if (in_array(substr($oDadosAgrupados->o56_elemento, 0, 7), $aMatrizCompDesp)) {
-          
-        $oDados12 = new cl_alq122023();
+
+        $oDados12 = new cl_alq122024();
         $oDados12->si123_tiporegistro = 12;
         $oDados12->si123_reg10 = $oDados10->si121_sequencial;
         $oDados12->si123_codreduzido = $oDados10->si121_codreduzido;
@@ -372,8 +372,8 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         }
 
       } elseif (in_array(substr($oDadosAgrupados->o56_elemento, 0, 7), $aMatrizDespSentenca)) {
-        
-        $oDados12 = new cl_alq122023();
+
+        $oDados12 = new cl_alq122024();
         $oDados12->si123_tiporegistro = 12;
         $oDados12->si123_reg10 = $oDados10->si121_sequencial;
         $oDados12->si123_codreduzido = $oDados10->si121_codreduzido;

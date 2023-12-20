@@ -1,15 +1,15 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_ctb102023_classe.php");
-require_once("classes/db_ctb202023_classe.php");
-require_once("classes/db_ctb212023_classe.php");
-require_once("classes/db_ctb222023_classe.php");
-require_once("classes/db_ctb302023_classe.php");
-require_once("classes/db_ctb312023_classe.php");
-require_once("classes/db_ctb402023_classe.php");
-require_once("classes/db_ctb502023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarCTB.model.php");
+require_once("classes/db_ctb102024_classe.php");
+require_once("classes/db_ctb202024_classe.php");
+require_once("classes/db_ctb212024_classe.php");
+require_once("classes/db_ctb222024_classe.php");
+require_once("classes/db_ctb302024_classe.php");
+require_once("classes/db_ctb312024_classe.php");
+require_once("classes/db_ctb402024_classe.php");
+require_once("classes/db_ctb502024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarCTB.model.php");
 require_once("model/orcamento/DeParaRecurso.model.php");
 require_once("model/orcamento/ControleOrcamentario.model.php");
 
@@ -98,14 +98,14 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
   {
 
 
-    $cCtb10 = new cl_ctb102023();
-    $cCtb20 = new cl_ctb202023();
-    $cCtb21 = new cl_ctb212023();
-    $cCtb22 = new cl_ctb222023();
-    $cCtb30 = new cl_ctb302023();
-    $cCtb31 = new cl_ctb312023();
-    $cCtb40 = new cl_ctb402023();
-    $cCtb50 = new cl_ctb502023();
+    $cCtb10 = new cl_ctb102024();
+    $cCtb20 = new cl_ctb202024();
+    $cCtb21 = new cl_ctb212024();
+    $cCtb22 = new cl_ctb222024();
+    $cCtb30 = new cl_ctb302024();
+    $cCtb31 = new cl_ctb312024();
+    $cCtb40 = new cl_ctb402024();
+    $cCtb50 = new cl_ctb502024();
 
     // matriz de entrada
     $what = array("°",chr(13),chr(10), 'ä','ã','à','á','â','ê','ë','è','é','ï','ì','í','ö','õ','ò','ó','ô','ü','ù','ú','û','À','Á','Ã','É','Í','Ó','Ú','ñ','Ñ','ç','Ç',' ','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','ª','º' );
@@ -177,7 +177,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
       }
     }
     db_fim_transacao();
-    
+
     $sSqlGeral = $cCtb10->sql_Reg10(db_getsession("DB_anousu"), db_getsession("DB_instit"), $mes, $this->sDataFinal);
     $rsContas = $cCtb10->sql_record($sSqlGeral);
 
@@ -208,7 +208,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
       if (!isset($aBancosAgrupados[$aHash])) {
 
-        $cCtb10 = new cl_ctb102023();
+        $cCtb10 = new cl_ctb102024();
 
 
         $cCtb10->si95_tiporegistro = $oRegistro10->tiporegistro;
@@ -307,7 +307,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsReg20Fonte); $iCont20++) {
 
           /* DADOS REGISTRO 20*/
-          $clDeParaFonte = new DeParaRecurso;          
+          $clDeParaFonte = new DeParaRecurso;
 
           $iFonte = db_utils::fieldsMemory($rsReg20Fonte, $iCont20)->fontemovimento;
           $iFonteNova = substr($clDeParaFonte->getDePara($iFonte),0,7);
@@ -318,7 +318,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $oTotalMov = db_utils::fieldsMemory($rsTotalMov, 0);
 
           $bFonteEncerrada = $iFonte != $iFonteNova ?  true : false;
-          $bCorrecaoFonte = ($bFonteEncerrada && $nMes == '01' && db_getsession("DB_anousu") == 2023);
+          $bCorrecaoFonte = ($bFonteEncerrada && $nMes == '01' && db_getsession("DB_anousu") == 2024);
 
           $iFonte2 = in_array($iFonte, $this->aFontesEncerradas) ? substr($iFonte, 0, 1) . '59' : $iFonte;
           $iFonte2 = substr($clDeParaFonte->getDePara($iFonte2), 0, 7);
@@ -333,11 +333,11 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
             $oCtb20->si96_codorgao = $oContaAgrupada->si95_codorgao;
             $oCtb20->si96_codctb = $oContaAgrupada->si95_codctb;
             //Modificação para de/para das fontes encerradas tratadas na OC11537
-            if ($bFonteEncerrada && $nMes != '01' && db_getsession("DB_anousu") == 2023) {
+            if ($bFonteEncerrada && $nMes != '01' && db_getsession("DB_anousu") == 2024) {
               $oCtb20->si96_codfontrecursos = $iFonte2;
-            } elseif ($nMes != '01' && db_getsession("DB_anousu") == 2023) {
+            } elseif ($nMes != '01' && db_getsession("DB_anousu") == 2024) {
               $oCtb20->si96_codfontrecursos = $iFonte;
-            } elseif ($bFonteEncerrada && db_getsession("DB_anousu") > 2023) {
+            } elseif ($bFonteEncerrada && db_getsession("DB_anousu") > 2024) {
               $oCtb20->si96_codfontrecursos = $iFonte2;
             } else {
               $oCtb20->si96_codfontrecursos = $iFonte;
@@ -600,15 +600,15 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                 /*
                 * SQL PARA PEGAR RECEITAS DOS TIPO ENTRA SAIDA 1 RECEITAS ARRECADADA NO MES
                 */
-                
+
                 $oReceita = db_utils::fieldsMemory($rsReceita, 0);
 
                 $sEmParlamentar = $oReceita->k81_emparlamentar == '' ? '3' : $oReceita->k81_emparlamentar;
-                
+
                 $oControleOrcamentario = new ControleOrcamentario();
                 $oControleOrcamentario->setNaturezaReceita("4".$oReceita->naturezareceita);
                 $oControleOrcamentario->setFonte($oReceita->o70_codigo);
-                $oControleOrcamentario->setEmendaParlamentar($sEmParlamentar); 
+                $oControleOrcamentario->setEmendaParlamentar($sEmParlamentar);
 
                 $sNaturezaReceita = $oReceita->naturezareceita;
                 foreach ($oNaturezaReceita as $oNatureza) {
@@ -691,7 +691,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           && pg_num_rows($rsQuery40) == 0 && ($oDtCad->k13_dtimplantacao <= $this->sDataFinal)
         ) {
 
-          $cCtb40 = new cl_ctb402023();
+          $cCtb40 = new cl_ctb402024();
 
           $cCtb40->si101_tiporegistro = 40;
           $cCtb40->si101_codorgao = $oMovi40->si09_codorgaotce;
@@ -723,7 +723,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
         $oMovi50 = db_utils::fieldsMemory($rsCtbEncerradas, $iCont50);
 
-        $cCtb50 = new cl_ctb502023();
+        $cCtb50 = new cl_ctb502024();
 
         $cCtb50->si102_tiporegistro = $oMovi50->tiporegistro;
         $cCtb50->si102_codorgao = $oMovi50->si09_codorgaotce;
@@ -955,13 +955,13 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 	foreach ($aCtb20Agrupado as $oCtb20) {
 
       $bFonteEncerrada  = in_array($oCtb20->si96_codfontrecursos, $this->aFontesEncerradas);
-      $bCorrecaoFonte   = ($bFonteEncerrada && $oCtb20->si96_mes == '01' && db_getsession("DB_anousu") == 2023);
+      $bCorrecaoFonte   = ($bFonteEncerrada && $oCtb20->si96_mes == '01' && db_getsession("DB_anousu") == 2024);
 
       if ($bFonteEncerrada && $bCorrecaoFonte && $oCtb20->si96_vlsaldoinicialfonte == 0) {
         continue;
       }
 
-      $cCtb20 = new cl_ctb202023();
+      $cCtb20 = new cl_ctb202024();
 
       $cCtb20->si96_tiporegistro = $oCtb20->si96_tiporegistro;
       $cCtb20->si96_codorgao = $oCtb20->si96_codorgao;
@@ -981,7 +981,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
       foreach ($oCtb20->ext21 as $oCtb21agrupado) {
 
-        $cCtb21 = new cl_ctb212023();
+        $cCtb21 = new cl_ctb212024();
 
         $cCtb21->si97_tiporegistro = $oCtb21agrupado->si97_tiporegistro;
         $cCtb21->si97_codctb = $oCtb21agrupado->si97_codctb;
@@ -993,15 +993,15 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
         $cCtb21->si97_tipoentrsaida = $oCtb21agrupado->si97_tipoentrsaida;
         $cCtb21->si97_valorentrsaida = abs($oCtb21agrupado->si97_valorentrsaida);
         $cCtb21->si97_dscoutrasmov = ($oCtb21agrupado->si97_tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário' : ($oCtb21agrupado->si97_tipoentrsaida == 10 ? $oCtb21agrupado->si97_dscoutrasmov : ' '));
-        
+
         $cCtb21->si97_codctbtransf = ($oCtb21agrupado->si97_tipoentrsaida == 5 || $oCtb21agrupado->si97_tipoentrsaida == 6
           || $oCtb21agrupado->si97_tipoentrsaida == 7 || $oCtb21agrupado->si97_tipoentrsaida == 9
           || $oCtb21agrupado->si97_tipoentrsaida == 95 || $oCtb21agrupado->si97_tipoentrsaida == 96) ? $oCtb21agrupado->si97_codctbtransf : 0;
-        
+
         $cCtb21->si97_codfontectbtransf = ($oCtb21agrupado->si97_tipoentrsaida == 5 || $oCtb21agrupado->si97_tipoentrsaida == 6
           || $oCtb21agrupado->si97_tipoentrsaida == 7 || $oCtb21agrupado->si97_tipoentrsaida == 9
           || $oCtb21agrupado->si97_tipoentrsaida == 95 || $oCtb21agrupado->si97_tipoentrsaida == 96) ? $oCtb21agrupado->si97_codfontectbtransf : 0;
-        
+
         $cCtb21->si97_codidentificafr = ($oCtb21agrupado->si97_tipoentrsaida == 94 ? $oCtb21agrupado->si97_codidentificafr : 'null');
         $cCtb21->si97_mes = $oCtb21agrupado->si97_mes;
         $cCtb21->si97_reg20 = $cCtb20->si96_sequencial;
@@ -1015,7 +1015,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
         foreach ($oCtb21agrupado->registro22 as $oCtb22Agrupado) {
 
-          $cCtb22 = new cl_ctb222023();
+          $cCtb22 = new cl_ctb222024();
 
           $cCtb22->si98_tiporegistro = $oCtb22Agrupado->si98_tiporegistro;
           $cCtb22->si98_codreduzidomov = $oCtb22Agrupado->si98_codreduzidomov;

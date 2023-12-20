@@ -1,9 +1,9 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_parpps102023_classe.php");
-require_once("classes/db_parpps202023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarPARPPS.model.php");
+require_once("classes/db_parpps102024_classe.php");
+require_once("classes/db_parpps202024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarPARPPS.model.php");
 
 /**
  * Projeção Atuarial Sicom Acompanhamento Mensal
@@ -62,8 +62,8 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
     public function gerarDados()
     {
 
-        $clparpps10 = new cl_parpps102023();
-        $clparpps20 = new cl_parpps202023();
+        $clparpps10 = new cl_parpps102024();
+        $clparpps20 = new cl_parpps202024();
 
         db_inicio_transacao();
         /*
@@ -109,7 +109,7 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
 
             for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-                $clparpps10 = new cl_parpps102023();
+                $clparpps10 = new cl_parpps102024();
                 $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
                 $clparpps10->si156_tiporegistro = 10;
@@ -132,18 +132,18 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
             /*
              * selecionar informacoes registro 20
              */
-            $sSql = "select * from projecaoatuarial20 
+            $sSql = "select * from projecaoatuarial20
                         where si169_exercicio >= " . (db_getsession("DB_anousu") - 1) . "
 	                        and si169_tipoplano = $oDados10->si168_tipoplano
                             and si169_instit = " . db_getsession("DB_instit") . "
-                            and si169_projecaoatuarial10 = $oDados10->si168_sequencial 
-                        order by si169_exercicio 
+                            and si169_projecaoatuarial10 = $oDados10->si168_sequencial
+                        order by si169_exercicio
                         limit 75";
             $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);die($sSql);
 
             for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-                $clparpps20 = new cl_parpps202023();
+                $clparpps20 = new cl_parpps202024();
                 $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
                 $clparpps20->si155_tiporegistro = 20;

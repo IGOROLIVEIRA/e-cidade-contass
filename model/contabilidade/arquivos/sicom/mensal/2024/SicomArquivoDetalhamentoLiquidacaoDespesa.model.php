@@ -2,10 +2,10 @@
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
-require_once("classes/db_lqd102023_classe.php");
-require_once("classes/db_lqd112023_classe.php");
-require_once("classes/db_lqd122023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarLQD.model.php");
+require_once("classes/db_lqd102024_classe.php");
+require_once("classes/db_lqd112024_classe.php");
+require_once("classes/db_lqd122024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarLQD.model.php");
 require_once("model/orcamento/ControleOrcamentario.model.php");
 require_once("model/orcamento/DeParaRecurso.model.php");
 
@@ -32,7 +32,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
   protected $sNomeArquivo = 'LQD';
 
   /**
-   * @var array Fontes encerradas em 2023
+   * @var array Fontes encerradas em 2024
    */
   protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
@@ -71,9 +71,9 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
   public function gerarDados()
   {
 
-    $cllqd10 = new cl_lqd102023();
-    $cllqd11 = new cl_lqd112023();
-    $cllqd12 = new cl_lqd122023();
+    $cllqd10 = new cl_lqd102024();
+    $cllqd11 = new cl_lqd112024();
+    $cllqd12 = new cl_lqd122024();
     $oDeParaRecurso = new DeParaRecurso();
 
     $sSqlUnidade = "select * from infocomplementares where
@@ -273,7 +273,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
     }
     foreach ($aDadosAgrupados as $oDados10) {
 
-      $cllqd10 = new cl_lqd102023();
+      $cllqd10 = new cl_lqd102024();
       $cllqd10->si118_tiporegistro = $oDados10->si118_tiporegistro;
       $cllqd10->si118_codreduzido = $oDados10->si118_codreduzido;
       $cllqd10->si118_codorgao = $oDados10->si118_codorgao;
@@ -295,7 +295,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
       }
       foreach ($oDados10->Reg11 as $oDados11) {
 
-        $cllqd11 = new cl_lqd112023();
+        $cllqd11 = new cl_lqd112024();
 
         $cllqd11->si119_tiporegistro = $oDados11->si119_tiporegistro;
         $cllqd11->si119_codreduzido = $oDados11->si119_codreduzido;
@@ -317,8 +317,8 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
       $aMatrizDespSentenca = array('3319091', '3319191','3319591','3319691');
 
       if (in_array(substr($oDados10->o56_elemento, 0, 7), $aMatrizCompDesp)) {
-            
-        $cllqd12 = new cl_lqd122023();
+
+        $cllqd12 = new cl_lqd122024();
         $cllqd12->si120_tiporegistro = 12;
         $cllqd12->si120_reg10 = $cllqd10->si118_sequencial;
         $cllqd12->si120_codreduzido = $oDados10->si118_codreduzido;
@@ -328,14 +328,14 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
         $cllqd12->si120_mes = $oDados10->si118_mes;
         $cllqd12->si120_instit = db_getsession("DB_instit");
         $cllqd12->incluir(null);
-        
+
         if ($cllqd12->erro_status == 0) {
         throw new Exception($cllqd12->erro_msg);
         }
 
       } elseif (in_array(substr($oDados10->o56_elemento, 0, 7), $aMatrizDespSentenca)) {
-        
-        $cllqd12 = new cl_lqd122023();
+
+        $cllqd12 = new cl_lqd122024();
         $cllqd12->si120_tiporegistro = 12;
         $cllqd12->si120_reg10 = $cllqd10->si118_sequencial;
         $cllqd12->si120_codreduzido = $oDados10->si118_codreduzido;

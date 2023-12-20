@@ -3,11 +3,11 @@
 
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_caixa102023_classe.php");
-require_once("classes/db_caixa112023_classe.php");
-require_once("classes/db_caixa122023_classe.php");
-require_once("classes/db_caixa132023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarCAIXA.model.php");
+require_once("classes/db_caixa102024_classe.php");
+require_once("classes/db_caixa112024_classe.php");
+require_once("classes/db_caixa122024_classe.php");
+require_once("classes/db_caixa132024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarCAIXA.model.php");
 
 /**
  * Contas de Caixa Sicom Acompanhamento Mensal
@@ -16,30 +16,30 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarCAIX
  */
 class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  
+
 	/**
 	 *
 	 * Codigo do layout. (db_layouttxt.db50_codigo)
 	 * @var Integer
 	 */
 	protected $iCodigoLayout = 165;
-	
+
 	/**
 	 *
 	 * Nome do arquivo a ser criado
 	 * @var String
 	 */
 	protected $sNomeArquivo = 'CAIXA';
-	
+
 	/**
 	 *
 	 * Construtor da classe
 	 */
 	public function __construct()
 	{
-		
+
 	}
-	
+
 	/**
 	 * Retorna o codigo do layout
 	 *
@@ -49,16 +49,16 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 	{
 		return $this->iCodigoLayout;
 	}
-	
+
 	/**
 	 *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
 	*/
 	public function getCampos()
 	{
-		
+
 
 	}
-	
+
 	/**
 	 * selecionar os dados das contas Caixa
 	 * @see iPadArquivoBase::gerarDados()
@@ -66,10 +66,10 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 	public function gerarDados()
 	{
 
-		$clcaixa13 = new cl_caixa132023();
-		$clcaixa12 = new cl_caixa122023();
-		$clcaixa11 = new cl_caixa112023();
-		$clcaixa10 = new cl_caixa102023();
+		$clcaixa13 = new cl_caixa132024();
+		$clcaixa12 = new cl_caixa122024();
+		$clcaixa11 = new cl_caixa112024();
+		$clcaixa10 = new cl_caixa102024();
 
 		/*
 		* SE JA FOI GERADO ESTA ROTINA UMA VEZ O SISTEMA APAGA OS DADOS DO BANCO E GERA NOVAMENTE
@@ -80,9 +80,9 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 		$nMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 		$iInstit = db_getsession("DB_instit");
 		$iAno = db_getsession("DB_anousu");
-		
+
 		$result = $clcaixa10->sql_record($clcaixa10->sql_query(null, "*", null, "si103_mes = {$nMes} and si103_instit = {$iInstit}"));
-		
+
 		if (pg_num_rows($result) > 0) {
 
 			$clcaixa13->excluir(null, "si105_mes = {$nMes} and si105_instit = {$iInstit}");
@@ -95,7 +95,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 			}
 
 		}
-		
+
 		$result = $clcaixa10->sql_record($clcaixa10->sql_query(null, "*", null, "si103_mes = {$nMes} and si103_instit = {$iInstit}"));
 
 		db_fim_transacao();
@@ -103,7 +103,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 		/*
 		* PEGA TODAS AS CONTAS CAIXA DA INSTIUICAO
 		*/
-		$sSqlContasCaixa = $clcaixa10->sql_ContasCaixa($iAno, $iInstit);		
+		$sSqlContasCaixa = $clcaixa10->sql_ContasCaixa($iAno, $iInstit);
 		$rsContasCaixa = $clcaixa10->sql_record($sSqlContasCaixa);
 
 		/**
@@ -231,7 +231,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 					$oReceita = db_utils::fieldsMemory($rsReceita, 0);
 					$sHash13 = $oReceita->ededucaodereceita . $oReceita->identificadordeducao . $oReceita->naturezareceita . $oReceita->o15_codtri;
-			
+
 					if (!isset($aDadosAgrupados[$sHash10]->registro13[$sHash13])) {
 
 						$oDados13 = new stdClass();
@@ -259,7 +259,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 		foreach ($aDadosAgrupados as $oDados10) {
 
-			$clcaixa10 = new cl_caixa102023();
+			$clcaixa10 = new cl_caixa102024();
 
 			$clcaixa10->si103_tiporegistro 		= $oDados10->si103_tiporegistro;
 			$clcaixa10->si103_codorgao 			= $oDados10->si103_codorgao;
@@ -276,7 +276,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 			foreach($oDados10->registro11 as $oDados11) {
 
-				$clcaixa11 = new cl_caixa112023();
+				$clcaixa11 = new cl_caixa112024();
 				$clcaixa11->si166_tiporegistro 			= $oDados11->si166_tiporegistro;
 				$clcaixa11->si166_codfontecaixa 		= $oDados11->si166_codfontecaixa;
 				$clcaixa11->si166_vlsaldoinicialfonte 	= $oDados11->si166_vlsaldoinicialfonte;
@@ -284,9 +284,9 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 				$clcaixa11->si166_mes 					= $nMes;
 				$clcaixa11->si166_instit 				= $iInstit;
 				$clcaixa11->si166_reg10 				= $clcaixa10->si103_sequencial;
-				
+
 				$clcaixa11->incluir(null);
-				
+
 				if ($clcaixa11->erro_status == 0) {
 					throw new Exception($clcaixa11->erro_msg);
 			  	}
@@ -295,7 +295,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 			foreach($oDados10->registro12 as $oDados12) {
 
-				$clcaixa12 = new cl_caixa122023();
+				$clcaixa12 = new cl_caixa122024();
 
 				$clcaixa12->si104_tiporegistro 		= $oDados12->si104_tiporegistro;
 				$clcaixa12->si104_codreduzido 		= $oDados12->si104_codreduzido;
@@ -321,7 +321,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 			foreach ($oDados10->registro13 as $oDados13) {
 
-				$clcaixa13 = new cl_caixa132023();
+				$clcaixa13 = new cl_caixa132024();
 
 				$clcaixa13->si105_tiporegistro 			= $oDados13->si105_tiporegistro;
 				$clcaixa13->si105_codreduzido 			= $oDados13->si105_codreduzido;
@@ -348,7 +348,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 		$oGerarCAIXA = new GerarCAIXA();
 		$oGerarCAIXA->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 		$oGerarCAIXA->gerarDados();
-		
+
   	}
 
 }

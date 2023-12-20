@@ -1,9 +1,9 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_parec102023_classe.php");
-require_once("classes/db_parec112023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarPAREC.model.php");
+require_once("classes/db_parec102024_classe.php");
+require_once("classes/db_parec112024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarPAREC.model.php");
 
 /**
  *
@@ -13,7 +13,7 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarPARE
  */
 class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  
+
   /**
    * Código do layout. (db_layouttxt.db50_codigo)
    *
@@ -27,23 +27,23 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
    * @var String
    */
   protected $sNomeArquivo = 'PAREC';
-  
+
   /**
    * Código da Pespectiva. (ppaversao.o119_sequencial)
    *
    * @var Integer
    */
   protected $iCodigoPespectiva;
-  
+
   /**
    *
    * Construtor da classe
    */
   public function __construct()
   {
-    
+
   }
-  
+
   /**
    * retornar o codio do layout
    *
@@ -53,7 +53,7 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
   {
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    *
@@ -61,7 +61,7 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
    */
   public function getCampos()
   {
-    
+
     $aElementos[10] = array(
       "tipoRegistro",
       "codReceita",
@@ -81,7 +81,7 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
 
     return $aElementos;
   }
-  
+
   /**
    * Gerar os dados necessários para o arquivo
    *
@@ -92,8 +92,8 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clparec10 = new cl_parec102023();
-    $clparec11 = new cl_parec112023();
+    $clparec10 = new cl_parec102024();
+    $clparec11 = new cl_parec112024();
 
     $sSqlInst = "SELECT codigo FROM db_config";
     $rsInst   = db_query($sSqlInst);
@@ -101,7 +101,7 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
     for($iCont = 0; $iCont < pg_num_rows($rsInst); $iCont++) {
         $aInstit[] = db_utils::fieldsMemory($rsInst, $iCont)->codigo;
     }
-    
+
     $db_filtro = "o70_instit in (".implode(',', $aInstit).")";
     $rsResult10 = db_receitasaldo(11, 1, 3, true, $db_filtro, db_getsession("DB_anousu"), $this->sDataInicial, $this->sDataFinal, false, ' * ', true, 0);
     $sSql = "SELECT * FROM infocomplementaresinstit WHERE si09_tipoinstit != 2 and si09_instit = " . db_getsession("DB_instit");
@@ -109,16 +109,16 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
     if (pg_num_rows($rsPref) > 0) {
       $rsResult10 = 0;
     }
-    
+
     $sSql = "select si09_codorgaotce from infocomplementaresinstit where si09_instit = " . db_getsession("DB_instit");
     $rsResult = db_query($sSql);
     $sCodOrgaoTce = db_utils::fieldsMemory($rsResult, 0)->si09_codorgaotce;
-    
+
     /**
      * exlcuir informacoes do mes selecionado
      */
     db_inicio_transacao();
-    
+
     $result = $clparec11->sql_record($clparec11->sql_query(null, "*", null, "si23_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si23_instit = " . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
       $clparec11->excluir(null, "si23_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si23_instit = " . db_getsession("DB_instit"));
@@ -126,7 +126,7 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
         throw new Exception($clparec11->erro_msg);
       }
     }
-    
+
     $result = $clparec10->sql_record($clparec10->sql_query(null, "*", null, "si22_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si22_instit = " . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
       $clparec10->excluir(null, "si22_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si22_instit = " . db_getsession("DB_instit"));
@@ -152,10 +152,10 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
     $aRectce = array('111202', '111208', '172136', '191138', '191139', '191140',
       '191308', '191311', '191312', '191313', '193104', '193111',
       '193112', '193113', '172401', '247199', '247299');
-    
+
     $aDadosAgrupados = array();
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-      
+
 
       $oDadosParec = db_utils::fieldsMemory($rsResult10, $iCont10);
       $vlPrevisao = $oDadosParec->saldo_prevadic_acum-$oDadosParec->saldo_prev_anterior;
@@ -236,12 +236,12 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
       }
     }
 
-    $aRectceSaudEduc = array('11120101', '11120230', '11120431', '11120434', '11120800', '11130501', '11130502', '17210102', '17210105', '17213600',
+    $aRectceSaudEduc = array('11120101', '11120240', '11120431', '11120434', '11120800', '11130501', '11130502', '17210102', '17210105', '17213600',
       '17220101', '17220102', '17220104', '19110801', '19113800', '19113900', '19114000', '19130800', '19131100', '19131200',
       '19131300', '19310400', '19311100', '19311200', '19311300');
     foreach ($aDadosAgrupados as $oDados10) {
 
-      $clparec10 = new cl_parec102023();
+      $clparec10 = new cl_parec102024();
       $clparec10->si22_tiporegistro = $oDados10->si22_tiporegistro;
       $clparec10->si22_codreduzido = $oDados10->si22_codreduzido;
       $clparec10->si22_codorgao = $oDados10->si22_codorgao;
@@ -264,7 +264,7 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
           ($oDados11->si23_codfontrecursos != '101') && ($oDados11->si23_codfontrecursos != '102')
         ) {
 
-          $clparec11 = new cl_parec112023();
+          $clparec11 = new cl_parec112024();
           $clparec11->si23_tiporegistro = $oDados11->si23_tiporegistro;
           $clparec11->si23_reg10 = $clparec10->si22_sequencial;
           $clparec11->si23_codreduzido = $oDados10->si22_codreduzido;
@@ -277,7 +277,7 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
           if ($clparec11->erro_status == 0) {
             throw new Exception($clparec11->erro_msg);
           }
-          
+
           $clparec11->si23_sequencial = null;
           $clparec11->si23_codfontrecursos = '101';
           $clparec11->si23_vlfonte = number_format(abs($oDados10->si22_vlacrescidoreduzido * 0.25), 2, ".", "");
@@ -285,7 +285,7 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
           if ($clparec11->erro_status == 0) {
             throw new Exception($clparec11->erro_msg);
           }
-          
+
           $clparec11->si23_sequencial = null;
           $clparec11->si23_codfontrecursos = '102';
           $clparec11->si23_vlfonte = number_format(abs($oDados10->si22_vlacrescidoreduzido), 2, ".", "") - (number_format(abs($oDados10->si22_vlacrescidoreduzido * 0.60), 2, ".", "") + number_format(abs($oDados10->si22_vlacrescidoreduzido * 0.25), 2, ".", ""));
@@ -299,7 +299,7 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
           || $oDados10->si22_identificadordeducao != ''
         ) {
 
-          $clparec11 = new cl_parec112023();
+          $clparec11 = new cl_parec112024();
           $clparec11->si23_tiporegistro = $oDados11->si23_tiporegistro;
           $clparec11->si23_codreduzido = $oDados10->si22_codreduzido;
           $clparec11->si23_codfontrecursos = $oDados11->si23_codfontrecursos;
@@ -316,12 +316,12 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
         }
 
       }
-      
+
 
     }
-    
+
     db_fim_transacao();
-    
+
     $oGerarPAREC = new GerarPAREC();
     $oGerarPAREC->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarPAREC->gerarDados();
@@ -330,5 +330,5 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
     db_query("drop table if exists work_receita");
 
   }
-  
+
 }

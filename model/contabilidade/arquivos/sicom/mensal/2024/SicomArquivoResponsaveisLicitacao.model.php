@@ -1,9 +1,9 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_resplic102023_classe.php");
-require_once("classes/db_resplic202023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarRESPLIC.model.php");
+require_once("classes/db_resplic102024_classe.php");
+require_once("classes/db_resplic202024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarRESPLIC.model.php");
 
 /**
  * Responsáveis pela Licitação Sicom Acompanhamento Mensal
@@ -107,8 +107,8 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-        $clresplic10 = new cl_resplic102023();
-        $clresplic20 = new cl_resplic202023();
+        $clresplic10 = new cl_resplic102024();
+        $clresplic20 = new cl_resplic202024();
 
 
         /**
@@ -164,7 +164,7 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 			INNER JOIN liccomissaocgm AS liccomissaocgm ON (liclicita.l20_codigo=liccomissaocgm.l31_licitacao)
 			INNER JOIN protocolo.cgm as cgm on (liccomissaocgm.l31_numcgm=cgm.z01_numcgm)
 			INNER JOIN configuracoes.db_config as db_config on (liclicita.l20_instit=db_config.codigo)
-			INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom) 
+			INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
 	        INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
 			LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
             LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
@@ -178,12 +178,12 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 		                                                  '53',
 		                                                  '54') order by liclicita.l20_edital";
         $rsResult10 = db_query($sSql); //echo $sSql;exit;db_criatabela($rsResult10);
-        //db_criatabela($rsResult10); 
-        //exit; 
+        //db_criatabela($rsResult10);
+        //exit;
         $aLicitacoes = array();
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-            $clresplic10 = new cl_resplic102023();
+            $clresplic10 = new cl_resplic102024();
             $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
             if ($oDados10->l20_naturezaobjeto != 6 && $oDados10->tiporesp == 9) {
                 continue;
@@ -192,7 +192,7 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
             $clresplic10->si55_tiporegistro = 10;
             $clresplic10->si55_codorgao = $oDados10->codorgaoresp;
             if($oDados10->codunidsubant!= null || $oDados10->codunidsubant!=''){
-                $clresplic10->si55_codunidadesub = $oDados10->codunidsubant;    
+                $clresplic10->si55_codunidadesub = $oDados10->codunidsubant;
             }else{
                 $clresplic10->si55_codunidadesub = $oDados10->codunidadesubresp;
             }
@@ -221,7 +221,7 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
                     $clresplic10->si55_tiporegistro = 10;
                     $clresplic10->si55_codorgao = $oDados10->codorgaoresp;
                     if($oDados10->codunidsubant!= null || $oDados10->codunidsubant!=''){
-                        $clresplic10->si55_codunidadesub = $oDados10->codunidsubant;    
+                        $clresplic10->si55_codunidadesub = $oDados10->codunidsubant;
                     }else{
                         $clresplic10->si55_codunidadesub = $oDados10->codunidadesubresp;
                     }
@@ -240,7 +240,7 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
                     $clresplic10->si55_tiporegistro = 10;
                     $clresplic10->si55_codorgao = $oDados10->codorgaoresp;
                     if($oDados10->codunidsubant!= null || $oDados10->codunidsubant!=''){
-                        $clresplic10->si55_codunidadesub = $oDados10->codunidsubant;    
+                        $clresplic10->si55_codunidadesub = $oDados10->codunidsubant;
                     }else{
                         $clresplic10->si55_codunidadesub = $oDados10->codunidadesubresp;
                     }
@@ -307,13 +307,13 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-            $clresplic20 = new cl_resplic202023();
+            $clresplic20 = new cl_resplic202024();
             $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
             $clresplic20->si56_tiporegistro = 20;
             $clresplic20->si56_codorgao = $oDados20->codorgaoresp;
             if($oDados20->codunidsubant!= null || $oDados20->codunidsubant!=''){
-                $clresplic20->si56_codunidadesub = $oDados20->codunidsubant;    
+                $clresplic20->si56_codunidadesub = $oDados20->codunidsubant;
             }else{
                 $clresplic20->si56_codunidadesub = $oDados20->codunidadesubresp;
             }

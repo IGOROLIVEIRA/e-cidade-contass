@@ -23,13 +23,13 @@ class GerarDDC extends GerarAM
     $this->sArquivo = "DDC";
     $this->abreArquivo();
 
-    $sSql = "select * from ddc102023 where si153_mes = " . $this->iMes . " and si153_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from ddc102024 where si153_mes = " . $this->iMes . " and si153_instit = " . db_getsession("DB_instit");
     $rsDDC10 = db_query($sSql);
 
-    $sSql2 = "select * from ddc202023 where si154_mes = " . $this->iMes . " and si154_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from ddc202024 where si154_mes = " . $this->iMes . " and si154_instit = " . db_getsession("DB_instit");
     $rsDDC20 = db_query($sSql2);
 
-    $sSql3 = "select * from ddc302023 where si178_mes = " . $this->iMes . " and si178_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from ddc302024 where si178_mes = " . $this->iMes . " and si178_instit = " . db_getsession("DB_instit");
     $rsDDC30 = db_query($sSql3);
 
     if (pg_num_rows($rsDDC10) == 0 && pg_num_rows($rsDDC20) == 0 && pg_num_rows($rsDDC30) == 0 ) {

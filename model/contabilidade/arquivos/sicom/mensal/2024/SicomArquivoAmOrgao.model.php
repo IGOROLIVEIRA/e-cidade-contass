@@ -1,11 +1,11 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_orgao102023_classe.php");
-require_once("classes/db_orgao112023_classe.php");
+require_once("classes/db_orgao102024_classe.php");
+require_once("classes/db_orgao112024_classe.php");
 require_once("classes/db_identificacaoresponsaveis_classe.php");
 require_once("classes/db_db_config_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarORGAO.model.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarORGAO.model.php");
 
 /**
  * selecionar dados de Orgao Sicom Acompanhamento Mensal
@@ -97,8 +97,8 @@ class SicomArquivoAmOrgao extends SicomArquivoBase implements iPadArquivoBaseCSV
   public function gerarDados()
   {
 
-    $clorgao10 = new cl_orgao102023();
-    $clorgao11 = new cl_orgao112023();
+    $clorgao10 = new cl_orgao102024();
+    $clorgao11 = new cl_orgao112024();
     $clidentresp = new cl_identificacaoresponsaveis();
     $cl_db_config = new cl_db_config();
 
@@ -131,7 +131,7 @@ class SicomArquivoAmOrgao extends SicomArquivoBase implements iPadArquivoBaseCSV
     $aCaracteres = array(".", "-");
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-      $clorgao10 = new cl_orgao102023();
+      $clorgao10 = new cl_orgao102024();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
       $clorgao10->si14_tiporegistro = 10;
@@ -163,7 +163,7 @@ class SicomArquivoAmOrgao extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
-        $clorgao11 = new cl_orgao112023();
+        $clorgao11 = new cl_orgao112024();
         $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
 
         $clorgao11->si15_tiporegistro = 11; //echo $clorgao11->si15_tiporegistro ;

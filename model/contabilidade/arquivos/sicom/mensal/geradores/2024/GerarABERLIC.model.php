@@ -22,25 +22,25 @@ class GerarABERLIC extends GerarAM
         $this->sArquivo = "ABERLIC";
         $this->abreArquivo();
 
-        $sSql10 = "select * from aberlic102023 where si46_mes = " . $this->iMes . " and si46_instit=" . db_getsession("DB_instit");
+        $sSql10 = "select * from aberlic102024 where si46_mes = " . $this->iMes . " and si46_instit=" . db_getsession("DB_instit");
         $rsABERLIC10 = db_query($sSql10);
 
-        $sSql11 = "select * from aberlic112023 where si47_mes = " . $this->iMes . " and si47_instit=" . db_getsession("DB_instit");;
+        $sSql11 = "select * from aberlic112024 where si47_mes = " . $this->iMes . " and si47_instit=" . db_getsession("DB_instit");;
         $rsABERLIC11 = db_query($sSql11);
 
-        $sSql12 = "select * from aberlic122023 where si48_mes = " . $this->iMes . " and si48_instit=" . db_getsession("DB_instit");;
+        $sSql12 = "select * from aberlic122024 where si48_mes = " . $this->iMes . " and si48_instit=" . db_getsession("DB_instit");;
         $rsABERLIC12 = db_query($sSql12);
 
-        $sSql13 = "select * from aberlic132023 where si49_mes = " . $this->iMes . " and si49_instit=" . db_getsession("DB_instit");;
+        $sSql13 = "select * from aberlic132024 where si49_mes = " . $this->iMes . " and si49_instit=" . db_getsession("DB_instit");;
         $rsABERLIC13 = db_query($sSql13);
 
-        $sSql14 = "select * from aberlic142023 where si50_mes = " . $this->iMes . " and si50_instit=" . db_getsession("DB_instit");;
+        $sSql14 = "select * from aberlic142024 where si50_mes = " . $this->iMes . " and si50_instit=" . db_getsession("DB_instit");;
         $rsABERLIC14 = db_query($sSql14);
 
-        $sSql15 = "select * from aberlic152023 where si51_mes = " . $this->iMes . " and si51_instit=" . db_getsession("DB_instit");;
+        $sSql15 = "select * from aberlic152024 where si51_mes = " . $this->iMes . " and si51_instit=" . db_getsession("DB_instit");;
         $rsABERLIC15 = db_query($sSql15);
 
-        $sSql16 = "select * from aberlic162023 where si52_mes = " . $this->iMes . " and si52_instit=" . db_getsession("DB_instit");;
+        $sSql16 = "select * from aberlic162024 where si52_mes = " . $this->iMes . " and si52_instit=" . db_getsession("DB_instit");;
         $rsABERLIC16 = db_query($sSql16);
 
         if (pg_num_rows($rsABERLIC10) == 0) {
@@ -52,7 +52,7 @@ class GerarABERLIC extends GerarAM
 
             /**
              *
-             * Registros 10, 11, 12   
+             * Registros 10, 11, 12
              */
 
             for ($iCont = 0; $iCont < pg_num_rows($rsABERLIC10); $iCont++) {

@@ -1,7 +1,7 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_dclrf102023_classe.php");
+require_once ("classes/db_dclrf102024_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarDCLRF.model.php");
 
  /**
@@ -55,18 +55,18 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
    */
   public function gerarDados() {
 
-  	$cldclrf102023 = new cl_dclrf102023();
+  	$cldclrf102024 = new cl_dclrf102024();
 
     db_inicio_transacao();
 
     /*
      * excluir informacoes do mes selecionado registro 10
      */
-    $result = $cldclrf102023->sql_record($cldclrf102023->sql_query(NULL,"*",NULL,"si157_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si157_instit = ".db_getsession("DB_instit") ));
+    $result = $cldclrf102024->sql_record($cldclrf102024->sql_query(NULL,"*",NULL,"si157_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si157_instit = ".db_getsession("DB_instit") ));
     if (pg_num_rows($result) > 0) {
-      $cldclrf102023->excluir(NULL,"si157_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si157_instit = ".db_getsession("DB_instit"));
-      if ($cldclrf102023->erro_status == 0) {
-        throw new Exception($cldclrf102023->erro_msg);
+      $cldclrf102024->excluir(NULL,"si157_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si157_instit = ".db_getsession("DB_instit"));
+      if ($cldclrf102024->erro_status == 0) {
+        throw new Exception($cldclrf102024->erro_msg);
       }
     }
 
@@ -88,25 +88,25 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
 
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-          $cldclrf102023 = new cl_dclrf102023();
+          $cldclrf102024 = new cl_dclrf102024();
           $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-          $cldclrf102023->si157_tiporegistro                        = 10;
-          $cldclrf102023->si157_codorgao                            = $sCodorgao;
-          $cldclrf102023->si157_vlsaldoatualconcgarantia            = $oDados10->si170_vlsaldoatualconcgarantia;
-          $cldclrf102023->si157_recprivatizacao                     = $oDados10->si170_recprivatizacao;
-          $cldclrf102023->si157_vlliqincentcontrib                  = $oDados10->si170_vlliqincentcontrib;
-          $cldclrf102023->si157_vlliqincentinstfinanc               = $oDados10->si170_vlliqincentInstfinanc;
-          $cldclrf102023->si157_vlirpnpincentcontrib                = $oDados10->si170_vlIrpnpincentcontrib;
-          $cldclrf102023->si157_vlirpnpincentinstfinanc             = $oDados10->si170_vllrpnpincentinstfinanc;
-          $cldclrf102023->si157_vlcompromissado                     = $oDados10->si170_vlcompromissado;
-          $cldclrf102023->si157_vlrecursosnaoaplicados              = $oDados10->si170_vlrecursosnaoaplicados;
-          $cldclrf102023->si157_mes                                 = $this->sDataFinal['5'].$this->sDataFinal['6'];
-          $cldclrf102023->si157_instit                              = db_getsession("DB_instit");
+          $cldclrf102024->si157_tiporegistro                        = 10;
+          $cldclrf102024->si157_codorgao                            = $sCodorgao;
+          $cldclrf102024->si157_vlsaldoatualconcgarantia            = $oDados10->si170_vlsaldoatualconcgarantia;
+          $cldclrf102024->si157_recprivatizacao                     = $oDados10->si170_recprivatizacao;
+          $cldclrf102024->si157_vlliqincentcontrib                  = $oDados10->si170_vlliqincentcontrib;
+          $cldclrf102024->si157_vlliqincentinstfinanc               = $oDados10->si170_vlliqincentInstfinanc;
+          $cldclrf102024->si157_vlirpnpincentcontrib                = $oDados10->si170_vlIrpnpincentcontrib;
+          $cldclrf102024->si157_vlirpnpincentinstfinanc             = $oDados10->si170_vllrpnpincentinstfinanc;
+          $cldclrf102024->si157_vlcompromissado                     = $oDados10->si170_vlcompromissado;
+          $cldclrf102024->si157_vlrecursosnaoaplicados              = $oDados10->si170_vlrecursosnaoaplicados;
+          $cldclrf102024->si157_mes                                 = $this->sDataFinal['5'].$this->sDataFinal['6'];
+          $cldclrf102024->si157_instit                              = db_getsession("DB_instit");
 
-          $cldclrf102023->incluir(null);
-          if ($cldclrf102023->erro_status == 0) {
-            throw new Exception($cldclrf102023->erro_msg);
+          $cldclrf102024->incluir(null);
+          if ($cldclrf102024->erro_status == 0) {
+            throw new Exception($cldclrf102024->erro_msg);
           }
 
         }

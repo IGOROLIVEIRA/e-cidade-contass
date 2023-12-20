@@ -16,17 +16,17 @@ class GerarAOB extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "AOB";
     $this->abreArquivo();
-    
-    $sSql = "select * from aob102023 where si141_mes = " . $this->iMes;
+
+    $sSql = "select * from aob102024 where si141_mes = " . $this->iMes;
     $rsAOB10 = db_query($sSql);
 
-    $sSql2 = "select * from aob112023 where si142_mes = " . $this->iMes;
+    $sSql2 = "select * from aob112024 where si142_mes = " . $this->iMes;
     $rsAOB11 = db_query($sSql2);
 
 
@@ -60,14 +60,14 @@ class GerarAOB extends GerarAM
         $aCSVAOB10['si141_nroliquidacao']           = substr($aAOB10['si141_nroliquidacao'], 0, 22);
         $aCSVAOB10['si141_dtliquidacao']            = $this->sicomDate($aAOB10['si141_dtliquidacao']);
         $aCSVAOB10['si141_valoranulacaolancamento'] = $this->sicomNumberReal($aAOB10['si141_valoranulacaolancamento'], 2);
-        
+
         $this->sLinha = $aCSVAOB10;
         $this->adicionaLinha();
 
         for ($iCont2 = 0; $iCont2 < pg_num_rows($rsAOB11); $iCont2++) {
 
           $aAOB11 = pg_fetch_array($rsAOB11, $iCont2);
-          
+
           if ($aAOB10['si141_sequencial'] == $aAOB11['si142_reg10']) {
 
             $aCSVAOB11['si142_tiporegistro']        = $this->padZeroLeft($aAOB11['si142_tiporegistro'], 2);
@@ -77,7 +77,7 @@ class GerarAOB extends GerarAM
 
             $this->sLinha = $aCSVAOB11;
             $this->adicionaLinha();
-            
+
           }
 
         }

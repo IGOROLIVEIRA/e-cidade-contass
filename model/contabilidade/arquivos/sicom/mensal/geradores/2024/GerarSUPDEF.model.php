@@ -16,17 +16,17 @@ class GerarSUPDEF extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "SUPDEF";
     $this->abreArquivo();
-    
-    $sSql = "select * from supdef102023 where si141_mes = " . $this->iMes;
+
+    $sSql = "select * from supdef102024 where si141_mes = " . $this->iMes;
     $rsSUPDEF10 = db_query($sSql);
 
-    $sSql2 = "select * from supdef112023 where si142_mes = " . $this->iMes;
+    $sSql2 = "select * from supdef112024 where si142_mes = " . $this->iMes;
     $rsSUPDEF11 = db_query($sSql2);
 
     $aCSV['tiporegistro'] = '99';

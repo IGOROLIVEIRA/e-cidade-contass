@@ -1,11 +1,11 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_emp102023_classe.php");
-require_once("classes/db_emp112023_classe.php");
-require_once("classes/db_emp122023_classe.php");
-require_once("classes/db_emp302023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarEMP.model.php");
+require_once("classes/db_emp102024_classe.php");
+require_once("classes/db_emp112024_classe.php");
+require_once("classes/db_emp122024_classe.php");
+require_once("classes/db_emp302024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarEMP.model.php");
 require_once("model/empenho/EmpenhoFinanceiro.model.php");
 require_once("model/orcamento/ControleOrcamentario.model.php");
 
@@ -108,10 +108,10 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
   public function gerarDados()
   {
 
-    $cEmp10 = new cl_emp102023();
-    $cEmp11 = new cl_emp112023();
-    $cEmp12 = new cl_emp122023();
-    $cEmp30 = new cl_emp302023();
+    $cEmp10 = new cl_emp102024();
+    $cEmp11 = new cl_emp112024();
+    $cEmp12 = new cl_emp122024();
+    $cEmp30 = new cl_emp302024();
 
     $sSqlInstit = "select cgc from db_config where codigo = " . db_getsession("DB_instit");
     $rsResultCnpj = db_query($sSqlInstit);
@@ -162,20 +162,20 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
           $oElementos = $oDOMDocument->getElementsByTagName('elemento');
 
         }
-    
+
 
     /**
      * selecionar arquivo xml de Dados Compl LicitaÃ§Ã£o
      */
     $sArquivo = "config/sicom/" . (db_getsession("DB_anousu") - 1) . "/{$sCnpj}_sicomdadoscompllicitacao.xml";
     if (file_exists($sArquivo)) {
-            
+
           $sTextoXml = file_get_contents($sArquivo);
           $oDOMDocument = new DOMDocument();
           $oDOMDocument->loadXML($sTextoXml);
           $oDadosComplLicitacoes = $oDOMDocument->getElementsByTagName('dadoscompllicitacao');
         }
-    
+
 
     $sSql = "SELECT si09_codorgaotce AS codorgao,
         si09_tipoinstit
@@ -433,7 +433,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
     $aCaracteres = array("Â°", chr(13), chr(10), "'", ";");
     // matriz de entrada
-    
+
     $what = array(
       'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û',
       'Ä', 'Ã', 'À', 'Á', 'Â', 'Ê', 'Ë', 'È', 'É', 'Ï', 'Ì', 'Í', 'Ö', 'Õ', 'Ò', 'Ó', 'Ô', 'Ü', 'Ù', 'Ú', 'Û',
@@ -533,7 +533,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
       db_inicio_transacao();
 
-      $oDadosEmpenho10 = new cl_emp102023();
+      $oDadosEmpenho10 = new cl_emp102024();
 
       $oDadosEmpenho10->si106_tiporegistro = $oEmpenho10->tiporegistro; // campo 1
       $oDadosEmpenho10->si106_codorgao = $oEmpenho10->codorgao; // campo 2
@@ -719,7 +719,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
       /**
        * dados registro 11
        */
-      $oDadosEmpenhoFonte = new cl_emp112023();
+      $oDadosEmpenhoFonte = new cl_emp112024();
 
         $oCodigoAcompanhamento = new ControleOrcamentario();
         $oCodigoAcompanhamento->setTipoDespesa($oEmpenho10->e60_tipodespesa);
@@ -743,7 +743,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
       }
 
 
-      $oEmp12 = new cl_emp122023();
+      $oEmp12 = new cl_emp122024();
 
       $oEmp12->si108_tiporegistro = '12';
       $oEmp12->si108_codunidadesub = $sCodUnidade;
@@ -865,7 +865,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
           /**
            * dados do registro 30
            */
-          $oDadosEmpenho30 = new cl_emp302023();
+          $oDadosEmpenho30 = new cl_emp302024();
 
           $oDadosEmpenho30->si206_tiporegistro = $oEmpenho30->tiporegistro; // campo 1
           $oDadosEmpenho30->si206_codorgao = $oEmpenho30->codorgao; //campo 2

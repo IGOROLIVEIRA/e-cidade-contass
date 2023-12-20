@@ -23,13 +23,13 @@ class GerarREDISPI extends GerarAM
         $this->sArquivo = "REDISPI";
         $this->abreArquivo();
 
-        $sSql = "select * from redispi102023 where si183_mes = " . $this->iMes . " and si183_instit=" . db_getsession("DB_instit");
+        $sSql = "select * from redispi102024 where si183_mes = " . $this->iMes . " and si183_instit=" . db_getsession("DB_instit");
         $rsREDISPI10 = db_query($sSql);
 
-        $sSql2 = "select * from redispi112023 where si184_mes = " . $this->iMes . " and si184_instit=" . db_getsession("DB_instit");;
+        $sSql2 = "select * from redispi112024 where si184_mes = " . $this->iMes . " and si184_instit=" . db_getsession("DB_instit");;
         $rsREDISPI11 = db_query($sSql2);
 
-        $sSql3 = "select * from redispi122023 where si185_mes = " . $this->iMes . " and si185_instit=" . db_getsession("DB_instit");;
+        $sSql3 = "select * from redispi122024 where si185_mes = " . $this->iMes . " and si185_instit=" . db_getsession("DB_instit");;
         $rsREDISPI12 = db_query($sSql3);
 
 

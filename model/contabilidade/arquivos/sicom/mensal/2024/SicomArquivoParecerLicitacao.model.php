@@ -1,8 +1,8 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_parelic102023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarPARELIC.model.php");
+require_once("classes/db_parelic102024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarPARELIC.model.php");
 
 /**
  * Parecer da Licitação Sicom Acompanhamento Mensal
@@ -11,30 +11,30 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarPARE
  */
 class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  
+
   /**
    *
    * Codigo do layout. (db_layouttxt.db50_codigo)
    * @var Integer
    */
   protected $iCodigoLayout = 159;
-  
+
   /**
    *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'PARELIC';
-  
+
   /**
    *
    * Construtor da classe
    */
   public function __construct()
   {
-    
+
   }
-  
+
   /**
    * Retorna o codigo do layout
    *
@@ -44,13 +44,13 @@ class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArqui
   {
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
   public function getCampos()
   {
-    
+
     $aElementos = array(
       "codOrgao",
       "codUnidadeSub",
@@ -71,7 +71,7 @@ class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArqui
 
     return $aElementos;
   }
-  
+
   /**
    * Parecer da Licitação do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
@@ -82,7 +82,7 @@ class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArqui
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clparelic10 = new cl_parelic102023();
+    $clparelic10 = new cl_parelic102024();
 
     /**
      * excluir informacoes do mes selecioado
@@ -96,7 +96,7 @@ class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArqui
       }
     }
     //
-    
+
 
     $sSql = " 	SELECT distinct '10' AS tipoRegistro,
          infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
@@ -144,20 +144,20 @@ class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArqui
 		                                                  '54')";
 
     $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);
-    
+
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-      
-      $clparelic10 = new cl_parelic102023();
+
+      $clparelic10 = new cl_parelic102024();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
       $clparelic10->si66_tiporegistro = 10;
       $clparelic10->si66_codorgao = $oDados10->codorgaoresp;
       if($oDados10->codunidsubant!= null || $oDados10->codunidsubant!=''){
-        $clparelic10->si66_codunidadesub = $oDados10->codunidsubant;  
+        $clparelic10->si66_codunidadesub = $oDados10->codunidsubant;
       }else{
         $clparelic10->si66_codunidadesub = $oDados10->codunidadesubresp;
       }
-      
+
       $clparelic10->si66_exerciciolicitacao = $oDados10->exerciciolicitacao;
       $clparelic10->si66_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio;
       $clparelic10->si66_dataparecer = $oDados10->dataparecer;
@@ -173,7 +173,7 @@ class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArqui
 
     }
     db_fim_transacao();
-    
+
     $oGerarPARELIC = new GerarPARELIC();
     $oGerarPARELIC->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarPARELIC->gerarDados();

@@ -1,8 +1,8 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_item102023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarITEM.model.php");
+require_once("classes/db_item102024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarITEM.model.php");
 
 /**
  * gerar arquivo de identificacao da Remessa Sicom Acompanhamento Mensal
@@ -61,7 +61,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clitem10 = new cl_item102023();
+    $clitem10 = new cl_item102024();
 
     /**
      * excluir informacoes do mes selecioado
@@ -104,9 +104,9 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
     $by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-      $clitem10 = new cl_item102023();
+      $clitem10 = new cl_item102024();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-      $sSqlitem = "select si43_coditem,si43_unidademedida from item102023  where si43_instit = " . db_getsession('DB_instit') . " and si43_coditem=" . $oDados10->coditem . " and si43_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+      $sSqlitem = "select si43_coditem,si43_unidademedida from item102024  where si43_instit = " . db_getsession('DB_instit') . " and si43_coditem=" . $oDados10->coditem . " and si43_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $sSqlitem .= " union
         select si43_coditem,si43_unidademedida from item102022 where si43_instit = " . db_getsession('DB_instit') . " and si43_coditem=" . $oDados10->coditem;
       $sSqlitem .= " union

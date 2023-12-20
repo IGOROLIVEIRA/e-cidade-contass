@@ -15,16 +15,16 @@ require_once('libs/db_libcontabilidade.php');
 require_once('libs/db_liborcamento.php');
 require_once('fpdf151/PDFDocument.php');
 
-require_once("classes/db_bpdcasp102023_classe.php");
-require_once("classes/db_bpdcasp202023_classe.php");
-require_once("classes/db_bpdcasp302023_classe.php");
-require_once("classes/db_bpdcasp402023_classe.php");
-require_once("classes/db_bpdcasp502023_classe.php");
-require_once("classes/db_bpdcasp602023_classe.php");
-require_once("classes/db_bpdcasp702023_classe.php");
-require_once("classes/db_bpdcasp712023_classe.php");
+require_once("classes/db_bpdcasp102024_classe.php");
+require_once("classes/db_bpdcasp202024_classe.php");
+require_once("classes/db_bpdcasp302024_classe.php");
+require_once("classes/db_bpdcasp402024_classe.php");
+require_once("classes/db_bpdcasp502024_classe.php");
+require_once("classes/db_bpdcasp602024_classe.php");
+require_once("classes/db_bpdcasp702024_classe.php");
+require_once("classes/db_bpdcasp712024_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/2023/dcasp/geradores/GerarBP.model.php");
+require_once("model/contabilidade/arquivos/sicom/2024/dcasp/geradores/GerarBP.model.php");
 
 /**
  * gerar arquivo de Balanço Patrimonial
@@ -102,14 +102,14 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clbpdcasp10 = new cl_bpdcasp102023();
-    $clbpdcasp20 = new cl_bpdcasp202023();
-    $clbpdcasp30 = new cl_bpdcasp302023();
-    $clbpdcasp40 = new cl_bpdcasp402023();
-    $clbpdcasp50 = new cl_bpdcasp502023();
-    $clbpdcasp60 = new cl_bpdcasp602023();
-    $clbpdcasp70 = new cl_bpdcasp702023();
-    $clbpdcasp71 = new cl_bpdcasp712023();
+    $clbpdcasp10 = new cl_bpdcasp102024();
+    $clbpdcasp20 = new cl_bpdcasp202024();
+    $clbpdcasp30 = new cl_bpdcasp302024();
+    $clbpdcasp40 = new cl_bpdcasp402024();
+    $clbpdcasp50 = new cl_bpdcasp502024();
+    $clbpdcasp60 = new cl_bpdcasp602024();
+    $clbpdcasp70 = new cl_bpdcasp702024();
+    $clbpdcasp71 = new cl_bpdcasp712024();
 
     /**
      * excluir informacoes caso estejam repetidas
@@ -205,7 +205,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 
     /**
-     * O método `getDados()`, da classe `BalancoPatromonialDCASP2023()`,
+     * O método `getDados()`, da classe `BalancoPatromonialDCASP2024()`,
      * retorna um array enorme. Para pegar os dados necessários para cada
      * registro do SICOM DCASP, estamos passando os índices exatos do array.
      * Se eles forem alterados (nas configurações dos relatórios), devem
@@ -226,7 +226,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     $oRetornoBP = $oBalancoPatrimonial->getDados();
 
-    /** BPDCASP102023
+    /** BPDCASP102024
      *  Quadro principal do relatório
      */
 
@@ -236,7 +236,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $clbpdcasp10  = new cl_bpdcasp102023();
+      $clbpdcasp10  = new cl_bpdcasp102024();
 
       $clbpdcasp10->si208_ano                               = $iAnoUsu;
       $clbpdcasp10->si208_periodo                           = $iCodigoPeriodo;
@@ -266,7 +266,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $clbpdcasp20  = new cl_bpdcasp202023();
+      $clbpdcasp20  = new cl_bpdcasp202024();
 
       $clbpdcasp20->si209_ano                                 = $iAnoUsu;
       $clbpdcasp20->si209_periodo                             = $iCodigoPeriodo;
@@ -325,7 +325,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $clbpdcasp30  = new cl_bpdcasp302023();
+      $clbpdcasp30  = new cl_bpdcasp302024();
 
       $clbpdcasp30->si210_ano                               = $iAnoUsu;
       $clbpdcasp30->si210_periodo                           = $iCodigoPeriodo;
@@ -346,7 +346,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $clbpdcasp40  = new cl_bpdcasp402023();
+      $clbpdcasp40  = new cl_bpdcasp402024();
 
       $clbpdcasp40->si211_ano                                 = $iAnoUsu;
       $clbpdcasp40->si211_periodo                             = $iCodigoPeriodo;
@@ -367,7 +367,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $clbpdcasp50  = new cl_bpdcasp502023();
+      $clbpdcasp50  = new cl_bpdcasp502024();
 
       $clbpdcasp50->si212_ano                 = $iAnoUsu;
       $clbpdcasp50->si212_periodo             = $iCodigoPeriodo;
@@ -386,7 +386,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $clbpdcasp60  = new cl_bpdcasp602023();
+      $clbpdcasp60  = new cl_bpdcasp602024();
 
       $clbpdcasp60->si213_ano                                 = $iAnoUsu;
       $clbpdcasp60->si213_periodo                             = $iCodigoPeriodo;
@@ -410,7 +410,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     } // $rsResult60
 
     /**
-     * @see funcao getSuperavitDeficit em BalancoPatrimonialDCASP2023.model.php
+     * @see funcao getSuperavitDeficit em BalancoPatrimonialDCASP2024.model.php
      */
 
 
@@ -436,7 +436,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       for ($iContfr = 0; $iContfr < pg_num_rows($rsSqlfr); $iContfr++) {
 
-        $clbpdcasp71 = new cl_bpdcasp712023();
+        $clbpdcasp71 = new cl_bpdcasp712024();
         $objContasfr = db_utils::fieldsMemory($rsSqlfr, $iContfr);
         $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente(false,$objContasfr->o15_codigo)) ;
         //db_criatabela($rsSaldoFontes);
@@ -468,7 +468,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       foreach($aDadosSuperavitFontes as $oDadosBP71) {
         if($oDadosBP71->si215_vlsaldofonte != 0){
 
-          $clbpdcasp71 = new cl_bpdcasp712023();
+          $clbpdcasp71 = new cl_bpdcasp712024();
           $clbpdcasp71->si215_ano = $iAnoUsu;
           $clbpdcasp71->si215_periodo = $iCodigoPeriodo;
           $clbpdcasp71->si215_institu = db_getsession("DB_instit");
@@ -485,7 +485,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
         } elseif ($oDadosBP71->si215_codfontrecursos == 100){
 
-            $clbpdcasp71 = new cl_bpdcasp712023();
+            $clbpdcasp71 = new cl_bpdcasp712024();
             $clbpdcasp71->si215_ano = $iAnoUsu;
             $clbpdcasp71->si215_periodo = $iCodigoPeriodo;
             $clbpdcasp71->si215_institu = db_getsession("DB_instit");
@@ -504,7 +504,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       /**
        * o registro 70 é o total do registro 71
        */
-      $clbpdcasp70  = new cl_bpdcasp702023();
+      $clbpdcasp70  = new cl_bpdcasp702024();
 
       $clbpdcasp70->si214_ano           = $iAnoUsu;
       $clbpdcasp70->si214_periodo       = $iCodigoPeriodo;

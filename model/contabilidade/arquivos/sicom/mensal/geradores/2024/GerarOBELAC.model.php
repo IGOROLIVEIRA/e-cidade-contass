@@ -17,17 +17,17 @@ class GerarOBELAC extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "OBELAC";
     $this->abreArquivo();
-    
-    $sSql = "select * from obelac102023 where si139_mes = " . $this->iMes;
+
+    $sSql = "select * from obelac102024 where si139_mes = " . $this->iMes;
     $rsOBELAC10 = db_query($sSql);
 
-    $sSql2 = "select * from obelac112023 where si140_mes = " . $this->iMes;
+    $sSql2 = "select * from obelac112024 where si140_mes = " . $this->iMes;
     $rsOBELAC11 = db_query($sSql2);
 
 
@@ -60,14 +60,14 @@ class GerarOBELAC extends GerarAM
         $aCSVOBELAC10['si139_dtliquidacao']     = $this->sicomDate($aOBELAC10['si139_dtliquidacao']);
         $aCSVOBELAC10['si139_esplancamento']    = substr($aOBELAC10['si139_esplancamento'], 0, 200);
         $aCSVOBELAC10['si139_valorlancamento']  = $this->sicomNumberReal($aOBELAC10['si139_valorlancamento'], 2);
-        
+
         $this->sLinha = $aCSVOBELAC10;
         $this->adicionaLinha();
 
         for ($iCont2 = 0; $iCont2 < pg_num_rows($rsOBELAC11); $iCont2++) {
 
           $aOBELAC11 = pg_fetch_array($rsOBELAC11, $iCont2);
-          
+
           if ($aOBELAC10['si139_sequencial'] == $aOBELAC11['si140_reg10']) {
 
             $aCSVOBELAC11['si140_tiporegistro']     = $this->padLeftZero($aOBELAC11['si140_tiporegistro'], 2);

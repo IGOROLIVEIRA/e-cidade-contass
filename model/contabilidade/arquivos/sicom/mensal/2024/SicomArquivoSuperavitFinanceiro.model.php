@@ -1,7 +1,7 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarSUPDEF.model.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarSUPDEF.model.php");
 
 /**
  * @author Marcelo
@@ -9,23 +9,23 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarSUPD
  */
 class SicomArquivoSuperavitFinanceiro extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  
+
   /**
    *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'SUPDEF';
-  
+
   /**
    *
    * Construtor da classe
    */
   public function __construct()
   {
-    
+
   }
-  
+
   /**
    * Retorna o codigo do layout
    *
@@ -35,7 +35,7 @@ class SicomArquivoSuperavitFinanceiro extends SicomArquivoBase implements iPadAr
   {
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
@@ -43,7 +43,7 @@ class SicomArquivoSuperavitFinanceiro extends SicomArquivoBase implements iPadAr
   {
 
   }
-  
+
   /**
    * selecionar os dados
    * @see iPadArquivoBase::gerarDados()

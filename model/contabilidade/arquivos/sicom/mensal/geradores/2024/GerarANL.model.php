@@ -16,17 +16,17 @@ class GerarANL extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "ANL";
     $this->abreArquivo();
-    
-    $sSql = "select * from anl102023 where si110_mes = " . $this->iMes . " and si110_instit = " . db_getsession("DB_instit");
+
+    $sSql = "select * from anl102024 where si110_mes = " . $this->iMes . " and si110_instit = " . db_getsession("DB_instit");
     $rsANL10 = db_query($sSql);
 
-    $sSql2 = "select * from anl112023 where si111_mes = " . $this->iMes . " and si111_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from anl112024 where si111_mes = " . $this->iMes . " and si111_instit = " . db_getsession("DB_instit");
     $rsANL11 = db_query($sSql2);
 
 
@@ -56,14 +56,14 @@ class GerarANL extends GerarAM
         $aCSVANL10['si110_tipoanulacao']          = $this->padLeftZero($aANL10['si110_tipoanulacao'], 1);
         $aCSVANL10['si110_especanulacaoempenho']  = substr($aANL10['si110_especanulacaoempenho'], 0, 200);
         $aCSVANL10['si110_vlanulacao']            = $this->sicomNumberReal($aANL10['si110_vlanulacao'], 2);
-        
+
         $this->sLinha = $aCSVANL10;
         $this->adicionaLinha();
 
         for ($iCont2 = 0; $iCont2 < pg_num_rows($rsANL11); $iCont2++) {
 
           $aANL11 = pg_fetch_array($rsANL11, $iCont2);
-          
+
           if ($aANL10['si110_sequencial'] == $aANL11['si111_reg10']) {
 
             $aCSVANL11['si111_tiporegistro']    = $this->padLeftZero($aANL11['si111_tiporegistro'], 2);
@@ -73,7 +73,7 @@ class GerarANL extends GerarAM
             $aCSVANL11['si111_codfontrecursos'] = $this->padLeftZero($aANL11['si111_codfontrecursos'], 7);
             $aCSVANL11['si111_codco'] = $this->padLeftZero($aANL11['si111_codco'], 4);
             $aCSVANL11['si111_vlanulacaofonte'] = $this->sicomNumberReal($aANL11['si111_vlanulacaofonte'], 2);
-            
+
             $this->sLinha = $aCSVANL11;
             $this->adicionaLinha();
 

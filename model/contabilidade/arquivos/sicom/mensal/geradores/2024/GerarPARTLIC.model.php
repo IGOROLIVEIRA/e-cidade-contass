@@ -23,10 +23,10 @@ class GerarPARTLIC extends GerarAM
     $this->sArquivo = "PARTLIC";
     $this->abreArquivo();
 
-    $sSql = "select * from PARTLIC102023 where si203_mes = " . $this->iMes . " and si203_instit=" . db_getsession("DB_instit");
+    $sSql = "select * from PARTLIC102024 where si203_mes = " . $this->iMes . " and si203_instit=" . db_getsession("DB_instit");
     $rsPARTLIC10 = db_query($sSql);
 
-  
+
     if (pg_num_rows($rsPARTLIC10) == 0 && pg_num_rows($rsPARTLIC10) == 0) {
 
       $aCSV['tiporegistro'] = '99';
@@ -53,7 +53,7 @@ class GerarPARTLIC extends GerarAM
         $this->sLinha = $aCSVPARTLIC10;
         $this->adicionaLinha();
 
-        
+
       }
 
       $this->fechaArquivo();

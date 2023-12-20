@@ -2,9 +2,9 @@
 
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_tce102023_classe.php");
-require_once ("classes/db_tce112023_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarTCE.model.php");
+require_once ("classes/db_tce102024_classe.php");
+require_once ("classes/db_tce112024_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarTCE.model.php");
  /**
   * TomadasContasEspeciais Sicom Acompanhamento Mensal
   * @author igor
@@ -56,28 +56,28 @@ class SicomArquivoTomadasContasEspeciais extends SicomArquivoBase implements iPa
    */
   public function gerarDados() {
 
-    $tce102023 = new cl_tce102023();
-    $tce112023 = new cl_tce112023();
+    $tce102024 = new cl_tce102024();
+    $tce112024 = new cl_tce112024();
 
 
     db_inicio_transacao();
 
     /*
-     * excluir informacoes do mes selecionado 
+     * excluir informacoes do mes selecionado
      */
 
-    $result = $tce112023->sql_record($tce112023->sql_query(NULL,"*",NULL,"si188_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si188_instit = ".db_getsession("DB_instit") ));
+    $result = $tce112024->sql_record($tce112024->sql_query(NULL,"*",NULL,"si188_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si188_instit = ".db_getsession("DB_instit") ));
     if (pg_num_rows($result) > 0) {
-      $tce112023->excluir(NULL,"si188_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si188_instit = ".db_getsession("DB_instit"));
-      if ($tce112023->erro_status == 0) {
-        throw new Exception($tce112023->erro_msg);
+      $tce112024->excluir(NULL,"si188_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si188_instit = ".db_getsession("DB_instit"));
+      if ($tce112024->erro_status == 0) {
+        throw new Exception($tce112024->erro_msg);
       }
     }
-    $result = $tce102023->sql_record($tce102023->sql_query(NULL,"*",NULL,"si187_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si187_instit = ".db_getsession("DB_instit") ));
+    $result = $tce102024->sql_record($tce102024->sql_query(NULL,"*",NULL,"si187_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si187_instit = ".db_getsession("DB_instit") ));
     if (pg_num_rows($result) > 0) {
-      $tce102023->excluir(NULL,"si187_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si187_instit = ".db_getsession("DB_instit"));
-      if ($tce102023->erro_status == 0) {
-        throw new Exception($tce102023->erro_msg);
+      $tce102024->excluir(NULL,"si187_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si187_instit = ".db_getsession("DB_instit"));
+      if ($tce102024->erro_status == 0) {
+        throw new Exception($tce102024->erro_msg);
       }
     }
 
@@ -92,31 +92,31 @@ class SicomArquivoTomadasContasEspeciais extends SicomArquivoBase implements iPa
      * selecionar informacoes registro 10
      */
 
-        $sSql       = "select * from tce102023 ";
+        $sSql       = "select * from tce102024 ";
 
         $rsResult10 = db_query($sSql);
 
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-          // $cldclrf102023 = new cl_dclrf102023();
+          // $cldclrf102024 = new cl_dclrf102024();
           // $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-          // $cldclrf102023->si157_tiporegistro                        = 10;
-          // $cldclrf102023->si157_codorgao                            = $sCodorgao;
-          // $cldclrf102023->si157_vlsaldoatualconcgarantia            = $oDados10->si170_vlsaldoatualconcgarantia;
-          // $cldclrf102023->si157_recprivatizacao                     = $oDados10->si170_recprivatizacao;
-          // $cldclrf102023->si157_vlliqincentcontrib                  = $oDados10->si170_vlliqincentcontrib;
-          // $cldclrf102023->si157_vlliqincentinstfinanc               = $oDados10->si170_vlliqincentInstfinanc;
-          // $cldclrf102023->si157_vlirpnpincentcontrib                = $oDados10->si170_vlIrpnpincentcontrib;
-          // $cldclrf102023->si157_vlirpnpincentinstfinanc             = $oDados10->si170_vllrpnpincentinstfinanc;
-          // $cldclrf102023->si157_vlcompromissado                     = $oDados10->si170_vlcompromissado;
-          // $cldclrf102023->si157_vlrecursosnaoaplicados              = $oDados10->si170_vlrecursosnaoaplicados;
-          // $cldclrf102023->si157_mes                                 = $this->sDataFinal['5'].$this->sDataFinal['6'];
-          // $cldclrf102023->si157_instit                              = db_getsession("DB_instit");
+          // $cldclrf102024->si157_tiporegistro                        = 10;
+          // $cldclrf102024->si157_codorgao                            = $sCodorgao;
+          // $cldclrf102024->si157_vlsaldoatualconcgarantia            = $oDados10->si170_vlsaldoatualconcgarantia;
+          // $cldclrf102024->si157_recprivatizacao                     = $oDados10->si170_recprivatizacao;
+          // $cldclrf102024->si157_vlliqincentcontrib                  = $oDados10->si170_vlliqincentcontrib;
+          // $cldclrf102024->si157_vlliqincentinstfinanc               = $oDados10->si170_vlliqincentInstfinanc;
+          // $cldclrf102024->si157_vlirpnpincentcontrib                = $oDados10->si170_vlIrpnpincentcontrib;
+          // $cldclrf102024->si157_vlirpnpincentinstfinanc             = $oDados10->si170_vllrpnpincentinstfinanc;
+          // $cldclrf102024->si157_vlcompromissado                     = $oDados10->si170_vlcompromissado;
+          // $cldclrf102024->si157_vlrecursosnaoaplicados              = $oDados10->si170_vlrecursosnaoaplicados;
+          // $cldclrf102024->si157_mes                                 = $this->sDataFinal['5'].$this->sDataFinal['6'];
+          // $cldclrf102024->si157_instit                              = db_getsession("DB_instit");
 
-          // $cldclrf102023->incluir(null);
-          // if ($cldclrf102023->erro_status == 0) {
-          //   throw new Exception($cldclrf102023->erro_msg);
+          // $cldclrf102024->incluir(null);
+          // if ($cldclrf102024->erro_status == 0) {
+          //   throw new Exception($cldclrf102024->erro_msg);
           // }
 
         }

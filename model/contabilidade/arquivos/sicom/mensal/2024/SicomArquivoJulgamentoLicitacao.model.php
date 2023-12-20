@@ -1,11 +1,11 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_julglic102023_classe.php");
-require_once("classes/db_julglic202023_classe.php");
-require_once("classes/db_julglic302023_classe.php");
-require_once("classes/db_julglic402023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarJULGLIC.model.php");
+require_once("classes/db_julglic102024_classe.php");
+require_once("classes/db_julglic202024_classe.php");
+require_once("classes/db_julglic302024_classe.php");
+require_once("classes/db_julglic402024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarJULGLIC.model.php");
 
 
 /**
@@ -120,10 +120,10 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 		/**
 		 * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
 		 */
-		$cljulglic10 = new cl_julglic102023();
-		$cljulglic20 = new cl_julglic202023();
-		$cljulglic30 = new cl_julglic302023();
-		$cljulglic40 = new cl_julglic402023();
+		$cljulglic10 = new cl_julglic102024();
+		$cljulglic20 = new cl_julglic202024();
+		$cljulglic30 = new cl_julglic302024();
+		$cljulglic40 = new cl_julglic402024();
 
 		/**
 		 * excluir informacoes do mes selecioado
@@ -189,14 +189,14 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 		ELSE 2
 	END) as tipoDocumento,
 	cgm.z01_cgccpf as nroDocumento,
-	CASE WHEN liclicita.l20_tipojulg = 3 THEN aberlic112023.si47_nrolote  ELSE 0 END AS nroLote,
-	CASE 
+	CASE WHEN liclicita.l20_tipojulg = 3 THEN aberlic112024.si47_nrolote  ELSE 0 END AS nroLote,
+	CASE
 	WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
   ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
 	pcorcamval.pc23_vlrun as vlUnitario,
 	pcorcamval.pc23_quant as quantidade,
   l20_codigo as codlicitacao,
-  aberlic102023.si46_criterioadjudicacao as criterioadjudicacao,
+  aberlic102024.si46_criterioadjudicacao as criterioadjudicacao,
   manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
 	FROM liclicita as liclicita
 	INNER JOIN homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
@@ -213,8 +213,8 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 	inner join pcmater on pcmater.pc01_codmater = solicitempcmater.pc16_codmater
 	INNER JOIN pcorcamval ON (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem and pcorcamforne.pc21_orcamforne=pcorcamval.pc23_orcamforne)
   LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
-  LEFT JOIN aberlic102023 on (aberlic102023.si46_nroprocessolicitatorio = liclicita.l20_edital::varchar)
-	LEFT JOIN aberlic112023 on (liclicitemlote.l04_descricao = aberlic112023.si47_dsclote and aberlic112023.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
+  LEFT JOIN aberlic102024 on (aberlic102024.si46_nroprocessolicitatorio = liclicita.l20_edital::varchar)
+	LEFT JOIN aberlic112024 on (liclicitemlote.l04_descricao = aberlic112024.si47_dsclote and aberlic112024.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
 	LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
   LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
   INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
@@ -280,7 +280,7 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 
 		foreach ($aDadosAgrupados10 as $oDadosAgrupados10) {
 
-			$cljulglic10 = new cl_julglic102023();
+			$cljulglic10 = new cl_julglic102024();
 
 			$cljulglic10->si60_tiporegistro = $oDadosAgrupados10->si60_tiporegistro;
 			$cljulglic10->si60_codorgao = $oDadosAgrupados10->si60_codorgao;
@@ -331,12 +331,12 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 		ELSE 2
 	END) as tipoDocumento,
 	cgm.z01_cgccpf as nroDocumento,
-	aberlic112023.si47_nrolote as nroLote,
-	CASE 
+	aberlic112024.si47_nrolote as nroLote,
+	CASE
 	WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
   ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
   pcorcamval.pc23_perctaxadesctabela as percDesconto,
-  aberlic102023.si46_criterioadjudicacao as criterioadjudicacao,
+  aberlic102024.si46_criterioadjudicacao as criterioadjudicacao,
   manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
 	FROM liclicita as liclicita
 	INNER JOIN homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
@@ -353,11 +353,11 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 	INNER JOIN pcmater on (solicitempcmater.pc16_codmater = pcmater.pc01_codmater)
 	INNER JOIN pcorcamval ON (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem and pcorcamforne.pc21_orcamforne=pcorcamval.pc23_orcamforne)
   LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
-  LEFT JOIN aberlic102023 on (aberlic102023.si46_nroprocessolicitatorio = liclicita.l20_edital::varchar
-  and aberlic102023.si46_instit = liclicita.l20_instit)
-	LEFT JOIN aberlic112023 on (liclicitemlote.l04_descricao = aberlic112023.si47_dsclote 
-	and aberlic112023.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar
-	and aberlic102023.si46_instit = liclicita.l20_instit)
+  LEFT JOIN aberlic102024 on (aberlic102024.si46_nroprocessolicitatorio = liclicita.l20_edital::varchar
+  and aberlic102024.si46_instit = liclicita.l20_instit)
+	LEFT JOIN aberlic112024 on (liclicitemlote.l04_descricao = aberlic112024.si47_dsclote
+	and aberlic112024.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar
+	and aberlic102024.si46_instit = liclicita.l20_instit)
 	LEFT JOIN descontotabela on (liclicita.l20_codigo=descontotabela.l204_licitacao
 	and pcorcamforne.pc21_orcamforne=descontotabela.l204_fornecedor
 	and descontotabela.l204_item=solicitempcmater.pc16_codmater)
@@ -365,7 +365,7 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
   LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 	LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
-	WHERE aberlic102023.si46_criterioadjudicacao = 1 AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
+	WHERE aberlic102024.si46_criterioadjudicacao = 1 AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
 
 		if (count($aLicitacoes) > 0) {
 			$rsResult20 = db_query($sSql);
@@ -408,7 +408,7 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 
 		foreach ($aDadosAgrupados20 as $oDadosAgrupados20) {
 
-			$cljulglic20 = new cl_julglic202023();
+			$cljulglic20 = new cl_julglic202024();
 
 			$cljulglic20->si61_tiporegistro = $oDadosAgrupados20->si61_tiporegistro;
 			$cljulglic20->si61_codorgao = $oDadosAgrupados20->si61_codorgao;
@@ -458,12 +458,12 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
     ELSE 2
   END) as tipoDocumento,
   cgm.z01_cgccpf as nroDocumento,
-  aberlic112023.si47_nrolote as nroLote,
-  CASE 
+  aberlic112024.si47_nrolote as nroLote,
+  CASE
   WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
 ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
   pcorcamval.pc23_percentualdesconto as perctaxaadm,
-  aberlic102023.si46_criterioadjudicacao as criterioadjudicacao,
+  aberlic102024.si46_criterioadjudicacao as criterioadjudicacao,
   manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
   FROM liclicita as liclicita
   INNER JOIN homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
@@ -480,8 +480,8 @@ ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1
   INNER JOIN pcmater on (solicitempcmater.pc16_codmater = pcmater.pc01_codmater)
   INNER JOIN pcorcamval ON (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem and pcorcamforne.pc21_orcamforne=pcorcamval.pc23_orcamforne)
   LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
-  LEFT JOIN aberlic102023 on (aberlic102023.si46_nroprocessolicitatorio = liclicita.l20_edital::varchar)
-  LEFT JOIN aberlic112023 on (liclicitemlote.l04_descricao = aberlic112023.si47_dsclote and aberlic112023.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
+  LEFT JOIN aberlic102024 on (aberlic102024.si46_nroprocessolicitatorio = liclicita.l20_edital::varchar)
+  LEFT JOIN aberlic112024 on (liclicitemlote.l04_descricao = aberlic112024.si47_dsclote and aberlic112024.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
   LEFT JOIN descontotabela on (liclicita.l20_codigo=descontotabela.l204_licitacao
   and pcorcamforne.pc21_orcamforne=descontotabela.l204_fornecedor
   and descontotabela.l204_item=solicitempcmater.pc16_codmater)
@@ -490,7 +490,7 @@ ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1
   LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
   LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
   WHERE db_config.codigo = " . db_getsession("DB_instit") . "
-  AND aberlic102023.si46_criterioadjudicacao = 2 AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
+  AND aberlic102024.si46_criterioadjudicacao = 2 AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
 
 		if (count($aLicitacoes) > 0) {
 			$rsResult30 = db_query($sSql);
@@ -532,7 +532,7 @@ ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1
 
 		foreach ($aDadosAgrupados30 as $oDadosAgrupados30) {
 
-			$cljulglic30 = new cl_julglic302023();
+			$cljulglic30 = new cl_julglic302024();
 
 			$cljulglic30->si62_tiporegistro = $oDadosAgrupados30->si62_tiporegistro;
 			$cljulglic30->si62_codorgao = $oDadosAgrupados30->si62_codorgao;
@@ -628,7 +628,7 @@ ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1
 		}
 
 		foreach ($aDadosAgrupados40 as $oDados40) {
-			$cljulglic40 = new cl_julglic402023();
+			$cljulglic40 = new cl_julglic402024();
 
 			$cljulglic40->si62_tiporegistro = $oDados40->si62_tiporegistro;
 			$cljulglic40->si62_codorgao = $oDados40->si62_codorgao;

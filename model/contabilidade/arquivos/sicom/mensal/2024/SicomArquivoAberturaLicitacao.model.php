@@ -1,15 +1,15 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_aberlic102023_classe.php");
-require_once("classes/db_aberlic112023_classe.php");
-require_once("classes/db_aberlic122023_classe.php");
-require_once("classes/db_aberlic132023_classe.php");
-require_once("classes/db_aberlic142023_classe.php");
-require_once("classes/db_aberlic152023_classe.php");
-require_once("classes/db_aberlic162023_classe.php");
+require_once("classes/db_aberlic102024_classe.php");
+require_once("classes/db_aberlic112024_classe.php");
+require_once("classes/db_aberlic122024_classe.php");
+require_once("classes/db_aberlic132024_classe.php");
+require_once("classes/db_aberlic142024_classe.php");
+require_once("classes/db_aberlic152024_classe.php");
+require_once("classes/db_aberlic162024_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarABERLIC.model.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarABERLIC.model.php");
 
 
 /**
@@ -144,13 +144,13 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-        $claberlic10 = new cl_aberlic102023();
-        $claberlic11 = new cl_aberlic112023();
-        $claberlic12 = new cl_aberlic122023();
-        $claberlic13 = new cl_aberlic132023();
-        $claberlic14 = new cl_aberlic142023();
-        $claberlic15 = new cl_aberlic152023();
-        $claberlic16 = new cl_aberlic162023();
+        $claberlic10 = new cl_aberlic102024();
+        $claberlic11 = new cl_aberlic112024();
+        $claberlic12 = new cl_aberlic122024();
+        $claberlic13 = new cl_aberlic132024();
+        $claberlic14 = new cl_aberlic142024();
+        $claberlic15 = new cl_aberlic152024();
+        $claberlic16 = new cl_aberlic162024();
 
         /**
          * excluir informacoes do mes selecioado para evitar duplicacao de registros
@@ -246,7 +246,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
        l20_dtpulicacaoedital as dataPubli,
        l20_linkedital as linkPublic,
        l20_diariooficialdivulgacao as divulgacaoDo,
-       l20_mododisputa as modoDisputa, 
+       l20_mododisputa as modoDisputa,
   (SELECT CASE
     WHEN o41_subunidade != 0
          OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
@@ -331,14 +331,14 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
 
         $rsResult10 = db_query($sSql);
         //echo $sSql;
-        //db_criatabela($rsResult10); 
-        //exit; 
+        //db_criatabela($rsResult10);
+        //exit;
         /**
          * registro 10
          */
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-            $claberlic10 = new cl_aberlic102023();
+            $claberlic10 = new cl_aberlic102024();
             $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
             $claberlic10->si46_tiporegistro = 10;
@@ -450,7 +450,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
 
                 if (!isset($aDadosAgrupados11[$sHash11])) {
 
-                    $claberlic11 = new cl_aberlic112023();
+                    $claberlic11 = new cl_aberlic112024();
 
                     $claberlic11->si47_tiporegistro = 11;
                     $claberlic11->si47_codorgaoresp = $oResult11->codorgaoresp;
@@ -497,7 +497,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
         liclicita.l20_anousu as exercicioLicitacao,
         liclicita.l20_edital as nroProcessoLicitatorio,
-        CASE 
+        CASE
         WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
       ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
         manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
@@ -518,7 +518,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
             $rsResult12 = db_query($sSql); //db_criatabela($rsResult12);echo $sSql;
             for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
 
-                $claberlic12 = new cl_aberlic122023();
+                $claberlic12 = new cl_aberlic122024();
                 $oDados12 = db_utils::fieldsMemory($rsResult12, $iCont12);
 
                 $claberlic12->si48_tiporegistro = 12;
@@ -565,8 +565,8 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
       liclicita.l20_anousu as exercicioLicitacao,
       liclicita.l20_edital as nroProcessoLicitatorio,
-      aberlic112023.si47_nrolote as nroLote,
-      CASE 
+      aberlic112024.si47_nrolote as nroLote,
+      CASE
       WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
     ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
       manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
@@ -578,7 +578,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
       INNER JOIN pcmater on (solicitempcmater.pc16_codmater = pcmater.pc01_codmater)
       INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
       INNER JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
-      INNER JOIN aberlic112023 on (liclicitemlote.l04_descricao = aberlic112023.si47_dsclote and aberlic112023.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
+      INNER JOIN aberlic112024 on (liclicitemlote.l04_descricao = aberlic112024.si47_dsclote and aberlic112024.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
       LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
       LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
       LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
@@ -590,7 +590,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
             $rsResult13 = db_query($sSql); //echo pg_last_error();db_criatabela($rsResult13);
             for ($iCont13 = 0; $iCont13 < pg_num_rows($rsResult13); $iCont13++) {
 
-                $claberlic13 = new cl_aberlic132023();
+                $claberlic13 = new cl_aberlic132024();
                 $oDados13 = db_utils::fieldsMemory($rsResult13, $iCont13);
 
                 $claberlic13->si49_tiporegistro = 13;
@@ -636,8 +636,8 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
     liclicita.l20_anousu as exercicioLicitacao,
     liclicita.l20_edital as nroProcessoLicitatorio,
-    CASE WHEN liclicita.l20_tipojulg = 3 THEN aberlic112023.si47_nrolote ELSE 0 END AS nroLote,
-    CASE 
+    CASE WHEN liclicita.l20_tipojulg = 3 THEN aberlic112024.si47_nrolote ELSE 0 END AS nroLote,
+    CASE
     WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
   ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
     precoreferencia.si01_datacotacao as dtCotacao,
@@ -649,7 +649,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     FROM liclicitem
     INNER JOIN liclicita on (liclicitem.l21_codliclicita=liclicita.l20_codigo)
     LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
-    LEFT JOIN aberlic112023 on (liclicitemlote.l04_descricao = aberlic112023.si47_dsclote and aberlic112023.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
+    LEFT JOIN aberlic112024 on (liclicitemlote.l04_descricao = aberlic112024.si47_dsclote and aberlic112024.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
     INNER JOIN pcprocitem  on (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
     INNER JOIN solicitem on (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
     INNER JOIN solicitempcmater on (solicitem.pc11_codigo = solicitempcmater.pc16_solicitem)
@@ -710,7 +710,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
 
             foreach ($aDadosAgrupados14 as $oDadosAgrupados14) {
 
-                $claberlic14 = new cl_aberlic142023();
+                $claberlic14 = new cl_aberlic142024();
 
                 $claberlic14->si50_tiporegistro = $oDadosAgrupados14->si50_tiporegistro;
                 $claberlic14->si50_codorgaoresp = $oDadosAgrupados14->si50_codorgaoresp;
@@ -762,8 +762,8 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
     liclicita.l20_anousu as exercicioLicitacao,
     liclicita.l20_edital as nroProcessoLicitatorio,
-    aberlic112023.si47_nrolote as nroLote,
-    CASE 
+    aberlic112024.si47_nrolote as nroLote,
+    CASE
     WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
   ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
     itemprecoreferencia.si02_vlprecoreferencia as vlItem,
@@ -771,7 +771,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     FROM liclicitem
     INNER JOIN liclicita on (liclicitem.l21_codliclicita=liclicita.l20_codigo)
     INNER JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
-    INNER JOIN aberlic112023 on (liclicitemlote.l04_descricao = aberlic112023.si47_dsclote and aberlic112023.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
+    INNER JOIN aberlic112024 on (liclicitemlote.l04_descricao = aberlic112024.si47_dsclote and aberlic112024.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
     INNER JOIN pcprocitem  on (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
     INNER JOIN solicitem on (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
     INNER JOIN solicitempcmater on (solicitem.pc11_codigo = solicitempcmater.pc16_solicitem)
@@ -796,7 +796,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
             $rsResult15 = db_query($sSql); //db_criatabela($rsResult15);
             for ($iCont15 = 0; $iCont15 < pg_num_rows($rsResult15); $iCont15++) {
 
-                $claberlic15 = new cl_aberlic152023();
+                $claberlic15 = new cl_aberlic152024();
                 $oDados15 = db_utils::fieldsMemory($rsResult15, $iCont15);
 
                 $claberlic15->si51_tiporegistro = 15;
@@ -885,7 +885,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
             $rsResult16 = db_query($sSql); //db_criatabela($rsResult16);echo pg_last_error();
             for ($iCont16 = 0; $iCont16 < pg_num_rows($rsResult16); $iCont16++) {
 
-                $claberlic16 = new cl_aberlic162023();
+                $claberlic16 = new cl_aberlic162024();
                 $oDados16 = db_utils::fieldsMemory($rsResult16, $iCont16);
 
                 $claberlic16->si52_tiporegistro = 16;

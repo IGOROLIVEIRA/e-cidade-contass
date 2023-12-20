@@ -16,23 +16,23 @@ class GerarCAIXA extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "CAIXA";
     $this->abreArquivo();
-    
-    $sSql = "select * from caixa102023 where si103_mes = " . $this->iMes . " and si103_instit = " . db_getsession("DB_instit");
+
+    $sSql = "select * from caixa102024 where si103_mes = " . $this->iMes . " and si103_instit = " . db_getsession("DB_instit");
     $rsCAIXA10 = db_query($sSql);
 
-    $sSql2 = "select * from caixa112023 where si166_mes = " . $this->iMes . " and si166_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from caixa112024 where si166_mes = " . $this->iMes . " and si166_instit = " . db_getsession("DB_instit");
     $rsCAIXA11 = db_query($sSql2);
 
-    $sSql3 = "select * from caixa122023 where si104_mes = " . $this->iMes . " and si104_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from caixa122024 where si104_mes = " . $this->iMes . " and si104_instit = " . db_getsession("DB_instit");
     $rsCAIXA12 = db_query($sSql3);
 
-    $sSql4 = "select * from caixa132023 where si105_mes = " . $this->iMes . " and si105_instit = " . db_getsession("DB_instit");
+    $sSql4 = "select * from caixa132024 where si105_mes = " . $this->iMes . " and si105_instit = " . db_getsession("DB_instit");
     $rsCAIXA13 = db_query($sSql4);
 
     if (pg_num_rows($rsCAIXA10) == 0) {
@@ -55,14 +55,14 @@ class GerarCAIXA extends GerarAM
         $aCSVCAIXA10['si103_codorgao']        = $this->padLeftZero($aCAIXA10['si103_codorgao'], 2);
         $aCSVCAIXA10['si103_vlsaldoinicial']  = $this->sicomNumberReal($aCAIXA10['si103_vlsaldoinicial'], 2);
         $aCSVCAIXA10['si103_vlsaldofinal']    = $this->sicomNumberReal($aCAIXA10['si103_vlsaldofinal'], 2);
-        
+
         $this->sLinha = $aCSVCAIXA10;
         $this->adicionaLinha();
 
         for ($iCont2 = 0; $iCont2 < pg_num_rows($rsCAIXA11); $iCont2++) {
 
           $aCAIXA11 = pg_fetch_array($rsCAIXA11, $iCont2);
-          
+
           if ($aCAIXA10['si103_sequencial'] == $aCAIXA11['si166_reg10']) {
 
             $aCSVCAIXA11['si166_tiporegistro']        = $this->padLeftZero($aCAIXA11['si166_tiporegistro'], 2);
@@ -77,7 +77,7 @@ class GerarCAIXA extends GerarAM
           for ($iCont3 = 0; $iCont3 < pg_num_rows($rsCAIXA12); $iCont3++) {
 
             $aCAIXA12 = pg_fetch_array($rsCAIXA12, $iCont3);
-            
+
             if ($aCAIXA10['si103_sequencial'] == $aCAIXA12['si104_reg10'] && $aCSVCAIXA11['si166_codfontecaixa'] == $aCAIXA12['si104_codfontecaixa']) {
 
               $aCSVCAIXA12['si104_tiporegistro']      = $this->padLeftZero($aCAIXA12['si104_tiporegistro'], 2);

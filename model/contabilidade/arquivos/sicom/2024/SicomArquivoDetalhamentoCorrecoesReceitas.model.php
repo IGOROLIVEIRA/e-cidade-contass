@@ -1,11 +1,11 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_arc102023_classe.php");
-require_once ("classes/db_arc112023_classe.php");
-require_once ("classes/db_arc122023_classe.php");
-require_once ("classes/db_arc202023_classe.php");
-require_once ("classes/db_arc212023_classe.php");
+require_once ("classes/db_arc102024_classe.php");
+require_once ("classes/db_arc112024_classe.php");
+require_once ("classes/db_arc122024_classe.php");
+require_once ("classes/db_arc202024_classe.php");
+require_once ("classes/db_arc212024_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarARC.model.php");
 
  /**
@@ -14,29 +14,29 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarARC.mode
   * @package Contabilidade
   */
 class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase implements iPadArquivoBaseCSV {
-  
+
 	/**
-	 * 
+	 *
 	 * Codigo do layout. (db_layouttxt.db50_codigo)
 	 * @var Integer
 	 */
   protected $iCodigoLayout = 150;
-  
+
   /**
-   * 
+   *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'ARC';
-  
+
   /**
-   * 
+   *
    * Construtor da classe
    */
   public function __construct() {
-    
+
   }
-  
+
   /**
 	 * Retorna o codigo do layout
 	 *
@@ -45,12 +45,12 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
   public function getCodigoLayout(){
     return $this->iCodigoLayout;
   }
-  
+
   /**
-   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV 
+   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
   public function getCampos(){
-    
+
     $aElementos[10] = array(
 	                          "tipoRegistro",
 	                          "codOrgao",
@@ -62,7 +62,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
 	                          "rubricaAcrescida",
 						    					  "codFonteAcrescida",
 						    					  "especificacaoAcrescida",
-						    					  "vlDeduzidoAcrescido"	
+						    					  "vlDeduzidoAcrescido"
                         );
     $aElementos[20] = array(
 	                          "tipoRegistro",
@@ -75,17 +75,17 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                         );
     return $aElementos;
   }
-  
+
   /**
    * selecionar os dados de detalhamente das correcoes receitas do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados() {
-    
+
   	$oGerarARC = new GerarARC();
   	$oGerarARC->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
   	$oGerarARC->gerarDados();
-  
+
   }
-		
+
 }

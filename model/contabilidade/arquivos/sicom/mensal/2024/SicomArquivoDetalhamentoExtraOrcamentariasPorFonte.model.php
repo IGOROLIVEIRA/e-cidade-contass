@@ -1,15 +1,15 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_ext102023_classe.php");
-require_once("classes/db_ext202023_classe.php");
-require_once("classes/db_ext302023_classe.php");
-require_once("classes/db_ext312023_classe.php");
-require_once("classes/db_rsp102023_classe.php");
+require_once("classes/db_ext102024_classe.php");
+require_once("classes/db_ext202024_classe.php");
+require_once("classes/db_ext302024_classe.php");
+require_once("classes/db_ext312024_classe.php");
+require_once("classes/db_rsp102024_classe.php");
 require_once("model/orcamento/DeParaRecurso.model.php");
 
 
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarEXT.model.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarEXT.model.php");
 
 /**
  * Detalhamento Extra Ocamentarias Sicom Acompanhamento Mensal
@@ -40,7 +40,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
     protected $bEncerramento = false;
 
     /**
-     * @var array Fontes encerradas em 2023
+     * @var array Fontes encerradas em 2024
      */
     protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
@@ -111,10 +111,10 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
     public function gerarDados()
     {
 
-        $cExt10 = new cl_ext102023();
-        $cExt20 = new cl_ext202023();
-        $cExt30 = new cl_ext302023();
-        $cExt31 = new cl_ext312023();
+        $cExt10 = new cl_ext102024();
+        $cExt20 = new cl_ext202024();
+        $cExt30 = new cl_ext302024();
+        $cExt31 = new cl_ext312024();
 
         /*
   	 * CASO JA TENHA SIDO GERADO ALTERIORMENTE PARA O MESMO PERIDO O SISTEMA IRA
@@ -214,7 +214,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
             if (!isset($aExt10Agrupodo[$aHash])) {
 
-                $cExt10 = new cl_ext102023();
+                $cExt10 = new cl_ext102024();
 
                 $cExt10->si124_tiporegistro     = $oContaExtra->tiporegistro;
                 $cExt10->si124_codext              = $oContaExtra->codtce != 0 ? $oContaExtra->codtce : $oContaExtra->codext;
@@ -230,7 +230,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                 /*
                  * VERIFICA SE NO EM ALGUMA REMESSA ENVIADA O CODEXT FOI IMFORMADO, CASO NÃO TENHA ENCONTRATO CRIA UM NOVO
                  */
-                $sSqlVerifica  = "SELECT 1 FROM ext102023
+                $sSqlVerifica  = "SELECT 1 FROM ext102024
                                      WHERE si124_codorgao        = '" . $cExt10->si124_codorgao . "'
                                        AND si124_tipolancamento  = '" . $cExt10->si124_tipolancamento . "'
                                        AND si124_subtipo         = '" . $cExt10->si124_subtipo . "'
@@ -359,7 +359,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
                     //OC11537
                     $bFonteEncerrada  = in_array($oExtRecursoTCE, $this->aFontesEncerradas);
-                    $bCorrecaoFonte   = ($bFonteEncerrada && $this->sDataFinal['5'] . $this->sDataFinal['6'] == '01' && db_getsession("DB_anousu") == 2023);
+                    $bCorrecaoFonte   = ($bFonteEncerrada && $this->sDataFinal['5'] . $this->sDataFinal['6'] == '01' && db_getsession("DB_anousu") == 2024);
 
                     $oExtRecursoTCE2 = $bFonteEncerrada ? substr($oExtRecursoTCE, 0, 1) . '59' : $oExtRecursoTCE; //caso atenda condição, altera para fonte nova 159 ou 259
 
@@ -444,7 +444,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                     $sDataFinal = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                     $iInstit = db_getsession ("DB_instit");
 
-                    $cExt30 = new cl_ext302023();
+                    $cExt30 = new cl_ext302024();
 
                     $sSqlMov = $cExt30->sqlReg30 ($oExtras, $oExtRecurso, $iAnousu, $sDataFinal);
                     $rsExtMov = db_query($sSqlMov);
@@ -454,7 +454,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
                         $oExtMov = db_utils::fieldsMemory($rsExtMov, $linha);
 
-                        $cExt30 = new cl_ext302023();
+                        $cExt30 = new cl_ext302024();
 
                         $sSql30 = $cExt30->sqlMovimentosReg30 ($oExtMov, $iInstit, $iAnousu);
                         $rsExt30 = db_query($sSql30) or die($sSql30);
@@ -605,18 +605,18 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
         $aExt20 = $this->lancamentosGenericos($aExt20);
 
 
-        if($this->sDataFinal['5'] . $this->sDataFinal['6'] == '01' && db_getsession("DB_anousu") == 2023){
+        if($this->sDataFinal['5'] . $this->sDataFinal['6'] == '01' && db_getsession("DB_anousu") == 2024){
             $aExt20 = $this->lancamentosGenericosTransferenciaSaldoFonte($aExt20);
         }
 
-        if($this->sDataFinal['5'] . $this->sDataFinal['6'] != '01' && db_getsession("DB_anousu") == 2023){
+        if($this->sDataFinal['5'] . $this->sDataFinal['6'] != '01' && db_getsession("DB_anousu") == 2024){
             $aExt20 = $this->lancamentosGenericosTransferenciaSaldoFontePosJaneiro($aExt20);
         }
 
         ksort($aExt20);
         foreach ($aExt20 as $oExt20) {
 
-            $cExt   = new cl_ext202023();
+            $cExt   = new cl_ext202024();
 
             $cExt->si165_tiporegistro          = $oExt20->si165_tiporegistro;
             $cExt->si165_codorgao              = $oExt20->si165_codorgao;
@@ -658,7 +658,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
             }
             foreach ($oExt20->ext30 as $oExtAgrupado) {
 
-                $cExt30 = new cl_ext302023();
+                $cExt30 = new cl_ext302024();
 
                 $cExt30->si126_tiporegistro        = $oExtAgrupado->si126_tiporegistro;
                 $cExt30->si126_codext              = $oExtAgrupado->si126_codext;
@@ -682,7 +682,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
                 foreach ($oExtAgrupado->ext31 as $oext31agrupado) {
 
-                    $cExt31 = new cl_ext312023();
+                    $cExt31 = new cl_ext312024();
 
 
                     $cExt31->si127_tiporegistro        = 31;
@@ -991,7 +991,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
             $nVlSaldoAnteriorFonte = 0;
             $sNatSaldoAnteriorFonte = 'C';
             $sSaldoAnterior  = "select si165_vlsaldoatualfonte, si165_natsaldoatualfonte ";
-            $sSaldoAnterior .= "from ext202023 where si165_mes={$iMes} and si165_instit={$oExt20->si165_instit} ";
+            $sSaldoAnterior .= "from ext202024 where si165_mes={$iMes} and si165_instit={$oExt20->si165_instit} ";
             $sSaldoAnterior .= " and si165_codext={$oExt20->si165_codext} and si165_codfontrecursos={$oExt20->si165_codfontrecursos} ";
 
             $rsSaldoAnterior = db_query($sSaldoAnterior);

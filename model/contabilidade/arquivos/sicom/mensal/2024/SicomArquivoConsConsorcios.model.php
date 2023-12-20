@@ -1,12 +1,12 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_consor102023_classe.php");
-require_once("classes/db_consor202023_classe.php");
-require_once("classes/db_consor302023_classe.php");
-require_once("classes/db_consor402023_classe.php");
-require_once("classes/db_consor502023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarCONSOR.model.php");
+require_once("classes/db_consor102024_classe.php");
+require_once("classes/db_consor202024_classe.php");
+require_once("classes/db_consor302024_classe.php");
+require_once("classes/db_consor402024_classe.php");
+require_once("classes/db_consor502024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarCONSOR.model.php");
 
 /**
  * gerar arquivo de identificacao da Remessa Sicom Acompanhamento Mensal
@@ -67,11 +67,11 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clconsor10 = new cl_consor102023();
-    $clconsor20 = new cl_consor202023();
-    $clconsor30 = new cl_consor302023();
-    $clconsor40 = new cl_consor402023();
-    $clconsor50 = new cl_consor502023();
+    $clconsor10 = new cl_consor102024();
+    $clconsor20 = new cl_consor202024();
+    $clconsor30 = new cl_consor302024();
+    $clconsor40 = new cl_consor402024();
+    $clconsor50 = new cl_consor502024();
 
     /**
      * excluir informacoes do mes selecioado
@@ -132,7 +132,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
     $rsResult10 = db_query($sSql);
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-      $clconsor10 = new cl_consor102023();
+      $clconsor10 = new cl_consor102024();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
       $clconsor10->si16_tiporegistro = 10;
       $clconsor10->si16_codorgao = $oDados10->si09_codorgaotce;
@@ -157,7 +157,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
         when c201_codacompanhamento is null then '0000'
     else
         c201_codacompanhamento
-    end as c201_codacompanhamento 
+    end as c201_codacompanhamento
     from consvalorestransf
 		join consconsorcios on c201_consconsorcios = c200_sequencial
 		join cgm on c200_numcgm = z01_numcgm
@@ -170,7 +170,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
      */
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-      $clconsor20 = new cl_consor202023();
+      $clconsor20 = new cl_consor202024();
       $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
       $clconsor20->si17_tiporegistro = 20;
@@ -189,7 +189,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
       }
 
     }
-    $sSql = "select si09_codorgaotce, z01_cgccpf, c202_sequencial,c202_consconsorcios ,c202_mescompetencia ,c202_funcao 
+    $sSql = "select si09_codorgaotce, z01_cgccpf, c202_sequencial,c202_consconsorcios ,c202_mescompetencia ,c202_funcao
     ,c202_subfuncao ,c202_codfontrecursos,c202_elemento ,c202_valorempenhado,c202_valorempenhadoanu,c202_valorliquidado
     ,c202_valorliquidadoanu,c202_valorpago,c202_valorpagoanu,c202_anousu,c202_mesreferenciasicom,
     case
@@ -212,7 +212,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
      */
     for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
-      $clconsor30 = new cl_consor302023();
+      $clconsor30 = new cl_consor302024();
       $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
 
       $clconsor30->si18_tiporegistro = 30;
@@ -254,7 +254,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
        */
       for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 
-        $clconsor40 = new cl_consor402023();
+        $clconsor40 = new cl_consor402024();
         $oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
 
         $clconsor40->si19_tiporegistro = 40;
@@ -283,7 +283,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
 
     for ($iCont50 = 0; $iCont50 < pg_num_rows($rsResult50); $iCont50++) {
 
-      $clconsor50 = new cl_consor502023();
+      $clconsor50 = new cl_consor502024();
       $oDados50 = db_utils::fieldsMemory($rsResult50, $iCont50);
 
       $clconsor50->si20_tiporegistro = 50;

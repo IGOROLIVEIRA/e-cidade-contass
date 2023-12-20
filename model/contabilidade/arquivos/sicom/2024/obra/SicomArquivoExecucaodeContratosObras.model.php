@@ -1,9 +1,9 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("model/contabilidade/arquivos/sicom/2023/obra/geradores/gerarEXEOBRAS.php");
-require_once("classes/db_exeobras102023_classe.php");
-require_once("classes/db_exeobras202023_classe.php");
+require_once("model/contabilidade/arquivos/sicom/2024/obra/geradores/gerarEXEOBRAS.php");
+require_once("classes/db_exeobras102024_classe.php");
+require_once("classes/db_exeobras202024_classe.php");
 
 /**
  * Execução dos Contratos de Obras e Serviços de Engenharia
@@ -61,8 +61,8 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-        $exeobras102023 = new cl_exeobras102023();
-        $exeobras202023 = new cl_exeobras202023();
+        $exeobras102024 = new cl_exeobras102024();
+        $exeobras202024 = new cl_exeobras202024();
 
         /**
          * excluir informacoes do mes selecioado para evitar duplicacao de registros
@@ -71,22 +71,22 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
         /**
          * registro 10 exclusão
          */
-        $result = db_query($exeobras102023->sql_query(null, "*", null, "si197_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si197_instit=" . db_getsession("DB_instit")));
+        $result = db_query($exeobras102024->sql_query(null, "*", null, "si197_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si197_instit=" . db_getsession("DB_instit")));
         if (pg_num_rows($result) > 0) {
-            $exeobras102023->excluir(null, "si197_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si197_instit=" . db_getsession("DB_instit"));
-            if ($exeobras102023->erro_status == 0) {
-                throw new Exception($exeobras102023->erro_msg);
+            $exeobras102024->excluir(null, "si197_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si197_instit=" . db_getsession("DB_instit"));
+            if ($exeobras102024->erro_status == 0) {
+                throw new Exception($exeobras102024->erro_msg);
             }
         }
 
         /**
          * registro 20 exclusão
          */
-        $result = db_query($exeobras202023->sql_query(null, "*", null, "si204_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si204_instit=" . db_getsession("DB_instit")));
+        $result = db_query($exeobras202024->sql_query(null, "*", null, "si204_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si204_instit=" . db_getsession("DB_instit")));
         if (pg_num_rows($result) > 0) {
-            $exeobras202023->excluir(null, "si204_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si204_instit=" . db_getsession("DB_instit"));
-            if ($exeobras202023->erro_status == 0) {
-                throw new Exception($exeobras202023->erro_msg);
+            $exeobras202024->excluir(null, "si204_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si204_instit=" . db_getsession("DB_instit"));
+            if ($exeobras202024->erro_status == 0) {
+                throw new Exception($exeobras202024->erro_msg);
             }
         }
         /**
@@ -179,46 +179,46 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
       INNER JOIN cflicita ON l20_codtipocom = l03_codigo
       INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
       LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
-      left join acordoobra on obr08_acordo = ac16_sequencial 
+      left join acordoobra on obr08_acordo = ac16_sequencial
       WHERE si09_tipoinstit in (1,2,3,4,5,6,8,9)
           AND ac16_instit = ".db_getsession("DB_instit")."
           AND l03_pctipocompratribunal NOT IN (100,101,102,103)
           AND DATE_PART('YEAR',acordo.ac16_dataassinatura)= " . db_getsession("DB_anousu") . "
-          AND DATE_PART('MONTH',acordo.ac16_dataassinatura)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and 
-          case 
+          AND DATE_PART('MONTH',acordo.ac16_dataassinatura)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and
+          case
             when l20_tipojulg = 3
-              then obr08_liclicitemlote = obr01_licitacaolote 
+              then obr08_liclicitemlote = obr01_licitacaolote
             else 1 = 1
         end";
         $rsResult10 = db_query($sql);//echo $sql;db_criatabela($rsResult10);exit;
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-      $clexeobras102023 = new cl_exeobras102023();
+      $clexeobras102024 = new cl_exeobras102024();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-      $clexeobras102023->si197_tiporegistro = 10;
-      $clexeobras102023->si197_codorgao = $oDados10->si197_codorgao;
-      $clexeobras102023->si197_codunidadesub = $oDados10->si197_codunidadesub;
-      $clexeobras102023->si197_nrocontrato = $oDados10->si197_nrocontrato;
-      $clexeobras102023->si197_exerciciocontrato = $oDados10->si197_exerciciocontrato;
+      $clexeobras102024->si197_tiporegistro = 10;
+      $clexeobras102024->si197_codorgao = $oDados10->si197_codorgao;
+      $clexeobras102024->si197_codunidadesub = $oDados10->si197_codunidadesub;
+      $clexeobras102024->si197_nrocontrato = $oDados10->si197_nrocontrato;
+      $clexeobras102024->si197_exerciciocontrato = $oDados10->si197_exerciciocontrato;
       if($oDados10->ac16_tipoorigem){
-        $clexeobras102023->si197_contdeclicitacao = $oDados10->ac16_tipoorigem;
+        $clexeobras102024->si197_contdeclicitacao = $oDados10->ac16_tipoorigem;
       }else{
-        $clexeobras102023->si197_contdeclicitacao = null;
+        $clexeobras102024->si197_contdeclicitacao = null;
       }
-      $clexeobras102023->si197_exerciciolicitacao = $oDados10->si197_exerciciolicitacao;
-      $clexeobras102023->si197_nroprocessolicitatorio = $oDados10->si197_nroprocessolicitatorio;
-      $clexeobras102023->si197_codunidadesubresp = $oDados10->si197_codunidadesubresp;
-      $clexeobras102023->si197_nrolote = $oDados10->si197_nrolote;
-      $clexeobras102023->si197_codobra = $oDados10->si197_codobra;
-      $clexeobras102023->si197_objeto = $this->removeCaracteres($oDados10->si197_objeto);
-      $clexeobras102023->si197_linkobra = $oDados10->si197_linkobra;
-      $clexeobras102023->si197_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-      $clexeobras102023->si197_instit = db_getsession("DB_instit");
-      $clexeobras102023->incluir(null);
+      $clexeobras102024->si197_exerciciolicitacao = $oDados10->si197_exerciciolicitacao;
+      $clexeobras102024->si197_nroprocessolicitatorio = $oDados10->si197_nroprocessolicitatorio;
+      $clexeobras102024->si197_codunidadesubresp = $oDados10->si197_codunidadesubresp;
+      $clexeobras102024->si197_nrolote = $oDados10->si197_nrolote;
+      $clexeobras102024->si197_codobra = $oDados10->si197_codobra;
+      $clexeobras102024->si197_objeto = $this->removeCaracteres($oDados10->si197_objeto);
+      $clexeobras102024->si197_linkobra = $oDados10->si197_linkobra;
+      $clexeobras102024->si197_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+      $clexeobras102024->si197_instit = db_getsession("DB_instit");
+      $clexeobras102024->incluir(null);
 
-            if ($clexeobras102023->erro_status == 0) {
-                throw new Exception($clexeobras102023->erro_msg);
+            if ($clexeobras102024->erro_status == 0) {
+                throw new Exception($clexeobras102024->erro_msg);
             }
         }
 
@@ -318,32 +318,32 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
         $rsResult20 = db_query($sql);
 
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
-            $clexeobras202023 = new cl_exeobras202023();
+            $clexeobras202024 = new cl_exeobras202024();
             $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
-            $clexeobras202023->si204_tiporegistro = 20;
-            $clexeobras202023->si204_codorgao = $oDados20->si204_codorgao;
-            $clexeobras202023->si204_codunidadesub = $oDados20->si204_codunidadesub;
-            $clexeobras202023->si204_nrocontrato = $oDados20->si204_nrocontrato;
-            $clexeobras202023->si204_exerciciocontrato = $oDados20->si204_exerciciocontrato;
+            $clexeobras202024->si204_tiporegistro = 20;
+            $clexeobras202024->si204_codorgao = $oDados20->si204_codorgao;
+            $clexeobras202024->si204_codunidadesub = $oDados20->si204_codunidadesub;
+            $clexeobras202024->si204_nrocontrato = $oDados20->si204_nrocontrato;
+            $clexeobras202024->si204_exerciciocontrato = $oDados20->si204_exerciciocontrato;
             if($oDados20->ac16_tipoorigem){
-                $clexeobras202023->si204_contdeclicitacao = $oDados20->ac16_tipoorigem;
+                $clexeobras202024->si204_contdeclicitacao = $oDados20->ac16_tipoorigem;
             }else{
-                $clexeobras202023->si204_contdeclicitacao = null;
+                $clexeobras202024->si204_contdeclicitacao = null;
             }
-            $clexeobras202023->si204_exercicioprocesso = $oDados20->si204_exercicioprocesso;
-            $clexeobras202023->si204_nroprocesso = $oDados20->si204_nroprocesso;
-            $clexeobras202023->si204_codunidadesubresp = $oDados20->si204_codunidadesubresp;
-            $clexeobras202023->si204_tipoprocesso = $oDados20->si204_tipoprocesso;
-            $clexeobras202023->si204_codobra = $oDados20->si204_codobra;
-            $clexeobras202023->si204_objeto = $this->removeCaracteres($oDados20->si204_objeto);
-            $clexeobras202023->si204_linkobra = $oDados20->si204_linkobra;
-            $clexeobras202023->si204_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-            $clexeobras202023->si204_instit = db_getsession("DB_instit");
-            $clexeobras202023->incluir(null);
+            $clexeobras202024->si204_exercicioprocesso = $oDados20->si204_exercicioprocesso;
+            $clexeobras202024->si204_nroprocesso = $oDados20->si204_nroprocesso;
+            $clexeobras202024->si204_codunidadesubresp = $oDados20->si204_codunidadesubresp;
+            $clexeobras202024->si204_tipoprocesso = $oDados20->si204_tipoprocesso;
+            $clexeobras202024->si204_codobra = $oDados20->si204_codobra;
+            $clexeobras202024->si204_objeto = $this->removeCaracteres($oDados20->si204_objeto);
+            $clexeobras202024->si204_linkobra = $oDados20->si204_linkobra;
+            $clexeobras202024->si204_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+            $clexeobras202024->si204_instit = db_getsession("DB_instit");
+            $clexeobras202024->incluir(null);
 
-            if ($clexeobras202023->erro_status == 0) {
-                throw new Exception($clexeobras202023->erro_msg);
+            if ($clexeobras202024->erro_status == 0) {
+                throw new Exception($clexeobras202024->erro_msg);
             }
         }
 

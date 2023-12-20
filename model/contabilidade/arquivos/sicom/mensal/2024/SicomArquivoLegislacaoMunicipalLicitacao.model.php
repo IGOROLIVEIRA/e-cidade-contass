@@ -2,9 +2,9 @@
 
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_reglic102023_classe.php");
-require_once("classes/db_reglic202023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarREGLIC.model.php");
+require_once("classes/db_reglic102024_classe.php");
+require_once("classes/db_reglic202024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarREGLIC.model.php");
 
 /**
  * gerar arquivo de identificacao da Remessa Sicom Acompanhamento Mensal
@@ -21,23 +21,23 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
    * @var Integer
    */
   protected $iCodigoLayout = 0;
-  
+
   /**
    *
    * NOme do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'REGLIC';
-  
+
   /**
    *
    * Contrutor da classe
    */
   public function __construct()
   {
-    
+
   }
-  
+
   /**
    * Retorna o codigo do layout
    *
@@ -47,7 +47,7 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
   {
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
@@ -55,7 +55,7 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
   {
 
   }
-  
+
   /**
    * selecionar os dados de indentificacao da remessa pra gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
@@ -67,10 +67,10 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
 
-    $clreglic10 = new cl_reglic102023();
-    $clreglic20 = new cl_reglic202023();
+    $clreglic10 = new cl_reglic102024();
+    $clreglic20 = new cl_reglic202024();
 
-    
+
     /**
      * excluir informacoes do mes selecioado
      */
@@ -82,7 +82,7 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
         throw new Exception($clreglic10->erro_msg);
       }
     }
-    
+
     $result = db_query($clreglic20->sql_query(null, "*", null, "si45_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si45_instit=" . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
       $clreglic20->excluir(null, "si45_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si45_instit=" . db_getsession("DB_instit"));
@@ -90,7 +90,7 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
         throw new Exception($clreglic20->erro_msg);
       }
     }
-    
+
     $sSql = "SELECT '10' AS tipoRegistro,
                     2 AS codOrgao,
                     decretopregao.l201_tipodecreto AS tipoDecreto,
@@ -101,7 +101,7 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
              WHERE decretopregao.l201_instit = " . db_getsession("DB_instit") . "
              AND decretopregao.l201_numdecreto NOT IN
                           (SELECT si44_nrodecretomunicipal
-                            FROM reglic102023
+                            FROM reglic102024
                            UNION SELECT si44_nrodecretomunicipal
                             FROM reglic102022
                            UNION SELECT si44_nrodecretomunicipal
@@ -113,17 +113,17 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
                            UNION SELECT si44_nrodecretomunicipal
                             FROM reglic102018
                            UNION SELECT si44_nrodecretomunicipal
-                            FROM reglic102023 WHERE si44_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") 
-    AND DATE_PART ( 'YEAR' , l201_datapublicacao ) = '2023'
+                            FROM reglic102024 WHERE si44_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ")
+    AND DATE_PART ( 'YEAR' , l201_datapublicacao ) = '2024'
     AND DATE_PART ( 'MONTH' , l201_datapublicacao ) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
     ";
-    
-    
+
+
     $rsResult10 = db_query($sSql);
-    
+
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-      
-      $clreglic10 = new cl_reglic102023();
+
+      $clreglic10 = new cl_reglic102024();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
       $clreglic10->si44_tiporegistro = 10;
@@ -147,11 +147,11 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
      */
 
     db_fim_transacao();
-    
+
     $oGerarREGLIC = new GerarREGLIC();
     $oGerarREGLIC->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarREGLIC->gerarDados();
-    
+
   }
-  
+
 }

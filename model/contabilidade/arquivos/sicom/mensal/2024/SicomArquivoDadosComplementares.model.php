@@ -1,15 +1,15 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_dclrf102023_classe.php");
-require_once ("classes/db_dclrf112023_classe.php");
-require_once ("classes/db_dclrf202023_classe.php");
-require_once ("classes/db_dclrf302023_classe.php");
-require_once ("classes/db_dclrf402023_classe.php");
+require_once ("classes/db_dclrf102024_classe.php");
+require_once ("classes/db_dclrf112024_classe.php");
+require_once ("classes/db_dclrf202024_classe.php");
+require_once ("classes/db_dclrf302024_classe.php");
+require_once ("classes/db_dclrf402024_classe.php");
 require_once ("classes/db_infocomplementaresinstit_classe.php");
 require_once ("classes/db_dadoscomplementareslrf_classe.php");
 require_once ("classes/db_medidasadotadaslrf_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarDCLRF.model.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarDCLRF.model.php");
 
 
 /**
@@ -72,11 +72,11 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
      */
     public function gerarDados() {
 
-        $cldclrf10                  = new cl_dclrf102023();
-        $cldclrf11                  = new cl_dclrf112023();
-        $cldclrf20                  = new cl_dclrf202023();
-        $cldclrf30                  = new cl_dclrf302023();
-        $cldclrf40                  = new cl_dclrf402023();
+        $cldclrf10                  = new cl_dclrf102024();
+        $cldclrf11                  = new cl_dclrf112024();
+        $cldclrf20                  = new cl_dclrf202024();
+        $cldclrf30                  = new cl_dclrf302024();
+        $cldclrf40                  = new cl_dclrf402024();
         $cldadoscomplementareslrf   = new cl_dadoscomplementareslrf();
         $clmedidasadotadaslrf       = new cl_medidasadotadaslrf();
         $clinfocomplementaresinstit = new cl_infocomplementaresinstit();
@@ -127,7 +127,7 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
     //echo '<pre>'; var_dump($rsDadoscomplementares);die;
         foreach ($rsDadoscomplementares as $dados) {
 
-            $cldclrf10 = new cl_dclrf102023();
+            $cldclrf10 = new cl_dclrf102024();
             $cldclrf10->si157_tiporegistro = 10;
             $cldclrf10->si157_codorgao                          = $dados->c218_codorgao;
             $cldclrf10->si157_vlsaldoatualconcgarantiainterna   = $dados->c218_vlsaldoatualconcgarantiainterna;
@@ -190,7 +190,7 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
 
             if($this->getTipoinstit(db_getsession('DB_instit')) == 2){
                 if($this->sDataFinal['5'].$this->sDataFinal['6'] == '12'){
-                    $cldclrf20 = new cl_dclrf202023();
+                    $cldclrf20 = new cl_dclrf202024();
                     $cldclrf20->si191_tiporegistro = 20;
                     $cldclrf20->si191_reg10 = $cldclrf10->si157_sequencial;
                     $cldclrf20->si191_contopcredito = $dados->c219_contopcredito;
@@ -210,7 +210,7 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
                     }
 
                 }
-                $cldclrf30 = new cl_dclrf302023();
+                $cldclrf30 = new cl_dclrf302024();
                 $cldclrf30->si192_tiporegistro = 30;
                 $cldclrf30->si192_publiclrf = $dados->c220_publiclrf;
                 $cldclrf30->si192_dtpublicacaorelatoriolrf = $dados->c220_dtpublicacaorelatoriolrf;
@@ -227,7 +227,7 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
                 }
 
             }
-            $cldclrf40 = new cl_dclrf402023();
+            $cldclrf40 = new cl_dclrf402024();
             $cldclrf40->si193_tiporegistro = 40;
             $cldclrf40->si193_reg10 = $cldclrf10->si157_sequencial;
             $cldclrf40->si193_publicrgf = $dados->c221_publicrgf;

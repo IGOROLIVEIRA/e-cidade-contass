@@ -1,8 +1,8 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_resplic102023_classe.php");
-require_once ("classes/db_resplic202321_classe.php");
+require_once ("classes/db_resplic102024_classe.php");
+require_once ("classes/db_resplic202024_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarRESPLIC.model.php");
 
  /**
@@ -103,8 +103,8 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
   	/**
   	 * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
   	 */
-  	$clresplic102023 = new cl_resplic102023();
-  	$clresplic202321 = new cl_resplic202321();
+  	$clresplic102024 = new cl_resplic102024();
+  	$clresplic202024 = new cl_resplic202024();
 
 
     /**
@@ -112,19 +112,19 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
      */
     db_inicio_transacao();
 
-    $result = db_query($clresplic102023->sql_query(NULL,"*",NULL,"si55_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si55_instit=".db_getsession("DB_instit")));
+    $result = db_query($clresplic102024->sql_query(NULL,"*",NULL,"si55_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si55_instit=".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clresplic102023->excluir(NULL,"si55_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si55_instit=".db_getsession("DB_instit"));
-      if ($clresplic102023->erro_status == 0) {
-    	  throw new Exception($clresplic102023->erro_msg);
+    	$clresplic102024->excluir(NULL,"si55_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si55_instit=".db_getsession("DB_instit"));
+      if ($clresplic102024->erro_status == 0) {
+    	  throw new Exception($clresplic102024->erro_msg);
       }
     }
 
-    $result = db_query($clresplic202321->sql_query(NULL,"*",NULL,"si56_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si56_instit=".db_getsession("DB_instit")));
+    $result = db_query($clresplic202024->sql_query(NULL,"*",NULL,"si56_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si56_instit=".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clresplic202321->excluir(NULL,"si56_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si56_instit=".db_getsession("DB_instit"));
-      if ($clresplic202321->erro_status == 0) {
-    	  throw new Exception($clresplic202321->erro_msg);
+    	$clresplic202024->excluir(NULL,"si56_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si56_instit=".db_getsession("DB_instit"));
+      if ($clresplic202024->erro_status == 0) {
+    	  throw new Exception($clresplic202024->erro_msg);
       }
     }
   /**
@@ -150,23 +150,23 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-    	$clresplic102023 = new cl_resplic102023();
+    	$clresplic102024 = new cl_resplic102024();
     	$oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
 
-		 $clresplic102023->si55_tiporegistro   				= 10;
-		 $clresplic102023->si55_codorgao					= $oDados10->codorgaoresp           ;
-		 $clresplic102023->si55_codunidadesub				= $oDados10->codunidadesubresp      ;
-		 $clresplic102023->si55_exerciciolicitacao			= $oDados10->exerciciolicitacao    ;
-		 $clresplic102023->si55_nroprocessolicitatorio		= $oDados10->nroprocessolicitatorio;
-		 $clresplic102023->si55_tiporesp					= $oDados10->tiporesp        ;
-		 $clresplic102023->si55_nrocpfresp					= $oDados10->nrocpfresp   ;
-		 $clresplic102023->si55_instit		    			= db_getsession("DB_instit");
-		 $clresplic102023->si55_mes             			= $this->sDataFinal['5'].$this->sDataFinal['6'];
+		 $clresplic102024->si55_tiporegistro   				= 10;
+		 $clresplic102024->si55_codorgao					= $oDados10->codorgaoresp           ;
+		 $clresplic102024->si55_codunidadesub				= $oDados10->codunidadesubresp      ;
+		 $clresplic102024->si55_exerciciolicitacao			= $oDados10->exerciciolicitacao    ;
+		 $clresplic102024->si55_nroprocessolicitatorio		= $oDados10->nroprocessolicitatorio;
+		 $clresplic102024->si55_tiporesp					= $oDados10->tiporesp        ;
+		 $clresplic102024->si55_nrocpfresp					= $oDados10->nrocpfresp   ;
+		 $clresplic102024->si55_instit		    			= db_getsession("DB_instit");
+		 $clresplic102024->si55_mes             			= $this->sDataFinal['5'].$this->sDataFinal['6'];
 
-		 $clresplic102023->incluir(null);
-		  if ($clresplic102023->erro_status == 0) {
-		  	throw new Exception($clresplic102023->erro_msg);
+		 $clresplic102024->incluir(null);
+		  if ($clresplic102024->erro_status == 0) {
+		  	throw new Exception($clresplic102024->erro_msg);
 		  }
 
     }
@@ -200,42 +200,42 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 
 		  for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-    	    $clresplic202321 = new cl_resplic202321();
+    	    $clresplic202024 = new cl_resplic202024();
     	    $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
-		  	$clresplic202321->si56_tiporegistro           = 20;
-		  	$clresplic202321->si56_codorgao               = $oDados20->codorgaoresp;
-		  	$clresplic202321->si56_codunidadesub          = $oDados20->codunidadesubresp;
-		  	$clresplic202321->si56_exerciciolicitacao     = $oDados20->exerciciolicitacao;
-		  	$clresplic202321->si56_nroprocessolicitatorio = $oDados20->nroprocessolicitatorio;
-		  	$clresplic202321->si56_codtipocomissao        = $oDados20->codtipocomissao;
-		  	$clresplic202321->si56_descricaoatonomeacao   = $oDados20->descricaoatonomeacao;
-		  	$clresplic202321->si56_nroatonomeacao         = $oDados20->nroatonomeacao;
-		  	$clresplic202321->si56_dataatonomeacao        = $oDados20->dataatonomeacao;
-		  	$clresplic202321->si56_iniciovigencia         = $oDados20->iniciovigencia;
-		  	$clresplic202321->si56_finalvigencia          = $oDados20->finalvigencia;
-		  	$clresplic202321->si56_cpfmembrocomissao      = $oDados20->cpfmembrocomissao;
-		  	$clresplic202321->si56_codatribuicao          = $oDados20->codatribuicao;
-		  	$clresplic202321->si56_cargo 			      = $oDados20->cargo;
-		  	$clresplic202321->si56_naturezacargo	 	  = $oDados20->naturezacargo;
-		  	$clresplic202321->si56_instit		     	  = db_getsession("DB_instit");
-		  	$clresplic202321->si56_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
+		  	$clresplic202024->si56_tiporegistro           = 20;
+		  	$clresplic202024->si56_codorgao               = $oDados20->codorgaoresp;
+		  	$clresplic202024->si56_codunidadesub          = $oDados20->codunidadesubresp;
+		  	$clresplic202024->si56_exerciciolicitacao     = $oDados20->exerciciolicitacao;
+		  	$clresplic202024->si56_nroprocessolicitatorio = $oDados20->nroprocessolicitatorio;
+		  	$clresplic202024->si56_codtipocomissao        = $oDados20->codtipocomissao;
+		  	$clresplic202024->si56_descricaoatonomeacao   = $oDados20->descricaoatonomeacao;
+		  	$clresplic202024->si56_nroatonomeacao         = $oDados20->nroatonomeacao;
+		  	$clresplic202024->si56_dataatonomeacao        = $oDados20->dataatonomeacao;
+		  	$clresplic202024->si56_iniciovigencia         = $oDados20->iniciovigencia;
+		  	$clresplic202024->si56_finalvigencia          = $oDados20->finalvigencia;
+		  	$clresplic202024->si56_cpfmembrocomissao      = $oDados20->cpfmembrocomissao;
+		  	$clresplic202024->si56_codatribuicao          = $oDados20->codatribuicao;
+		  	$clresplic202024->si56_cargo 			      = $oDados20->cargo;
+		  	$clresplic202024->si56_naturezacargo	 	  = $oDados20->naturezacargo;
+		  	$clresplic202024->si56_instit		     	  = db_getsession("DB_instit");
+		  	$clresplic202024->si56_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
 
-			$clresplic202321->incluir(null);
-			if ($clresplic202321->erro_status == 0) {
-			  throw new Exception($clresplic202321->erro_msg);
+			$clresplic202024->incluir(null);
+			if ($clresplic202024->erro_status == 0) {
+			  throw new Exception($clresplic202024->erro_msg);
 			}
-			
-		  }	  
-    
-    
-    
+
+		  }
+
+
+
     db_fim_transacao();
-    
+
     $oGerarRESPLIC = new GerarRESPLIC();
     $oGerarRESPLIC->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
     $oGerarRESPLIC->gerarDados();
-    
+
   }
-  
+
 }

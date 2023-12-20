@@ -1,14 +1,14 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_regadesao102023_classe.php");
-require_once("classes/db_regadesao112023_classe.php");
-require_once("classes/db_regadesao122023_classe.php");
-require_once("classes/db_regadesao132023_classe.php");
-require_once("classes/db_regadesao142023_classe.php");
-require_once("classes/db_regadesao152023_classe.php");
-require_once("classes/db_regadesao202023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarREGADESAO.model.php");
+require_once("classes/db_regadesao102024_classe.php");
+require_once("classes/db_regadesao112024_classe.php");
+require_once("classes/db_regadesao122024_classe.php");
+require_once("classes/db_regadesao132024_classe.php");
+require_once("classes/db_regadesao142024_classe.php");
+require_once("classes/db_regadesao152024_classe.php");
+require_once("classes/db_regadesao202024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarREGADESAO.model.php");
 
 /**
  * Adeso a Registro de Preos Sicom Acompanhamento Mensal
@@ -139,13 +139,13 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
   public function gerarDados()
   {
 
-    $regadesao10 = new cl_regadesao102023();
-    $regadesao11 = new cl_regadesao112023();
-    $regadesao12 = new cl_regadesao122023();
-    $regadesao13 = new cl_regadesao132023();
-    $regadesao14 = new cl_regadesao142023();
-    $regadesao15 = new cl_regadesao152023();
-    $regadesao20 = new cl_regadesao202023();
+    $regadesao10 = new cl_regadesao102024();
+    $regadesao11 = new cl_regadesao112024();
+    $regadesao12 = new cl_regadesao122024();
+    $regadesao13 = new cl_regadesao132024();
+    $regadesao14 = new cl_regadesao142024();
+    $regadesao15 = new cl_regadesao152024();
+    $regadesao20 = new cl_regadesao202024();
 
     db_inicio_transacao();
 
@@ -239,7 +239,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-      $regadesao10 = new cl_regadesao102023();
+      $regadesao10 = new cl_regadesao102024();
       $regadesao10->si67_tiporegistro = 10;
       $regadesao10->si67_tipocadastro = $oDados10->si06_cadinicial;
       $regadesao10->si67_codorgao = $oDados10->codorgao;
@@ -282,7 +282,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
         $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
-        $regadesao11 = new cl_regadesao112023();
+        $regadesao11 = new cl_regadesao112024();
         $regadesao11->si68_tiporegistro = 11;
         $regadesao11->si68_codorgao = $oDados10->codorgao;
         if ($oDados10->si06_codunidadesubant != "") {
@@ -305,7 +305,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       }
 
       $sSql = "select si07_numeroitem,
-      CASE 
+      CASE
       WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
     ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) END AS coditem
       from itensregpreco
@@ -317,7 +317,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
 
         $oDados12 = db_utils::fieldsMemory($rsResult12, $iCont12);
-        $regadesao12 = new cl_regadesao122023();
+        $regadesao12 = new cl_regadesao122024();
         $regadesao12->si69_tiporegistro = 12;
         $regadesao12->si69_codorgao = $oDados10->codorgao;
         if ($oDados10->si06_codunidadesubant != "") {
@@ -340,10 +340,10 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       }
 
       $sSql = "select si07_numerolote,
-                   CASE 
+                   CASE
       WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
     ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) END AS coditem
-                   from itensregpreco 
+                   from itensregpreco
                    inner join pcmater on
                    		pcmater.pc01_codmater = si07_item
                    where si07_sequencialadesao = $oDados10->si06_sequencial
@@ -352,7 +352,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       for ($iCont13 = 0; $iCont13 < pg_num_rows($rsResult13); $iCont13++) {
 
         $oDados13 = db_utils::fieldsMemory($rsResult13, $iCont13);
-        $regadesao13 = new cl_regadesao132023();
+        $regadesao13 = new cl_regadesao132024();
         $regadesao13->si70_tiporegistro = 13;
         $regadesao13->si70_codorgao = $oDados10->codorgao;
         if ($oDados10->si06_codunidadesubant != "") {
@@ -419,7 +419,7 @@ ORDER BY pc11_seq) as x GROUP BY
                 pc01_codmater,
                 si01_datacotacao,
                 si07_numerolote,
-                CASE 
+                CASE
       WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
     ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) END AS coditem
 FROM pcproc
@@ -439,7 +439,7 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
       for ($iCont14 = 0; $iCont14 < pg_num_rows($rsResult14); $iCont14++) {
 
         $oDados14 = db_utils::fieldsMemory($rsResult14, $iCont14);
-        $regadesao14 = new cl_regadesao142023();
+        $regadesao14 = new cl_regadesao142024();
         $regadesao14->si71_tiporegistro = 14;
         $regadesao14->si71_codorgao = $oDados10->codorgao;
         if ($oDados10->si06_codunidadesubant != "") {
@@ -467,7 +467,7 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
       $sSql = "select si07_numerolote,si07_precounitario,si07_quantidadelicitada,si07_quantidadeaderida,
 case when length(z01_cgccpf) = 11 then 1 when length(z01_cgccpf) = 14 then 2 else 0 end as tipodocumento,
 z01_cgccpf,
-CASE 
+CASE
       WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
     ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) END AS coditem
 from itensregpreco
@@ -480,7 +480,7 @@ where si07_sequencialadesao = {$oDados10->si06_sequencial}";
       for ($iCont15 = 0; $iCont15 < pg_num_rows($rsResult15); $iCont15++) {
 
         $oDados15 = db_utils::fieldsMemory($rsResult15, $iCont15);
-        $regadesao15 = new cl_regadesao152023();
+        $regadesao15 = new cl_regadesao152024();
         $regadesao15->si72_tiporegistro = 15;
         $regadesao15->si72_codorgao = $oDados10->codorgao;
         if ($oDados10->si06_codunidadesubant != "") {
@@ -510,7 +510,7 @@ where si07_sequencialadesao = {$oDados10->si06_sequencial}";
       $sSql = "select si07_numerolote,si07_precounitario,si07_quantidadelicitada,si07_quantidadeaderida,si07_percentual,
 case when length(z01_cgccpf) = 11 then 1 when length(z01_cgccpf) = 14 then 2 else 0 end as tipodocumento,
 z01_cgccpf,
-CASE 
+CASE
       WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
     ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) END AS coditem
 from itensregpreco
@@ -523,7 +523,7 @@ where si07_sequencialadesao = {$oDados10->si06_sequencial}";
       for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
         $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
-        $regadesao20 = new cl_regadesao202023();
+        $regadesao20 = new cl_regadesao202024();
         $regadesao20->si73_tiporegistro = 20;
         $regadesao20->si73_codorgao = $oDados10->codorgao;
         if ($oDados10->si06_codunidadesubant != "") {

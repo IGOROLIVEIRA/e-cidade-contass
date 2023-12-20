@@ -1,7 +1,7 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarAOB.model.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarAOB.model.php");
 
 /**
  * Anulações de Outras Baixas de Empenhos por Lançamento Contábil Sicom Acompanhamento Mensal
@@ -10,30 +10,30 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarAOB.
  */
 class SicomArquivoAnulacoesOutrasBaixasEmpenhos extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  
+
   /**
    *
    * Codigo do layout. (db_layouttxt.db50_codigo)
    * @var Integer
    */
   protected $iCodigoLayout = 193;
-  
+
   /**
    *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'AOB';
-  
+
   /**
    *
    * Construtor da classe
    */
   public function __construct()
   {
-    
+
   }
-  
+
   /**
    * Retorna o codigo do layout
    *
@@ -43,7 +43,7 @@ class SicomArquivoAnulacoesOutrasBaixasEmpenhos extends SicomArquivoBase impleme
   {
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
@@ -51,7 +51,7 @@ class SicomArquivoAnulacoesOutrasBaixasEmpenhos extends SicomArquivoBase impleme
   {
 
   }
-  
+
   /**
    * selecionar os dados
    * @see iPadArquivoBase::gerarDados()

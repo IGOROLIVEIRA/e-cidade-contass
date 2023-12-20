@@ -23,16 +23,16 @@ class GerarJULGLIC extends GerarAM
     $this->sArquivo = "JULGLIC";
     $this->abreArquivo();
 
-    $sSql = "select * from julglic102023 where si60_mes = " . $this->iMes . " and si60_instit=" . db_getsession("DB_instit");
+    $sSql = "select * from julglic102024 where si60_mes = " . $this->iMes . " and si60_instit=" . db_getsession("DB_instit");
     $rsJULGLIC10 = db_query($sSql);
 
-    $sSql2 = "select * from julglic202023 where si61_mes = " . $this->iMes . " and si61_instit=" . db_getsession("DB_instit");
+    $sSql2 = "select * from julglic202024 where si61_mes = " . $this->iMes . " and si61_instit=" . db_getsession("DB_instit");
     $rsJULGLIC20 = db_query($sSql2);
 
-    $sSql3 = "select * from julglic302023 where si62_mes = " . $this->iMes . " and si62_instit=" . db_getsession("DB_instit");
+    $sSql3 = "select * from julglic302024 where si62_mes = " . $this->iMes . " and si62_instit=" . db_getsession("DB_instit");
     $rsJULGLIC30 = db_query($sSql3);
 
-    $sSql4 = "select * from julglic402023 where si62_mes = " . $this->iMes . " and si62_instit=" . db_getsession("DB_instit");
+    $sSql4 = "select * from julglic402024 where si62_mes = " . $this->iMes . " and si62_instit=" . db_getsession("DB_instit");
     $rsJULGLIC40 = db_query($sSql4);
 
     if (pg_num_rows($rsJULGLIC10) == 0 && pg_num_rows($rsJULGLIC20) == 0 && pg_num_rows($rsJULGLIC40) == 0) {

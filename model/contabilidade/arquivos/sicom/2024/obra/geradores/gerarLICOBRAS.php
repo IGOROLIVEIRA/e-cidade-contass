@@ -21,16 +21,16 @@ class gerarLICOBRAS extends GerarAM
         $this->sArquivo = "LICOBRAS";
         $this->abreArquivo();
 
-        $sSql = "select * from licobras102023 where si195_mes = " . $this->iMes . " and si195_instit=" . db_getsession("DB_instit");
-        $rslicobras102023 = db_query($sSql);
+        $sSql = "select * from licobras102024 where si195_mes = " . $this->iMes . " and si195_instit=" . db_getsession("DB_instit");
+        $rslicobras102024 = db_query($sSql);
 
-        $sSql = "select * from licobras202023 where si196_mes = " . $this->iMes . " and si196_instit=" . db_getsession("DB_instit");
-        $rslicobras202023 = db_query($sSql);
+        $sSql = "select * from licobras202024 where si196_mes = " . $this->iMes . " and si196_instit=" . db_getsession("DB_instit");
+        $rslicobras202024 = db_query($sSql);
 
-        $sSql = "select * from licobras302023 where si203_mes = " . $this->iMes . " and si203_instit=" . db_getsession("DB_instit");
-        $rslicobras302023 = db_query($sSql);
+        $sSql = "select * from licobras302024 where si203_mes = " . $this->iMes . " and si203_instit=" . db_getsession("DB_instit");
+        $rslicobras302024 = db_query($sSql);
 
-        if (pg_num_rows($rslicobras102023) == 0) {
+        if (pg_num_rows($rslicobras102024) == 0) {
 
             $aCSV['tiporegistro'] = '99';
             $this->sLinha = $aCSV;
@@ -41,9 +41,9 @@ class gerarLICOBRAS extends GerarAM
              *
              * Registros 10
              */
-            for ($iCont = 0; $iCont < pg_num_rows($rslicobras102023); $iCont++) {
+            for ($iCont = 0; $iCont < pg_num_rows($rslicobras102024); $iCont++) {
 
-                $alICOBRAS10 = pg_fetch_array($rslicobras102023, $iCont);
+                $alICOBRAS10 = pg_fetch_array($rslicobras102024, $iCont);
 
                 $aCSVLICOBRAS10['si195_tiporegistro'] = str_pad($alICOBRAS10['si195_tiporegistro'], 2, "0", STR_PAD_LEFT);
                 $aCSVLICOBRAS10['si195_codorgaoresp'] = str_pad($alICOBRAS10['si195_codorgaoresp'], 3, "0", STR_PAD_LEFT);
@@ -68,7 +68,7 @@ class gerarLICOBRAS extends GerarAM
             }
         }
 
-        if (pg_num_rows($rslicobras202023) == 0) {
+        if (pg_num_rows($rslicobras202024) == 0) {
 
             //      $aCSV['tiporegistro'] = '99';
             //      $this->sLinha = $aCSV;
@@ -80,9 +80,9 @@ class gerarLICOBRAS extends GerarAM
              *
              * Registros 20
              */
-            for ($iCont = 0; $iCont < pg_num_rows($rslicobras202023); $iCont++) {
+            for ($iCont = 0; $iCont < pg_num_rows($rslicobras202024); $iCont++) {
 
-                $aLICOBRAS20 = pg_fetch_array($rslicobras202023, $iCont);
+                $aLICOBRAS20 = pg_fetch_array($rslicobras202024, $iCont);
 
                 $aCSVLICOBRAS20['si196_tiporegistro'] = str_pad($aLICOBRAS20['si196_tiporegistro'], 2, "0", STR_PAD_LEFT);
                 $aCSVLICOBRAS20['si196_codorgaoresp'] = str_pad($aLICOBRAS20['si196_codorgaoresp'], 3, "0", STR_PAD_LEFT);
@@ -107,7 +107,7 @@ class gerarLICOBRAS extends GerarAM
             }
         }
 
-        if (pg_num_rows($rslicobras302023) == 0) {
+        if (pg_num_rows($rslicobras302024) == 0) {
 
             //      $aCSV['tiporegistro'] = '99';
             //      $this->sLinha = $aCSV;
@@ -119,9 +119,9 @@ class gerarLICOBRAS extends GerarAM
              *
              * Registros 30
              */
-            for ($iCont = 0; $iCont < pg_num_rows($rslicobras302023); $iCont++) {
+            for ($iCont = 0; $iCont < pg_num_rows($rslicobras302024); $iCont++) {
 
-                $aLICOBRAS30 = pg_fetch_array($rslicobras302023, $iCont);
+                $aLICOBRAS30 = pg_fetch_array($rslicobras302024, $iCont);
 
                 $aCSVLICOBRAS30['si203_tiporegistro'] = str_pad($aLICOBRAS30['si203_tiporegistro'], 2, "0", STR_PAD_LEFT);
                 $aCSVLICOBRAS30['si203_codorgaoresp'] = str_pad($aLICOBRAS30['si203_codorgaoresp'], 3, "0", STR_PAD_LEFT);

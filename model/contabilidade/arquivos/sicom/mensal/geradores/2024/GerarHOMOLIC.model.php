@@ -16,23 +16,23 @@ class GerarHOMOLIC extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "HOMOLIC";
     $this->abreArquivo();
-    
-    $sSql = "select * from homolic102023 where si63_mes = " . $this->iMes . " and si63_instit=" . db_getsession("DB_instit");
+
+    $sSql = "select * from homolic102024 where si63_mes = " . $this->iMes . " and si63_instit=" . db_getsession("DB_instit");
     $rsHOMOLIC10 = db_query($sSql);
 
-    $sSql2 = "select * from homolic202023 where si64_mes = " . $this->iMes . " and si64_instit=" . db_getsession("DB_instit");
+    $sSql2 = "select * from homolic202024 where si64_mes = " . $this->iMes . " and si64_instit=" . db_getsession("DB_instit");
     $rsHOMOLIC20 = db_query($sSql2);
 
-  	$sSql3 = "select * from homolic302023 where si65_mes = " . $this->iMes . " and si65_instit=" . db_getsession("DB_instit");
+  	$sSql3 = "select * from homolic302024 where si65_mes = " . $this->iMes . " and si65_instit=" . db_getsession("DB_instit");
 	$rsHOMOLIC30 = db_query($sSql3);
 
-    $sSql4 = "select * from homolic402023 where si65_mes = " . $this->iMes . " and si65_instit=" . db_getsession("DB_instit");
+    $sSql4 = "select * from homolic402024 where si65_mes = " . $this->iMes . " and si65_instit=" . db_getsession("DB_instit");
     $rsHOMOLIC40 = db_query($sSql4);
 
     if (pg_num_rows($rsHOMOLIC10) == 0 && pg_num_rows($rsHOMOLIC20) == 0 && pg_num_rows($rsHOMOLIC40) == 0) {
@@ -86,7 +86,7 @@ class GerarHOMOLIC extends GerarAM
         $aCSVHOMOLIC20['si64_nrolote']                = !$aHOMOLIC20['si64_nrolote'] ? '' : substr($aHOMOLIC20['si64_nrolote'], 0, 4);
         $aCSVHOMOLIC20['si64_coditem']                = substr($aHOMOLIC20['si64_coditem'], 0, 15);
         $aCSVHOMOLIC20['si64_percdesconto']           = $this->sicomNumberReal($aHOMOLIC20['si64_percdesconto'], 2);
-        
+
         $this->sLinha = $aCSVHOMOLIC20;
         $this->adicionaLinha();
 
@@ -131,7 +131,7 @@ class GerarHOMOLIC extends GerarAM
         $aCSVHOMOLIC40['si65_nroprocessolicitatorio'] = substr($aHOMOLIC40['si65_nroprocessolicitatorio'], 0, 12);
         $aCSVHOMOLIC40['si65_dthomologacao']          = $this->sicomDate($aHOMOLIC40['si65_dthomologacao']);
         $aCSVHOMOLIC40['si65_dtadjudicacao']          = $this->sicomDate($aHOMOLIC40['si65_dtadjudicacao']);
-        
+
         $this->sLinha = $aCSVHOMOLIC40;
         $this->adicionaLinha();
 

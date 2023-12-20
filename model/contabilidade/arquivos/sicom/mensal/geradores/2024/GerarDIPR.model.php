@@ -23,19 +23,19 @@ class GerarDIPR extends GerarAM
         $this->sArquivo = "DIPR";
         $this->abreArquivo();
 
-        $sSql = "select * from dipr102023 where si230_mes = " . $this->iMes . " and si230_instit = " . db_getsession("DB_instit");
+        $sSql = "select * from dipr102024 where si230_mes = " . $this->iMes . " and si230_instit = " . db_getsession("DB_instit");
         $rsDIPR10 = db_query($sSql);
 
-        $sSql = "select * from dipr202023 where si231_mes = " . $this->iMes . " and si231_instit = " . db_getsession("DB_instit");
+        $sSql = "select * from dipr202024 where si231_mes = " . $this->iMes . " and si231_instit = " . db_getsession("DB_instit");
         $rsDIPR20 = db_query($sSql);
 
-        $sSql = "select * from dipr302023 where si232_mes = " . $this->iMes . " and si232_instit = " . db_getsession("DB_instit");
+        $sSql = "select * from dipr302024 where si232_mes = " . $this->iMes . " and si232_instit = " . db_getsession("DB_instit");
         $rsDIPR30 = db_query($sSql);
 
-        $sSql = "select * from dipr402023 where si233_mes = " . $this->iMes . " and si233_instit = " . db_getsession("DB_instit");
+        $sSql = "select * from dipr402024 where si233_mes = " . $this->iMes . " and si233_instit = " . db_getsession("DB_instit");
         $rsDIPR40 = db_query($sSql);
 
-        $sSql = "select * from dipr502023 where si234_mes = " . $this->iMes . " and si234_instit = " . db_getsession("DB_instit");
+        $sSql = "select * from dipr502024 where si234_mes = " . $this->iMes . " and si234_instit = " . db_getsession("DB_instit");
         $rsDIPR50 = db_query($sSql);
 
 
@@ -83,14 +83,14 @@ class GerarDIPR extends GerarAM
                 $aCSVDIPR20['si231_tipocontribuicao']                = $aDIPR20['si231_tipocontribuicao'];
                 $aCSVDIPR20['si231_aliquota']                        = $this->sicomNumberReal($aDIPR20['si231_aliquota'], 2);
                 $aCSVDIPR20['si231_valorcontribdevida']              = $this->sicomNumberReal($aDIPR20['si231_valorcontribdevida'], 2);
-          
+
                 $this->sLinha = $aCSVDIPR20;
                 $this->adicionaLinha();
             }
 
             for ($iCont = 0; $iCont < pg_num_rows($rsDIPR30); $iCont++) {
                 $aDIPR30 = pg_fetch_array($rsDIPR30, $iCont);
-   
+
                 $aCSVDIPR30['si232_tiporegistro']           = $this->padLeftZero($aDIPR30['si232_tiporegistro'], 2);
                 $aCSVDIPR30['si232_codorgao']               = $this->padLeftZero($aDIPR30['si232_codorgao'], 2);
                 $aCSVDIPR30['si232_mescompetencia']         = $this->padLeftZero($aDIPR30['si232_mescompetencia'], 2);
@@ -115,7 +115,7 @@ class GerarDIPR extends GerarAM
             // Foi Alterado número do registro de 40 para 31
             for ($iCont = 0; $iCont < pg_num_rows($rsDIPR40); $iCont++) {
                 $aDIPR40 = pg_fetch_array($rsDIPR40, $iCont);
- 
+
                 $aCSVDIPR40['si233_tiporegistro']           = $this->padLeftZero($aDIPR40['si233_tiporegistro'], 2);
                 $aCSVDIPR40['si233_codorgao']               = $this->padLeftZero($aDIPR40['si233_codorgao'], 2);
                 $aCSVDIPR40['si233_mescompetencia']         = $this->padLeftZero($aDIPR40['si233_mescompetencia'], 2);

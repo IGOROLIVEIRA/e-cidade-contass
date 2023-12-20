@@ -1,7 +1,7 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarCONCIBANC.model.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarCONCIBANC.model.php");
 
 /**
  * Conciliação Bancária Sicom Acompanhamento Mensal

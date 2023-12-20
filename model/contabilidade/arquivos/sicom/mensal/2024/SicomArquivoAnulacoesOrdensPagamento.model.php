@@ -1,10 +1,10 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_aop102023_classe.php");
-require_once("classes/db_aop112023_classe.php");
-require_once("classes/db_aop122023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarAOP.model.php");
+require_once("classes/db_aop102024_classe.php");
+require_once("classes/db_aop112024_classe.php");
+require_once("classes/db_aop122024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarAOP.model.php");
 require_once("model/orcamento/ControleOrcamentario.model.php");
 require_once("model/orcamento/DeParaRecurso.model.php");
 
@@ -34,7 +34,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
     protected $sNomeArquivo = 'AOP';
 
     /**
-     * @var array Fontes encerradas em 2023
+     * @var array Fontes encerradas em 2024
      */
     protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
@@ -96,9 +96,9 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
     public function gerarDados()
     {
 
-        $claop10 = new cl_aop102023();
-        $claop11 = new cl_aop112023();
-        $claop12 = new cl_aop122023();
+        $claop10 = new cl_aop102024();
+        $claop11 = new cl_aop112024();
+        $claop12 = new cl_aop122024();
 
 
         $sSqlUnidade = "select * from infocomplementares where
@@ -195,7 +195,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 
         foreach ($aAnulacoes as $anulacao) {
 
-            $oDadosAnulacao = new cl_aop102023();
+            $oDadosAnulacao = new cl_aop102024();
 
             $oDadosAnulacao->si137_tiporegistro = $anulacao->si137_tiporegistro;
             $oDadosAnulacao->si137_codreduzido = $anulacao->si137_codreduzido;
@@ -217,7 +217,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 
             foreach ($anulacao->reg11 as $reg11) {
 
-                $oDadosAnulacaoFonte = new cl_aop112023();
+                $oDadosAnulacaoFonte = new cl_aop112024();
 
                 $oDadosAnulacaoFonte->si138_tiporegistro = $reg11->si138_tiporegistro;
                 $oDadosAnulacaoFonte->si138_codreduzido = $reg11->si138_codreduzido;
@@ -259,15 +259,15 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 
     public function setDetalhamento12($oEmpPago, $oAOP10, $oAOP11, $sDataFinal, $iAnoUsu, $iInstit)
     {
-        $claop12 = new cl_aop122023();
+        $claop12 = new cl_aop122024();
 
         $rsPagOrd12 = $claop12->sqlReg12($oEmpPago, $iAnoUsu);
         $reg12 = db_utils::fieldsMemory($rsPagOrd12, 0);
 
         $sSqlContaPagFont = " SELECT * FROM ( ";
-        for ($iAno = 2014; $iAno <= 2023; $iAno++) {
+        for ($iAno = 2014; $iAno <= 2024; $iAno++) {
             $sSqlContaPagFont .= $claop12->getUnionPagFont($reg12, $iAno, $sDataFinal, $iInstit, $iAnoUsu);
-            if ($iAno < 2023) {
+            if ($iAno < 2024) {
                 $sSqlContaPagFont .= " UNION ";
             }
         }

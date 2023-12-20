@@ -18,19 +18,19 @@ require_once("libs/db_libcontabilidade.php");
 require_once("libs/db_liborcamento.php");
 require_once("fpdf151/PDFDocument.php");
 
-require_once("classes/db_dfcdcasp102023_classe.php");
-require_once("classes/db_dfcdcasp202023_classe.php");
-require_once("classes/db_dfcdcasp302023_classe.php");
-require_once("classes/db_dfcdcasp402023_classe.php");
-require_once("classes/db_dfcdcasp502023_classe.php");
-require_once("classes/db_dfcdcasp602023_classe.php");
-require_once("classes/db_dfcdcasp702023_classe.php");
-require_once("classes/db_dfcdcasp802023_classe.php");
-require_once("classes/db_dfcdcasp902023_classe.php");
-require_once("classes/db_dfcdcasp1002023_classe.php");
-require_once("classes/db_dfcdcasp1102023_classe.php");
+require_once("classes/db_dfcdcasp102024_classe.php");
+require_once("classes/db_dfcdcasp202024_classe.php");
+require_once("classes/db_dfcdcasp302024_classe.php");
+require_once("classes/db_dfcdcasp402024_classe.php");
+require_once("classes/db_dfcdcasp502024_classe.php");
+require_once("classes/db_dfcdcasp602024_classe.php");
+require_once("classes/db_dfcdcasp702024_classe.php");
+require_once("classes/db_dfcdcasp802024_classe.php");
+require_once("classes/db_dfcdcasp902024_classe.php");
+require_once("classes/db_dfcdcasp1002024_classe.php");
+require_once("classes/db_dfcdcasp1102024_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/2023/dcasp/geradores/GerarDFC.model.php");
+require_once("model/contabilidade/arquivos/sicom/2024/dcasp/geradores/GerarDFC.model.php");
 
 /**
  * gerar arquivo de Demonstração dos Fluxos de Caixa
@@ -108,17 +108,17 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-        $cldfcdcasp10   = new cl_dfcdcasp102023();
-        $cldfcdcasp20   = new cl_dfcdcasp202023();
-        $cldfcdcasp30   = new cl_dfcdcasp302023();
-        $cldfcdcasp40   = new cl_dfcdcasp402023();
-        $cldfcdcasp50   = new cl_dfcdcasp502023();
-        $cldfcdcasp60   = new cl_dfcdcasp602023();
-        $cldfcdcasp70   = new cl_dfcdcasp702023();
-        $cldfcdcasp80   = new cl_dfcdcasp802023();
-        $cldfcdcasp90   = new cl_dfcdcasp902023();
-        $cldfcdcasp100  = new cl_dfcdcasp1002023();
-        $cldfcdcasp110  = new cl_dfcdcasp1102023();
+        $cldfcdcasp10   = new cl_dfcdcasp102024();
+        $cldfcdcasp20   = new cl_dfcdcasp202024();
+        $cldfcdcasp30   = new cl_dfcdcasp302024();
+        $cldfcdcasp40   = new cl_dfcdcasp402024();
+        $cldfcdcasp50   = new cl_dfcdcasp502024();
+        $cldfcdcasp60   = new cl_dfcdcasp602024();
+        $cldfcdcasp70   = new cl_dfcdcasp702024();
+        $cldfcdcasp80   = new cl_dfcdcasp802024();
+        $cldfcdcasp90   = new cl_dfcdcasp902024();
+        $cldfcdcasp100  = new cl_dfcdcasp1002024();
+        $cldfcdcasp110  = new cl_dfcdcasp1102024();
 
         /**
          * excluir informacoes caso estejam repetidas
@@ -283,12 +283,12 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
         );
 
 
-        /** DFCDCASP102023
+        /** DFCDCASP102024
          * FLUXOS DE CAIXA DAS ATIVIDADES OPERACIONAIS - Ingressos
          */
         foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-            $cldfcdcasp10 = new cl_dfcdcasp102023();
+            $cldfcdcasp10 = new cl_dfcdcasp102024();
 
             $cldfcdcasp10->si219_anousu                           = $iAnoUsu;
             $cldfcdcasp10->si219_periodo                          = $iCodigoPeriodo;
@@ -320,12 +320,12 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
         } // $rsResult10
 
 
-        /** DFCDCASP202023
+        /** DFCDCASP202024
          * FLUXOS DE CAIXA DAS ATIVIDADES OPERACIONAIS - Desembolsos
          */
         foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-            $cldfcdcasp20 = new cl_dfcdcasp202023();
+            $cldfcdcasp20 = new cl_dfcdcasp202024();
 
             $cldfcdcasp20->si220_anousu                             = $iAnoUsu;
             $cldfcdcasp20->si220_periodo                            = $iCodigoPeriodo;
@@ -346,13 +346,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
         } // $rsResult20
 
 
-        /** DFCDCASP302023
+        /** DFCDCASP302024
          * Fluxo de caixa líquido das atividades operacionais (I)
          */
 
         foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-            $cldfcdcasp30 = new cl_dfcdcasp302023();
+            $cldfcdcasp30 = new cl_dfcdcasp302024();
 
             $cldfcdcasp30->si221_anousu                         = $iAnoUsu;
             $cldfcdcasp30->si221_periodo                        = $iCodigoPeriodo;
@@ -369,13 +369,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
         } // $rsResult30
 
 
-        /** DFCDCASP402023
+        /** DFCDCASP402024
          * FLUXOS DE CAIXA DAS ATIVIDADES DE INVESTIMENTO - Ingressos
          */
 
         foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-            $cldfcdcasp40 = new cl_dfcdcasp402023();
+            $cldfcdcasp40 = new cl_dfcdcasp402024();
 
             $cldfcdcasp40->si222_anousu                             = $iAnoUsu;
             $cldfcdcasp40->si222_periodo                            = $iCodigoPeriodo;
@@ -395,13 +395,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
         } // $rsResult40
 
 
-        /** DFCDCASP502023
+        /** DFCDCASP502024
          * FLUXOS DE CAIXA DAS ATIVIDADES DE INVESTIMENTO - Desembolsos
          */
 
         foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-            $cldfcdcasp50 = new cl_dfcdcasp502023();
+            $cldfcdcasp50 = new cl_dfcdcasp502024();
 
             $cldfcdcasp50->si223_anousu                             = $iAnoUsu;
             $cldfcdcasp50->si223_periodo                            = $iCodigoPeriodo;
@@ -421,13 +421,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
         } // $rsResult50
 
 
-        /** DFCDCASP602023
+        /** DFCDCASP602024
          * Fluxo de caixa líquido das atividades de investimento (II)
          */
 
         foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-            $cldfcdcasp60 = new cl_dfcdcasp602023();
+            $cldfcdcasp60 = new cl_dfcdcasp602024();
 
             $cldfcdcasp60->si224_anousu                           = $iAnoUsu;
             $cldfcdcasp60->si224_periodo                          = $iCodigoPeriodo;
@@ -444,13 +444,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
         } // $rsResult60
 
 
-        /** DFCDCASP702023
+        /** DFCDCASP702024
          * FLUXOS DE CAIXA DAS ATIVIDADES DE FINANCIAMENTO - Ingressos
          */
 
         foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-            $cldfcdcasp70 = new cl_dfcdcasp702023();
+            $cldfcdcasp70 = new cl_dfcdcasp702024();
 
             $cldfcdcasp70->si225_anousu                             = $iAnoUsu;
             $cldfcdcasp70->si225_periodo                            = $iCodigoPeriodo;
@@ -471,13 +471,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
         } // $rsResult70
 
 
-        /** DFCDCASP802023
+        /** DFCDCASP802024
          * FLUXOS DE CAIXA DAS ATIVIDADES DE FINANCIAMENTO - Desembolsos
          */
 
         foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-            $cldfcdcasp80 = new cl_dfcdcasp802023();
+            $cldfcdcasp80 = new cl_dfcdcasp802024();
 
             $cldfcdcasp80->si226_anousu                             = $iAnoUsu;
             $cldfcdcasp80->si226_periodo                            = $iCodigoPeriodo;
@@ -496,13 +496,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
         } // $rsResult80
 
 
-        /** DFCDCASP902023
+        /** DFCDCASP902024
          * Fluxo de caixa líquido das atividades de financiamento (III)
          */
 
         foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-            $cldfcdcasp90 = new cl_dfcdcasp902023();
+            $cldfcdcasp90 = new cl_dfcdcasp902024();
 
             $cldfcdcasp90->si227_anousu                     = $iAnoUsu;
             $cldfcdcasp90->si227_periodo                    = $iCodigoPeriodo;
@@ -519,13 +519,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
         } // $rsResult90
 
 
-        /** DFCDCASP1002023
+        /** DFCDCASP1002024
          * GERAÇÃO LÍQUIDA DE CAIXA E EQUIVALENTE DE CAIXA ( I+II+III )
          */
 
         foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-            $cldfcdcasp100 = new cl_dfcdcasp1002023();
+            $cldfcdcasp100 = new cl_dfcdcasp1002024();
 
             $cldfcdcasp100->si228_anousu                            = $iAnoUsu;
             $cldfcdcasp100->si228_periodo                           = $iCodigoPeriodo;
@@ -542,13 +542,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
         } // $rsResult100
 
 
-        /** DFCDCASP1102023
+        /** DFCDCASP1102024
          * Caixa e Equivalentes de caixa inicial e final
          */
 
         foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-            $cldfcdcasp110 = new cl_dfcdcasp1102023();
+            $cldfcdcasp110 = new cl_dfcdcasp1102024();
 
             $cldfcdcasp110->si229_anousu                          = $iAnoUsu;
             $cldfcdcasp110->si229_periodo                         = $iCodigoPeriodo;

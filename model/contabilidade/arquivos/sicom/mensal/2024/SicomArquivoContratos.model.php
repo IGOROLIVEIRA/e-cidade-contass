@@ -2,15 +2,15 @@
 
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_contratos102023_classe.php");
-require_once("classes/db_contratos112023_classe.php");
-require_once("classes/db_contratos122023_classe.php");
-require_once("classes/db_contratos132023_classe.php");
-require_once("classes/db_contratos202023_classe.php");
-require_once("classes/db_contratos212023_classe.php");
-require_once("classes/db_contratos302023_classe.php");
-require_once("classes/db_contratos402023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarCONTRATOS.model.php");
+require_once("classes/db_contratos102024_classe.php");
+require_once("classes/db_contratos112024_classe.php");
+require_once("classes/db_contratos122024_classe.php");
+require_once("classes/db_contratos132024_classe.php");
+require_once("classes/db_contratos202024_classe.php");
+require_once("classes/db_contratos212024_classe.php");
+require_once("classes/db_contratos302024_classe.php");
+require_once("classes/db_contratos402024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarCONTRATOS.model.php");
 require_once("model/Acordo.model.php");
 require_once("model/AcordoPosicao.model.php");
 require_once("model/AcordoRescisao.model.php");
@@ -263,14 +263,14 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
     public function gerarDados()
     {
 
-        $clcontratos10 = new cl_contratos102023();
-        $clcontratos11 = new cl_contratos112023();
-        $clcontratos12 = new cl_contratos122023();
-        $clcontratos13 = new cl_contratos132023();
-        $clcontratos20 = new cl_contratos202023();
-        $clcontratos21 = new cl_contratos212023();
-        $clcontratos30 = new cl_contratos302023();
-        $clcontratos40 = new cl_contratos402023();
+        $clcontratos10 = new cl_contratos102024();
+        $clcontratos11 = new cl_contratos112024();
+        $clcontratos12 = new cl_contratos122024();
+        $clcontratos13 = new cl_contratos132024();
+        $clcontratos20 = new cl_contratos202024();
+        $clcontratos21 = new cl_contratos212024();
+        $clcontratos30 = new cl_contratos302024();
+        $clcontratos40 = new cl_contratos402024();
 
         db_inicio_transacao();
         // matriz de entrada
@@ -283,7 +283,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
          * excluir informacoes do mes selecionado registro 13
          */
         $result = $clcontratos13->sql_record($clcontratos13->sql_query(NULL, "*", NULL, "si86_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si86_instit = " . db_getsession("DB_instit")));
-        
+
         if ($clcontratos13->numrows > 0) {
 
             $clcontratos13->excluir(NULL, "si86_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si86_instit = " . db_getsession("DB_instit"));
@@ -481,7 +481,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-            $clcontratos10 = new cl_contratos102023();
+            $clcontratos10 = new cl_contratos102024();
 
             $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
@@ -589,7 +589,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
             if (in_array($oDados10->contdeclicitacao, array(1, 8, 9))) {
                 $clcontratos10->si83_codunidadesubresp = ''; //campo 11
-            } 
+            }
 
             /*
             * Origem  = 1 - Processo de Compras, 2 - Licitacao , 3 - Manual
@@ -597,7 +597,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             */
             if (in_array($oDados10->ac16_origem, array(1, 2, 3)) && in_array($oDados10->contdeclicitacao, array(2, 3,))) {
                 $clcontratos10->si83_codunidadesubresp = $oDados10->manutlic_codunidsubanterior == "" ? $sCodUnidadeM : $oDados10->manutlic_codunidsubanterior; //campo 11
-            } 
+            }
 
             /*
             * Origem  = 1 - Processo de Compras, 2 - Licitacao
@@ -609,13 +609,13 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 } else {
                     $clcontratos10->si83_codunidadesubresp = $this->getCodunidadesubrespAdesao($oDados10->ac16_sequencial, true); //campo 11
                 }
-            } 
-            
+            }
+
             //LICITACAO DE OUTROS ORGAOS
             if (in_array($oDados10->contdeclicitacao, array(5, 6, 7))) {
                 $clcontratos10->si83_codorgaoresp = $oDados10->lic211_codorgaoresplicit; //campo 10
                 $clcontratos10->si83_codunidadesubresp = $oDados10->lic211_codunisubres; //campo 11
-            } 
+            }
 
             if ($oDados10->ac16_origem == self::ORIGEM_MANUAL || $oDados10->ac16_origem == self::ORIGEM_PROCESSO_COMPRAS) {
                 if ($oDados10->ac16_tipoorigem == self::TIPO_ORIGEM_ADESAO_REGISTRO_PRECO) {
@@ -797,7 +797,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
                 foreach ($aDadosAgrupados as $oDadosReg11) {
 
-                    $clcontratos11 = new cl_contratos112023();
+                    $clcontratos11 = new cl_contratos112024();
 
                     $clcontratos11->si84_tiporegistro = 11;
                     $clcontratos11->si84_reg10 = $oDadosReg11->si84_reg10;
@@ -914,7 +914,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
                 foreach ($aDadosAgrupados12 as $oDadosReg12) {
 
-                    $clcontratos12 = new cl_contratos122023();
+                    $clcontratos12 = new cl_contratos122024();
                     $clcontratos12->si85_tiporegistro = 12; //campo 01
                     $clcontratos12->si85_reg10 = $oDadosReg12->si85_reg10;
                     $clcontratos12->si85_codcontrato = $oDadosReg12->si85_codcontrato; //campo 02
@@ -948,7 +948,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
             $rsResult13 = db_query($sSql); //db_criatabela($rsResult13);
             $oDados13 = db_utils::fieldsMemory($rsResult13, 0);
-            $clcontratos13 = new cl_contratos132023;
+            $clcontratos13 = new cl_contratos132024;
             $clcontratos13->si86_tiporegistro = 13; //campo 01
             $clcontratos13->si86_codcontrato = $oAcordo->getCodigo(); //campo 02
             $clcontratos13->si86_tipodocumento = $oDados13->tipodocumento; //campo 03
@@ -1014,7 +1014,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         $oDadosAgrupados20 = array();
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-            $clcontratos20 = new cl_contratos202023();
+            $clcontratos20 = new cl_contratos202024();
             $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
             $oAcordoPosicao = new AcordoPosicao($oDados20->ac26_sequencial);
             $oAcordo = new Acordo($oDados20->ac16_sequencial);
@@ -1022,7 +1022,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
             $sSQL20 = "
            select si87_codaditivo
-               from contratos202023
+               from contratos202024
                where si87_codaditivo = {$oDados20->ac26_sequencial}
            ";
             $rsConsultaR20  = db_query($sSQL20);
@@ -1174,7 +1174,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
 
                             $sSql = "SELECT si43_coditem FROM
-                                    (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102023 union select si43_coditem,si43_dscitem from item102023) as y
+                                    (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102024 union select si43_coditem,si43_dscitem from item102024) as y
                                     WHERE si43_coditem = " . $oAcordoItem->getCodigo() . $oAcordoItem->getUnidade();
                             $result = db_query($sSql);
                             $iCodItem = db_utils::fieldsMemory($result, 0)->si43_coditem;
@@ -1472,7 +1472,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
 
                             $sSql = "SELECT si43_coditem FROM
-                                    (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102023 union select si43_coditem,si43_dscitem from item102023) as y
+                                    (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102024 union select si43_coditem,si43_dscitem from item102024) as y
                                     WHERE si43_coditem = " . $oAcordoItem->getCodigo() . $oAcordoItem->getUnidade();
                             $result = db_query($sSql);
                             $iCodItem = db_utils::fieldsMemory($result, 0)->si43_coditem;
@@ -1668,7 +1668,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
 
                                 $sSql = "SELECT si43_coditem FROM
-                                                (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102023 union select si43_coditem,si43_dscitem from item102023) as y
+                                                (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102024 union select si43_coditem,si43_dscitem from item102024) as y
                                                 WHERE si43_coditem = " . $oAcordoItem->getCodigo() . $oAcordoItem->getUnidade();
                                 $result = db_query($sSql);
                                 $iCodItem = db_utils::fieldsMemory($result, 0)->si43_coditem;
@@ -1780,7 +1780,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
 
                                 $sSql = "SELECT si43_coditem FROM
-                                                (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102023 union select si43_coditem,si43_dscitem from item102023) as y
+                                                (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102024 union select si43_coditem,si43_dscitem from item102024) as y
                                                 WHERE si43_coditem = " . $oAcordoItem->getCodigo() . $oAcordoItem->getUnidade();
                                 $result = db_query($sSql);
                                 $iCodItem = db_utils::fieldsMemory($result, 0)->si43_coditem;
@@ -1896,7 +1896,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
 
                                 $sSql = "SELECT si43_coditem FROM
-                                                (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102023 union select si43_coditem,si43_dscitem from item102023) as y
+                                                (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102024 union select si43_coditem,si43_dscitem from item102024) as y
                                                 WHERE si43_coditem = " . $oAcordoItem->getCodigo() . $oAcordoItem->getUnidade();
                                 $result = db_query($sSql);
                                 $iCodItem = db_utils::fieldsMemory($result, 0)->si43_coditem;
@@ -2117,7 +2117,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $sCodUnidadeSub = ' ';
             }
 
-            $clcontratos30 = new cl_contratos302023();
+            $clcontratos30 = new cl_contratos302024();
 
             $clcontratos30->si89_tiporegistro = 30; //campo 01
             $clcontratos30->si89_codorgao = $sCodorgao; //campo 02
@@ -2169,7 +2169,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
         for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 
-            $clcontratos40 = new cl_contratos402023();
+            $clcontratos40 = new cl_contratos402024();
             $oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
 
             $aAnoContrato = explode("-", $oDados40->ac16_dataassinatura);

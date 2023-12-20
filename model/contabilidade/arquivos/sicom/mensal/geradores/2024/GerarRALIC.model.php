@@ -23,10 +23,10 @@ class GerarRALIC extends GerarAM
     $this->sArquivo = "RALIC";
     $this->abreArquivo();
 
-    $sSql = "select * from ralic102023 where si180_mes = " . $this->iMes . " and si180_instit=" . db_getsession("DB_instit");
+    $sSql = "select * from ralic102024 where si180_mes = " . $this->iMes . " and si180_instit=" . db_getsession("DB_instit");
     $rsRALIC10 = db_query($sSql);
 
-    $sSql2 = "select * from ralic112023 where si181_mes = " . $this->iMes . " and si181_instit=" . db_getsession("DB_instit");;
+    $sSql2 = "select * from ralic112024 where si181_mes = " . $this->iMes . " and si181_instit=" . db_getsession("DB_instit");;
     $rsRALIC11 = db_query($sSql2);
 
     if (pg_num_rows($rsRALIC10) == 0) {
@@ -101,7 +101,7 @@ class GerarRALIC extends GerarAM
             $this->adicionaLinha();
           }
 
-          $sSql3 = "select * from ralic122023 where si182_mes = " . $this->iMes . " and si182_instit=" . db_getsession("DB_instit");
+          $sSql3 = "select * from ralic122024 where si182_mes = " . $this->iMes . " and si182_instit=" . db_getsession("DB_instit");
           $rsRALIC12 = db_query($sSql3);
 
           for ($iCont3 = 0; $iCont3 < pg_num_rows($rsRALIC12); $iCont3++) {

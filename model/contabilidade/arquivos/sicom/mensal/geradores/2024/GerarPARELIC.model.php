@@ -16,14 +16,14 @@ class GerarPARELIC extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "PARELIC";
     $this->abreArquivo();
-    
-    $sSql = "select * from parelic102023 where si66_mes = " . $this->iMes . " and si66_instit=" . db_getsession("DB_instit");
+
+    $sSql = "select * from parelic102024 where si66_mes = " . $this->iMes . " and si66_instit=" . db_getsession("DB_instit");
     $rsPARELIC10 = db_query($sSql);
 
     if (pg_num_rows($rsPARELIC10) == 0) {
@@ -31,7 +31,7 @@ class GerarPARELIC extends GerarAM
       $aCSV['tiporegistro'] = '99';
       $this->sLinha = $aCSV;
       $this->adicionaLinha();
-      
+
     } else {
 
       for ($iCont = 0; $iCont < pg_num_rows($rsPARELIC10); $iCont++) {
@@ -56,4 +56,4 @@ class GerarPARELIC extends GerarAM
     $this->fechaArquivo();
   }
 
-} 
+}

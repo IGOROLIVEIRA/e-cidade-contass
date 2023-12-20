@@ -8,7 +8,7 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
    /*
     * O codigo do layout estava setado para um valor que teve a quantidade de campos alterada.
     * Para atender a solicitação de alteração, no metodo get foi tratado condição para retornar o codigo do novo layout,
-    * com a quantidade campos correta a partir de 2023 (Leiaute Módulo Instrumentos de Planejamento, Versão 12.0 - 2023).
+    * com a quantidade campos correta a partir de 2024 (Leiaute Módulo Instrumentos de Planejamento, Versão 12.0 - 2024).
    */
   //protected $iCodigoLayout = 100222;
   protected $iCodigoLayout;
@@ -27,7 +27,7 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
   {
     require_once "classes/db_db_layouttxt_classe.php";
     $cl_db_layouttxt = new cl_db_layouttxt();
-    $result = $cl_db_layouttxt->sql_record($cl_db_layouttxt->sql_query_file(null, "db50_codigo", null, "db50_descr = 'SICOM IP MTFIS 2023'"));
+    $result = $cl_db_layouttxt->sql_record($cl_db_layouttxt->sql_query_file(null, "db50_codigo", null, "db50_descr = 'SICOM IP MTFIS 2024'"));
 
     $oCodLayout = db_utils::fieldsMemory($result, 0);
     $iCodigoLayout = $oCodLayout->db50_codigo;

@@ -1,14 +1,14 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_arc102023_classe.php");
-require_once("classes/db_arc112023_classe.php");
-require_once("classes/db_arc122023_classe.php");
-require_once("classes/db_arc202023_classe.php");
-require_once("classes/db_arc212023_classe.php");
-require_once("classes/db_rec102023_classe.php");
-require_once("classes/db_rec112023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarARC.model.php");
+require_once("classes/db_arc102024_classe.php");
+require_once("classes/db_arc112024_classe.php");
+require_once("classes/db_arc122024_classe.php");
+require_once("classes/db_arc202024_classe.php");
+require_once("classes/db_arc212024_classe.php");
+require_once("classes/db_rec102024_classe.php");
+require_once("classes/db_rec112024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarARC.model.php");
 
 /**
  * detalhamento das correcoes das receitas do mes Sicom Acompanhamento Mensal
@@ -119,10 +119,10 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-        $clrec10 = new cl_rec102023();
-        $clrec11 = new cl_rec112023();
-        $clarc20 = new cl_arc202023();
-        $clarc21 = new cl_arc212023();
+        $clrec10 = new cl_rec102024();
+        $clrec11 = new cl_rec112024();
+        $clarc20 = new cl_arc202024();
+        $clarc21 = new cl_arc212024();
 
 
         $db_filtro = "o70_instit = " . db_getsession("DB_instit");
@@ -209,7 +209,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
             $oCodDoc = db_utils::fieldsMemory($rsDocRec, 0);
 
             if (($oCodDoc->c53_tipo == 101 && substr($oDadosRec->o57_fonte, 0, 2) != '49') || ($oCodDoc->c53_tipo == 100 && substr($oDadosRec->o57_fonte, 0, 2) == '49')) {
-                
+
                 if ($oDadosRec->o70_codigo != 0 && $oDadosRec->saldo_arrecadado) {
 
                     $sNaturezaReceita = substr($oDadosRec->o57_fonte, 1, 8);
@@ -315,7 +315,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                         AND c61_anousu = c60_anousu
                                     INNER JOIN conplanocontabancaria ON c56_codcon = c60_codcon AND c56_anousu = c60_anousu
                                     INNER JOIN contabancaria on contabancaria.db83_sequencial = c56_contabancaria
-                                    LEFT JOIN db_operacaodecredito ON op01_sequencial = db83_codigoopcredito::int 
+                                    LEFT JOIN db_operacaodecredito ON op01_sequencial = db83_codigoopcredito::int
                                     WHERE o15_codigo  = " . $oDadosRec->o70_codigo . "
                                         AND o70_instit = " . db_getsession('DB_instit') . "
                                         AND (CASE
@@ -369,7 +369,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                             }
 
                             $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
-                     
+
                             if(!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]) && empty($aDadosCgm11)) {
 
                                 $aDados = new stdClass();
@@ -391,7 +391,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                 $aDados->si26_dataassinaturacontratoop = $oCodFontRecursos->op01_dataassinaturacop;
                                 $aDados->si26_vlarrecadadofonte = $oCodDoc2->c70_valor;
                                 $aDados->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                            
+
                                 $aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11] = $aDados;
                             }
 
@@ -406,7 +406,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
             }
         }
         /*
-         * Alteração das fontes de receitas, para considerar os novos estruturais disponibilizados pelo TCE para 2023!
+         * Alteração das fontes de receitas, para considerar os novos estruturais disponibilizados pelo TCE para 2024!
          * */
 
         $aRectceSaudEduc = array('11120111', '11180111', '11130311', '11130341', '11180141', '11180231', '11180241', '17180121', '17180151', '17180611',
@@ -415,7 +415,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
 
         foreach ($aDadosAgrupados as $oDados10) {
 
-            $clarc20 = new cl_arc202023();
+            $clarc20 = new cl_arc202024();
             $clarc20->si31_tiporegistro = 20;
             $clarc20->si31_codorgao = $oDados10->si25_codorgao;
             $clarc20->si31_codestorno = $oDados10->si25_codreceita;
@@ -441,7 +441,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                         ($oDados10->si25_identificadordeducao == 0 || $oDados10->si25_identificadordeducao == '91' || $oDados10->si25_identificadordeducao == '')
                     ) {
 
-                        $clarc21 = new cl_arc212023();
+                        $clarc21 = new cl_arc212024();
                         $clarc21->si32_tiporegistro = 21;
                         $clarc21->si32_reg20 = $clarc20->si31_sequencial;
                         $clarc21->si32_codestorno = intval($oDados10->si25_codreceita);
@@ -471,13 +471,13 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                         || $oDados10->si25_identificadordeducao != ''
                     ) {
 
-                        $clarc21 = new cl_arc212023();
+                        $clarc21 = new cl_arc212024();
                         $clarc21->si32_tiporegistro = 21;
                         $clarc21->si32_reg20 = $clarc20->si31_sequencial;
                         $clarc21->si32_codestorno = intval($oDados10->si25_codreceita);
                         $clarc21->si32_codfonteestornada = $oDados11->si26_codfontrecursos;
                         $clarc21->si32_codigocontroleorcamentario = $oDados11->si26_codigocontroleorcamentario;
-                        $clarc21->si32_tipodocumento = intval($oDados11->si26_tipodocumento);// \d arc212023
+                        $clarc21->si32_tipodocumento = intval($oDados11->si26_tipodocumento);// \d arc212024
                         $clarc21->si32_nrodocumento = $oDados11->si26_cnpjorgaocontribuinte;
                         $clarc21->si32_nroconvenio = $oDados11->si26_nroconvenio;
                         $clarc21->si32_dataassinatura = $oDados11->si26_dataassinatura;

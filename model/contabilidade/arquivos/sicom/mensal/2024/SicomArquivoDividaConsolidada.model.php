@@ -1,11 +1,11 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_ddc102023_classe.php");
-require_once("classes/db_ddc202023_classe.php");
-require_once("classes/db_ddc302023_classe.php");
-require_once("classes/db_ddc402023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarDDC.model.php");
+require_once("classes/db_ddc102024_classe.php");
+require_once("classes/db_ddc202024_classe.php");
+require_once("classes/db_ddc302024_classe.php");
+require_once("classes/db_ddc402024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarDDC.model.php");
 
 /**
  * Divida Consolidada Sicom Acompanhamento Mensal
@@ -63,10 +63,10 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
   public function gerarDados()
   {
 
-    $clddc10 = new cl_ddc102023();
-    $clddc20 = new cl_ddc202023();
-    $clddc30 = new cl_ddc302023();
-    $clddc40 = new cl_ddc402023();
+    $clddc10 = new cl_ddc102024();
+    $clddc20 = new cl_ddc202024();
+    $clddc30 = new cl_ddc302024();
+    $clddc40 = new cl_ddc402024();
 
     db_inicio_transacao();
     /*
@@ -119,7 +119,7 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
      */
     $sSql = "select * from dividaconsolidada where si167_mesreferencia = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
              and si167_anoreferencia = " . db_getsession("DB_anousu") . " and si167_instit = " . db_getsession("DB_instit") . " and not exists
-             (select 1 from ddc202023  where si154_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si154_instit = " . db_getsession("DB_instit") . "
+             (select 1 from ddc202024  where si154_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si154_instit = " . db_getsession("DB_instit") . "
              and si154_nrocontratodivida = si167_nrocontratodivida and si154_dtassinatura = si167_dtassinatura
               union select 1 from ddc202022  where si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura
               and si153_instit = " . db_getsession("DB_instit") . "
@@ -144,7 +144,7 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-      $clddc10 = new cl_ddc102023();
+      $clddc10 = new cl_ddc102024();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
       $clddc10->si153_tiporegistro = 10;
@@ -175,7 +175,7 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
     $rsResult20 = db_query($sSql);
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-      $clddc20 = new cl_ddc202023();
+      $clddc20 = new cl_ddc202024();
       $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
       $clddc20->si154_tiporegistro = 20;
@@ -217,7 +217,7 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
     $rsResult30 = db_query($sSql);
     for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
       $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
-      $clddc30 = new cl_ddc302023();
+      $clddc30 = new cl_ddc302024();
 
       $clddc30->si178_tiporegistro = 30;
       $clddc30->si178_codorgao = $sCodorgao;

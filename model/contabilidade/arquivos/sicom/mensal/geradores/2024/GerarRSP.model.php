@@ -38,16 +38,16 @@ class GerarRSP extends GerarAM
                      si112_vlsaldoantnaoproc,
                      si112_mes,
                      si112_instit
-             FROM rsp102023
+             FROM rsp102024
              INNER JOIN empempenho ON (e60_codemp::int8, e60_instit, e60_anousu) = (si112_nroempenho, si112_instit, si112_exercicioempenho)
              WHERE si112_mes = " . $this->iMes . "
                AND si112_instit = " . db_getsession("DB_instit");
     $rsRSP10 = db_query($sSql);
 
-    $sSql2 = "select * from rsp112023 where si113_mes = " . $this->iMes . " and si113_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from rsp112024 where si113_mes = " . $this->iMes . " and si113_instit = " . db_getsession("DB_instit");
     $rsRSP11 = db_query($sSql2);
 
-    $sSql3 = "select * from rsp122023 where si114_mes = " . $this->iMes . " and si114_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from rsp122024 where si114_mes = " . $this->iMes . " and si114_instit = " . db_getsession("DB_instit");
     $rsRSP12 = db_query($sSql3);
 
     $sSql4 = "SELECT DISTINCT si115_sequencial,
@@ -71,16 +71,16 @@ class GerarRSP extends GerarAM
                      si115_dataatocancelamento,
                      si115_mes,
                      si115_instit
-              FROM rsp202023
+              FROM rsp202024
               INNER JOIN empempenho ON (e60_codemp::int8, e60_instit, e60_anousu) = (si115_nroempenho, si115_instit, si115_exercicioempenho)
               WHERE si115_mes = " . $this->iMes . "
                 AND si115_instit = " . db_getsession("DB_instit");
     $rsRSP20 = db_query($sSql4);
 
-    $sSql5 = "select * from rsp212023 where si116_mes = " . $this->iMes . " and si116_instit = " . db_getsession("DB_instit");
+    $sSql5 = "select * from rsp212024 where si116_mes = " . $this->iMes . " and si116_instit = " . db_getsession("DB_instit");
     $rsRSP21 = db_query($sSql5);
 
-    $sSql6 = "select * from rsp222023 where si117_mes = " . $this->iMes . " and si117_instit = " . db_getsession("DB_instit");
+    $sSql6 = "select * from rsp222024 where si117_mes = " . $this->iMes . " and si117_instit = " . db_getsession("DB_instit");
     $rsRSP22 = db_query($sSql6);
 
     if (pg_num_rows($rsRSP10) == 0 && pg_num_rows($rsRSP20) == 0) {

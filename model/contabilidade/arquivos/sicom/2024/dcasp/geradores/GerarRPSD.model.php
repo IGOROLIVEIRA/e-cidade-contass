@@ -16,17 +16,17 @@ class GerarRPSD extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "RPSD";
     $this->abreArquivo();
 
-    $sSql = "select * from rpsd102021 where si189_mes = " . $this->iMes . " and si189_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from rpsd102024 where si189_mes = " . $this->iMes . " and si189_instit = " . db_getsession("DB_instit");
     $rsRPSD10 = db_query($sSql);
 
-    $sSql2 = "select * from rpsd112021 where si190_mes = " . $this->iMes . " and si190_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from rpsd112024 where si190_mes = " . $this->iMes . " and si190_instit = " . db_getsession("DB_instit");
     $rsRPSD11 = db_query($sSql2);
 
     if (pg_num_rows($rsRPSD10) == 0) {

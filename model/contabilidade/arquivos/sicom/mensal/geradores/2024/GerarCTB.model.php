@@ -23,28 +23,28 @@ class GerarCTB extends GerarAM
         $this->sArquivo = "CTB";
         $this->abreArquivo();
 
-        $sSql = "select * from ctb102023 where si95_mes = " . $this->iMes . " and si95_instit = " . db_getsession("DB_instit");
+        $sSql = "select * from ctb102024 where si95_mes = " . $this->iMes . " and si95_instit = " . db_getsession("DB_instit");
         $rsCTB10 = db_query($sSql);
 
-        $sSql2 = "select * from ctb202023 where si96_mes = " . $this->iMes . " and si96_instit = " . db_getsession("DB_instit");
+        $sSql2 = "select * from ctb202024 where si96_mes = " . $this->iMes . " and si96_instit = " . db_getsession("DB_instit");
         $rsCTB20 = db_query($sSql2);
 
-        $sSql3 = "select * from ctb212023 where si97_mes = " . $this->iMes . " and si97_instit = " . db_getsession("DB_instit");
+        $sSql3 = "select * from ctb212024 where si97_mes = " . $this->iMes . " and si97_instit = " . db_getsession("DB_instit");
         $rsCTB21 = db_query($sSql3);
 
-        $sSql4 = "select * from ctb222023 where si98_mes = " . $this->iMes . " and si98_instit = " . db_getsession("DB_instit");
+        $sSql4 = "select * from ctb222024 where si98_mes = " . $this->iMes . " and si98_instit = " . db_getsession("DB_instit");
         $rsCTB22 = db_query($sSql4);
 
-        $sSql5 = "select * from ctb302023 where si99_mes = " . $this->iMes . " and si99_instit = " . db_getsession("DB_instit");
+        $sSql5 = "select * from ctb302024 where si99_mes = " . $this->iMes . " and si99_instit = " . db_getsession("DB_instit");
         $rsCTB30 = db_query($sSql5);
 
-        $sSql6 = "select * from ctb312023 where si100_mes = " . $this->iMes . " and si100_instit = " . db_getsession("DB_instit");
+        $sSql6 = "select * from ctb312024 where si100_mes = " . $this->iMes . " and si100_instit = " . db_getsession("DB_instit");
         $rsCTB31 = db_query($sSql6);
 
-        $sSql7 = "select * from ctb402023 where si101_mes = " . $this->iMes . " and si101_instit = " . db_getsession("DB_instit");
+        $sSql7 = "select * from ctb402024 where si101_mes = " . $this->iMes . " and si101_instit = " . db_getsession("DB_instit");
         $rsCTB40 = db_query($sSql7);
 
-        $sSql8 = "select * from ctb502023 where si102_mes = " . $this->iMes . " and si102_instit = " . db_getsession("DB_instit");
+        $sSql8 = "select * from ctb502024 where si102_mes = " . $this->iMes . " and si102_instit = " . db_getsession("DB_instit");
         $rsCTB50 = db_query($sSql8);
 
         if (pg_num_rows($rsCTB10) == 0 && pg_num_rows($rsCTB20) == 0 && pg_num_rows($rsCTB30) == 0 && pg_num_rows($rsCTB40) == 0 && pg_num_rows($rsCTB50) == 0) {

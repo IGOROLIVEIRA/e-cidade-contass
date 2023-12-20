@@ -23,19 +23,19 @@ class GerarCONGE extends GerarAM
     $this->sArquivo = "CONGE";
     $this->abreArquivo();
 
-    $sSql = "select * from conge102023 where si182_mes = " . $this->iMes . " and si182_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from conge102024 where si182_mes = " . $this->iMes . " and si182_instit = " . db_getsession("DB_instit");
     $rsconge10 = db_query($sSql);
 
-    $sSql2 = "select * from conge202023 where si183_mes = " . $this->iMes . " and si183_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from conge202024 where si183_mes = " . $this->iMes . " and si183_instit = " . db_getsession("DB_instit");
     $rsconge20 = db_query($sSql2);
 
-    $sSql3 = "select * from conge302023 where si184_mes = " . $this->iMes . " and si184_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from conge302024 where si184_mes = " . $this->iMes . " and si184_instit = " . db_getsession("DB_instit");
     $rsconge30 = db_query($sSql3);
 
-    $sSql4 = "select * from conge402023 where si185_mes = " . $this->iMes . " and si185_instit = " . db_getsession("DB_instit");
+    $sSql4 = "select * from conge402024 where si185_mes = " . $this->iMes . " and si185_instit = " . db_getsession("DB_instit");
     $rsconge40 = db_query($sSql4);
 
-    $sSql5 = "select * from conge502023 where si186_mes = " . $this->iMes . " and si186_instit = " . db_getsession("DB_instit");
+    $sSql5 = "select * from conge502024 where si186_mes = " . $this->iMes . " and si186_instit = " . db_getsession("DB_instit");
     $rsconge50 = db_query($sSql5);
 
     if (pg_num_rows($rsconge10) == 0 && pg_num_rows($rsconge20) == 0 && pg_num_rows($rsconge30) == 0 && pg_num_rows($rsconge40) == 0 && pg_num_rows($rsconge50) == 0) {

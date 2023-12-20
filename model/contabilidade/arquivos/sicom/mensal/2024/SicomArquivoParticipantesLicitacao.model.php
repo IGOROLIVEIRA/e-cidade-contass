@@ -1,8 +1,8 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_partlic102023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarPARTLIC.model.php");
+require_once("classes/db_partlic102024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarPARTLIC.model.php");
 
 /**
  * Participantes Licitação Sicom Acompanhamento Mensal
@@ -77,7 +77,7 @@ class SicomArquivoParticipantesLicitacao extends SicomArquivoBase implements iPa
      */
     public function gerarDados()
     {
-        $clpartlic10 = new cl_partlic102023();
+        $clpartlic10 = new cl_partlic102024();
 
 
         db_inicio_transacao();
@@ -147,7 +147,7 @@ class SicomArquivoParticipantesLicitacao extends SicomArquivoBase implements iPa
 
 
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-            $clpartlic10 = new cl_partlic102023();
+            $clpartlic10 = new cl_partlic102024();
             $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
             $clpartlic10->si203_tiporegistro = '10';

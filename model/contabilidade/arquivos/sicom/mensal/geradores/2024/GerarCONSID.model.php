@@ -16,14 +16,14 @@ class GerarCONSID extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "CONSID";
     $this->abreArquivo();
-    
-    $sSql = "select * from consid102023 where si158_mes = " . $this->iMes;
+
+    $sSql = "select * from consid102024 where si158_mes = " . $this->iMes;
     $rsCONSID10 = db_query($sSql);
 
 
@@ -49,7 +49,7 @@ class GerarCONSID extends GerarAM
         $aCSVCONSID10['si158_mesreferenciaconsid']        = $this->padLeftZero($aCONSID10['si158_mesreferenciaconsid'], 2);
         $aCSVCONSID10['si158_consideracoes']              = substr($aCONSID10['si158_consideracoes'], 0, 3000);
 
-        
+
         $this->sLinha = $aCSVCONSID10;
         $this->adicionaLinha();
 

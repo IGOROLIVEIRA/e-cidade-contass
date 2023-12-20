@@ -1,9 +1,9 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_rpsd102023_classe.php");
-require_once("classes/db_rpsd112023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/2023/dcasp/geradores/GerarRPSD.model.php");
+require_once("classes/db_rpsd102024_classe.php");
+require_once("classes/db_rpsd112024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/2024/dcasp/geradores/GerarRPSD.model.php");
 
 
 
@@ -38,8 +38,8 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
     $iAnousu    = db_getsession("DB_anousu");
     $iCodInstit = db_getsession("DB_instit");
 
-    $clrpsd10 = new cl_rpsd102023();
-    $clrpsd11 = new cl_rpsd112023();
+    $clrpsd10 = new cl_rpsd102024();
+    $clrpsd11 = new cl_rpsd112024();
 
     db_inicio_transacao();
     /**
@@ -83,33 +83,33 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                                 e60_numemp AS codreduzidorsp,
                                 CASE
                                     WHEN orcorgao.o40_codtri = '0' OR NULL THEN orcorgao.o40_orgao::VARCHAR
-                                    ELSE orcorgao.o40_codtri 
+                                    ELSE orcorgao.o40_codtri
                                 END AS o58_orgao,
                                 CASE
                                     WHEN orcunidade.o41_codtri = '0' OR NULL THEN orcunidade.o41_unidade::VARCHAR
-                                    ELSE orcunidade.o41_codtri 
+                                    ELSE orcunidade.o41_codtri
                                 END AS o58_unidade,
                                 si09_codorgaotce AS codorgao,
                                 lpad((CASE
                                           WHEN orcorgao.o40_codtri = '0' OR NULL THEN orcorgao.o40_orgao::VARCHAR
-                                          ELSE orcorgao.o40_codtri 
+                                          ELSE orcorgao.o40_codtri
                                       END ),2,0) || lpad((CASE
                                                               WHEN orcunidade.o41_codtri = '0' OR NULL THEN orcunidade.o41_unidade::VARCHAR
-                                                              ELSE orcunidade.o41_codtri 
+                                                              ELSE orcunidade.o41_codtri
                                                           END),3,0) AS codunidadesub,
                                 e60_codemp AS nroempenho,
                                 e60_anousu AS exercicioempenho,
-                                e60_emiss AS dtEmpenho,   
+                                e60_emiss AS dtEmpenho,
                                 o15_codtri AS codfontrecursos,
-                                CASE 
-                                    WHEN c53_coddoc = 35 THEN 1 
+                                CASE
+                                    WHEN c53_coddoc = 35 THEN 1
                                     ELSE 2
                                 END AS tipopagamentorsp,
                                 sum(CASE
-                                        WHEN c53_tipo = 31 THEN c70_valor * -1 
-                                        ELSE c70_valor 
+                                        WHEN c53_tipo = 31 THEN c70_valor * -1
+                                        ELSE c70_valor
                                     END) AS vlpagofontersp
-                        FROM empempenho 
+                        FROM empempenho
                         INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu
                         INNER JOIN orcprojativ ON o58_anousu = o55_anousu AND o58_projativ = o55_projativ
                         INNER JOIN orctiporec ON o58_codigo = o15_codigo
@@ -119,10 +119,10 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                         INNER JOIN conhistdoc ON c71_coddoc = c53_coddoc
                         LEFT JOIN infocomplementaresinstit ON si09_instit = e60_instit
                         LEFT JOIN orcunidade ON o58_anousu = orcunidade.o41_anousu AND o58_orgao = orcunidade.o41_orgao AND o58_unidade = orcunidade.o41_unidade
-                        LEFT JOIN orcorgao ON orcorgao.o40_orgao = orcunidade.o41_orgao AND orcorgao.o40_anousu = orcunidade.o41_anousu                   
-                        WHERE c53_tipo in (30,31) 
-                          AND e60_instit = ".$oInstit->codigo." 
-                          AND o15_codtri = '" . $iFonte . "' 
+                        LEFT JOIN orcorgao ON orcorgao.o40_orgao = orcunidade.o41_orgao AND orcorgao.o40_anousu = orcunidade.o41_anousu
+                        WHERE c53_tipo in (30,31)
+                          AND e60_instit = ".$oInstit->codigo."
+                          AND o15_codtri = '" . $iFonte . "'
                           AND DATE_PART('YEAR',c70_data) = ".db_getsession("DB_anousu") ."
                           AND e60_anousu between 2012 AND 2019
                         GROUP BY 1,2,3,4,5,6,7,8,9,10,11
@@ -133,7 +133,7 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
               $nTotalRPPago = 0;
               for ($iContRP = 0; $iContRP < pg_num_rows($rsRPPago); $iContRP++) {
 
-                  $clrpsd10 = new cl_rpsd102023();
+                  $clrpsd10 = new cl_rpsd102024();
 
                   $oDadosRPSD = db_utils::fieldsMemory($rsRPPago, $iContRP);
 
@@ -174,7 +174,7 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                   if ($clrpsd10->erro_status == 0) {
                       throw new Exception($clrpsd10->erro_msg);
                   }
-                  $clrpsd11 = new cl_rpsd112023();
+                  $clrpsd11 = new cl_rpsd112024();
                   $clrpsd11->si190_tiporegistro = 11;
                   $clrpsd11->si190_codreduzidorsp = $oDadosRPSD->codreduzidorsp;
                   $clrpsd11->si190_codfontrecursos = $iFonteAlterada;
@@ -202,15 +202,15 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
   }
     function sql_query_saldoInicialContaCorrente ($iFonte=null, $sIntituicoes, $iAno=null){
 
-        $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu 
+        $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu
                              where substr(c60_estrut,1,5)='82111' and c60_anousu=" . $iAno ." and c61_anousu=" . $iAno;
         $sWhere =  " AND conhistdoc.c53_tipo not in (1000) ";
 
-        if($iAno==2023){
-            $iAno = 2023;
-            $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu 
-                             where substr(c60_estrut,1,5)='82910' and c60_anousu=2023 and c61_anousu=2023";
-            $sWhere =  " AND conhistdoc.c53_tipo in (2023) ";
+        if($iAno==2024){
+            $iAno = 2024;
+            $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu
+                             where substr(c60_estrut,1,5)='82910' and c60_anousu=2024 and c61_anousu=2024";
+            $sWhere =  " AND conhistdoc.c53_tipo in (2024) ";
         }
 
 
@@ -262,8 +262,8 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                                                AND c17_sequencial = 103
                                                AND c19_reduz IN ( $sSqlReduzSuperavit )
                                                AND c19_conplanoreduzanousu = " . $iAno . "
-                                               AND c19_orctiporec = {$iFonte} 
-                                               ".$sWhere."                                              
+                                               AND c19_orctiporec = {$iFonte}
+                                               ".$sWhere."
                                              GROUP BY c28_tipo),0) as debito) AS debitos";
 
         return $sSqlSaldos;

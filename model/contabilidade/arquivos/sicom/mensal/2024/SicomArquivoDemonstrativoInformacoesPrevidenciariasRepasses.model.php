@@ -1,12 +1,12 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_dipr102023_classe.php");
-require_once("classes/db_dipr202023_classe.php");
-require_once("classes/db_dipr302023_classe.php");
-require_once("classes/db_dipr402023_classe.php");
-require_once("classes/db_dipr502023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarDIPR.model.php");
+require_once("classes/db_dipr102024_classe.php");
+require_once("classes/db_dipr202024_classe.php");
+require_once("classes/db_dipr302024_classe.php");
+require_once("classes/db_dipr402024_classe.php");
+require_once("classes/db_dipr502024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarDIPR.model.php");
 
 /**
  * Selecionar dados de DIPR Sicom Acompanhamento Mensal
@@ -61,11 +61,11 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
      */
     public function gerarDados()
     {
-        $cldipr10 = new cl_dipr102023();
-        $cldipr20 = new cl_dipr202023();
-        $cldipr30 = new cl_dipr302023();
-        $cldipr40 = new cl_dipr402023();
-        $cldipr50 = new cl_dipr502023();
+        $cldipr10 = new cl_dipr102024();
+        $cldipr20 = new cl_dipr202024();
+        $cldipr30 = new cl_dipr302024();
+        $cldipr40 = new cl_dipr402024();
+        $cldipr50 = new cl_dipr502024();
 
         db_inicio_transacao();
         /*
@@ -83,7 +83,7 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
         $result = $cldipr20->sql_record($cldipr20->sql_query(null, "*", null, "si231_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si231_instit = " . db_getsession("DB_instit")));
         if (pg_num_rows($result) > 0) {
             $cldipr20->excluir(null, "si231_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si231_instit = " . db_getsession("DB_instit"));
-    
+
             if ($cldipr20->erro_status == 0) {
                 throw new Exception($cldipr20->erro_msg);
             }
@@ -114,7 +114,7 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
         }
 
         db_fim_transacao();
-        
+
         $sSql = "SELECT si09_codorgaotce AS codorgao
               FROM infocomplementaresinstit
               WHERE si09_instit = " . db_getsession("DB_instit");
@@ -125,13 +125,13 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
         /*
          * selecionar informacoes registro 10
         */
-        
-        $sSql = "SELECT * FROM dipr WHERE c236_orgao = " . db_getsession("DB_instit") . " AND not exists (select 1 from dipr102023 where si230_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si230_instit = " . db_getsession("DB_instit") . " );";
-        
+
+        $sSql = "SELECT * FROM dipr WHERE c236_orgao = " . db_getsession("DB_instit") . " AND not exists (select 1 from dipr102024 where si230_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si230_instit = " . db_getsession("DB_instit") . " );";
+
         $rsResult10 = db_query($sSql);
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-            $cldipr10 = new cl_dipr102023();
+            $cldipr10 = new cl_dipr102024();
             $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
             $cldipr10->si230_tiporegistro = 10;
@@ -161,7 +161,7 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
         $aEnte = array(1 => "Executivo", 2 => "Legistalivo", 3 => "Gestor" ,4 => "Autarquia");
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-            $cldipr20 = new cl_dipr202023();
+            $cldipr20 = new cl_dipr202024();
             $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
             if (empty($oDados20->c236_orgao))
@@ -190,13 +190,13 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
                 throw new Exception($cldipr20->erro_msg);
             }
         }
-         
+
         $sSql = "SELECT diprbaseprevidencia.*, CASE WHEN c238_tipoente = 1 THEN i1.si09_codorgaotce WHEN c238_tipoente = 2 THEN i2.si09_codorgaotce WHEN c238_tipoente = 3 THEN i3.si09_codorgaotce when c238_tipoente = 4 then i4.si09_codorgaotce END as c236_orgao FROM diprbaseprevidencia LEFT JOIN dipr ON c236_coddipr = c238_coddipr LEFT JOIN db_config db1 ON db1.numcgm = c236_numcgmexecutivo LEFT JOIN infocomplementaresinstit i1 ON i1.si09_instit = db1.codigo LEFT JOIN db_config db2 ON db2.numcgm = c236_numcgmlegislativo LEFT JOIN infocomplementaresinstit i2 ON i2.si09_instit = db2.codigo LEFT JOIN db_config db3 ON db3.numcgm = c236_numcgmgestora LEFT JOIN infocomplementaresinstit i3 ON i3.si09_instit = db3.codigo left join db_config db4 on db4.numcgm = c236_numcgmautarquia left join infocomplementaresinstit i4 on i4.si09_instit = db4.codigo	 WHERE c236_orgao = " . db_getsession("DB_instit") . " AND c238_datasicom BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}';";
 
         $rsResult30 = db_query($sSql);
         for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
-            $cldipr30 = new cl_dipr302023();
+            $cldipr30 = new cl_dipr302024();
             $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
 
             $cldipr30->si232_tiporegistro = 30;
@@ -231,7 +231,7 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
         $rsResult40 = db_query($sSql);
         for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 
-            $cldipr40 = new cl_dipr402023();
+            $cldipr40 = new cl_dipr402024();
             $oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
             // Foi Alterado número do registro de 40 para 31
             $cldipr40->si233_tiporegistro = 31;
@@ -262,7 +262,7 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
         $rsResult50 = db_query($sSql);
         for ($iCont50 = 0; $iCont50 < pg_num_rows($rsResult50); $iCont50++) {
 
-            $cldipr50 = new cl_dipr502023();
+            $cldipr50 = new cl_dipr502024();
             $oDados50 = db_utils::fieldsMemory($rsResult50, $iCont50);
             // Foi Alterado número do registro de 50 para 40
             $cldipr50->si234_tiporegistro = 40;
@@ -287,7 +287,7 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
         }
 
         db_fim_transacao();
-        
+
         $oGerarDIPR = new GerarDIPR();
         $oGerarDIPR->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $oGerarDIPR->gerarDados();

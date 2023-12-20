@@ -17,23 +17,23 @@ class GerarLAO extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "LAO";
     $this->abreArquivo();
-    
-    $sSql = "select * from lao102023 where si34_mes = " . $this->iMes . " and si34_instit = " . db_getsession("DB_instit");
+
+    $sSql = "select * from lao102024 where si34_mes = " . $this->iMes . " and si34_instit = " . db_getsession("DB_instit");
     $rsLAO10 = db_query($sSql);
 
-    $sSql2 = "select * from lao112023 where si35_mes = " . $this->iMes . " and si35_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from lao112024 where si35_mes = " . $this->iMes . " and si35_instit = " . db_getsession("DB_instit");
     $rsLAO11 = db_query($sSql2);
 
-    $sSql3 = "select * from lao202023 where si36_mes = " . $this->iMes . " and si36_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from lao202024 where si36_mes = " . $this->iMes . " and si36_instit = " . db_getsession("DB_instit");
     $rsLAO20 = db_query($sSql3);
 
-    $sSql4 = "select * from lao212023 where si37_mes = " . $this->iMes . " and si37_instit = " . db_getsession("DB_instit");
+    $sSql4 = "select * from lao212024 where si37_mes = " . $this->iMes . " and si37_instit = " . db_getsession("DB_instit");
     $rsLAO21 = db_query($sSql4);
 
     if (pg_num_rows($rsLAO10) == 0 && pg_num_rows($rsLAO20) == 0) {
@@ -56,14 +56,14 @@ class GerarLAO extends GerarAM
         $aCSVLAO10['si34_codorgao']         = $this->padLeftZero($aLAO10['si34_codorgao'], 2);
         $aCSVLAO10['si34_nroleialteracao']  = substr($aLAO10['si34_nroleialteracao'], 0, 6);
         $aCSVLAO10['si34_dataleialteracao'] = $this->sicomDate($aLAO10['si34_dataleialteracao']);
-        
+
         $this->sLinha = $aCSVLAO10;
         $this->adicionaLinha();
 
         for ($iCont2 = 0; $iCont2 < pg_num_rows($rsLAO11); $iCont2++) {
 
           $aLAO11 = pg_fetch_array($rsLAO11, $iCont2);
-          
+
           if ($aLAO10['si34_sequencial'] == $aLAO11['si35_reg10']) {
 
             $aCSVLAO11['si35_tiporegistro']           = $this->padLeftZero($aLAO11['si35_tiporegistro'], 2);
@@ -72,7 +72,7 @@ class GerarLAO extends GerarAM
             $aCSVLAO11['si35_artigoleialteracao']     = substr($aLAO11['si35_artigoleialteracao'], 0, 6);
             $aCSVLAO11['si35_descricaoartigo']        = substr($aLAO11['si35_descricaoartigo'], 0, 512);
             $aCSVLAO11['si35_vlautorizadoalteracao']  = $this->sicomNumberReal($aLAO11['si35_vlautorizadoalteracao'], 2);
-            
+
             $this->sLinha = $aCSVLAO11;
             $this->adicionaLinha();
           }
@@ -100,7 +100,7 @@ class GerarLAO extends GerarAM
         for ($iCont4 = 0; $iCont4 < pg_num_rows($rsLAO21); $iCont4++) {
 
           $aLAO21 = pg_fetch_array($rsLAO21, $iCont4);
-          
+
           if ($aLAO20['si36_sequencial'] == $aLAO21['si37_reg20']) {
 
             $aCSVLAO21['si37_tiporegistro']             = $this->padLeftZero($aLAO21['si37_tiporegistro'], 2);

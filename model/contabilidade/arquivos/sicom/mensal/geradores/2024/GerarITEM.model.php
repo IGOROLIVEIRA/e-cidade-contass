@@ -23,7 +23,7 @@ class GerarITEM extends GerarAM
     $this->sArquivo = "ITEM";
     $this->abreArquivo();
 
-    $sSql = "select * from item102023 where si43_mes = " . $this->iMes . " and si43_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from item102024 where si43_mes = " . $this->iMes . " and si43_instit = " . db_getsession("DB_instit");
     $rsITEM10 = db_query($sSql);//db_criatabela($rsITEM10);
 
     if (pg_num_rows($rsITEM10) == 0) {
@@ -31,7 +31,7 @@ class GerarITEM extends GerarAM
       $aCSV['tiporegistro'] = '99';
       $this->sLinha = $aCSV;
       $this->adicionaLinha();
-      
+
     } else {
 
       for ($iCont = 0; $iCont < pg_num_rows($rsITEM10); $iCont++) {
@@ -44,7 +44,7 @@ class GerarITEM extends GerarAM
         $aCSVITEM10['si43_unidademedida']           = substr($aITEM10['si43_unidademedida'], 0, 50);
         $aCSVITEM10['si43_tipocadastro']            = $this->padLeftZero($aITEM10['si43_tipocadastro'], 1);
         $aCSVITEM10['si43_justificativaalteracao']  = substr($aITEM10['si43_justificativaalteracao'], 0, 100);
-        
+
         $this->sLinha = $aCSVITEM10;
         $this->adicionaLinha();
 
@@ -54,4 +54,4 @@ class GerarITEM extends GerarAM
     $this->fechaArquivo();
   }
 
-} 
+}

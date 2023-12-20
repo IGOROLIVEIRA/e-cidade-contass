@@ -1,8 +1,8 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_idedcasp2023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/2023/dcasp/geradores/GerarIDE.model.php");
+require_once("classes/db_idedcasp2024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/2024/dcasp/geradores/GerarIDE.model.php");
 
 /**
  * gerar arquivo de identificacao da Remessa Sicom Acompanhamento Mensal
@@ -52,7 +52,7 @@ class SicomArquivoIDE extends SicomArquivoBase implements iPadArquivoBaseCSV
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clidedcasp = new cl_idedcasp2023();
+    $clidedcasp = new cl_idedcasp2024();
 
     /**
      * inserir informacoes no banco de dados
@@ -86,7 +86,7 @@ class SicomArquivoIDE extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
-      $clidedcasp = new cl_idedcasp2023();
+      $clidedcasp = new cl_idedcasp2024();
       $oDadosIde = db_utils::fieldsMemory($rsResult, $iCont);
 
       $clidedcasp->si200_anousu              = $iAnousu;

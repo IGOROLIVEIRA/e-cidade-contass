@@ -1,13 +1,13 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_rsp102023_classe.php");
-require_once("classes/db_rsp112023_classe.php");
-require_once("classes/db_rsp122023_classe.php");
-require_once("classes/db_rsp202023_classe.php");
-require_once("classes/db_rsp212023_classe.php");
-require_once("classes/db_rsp222023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarRSP.model.php");
+require_once("classes/db_rsp102024_classe.php");
+require_once("classes/db_rsp112024_classe.php");
+require_once("classes/db_rsp122024_classe.php");
+require_once("classes/db_rsp202024_classe.php");
+require_once("classes/db_rsp212024_classe.php");
+require_once("classes/db_rsp222024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarRSP.model.php");
 
 /**
  * selecionar dados de Leis de Alteração Sicom Acompanhamento Mensal
@@ -36,7 +36,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
   const JUSTIFICATIVA_RESTABELECIMENTO = 'Reclassificacao de resto a pagar na fonte correta.';
 
   /**
-   * @var array Fontes encerradas em 2023
+   * @var array Fontes encerradas em 2024
    */
   protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
@@ -81,12 +81,12 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
   {
 
 
-    $clrsp10 = new cl_rsp102023();
-    $clrsp11 = new cl_rsp112023();
-    $clrsp12 = new cl_rsp122023();
-    $clrsp20 = new cl_rsp202023();
-    $clrsp21 = new cl_rsp212023();
-    $clrsp22 = new cl_rsp222023();
+    $clrsp10 = new cl_rsp102024();
+    $clrsp11 = new cl_rsp112024();
+    $clrsp12 = new cl_rsp122024();
+    $clrsp20 = new cl_rsp202024();
+    $clrsp21 = new cl_rsp212024();
+    $clrsp22 = new cl_rsp222024();
 
     db_inicio_transacao();
 
@@ -170,11 +170,11 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 
       $sSql = $clrsp10->sql_Reg10(db_getsession("DB_anousu"), db_getsession("DB_instit"));
       $rsResult10 = $clrsp10->sql_record($sSql);
-      
+
 
       for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-        $clrsp10 = new cl_rsp102023();
+        $clrsp10 = new cl_rsp102024();
         $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
         if ($oDados10->subunidade  > 0) {
           $oDados10->codunidadesub .= str_pad($oDados10->subunidade, 3, "0", STR_PAD_LEFT);
@@ -247,7 +247,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         if (in_array($oDados10->codfontrecursos, $this->aFontesEncerradas)) {
           $clrsp11->si113_codfontrecursos = substr($clrsp11->si113_codfontrecursos, 0, 1).'59';
         }
-        
+
         $clrsp11->si113_codco = $oDados10->codco;
 
         $clrsp11->si113_vloriginalfonte = $oDados10->vloriginal;
@@ -284,20 +284,20 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
          * Alteracoes nas validacoes do SICOM
          * Cancelamento e Reclassificacoes das fontes encerradas
          */
-        if (db_getsession("DB_anousu") == 2023) {
+        if (db_getsession("DB_anousu") == 2024) {
 
           if (($oDados10->codfontrecursos == $oDados10->old_codfontrecursos) || (in_array($oDados10->codfontrecursos, $this->aFontesEncerradas))) {
 
             if ($oDados10->vlsaldoantproce > 0) {
 
-              $this->gerarReg202023($oDados10, $clrsp10, 1, 6, $oDados10->vlsaldoantproce, $this::JUSTIFICATIVA_CANCELAMENTO, false);
-              $this->gerarReg202023($oDados10, $clrsp10, 1, 5, $oDados10->vlsaldoantproce, $this::JUSTIFICATIVA_RESTABELECIMENTO, true);
+              $this->gerarReg202024($oDados10, $clrsp10, 1, 6, $oDados10->vlsaldoantproce, $this::JUSTIFICATIVA_CANCELAMENTO, false);
+              $this->gerarReg202024($oDados10, $clrsp10, 1, 5, $oDados10->vlsaldoantproce, $this::JUSTIFICATIVA_RESTABELECIMENTO, true);
             }
 
             if ($oDados10->vlsaldoantnaoproc > 0) {
 
-              $this->gerarReg202023($oDados10, $clrsp10, 2, 6, $oDados10->vlsaldoantnaoproc, $this::JUSTIFICATIVA_CANCELAMENTO, false);
-              $this->gerarReg202023($oDados10, $clrsp10, 2, 5, $oDados10->vlsaldoantnaoproc, $this::JUSTIFICATIVA_RESTABELECIMENTO, true);
+              $this->gerarReg202024($oDados10, $clrsp10, 2, 6, $oDados10->vlsaldoantnaoproc, $this::JUSTIFICATIVA_CANCELAMENTO, false);
+              $this->gerarReg202024($oDados10, $clrsp10, 2, 5, $oDados10->vlsaldoantnaoproc, $this::JUSTIFICATIVA_RESTABELECIMENTO, true);
             }
           }
         }
@@ -310,7 +310,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
     $clrsp10->sql_DeParaFontes();
     $sSql = $clrsp20->sql_Reg20(db_getsession("DB_instit"), $this->sDataInicial, $this->sDataFinal);
     $rsResult20 = $clrsp20->sql_record($sSql);
-    
+
 
     $aDadosAgrupados = array();
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
@@ -371,7 +371,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         } else {
           $clrsp21->si116_codfontrecursos = $oDados20->codfontrecursos == $oDados20->old_codfontrecursos ? $oDados20->new_codfontrecursos : $oDados20->codfontrecursos;
         }
-        
+
         $clrsp21->si116_codco = $oDados20->codco;
         $clrsp21->si116_codidentificafr = $oDados20->tipomovimento != 5 || $oDados20->tipomovimento != 6 ? 'null' : $oDados20->codfontrecursos;
         $clrsp21->si116_vlmovimentacaofonte = $oDados20->vlmovimentacao;
@@ -389,7 +389,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 
     foreach ($aDadosAgrupados as $oDados) {
 
-      $clrsp20 = new cl_rsp202023();
+      $clrsp20 = new cl_rsp202024();
 
       $clrsp20->si115_tiporegistro = 20;
       $clrsp20->si115_codreduzidomov = $oDados->si115_codreduzidomov;
@@ -418,7 +418,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
       }
 
 
-      $clrsp21 = new cl_rsp212023();
+      $clrsp21 = new cl_rsp212024();
 
 
       $clrsp21->si116_tiporegistro = 21;
@@ -446,7 +446,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 
   }
 
-  public function gerarReg202023($oDados10, $clrsp10, $iTiporestospagar, $iTipoMovimento, $vlSaldoproce, $sJustificativa, $bRestabelecimento)
+  public function gerarReg202024($oDados10, $clrsp10, $iTiporestospagar, $iTipoMovimento, $vlSaldoproce, $sJustificativa, $bRestabelecimento)
   {
 
     $fonte = $oDados10->new_codfontrecursos;
@@ -467,7 +467,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
     }
 
 
-    $clrsp20 = new cl_rsp202023();
+    $clrsp20 = new cl_rsp202024();
     $clrsp20->si115_tiporegistro = 20;
     $clrsp20->si115_codreduzidomov = $iTipoMovimento == 6 ? $oDados10->codreduzidorsp . $oDados10->codfontrecursos . $iTiporestospagar : $oDados10->codreduzidorsp . '1500000' . $iTiporestospagar;
     $clrsp20->si115_codorgao = $oDados10->codorgao;
@@ -478,7 +478,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
     $clrsp20->si115_dtempenho = $oDados10->dtempenho;
     $clrsp20->si115_tiporestospagar = $iTiporestospagar;
     $clrsp20->si115_tipomovimento = $iTipoMovimento;
-    $clrsp20->si115_dtmovimentacao = '2023-01-01';
+    $clrsp20->si115_dtmovimentacao = '2024-01-01';
     $clrsp20->si115_dotorig = '';
     $clrsp20->si115_vlmovimentacao = $vlSaldoproce;
     $clrsp20->si115_codorgaoencampatribuic = '';
@@ -494,7 +494,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
       throw new Exception($clrsp20->erro_msg);
     }
 
-    $clrsp21 = new cl_rsp212023();
+    $clrsp21 = new cl_rsp212024();
 
     $clrsp21->si116_tiporegistro = 21;
     $clrsp21->si116_reg20 = $clrsp20->si115_sequencial;
@@ -513,7 +513,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 
     if ($iTipoMovimento == 4) {
 
-      $clrsp22 = new cl_rsp222023();
+      $clrsp22 = new cl_rsp222024();
 
       $clrsp22->si117_tiporegistro = 22;
       $clrsp22->si117_codreduzidomov = $iTipoMovimento == 6 ? $oDados10->codreduzidorsp . $oDados10->codfontrecursos . $iTiporestospagar : $oDados10->codreduzidorsp . '1500000' . $iTiporestospagar;

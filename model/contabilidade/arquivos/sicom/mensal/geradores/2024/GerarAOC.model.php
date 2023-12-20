@@ -23,22 +23,22 @@ class GerarAOC extends GerarAM
         $this->sArquivo = "AOC";
         $this->abreArquivo();
 
-        $sSql = "select * from aoc102023 where si38_mes = " . $this->iMes . " and si38_instit = " . db_getsession("DB_instit");
+        $sSql = "select * from aoc102024 where si38_mes = " . $this->iMes . " and si38_instit = " . db_getsession("DB_instit");
         $rsAOC10 = db_query($sSql);
 
-        $sSql2 = "select * from aoc112023 where si39_mes = " . $this->iMes . " and si39_instit = " . db_getsession("DB_instit");
+        $sSql2 = "select * from aoc112024 where si39_mes = " . $this->iMes . " and si39_instit = " . db_getsession("DB_instit");
         $rsAOC11 = db_query($sSql2);
 
-        $sSql3 = "select * from aoc122023 where si40_mes = " . $this->iMes . " and si40_instit = " . db_getsession("DB_instit");
+        $sSql3 = "select * from aoc122024 where si40_mes = " . $this->iMes . " and si40_instit = " . db_getsession("DB_instit");
         $rsAOC12 = db_query($sSql3);
 
-        $sSql4 = "select * from aoc132023 where si41_mes = " . $this->iMes . " and si41_instit = " . db_getsession("DB_instit");
+        $sSql4 = "select * from aoc132024 where si41_mes = " . $this->iMes . " and si41_instit = " . db_getsession("DB_instit");
         $rsAOC13 = db_query($sSql4);
 
-        $sSql5 = "select * from aoc142023 where si42_mes = " . $this->iMes . " and si42_instit = " . db_getsession("DB_instit");
+        $sSql5 = "select * from aoc142024 where si42_mes = " . $this->iMes . " and si42_instit = " . db_getsession("DB_instit");
         $rsAOC14 = db_query($sSql5);
 
-        $sSql6 = "select * from aoc152023 where si194_mes = " . $this->iMes . " and si194_instit = " . db_getsession("DB_instit");
+        $sSql6 = "select * from aoc152024 where si194_mes = " . $this->iMes . " and si194_instit = " . db_getsession("DB_instit");
         $rsAOC15 = db_query($sSql6);
 
         if (pg_num_rows($rsAOC10) == 0) {

@@ -1,10 +1,10 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_ntf102023_classe.php");
-require_once("classes/db_ntf112023_classe.php");
-require_once("classes/db_ntf202023_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarNTF.model.php");
+require_once("classes/db_ntf102024_classe.php");
+require_once("classes/db_ntf112024_classe.php");
+require_once("classes/db_ntf202024_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarNTF.model.php");
 
 /**
  * selecionar dados de Notas Fiscais Sicom Acompanhamento Mensal
@@ -63,9 +63,9 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
   public function gerarDados()
   {
 
-    $clntf10 = new cl_ntf102023();
-    $clntf11 = new cl_ntf112023();
-    $clntf20 = new cl_ntf202023();
+    $clntf10 = new cl_ntf102024();
+    $clntf11 = new cl_ntf112024();
+    $clntf20 = new cl_ntf202024();
 
 
     db_inicio_transacao();
@@ -322,16 +322,16 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
           $sHash11 = $oDados11->coditem;
           if (!isset($aDadosAgrupados11[$sHash11])) {
 
-            $oNtf112023 = new stdClass();
-            $oNtf112023->si144_tiporegistro           = 11;
-            $oNtf112023->si144_reg10                  = $clntf10->si143_sequencial;
-            $oNtf112023->si144_codnotafiscal          = $oDados11->codnotafiscal;
-            $oNtf112023->si144_coditem                = $oDados11->coditem;
-            $oNtf112023->si144_quantidadeitem         = $oDados11->quantidadeitem;
-            $oNtf112023->si144_valorunitarioitem      = $oDados11->valorunitarioitem;
-            $oNtf112023->si144_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
-            $oNtf112023->si144_instit                 = db_getsession("DB_instit");
-            $aDadosAgrupados11[$sHash11] = $oNtf112023;
+            $oNtf112024 = new stdClass();
+            $oNtf112024->si144_tiporegistro           = 11;
+            $oNtf112024->si144_reg10                  = $clntf10->si143_sequencial;
+            $oNtf112024->si144_codnotafiscal          = $oDados11->codnotafiscal;
+            $oNtf112024->si144_coditem                = $oDados11->coditem;
+            $oNtf112024->si144_quantidadeitem         = $oDados11->quantidadeitem;
+            $oNtf112024->si144_valorunitarioitem      = $oDados11->valorunitarioitem;
+            $oNtf112024->si144_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
+            $oNtf112024->si144_instit                 = db_getsession("DB_instit");
+            $aDadosAgrupados11[$sHash11] = $oNtf112024;
 
           } else {
             $aDadosAgrupados11[$sHash11]->si144_quantidadeitem    += $oDados11->quantidadeitem;
@@ -343,7 +343,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
 
         foreach ($aDadosAgrupados11 as $oDadosAgrupados11) {
 
-          $clntf11 = new cl_ntf112023();
+          $clntf11 = new cl_ntf112024();
 
           $clntf11->si144_tiporegistro           = $oDadosAgrupados11->si144_tiporegistro;
           $clntf11->si144_reg10                  = $oDadosAgrupados11->si144_reg10;
@@ -466,7 +466,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
      */
     foreach ($aDadosAgrupados as $oDados10) {
 
-      $clntf10 = new cl_ntf102023();
+      $clntf10 = new cl_ntf102024();
       $clntf10->si143_tiporegistro = $oDados10->si143_tiporegistro;
       $clntf10->si143_codnotafiscal = $oDados10->si143_codnotafiscal;
       $clntf10->si143_codorgao = $oDados10->si143_codorgao;
@@ -498,7 +498,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
 
       foreach ($oDados10->reg20 as $oDados20) {
 
-        $clntf20 = new cl_ntf202023();
+        $clntf20 = new cl_ntf202024();
         $clntf20->si145_tiporegistro = $oDados20->si145_tiporegistro;
         $clntf20->si145_reg10 = $clntf10->si143_sequencial;
         $clntf20->si145_nfnumero = $oDados20->si145_nfnumero;

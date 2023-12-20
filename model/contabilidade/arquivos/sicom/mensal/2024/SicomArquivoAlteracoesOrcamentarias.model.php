@@ -1,13 +1,13 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_aoc102023_classe.php");
-require_once("classes/db_aoc112023_classe.php");
-require_once("classes/db_aoc122023_classe.php");
-require_once("classes/db_aoc132023_classe.php");
-require_once("classes/db_aoc142023_classe.php");
+require_once("classes/db_aoc102024_classe.php");
+require_once("classes/db_aoc112024_classe.php");
+require_once("classes/db_aoc122024_classe.php");
+require_once("classes/db_aoc132024_classe.php");
+require_once("classes/db_aoc142024_classe.php");
 require_once("classes/db_infocomplementaresinstit_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarAOC.model.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarAOC.model.php");
 
 /**
  * Alterações Orçamentárias Sicom Acompanhamento Mensal
@@ -91,12 +91,12 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     public function gerarDados()
     {
 
-        $claoc10 = new cl_aoc102023();
-        $claoc11 = new cl_aoc112023();
-        $claoc12 = new cl_aoc122023();
-        $claoc13 = new cl_aoc132023();
-        $claoc14 = new cl_aoc142023();
-        $claoc15 = new cl_aoc152023();
+        $claoc10 = new cl_aoc102024();
+        $claoc11 = new cl_aoc112024();
+        $claoc12 = new cl_aoc122024();
+        $claoc13 = new cl_aoc132024();
+        $claoc14 = new cl_aoc142024();
+        $claoc15 = new cl_aoc152024();
 
         /**
          * excluir informacoes do mes selecionado
@@ -184,7 +184,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
             for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
                 $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-                $claoc10 = new cl_aoc102023();
+                $claoc10 = new cl_aoc102024();
 
                 $claoc10->si38_tiporegistro = 10;
                 $claoc10->si38_codorgao = $oDados10->codorgao;
@@ -205,7 +205,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                 for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
                     $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
-                    $claoc11 = new cl_aoc112023();
+                    $claoc11 = new cl_aoc112024();
 
                     $claoc11->si39_tiporegistro = 11;
                     $claoc11->si39_codreduzidodecreto = $oDados11->codreduzidodecreto;
@@ -240,7 +240,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                     for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
 
                         $oDados12 = db_utils::fieldsMemory($rsResult12, $iCont12);
-                        $claoc12 = new cl_aoc122023();
+                        $claoc12 = new cl_aoc122024();
 
                         $claoc12->si40_tiporegistro = 12;
                         $claoc12->si40_codreduzidodecreto = $oDados12->codreduzidodecreto;
@@ -278,7 +278,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                 for ($iCont13 = 0; $iCont13 < pg_num_rows($rsResult13); $iCont13++) {
 
                     $oDados13 = db_utils::fieldsMemory($rsResult13, $iCont13);
-                    $claoc13 = new cl_aoc132023();
+                    $claoc13 = new cl_aoc132024();
 
                     $claoc13->si41_tiporegistro = 13;
                     $claoc13->si41_codreduzidodecreto = $oDados13->codreduzidodecreto;
@@ -421,7 +421,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
 
                         foreach ($aDadosAgrupados14 as $oDadosReg14) {
 
-                            $claoc14 = new cl_aoc142023();
+                            $claoc14 = new cl_aoc142024();
 
                             $claoc14->si42_tiporegistro = 14;
                             $claoc14->si42_codreduzidodecreto = $oDadosReg14->si42_codreduzidodecreto;
@@ -452,7 +452,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
 
                         foreach ($aDadosAgrupados15 as $oDadosReg14) {
 
-                            $claoc14 = new cl_aoc142023();
+                            $claoc14 = new cl_aoc142024();
 
                             $claoc14->si42_tiporegistro = 14;
                             $claoc14->si42_codreduzidodecreto = $oDadosReg14->si194_codreduzidodecreto;
@@ -481,12 +481,12 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
 
                         /**
                          * 15 - Alterações Orçamentárias de Redução
-                         * Novo Registro Inserido a partir de 2023, conforme layout Versão 8.0_2023                         *
+                         * Novo Registro Inserido a partir de 2024, conforme layout Versão 8.0_2024                         *
                          */
 
                         foreach ($aDadosAgrupados15 as $oDadosReg15) {
 
-                            $claoc15 = new cl_aoc152023();
+                            $claoc15 = new cl_aoc152024();
 
                             $claoc15->si194_tiporegistro = $oDadosReg15->si194_tiporegistro;
                             $claoc15->si194_codreduzidodecreto = $oDadosReg15->si194_codreduzidodecreto;
@@ -517,7 +517,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                 } else {
                     foreach ($aDadosAgrupados14 as $oDadosReg14) {
 
-                        $claoc14 = new cl_aoc142023();
+                        $claoc14 = new cl_aoc142024();
 
                         $claoc14->si42_tiporegistro = 14;
                         $claoc14->si42_codreduzidodecreto = $oDadosReg14->si42_codreduzidodecreto;

@@ -23,7 +23,7 @@ class GerarPESSOA extends GerarAM
     $this->sArquivo = "PESSOA";
     $this->abreArquivo();
 
-    $sSql = "select * from pessoa102023 where si12_mes = " . $this->iMes . " and si12_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from pessoa102024 where si12_mes = " . $this->iMes . " and si12_instit = " . db_getsession("DB_instit");
     $rsPESSOA10 = db_query($sSql);
 
     if (pg_num_rows($rsPESSOA10) == 0) {
@@ -58,4 +58,4 @@ class GerarPESSOA extends GerarAM
     $this->fechaArquivo();
   }
 
-} 
+}

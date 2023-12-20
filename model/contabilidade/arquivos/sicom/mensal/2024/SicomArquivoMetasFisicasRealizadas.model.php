@@ -2,8 +2,8 @@
 
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_metareal102023_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarMETAREAL.model.php");
+require_once ("classes/db_metareal102024_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarMETAREAL.model.php");
 
 /**
  * Dados Complementares Sicom Acompanhamento Mensal
@@ -58,7 +58,7 @@ class SicomArquivoMetasFisicasRealizadas extends SicomArquivoBase implements iPa
    */
   public function gerarDados() {
 
-    $clmetareal10 = new cl_metareal102023();
+    $clmetareal10 = new cl_metareal102024();
 
     db_inicio_transacao();
 
@@ -90,7 +90,7 @@ class SicomArquivoMetasFisicasRealizadas extends SicomArquivoBase implements iPa
       $sSqlInstit  = "SELECT codigo FROM db_config ";
       $rsInstit    = db_query($sSqlInstit);
 
-      // Lista das institui??es 
+      // Lista das institui??es
       for ($iCont = 0; $iCont < pg_num_rows($rsInstit); $iCont++) {
         $oReceita =  db_utils::fieldsMemory($rsInstit, $iCont);
         $sListaInstit[] = $oReceita->codigo;
@@ -107,8 +107,8 @@ class SicomArquivoMetasFisicasRealizadas extends SicomArquivoBase implements iPa
                                 p.o55_finali,
                                 pr.o22_descrprod,
                                 p.o55_descrunidade,
-                                p.o55_valorunidade, 
-                                d.o58_orgao as o08_orgao, 
+                                p.o55_valorunidade,
+                                d.o58_orgao as o08_orgao,
                                 d.o58_unidade as o08_unidade,
                                 si09_codorgaotce,
                                 p.o55_valorunidade
@@ -145,7 +145,7 @@ class SicomArquivoMetasFisicasRealizadas extends SicomArquivoBase implements iPa
         $sHash  = $oMetasPPA->si09_codorgaotce.$org.$unidade.$oMetasPPA->o08_funcao.$oMetasPPA->o08_subfuncao;
         $sHash .= $oMetasPPA->o08_programa.$oMetasPPA->o55_projativ;
 
-        $rsCodTri = db_query("select o41_codtri from orcunidade where o41_unidade =". $oMetasPPA->o08_unidade ." 
+        $rsCodTri = db_query("select o41_codtri from orcunidade where o41_unidade =". $oMetasPPA->o08_unidade ."
           and o41_anousu = ".db_getsession('DB_anousu'));
 
         $oCodTri = db_utils::fieldsMemory($rsCodTri, 0);
@@ -167,7 +167,7 @@ class SicomArquivoMetasFisicasRealizadas extends SicomArquivoBase implements iPa
           $unidade = $oCodTriUnid->o41_codtri;
         }
 
-        $rsCodTriOrg = db_query("select o40_codtri from orcorgao where o40_orgao = ". $oMetasPPA->o08_orgao ." 
+        $rsCodTriOrg = db_query("select o40_codtri from orcorgao where o40_orgao = ". $oMetasPPA->o08_orgao ."
             and o40_anousu = ".db_getsession('DB_anousu'));
         $oCodTriOrg = db_utils::fieldsMemory($rsCodTriOrg, 0);
 
@@ -178,7 +178,7 @@ class SicomArquivoMetasFisicasRealizadas extends SicomArquivoBase implements iPa
         }
         if (!isset($aDadosAgrupados[$sHash])) {
 
-          $clmetareal10 = new cl_metareal102023();
+          $clmetareal10 = new cl_metareal102024();
           $clmetareal10->si171_tiporegistro    = 10;
           $clmetareal10->si171_codorgao        = str_pad($oMetasPPA->si09_codorgaotce, 2, "0", STR_PAD_LEFT);
           $clmetareal10->si171_codunidadesub   = str_pad($org, 2, "0", STR_PAD_LEFT);
@@ -209,7 +209,7 @@ class SicomArquivoMetasFisicasRealizadas extends SicomArquivoBase implements iPa
       //echo "<pre>";print_r($aDadosAgrupados);
       foreach ($aDadosAgrupados as $oDado) {
 
-        $clmetareal = new cl_metareal102023();
+        $clmetareal = new cl_metareal102024();
 
         $clmetareal->si171_tiporegistro    = 10;
         $clmetareal->si171_codorgao        = $oDado->si171_codorgao;

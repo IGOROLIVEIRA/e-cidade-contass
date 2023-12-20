@@ -23,10 +23,10 @@ class GerarTCE extends GerarAM
     $this->sArquivo = "TCE";
     $this->abreArquivo();
 
-    $sSql = "select * from tce102023 where si187_mes = " . $this->iMes . " and si187_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from tce102024 where si187_mes = " . $this->iMes . " and si187_instit = " . db_getsession("DB_instit");
     $rstce10 = db_query($sSql);
 
-    $sSql2 = "select * from tce112023 where si188_mes = " . $this->iMes . " and si188_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from tce112024 where si188_mes = " . $this->iMes . " and si188_instit = " . db_getsession("DB_instit");
     $rstce11 = db_query($sSql2);
 
 

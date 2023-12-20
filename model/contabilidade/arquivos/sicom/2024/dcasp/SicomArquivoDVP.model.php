@@ -15,11 +15,11 @@ require_once('libs/db_libcontabilidade.php');
 require_once('libs/db_liborcamento.php');
 require_once('fpdf151/PDFDocument.php');
 
-require_once("classes/db_dvpdcasp102023_classe.php");
-require_once("classes/db_dvpdcasp202023_classe.php");
-require_once("classes/db_dvpdcasp302023_classe.php");
+require_once("classes/db_dvpdcasp102024_classe.php");
+require_once("classes/db_dvpdcasp202024_classe.php");
+require_once("classes/db_dvpdcasp302024_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/2023/dcasp/geradores/GerarDVP.model.php");
+require_once("model/contabilidade/arquivos/sicom/2024/dcasp/geradores/GerarDVP.model.php");
 
 /**
  * gerar arquivo de Demonstração das Variações Patrimoniais
@@ -100,9 +100,9 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $cldvpdcasp10 = new cl_dvpdcasp102023();
-    $cldvpdcasp20 = new cl_dvpdcasp202023();
-    $cldvpdcasp30 = new cl_dvpdcasp302023();
+    $cldvpdcasp10 = new cl_dvpdcasp102024();
+    $cldvpdcasp20 = new cl_dvpdcasp202024();
+    $cldvpdcasp30 = new cl_dvpdcasp302024();
 
     /**
      * excluir informacoes caso estejam repetidas
@@ -158,7 +158,7 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $cldvpdcasp10  = new cl_dvpdcasp102023();
+      $cldvpdcasp10  = new cl_dvpdcasp102024();
       $cldvpdcasp10->si216_ano                                = $iAnoUsu;
       $cldvpdcasp10->si216_periodo                            = $iCodigoPeriodo;
       $cldvpdcasp10->si216_institu                            = db_getsession("DB_instit");
@@ -182,7 +182,7 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $cldvpdcasp20  = new cl_dvpdcasp202023();
+      $cldvpdcasp20  = new cl_dvpdcasp202024();
 
       $cldvpdcasp20->si217_ano                                = $iAnoUsu;
       $cldvpdcasp20->si217_periodo                            = $iCodigoPeriodo;
@@ -209,7 +209,7 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $cldvpdcasp30  = new cl_dvpdcasp302023();
+      $cldvpdcasp30  = new cl_dvpdcasp302024();
       $cldvpdcasp30->si218_ano                            = $iAnoUsu;
       $cldvpdcasp30->si218_periodo                        = $iCodigoPeriodo;
       $cldvpdcasp30->si218_institu                        = db_getsession("DB_instit");
