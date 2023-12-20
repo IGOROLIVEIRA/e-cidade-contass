@@ -51,11 +51,24 @@
         <b>Quantidade de Diárias:</b>
       </td>
       <td>
-        <? db_input("e140_qtddiarias", 8, 4, true, 'text', 1, "onchange=js_calculaTotalDiarias()") ?>
-        <b>&emsp;&emsp;Valor Unitário da Diária:&nbsp;&nbsp;&emsp;&emsp;&emsp;</b>
-        <? db_input("e140_vrldiariauni", 8, 4, true, 'text', 1, "onchange=js_calculaTotalDiarias()") ?>
-        <b>&emsp;Valor Total das Diárias:&nbsp;&emsp;&emsp;&emsp;</b>
+        <? db_input("e140_qtddiarias", 8, 4, true, 'text', 1, "onchange=js_calculaTotal('e140_qtddiarias','e140_vrldiariauni','diariaVlrTotal')") ?>
+        <b style='margin-left: 22px'>Valor Unitário da Diária:</b>
+        <? db_input("e140_vrldiariauni", 8, 4, true, 'text', 1, "onchange=js_calculaTotal('e140_qtddiarias','e140_vrldiariauni','diariaVlrTotal')") ?>
+        <b style='margin-left: 53px'>Valor Total das Diárias:</b>
         <? db_input("diariaVlrTotal", 8, 4, true, 'text', 3) ?>
+      </td>
+    </tr>
+    <tr></tr>
+    <tr>
+      <td>
+        <b>Quantidade de Diárias Pernoite:</b>
+      </td>
+      <td>
+        <? db_input("e140_qtddiariaspernoite", 8, 4, true, 'text', 1, "onchange=js_calculaTotal('e140_qtddiariaspernoite','e140_vrldiariaspernoiteuni','diariaPernoiteVlrTotal')") ?>
+        <b style='margin-left: 22px'>Valor Unitário da Diária Pernoite:</b>
+        <? db_input("e140_vrldiariaspernoiteuni", 8, 4, true, 'text', 1, "onchange=js_calculaTotal('e140_qtddiariaspernoite','e140_vrldiariaspernoiteuni','diariaPernoiteVlrTotal')") ?>
+        <b style='margin-left: 53px'>Valor Total das Diárias Pernoite:</b>
+        <? db_input("diariaPernoiteVlrTotal", 8, 4, true, 'text', 3) ?>
       </td>
     </tr>
     <tr></tr>
@@ -64,10 +77,10 @@
         <b>Quantidade de Hospedagens:</b>
       </td>
       <td>
-        <? db_input("e140_qtdhospedagens", 8, 4, true, 'text', 1, "onchange=js_calculaTotalHospedagens()") ?>
-        <b>&emsp;&emsp;Valor Unitário da Hospedagem:</b>
-        <? db_input("e140_vrlhospedagemuni", 8, 4, true, 'text', 1, "onchange=js_calculaTotalHospedagens()") ?>
-        <b>&emsp;Valor Total das Hospedagens:</b>
+        <? db_input("e140_qtdhospedagens", 8, 4, true, 'text', 1, "onchange=js_calculaTotal('e140_qtdhospedagens','e140_vrlhospedagemuni','hospedagemVlrTotal')") ?>
+        <b style='margin-left: 22px'>Valor Unitário da Hospedagem:</b>
+        <? db_input("e140_vrlhospedagemuni", 8, 4, true, 'text', 1, "onchange=js_calculaTotal('e140_qtdhospedagens','e140_vrlhospedagemuni','hospedagemVlrTotal')") ?>
+        <b style='margin-left: 53px'>Valor Total das Hospedagens:</b>
         <? db_input("hospedagemVlrTotal", 8, 4, true, 'text', 3) ?>
       </td>
     </tr>
@@ -77,17 +90,17 @@
         <b>Transporte:</b>
       </td>
       <td>
-        <? db_input("e140_transporte", 45, 2, true, 'text', 1) ?>
+        <? db_input("e140_transporte", 21, 2, true, 'text', 1) ?>
         <b>Valor do Transporte:</b>
-        <? db_input("e140_vlrtransport", 7, 4, true, 'text', 1, "onchange=js_calculaTotalDespesa()") ?>
-        <b>Valor Total da Despesa:</b>
-        <? db_input("diariaVlrDespesa", 7, 4, true, 'text', 3) ?>
+        <? db_input("e140_vlrtransport", 8, 4, true, 'text', 1, "onchange=js_calculaTotalDespesa()") ?>
+        <b style='margin-left: 53px'>Valor Total da Despesa:</b>
+        <? db_input("diariaVlrDespesa", 8, 4, true, 'text', 3) ?>
       </td>
     </tr>
     <tr></tr>
   </table>
   <b>&nbsp;Objetivo da Viagem:</b></br>
-  <? db_textarea("e140_objetivo", 2, 128, 0, true, 'text', 1) ?>
+  <? db_textarea("e140_objetivo", 2, 130, 0, true, 'text', 1) ?>
 </fieldset>
 
 <script>
@@ -95,9 +108,21 @@
   $('e140_dtinicial').size = 8;
   $('e140_dtfinal').size = 8;
 
+  $('e140_vrldiariauni').style.marginLeft = '52px';
+  $('e140_vrlhospedagemuni').style.marginLeft = '10px';
+  $('e140_vlrtransport').style.marginLeft = '2px';
+  $('diariaVlrTotal').style.marginLeft = '50px';
+  $('hospedagemVlrTotal').style.marginLeft = '12px';
+  $('diariaVlrDespesa').style.marginLeft = '48px';
+
   $('diariaViajante').disabled = true;
   $('diariaVlrTotal').disabled = true;
   $('diariaVlrDespesa').disabled = true;
+  $('hospedagemVlrTotal').disabled = true;
+  $('diariaPernoiteVlrTotal').disabled = true;
+
+  $('e140_horainicial').addEventListener('blur', function () {js_validaHora('e140_horainicial')});
+  $('e140_horafinal').addEventListener('blur', function () {js_validaHora('e140_horafinal')});
 
   function js_validaData(campo) {
     let dtAutorizacao = $F('e140_dtautorizacao');
@@ -198,25 +223,19 @@
     performsAutoComplete(oAjax);
   }
 
-  function js_calculaTotalDiarias() {
-    let qtdDiaria = $('e140_qtddiarias').value != '' ? parseFloat($('e140_qtddiarias').value) : 0;
-    let vlrUnitario = $('e140_vrldiariauni').value != '' ? parseFloat($('e140_vrldiariauni').value) : 0;
-    $('diariaVlrTotal').value = qtdDiaria * vlrUnitario;
-    js_calculaTotalDespesa();
-  }
-
-  function js_calculaTotalHospedagens() {
-    let qtdHospedagens = $('e140_qtdhospedagens').value != '' ? parseFloat($('e140_qtdhospedagens').value) : 0;
-    let vlrUnitario = $('e140_vrlhospedagemuni').value != '' ? parseFloat($('e140_vrlhospedagemuni').value) : 0;
-    $('hospedagemVlrTotal').value = qtdHospedagens * vlrUnitario;
+  function js_calculaTotal(campoQtd, campoVlrUni, campoTotal) {
+    let qtd = $(campoQtd).value != '' ? parseFloat($(campoQtd).value) : 0;
+    let vlrUnitario = $(campoVlrUni).value != '' ? parseFloat($(campoVlrUni).value) : 0;
+    $(campoTotal).value = (qtd * vlrUnitario).toFixed(2);
     js_calculaTotalDespesa();
   }
 
   function js_calculaTotalDespesa() {
     let vlrTotalDiaria = $('diariaVlrTotal').value != '' ? parseFloat($('diariaVlrTotal').value) : 0;
+    let vlrTotalDiariaPernoite = $('diariaPernoiteVlrTotal').value != '' ? parseFloat($('diariaPernoiteVlrTotal').value) : 0;
     let vlrTotalHospedagem = $('hospedagemVlrTotal').value != '' ? parseFloat($('hospedagemVlrTotal').value) : 0;
     let vlrTransporte = $('e140_vlrtransport').value != '' ? parseFloat($('e140_vlrtransport').value) : 0;
-    $('diariaVlrDespesa').value = vlrTotalDiaria + vlrTransporte + vlrTotalHospedagem;
+    $('diariaVlrDespesa').value = (vlrTotalDiaria + vlrTransporte + vlrTotalHospedagem + vlrTotalDiariaPernoite).toFixed(2);
   }
 
   function js_mascaraHora(hora,id){
@@ -226,12 +245,22 @@
       horaMascara = horaMascara + ':';
       $(id).value = horaMascara;
     }
-    if(horaMascara.length == 5){
-      js_verificaHora(id);
-    }else if(horaMascara.length > 5){
+  }
+
+  function js_validaHora(id){
+    let hora = $(id).value;
+    if (hora.length < 5 || hora.length > 5 ){
       alert("Hora inválida! Preencha corretamente o campo!");
-      $(id).value="";
+      $(id).value = "";
       $(id).focus();
+    }else{
+      let hrs = (hora.substring(0,2));
+      let min = (hora.substring(3,5));
+      if ( (hrs < 0 ) || (hrs > 23) || ( min < 0) || ( min > 59) || (/\D/.test(hrs)) || (/\D/.test(min))) {
+        alert("Hora inválida! Preencha corretamente o campo!");
+        $(id).value="";
+        $(id).focus();
+      }
     }
   }
 
@@ -243,5 +272,108 @@
       $(id).value="";
       $(id).focus();
     }
+  }
+
+  function js_separaMunicipio(municipio){
+    if (municipio != '') {
+      const separador = / *-/;
+      const aString = municipio.split(separador);
+      return aString;
+    }else{
+      return false;
+    }
+  }
+
+  function js_preencheCampos(oAjax){
+    obj  = eval("("+oAjax.responseText+")");
+    const desdobramentoDiaria = obj.sDesdobramento.substr(5, 2);
+    $('desdobramentoDiaria').value = desdobramentoDiaria;
+    if((desdobramentoDiaria == '14' || desdobramentoDiaria == '33')){
+      $('diariaFieldset').style.display = 'table-cell';
+      if(obj.oDiaria != null){
+        const oDiaria = obj.oDiaria;
+        const aOrigem = js_separaMunicipio(oDiaria.e140_origem);
+        const aDestino = js_separaMunicipio(oDiaria.e140_destino);
+        $('salvarDiaria').value = 1;
+        $('e140_sequencial').value            = oDiaria.e140_sequencial;
+        $('diariaViajante').value             = oDiaria.z01_nome;
+        $('e140_matricula').value             = oDiaria.e140_matricula;
+        $('e140_cargo').value                 = oDiaria.e140_cargo;
+        $('e140_dtautorizacao').value         = converterData(oDiaria.e140_dtautorizacao);
+        $('e140_dtinicial').value             = converterData(oDiaria.e140_dtinicial);
+        $('e140_dtfinal').value               = converterData(oDiaria.e140_dtfinal);
+        $('e140_horainicial').value           = oDiaria.e140_horainicial;
+        $('e140_horafinal').value             = oDiaria.e140_horafinal;
+        $('diariaOrigemMunicipio').value      = aOrigem ? aOrigem[0].trim() : '';
+        $('diariaOrigemUf').value             = aOrigem ? aOrigem[1].trim() : '';
+        $('diariaDestinoMunicipio').value     = aDestino ? aDestino[0].trim() : '';
+        $('diariaDestinoUf').value            = aDestino ? aDestino[1].trim() : '';
+        $('e140_qtddiarias').value            = oDiaria.e140_qtddiarias;
+        $('e140_vrldiariauni').value          = oDiaria.e140_vrldiariauni;
+        $('diariaVlrTotal').value             = (oDiaria.e140_qtddiarias * oDiaria.e140_vrldiariauni).toFixed(2);
+        $('e140_qtddiariaspernoite').value    = oDiaria.e140_qtddiariaspernoite;
+        $('e140_vrldiariaspernoiteuni').value = oDiaria.e140_vrldiariaspernoiteuni;
+        $('diariaPernoiteVlrTotal').value     = (oDiaria.e140_qtddiariaspernoite * oDiaria.e140_vrldiariaspernoiteuni).toFixed(2);
+        $('e140_qtdhospedagens').value        = oDiaria.e140_qtdhospedagens;
+        $('e140_vrlhospedagemuni').value      = oDiaria.e140_vrlhospedagemuni;
+        $('hospedagemVlrTotal').value         = (oDiaria.e140_qtdhospedagens * oDiaria.e140_vrlhospedagemuni).toFixed(2);         
+        $('e140_transporte').value            = oDiaria.e140_transporte;
+        $('e140_vlrtransport').value          = oDiaria.e140_vlrtransport;    
+        $('e140_objetivo').value              = oDiaria.e140_objetivo;
+        js_calculaTotalDespesa()
+      }else{
+        $('salvarDiaria').value = 2;
+        var elementos = $('diariaFieldset').querySelectorAll('input, textarea');
+        elementos.forEach(function(elemento) {
+          if(elemento.id.substring(0,4) != 'dtjs'){
+            elemento.value = '';
+            elemento.addEventListener("change", function() {
+              $('salvarDiaria').value = 1;
+            });
+            js_pesquisaViajante(obj.e60_numcgm);
+          }else{
+            elemento.addEventListener("click", function() {
+              $('salvarDiaria').value = 1;
+            });
+          }
+        });
+      }
+    }else{
+      $('diariaFieldset').style.display = 'none';
+    }      
+  }
+
+  function js_pesquisaDiaria(iCodord, iNumemp){
+    let oParam = new Object();
+    oParam.exec = 'pesquisaDiaria';
+    oParam.iCodord = iCodord;
+    oParam.iNumemp = iNumemp;
+    let oAjax = new Ajax.Request("emp4_empdiaria.RPC.php", {
+        method: 'post',
+        parameters: 'json=' + Object.toJSON(oParam),
+        onComplete: js_preencheCampos
+      });
+  }
+
+  function js_pesquisaViajante(e60_numcgm){
+    let oParam        = new Object();
+    oParam.exec       = 'consultaMatricula';
+    oParam.iNumCgm    = e60_numcgm;
+    console.log(e60_numcgm)
+    oAjax    = new Ajax.Request(
+                            'pes1_rhpessoal.RPC.php',
+                              {
+                              method: 'post',
+                              parameters: 'json='+Object.toJSON(oParam),
+                              onComplete: function(oAjax){
+                                oRetorno = eval("("+oAjax.responseText+")");
+                                if(oRetorno.iStatus === 1){
+                                  $('e140_matricula').value = oRetorno.rh01_regist;
+                                  $('e140_cargo').value = oRetorno.rh37_descr;
+                                  $('diariaViajante').value = oRetorno.z01_nome;
+                                }
+                              }
+                              }
+                            );
   }
 </script>
