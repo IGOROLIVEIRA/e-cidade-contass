@@ -52,7 +52,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
         <tr>
           <td>
             <?
-            db_ancora("Cód.Departamento", "js_pesquisasi06_departamento(true);", $db_opcao)
+            db_ancora("Cód.Departamento:", "js_pesquisasi06_departamento(true);", $db_opcao)
             ?>
           </td>
           <td>
@@ -158,7 +158,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
           </td>
           <td>
             <?
-            db_input('si06_anoproc', 10, $Isi06_anoproc, true, 'text', $db_opcao, "")
+            db_input('si06_anoproc', 10, $Isi06_anoproc, true, 'text', $db_opcao, "onchange='js_validacaoano(event,this.value);'")
             ?>
           </td>
         </tr>
@@ -232,7 +232,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
       </td>
       <td>
         <?
-        db_input('si06_anomodadm', 10, 1, true, 'text', $db_opcao, "", "", "", "", 4);
+        db_input('si06_anomodadm', 10, 1, true, 'text', $db_opcao, "onchange='js_validacaoano(event,this.value);'", "", "", "", 4);
         ?>
       </td>
     </tr>
@@ -244,7 +244,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
       </td>
       <td>
         <?
-        db_input('si06_nummodadm', 10, '', true, 'text', $db_opcao, "");
+        db_input('si06_nummodadm', 10, 1, true, 'text', $db_opcao, "");
         ?>
       </td>
     </tr>
@@ -289,7 +289,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
           "2" => "2 - Menor taxa ou percentual",
           "3" => "3 - Outros"
         );
-        db_select("si06_criterioadjudicacao", $aCriterios, true, $db_opcao, "style='width:70%;'");
+        db_select("si06_criterioadjudicacao", $aCriterios, true, $db_opcao, "style='width:70%;' onchange='js_criterioadjudicacao();'");
         ?>
       </td>
     </tr>
@@ -602,6 +602,17 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
     document.getElementById("tr_edital").style.display = 'none';
     document.getElementById("tr_modalidade").style.display = 'none';
     document.getElementById("tr_nummodalidade").style.display = 'none';
+  }
+
+  function js_validacaoano(event,ano){
+    let idRequisicao = event.target.id;
+    if(ano.length!=4){
+      document.getElementById(idRequisicao).value = "";
+    }
+  } 
+
+  function js_criterioadjudicacao(){
+    document.getElementById('si06_processocompra').value = "";
   }
 
 </script>

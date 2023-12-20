@@ -105,13 +105,16 @@ if (!$sqlerro) {
     }
     if ($cladesaoregprecos->erro_status == "0") {
 
-      $cladesaoregprecos->erro(true, false);
       $db_botao = true;
       echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
       if ($cladesaoregprecos->erro_campo != "") {
         echo "<script> document.form1." . $cladesaoregprecos->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
         echo "<script> document.form1." . $cladesaoregprecos->erro_campo . ".focus();</script>";
       }
+
+      $erro_msg = $cladesaoregprecos->erro_msg;
+      $sqlerro = true;
+      
     } else {
       if (!$sqlerro) {
         $sSql = "select * from adesaoregprecos order by si06_sequencial desc limit 1;";
@@ -230,12 +233,6 @@ if (!$sqlerro) {
   }
 }
 
-if ($sqlerro) {
-  echo "<script>";
-  echo "alert('$erro_msg');";
-  echo "</script>";
-}
-
 ?>
 <html>
 
@@ -264,6 +261,12 @@ if ($sqlerro) {
 </html>
 
 <?
+
+if(isset($incluir) && $sqlerro){
+  echo "<script>";
+  echo "alert('$erro_msg');";
+  echo "</script>";
+}
 
 if (isset($alterar)) {
   if ($cladesaoregprecos->erro_status == "0") {

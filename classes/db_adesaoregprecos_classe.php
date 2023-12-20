@@ -228,7 +228,7 @@ class cl_adesaoregprecos
       return false;
     }
     if ($this->si06_numeroprc == null) {
-      $this->erro_sql = " Campo Número do PRC nao Informado.";
+      $this->erro_sql = " Número do Processo Licitatório não informado.";
       $this->erro_campo = "si06_numeroprc";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -310,7 +310,7 @@ class cl_adesaoregprecos
       return false;
     }
     if ($this->si06_numeroadm == null) {
-      $this->erro_sql = " Campo Número do ADM nao Informado.";
+      $this->erro_sql = " Número do Processo de Adesão não informado.";
       $this->erro_campo = "si06_numeroadm";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -625,7 +625,7 @@ class cl_adesaoregprecos
       $sql  .= $virgula . " si06_numeroprc = $this->si06_numeroprc ";
       $virgula = ",";
       if (trim($this->si06_numeroprc) == null) {
-        $this->erro_sql = " Campo Número do PRC nao Informado.";
+        $this->erro_sql = " Número do Processo Licitatório não informado.";
         $this->erro_campo = "si06_numeroprc";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -792,7 +792,7 @@ class cl_adesaoregprecos
       $sql  .= $virgula . " si06_numeroadm = $this->si06_numeroadm ";
       $virgula = ",";
       if (trim($this->si06_numeroadm) == null) {
-        $this->erro_sql = " Campo Número do ADM nao Informado.";
+        $this->erro_sql = " Número do Processo de Adesão não informado.";
         $this->erro_campo = "si06_numeroadm";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
