@@ -73,12 +73,12 @@ db_postmemory($HTTP_POST_VARS);
         <fieldset>
             <legend>Fornecedores</legend>
             <form name="form1" method="post" action="">
-            <label for="bloqueado"> <strong>Filtrar por:&nbsp;&nbsp;</strong> </label>
-            <?php
-            $tipo = array("a" => "Todos", "f" => "Ativos", "t" => "Bloqueados");
-            db_select("bloqueado", $tipo, true, 2);
-            ?>
-            <input name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" style="display:block; margin: 10px auto">
+                <label for="bloqueado"> <strong>Filtrar por:&nbsp;&nbsp;</strong> </label>
+                <?php
+                $tipo = array("a" => "Todos", "f" => "Ativos", "t" => "Bloqueados");
+                db_select("bloqueado", $tipo, true, 2);
+                ?>
+                <input name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" style="display:block; margin: 10px auto">
             </form>
         </fieldset>
     </div>
