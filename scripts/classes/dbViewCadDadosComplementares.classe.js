@@ -348,6 +348,10 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     sContent += "           <b>Atividade do Serviço:</b>";
     sContent += "         </td>";
     sContent += "         <td id='ctnAtividadeServico" + sId + "'></td>";
+    sContent += "         <td id='ctnLabelAtividadeServEsp" + sId + "' >";
+    sContent += "           <b>Atividade dos Serviços Especializados:</b>";
+    sContent += "         </td>";
+    sContent += "         <td id='ctnAtividadeServEsp" + sId + "'></td>";
     sContent += "         <td id='ctnLabelBdi" + sId + "' >";
     sContent += "           <b>BDI:</b>";
     sContent += "         </td>";
@@ -360,12 +364,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     sContent += "         <td id='ctnDescrAtividadeServico" + sId + "' colspan='4'>";
     sContent += "         <textarea  id='txtDescrAtividadeServico" + sId + "' rows='2' style='width:100%'></textarea>";
     sContent += "         </td>";
-    sContent += "       </tr>";
-    sContent += "       <tr>";
-    sContent += "         <td id='ctnLabelAtividadeServEsp" + sId + "' >";
-    sContent += "           <b>Atividade dos Serviços Especializados:</b>";
-    sContent += "         </td>";
-    sContent += "         <td id='ctnAtividadeServEsp" + sId + "'></td>";
     sContent += "       </tr>";
     sContent += "       <tr id='trAtividadeServicoEsp" + sId + "' style='display: none'>";
     sContent += "         <td id='ctnLabelAtividadeServicoEsp" + sId + "'  nowrap>";
@@ -1203,17 +1201,28 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
               $('cboAtividadeObra' + sId).disabled = true;
               $('ctnLabelAtividadeObra' + sId).style.display = 'none';
               $('ctnAtividadeObra' + sId).style.display = 'none';
+
               $('cboAtividadeServico' + sId).disabled = true;
               $('ctnLabelAtividadeServico' + sId).style.display = 'none';
               $('ctnAtividadeServico' + sId).style.display = 'none';
+
               $('cboAtividadeServicoEsp' + sId).disabled = false;
               $('ctnLabelAtividadeServEsp' + sId).style.display = '';
               $('ctnAtividadeServEsp' + sId).style.display = '';
               break;
           default:
               $('cboAtividadeObra' + sId).disabled = true;
+              $('ctnLabelAtividadeObra' + sId).style.display = 'none';
+              $('ctnAtividadeObra' + sId).style.display = 'none';
+
               $('cboAtividadeServico' + sId).disabled = true;
+              $('ctnLabelAtividadeServico' + sId).style.display = 'none';
+              $('ctnAtividadeServico' + sId).style.display = 'none';
+
               $('cboAtividadeServicoEsp' + sId).disabled = true;
+              $('ctnLabelAtividadeServEsp' + sId).style.display = 'none';
+              $('ctnAtividadeServEsp' + sId).style.display = 'none';
+
               break;
     }
 

@@ -154,7 +154,8 @@ $db_botao = true;
                   </td>
                   <td>
                     <?php
-                        db_input('email', 200, '', true, 'text', 1, "");
+                        db_input('email', 58, '', true, 'text', 1, "oninput = limparInput(this);","","","",200);
+                    ;
                     ?>
                   </td>
                 </tr>
@@ -164,7 +165,7 @@ $db_botao = true;
                   </td>
                   <td>
                     <?
-                    db_textarea('links', 4, 56, '', true, 'text', 1, '', '', '', 200);
+                    db_textarea('links', 4, 58, '', true, 'text', 1, '', '', '', 200);
                     ?>
                   </td>
                 </tr>
@@ -226,6 +227,10 @@ $db_botao = true;
   origem_rec = "<?= $origem_recurso ?>";
   anoLicitacao = "<?= $anoLicitacao ?>";
   tipoJulgamento = "<?= $iTipoJulgamento ?>"
+
+  function limparInput(input) {
+    input.value = input.value.replace(/[;\*\\\:\"\']/gm, '');
+  }
 
   function js_mostraDescricao(valor) {
     if (valor != 9) {
@@ -293,7 +298,6 @@ $db_botao = true;
   function js_exibeDadosCompl(iSequencial = null, incluir = true) {
 
     if (anoLicitacao >= 2021 && iSequencial == null && tipoJulgamento == '3') {
-        console.log('if1');
       oDadosLotesPendentes = new DBViewLotesPendentes('oDadosLotesPendentes');
       oDadosLotesPendentes.setLicitacao(codigoLicitacao);
 
@@ -312,17 +316,14 @@ $db_botao = true;
       oDadosLotesPendentes.show();
 
     } else {
-    console.log("Passou aqui 1 else");
       oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '', incluir,
         codigoLicitacao, "<?= $natureza_objeto ?>", iSequencial, '');
       oDadosComplementares.setObjetoRetorno($('idObra'));
       oDadosComplementares.setLicitacao(codigoLicitacao);
 
       if (iSequencial) {
-        console.log("Passou aqui");
         oDadosComplementares.preencheCampos(iSequencial);
       } else {
-        console.log("Passou aqui callback");
         oDadosComplementares.setCallBackFunction(() => {
           js_lancaDadosCompCallBack();
         });
@@ -431,7 +432,6 @@ $db_botao = true;
 
     let oRetorno = eval("(" + oAjax.responseText + ")");
 
-    console.log(oRetorno.dadoscomplementares);
     oRetorno.dadoscomplementares.forEach((dado) => {
 
       let descMunicipio = dado.descrmunicipio.urlDecode();
