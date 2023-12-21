@@ -54,9 +54,7 @@ cmibiracatu			5432	e-cidade
 cmjosenopolis			5432	e-cidade
 cmjuramento			5432	e-cidade
 cmmatiascardoso			5432	e-cidade
-cmmirabela			5432	e-cidade
 cmmonteazul			5432	e-cidade
-cmpatis				5432	e-cidade
 cmsantafe			5432	e-cidade
 cmsjponte			5432	e-cidade
 cmubai				5432	e-cidade
@@ -126,6 +124,8 @@ cismesf                5432 e-cidadev3
 cias                   5432 e-cidadev3
 treinamento_consorcio  5432 e-cidadev3
 prevcap				   5432	e-cidadev3
+cmmirabela			   5432	e-cidadev3
+cmpatis			       5432	e-cidadev3
 
 e-cidade            5432 pmmonteazulv3
 
