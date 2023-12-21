@@ -3444,7 +3444,7 @@ class Acordo
      * @return $this
      * @throws Exception
      */
-    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $sJustificativa, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada, $lProvidencia, $datareferencia, $sPercentualReajuste, $iIndiceReajusteacordo, $sDescricaoIndiceacordo,$iCriterioReajuste)
+    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $sJustificativa, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada, $lProvidencia, $datareferencia, $sPercentualReajuste, $iIndiceReajusteacordo, $sDescricaoIndiceacordo,$sDescricaoReajuste,$iCriterioReajuste)
     {
         $nValorItens = 0;
         $nValorLancamentoContabil = 0;
@@ -3481,6 +3481,7 @@ class Acordo
         $oNovaPosicao->setIndiceReajusteacordo($iIndiceReajusteacordo);
         $oNovaPosicao->setDescricaoIndiceacordo(db_stdClass::normalizeStringJsonEscapeString($sDescricaoIndiceacordo));
         $oNovaPosicao->setCriterioReajuste($iCriterioReajuste);
+        $oNovaPosicao->setDescricaoReajuste(db_stdClass::normalizeStringJsonEscapeString($sDescricaoReajuste));
 
         $oNovaPosicao->save();
 
