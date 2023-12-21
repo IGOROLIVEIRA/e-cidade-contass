@@ -65,8 +65,6 @@ cmvarzelandia			5432	e-cidade
 converdegran			5432	e-cidade
 e-cidade-zerada-2019		5432	e-cidade
 emutur				5432	e-cidade
-inframinas			5432	e-cidade
-prevcap				5432	e-cidade
 prevponte39			5432	e-cidade
 cmburitizeiro       5432    e-cidade
 samu                5432    e-cidade
@@ -127,6 +125,7 @@ pmsaogoncalodoriopreto 5432 e-cidadev3
 cismesf                5432 e-cidadev3
 cias                   5432 e-cidadev3
 treinamento_consorcio  5432 e-cidadev3
+prevcap				   5432	e-cidadev3
 
 e-cidade            5432 pmmonteazulv3
 
