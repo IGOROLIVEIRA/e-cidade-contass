@@ -1524,14 +1524,14 @@ function js_desabilitaTipoCompra() {
         $('e60_esferaemendaparlamentar').style.width = "68.6%"; 
         $('e60_datasentenca').style.width = "10%";
         
-    } else {
+     } else {
         $('efd60_possuicno').style.width = "99%";
         $('efd60_numcno').style.width = "99%";
         $('efd60_indprestservico').style.width = "99%";
         $('efd60_prescontricprb').style.width = "99%";
         $('efd60_tiposervico').style.width = "99%";
         if (prodoptacp !== null) {
-            $('efd60_prodoptacp').style.width = "68.6%";
+           $('efd60_prodoptacp').style.width = "68.6%";
         }
         $('e54_destin').style.width = "68.6%";
         $('e60_numconvenio').style.width = "10%";
@@ -1559,6 +1559,8 @@ function js_desabilitaTipoCompra() {
         $('z01_nome').style.width = "58%";   
         $('e60_emendaparlamentar').style.width = "68.6%"; 
         $('e60_esferaemendaparlamentar').style.width = "68.6%"; 
-        
-    }
+        if (aquisicaoprodrural !== null) {
+            $('efd60_aquisicaoprodrural').style.width = "68.6%";
+        }
+     }
 </script>

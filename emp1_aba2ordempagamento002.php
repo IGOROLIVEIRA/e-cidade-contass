@@ -382,7 +382,7 @@ db_fim_transacao($sqlerroReinf);
 
 db_inicio_transacao();
 
-if (isset($alterar)) {
+if (isset($alterar) && $ct01_codcategoria) {
 
   // Esocial
   $sqlerroEsocial = false;
@@ -396,20 +396,23 @@ if (isset($alterar)) {
           $oEsocial= db_utils::fieldsMemory($sql, 0);
           
           $clpagordemEsocial = new cl_pagordem;
+          $clpagordemEsocial->e50_retencaoir                = $reinfRetencao;
+          $clpagordemEsocial->e50_naturezabemservico        = $naturezaCod;
           $clpagordemEsocial->e50_cattrabalhador            = $ct01_codcategoria;
           $clpagordemEsocial->e50_cattrabalhadorremurenacao = $ct01_codcategoriaremuneracao;
           $clpagordemEsocial->e50_empresadesconto           = $numempresa;
           $clpagordemEsocial->e50_contribuicaoPrev          = $contribuicaoPrev;
           $clpagordemEsocial->e50_valorremuneracao          = str_replace(',', '', $valorremuneracao);
           $clpagordemEsocial->e50_valordesconto             = str_replace(',', '', $valordesconto);
-          if ($competencia) {
+
+          if ($competencia && $competencia != "undefined") {
             $clpagordemEsocial->e50_datacompetencia         = formateDateReverse($competencia);
           }
+          
           $clpagordemEsocial->alterar($oEsocial->e50_codord,null);
           $erro_msg_esocial = $clpagordemEsocial->erro_status;
 
       } 
-      
   }
 
   if($erro_msg_esocial == 1){

@@ -66,13 +66,13 @@
                                 <?db_input('e53_valor', 10, "", true, 'text', 3);?>
                             </td>
                             <td>
-                                <b>Valor Pago:</b>
+                                <b>Valor Anulado:</b>
                             </td>
                             <td>
                                 <?db_input('e53_vlranu', 10, "", true, 'text', 3);?>
                             </td>
                             <td>
-                                <b>Valor Anulado:</b>
+                                <b>Valor Pago:</b>
                             </td>
                             <td>
                                 <?db_input('e53_vlrpag', 10, "", true, 'text', 3);?>
@@ -219,7 +219,7 @@
         var tipodesdobramento = "<?php print $tipodesdobramento; ?>";
         var opcao = "<?php print $opcao; ?>";
 
-        if (document.form1.aIncide.value == 1) {
+        if (tipodesdobramento == 1  && document.form1.aIncide.value == 1) {
             if (opcao != '3' && !document.form1.ct01_codcategoria.value && cpfcnpj.length == 11 && tipodesdobramento == '1') {
                 alert("Campo Categoria do Trabalhador Obrigatorio")
                 return false;
@@ -254,7 +254,6 @@
                 return false;
             }
         }
-        // js_alterarEsocial();
         document.getElementById("db_opcao").type = "submit";
     }
 
@@ -334,7 +333,10 @@
         $('fieldsetEstabelecimentos').style = "display: none"
         $('estabelecimentosTableBody').innerHTML = '';
         db_iframe_alteracaoop.hide();
-        js_verificaEsocial(e50_codord);
+        var tipodesdobramento = "<?php print $tipodesdobramento; ?>";
+        if (tipodesdobramento == 1) {
+            js_verificaEsocial(e50_codord);          
+        } 
     }
 
     $('e140_dtautorizacao').size = 8;

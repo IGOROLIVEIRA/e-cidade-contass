@@ -162,6 +162,10 @@ class cl_empefdreinf
         if ($this->efd60_aquisicaoprodrural == null) {
             $this->efd60_aquisicaoprodrural = 'null';
         }
+        if ($this->efd60_tiposervico == null) {
+            $this->efd60_tiposervico = 'null';
+        }
+
         $sql = "insert into empefdreinf(
                                        efd60_sequencial
                                       ,efd60_numemp
@@ -189,9 +193,9 @@ class cl_empefdreinf
                                ,'$this->efd60_numcno'
                                ,$this->efd60_indprestservico
                                ,$this->efd60_prescontricprb
-                               ,'$this->efd60_tiposervico'
+                               ,$this->efd60_tiposervico
                                ,$this->efd60_prodoptacp
-                      )";  
+                      )"; 
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -221,8 +225,6 @@ class cl_empefdreinf
     // funcao para alteracao
     function alterar($efd60_numemp = null)
     {
-        ini_set('display_errors', 'On');
-    error_reporting(E_ALL);
         $this->atualizacampos();
         $sql = " update empefdreinf set ";
         $virgula = "";

@@ -100,7 +100,7 @@
     document.getElementById('aIncide').style.width = "100%";
     document.getElementById('ct01_codcategoria').style.width = "100%";
     document.getElementById('multiplosvinculos').style.width = "100%";
-    if (document.form1.aIncide.value == '2') {
+    if (document.form1.aIncide.value && document.form1.aIncide.value == '2') {
       var r = confirm("Tem certeza de que não há incidência de contribuição previdenciária para este prestador? ");
       if (r == true) {
         document.getElementById('idcontri').style.display = "none";
@@ -331,26 +331,6 @@
       document.form1.valordesconto.value = document.form1.valordesconto.value.substring(0, valordesconto) + virgula.substring(0, 3);
     }
   }
-  // function js_alterarEsocial() 
-  // {
-  //   var oParam = new Object();
-  //   oParam.method = "alterarboxesocial"
-  //   oParam.iCodOrdem = $('e50_codord').value
-  //   oParam.aCattrabalhador = $('ct01_codcategoria').value
-  //   oParam.aCattrabalhadorremurenacao = $('ct01_codcategoriaremuneracao').value
-  //   oParam.aEmpresadesconto = $('numempresa').value
-  //   oParam.aContribuicaoPrev = $('contribuicaoPrev').value
-  //   oParam.avalorremuneracao = $('valorremuneracao').value
-  //   oParam.aValordesconto = $('valordesconto').value
-  //   oParam.aDatacompetencia = $('competencia').value
-  //   url = 'emp4_pagordemesocial.RPC.php';
-  //   oAjax = new Ajax.Request(
-  //     url, {
-  //       method: 'post',
-  //       parameters: 'json=' + js_objectToJson(oParam)
-  //     }
-  //   );
-  // }
   function js_preencheDadosEsocial(oAjax) 
   {
     obj = eval("(" + oAjax.responseText + ")");

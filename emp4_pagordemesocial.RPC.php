@@ -17,27 +17,6 @@ $oRetorno->message = "";
 
 switch ($oParam->method) {
 
-  // case "alterarboxesocial":
-    
-  //   // $clpagordemEsocial = new cl_pagordem();
-    
-  //   // $clpagordemEsocial->e50_cattrabalhador            = $oParam->aCattrabalhador;
-  //   // $clpagordemEsocial->e50_cattrabalhadorremurenacao = $oParam->aCattrabalhadorremurenacao;
-  //   // $clpagordemEsocial->e50_empresadesconto           = $oParam->aEmpresadesconto;
-  //   // $clpagordemEsocial->e50_contribuicaoPrev          = $oParam->aContribuicaoPrev;
-  //   // $clpagordemEsocial->e50_valorremuneracao          = $oParam->avalorremuneracao;
-  //   // $clpagordemEsocial->e50_valordesconto             = $oParam->aValordesconto;
-  //   // if ($oParam->aDatacompetencia) {
-  //   //   $clpagordemEsocial->e50_datacompetencia         = formateDateReverse($oParam->aDatacompetencia);
-  //   // }
-  //   // $clpagordemEsocial->alterar($oParam->iCodOrdem, null);
-  //   // if ($clpagordemEsocial->erro_status == 1) {
-  //   //   $oRetorno->status      = 2;
-  //   //   $oRetorno->message = "Incluido com sucesso!";
-  //   // } else {
-  //   //   $oRetorno->message = $clpagordemEsocial->erro_msg;
-  //   // }
-  //   break;
   case "verificaEsocial":
 
     $clpagordemEsocial      = new cl_pagordem;
@@ -54,20 +33,21 @@ switch ($oParam->method) {
 
     $oDados =  pg_fetch_all($clpagordemEsocial->sql_record($clpagordemEsocial->sql_query_boxesocial($oParam->iCodOrdem,$campos,null,$where)));
 
-    foreach ($oDados as $Dados) {
-     
-      $oRetorno->e50_cattrabalhador            = $Dados['e50_cattrabalhador'];
-      $oRetorno->e50_cattrabalhadorremurenacao = $Dados['e50_cattrabalhadorremurenacao'];
-      $oRetorno->e50_empresadesconto           = $Dados['e50_empresadesconto'];
-      $oRetorno->e50_contribuicaoPrev          = $Dados['e50_contribuicaoprev'];
-      $oRetorno->e50_valorremuneracao          = number_format($Dados['e50_valorremuneracao'],2);
-      $oRetorno->e50_valordesconto             = number_format($Dados['e50_valordesconto'],2);
-      if ($Dados['e50_datacompetencia']) {
-        $oRetorno->e50_datacompetencia           = formateDate($Dados['e50_datacompetencia']);
+    if ($clpagordemEsocial->numrows > 0 ) {
+      foreach ($oDados as $Dados) {
+        $oRetorno->e50_cattrabalhador            = $Dados['e50_cattrabalhador'];
+        $oRetorno->e50_cattrabalhadorremurenacao = $Dados['e50_cattrabalhadorremurenacao'];
+        $oRetorno->e50_empresadesconto           = $Dados['e50_empresadesconto'];
+        $oRetorno->e50_contribuicaoPrev          = $Dados['e50_contribuicaoprev'];
+        $oRetorno->e50_valorremuneracao          = number_format($Dados['e50_valorremuneracao'],2);
+        $oRetorno->e50_valordesconto             = number_format($Dados['e50_valordesconto'],2);
+        if ($Dados['e50_datacompetencia']) {
+          $oRetorno->e50_datacompetencia           = formateDate($Dados['e50_datacompetencia']);
+        }
+        $oRetorno->desccattrabalhado             = $Dados['desccattrabalhado'];
+        $oRetorno->desctrabremuneracao           = $Dados['desctrabremuneracao'];
+        $oRetorno->nomeempresa                   = $Dados['z01_nome'];
       }
-      $oRetorno->desccattrabalhado             = $Dados['desccattrabalhado'];
-      $oRetorno->desctrabremuneracao           = $Dados['desctrabremuneracao'];
-      $oRetorno->nomeempresa                   = $Dados['z01_nome'];
     }
     break;  
 }
