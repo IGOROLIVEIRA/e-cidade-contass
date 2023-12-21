@@ -717,7 +717,7 @@ if (isset($mostramenu) && $mostramenu == "t"){
 }
 
 if ($usePixIntegration) {
-    $body['codigoGuiaRecebimento'] = $k03_numpre;
+    $body['codigoGuiaRecebimento'] = $codigobarras;
     $body['descricaoSolicitacaoPagamento'] = trim($historico);
     $body['valorOriginalSolicitacao'] = $total_recibo;
     $body['k00_numnov'] = $k03_numpre;

@@ -996,7 +996,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
           $oConvenio = new convenio($oRegraEmissao->getConvenio(),$k00_numpre,0,$k00_valor,$vlrbar,$dtvencunic,$iTercDig);
 
             if ($usePixIntegration) {
-                $body['codigoGuiaRecebimento'] = $k00_numpre.'0';
+                $body['codigoGuiaRecebimento'] = $oConvenio->getCodigoBarra();
                 $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
                 $body['valorOriginalSolicitacao'] = $k00_valor;
                 $body['k00_numnov'] = $k00_numpre;
@@ -1706,7 +1706,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
   try {
     $oConvenio = new convenio($oRegraEmissao->getConvenio(),$iNumpre,$iNumpar,$nValorTot,$vlrbar,$dtVencimento,$iTercDig);
       if ($usePixIntegration && $unica !== 1) {
-          $body['codigoGuiaRecebimento'] = $iNumpre.$iNumpar;
+          $body['codigoGuiaRecebimento'] = $oConvenio->getCodigoBarra();
           $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
           $body['valorOriginalSolicitacao'] = $nValorTot;
           $body['k00_numpre'] = $iNumpre;
