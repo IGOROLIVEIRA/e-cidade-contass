@@ -327,6 +327,23 @@ $val = false;
                         ?>
                     </td>
                 </tr>
+                <tr id="dispensaporvalor6" style="display:none">
+                    <td>
+                        <label class="bold">Critério de Julgamento:</label>
+                    </td>
+                    <td>
+                        <?php
+                        $aCriteriojulgamento = array(
+                            '0' => 'Selecione',
+                            '1' => 'Menor preço',
+                            '2' => 'Maior desconto',
+                            '5' => 'Maior lance',
+                            '7' => 'Não se aplica'
+                        );
+                        db_select('pc80_criteriojulgamento', $aCriteriojulgamento, true, '', 'style="width:100%"');
+                        ?>
+                    </td>
+                </tr>
                 <tr>
                     <td colspan="4">
                         <fieldset>
@@ -508,6 +525,7 @@ $val = false;
             $('dispensaporvalor3').style.display = '';
             $('dispensaporvalor4').style.display = '';
             $('dispensaporvalor5').style.display = '';
+            $('dispensaporvalor6').style.display = '';
             $('categoriaprocesso').style.display = '';
         } else {
             $('dispensaporvalor1').style.display = 'none';
@@ -515,6 +533,7 @@ $val = false;
             $('dispensaporvalor3').style.display = 'none';
             $('dispensaporvalor4').style.display = 'none';
             $('dispensaporvalor5').style.display = 'none';
+            $('dispensaporvalor6').style.display = 'none';
             $('categoriaprocesso').style.display = 'none';
         }
     }
@@ -524,8 +543,10 @@ $val = false;
         let modalidade = 0;
 
         if(param === '8'){
+           $('pc80_criteriojulgamento').value = 0;
            modalidade = 101;
         }else{
+           $('pc80_criteriojulgamento').value = 7;
            modalidade = 100;
         }
 
@@ -556,6 +577,5 @@ $val = false;
         oRetorno.amparolegal.forEach(function (amparo, iseq){
             listaamparolegal.add(new Option(amparo.l212_lei, amparo.l212_codigo));
         });
-
     }
 </script>

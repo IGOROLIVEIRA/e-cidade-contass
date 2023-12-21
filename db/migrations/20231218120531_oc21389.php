@@ -8,6 +8,9 @@ class Oc21389 extends AbstractMigration
     {
         $sql = "
             begin;
+
+                alter table pcproc add column pc80_criteriojulgamento int4;
+
                 insert into amparolegal values (60,'Lei 14.133/2021, Art. 75, XVII');
                 insert into amparolegal values (61,'Lei 14.133/2021, Art. 76, I, a');
                 insert into amparolegal values (62,'Lei 14.133/2021, Art. 76, I, b');

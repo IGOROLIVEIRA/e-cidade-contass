@@ -248,6 +248,23 @@ $clrotulo->label("descrdepto");
                             ?>
                         </td>
                     </tr>
+                    <tr id="dispensaporvalor6" style="display:none">
+                        <td>
+                            <label class="bold">Critério de Julgamento:</label>
+                        </td>
+                        <td>
+                            <?php
+                            $aCriteriojulgamento = array(
+                                '0' => 'Selecione',
+                                '1' => 'Menor preço',
+                                '2' => 'Maior desconto',
+                                '5' => 'Maior lance',
+                                '7' => 'Não se aplica'
+                            );
+                            db_select('pc80_criteriojulgamento', $aCriteriojulgamento, true, '', 'style="width:50%"');
+                            ?>
+                        </td>
+                    </tr>
                     <tr>
                         <td colspan="4">
                             <fieldset>
@@ -339,6 +356,7 @@ $clrotulo->label("descrdepto");
             document.getElementById('dispensaporvalor3').style.display = 'none';
             document.getElementById('dispensaporvalor4').style.display = 'none';
             document.getElementById('dispensaporvalor5').style.display = 'none';
+            document.getElementById('dispensaporvalor6').style.display = 'none';
             document.getElementById('categoriaprocesso').style.display = 'none';
         } else {
             document.getElementById('dispensaporvalor1').style.display = '';
@@ -346,6 +364,7 @@ $clrotulo->label("descrdepto");
             document.getElementById('dispensaporvalor3').style.display = '';
             document.getElementById('dispensaporvalor4').style.display = '';
             document.getElementById('dispensaporvalor5').style.display = '';
+            document.getElementById('dispensaporvalor6').style.display = '';
             document.getElementById('categoriaprocesso').style.display = '';
         }
     }
@@ -384,7 +403,8 @@ $clrotulo->label("descrdepto");
                 pc80_dadoscomplementares: $('pc80_dadoscomplementares'),
                 pc80_amparolegal: $('pc80_amparolegal'),
                 pc80_categoriaprocesso: $('pc80_categoriaprocesso'),
-                pc80_modalidadecontratacao: $('pc80_modalidadecontratacao')
+                pc80_modalidadecontratacao: $('pc80_modalidadecontratacao'),
+                pc80_criteriojulgamento: $('pc80_criteriojulgamento')
             },
             lRedirecionaLote = false;
 
@@ -549,6 +569,7 @@ $clrotulo->label("descrdepto");
                 document.getElementById('pc80_amparolegal').value = oRetorno.pc80_amparolegal;
                 document.getElementById('pc80_categoriaprocesso').selectedIndex = oRetorno.pc80_categoriaprocesso;
                 document.getElementById('pc80_modalidadecontratacao').value = oRetorno.pc80_modalidadecontratacao;
+                document.getElementById('pc80_criteriojulgamento').value = oRetorno.pc80_criteriojulgamento;
 
                 aLotes = (Object.isArray(oRetorno.aLotes) ? {} : oRetorno.aLotes);
 
@@ -837,6 +858,7 @@ $clrotulo->label("descrdepto");
                 pc80_amparolegal: oCampos.pc80_amparolegal.value,
                 pc80_categoriaprocesso: oCampos.pc80_categoriaprocesso.value,
                 pc80_modalidadecontratacao: oCampos.pc80_modalidadecontratacao.value,
+                pc80_criteriojulgamento: oCampos.pc80_criteriojulgamento.value,
                 iSolicitacao: document.getElementById('oGridItensrow0cell0').innerText,
                 data: oCampos.data.value,
                 aItens: aItensLote
