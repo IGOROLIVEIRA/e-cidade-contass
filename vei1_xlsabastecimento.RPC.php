@@ -111,7 +111,6 @@ switch ($oParam->exec) {
     case 'importar':
 
         $erro = false;
-        db_inicio_transacao();
 
 
         //monto o nome do arquivo
@@ -784,7 +783,7 @@ switch ($oParam->exec) {
                 }
             }
 
-
+            db_inicio_transacao();
 
             //após a verificação de todas validações realiza a importar
             /**

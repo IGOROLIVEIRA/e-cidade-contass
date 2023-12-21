@@ -399,7 +399,7 @@ switch ($oParam->exec) {
                   $clhistoricomaterial->db150_unidademedida             = $oMat[0]->db150_unidademedida;
                   $clhistoricomaterial->db150_tipocadastro              = 2;
                   $clhistoricomaterial->db150_mes                       = $aData[1];
-                  $clhistoricomaterial->db150_data                      = $dataAlteracao;
+                  $clhistoricomaterial->db150_data                      = $oMaterial->data_alteracao;
                   $clhistoricomaterial->db150_instit                    = db_getsession('DB_instit');
                   $clhistoricomaterial->incluir(null);
 
