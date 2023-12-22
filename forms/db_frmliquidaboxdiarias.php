@@ -273,4 +273,107 @@
       $(id).focus();
     }
   }
+
+  function js_separaMunicipio(municipio){
+    if (municipio != '') {
+      const separador = / *-/;
+      const aString = municipio.split(separador);
+      return aString;
+    }else{
+      return false;
+    }
+  }
+
+  function js_preencheCampos(oAjax){
+    obj  = eval("("+oAjax.responseText+")");
+    const desdobramentoDiaria = obj.sDesdobramento.substr(5, 2);
+    $('desdobramentoDiaria').value = desdobramentoDiaria;
+    if((desdobramentoDiaria == '14' || desdobramentoDiaria == '33')){
+      $('diariaFieldset').style.display = 'table-cell';
+      if(obj.oDiaria != null){
+        const oDiaria = obj.oDiaria;
+        const aOrigem = js_separaMunicipio(oDiaria.e140_origem);
+        const aDestino = js_separaMunicipio(oDiaria.e140_destino);
+        $('salvarDiaria').value = 1;
+        $('e140_sequencial').value            = oDiaria.e140_sequencial;
+        $('diariaViajante').value             = oDiaria.z01_nome;
+        $('e140_matricula').value             = oDiaria.e140_matricula;
+        $('e140_cargo').value                 = oDiaria.e140_cargo;
+        $('e140_dtautorizacao').value         = converterData(oDiaria.e140_dtautorizacao);
+        $('e140_dtinicial').value             = converterData(oDiaria.e140_dtinicial);
+        $('e140_dtfinal').value               = converterData(oDiaria.e140_dtfinal);
+        $('e140_horainicial').value           = oDiaria.e140_horainicial;
+        $('e140_horafinal').value             = oDiaria.e140_horafinal;
+        $('diariaOrigemMunicipio').value      = aOrigem ? aOrigem[0].trim() : '';
+        $('diariaOrigemUf').value             = aOrigem ? aOrigem[1].trim() : '';
+        $('diariaDestinoMunicipio').value     = aDestino ? aDestino[0].trim() : '';
+        $('diariaDestinoUf').value            = aDestino ? aDestino[1].trim() : '';
+        $('e140_qtddiarias').value            = oDiaria.e140_qtddiarias;
+        $('e140_vrldiariauni').value          = oDiaria.e140_vrldiariauni;
+        $('diariaVlrTotal').value             = (oDiaria.e140_qtddiarias * oDiaria.e140_vrldiariauni).toFixed(2);
+        $('e140_qtddiariaspernoite').value    = oDiaria.e140_qtddiariaspernoite;
+        $('e140_vrldiariaspernoiteuni').value = oDiaria.e140_vrldiariaspernoiteuni;
+        $('diariaPernoiteVlrTotal').value     = (oDiaria.e140_qtddiariaspernoite * oDiaria.e140_vrldiariaspernoiteuni).toFixed(2);
+        $('e140_qtdhospedagens').value        = oDiaria.e140_qtdhospedagens;
+        $('e140_vrlhospedagemuni').value      = oDiaria.e140_vrlhospedagemuni;
+        $('hospedagemVlrTotal').value         = (oDiaria.e140_qtdhospedagens * oDiaria.e140_vrlhospedagemuni).toFixed(2);         
+        $('e140_transporte').value            = oDiaria.e140_transporte;
+        $('e140_vlrtransport').value          = oDiaria.e140_vlrtransport;    
+        $('e140_objetivo').value              = oDiaria.e140_objetivo;
+        js_calculaTotalDespesa()
+      }else{
+        $('salvarDiaria').value = 2;
+        var elementos = $('diariaFieldset').querySelectorAll('input, textarea');
+        elementos.forEach(function(elemento) {
+          if(elemento.id.substring(0,4) != 'dtjs'){
+            elemento.value = '';
+            elemento.addEventListener("change", function() {
+              $('salvarDiaria').value = 1;
+            });
+            js_pesquisaViajante(obj.e60_numcgm);
+          }else{
+            elemento.addEventListener("click", function() {
+              $('salvarDiaria').value = 1;
+            });
+          }
+        });
+      }
+    }else{
+      $('diariaFieldset').style.display = 'none';
+    }      
+  }
+
+  function js_pesquisaDiaria(iCodord, iNumemp){
+    let oParam = new Object();
+    oParam.exec = 'pesquisaDiaria';
+    oParam.iCodord = iCodord;
+    oParam.iNumemp = iNumemp;
+    let oAjax = new Ajax.Request("emp4_empdiaria.RPC.php", {
+        method: 'post',
+        parameters: 'json=' + Object.toJSON(oParam),
+        onComplete: js_preencheCampos
+      });
+  }
+
+  function js_pesquisaViajante(e60_numcgm){
+    let oParam        = new Object();
+    oParam.exec       = 'consultaMatricula';
+    oParam.iNumCgm    = e60_numcgm;
+    console.log(e60_numcgm)
+    oAjax    = new Ajax.Request(
+                            'pes1_rhpessoal.RPC.php',
+                              {
+                              method: 'post',
+                              parameters: 'json='+Object.toJSON(oParam),
+                              onComplete: function(oAjax){
+                                oRetorno = eval("("+oAjax.responseText+")");
+                                if(oRetorno.iStatus === 1){
+                                  $('e140_matricula').value = oRetorno.rh01_regist;
+                                  $('e140_cargo').value = oRetorno.rh37_descr;
+                                  $('diariaViajante').value = oRetorno.z01_nome;
+                                }
+                              }
+                              }
+                            );
+  }
 </script>

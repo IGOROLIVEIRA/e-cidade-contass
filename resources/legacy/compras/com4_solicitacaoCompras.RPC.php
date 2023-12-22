@@ -38,6 +38,9 @@ require_once("classes/db_solicitem_classe.php");
 require_once("classes/db_solicitempcmater_classe.php");
 require_once("classes/db_solicitemunid_classe.php");
 require_once("classes/db_solicitemregistropreco_classe.php");
+require_once("classes/db_historicomaterial_classe.php");
+require_once("classes/db_pcmater_classe.php");
+require_once("classes/db_matunid_classe.php");
 include("libs/PHPExcel/Classes/PHPExcel.php");
 
 $oJson             = new services_json();
@@ -165,19 +168,48 @@ switch ($oParam->exec) {
       $oSolicita =  $_SESSION["oSolicita"];
 
       $validaItens = $oSolicita->getItens();
-      if (count($validaItens) > 0) {
-        foreach ($validaItens as $row) {
-          if ($oParam->iCodigoItem == $row->getCodigoMaterial()) {
-          }
-        }
-      }
-
 
       $aItens    = $oSolicita->getItens();
       $oItem     = $aItens[$oParam->iIndice];
       $oItem->setUnidade($oParam->iUnidade);
       $oItem->save($oSolicita->getCodigoSolicitacao());
       $aitens         = $oSolicita->getItens();
+
+        //Salva o item na tabela historicomaterial para gerar no sicom OC20960
+        $clhistoricomaterial = new cl_historicomaterial;
+        $clpcmater = new cl_pcmater();
+        $clmatunid = new cl_matunid();
+
+        $db150_coditem = $oParam->iCodigoItem.$oParam->iUnidade;
+
+        $rsPcmater = $clpcmater->sql_record($clpcmater->sql_query_file($oParam->iCodigoItem));
+        $oPcmater = db_utils::fieldsmemory($rsPcmater, 0);
+
+        $rsMatunid = $clmatunid->sql_record($clmatunid->sql_query_file($oParam->iUnidade));
+        $oMatunid = db_utils::fieldsmemory($rsMatunid, 0);
+
+        $rsHistoricoMaterial = $clhistoricomaterial->sql_record($clhistoricomaterial->sql_query(null,"*",null,"db150_coditem =$db150_coditem"));
+
+        if(pg_num_rows($rsHistoricoMaterial) == 0 ){
+
+            //inserir na tabela historico material
+            $clhistoricomaterial->db150_tiporegistro              = 10;
+            $clhistoricomaterial->db150_coditem                   = $db150_coditem;
+            $clhistoricomaterial->db150_pcmater                   = $oParam->iCodigoItem;
+            $clhistoricomaterial->db150_dscitem                   = substr($oPcmater->pc01_descrmater.'-'.$oPcmater->pc01_complmater,0,999);
+            $clhistoricomaterial->db150_unidademedida             = $oMatunid->m61_descr;
+            $clhistoricomaterial->db150_tipocadastro              = 1;
+            $clhistoricomaterial->db150_justificativaalteracao    = '';
+            $clhistoricomaterial->db150_mes                       = date("m", db_getsession("DB_datausu"));
+            $clhistoricomaterial->db150_data                      = date("Y-m-d", db_getsession("DB_datausu"));
+            $clhistoricomaterial->db150_instit                    = db_getsession('DB_instit');
+            $clhistoricomaterial->incluir(null);
+
+            if ($clhistoricomaterial->erro_status == 0) {
+                $oRetorno->status  = 2;
+                $oRetorno->message = urlencode($clhistoricomaterial->erro_msg);
+            }
+        }
 
       $aitens = $oSolicita->getItens();
 
@@ -371,10 +403,45 @@ switch ($oParam->exec) {
         $oSolicita->addItem($oItemNovo);
         $lTemEstimativa = false;
 
-
         if ($oSolicita instanceof aberturaRegistroPreco) {
           $lTemEstimativa = $oSolicita->hasEstimativas();
         }
+
+          //Salva o item na tabela historicomaterial para gerar no sicom OC20960
+          $clhistoricomaterial = new cl_historicomaterial;
+          $clpcmater = new cl_pcmater();
+          $clmatunid = new cl_matunid();
+
+          $db150_coditem = $oParam->iCodigoItem.$oParam->iUnidade;
+
+          $rsPcmater = $clpcmater->sql_record($clpcmater->sql_query_file($oParam->iCodigoItem));
+          $oPcmater = db_utils::fieldsmemory($rsPcmater, 0);
+
+          $rsMatunid = $clmatunid->sql_record($clmatunid->sql_query_file($oParam->iUnidade));
+          $oMatunid = db_utils::fieldsmemory($rsMatunid, 0);
+
+          $rsHistoricoMaterial = $clhistoricomaterial->sql_record($clhistoricomaterial->sql_query(null,"*",null,"db150_coditem =$db150_coditem"));
+
+          if(pg_num_rows($rsHistoricoMaterial) == 0 ){
+
+              //inserir na tabela historico material
+              $clhistoricomaterial->db150_tiporegistro              = 10;
+              $clhistoricomaterial->db150_coditem                   = $db150_coditem;
+              $clhistoricomaterial->db150_pcmater                   = $oParam->iCodigoItem;
+              $clhistoricomaterial->db150_dscitem                   = substr($oPcmater->pc01_descrmater.'-'.$oPcmater->pc01_complmater,0,999);
+              $clhistoricomaterial->db150_unidademedida             = $oMatunid->m61_descr;
+              $clhistoricomaterial->db150_tipocadastro              = 1;
+              $clhistoricomaterial->db150_justificativaalteracao    = '';
+              $clhistoricomaterial->db150_mes                       = date("m", db_getsession("DB_datausu"));
+              $clhistoricomaterial->db150_data                      = date("Y-m-d", db_getsession("DB_datausu"));
+              $clhistoricomaterial->db150_instit                    = db_getsession('DB_instit');
+              $clhistoricomaterial->incluir(null);
+
+              if ($clhistoricomaterial->erro_status == 0) {
+                  $oRetorno->status  = 2;
+                  $oRetorno->message = urlencode($clhistoricomaterial->erro_msg);
+              }
+          }
 
         $aitens = $oSolicita->getItens();
 
@@ -397,6 +464,7 @@ switch ($oParam->exec) {
           $oRetorno->itens[] = $oItemRetono;
         }
       }
+          db_fim_transacao(false);
     } catch (Exception $eErro) {
 
       $oRetorno->status  = 2;

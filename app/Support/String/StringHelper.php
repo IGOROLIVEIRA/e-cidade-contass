@@ -26,4 +26,9 @@ class StringHelper
 
         return strtr($string, $accents);
     }
+
+    public static function barCodeAmountFormart(float $amount): string
+    {
+        return str_pad(number_format($amount, 2, "", ""), 11, "0", STR_PAD_LEFT);
+    }
 }

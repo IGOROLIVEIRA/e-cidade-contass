@@ -295,9 +295,9 @@ function buscaConteudoDesenvolvidoDiario($oRegencia,$datasBim = null)
 {
 
 	$oDaoConteudos = db_utils::getDao('diarioclasse');
-	$sWhere 			 = " ed58_i_regencia = {$oRegencia->getCodigo()} and ed300_datalancamento between '{$datasBim->inicio}' and '{$datasBim->fim}'";
+	$sWhere 			 = " length(ed300_auladesenvolvida) > 0 and ed58_i_regencia = {$oRegencia->getCodigo()} and ed300_datalancamento between '{$datasBim->inicio}' and '{$datasBim->fim}'";
 	$sCampos			 = " distinct ed300_datalancamento, ed300_auladesenvolvida";
-	$sSqlConteudo  = $oDaoConteudos->sql_query_faltas(null, $sCampos, "ed300_datalancamento", $sWhere);// print_r($sSqlConteudo);die;
+	$sSqlConteudo  = $oDaoConteudos->sql_query_faltas(null, $sCampos, "ed300_datalancamento", $sWhere);
 	$rsConteudo    = $oDaoConteudos->sql_record($sSqlConteudo);
 	$iRegistros    = $oDaoConteudos->numrows;
 
