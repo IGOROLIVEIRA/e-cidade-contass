@@ -243,10 +243,10 @@ i77_dataprocessamento AS dataprocessamento,
             //verifica se ja existe o material vinculado ao inventario
             //informacoes sobre o estoque
 
-            $sSql = "SELECT * FROM matmater 
+            $sSql = "SELECT * FROM matmater
                      INNER JOIN matestoque ON m70_codmatmater = m60_codmater
                      INNER JOIN matmaterprecomedio on m85_matmater = m60_codmater
-                     WHERE m70_codigo = {$oParam->iCodigoEstoque} 
+                     WHERE m70_codigo = {$oParam->iCodigoEstoque}
                      ORDER BY m85_sequencial DESC LIMIT 1";
 
             $oEstoque = db_utils::fieldsMemory(db_query($sSql));
@@ -367,7 +367,7 @@ i77_dataprocessamento AS dataprocessamento,
                     $clmatestoqueitem->m71_quantatend    = '0';
                     $clmatestoqueitem->incluir(null);
                     if($clmatestoqueitem->erro_status==0){
-                        throw new ParameterException($clmatestoqueitem->erro_msg);
+                        throw new ParameterException($clmatestoqueitem->erro_msg . "CODIGO MATMATER = " . $oEstoque->m70_codmatmater);
                     }
                     $m80_matestoqueitem = $clmatestoqueitem->m71_codlanc;
 
@@ -376,7 +376,7 @@ i77_dataprocessamento AS dataprocessamento,
                     $clmatestoqueinimei->m82_quant          = $aResult->i77_contagem - $aResult->i77_estoqueinicial;
                     $clmatestoqueinimei->incluir(@$m82_codigo);
                     if($clmatestoqueinimei->erro_status==0){
-                        throw new ParameterException($clmatestoqueinimei->erro_msg);
+                        throw new ParameterException($clmatestoqueinimei->erro_msg . "CODIGO MATMATER = " . $oEstoque->m70_codmatmater);
                     }
 
                     $oDataImplantacao = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
