@@ -1065,8 +1065,8 @@ class cl_acordoitem {
             si03_indicereajuste,
             si03_datareferencia,
             si03_justificativa,
-            si03_descricaoreajuste,
-            si03_criterioreajuste
+            ac26_descricaoreajuste,
+            ac26_criterioreajuste
         FROM apostilamento
         INNER JOIN acordo ON ac16_sequencial = si03_acordo
         INNER JOIN acordoposicao ON acordoposicao.ac26_acordo = acordo.ac16_sequencial

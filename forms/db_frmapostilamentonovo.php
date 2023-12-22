@@ -79,7 +79,7 @@ unset($_GET['viewAlterar']);
                 <td>
                     <?
                     $aCriteriosReajuste = array("1" => "Índice Único", "2" => "Cesta de Índices", "3" => "Índice Específico");
-                    db_select('si03_criterioreajuste', $aCriteriosReajuste, true, $db_opcao, "onchange='js_changeCriterioReajuste(this.value)'");
+                    db_select('ac26_criterioreajuste', $aCriteriosReajuste, true, $db_opcao, "onchange='js_changeCriterioReajuste(this.value)'");
                     ?>
                 </td>
             </tr>
@@ -105,7 +105,7 @@ unset($_GET['viewAlterar']);
                 </td>
                 <td>
                     <?
-                    db_textarea('si03_descricaoreajuste', 3, 58, $Isi03_descricaoindice, true, 'text', $db_opcao, "style='resize: none'", "", "", "300");
+                    db_textarea('ac26_descricaoreajuste', 3, 58, $Isi03_descricaoindice, true, 'text', $db_opcao, "style='resize: none'", "", "", "300");
                     ?>
                 </td>
             </tr>
@@ -1251,17 +1251,17 @@ unset($_GET['viewAlterar']);
             if ($("si03_percentualreajuste").value == "") {
                 return alert("Obrigatório informar o Percentual de Reajuste.");
             }
-            if ($("si03_indicereajuste").value == "0" && $("si03_criterioreajuste").value == "1") {
+            if ($("si03_indicereajuste").value == "0" && $("ac26_criterioreajuste").value == "1") {
                 return alert("Obrigatório informar o Indice Reajuste.");
             }
             if ($("si03_indicereajuste").value == "6") {
-                if ($("si03_descricaoreajuste").value == "") {
+                if ($("ac26_descricaoreajuste").value == "") {
                     return alert("Obrigatório informar a Descrição do Critério de Reajuste.");
                 }
             }
         }
 
-        if($("si03_criterioreajuste").value != "1"){
+        if($("ac26_criterioreajuste").value != "1"){
             if ($("si03_descricaoindice").value == "") {
                 return alert("Obrigatório informar a Descrição do Índice.");
             }
@@ -1289,8 +1289,8 @@ unset($_GET['viewAlterar']);
         oApostila.percentualreajuste = $("si03_percentualreajuste").value;
         oApostila.indicereajuste = $("si03_indicereajuste").value;
         oApostila.descricaoindice = decodeURIComponent(encodeURIComponent($("si03_descricaoindice").value));
-        oApostila.descricaoreajuste = decodeURIComponent(encodeURIComponent($("si03_descricaoreajuste").value));
-        oApostila.criterioreajuste = $("si03_criterioreajuste").value;
+        oApostila.descricaoreajuste = decodeURIComponent(encodeURIComponent($("ac26_descricaoreajuste").value));
+        oApostila.criterioreajuste = $("ac26_criterioreajuste").value;
 
         var oParam = {
             exec: "processarApostilamento",
@@ -1583,13 +1583,13 @@ unset($_GET['viewAlterar']);
                 $('si03_descrapostila').value = oRetorno.dadosAcordo.si03_descrapostila;
                 $('si03_datareferencia').value = oRetorno.dadosAcordo.si03_datareferencia;
                 $('si03_justificativa').value = oRetorno.dadosAcordo.si03_justificativa;
-                $('si03_descricaoreajuste').value = oRetorno.dadosAcordo.si03_descricaoreajuste;
-                $('si03_criterioreajuste').value = oRetorno.dadosAcordo.si03_criterioreajuste;
+                $('ac26_descricaoreajuste').value = oRetorno.dadosAcordo.ac26_descricaoreajuste;
+                $('ac26_criterioreajuste').value = oRetorno.dadosAcordo.ac26_criterioreajuste;
                 $("si03_indicereajuste").value = oRetorno.dadosAcordo.si03_indicereajuste;
                 si03_sequencial = oRetorno.dadosAcordo.si03_sequencial;
                 js_changeTipoApostila(tipoApostilaInicial);
                 js_indicereajuste($("si03_indicereajuste").value);
-                js_changeCriterioReajuste($("si03_criterioreajuste").value);
+                js_changeCriterioReajuste($("ac26_criterioreajuste").value);
 
                 validaDadosAcordo(oRetorno);
 
@@ -1644,6 +1644,7 @@ unset($_GET['viewAlterar']);
             si03_datareferencia: $('si03_datareferencia').value,
             si03_justificativa: $('si03_justificativa').value,
             si03_descricaoreajuste: oApostila.descricaoreajuste,
+            si03_descricaoindice: oApostila.descricaoindice,
             si03_criterioreajuste: oApostila.criterioreajuste,
             updateNumApostilamento
         }
@@ -1692,11 +1693,13 @@ unset($_GET['viewAlterar']);
             document.getElementById('si03_indicereajuste').style.display = "";
             document.getElementById('indicereajuste').style.display = "";
             document.getElementById('tr_descricaoindice').style.display = "none";
+            document.getElementById('si03_descricaoindice').value = "";
             return;
         }
         document.getElementById('si03_indicereajuste').style.display = "none";
         document.getElementById('indicereajuste').style.display = "none";
         document.getElementById('tr_descricaoindice').style.display = "";
-
+        document.getElementById('si03_indicereajuste').value = "0";
+        document.getElementById('ac26_descricaoreajuste').value = "";
     }
 </script>

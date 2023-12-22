@@ -1949,9 +1949,6 @@ class AcordoPosicao
             $oDaoApostilamento->si03_indicereajuste = $oApostila->indicereajuste;
             $oDaoApostilamento->si03_percentualreajuste = $oApostila->percentualreajuste;
             $oDaoApostilamento->si03_descricaoindice = db_stdClass::normalizeStringJsonEscapeString($oApostila->descricaoindice);
-            $oDaoApostilamento->si03_descricaoreajuste = db_stdClass::normalizeStringJsonEscapeString($oApostila->descricaoreajuste);
-            $oDaoApostilamento->si03_criterioreajuste = $oApostila->criterioreajuste;
-
             if ($oApostila->datareferencia == "") {
                 $oDaoApostilamento->si03_datareferencia = $oDaoApostilamento->si03_dataapostila;
             } else {

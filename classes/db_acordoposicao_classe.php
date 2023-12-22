@@ -986,13 +986,19 @@ class cl_acordoposicao {
     return $sql;
   }
 
-  public function updateNumeroApositilamento($ac26_acordo, $ac26_numeroapostilamento)
+  public function updateApositilamento($ac26_acordo, $apostilamento)
   {
+    
     $sql = "
     UPDATE
         acordoposicao
     SET
-        ac26_numeroapostilamento = $ac26_numeroapostilamento
+        ac26_numeroapostilamento = $apostilamento->si03_numapostilamento,
+        ac26_criterioreajuste = " . ($apostilamento->si03_criterioreajuste == "null" || $apostilamento->si03_criterioreajuste == "" ? 'null' : "'" . $apostilamento->si03_criterioreajuste . "'") . ",
+        ac26_descricaoreajuste = " . ($apostilamento->si03_descricaoreajuste == "null" || $apostilamento->si03_descricaoreajuste == "" ? 'null' : "'" . $apostilamento->si03_descricaoreajuste . "'") . ",
+        ac26_descricaoindice = " . ($apostilamento->si03_descricaoindice == "null" || $apostilamento->si03_descricaoindice == "" ? 'null' : "'" . $apostilamento->si03_descricaoindice . "'") . ",
+        ac26_indicereajuste = " . ($apostilamento->si03_indicereajuste == "null" || $apostilamento->si03_indicereajuste == "" ? '0' :  $apostilamento->si03_indicereajuste ).",
+        ac26_percentualreajuste = " . ($apostilamento->si03_percentualreajuste == "null" || $apostilamento->si03_percentualreajuste == "" ? 'null' :  $apostilamento->si03_percentualreajuste )."
     WHERE
         ac26_acordo = $ac26_acordo
         AND ac26_numeroapostilamento IS NOT NULL

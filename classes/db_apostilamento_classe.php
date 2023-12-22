@@ -44,8 +44,6 @@ class cl_apostilamento
   var $si03_indicereajuste = 0;
   var $si03_percentualreajuste = null;
   var $si03_descricaoindice = null;
-  var $si03_descricaoreajuste = null;
-  var $si03_criterioreajuste = null;
 
   // cria propriedade com as variaveis do arquivo
   var $campos = "
@@ -68,8 +66,6 @@ class cl_apostilamento
                  si03_indicereajuste = int8 = Indice de Reajuste
                  si03_percentualreajuste = varchar = Percentual Reajuste
                  si03_descricaoindice = varchar = Percentual Reajuste
-                 si03_descricaoreajuste = varchar = Descrição do Critério de Reajuste;
-                 si03_criterioreajuste = int = Critério de Reajuste;
 
                  ";
   //funcao construtor da classe
@@ -125,8 +121,6 @@ class cl_apostilamento
       $this->si03_numcontratoanosanteriores = ($this->si03_numcontratoanosanteriores == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_numcontratoanosanteriores"] : $this->si03_numcontratoanosanteriores);
       $this->si03_acordoposicao = ($this->si03_acordoposicao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_acordoposicao"] : $this->si03_acordoposicao);
       $this->si03_acordo = ($this->si03_acordo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_acordo"] : $this->si03_acordo);
-      $this->si03_descricaoreajuste = ($this->si03_descricaoreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_descricaoreajuste"] : $this->si03_descricaoreajuste);
-      $this->si03_criterioreajuste = ($this->si03_criterioreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_criterioreajuste"] : $this->si03_criterioreajuste);
     } else {
       $this->si03_sequencial = ($this->si03_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_sequencial"] : $this->si03_sequencial);
     }
@@ -280,8 +274,6 @@ class cl_apostilamento
                                       ,si03_indicereajuste
                                       ,si03_percentualreajuste
                                       ,si03_descricaoindice
-                                      ,si03_descricaoreajuste
-                                      ,si03_criterioreajuste
                        )
                 values (
                                 $this->si03_sequencial
@@ -303,8 +295,6 @@ class cl_apostilamento
                                ,$this->si03_indicereajuste
                                ,'$this->si03_percentualreajuste'
                                ," . ($this->si03_descricaoindice == "null" || $this->si03_descricaoindice == "" ? "null" : "'" . $this->si03_descricaoindice . "'") . "
-                               ," . ($this->si03_descricaoreajuste == "null" || $this->si03_descricaoreajuste == "" ? "null" : "'" . $this->si03_descricaoreajuste . "'") . "
-                               ,$this->si03_criterioreajuste
                       )";
 
     $result = db_query($sql);
@@ -316,7 +306,7 @@ class cl_apostilamento
         $this->erro_banco = "apostilamento j Cadastrado";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       } else {
-        $this->erro_sql   = "$sql apostilamento ($this->si03_sequencial) nao Includo. Inclusao Abortada.";
+        $this->erro_sql   = " apostilamento ($this->si03_sequencial) nao Includo. Inclusao Abortada.";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       }
@@ -616,9 +606,6 @@ class cl_apostilamento
       $sql  .= $virgula . " si03_acordo = $this->si03_acordo ";
       $virgula = ",";
     }
-    $this->si03_descricaoreajuste = $this->si03_descricaoreajuste == "null" || $this->si03_descricaoreajuste == "" ? "null" : "'" . $this->si03_descricaoreajuste . "'";
-    $sql  .= $virgula . " si03_descricaoreajuste = $this->si03_descricaoreajuste";
-    $sql  .= $virgula . " si03_criterioreajuste = $this->si03_criterioreajuste";
 
     $sql .= " where ";
     if ($si03_sequencial != null) {

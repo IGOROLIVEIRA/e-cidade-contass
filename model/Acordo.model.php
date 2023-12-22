@@ -4561,6 +4561,8 @@ class Acordo
         $oNovaPosicao->setPercentualReajuste($oApostila->percentualreajuste);
         $oNovaPosicao->setIndiceReajusteacordo($oApostila->indicereajuste);
         $oNovaPosicao->setDescricaoIndiceacordo(db_stdClass::normalizeStringJsonEscapeString($oApostila->descricaoindice));
+        $oNovaPosicao->setCriterioReajuste($oApostila->criterioreajuste);
+        $oNovaPosicao->setDescricaoReajuste(db_stdClass::normalizeStringJsonEscapeString($oApostila->descricaoreajuste));
         $oNovaPosicao->save();
 
         /**
