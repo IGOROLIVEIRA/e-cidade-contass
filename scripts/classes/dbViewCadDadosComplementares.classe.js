@@ -3924,6 +3924,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
                 me.setPlanilhaTce('');
                 $('cboClasseObjeto' + sId).value = 0;
                 me.setClassesObjeto('');
+                me.lidaAlteracaoClasseObjeto(0);
                 $('cboAtividadeObra' + sId).value = 0;
                 $('cboAtividadeObra' + sId).disabled = true;
                 me.setAtividadeObra('');
@@ -4465,7 +4466,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         $('txtCodigoNumero' + sId).value = dados.db150_numero;
         me.setNumero(dados.db150_numero);
         $('cboPlanilhaTce' + sId).selectedIndex = dados.db150_planilhatce;
-        me.setClassesObjeto(dados.db150_planilhatce);
+        me.setPlanilhaTce(dados.db150_planilhatce);
         $('cboClasseObjeto' + sId).selectedIndex = dados.db150_classeobjeto;
         me.setClassesObjeto(dados.db150_classeobjeto);
         me.lidaAlteracaoClasseObjeto(dados.db150_classeobjeto);
