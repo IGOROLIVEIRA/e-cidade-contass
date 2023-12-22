@@ -58,6 +58,9 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
 
         $acordoPosicao = $this->formatAcordoPosicao($aditamento);
         $acordoPosicaoAdimento = $this->formatAcordoPosicaoAditamento($aditamento);
+        $vigenciaIncio = $aditamento->getVigenciaInicio()->format('Y-m-d');
+        $vigenciaFim = $aditamento->getVigenciaFim()->format('Y-m-d');
+        $sequencialAcordoPosicao = $aditamento->getAcordoPosicaoSequencial();
 
         try {
             DB::beginTransaction();
@@ -76,8 +79,8 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
                 $resultVigencia =  $acordoVigenciaRepository->update(
                     $aditamento->getAcordoPosicaoSequencial(),
                     [
-                        'ac18_datainicio' => $aditamento->getVigenciaInicio()->format('Y-m-d'),
-                        'ac18_datafim' => $aditamento->getVigenciaFim()->format('Y-m-d')
+                        'ac18_datainicio' => $vigenciaIncio,
+                        'ac18_datafim' => $vigenciaFim
                     ]
                 );
 
@@ -120,7 +123,17 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
                         [
                             'ac41_datainicial' => $item->getInicioExecucao()->format('Y-m-d'),
                             'ac41_datafinal'   => $item->getFimExecucao()->format('Y-m-d'),
-                            'ac41_acordoposicao' => $aditamento->getAcordoPosicaoSequencial()
+                            'ac41_acordoposicao' => $sequencialAcordoPosicao
+                        ]);
+                }
+
+                if($aditamento->isVigenciaExecucao()) {
+                    $this->acordItemPeriodRepository->update(
+                        $codigoItem,
+                        [
+                            'ac41_datainicial' => $vigenciaIncio,
+                            'ac41_datafinal'   => $vigenciaFim,
+                            'ac41_acordoposicao' => $sequencialAcordoPosicao
                         ]);
                 }
             }

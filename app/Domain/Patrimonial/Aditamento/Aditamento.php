@@ -12,6 +12,8 @@ class Aditamento
 
     private const TIPO_ALTERACAO_VIGENCIA = 6;
 
+    private const TIPO_VIGENCIA_EXECUCAO = 13;
+
     /**
      * @var integer
      */
@@ -472,6 +474,15 @@ class Aditamento
     public function isAlteracaoVigencia(): bool
     {
         return $this->getTipoAditivo() === self::TIPO_ALTERACAO_VIGENCIA;
+    }
+
+     /**
+     *
+     * @return boolean
+     */
+    public function isVigenciaExecucao(): bool
+    {
+        return $this->getTipoAditivo() === self::TIPO_VIGENCIA_EXECUCAO;
     }
 
     /**
