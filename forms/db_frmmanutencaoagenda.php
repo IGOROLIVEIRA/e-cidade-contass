@@ -2507,7 +2507,7 @@ if (count($aParametrosEmpenho) > 0) {
         var oRetorno = eval("("+oAjax.responseText+")");
 
         if (oRetorno.status == 1) {
-            alert(oRetorno.message.urlDecode());
+            alert("Pagamentos Migrados com sucesso!!!");
         } else {
             alert(oRetorno.message.urlDecode());
         }
