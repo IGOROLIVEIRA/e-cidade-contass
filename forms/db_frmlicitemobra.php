@@ -106,21 +106,20 @@ $cllicitemobra->rotulo->label();
     <?php
 
     if (!empty($l20_codigo)) {
-        $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,obr06_versaotabela,l21_ordem";
-        $sOrdem   = "l21_ordem";
+        $sCampos  = " distinct obr06_sequencial,pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,obr06_versaotabela";
+        $sOrdem   = "pc01_codmater";
         $sWhere   = "l21_codliclicita = {$l20_codigo} and pc01_obras = 't' and pc10_instit = " . db_getsession('DB_instit');
         $sSqlItemLicitacao = $cllicitemobra->sql_query_itens_obras_licitacao(null, $sCampos, $sOrdem, $sWhere);
-        $sResultitens = $cllicitemobra->sql_record($sSqlItemLicitacao);
+            $sResultitens = $cllicitemobra->sql_record($sSqlItemLicitacao);
         $aItensObras = db_utils::getCollectionByRecord($sResultitens);
         $numrows = $cllicitemobra->numrows;
     }
 
     if (!empty($pc80_codproc)) {
-        $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,obr06_versaotabela,pc11_seq";
+        $sCampos  = " distinct obr06_sequencial,pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,obr06_versaotabela,pc11_seq";
         $sOrdem   = "pc11_seq";
         $sWhere   = "pc80_codproc = {$pc80_codproc} and pc01_obras = 't' and pc10_instit = " . db_getsession('DB_instit');
         $sSqlItemProcessodeCompras = $cllicitemobra->sql_query_itens_obras_processodecompras(null, $sCampos, $sOrdem, $sWhere);
-        //            die($sSqlItemProcessodeCompras);
         $sResultitens = $cllicitemobra->sql_record($sSqlItemProcessodeCompras);
         $aItensObras = db_utils::getCollectionByRecord($sResultitens);
         $numrows = $cllicitemobra->numrows;
@@ -150,6 +149,7 @@ $cllicitemobra->rotulo->label();
                     } else {
                         $iItem = $aItem->pc01_codmater . $aItem->obr06_tabela;
                     }
+                   
 
                 ?>
                     <tr class="normal" id="<?= "linha_" . $iItem  ?>">
@@ -585,9 +585,7 @@ $cllicitemobra->rotulo->label();
                     codigoTabela.style.backgroundColor = "#6E9D88";
                     // Atualiza a cor de fundo de todos os elementos com o mesmo código
                     elementosCodigos[tipo][codigo].forEach(function(el) {
-                        console.log(el);
                         el.style.backgroundColor = "#6E9D88";
-                        console.log(el);
                     });
                 } else if (codigo !== "") {
 
