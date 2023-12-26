@@ -20,6 +20,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       pointer-events: none;
       touch-action: none;
   `;
+  this.itensAdaptados = [];
 
 
   switch (iTipoAditamento) {
@@ -1017,8 +1018,9 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
   }
 
   this.aditar = function () {
-    var oSelecionados = {};
-    var iSelecionados = [];
+    let oSelecionados = {};
+    let iSelecionados = [];
+
     /**
      * @todo incluir aqui todas as validaes de campos obrigatrios para o SICOM contratos
      */
@@ -1104,7 +1106,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       return alert('Nenhum item selecionado para aditar.');
   }
 
-    var lAditar = true;
+    let lAditar = true;
 
     var dt1 = me.oTxtDataFinal.getValue().split("/");
     var dt2 = me.oTxtDataFinalCompara.getValue().split("/");
@@ -1212,20 +1214,31 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
           lAditar = false;
           return alert("Desmarque os itens que não foram aditados!");
         }
-        var qtanter = oSelecionados[iIndice].aCells[4].getValue().getNumber();
-        var vlranter = oSelecionados[iIndice].aCells[5].getValue().getNumber();
+        let cboTipo = $('oCboTipoAditivo').value;
+        let qtanter =  oSelecionados[iIndice].aCells[4].getValue().getNumber();
+        let vlranter = oSelecionados[iIndice].aCells[5].getValue().getNumber();
+
+
+        if (cboTipo == 9 || cboTipo == 10 ) {
+          let codigoItemFiltro = oSelecionados[iIndice].aCells[2].getValue();
+          const itemFiltrado = me.itensAdaptados.filter(item => item.codigoitem == codigoItemFiltro);
+          qtanter = itemFiltrado[0].qtdePosicaoanterior;
+          vlranter = itemFiltrado[0].vlunitPosicaoanterior;
+        }
+
 
         if ($('oCboTipoAditivo').value == 9
           && (oItemAdicionar.quantidade < qtanter || oItemAdicionar.valorunitario < vlranter)) {
           lAditar = false;
-          return alert("Não é possí­vel realizar DECRÉSCIMOS de itens no tipo ACRÉSCIMO de itens!");
+           alert("Não é possí­vel realizar DECRÉSCIMOS de itens no tipo ACRÉSCIMO de itens!");
+           return;
         }
 
         if ($('oCboTipoAditivo').value == 10
           && (oItemAdicionar.quantidade > qtanter || oItemAdicionar.valorunitario > vlranter)) {
           lAditar = false;
-          return alert("Não é possí­vel realizar ACREéeeSCIMOS de itens no tipo DECRÉSCIMO de itens!");
-
+          alert("Não é possí­vel realizar ACREéeeSCIMOS de itens no tipo DECRÉSCIMO de itens!");
+          return;
         }
 
         if ($('oCboTipoAditivo').value == 13) {
@@ -1283,9 +1296,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
           oItemAdicionar.dotacoes = oItem.dotacoesoriginal;
         }
 
-      }
-
-      else {
+      } else {
 
         if (oItem.novo) {
 
@@ -1317,7 +1328,10 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       oParam.aItens.push(oItemAdicionar);
     });
 
-
+    if ( !lAditar) {
+      return;
+    }
+    
     me.alterarAdiamento(oParam);
     return;
   }
@@ -2018,7 +2032,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
    */
   this.calculaValorTotal = function (iLinha) {
 
-    var aLinha = me.oGridItens.aRows[iLinha],
+    let aLinha = me.oGridItens.aRows[iLinha],
       nQuantidade = aLinha.aCells[6].getValue().getNumber(),
       nUnitario = aLinha.aCells[7].getValue().getNumber(),
       nQuantidadeA = aLinha.aCells[4].getValue().getNumber(),//OC5304
@@ -2031,6 +2045,16 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     } else {
       casas = 2;
     }
+
+    let cboTipo = $('oCboTipoAditivo').value;
+
+    if ( cboTipo == 10 || cboTipo == 9) {
+      let codigoItemFiltro = aLinha.aCells[2].getValue();
+      const itemFiltrado = me.itensAdaptados.filter(item => item.codigoitem == codigoItemFiltro);
+      nQuantidadeA = itemFiltrado[0].qtdePosicaoanterior;
+      nUnitarioA = itemFiltrado[0].vlunitPosicaoanterior;
+    }
+
 
     aItensPosicao[iLinha].novaquantidade = nQuantidade;
     aItensPosicao[iLinha].novounitario = nUnitario;
@@ -2524,7 +2548,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     adapatador = new ItensAdapter(aditamento)
 
     aItensPosicao = adapatador.criarItens();
-
+    me.itensAdaptados = aItensPosicao;
     me.preencheItens(aItensPosicao);
     me.js_changeTipoAditivo();
     me.lidaLeiLicitacao(aditamento.acordoSequencial);
