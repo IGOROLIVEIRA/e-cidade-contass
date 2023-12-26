@@ -355,8 +355,10 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
   
     js_alteraRegimeContratacao(document.getElementById('si06_regimecontratacao').value);
   }
-
-  js_inicializacao();
+  <?php $inicializarCampos = count($_POST)?>;
+  let inicializarCampos = <? print $inicializarCampos; ?>;
+  inicializarCampos = inicializarCampos == 0 ? true : false;
+  if(inicializarCampos == true) js_inicializacao();
 
   function js_pesquisasi06_orgaogerenciador(mostra) {
     if (mostra == true) {
@@ -473,9 +475,11 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
   }
 
   function js_mostrapcproc(chave,chave2,erro) {
-    if (erro == true) {
+
+    if (chave2 == true) {
       document.form1.si06_processocompra.focus();
       document.form1.si06_processocompra.value = '';
+      document.form1.si06_objetoadesao.value = '';
       return;
     }
     document.form1.si06_objetoadesao.value = chave2;

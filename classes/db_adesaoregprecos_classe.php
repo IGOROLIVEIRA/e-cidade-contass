@@ -460,6 +460,8 @@ class cl_adesaoregprecos
       return false;
     }
 
+    $this->si06_objetoadesao =  str_replace(["'",'\"',':','*','@','|','\\','/'],'',$this->si06_objetoadesao);
+
     $sql = "insert into adesaoregprecos(
                                        si06_sequencial
                                       ,si06_orgaogerenciador
@@ -608,7 +610,7 @@ class cl_adesaoregprecos
         return false;
       }
     }
-    if (trim($this->si06_modalidade) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_modalidade"]) && $si06_regimecontratacao != 1) {
+    if (trim($this->si06_modalidade) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_modalidade"]) && $this->si06_regimecontratacao != 1) {
       $sql  .= $virgula . " si06_modalidade = $this->si06_modalidade ";
       $virgula = ",";
       if (trim($this->si06_modalidade) == null) {
@@ -647,7 +649,7 @@ class cl_adesaoregprecos
         return false;
       }
     }
-    if (trim($this->si06_numlicitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_numlicitacao"]) && $si06_regimecontratacao != 1) {
+    if (trim($this->si06_numlicitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_numlicitacao"]) && $this->si06_regimecontratacao == 1) {
       $sql  .= $virgula . " si06_numlicitacao = $this->si06_numlicitacao ";
       $virgula = ",";
       if (trim($this->si06_numlicitacao) == null) {
@@ -948,7 +950,7 @@ class cl_adesaoregprecos
       }
     }
 
-    if (trim($this->si06_edital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_edital"]) && $si06_regimecontratacao != 1) {
+    if (trim($this->si06_edital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_edital"]) && $this->si06_regimecontratacao == 1) {
       $sql  .= $virgula . " si06_edital = $this->si06_edital ";
       $virgula = ",";
       if (!trim($this->si06_edital)) {
@@ -973,6 +975,9 @@ class cl_adesaoregprecos
       $sql  .= $virgula . " si06_codunidadesubant = '$this->si06_codunidadesubant'";
       $virgula = ",";
     }
+    
+    $this->si06_objetoadesao =  str_replace(["'",'\"',':','@','|','\\'],'',$this->si06_objetoadesao);
+
     $sql .= " where ";
     if ($si06_sequencial != null) {
       $sql .= " si06_sequencial = $this->si06_sequencial";

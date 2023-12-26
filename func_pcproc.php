@@ -256,8 +256,12 @@ $sWhereContrato = " and 1 = 1 ";
             if (isset($iAtivo) && !empty($iAtivo)) {
               $sql .= " and pc80_situacao = $iAtivo";
             }
-            $sql .= " order by pc80_codproc desc ";
 
+            if (isset($adesaoregpreco)) {
+              $sql .=  " and pc80_criterioadjudicacao = $criterioadjudicacao";
+            }
+
+            $sql .= " order by pc80_codproc desc ";
 
             $result = $clpcproc->sql_record($sql);
             if ($clpcproc->numrows != 0) {
