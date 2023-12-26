@@ -3108,7 +3108,7 @@ class cl_acordo
         WHERE ac16_acordosituacao IN (4)
             AND ac16_acordosituacao = 4
             AND ac16_instit = 1
-            AND ac26_acordoposicaotipo in (2,5,6,7,8,9,10,11,12,13)
+            AND ac26_acordoposicaotipo in (2,5,6,7,8,9,10,11,12,13,14)
             AND ac26_numeroaditamento IS NOT NULL
             --and para mostrar somente acordos em que a ultima possicao nao tenha autorizacao
             AND ac26_acordo NOT IN
