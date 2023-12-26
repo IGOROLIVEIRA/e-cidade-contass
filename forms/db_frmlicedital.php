@@ -155,7 +155,6 @@ $db_botao = true;
                   <td>
                     <?php
                         db_input('email', 58, '', true, 'text', 1, "oninput = limparInput(this);","","","",200);
-                    ;
                     ?>
                   </td>
                 </tr>
