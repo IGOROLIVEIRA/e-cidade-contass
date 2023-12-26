@@ -726,7 +726,7 @@ switch($oParam->exec) {
             $sql  = "select distinct id   , icodforma ,  nvalor  , icontapagadora , icontasaltes , inota , dtautoriza, empord.*,  ";
             $sql .= " round(COALESCE((select sum(e23_valorretencao) as nvalorretencao from retencaoreceitas inner join retencaopagordem on e23_retencaopagordem=e20_sequencial where e20_pagordem=inota),0),2) as nvalorretencao ";
             $sql .= " from empenho.pagordemmigracao inner join empord on inota=e82_codord ";
-            $sql .= " where inota not in (13749,14006,14283,14011,14026,14563,14895,14317,14022,14901,14002,15374,13536,14032,14890,14028,14009,14030,14277,14723,14799,13747,14004) ";
+            $sql .= " where inota not in (12871, 12908) ";
             $sql .= " order by inota ";
             $aMovimentos = db_utils::getCollectionByRecord(db_query($sql), false , false , false);
             //echo "<pre>";print_r($aMovimentos);exit;
