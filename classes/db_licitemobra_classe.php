@@ -137,7 +137,7 @@ class cl_licitemobra {
       $this->obr06_descricaotabela == "";
     }
     
-    if ($this->obr06_codigotabela == null ) {
+    if ($this->obr06_tabela != "4" && $this->obr06_codigotabela == null ) {
       $this->erro_sql = " Campo Código da Tabela não informado.";
       $this->erro_campo = "obr06_codigotabela";
       $this->erro_banco = "";
@@ -301,7 +301,7 @@ class cl_licitemobra {
             }
         }
     }
-    if (trim($this->obr06_codigotabela)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr06_codigotabela"])) {
+    if ($this->obr06_tabela != "4" && (trim($this->obr06_codigotabela)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr06_codigotabela"]))) {
       $sql  .= $virgula." obr06_codigotabela = '$this->obr06_codigotabela' ";
       $virgula = ",";
       if (trim($this->obr06_codigotabela) == null ) {

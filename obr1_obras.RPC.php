@@ -239,36 +239,35 @@ switch ($oParam->exec) {
         break;
     case 'buscarLotes':
         $clliclicita = new cl_liclicita();
-        
-        if($oParam->iLicitacao!="" || $oParam->iLicitacao!=null){
+
+        if ($oParam->iLicitacao != "" || $oParam->iLicitacao != null) {
             $oRetorno->status = 3;
-            $resultLotes = $clliclicita->sql_record('select DISTINCT l04_numerolote,l04_descricao from liclicitemlote where l04_liclicitem in (select l21_codigo from liclicitem where l21_codliclicita = '.$oParam->iLicitacao.' and l04_numerolote > 0 )');
+            $resultLotes = $clliclicita->sql_record('select DISTINCT l04_numerolote,l04_descricao from liclicitemlote where l04_liclicitem in (select l21_codigo from liclicitem where l21_codliclicita = ' . $oParam->iLicitacao . ' and l04_numerolote > 0 )');
             if (pg_num_rows($resultLotes) == 0) {
                 $oRetorno->status = 2;
-            }else{
-                $resultLicobras = $clliclicita->sql_record('select DISTINCT obr01_licitacaolote from licobras where obr01_licitacao = '.$oParam->iLicitacao);
+            } else {
+                $resultLicobras = $clliclicita->sql_record('select DISTINCT obr01_licitacaolote from licobras where obr01_licitacao = ' . $oParam->iLicitacao);
                 for ($iCont = 0; $iCont < pg_num_rows($resultLotes); $iCont++) {
                     $oDadosLotes = db_utils::fieldsMemory($resultLotes, $iCont);
                     $contrele = 0;
-                    if($oParam->iObra == 0){
+                    if ($oParam->iObra == 0) {
                         for ($iContLicobras = 0; $iContLicobras < pg_num_rows($resultLicobras); $iContLicobras++) {
                             $oDadosLicobras = db_utils::fieldsMemory($resultLicobras, $iContLicobras);
-                            if($oDadosLicobras->obr01_licitacaolote == $oDadosLotes->l04_numerolote){
-                                $contrele=1;
+                            if ($oDadosLicobras->obr01_licitacaolote == $oDadosLotes->l04_numerolote) {
+                                $contrele = 1;
                             }
                         }
                     }
-                    if($contrele == 0){
-                        
+                    if ($contrele == 0) {
+
                         $oRetorno->status = 1;
                         $lotes                        = new stdClass();
                         $lotes->descricao = urlencode($oDadosLotes->l04_descricao);
                         $lotes->numlote = $oDadosLotes->l04_numerolote;
                         $lotes->total = pg_num_rows($resultLotes);
                         $oRetorno->itens[] = $lotes;
-                    }    
+                    }
                 }
-                
             }
         }
         break;
@@ -364,7 +363,7 @@ switch ($oParam->exec) {
     case 'getItensObra':
 
         $cllicitemobra = new cl_licitemobra();
-        
+
         $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,obr06_versaotabela,l21_ordem";
 
         if (isset($oParam->l20_codigo) && !empty($oParam->l20_codigo)) {
@@ -394,9 +393,13 @@ switch ($oParam->exec) {
             foreach ($oParam->itens as $item) {
 
                 /**
-                * Validação com sicom
-                */
-                $dtcadastro = DateTime::createFromFormat('d/m/Y', $item->obr06_dtcadastro);
+                 * Validação com sicom
+                 */
+                if (strpos($item->obr06_dtcadastro, '/') !== false) {
+                    $dtcadastro = DateTime::createFromFormat('d/m/Y', $item->obr06_dtcadastro);
+                } else if (strpos($item->obr06_dtcadastro, '-') !== false) {
+                    $dtcadastro = DateTime::createFromFormat('Y-m-d',  $item->obr06_dtcadastro);
+                }
 
                 if (!empty($dtcadastro)) {
                     $anousu = db_getsession('DB_anousu');
@@ -405,7 +408,6 @@ switch ($oParam->exec) {
                     db_fieldsmemory($result);
                     $data = (implode("/", (array_reverse(explode("-", $c99_datapat)))));
                     $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
-
                     if ($dtcadastro <= $dtencerramento) {
                         throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
                     }

@@ -177,7 +177,7 @@ $cllicitemobra->rotulo->label();
                             </select>
                         </td>
                         <td class="linhagrid" style="width: 87px">
-                            <input style="width: 80px" type="text" name="" value="<?= $aItem->obr06_codigotabela ?>" id="<?= 'obr06_codigotabela_' . $iItem ?>">
+                            <input type="text" name="" value="<?= $aItem->obr06_codigotabela ?>" id="<?= 'obr06_codigotabela_' . $iItem ?>" <?= $aItem->obr06_tabela === "4" ? "disabled style='background-color: #E6E4F1;width: 80px;'" : "style='width: 80px'" ?>>
                         </td>
                         <td class="linhagrid" style="width: 90px">
                             <input type="text" name="" value="<?= $aItem->obr06_versaotabela ?>" id="<?= 'obr06_versaotabela_' . $iItem ?>" <?= $aItem->obr06_tabela === "4" ? "disabled style='background-color: #E6E4F1;width: 80px;'" : "style='width: 80px'" ?>>
@@ -530,7 +530,7 @@ $cllicitemobra->rotulo->label();
      * Verifica se existe erro de validação em algum campo
      */
     function itemEValido(item) {
-        if (item.obr06_codigotabela === "") {
+        if (item.obr06_codigotabela === "" && item.obr06_tabela !== "4") {
             return false;
         }
 
@@ -558,19 +558,48 @@ $cllicitemobra->rotulo->label();
 
         // Valida se existem campos repetidos no código da tabela
         // A validação considera até os códigos que não estão marcadas para alteração
-        const codigosUsados = [];
+        const codigosUsados = {
+            "1": {},
+            "2": {},
+            "3": {}
+        };
+        const elementosCodigos = {
+            "1": {},
+            "2": {},
+            "3": {}
+        };
+
         let existeCodigoDuplicado = false;
 
         aItens().forEach(function(item) {
+            const tabela = document.getElementById('obr06_tabela_' + item.id);
             const codigoTabela = document.getElementById('obr06_codigotabela_' + item.id);
 
-            codigoTabela.style.backgroundColor = "#FFFFFF";
+            if (tabela.value !== "4") {
+                const codigo = codigoTabela.value;
+                const tipo = tabela.value;
 
-            if (!codigosUsados.includes(codigoTabela.value)) {
-                codigosUsados.push(codigoTabela.value);
-            } else if (codigoTabela.value !== "") {
-                existeCodigoDuplicado = true;
-                codigoTabela.style.backgroundColor = "#6E9D88";
+                // Se o código já foi usado, marca como duplicado
+                if (codigosUsados[tipo][codigo]) {
+                    existeCodigoDuplicado = true;
+                    codigoTabela.style.backgroundColor = "#6E9D88";
+                    // Atualiza a cor de fundo de todos os elementos com o mesmo código
+                    elementosCodigos[tipo][codigo].forEach(function(el) {
+                        console.log(el);
+                        el.style.backgroundColor = "#6E9D88";
+                        console.log(el);
+                    });
+                } else if (codigo !== "") {
+
+                    codigoTabela.style.backgroundColor = "#FFFFFF";
+
+                    // Adiciona o código e o elemento ao registro
+                    codigosUsados[tipo][codigo] = 1;
+                    if (!elementosCodigos[tipo][codigo]) {
+                        elementosCodigos[tipo][codigo] = [];
+                    }
+                    elementosCodigos[tipo][codigo].push(codigoTabela);
+                }
             }
         });
 
@@ -590,14 +619,7 @@ $cllicitemobra->rotulo->label();
                 const linha = document.getElementById("linha_" + coditem);
                 linha.style.backgroundColor = "#FFFFFF";
 
-                const novoItem = {
-                    obr06_pcmater: coditem,
-                    obr06_tabela: document.getElementById('obr06_tabela_' + coditem).value,
-                    obr06_descricaotabela: document.getElementById('obr06_descricaotabela_' + coditem).value,
-                    obr06_codigotabela: document.getElementById('obr06_codigotabela_' + coditem).value,
-                    obr06_versaotabela: document.getElementById('obr06_versaotabela_' + coditem).value,
-                    obr06_dtcadastro: document.getElementById('obr06_dtcadastro_' + coditem).value,
-                };
+                const novoItem = NovoItem(coditem);
 
                 if (!itemEValido(novoItem)) {
                     temErro = true;
@@ -641,7 +663,37 @@ $cllicitemobra->rotulo->label();
         return false;
     }
 
+    function NovoItem(coditem) {
+        const obr06_pcmater = coditem;
+        const obr06_tabela = document.getElementById('obr06_tabela_' + coditem).value;
+        const obr06_dtcadastro = document.getElementById('obr06_dtcadastro_' + coditem).value;
 
+        let obr06_descricaotabela = null;
+        let obr06_codigotabela = null;
+        let obr06_versaotabela = null;
+
+        if (obr06_tabela !== "4") {
+            obr06_codigotabela = document.getElementById('obr06_codigotabela_' + coditem).value;
+        }
+
+        if ((obr06_tabela === "1" || obr06_tabela === "2")) {
+            obr06_versaotabela = document.getElementById('obr06_versaotabela_' + coditem).value;
+        }
+
+        if (obr06_tabela === "3") {
+            obr06_versaotabela = document.getElementById('obr06_versaotabela_' + coditem).value;
+            obr06_descricaotabela = document.getElementById('obr06_descricaotabela_' + coditem).value;
+        }
+
+        return {
+            obr06_pcmater,
+            obr06_tabela,
+            obr06_descricaotabela,
+            obr06_codigotabela,
+            obr06_versaotabela,
+            obr06_dtcadastro
+        }
+    }
 
     function salvarItemAjax(params, onComplete) {
         js_divCarregando('Aguarde salvando', 'div_aguarde');
@@ -690,7 +742,7 @@ $cllicitemobra->rotulo->label();
         td_obr06_versaotabela.style.display = 'none';
         tr_obr06_descricaotabela.style.display = 'none';
         td_obr06_codigotabela.style.display = 'none';
-        
+
         // Se tabela for igual 1 e 2
         if (tipoTabela === "1" || tipoTabela === "2") {
             td_obr06_versaotabela.style.display = '';
@@ -714,10 +766,12 @@ $cllicitemobra->rotulo->label();
             tipoTabela = document.getElementById('obr06_tabela_' + campo).value;
             versaoTabela = document.getElementById("obr06_versaotabela_" + campo);
             descricaoTabela = document.getElementById("obr06_descricaotabela_" + campo);
+            codigoTabela = document.getElementById("obr06_codigotabela_" + campo);
         } else {
             tipoTabela = document.getElementById("obr06_tabela").value;
             versaoTabela = document.getElementById("obr06_versaotabela");
             descricaoTabela = document.getElementById("obr06_descricaotabela");
+            codigoTabela = document.getElementById("obr06_codigotabela");
 
             versaoTabela.value = '';
             descricaoTabela.value = '';
@@ -729,6 +783,9 @@ $cllicitemobra->rotulo->label();
         descricaoTabela.disabled = true;
         descricaoTabela.style.backgroundColor = '#E6E4F1';
 
+        codigoTabela.disabled = true;
+        codigoTabela.style.backgroundColor = '#E6E4F1';
+
         const option = parseInt(campo ? tipoTabela : value);
 
         switch (option) {
@@ -737,6 +794,9 @@ $cllicitemobra->rotulo->label();
                 // Se 1 - Tabela SINAP ou 2 - Tabela SICRO somente habilitar o campo "Versão da Tabela"
                 versaoTabela.disabled = false;
                 versaoTabela.style.backgroundColor = '#FFFFFF';
+
+                codigoTabela.disabled = false;
+                codigoTabela.style.backgroundColor = '#FFFFFF';
                 break;
             case 3:
                 // Se 3 - Outras Tabelas Oficiais somente os campos "Versão da Tabela" e "Descrição da Tabela"
@@ -745,6 +805,9 @@ $cllicitemobra->rotulo->label();
 
                 descricaoTabela.disabled = false;
                 descricaoTabela.style.backgroundColor = '#FFFFFF';
+
+                codigoTabela.disabled = false;
+                codigoTabela.style.backgroundColor = '#FFFFFF';
                 break;
             default:
                 // Se 4 - Cadastro Próprio desabilitar todos os campos
@@ -755,7 +818,17 @@ $cllicitemobra->rotulo->label();
 
     function js_validatabela(value) {
         habilitaDesabilitaTabela(value);
+        //aplicaTabelaNosCampos(value);
         mostraOcultaCamposEdicaoEmBloco();
+    }
+
+    function aplicaTabelaNosCampos(value) {
+        //debugger;
+        aItens().forEach(function(item) {
+            if (item.checked === true) {
+                habilitaDesabilitaTabela(value, item.id);
+            }
+        })
     }
 
     function js_validatabelaLinha(value) {
