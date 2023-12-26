@@ -3110,10 +3110,17 @@ class cl_acordo
             AND ac16_instit = 1
             AND ac26_acordoposicaotipo in (2,5,6,7,8,9,10,11,12,13)
             AND ac26_numeroaditamento IS NOT NULL
-            AND NOT EXISTS
-                         (SELECT 1
-                          FROM acordoempautoriza
-                          WHERE ac45_acordo = ac16_sequencial) ";
+            --and para mostrar somente acordos em que a ultima possicao nao tenha autorizacao
+            AND ac26_acordo NOT IN
+            (SELECT ac26_acordo
+             FROM acordoposicao
+             INNER JOIN acordoitem ON ac20_acordoposicao= ac26_sequencial
+             INNER JOIN acordoitemexecutado ON ac29_acordoitem = ac20_sequencial
+             INNER JOIN acordoitemexecutadoempautitem ON ac19_acordoitemexecutado = ac29_sequencial
+             WHERE ac26_sequencial IN
+                     (SELECT max(ac26_sequencial)
+                      FROM acordoposicao
+                      WHERE ac26_acordo = ac16_sequencial)) ";
 
         foreach ($filtros as $key => $filtro) {
             $sql .= " AND {$key} = {$filtro} ";
