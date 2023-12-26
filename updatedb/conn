@@ -123,7 +123,6 @@ pmsaogoncalodoriopreto 5432 e-cidadev3
 cismesf                5432 e-cidadev3
 cias                   5432 e-cidadev3
 treinamento_consorcio  5432 e-cidadev3
-prevcap				   5432	e-cidadev3
 cmmirabela			   5432	e-cidadev3
 cmpatis			       5432	e-cidadev3
 
@@ -160,3 +159,4 @@ cisarp                  5432 e-cidadev3-prod
 cimvales                5432 e-cidadev3-prod
 mctrans                 5432 e-cidadev3-prod
 samu                    5432 e-cidadev3-prod
+prevcap				    5432 e-cidadev3-prod
