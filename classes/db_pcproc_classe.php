@@ -1549,7 +1549,13 @@ class cl_pcproc
     LEFT JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
     LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
     LEFT JOIN liccontrolepncp on l213_processodecompras = pc80_codproc
-    WHERE pc80_dispvalor='t' and db_depart.instit = " . db_getsession('DB_instit') . "
+    WHERE pc80_dispvalor='t'
+          AND pc80_codproc NOT IN
+        (SELECT DISTINCT pc81_codproc
+         FROM liclicitem
+         INNER JOIN pcprocitem ON pc81_codprocitem = l21_codpcprocitem
+         WHERE pc81_codproc = pc80_codproc)
+      and db_depart.instit = " . db_getsession('DB_instit') . "
     ORDER BY pc80_codproc desc";
     return $sql;
   }

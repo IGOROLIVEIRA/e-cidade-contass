@@ -7,7 +7,7 @@ include("classes/db_licobras_classe.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_homologacaoadjudica_classe.php");
 include("classes/db_condataconf_classe.php");
-testeeeeeeeeeeeeeeeeeeeeeeeeee
+
 db_postmemory($HTTP_POST_VARS);
 $cllicobras = new cl_licobras;
 $clhomologacaoadjudica = new cl_homologacaoadjudica();

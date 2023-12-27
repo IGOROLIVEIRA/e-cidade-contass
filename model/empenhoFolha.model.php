@@ -819,6 +819,13 @@ class empenhoFolha {
 	   if (empty($oSaldoDotacao->dot_ini)) {
 	    $oSaldoDotacao->dot_ini = 1;
 	   }
+
+    $oCodigoAcompanhamento  = new ControleOrcamentario();
+    $oCodigoAcompanhamento->setTipoDespesa(0);
+    $oCodigoAcompanhamento->setFonte($oSaldoDotacao->o58_codigo);
+    $oCodigoAcompanhamento->setDeParaFonteCompleta();
+    $e60_codco = $oCodigoAcompanhamento->getCodigoParaEmpenho();
+   
 	  $oDaoEmpenho->e60_coddot         = $this->dotacao;
 	  $oDaoEmpenho->e60_anousu         = $this->ano;
 	  $oDaoEmpenho->e60_codcom         = 7;
@@ -841,6 +848,7 @@ class empenhoFolha {
 	  $oDaoEmpenho->e60_vlranu         = "0";
 	  $oDaoEmpenho->e60_id_usuario     = db_getsession("DB_id_usuario");
 	  $oDaoEmpenho->e60_tipodespesa    = "0";
+    $oDaoEmpenho->e60_codco          = $e60_codco;
 	  $oDaoEmpenho->incluir(null);
 	  if ($oDaoEmpenho->erro_status == 0) {
 

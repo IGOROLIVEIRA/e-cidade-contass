@@ -93,7 +93,8 @@ const IDENTIFICADOR_PIX = 9;
 
 function isPagamentoViaPix(string $line): bool
 {
-    return ((int) substr($line, 116, 1) === IDENTIFICADOR_PIX);
+    return ((int) substr($line, 116, 1) === IDENTIFICADOR_PIX) &&
+        strlen(str_replace(' ', '', $line)) < 100;
 }
 
 /**
@@ -1084,8 +1085,10 @@ if ($situacao == 2) {
                     $numpar = substr($arq_array[$i], substr($k15_numpar, 0, 3) - 1, substr($k15_numpar, 3, 3));
 
                     if($usePixIntegration && isPagamentoViaPix($arq_array[$i])) {
-                        $numpre = (new ExtractNumprePaymentReturnService())->execute($arq_array[$i]);
-                        $numpar = '000';
+                        $response = (new ExtractNumprePaymentReturnService())->execute($arq_array[$i]);
+                        $numpre = $response['numpre'];
+                        $numpar = $response['numpar'];
+
                         if ($lDebugAtivo) {
                             echo '<br>numpre do pix: '.$numpre;
                             echo '<br>numpar do pix: '.$numpar;
