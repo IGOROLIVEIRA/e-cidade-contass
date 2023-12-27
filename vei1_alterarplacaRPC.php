@@ -31,8 +31,13 @@ function buscarVeiculo($codigo)
     return buildResponse(2, "Veiculo código $codigo não encontrado.");
   }
 
-  $records = db_utils::getCollectionByRecord($result);
-  return buildResponse(1, "", ['veiculo' => $records[0]]);
+  $veiculo = db_utils::getCollectionByRecord($result)[0];
+  
+  if (isset($veiculo) || $veiculo !== null) {
+    $veiculo->si04_descricao = mb_convert_encoding($veiculo->si04_descricao, 'UTF-8', 'ISO-8859-1');
+  }
+  
+  return buildResponse(1, "", ['veiculo' => $veiculo]);
 }
 
 // Função para alteração da placa do veículo
@@ -53,7 +58,7 @@ function alterarPlaca($dados)
 
   $clveiculos = new cl_veiculos;
 
-  $sql = $clveiculos->sql_query($dados->ve01_codigo, "ve01_codigo,ve01_placa,si04_descricao");
+  $sql = $clveiculos->sql_query($dados->ve01_codigo, "ve01_codigo,ve01_placa,si04_descricao,ve01_dtaquis");
   $result = $clveiculos->sql_record($sql);
 
   if (!$result) {
@@ -74,6 +79,8 @@ function alterarPlaca($dados)
     return buildResponse(2, "A placa informada já está cadastrada para outro veículo.");
   }
 
+  $dataAlteracaoPlaca = convertToDate($dados->ve76_data);
+
   // Verifica a data de encerramento do período patrimonial
   $clcondataconf = new cl_condataconf;
   $sqlConf = $clcondataconf->sql_query_file(db_getsession("DB_anousu"), db_getsession("DB_instit"));
@@ -83,11 +90,15 @@ function alterarPlaca($dados)
     $config = db_utils::getCollectionByRecord($result)[0];
 
     $dataEncerramentoPatrimonial = convertToDate($config->c99_datapat);
-    $dataAlteracaoPlaca = convertToDate($dados->ve76_data);
-
     if ($dataAlteracaoPlaca <= $dataEncerramentoPatrimonial) {
       return buildResponse(2, "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
     }
+  }
+
+  // Valida a data de alteração com a data de aquisição do veículo
+  $dataAquisicao = convertToDate($veiculo->ve01_dtaquis);
+  if ($dataAlteracaoPlaca < $dataAquisicao) {
+    return buildResponse(2, "A data da alteração deve ser posterior à data de aquisição do veículo.");
   }
 
   db_inicio_transacao();
@@ -121,6 +132,10 @@ function alterarPlaca($dados)
     $result = $clveiculos->sql_record($sql);
     $veiculo = db_utils::getCollectionByRecord($result)[0];
 
+    if (isset($veiculo) || $veiculo !== null) {
+      $veiculo->si04_descricao = mb_convert_encoding($veiculo->si04_descricao, 'UTF-8', 'ISO-8859-1');
+    }
+
     return buildResponse(1, "Placa alterada com sucesso!", ["veiculo" =>  $veiculo]);
 
   } catch (Exception $erro) {
@@ -144,8 +159,11 @@ function buscarAlteracao($ve76_sequencial) {
 
   $alterarplaca = db_utils::getCollectionByRecord($result)[0];
 
-  return buildResponse(1, "", ["alterarplaca" =>  $alterarplaca]);
+  if (isset($alterarplaca) || $alterarplaca !== null) {
+    $alterarplaca->ve76_obs = mb_convert_encoding($alterarplaca->ve76_obs, 'UTF-8', 'ISO-8859-1');
+  }
 
+  return buildResponse(1, "", ["alterarplaca" =>  $alterarplaca]);
 }
 
 // Função para excluir a alteração de placa
@@ -226,6 +244,7 @@ function buildResponse($status, $message, $data = [])
   foreach ($data as $key => $value) {
     $oRetorno->$key = $value;
   }
+  
   return $oJson->encode($oRetorno);
 }
 

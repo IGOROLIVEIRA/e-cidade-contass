@@ -32,6 +32,8 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
+include "classes/db_veiculosplaca_classe.php";
+
 
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
@@ -189,6 +191,29 @@ $oDaoVeicCadCentralDepart->rotulo->label("ve37_veiccadcentral");
           }
         }
         if ($pesquisa_chave_placa != null && $pesquisa_chave_placa != "") {
+
+          // Busca o veiculo por placa nas alterações de placa
+          /*
+          $clveiculosplaca  = new cl_veiculosplaca;
+          $sqlBuscaVeiculo = $clveiculosplaca->sql_query(null, "distinct ve76_veiculo", "", "trim(ve76_placaanterior) like '$chave_ve01_placa%'");
+          $resultBuscaVeiculo = $clveiculosplaca->sql_record($sqlBuscaVeiculo);
+
+          $alterarplaca = null;
+          if ($resultBuscaVeiculo != false && $clveiculosplaca->numrows > 0) {
+            if ($clveiculosplaca->numrows == 1) {
+              $alterarplaca = db_utils::getCollectionByRecord($resultBuscaVeiculo)[0];
+            } else {
+              echo "<script>alert('Foi encontrado mais de um veículo com essa placa nas alterações de placa.');</script>";
+            }
+          }
+
+          if (!empty($alterarplaca)) {
+            $sql = $clveiculos->sql_query(null, $campos, "ve01_codigo", "ve01_codigo = $alterarplaca->ve76_veiculo $sWhereInstituicao ");
+          } else {
+            $sSqlVeiculos = $oDaoVeiculos->sql_query_central(null, $sCampos, null, "ve01_placa like'%$pesquisa_chave_placa%' $sWhere");
+          }
+          */
+
           if ($sWhere != "") {
             $sWhere = " and " . $sWhere;
           }

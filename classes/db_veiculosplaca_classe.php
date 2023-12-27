@@ -221,7 +221,7 @@ class cl_veiculosplaca
 
   function sql_query_ultima_alteracao($dbwhere = "")
   {
-    $sql = "select DISTINCT ON (ve76_veiculo) ve76_sequencial,ve76_veiculo,ve76_placaanterior,ve76_placa,ve76_data,ve76_obs, nome as ve76_usuario ";
+    $sql = "select DISTINCT ON (ve76_veiculo) ve76_sequencial,ve76_veiculo,ve76_placaanterior,ve76_placa,ve76_data, LEFT(ve76_obs, 50) ve76_obs, id_usuario || ' - ' || nome as ve76_usuario ";
     
     $sql .= " from  veiculos.veiculosplaca ";
     $sql .= " inner join db_usuarios on id_usuario = ve76_usuario ";

@@ -39,7 +39,7 @@
       <tr>
         <td class="title">Nova Placa:</td>
         <td colspan="2">
-          <? db_input('ve76_placa', 30, $ve76_placa, true, 'text', $db_opcao, "", "", "", 20); ?>
+          <? db_input('ve76_placa', 30, $ve76_placa, true, 'text', $db_opcao, 'onkeyup="js_limpaCaracteresEspeciais(this)"', "", "", "", 7); ?>
         </td>
       </tr>
       <tr>
@@ -47,7 +47,7 @@
       </tr>
       <tr>
         <td colspan="3">
-          <? db_textarea('ve76_obs', 8, 70, $Ive76_obs, true, 'text', $db_opcao, "", "", "", 200); ?>
+          <? db_textarea('ve76_obs', 8, 70, $Ive76_obs, true, 'text', $db_opcao, 'onkeyup="js_limpaCaracteresEspeciais(this, /[^a-zA-Z0-9áéíóúãõâêîôûçÁÉÍÓÚÃÕÂÊÎÔÛÇ ]/g)"', "", "", 200); ?>
         </td>
       </tr>
     </table>
@@ -62,7 +62,11 @@
   (function() {
     document.addEventListener('DOMContentLoaded', js_pesquisaveiculo);
   })();
-  
+
+  function js_limpaCaracteresEspeciais(campo, reg = /[^a-zA-Z0-9]/g) {
+    campo.value = campo.value.replace(reg, '');
+  };
+
   function js_pesquisaveiculo() {
     js_OpenJanelaIframe('top.corpo', 'db_iframe_alterarplaca', 'func_veiculosalt.php?baixa=1&funcao_js=parent.js_buscarveiculo|ve01_codigo', 'Pesquisa Veiculo', true);
   }
@@ -84,11 +88,11 @@
     const campoVe76_placa = document.getElementById('ve76_placa');
 
     if (!validateInput(campoVe76_data, "É necessário informar a data da alteração.")) {
-        return;
+      return;
     }
 
     if (!validateInput(campoVe76_placa, "É necessário informar a nova placa para o veículo.")) {
-        return;
+      return;
     }
 
     const params = {
@@ -114,7 +118,7 @@
 
     if (status !== 1) {
       return;
-    } 
+    }
 
     document.getElementById('ve01_codigo').value = veiculo.ve01_codigo;
     document.getElementById('si04_descricao').value = veiculo.si04_descricao;
@@ -163,10 +167,10 @@
   function validateInput(inputElement, errorMessage) {
     // Check if value is either null, undefined, or empty string
     if (inputElement.value == null || inputElement.value.trim() === "") {
-        alert(`Usuário: ${errorMessage}`);
-        inputElement.style.backgroundColor = "#6E9D88";
-        inputElement.focus();
-        return false;
+      alert(`Usuário: ${errorMessage}`);
+      inputElement.style.backgroundColor = "#6E9D88";
+      inputElement.focus();
+      return false;
     }
     inputElement.style.backgroundColor = "#FFFFFF";
     return true;
