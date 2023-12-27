@@ -75,24 +75,28 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
       }
     }
     $mes = intval($this->sDataFinal['5'] . $this->sDataFinal['6']);
+    $instit = db_getsession("DB_instit");
+
     $sSql = "SELECT    db150_tiporegistro AS tipoRegistro,
                        db150_coditem AS coditem,
-                       db150_dscitem AS dscItem,
+                       (pcmater.pc01_descrmater||substring(pc01_complmater,1,900)) AS dscItem,
                        db150_unidademedida AS unidadeMedida,
                        db150_tipocadastro AS tipoCadastro,
                        '' AS justificativaAlteracao
                 FROM historicomaterial
-                WHERE db150_instit = " . db_getsession("DB_instit") . "
+                INNER JOIN pcmater ON pc01_codmater = db150_pcmater
+                WHERE db150_instit in ($instit,0)
                     AND db150_mes = $mes
                 UNION
                 SELECT db150_tiporegistro AS tipoRegistro,
                        db150_coditem AS coditem,
-                       db150_dscitem AS dscItem,
+                       (pcmater.pc01_descrmater||substring(pc01_complmater,1,900)) AS dscItem,
                        db150_unidademedida AS unidadeMedida,
                        db150_tipocadastro AS tipoCadastro,
                        '' AS justificativaAlteracao
                 FROM historicomaterial
-                WHERE db150_instit = " . db_getsession("DB_instit") . "
+                INNER JOIN pcmater ON pc01_codmater = db150_pcmater
+                WHERE db150_instit in ($instit,0)
                     AND db150_tipocadastro = 2
                     AND db150_mes = $mes";
     $rsResult10 = db_query($sSql);
@@ -135,8 +139,8 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
 
         $clitem10->si43_tiporegistro = 10;
         $clitem10->si43_coditem = $oDados10->coditem;
-        $clitem10->si43_dscItem = trim(preg_replace("/[^a-zA-Z0-9 ]/", "", str_replace($what, $by, $oDados10->dscitem))) . " $oDados10->coditem";
-        $clitem10->si43_unidademedida = trim(preg_replace("/[^a-zA-Z0-9 ]/", "", str_replace($what, $by, $oDados10->unidademedida)));
+        $clitem10->si43_dscItem = str_replace($what, $by, $oDados10->dscitem);
+        $clitem10->si43_unidademedida = str_replace($what, $by, $oDados10->unidademedida);
         $clitem10->si43_tipocadastro = $oDados10->tipocadastro;
         $clitem10->si43_justificativaalteracao = $oDados10->justificativaalteracao;
         $clitem10->si43_instit = db_getsession("DB_instit");
