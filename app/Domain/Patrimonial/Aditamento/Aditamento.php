@@ -14,6 +14,8 @@ class Aditamento
 
     private const TIPO_VIGENCIA_EXECUCAO = 13;
 
+    private const TIPO_ACDC_CONJUGADO = 14;
+
     /**
      * @var integer
      */
@@ -483,6 +485,15 @@ class Aditamento
     public function isVigenciaExecucao(): bool
     {
         return $this->getTipoAditivo() === self::TIPO_VIGENCIA_EXECUCAO;
+    }
+
+     /**
+     *
+     * @return boolean
+     */
+    public function isAcdcConjugado(): bool
+    {
+        return $this->getTipoAditivo() === self::TIPO_ACDC_CONJUGADO;
     }
 
     /**

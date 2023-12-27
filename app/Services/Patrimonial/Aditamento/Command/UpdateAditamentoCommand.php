@@ -74,7 +74,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
                 throw new Exception("Não foi possível atualizar aditamento. Erro em acordoposicao!");
             }
 
-            if ($aditamento->isAlteracaoVigencia()) {
+            if ($aditamento->isAlteracaoVigencia() || $aditamento->isAcdcConjugado()) {
                 $acordoVigenciaRepository = new AcordoVigenciaRepository();
                 $resultVigencia =  $acordoVigenciaRepository->update(
                     $aditamento->getAcordoPosicaoSequencial(),
@@ -117,7 +117,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
                     throw new Exception("Não foi possível atualizar aditamento. Erro em acordoitem, no item: ".  $codigoItem);
                 }
 
-                if($aditamento->isAlteracaoPrazo()) {
+                if($aditamento->isAlteracaoPrazo() || $aditamento->isAcdcConjugado()) {
                     $this->acordItemPeriodRepository->update(
                         $codigoItem,
                         [

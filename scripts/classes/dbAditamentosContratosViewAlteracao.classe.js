@@ -1932,7 +1932,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
           aLinha[13].setDisable(true);
         } else if ($('oCboTipoAditivo').value == 14) {
 
-          oInputQuantidade.setValue(js_formatar(0, "f", 3));
+          oInputQuantidade.setValue(js_formatar(oItem.qtdeanterior, "f", 3));
           aLinha[5] = oInputQuantidade.toInnerHtml();
 
           aLinha[13].setValue(0);
@@ -2559,7 +2559,6 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     me.js_changeTipoAditivo();
     me.lidaLeiLicitacao(aditamento.acordoSequencial);
     me.ocultaDescricaoAlteracao();
-    me.lidaCampoDataReferencia(aditamento.dataAssinatura, aditamento.dataReferencia);
     me.mostracampos();
 
   }
@@ -2601,7 +2600,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
         if (oRetorno.erro == true) {
           if (oRetorno.datareferencia) {
-            document.getElementById("trdatareferencia").style.display = 'contents';
+           return alert(`O período já foi encerrado para envio do SICOM. Altere a Data de Assinatura para uma data posterior. `)
           }
 
           return alert(oRetorno.message.urlDecode());
@@ -2641,12 +2640,6 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     new AjaxRequest(me.sUrlRpc, oParam, function (oRetorno, lErro) {
       if (lErro && !oRetorno.datareferencia) {
         alert("Erro ao validar periodo sicom");
-        return;
-      }
-
-      if (lErro && oRetorno.datareferencia) {
-        document.getElementById("trdatareferencia").style.display = 'contents';
-        $('oTxtDataReferencia').value = dataReferencia;
         return;
       }
 
