@@ -37,7 +37,10 @@ include("classes/db_orcreserva_classe.php");
 include("classes/db_orcreservaaut_classe.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_empautitem_classe.php");
+include("classes/db_empempaut_classe.php");
 $clempautitem = new cl_empautitem;
+$oCodigoAcompanhamento  = new ControleOrcamentario();
+$clempempaut			= new cl_empempaut;
 
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);

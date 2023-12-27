@@ -460,6 +460,7 @@ switch ($oParam->exec) {
         $oEndereco->setFlagLote($oParam->endereco->lLote);
       }
 
+      $oEndereco->setPlanilhaTce($oParam->endereco->planilhaTce);
       $oEndereco->setClasseObjeto($oParam->endereco->classeObjeto);
       $oEndereco->setAtividadeObra($oParam->endereco->atividadeObra);
       $oEndereco->setAtividadeServico($oParam->endereco->atividadeServico);
@@ -476,7 +477,6 @@ switch ($oParam->exec) {
       $oEndereco->setLicita($oParam->endereco->licitacao);
       $oEndereco->setSequencial($oParam->endereco->sequencial);
       $oEndereco->setSeqObrasCodigos($oParam->endereco->seqobrascodigo);
-
 
       $oEndereco->salvaDadosComplementares($oParam->acao);
       db_fim_transacao(false);
