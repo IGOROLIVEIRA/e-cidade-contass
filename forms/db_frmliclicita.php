@@ -1170,13 +1170,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                     </td>
                 </tr>
 
-                <tr id="tr_criterioadjudicao_dispensainexibilidade" style="display:none;">
+                <tr id="tr_criterioadjudicao_dispensainexibilidade" style="display:none;" >
                      <td>
                         <label class="bold">Critério de Adjudicação:</label>
                      </td>
                      <td>
                         <? 
-                        $aCriterios = array("1" => "1- Desconto sobre tabela", "2" => "2 - Menor taxa ou percentual", "3" => "Outros");
+                        $aCriterios = array("1" => "1- Desconto sobre tabela", "2" => "2 - Menor taxa ou percentual", "3" => "3 - Outros");
                         db_select("criterioadjudicao_dispensainexibilidade", $aCriterios, true, '');
                         ?>
                      </td>
@@ -1238,6 +1238,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     js_busca();
 
     js_verificaDatasProposta();
+
+    <?php $postRequest = count($_POST)?>;
+    let postRequest = <? print $postRequest; ?>;
+    postRequest = postRequest == 0 ? false : true;
+    if(postRequest == false){
+        document.getElementById('criterioadjudicao_dispensainexibilidade').value = '3';
+    }
 
     // alterando a função padrao para verificar  as opçoes de convite e de INEXIGIBILIDADE
     function js_ProcCod_l20_codtipocom(proc, res) {
@@ -1306,6 +1313,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         document.getElementById("l212_codigo").style.width = "307px";
         document.getElementById("l20_tipojulg").style.width = "85px";
         document.getElementById("l20_tipoprocesso").style.width = "400px";
+        document.getElementById("criterioadjudicao_dispensainexibilidade").style.width = "400px";
         document.form1.modalidade_tribunal.value = oRetorno.tribunal;
 
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
