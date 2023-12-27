@@ -177,6 +177,15 @@ class cl_liclancedital
 			return false;
 		}
 
+		if ($this->l47_email == "" || $this->l47_email == null) {
+			$this->erro_banco = str_replace("\n", "", @pg_last_error());
+			$this->erro_sql = "O campo email é obrigatório";
+			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+			$this->erro_status = "0";
+			return false;
+		}
+
 		if ((!$this->l47_origemrecurso || $this->l47_origemrecurso == null) && !in_array($iTribunal, array(100, 101, 102, 103))) {
 			$this->erro_banco = str_replace("\n", "", @pg_last_error());
 			$this->erro_sql = "Verifique a origem do recurso";
@@ -215,6 +224,7 @@ class cl_liclancedital
                          ,l47_descrecurso
                          ,l47_dataenvio
                          ,l47_liclicita
+                         ,l47_email
                 )
                 values (
 						$this->l47_sequencial
@@ -223,6 +233,7 @@ class cl_liclancedital
 						,'$this->l47_descrecurso'
 						," . ($this->l47_dataenvio == "null" || $this->l47_dataenvio == "" ? "null" : "'" . $this->l47_dataenvio . "'") . "
 						,$this->l47_liclicita
+                        ,'$this->l47_email'
                 	)";
 
 		$result = db_query($sql);
