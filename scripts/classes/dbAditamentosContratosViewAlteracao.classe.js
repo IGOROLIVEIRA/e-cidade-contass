@@ -1331,7 +1331,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     if ( !lAditar) {
       return;
     }
-    
+
     me.alterarAdiamento(oParam);
     return;
   }
@@ -2225,11 +2225,14 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     const oCboTipoAditivo = $('oCboTipoAditivo').value;
 
     if (oCboTipoAditivo == 14) {
-
+      console.log("passou linha 2228");
       $('oTextAreaDescricaoAlteracao').removeClassName('readonly');
       $('oTextAreaDescricaoAlteracao').readOnly = false;
 
-    } else if (oCboTipoAditivo == 6 || oCboTipoAditivo == 13 || oCboTipoAditivo == 14) {
+    }
+
+    if (oCboTipoAditivo == 6 || oCboTipoAditivo == 13 || oCboTipoAditivo == 14) {
+
       $('oTxtDataInicial').readOnly = false;
       $('oTxtDataInicial').style.backgroundColor = 'white';
       $('oTxtDataFinal').readOnly = false;
@@ -2238,7 +2241,9 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       $('dtjs_oTxtDataInicial').disabled = false;
       $('dtjs_oTxtDataFinal').disabled = false;
 
-    } else if (oCboTipoAditivo == 12) {
+    }
+
+    if (oCboTipoAditivo == 12) {
       $('btnItens').style.display = '';
       $('btnItens').observe('click', me.novoItem);
     }
@@ -2541,6 +2546,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     $('oTextAreaDescricaoAlteracao').value = aditamento.descricaoAlteracao;
     $('oPercentualReajuste').value = aditamento.percentualReajuste;
     $('oIndiceReajuste').value = aditamento.indiceReajuste;
+    me.oTxtDataFinalCompara.setData(aditamento.vigenciaFim);
 
 
     me.ajusteInicialGrid();
