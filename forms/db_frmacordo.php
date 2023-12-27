@@ -226,7 +226,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                         $aValores,
                                                         true,
                                                         $db_opcao,
-                                                        "onchange='js_exibeBotaoJulgamento();js_validaCampoValor();js_verificaorigem();'"
+                                                        "onchange='js_exibeBotaoJulgamento();js_validaCampoValor();js_verificaorigem();exibicaoVigenciaIndeterminada();'"
                                                     );
 
                                                     ?>
@@ -250,7 +250,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                         8 => '8 - Licitação realizada por consorcio público',
                                                         9 => '9 - Licitação realizada por outro ente da federação',
                                                     );
-                                                    db_select('ac16_tipoorigem', $aValores, true, $db_opcao, "onchange='js_verificatipoorigem()'", "");
+                                                    db_select('ac16_tipoorigem', $aValores, true, $db_opcao, "onchange='js_verificatipoorigem();exibicaoVigenciaIndeterminada();'", "");
 
                                                     ?>
                                                 </td>
@@ -1793,7 +1793,6 @@ db_app::load("dbtextFieldData.widget.js");
      *funçao para verificar tipo origem do acordo para listar ancorar relacionada
      */
     function js_verificatipoorigem() {
-        js_alteracaoVigencia($('ac16_vigencia').value);
         iTipoOrigem = document.form1.ac16_tipoorigem.value;
         iOrigem = document.form1.ac16_origem.value;
 
@@ -2015,17 +2014,6 @@ db_app::load("dbtextFieldData.widget.js");
     ?>
 
     function js_alteracaoVigencia(vigenciaIndeterminada){
-        leilicitacao = document.getElementById('leidalicitacao').value;
-        let aOrigensValidas = ["2","3"];
-        let iTipoOrigem = $('ac16_tipoorigem').value;
-        if(!aOrigensValidas.includes(iTipoOrigem)){
-            document.getElementById('tr_vigenciaindeterminada').style.display = 'none';
-            document.getElementsByClassName('vigencia_final')[0].style.display = '';
-            document.getElementsByClassName('vigencia_final')[1].style.display = '';
-            return false;
-        } 
-        
-        document.getElementById('tr_vigenciaindeterminada').style.display = '';
 
         if(vigenciaIndeterminada == 1){
             document.getElementsByClassName('vigencia_final')[0].style.display = 'none';
@@ -2035,5 +2023,24 @@ db_app::load("dbtextFieldData.widget.js");
         document.getElementsByClassName('vigencia_final')[0].style.display = '';
         document.getElementsByClassName('vigencia_final')[1].style.display = '';
        
+    }
+
+    function exibicaoVigenciaIndeterminada(){
+        let origensValidas = ["2","3"];
+        let tipoOrigem = $('ac16_tipoorigem').value;
+        let origem = $('ac16_origem').value;
+        let leiLicitacao = $('leidalicitacao').value;
+
+        js_alteracaoVigencia($('ac16_vigencia').value);
+
+        if(origem == "2" && origensValidas.includes(tipoOrigem) && leiLicitacao == "1"){
+            document.getElementById('tr_vigenciaindeterminada').style.display = '';
+            return;
+        }
+
+        document.getElementById('tr_vigenciaindeterminada').style.display = 'none';
+        document.getElementsByClassName('vigencia_final')[0].style.display = '';
+        document.getElementsByClassName('vigencia_final')[1].style.display = '';
+        
     }
 </script>

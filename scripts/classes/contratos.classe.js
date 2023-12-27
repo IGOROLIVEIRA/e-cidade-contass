@@ -242,23 +242,22 @@ contrato = function () {
 
         }
 
-    this.verificacredenciamentotermo = function() {
-        var oParam     = new Object();
-        oParam.exec    = "verificaCredenciamentoTermo";
-        aItensSelecionados.each(function(oLinha, id) {
-            oParam.iLicitacao = oLinha.aCells[1].getContent();;
-        });
+        this.verificacredenciamentotermo = function() {
+            var oParam     = new Object();
+            oParam.exec    = "verificaCredenciamentoTermo";
+            aItensSelecionados.each(function(oLinha, id) {
+                oParam.iLicitacao = oLinha.aCells[1].getContent();;
+            });
 
-        var oAjax   = new Ajax.Request(
-            sURL,
-            {
-                method    : 'post',
-                parameters: 'json='+Object.toJSON(oParam),
-                onComplete: me.retornoVerificaTermoCredenciamento
-            }
-        );
-    }
-//cntDados
+            var oAjax   = new Ajax.Request(
+                sURL,
+                {
+                    method    : 'post',
+                    parameters: 'json='+Object.toJSON(oParam),
+                    onComplete: me.retornoVerificaTermoCredenciamento
+                }
+            );
+        }
 
         var oParam     = new Object();
         oParam.exec    = "setDadosSelecao";
@@ -290,11 +289,20 @@ contrato = function () {
         if (oRetorno.status == 1) {
 
             oJanela.destroy();
-            let aLicitacaoSelecionada = oGridDados.getSelection("object");
-            $('ac16_licitacao').value = aLicitacaoSelecionada[0].aCells[1].content;
+
+            let origensValidas = ["2","3"];
+            let tipoOrigem = $('ac16_tipoorigem').value;
+
+            if($('ac16_origem').value == "2" && origensValidas.includes(tipoOrigem)){
+                let aLicitacaoSelecionada = oGridDados.getSelection("object");
+                $('ac16_licitacao').value = aLicitacaoSelecionada[0].aCells[1].content;
+                me.getLeiLicitacao();
+            } else {
+                document.getElementById('tr_vigenciaindeterminada').style.display = 'none';
+                $('leidalicitacao').value = oRetorno.leiLicitacao;
+            }
+
             $('ac16_deptoresponsavel').focus();
-            me.getLeiLicitacao();
-            js_alteracaoVigencia($('ac16_vigencia').value);
 
         } else {
             alert(oRetorno.message.urlDecode());
@@ -887,17 +895,18 @@ contrato = function () {
                 asynchronous: false,
                 onComplete: function(oAjax) {
                     var oRetorno = eval("(" + oAjax.responseText.urlDecode() + ")");
+                    
                     $('leidalicitacao').value = oRetorno.leiLicitacao;
-                    let aOrigensValidas = ["2","3"];
-                    let iTipoOrigem = $('ac16_tipoorigem').value;
-                    if(!aOrigensValidas.includes(iTipoOrigem)){
-                        return false;
-                    } 
-                    if($('leidalicitacao').value == "1"){
+                    js_alteracaoVigencia($('ac16_vigencia').value);
+
+                    if(oRetorno.leiLicitacao == "1"){
                         document.getElementById('tr_vigenciaindeterminada').style.display = '';
                         return;
                     }
+
                     document.getElementById('tr_vigenciaindeterminada').style.display = 'none';
+                    document.getElementsByClassName('vigencia_final')[0].style.display = '';
+                    document.getElementsByClassName('vigencia_final')[1].style.display = '';
                 }
             }
         );
