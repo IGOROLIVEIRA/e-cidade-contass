@@ -143,7 +143,7 @@ $iInstituicao = db_getsession("DB_instit");
           if (isset($chave_ve01_codigo) && (trim($chave_ve01_codigo) != "")) {
             $sql = $clveiculos->sql_query($chave_ve01_codigo, $campos, "ve01_codigo", "ve01_codigo=$chave_ve01_codigo and instit = {$iInstituicao} ");
           } else if (isset($chave_ve01_placa) && (trim($chave_ve01_placa) != "")) {
-          
+
             // Busca o veiculo por placa nas alterações de placa
             $clveiculosplaca  = new cl_veiculosplaca;
             $sqlBuscaVeiculo = $clveiculosplaca->sql_query(null, "distinct ve76_veiculo", "", "trim(ve76_placaanterior) like '$chave_ve01_placa%'");
@@ -153,12 +153,10 @@ $iInstituicao = db_getsession("DB_instit");
             if ($resultBuscaVeiculo != false && $clveiculosplaca->numrows > 0) {
               if ($clveiculosplaca->numrows == 1) {
                 $alterarplaca = db_utils::getCollectionByRecord($resultBuscaVeiculo)[0];
-              } else {
-                echo "<script>alert('Foi encontrado mais de um veículo com essa placa nas alterações de placa.');</script>";
               }
             }
-            
-            if(!empty($alterarplaca)) {
+
+            if (!empty($alterarplaca)) {
               $sql = $clveiculos->sql_query($chave_ve01_codigo, $campos, "ve01_codigo", "ve01_codigo=$alterarplaca->ve76_veiculo and instit = {$iInstituicao} ");
             } else {
               $sql = $clveiculos->sql_query("", $campos, "ve01_placa", " trim(ve01_placa) like '$chave_ve01_placa%' and instit = {$iInstituicao} ");

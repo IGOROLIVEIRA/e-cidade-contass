@@ -55,7 +55,7 @@ if (isset($oGet->iVeiculo) && trim($oGet->iVeiculo) != "") {
 }
 
 if (isset($oGet->sPlaca) && trim($oGet->sPlaca) != "") {
-  
+
   // Busca o veiculo por placa nas alterações de placa
   $clveiculosplaca  = new cl_veiculosplaca;
   $sqlBuscaVeiculo = $clveiculosplaca->sql_query(null, "distinct ve76_veiculo", "", "trim(ve76_placaanterior) like '$oGet->sPlaca%'");
@@ -65,11 +65,9 @@ if (isset($oGet->sPlaca) && trim($oGet->sPlaca) != "") {
   if ($resultBuscaVeiculo != false && $clveiculosplaca->numrows > 0) {
     if ($clveiculosplaca->numrows == 1) {
       $alterarplaca = db_utils::getCollectionByRecord($resultBuscaVeiculo)[0];
-    } else {
-      echo "<script>alert('Foi encontrado mais de um veículo com essa placa nas alterações de placa.');</script>";
     }
   }
-  
+
   if (!empty($alterarplaca)) {
     $aWhere[] = " ve01_codigo = {$alterarplaca->ve76_veiculo}";
   } else {
@@ -81,7 +79,7 @@ if (isset($oGet->iCentral) && trim($oGet->iCentral) != '') {
   $aWhere[] .= " ve40_veiccadcentral = {$oGet->iCentral}";
 }
 $sWhere        = implode(" and ", $aWhere);
-$slistaCampos  = "distinct ve01_codigo,ve01_placa,upper(si05_descricao) as si05_descricao,ve21_descr,"; 
+$slistaCampos  = "distinct ve01_codigo,ve01_placa,upper(si05_descricao) as si05_descricao,ve21_descr,";
 $slistaCampos .= "ve22_descr,ve23_descr,ve01_chassi,ve01_certif,ve01_anofab,ve01_anomod";
 
 $funcao_js     = 'carregaVeiculo|ve01_codigo';
@@ -93,29 +91,31 @@ $sSqlVeiculos  = $oDaoVeiculos->sql_query(null, $slistaCampos, 've01_codigo', $s
 
 ?>
 <html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link href="estilos.css" rel="stylesheet" type="text/css">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-<script type="text/javascript">
-  function carregaVeiculo(iCod) {
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link href="estilos.css" rel="stylesheet" type="text/css">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+  <script type="text/javascript">
+    function carregaVeiculo(iCod) {
 
-    var iWidth = document.body.scrollWidth-100;
-    var sUrl = 'vei3_veiculos002.php?veiculo='+iCod;
+      var iWidth = document.body.scrollWidth - 100;
+      var sUrl = 'vei3_veiculos002.php?veiculo=' + iCod;
 
-	  parent.func_veiculo.hide();
-    js_OpenJanelaIframe('CurrentWindow.corpo','func_veiculo_detalhes', sUrl,'Consulta de Veículos',true, 20, 0, iWidth);
-  }
-</script>
+      parent.func_veiculo.hide();
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'func_veiculo_detalhes', sUrl, 'Consulta de Veículos', true, 20, 0, iWidth);
+    }
+  </script>
 </head>
+
 <body bgcolor="#CCCCCC" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-  <table border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
+  <table border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
     <tr>
       <td>
 
         <?php
-          db_lovrot($sSqlVeiculos, 15, "()", "%", $funcao_js, "", "NoMe", array(), true);
+        db_lovrot($sSqlVeiculos, 15, "()", "%", $funcao_js, "", "NoMe", array(), true);
         ?>
 
       </td>

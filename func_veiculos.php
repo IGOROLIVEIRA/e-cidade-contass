@@ -207,8 +207,6 @@ $clveiculos->rotulo->label("si04_especificacao");
             if ($resultBuscaVeiculo != false && $clveiculosplaca->numrows > 0) {
               if ($clveiculosplaca->numrows == 1) {
                 $alterarplaca = db_utils::getCollectionByRecord($resultBuscaVeiculo)[0];
-              } else {
-                echo "<script>alert('Foi encontrado mais de um veículo com essa placa nas alterações de placa.');</script>";
               }
             }
 
@@ -216,7 +214,7 @@ $clveiculos->rotulo->label("si04_especificacao");
               $sql = $clveiculos->sql_query(null, $campos, "ve01_codigo", "ve01_codigo = $alterarplaca->ve76_veiculo $sWhereInstituicao ");
             } else {
               $sql = $clveiculos->sql_query("", $campos, "ve01_placa", "ve01_placa = '$chave_ve01_placa' $sWhereInstituicao ");
-            }           
+            }
           } else if (isset($chave_ve01_veiccadmodelo)  && trim($chave_ve01_veiccadmodelo) != "" && $chave_ve01_veiccadmodelo > 0) {
             $sql = $clveiculos->sql_query("", $campos, "veiccadmodelo.ve22_descr", "ve01_veiccadmodelo = $chave_ve01_veiccadmodelo $sWhereInstituicao ");
           } else if (isset($chave_ve01_veiccadmarca) && trim($chave_ve01_veiccadmarca) != ""  && $chave_ve01_veiccadmarca > 0) {

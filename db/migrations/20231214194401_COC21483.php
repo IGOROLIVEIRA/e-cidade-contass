@@ -48,7 +48,7 @@ class AddTableVeiculosplaca extends PostgresMigration
           CREATE TABLE veiculos.veiculosplaca (
               ve76_sequencial int8 NOT NULL DEFAULT nextval('veiculosplaca_ve76_sequencial_seq'),
               ve76_veiculo int4 NOT NULL,
-              ve76_placa varchar(7) NOT NULL,
+              ve76_placa varchar(8) NOT NULL,
               ve76_placaanterior varchar(7),
               ve76_obs varchar(200),
               ve76_data date NOT NULL,
