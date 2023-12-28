@@ -52,7 +52,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
   }
 
   function tirarAcentos($string){
-    return preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"),$string);
+    return preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/","/(ç)/","/(Ç)/"),explode(" ","a A e E i I o O u U n N c C"),$string);
   }
 
   /**
@@ -83,7 +83,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     $sSql = "SELECT    db150_tiporegistro AS tipoRegistro,
                        db150_coditem AS coditem,
-                       (pcmater.pc01_descrmater||substring(pc01_complmater,1,900)) AS dscItem,
+                       regexp_replace(pcmater.pc01_descrmater||' '||substring(pc01_complmater,1,900), ' +', ' ', 'g') AS dscItem,
                        db150_unidademedida AS unidadeMedida,
                        db150_tipocadastro AS tipoCadastro,
                        '' AS justificativaAlteracao
@@ -94,7 +94,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
                 UNION
                 SELECT db150_tiporegistro AS tipoRegistro,
                        db150_coditem AS coditem,
-                       (pcmater.pc01_descrmater||substring(pc01_complmater,1,900)) AS dscItem,
+                       regexp_replace(pcmater.pc01_descrmater||' '||substring(pc01_complmater,1,900), ' +', ' ', 'g') AS dscItem,
                        db150_unidademedida AS unidadeMedida,
                        db150_tipocadastro AS tipoCadastro,
                        '' AS justificativaAlteracao
@@ -104,7 +104,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
                     AND db150_tipocadastro = 2
                     AND db150_mes = $mes";
     $rsResult10 = db_query($sSql);
-
+    //db_criatabela($rsResult10);exit;
        for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $clitem10 = new cl_item102023();
@@ -136,7 +136,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
 
         $clitem10->si43_tiporegistro = 10;
         $clitem10->si43_coditem = $oDados10->coditem;
-        $clitem10->si43_dscItem = $this->tirarAcentos($oDados10->dscitem);
+        $clitem10->si43_dscItem = preg_replace('/\s+/', ' ', (preg_replace("/[^a-zA-Z0-9 ]/", "",$this->tirarAcentos(strtoupper($oDados10->dscitem)))));
         $clitem10->si43_unidademedida = $this->tirarAcentos($oDados10->unidademedida);
         $clitem10->si43_tipocadastro = $oDados10->tipocadastro;
         $clitem10->si43_justificativaalteracao = $oDados10->justificativaalteracao;
