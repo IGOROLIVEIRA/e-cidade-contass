@@ -443,6 +443,8 @@ unset($_GET['viewAlterar']);
                     $('justificativa').style.display = 'none';
                 }
 
+            validaAcordoDotacoesAnoOrigem(chave1);
+
             }).setMessage("Aguarde, pesquisando acordos.")
             .execute();
         $('ac16_sequencial').value = chave1;
@@ -450,6 +452,34 @@ unset($_GET['viewAlterar']);
 
         pesquisarDadosAcordo(chave1);
         db_iframe_acordo.hide();
+
+        // validaAcordoDotacoesAnoOrigem($('ac16_sequencial').value);
+    }
+
+    function validaAcordoDotacoesAnoOrigem(codigoAcordo) {
+        let anoOrigem = "<?php echo db_getsession('DB_anousu'); ?>";
+        let anoDestino = "<?php echo db_getsession('DB_anousu') + 1; ?>";
+
+        let oParametros = {};
+        oParametros.anoOrigem = anoOrigem;
+        oParametros.anoDestino = anoDestino;
+        oParametros.codigoAcordo = codigoAcordo;
+        oParametros.somenteConsulta = true;
+
+        new Ajax.Request('ac04_alteradotacoescontratos.RPC.php', {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParametros),
+            onComplete: function(oResponse) {
+                const oRetorno = eval("(" + oResponse.responseText + ")");
+                if (oRetorno.materiaisSemDotacoes === true) {
+                    if (oRetorno.todosItensSemDotacoes === true) {
+                        alert(`Todos os itens deste contrato estão sem dotações para o ano ${anoOrigem}. Acessar a rotina Módulo Contratos > Procedimentos - Acordo - Alteração de Dotação e realizar a alteração para prosseguir com o procedimento.`);
+                    } else {
+                        alert(`Os itens ${oRetorno.itens} estão sem dotações para o ano ${anoOrigem}. Acessar a rotina Módulo Contratos > Procedimentos - Acordo - Alteração de Dotação e realizar a alteração para prosseguir com o procedimento.`);
+                    }
+                }
+            }
+        });
     }
 
     function pesquisarDadosAcordo(iAcordo) {

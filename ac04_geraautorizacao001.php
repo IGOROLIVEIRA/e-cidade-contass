@@ -396,6 +396,9 @@ if ($x->consultarDataDoSistema == true) {
 
     var tipocompratribunal = '';
 
+    let anoOrigem = "<?php echo db_getsession('DB_anousu'); ?>";
+    let anoDestino = "<?php echo db_getsession('DB_anousu') + 1; ?>";
+
     /** Array com os ids dos itens com erro nas quantidades/valores das dotações */
     var aIdItensErro = new Array();
 
@@ -482,7 +485,6 @@ if ($x->consultarDataDoSistema == true) {
         document.getElementById('e54_emissao').style.backgroundColor = 'white';
         js_getUltimaPosicao();
 
-
     }
 
     /**
@@ -498,6 +500,33 @@ if ($x->consultarDataDoSistema == true) {
         document.getElementById('e54_emissao').style.backgroundColor = 'white';
         db_iframe_acordo.hide();
         js_getUltimaPosicao();
+
+        let oParametros = {};
+        oParametros.anoOrigem = anoOrigem;
+        oParametros.anoDestino = anoDestino;
+        oParametros.codigoAcordo = oTxtCodigoAcordo.getValue();
+        oParametros.somenteConsulta = true;
+
+        new Ajax.Request('ac04_alteradotacoescontratos.RPC.php', {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParametros),
+            onComplete: function(oResponse) {
+                const oRetorno = eval("(" + oResponse.responseText + ")");
+                if (oRetorno.materiaisSemDotacoes === true) {
+                    if (oRetorno.todosItensSemDotacoes === true) {
+                        setTimeout(function(){
+                            alert(`Todos os itens deste contrato estão sem dotações para o ano ${anoOrigem}. Acessar a rotina Módulo Contratos > Procedimentos - Acordo - Alteração de Dotação e realizar a alteração para prosseguir com o procedimento.`);
+                        }, 7000);
+                    } else {
+                        setTimeout(function(){
+                            alert(`Os itens ${oRetorno.itens} estão sem dotações para o ano ${anoOrigem}. Acessar a rotina Módulo Contratos > Procedimentos - Acordo - Alteração de Dotação e realizar a alteração para prosseguir com o procedimento.`);
+                        }, 7000);
+                    }
+                }
+            }
+        });
+
+
     }
 
     function js_main() {
@@ -1342,7 +1371,7 @@ if ($x->consultarDataDoSistema == true) {
     }
 
     function js_consultarDataDoSistema(lProcessar) {
-        
+
         if($('e54_codcom').value == "0") return alert("Selecione o tipo.");
 
         let botao = $('btnSalvarAutorizacoes');
@@ -1587,7 +1616,7 @@ if ($x->consultarDataDoSistema == true) {
         if((oRetorno.sTipoOrigem == '4' ) && oRetorno.sAdesaoRegPreco == ''){
             return alert ('Usuário: Inclusão abortada. Contrato de origem ' + aTipoOrigem[oRetorno.sTipoOrigem] + ' sem vínculo com Adesão de Registro de Preço. Gentileza entrar em contato com o suporte para a vinculação correta.');
         }
-        
+
         if(aTipoOrigemLicitacaoOutrosOrgaos.includes(oRetorno.sTipoOrigem)  && oRetorno.sLicitacaooutroorgao == ''){
             return alert ('Usuário: Inclusão abortada. Contrato de origem ' + aTipoOrigem[oRetorno.sTipoOrigem] + ' sem vínculo com Licitação de Outros Órgãos. Gentileza entrar em contato com o suporte para a vinculação correta.');
         }
