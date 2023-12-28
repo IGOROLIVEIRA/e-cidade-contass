@@ -11,16 +11,7 @@ $clrotulo->label("si06_anoproc");
 if (strpos($_SERVER['HTTP_REFERER'], 'con4_adesaoitensregprecos002.php')) {
   $db_opcao = 2;
   echo "<script> ";
-  echo "parent.document.formaba.db_itens.disabled = true;
-  js_OpenJanelaIframe('', 'db_iframe_adesaoregprecos', 'func_adesaoregprecos.php?funcao_js=parent.js_preenchepesquisa|si06_sequencial|si06_anocadastro', 'Pesquisa', true);";
-  echo "</script>";
-}
-
-if (strpos($_SERVER['HTTP_REFERER'], 'con4_adesaoitensregprecos003.php')) {
-  $db_opcao = 3;
-  echo "<script> ";
-  echo "parent.document.formaba.db_itens.disabled = true;
-  js_OpenJanelaIframe('', 'db_iframe_adesaoregprecos', 'func_adesaoregprecos.php?funcao_js=parent.js_preenchepesquisa|si06_sequencial|si06_anocadastro', 'Pesquisa', true);";
+  echo "js_OpenJanelaIframe('', 'db_iframe_adesaoregprecos', 'func_adesaoregprecos.php?funcao_js=parent.js_preenchepesquisa|si06_sequencial|si06_anocadastro', 'Pesquisa', true);";
   echo "</script>";
 }
 
@@ -492,7 +483,6 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
   }
 
   function js_pesquisa() {
-    parent.document.formaba.db_itens.disabled = true;
     js_OpenJanelaIframe('', 'db_iframe_adesaoregprecos', 'func_adesaoregprecos.php?funcao_js=parent.js_preenchepesquisa|si06_sequencial|si06_anocadastro', 'Pesquisa', true);
   }
 

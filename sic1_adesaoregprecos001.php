@@ -23,39 +23,24 @@ if (isset($incluir) || isset($alterar)) {
 
 
   if (isset($incluir)) {
-    $dataAux = $si06_dataadesao_ano + 1;
-    $resultado = db_query("select * from adesaoregprecos where si06_dataadesao >= '$si06_dataadesao_ano-01-01 00:00:00' 
-    and si06_dataadesao < '$dataAux-01-01 00:00:00' and si06_numeroadm = $si06_numeroadm");
 
-    $objeto = db_utils::fieldsMemory($resultado, 0);
+    $rsAdesao = db_query("select * from adesaoregprecos where si06_anomodadm = $si06_anomodadm and si06_numeroadm = $si06_numeroadm");
 
-    if ($objeto->si06_dataadesao != null) {
-      $erro_msg = 'Erro, o número do processo de adesão informado já está sendo utilizado no exercício de ' . $si06_dataadesao_ano;
+    if(pg_num_rows($rsAdesao) > 0){
+      $erro_msg = 'Erro, o número do processo de adesão informado já está sendo utilizado no exercício de ' . $si06_anomodadm;
       $sqlerro = true;
     }
+
   }
-
-
+  
   if (isset($alterar)) {
+    $rsAdesao = db_query("select * from adesaoregprecos where si06_numeroadm = $si06_numeroadm and si06_anomodadm != (select si06_anomodadm from adesaoregprecos where si06_sequencial = $si06_sequencial) and si06_anomodadm = $si06_anomodadm;");
 
-    $resultado = db_query("select * from adesaoregprecos where si06_numeroadm = $si06_numeroadm  ");
-    $objeto = db_utils::fieldsMemory($resultado, 0);
-    $tamanho = pg_num_rows($resultado);
-
-    $registroDePrecoSelecionado = db_query("select * from adesaoregprecos where si06_sequencial = $si06_sequencial");
-    $objetoRegistroDePrecoSelecionado = db_utils::fieldsMemory($registroDePrecoSelecionado, 0);
-    $anoAdesaoSelecionado = substr($objetoRegistroDePrecoSelecionado->si06_dataadesao, 0, strpos($objetoRegistroDePrecoSelecionado->si06_dataadesao, "-"));
-
-
-    for ($i = 0; $i < $tamanho; $i++) {
-      $objeto = db_utils::fieldsMemory($resultado, $i);
-      $ano = substr($objeto->si06_dataadesao, 0, strpos($objeto->si06_dataadesao, "-"));
-
-      if ($objeto->si06_dataadesao != null && ($si06_dataadesao_ano == $ano && $si06_dataadesao_ano != $anoAdesaoSelecionado)) {
-        $erro_msg = 'Erro, o número do processo de adesão informado já está sendo utilizado no exercício de ' . $ano;
-        $sqlerro = true;
-      }
+    if(pg_num_rows($rsAdesao) > 0){
+      $erro_msg = 'Erro, o número do processo de adesão informado já está sendo utilizado no exercício de ' . $si06_anomodadm;
+      $sqlerro = true;
     }
+
   }
 
   $sDataAta = join('-', array_reverse(explode('/', $si06_dataata)));
@@ -262,7 +247,7 @@ if (!$sqlerro) {
 
 <?
 
-if(isset($incluir) && $sqlerro){
+if($sqlerro){
   echo "<script>";
   echo "alert('$erro_msg');";
   echo "</script>";
