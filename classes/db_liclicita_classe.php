@@ -1937,11 +1937,11 @@ class cl_liclicita
             $sql .= $virgula . " l20_receita = '$this->l20_receita'";
             $virgula = ",";
         }
-       
+
         $sql .= " where ";
         if ($l20_codigo != null) {
             $sql .= " l20_codigo = $this->l20_codigo";
-        }        
+        }
         $result = db_query($sql);
 
 
