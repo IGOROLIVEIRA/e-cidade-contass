@@ -1,3 +1,9 @@
+<?
+$clrotulo = new rotulocampo;
+$clrotulo->label("ve01_placa");
+$clrotulo->label("ve76_placa");
+$clrotulo->label("ve76_obs");
+?>
 <style>
   .title {
     font-weight: bold;
@@ -33,13 +39,13 @@
       <tr>
         <td class="title">Placa Atual:</td>
         <td colspan="2">
-          <? db_input('ve01_placa', 30, $ve01_placa, true, 'text', 3, ""); ?>
+          <? db_input('ve01_placa', 30, $Ive01_placa, true, 'text', 3, ""); ?>
         </td>
       </tr>
       <tr>
         <td class="title">Nova Placa:</td>
         <td colspan="2">
-          <? db_input('ve76_placa', 30, $ve76_placa, true, 'text', $db_opcao, 'onkeyup="js_limpaCaracteresEspeciais(this)"', "", "", "", 7); ?>
+          <? db_input('ve76_placa', 30, $Ive76_placa, true, 'text', $db_opcao, '') ?>
         </td>
       </tr>
       <tr>

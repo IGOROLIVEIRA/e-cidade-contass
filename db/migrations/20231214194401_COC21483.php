@@ -36,6 +36,10 @@ class AddTableVeiculosplaca extends PostgresMigration
           INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Exclusão','Exclusão','vei1_alterarplaca003.php',1,1,'Exclusão','t');
           INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like 'Alteracão de Placa'),(select max(id_item) from db_itensmenu),2,633);
 
+          -- Altera o campo placa para 8 caracteres
+          ALTER TABLE veiculos.veiculos ALTER COLUMN ve01_placa TYPE varchar(8);
+          UPDATE db_syscampo SET conteudo = 'varchar(8)', tamanho = 8 WHERE nomecam = 've01_placa';
+
           -- Cria o sequencial da tablea
           CREATE SEQUENCE veiculos.veiculosplaca_ve76_sequencial_seq
               INCREMENT 1
@@ -66,7 +70,7 @@ class AddTableVeiculosplaca extends PostgresMigration
           VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_veiculo', 'int4', 'Código Veículo', '', 'Veículo', 4, false, false, false, 1, 'text', 'Veículo');
 
           INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
-          VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_placa', 'varchar(7)', 'Placa', '', 'Placa Atual', 7, false, false, false, 1, 'text', 'Placa Atual');
+          VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_placa', 'varchar(8)', 'Placa', '', 'Placa Atual', 8, false, false, false, 1, 'text', 'Placa Atual');
 
           INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
           VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_placaanterior', 'varchar(7)', 'Placa Anterior', '', 'Placa Anterior', 7, false, false, false, 1, 'text', 'Placa Anterior');
