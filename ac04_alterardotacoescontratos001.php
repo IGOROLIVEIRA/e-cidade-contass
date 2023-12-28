@@ -84,6 +84,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
     const iAnoOrigem = document.getElementById("iAnoOrigem");
     const iAnoDestino = document.getElementById("iAnoDestino");
     let anoDestino = "<?php echo db_getsession('DB_anousu') + 1; ?>";
+    const codigoInstituicao = "<?php echo db_getsession('DB_instit'); ?>";
 
     iAnoOrigem.value = "<?php echo db_getsession('DB_anousu'); ?>";
     iAnoDestino.value = anoDestino;
@@ -92,6 +93,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
         let oParametros = {};
         oParametros.anoOrigem = $F('iAnoOrigem');
         oParametros.anoDestino = anoDestino;
+        oParametros.codigoInstituicao = codigoInstituicao;
         js_divCarregando('Aguarde, Atualizando leituras...<br>Esse procedimento pode levar algum tempo.', 'msgBox');
         new Ajax.Request('ac04_alteradotacoescontratos.RPC.php', {
             method: 'post',
