@@ -72,7 +72,8 @@ class OrcDotacao extends LegacyModel
                     ELSE ''
                 END,
                 o58_unidade, '.',
-                o58_funcao, '.', o58_subfuncao, '.', o58_programa, '.', o58_projativ, '.', orcelemento.o56_elemento, '.', o58_codigo) AS estrutural"),
+                o58_funcao, '.', o58_subfuncao, '.',
+                LPAD(o58_programa::text, 4, '0'), '.', o58_projativ, '.', orcelemento.o56_elemento, '.', o58_codigo) AS estrutural"),
                 'o58_anousu'
             );
     }
