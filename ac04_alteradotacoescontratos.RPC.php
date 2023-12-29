@@ -76,7 +76,7 @@ if (!isset($oParam->somenteConsulta) && !$oParam->somenteConsulta) {
         ->get();
 
     $resultadoDotacoesAcordosOrcamentos = $acordosDotacoesAnoOrigem
-        ->whereIn('estrutural', $orcamentosDotacoesAnoDestino->pluck('estrutural'))->take(3);
+        ->whereIn('estrutural', $orcamentosDotacoesAnoDestino->pluck('estrutural'));
 
     $dotacoesAcordosOrcamentosNaoInseridas = $acordosDotacoesAnoOrigem
         ->whereNotIn('estrutural', $orcamentosDotacoesAnoDestino->pluck('estrutural'));
