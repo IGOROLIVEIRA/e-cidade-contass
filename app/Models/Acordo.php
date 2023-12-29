@@ -86,7 +86,8 @@ class Acordo extends LegacyModel
                     WHEN o58_unidade < 10 THEN '0'
                     ELSE ''
                 END,
-                o58_unidade, '.', o58_funcao, '.', o58_subfuncao, '.', o58_programa, '.', o58_projativ, '.', o56_elemento, '.', o58_codigo) AS estrutural"),
+                o58_unidade, '.', o58_funcao, '.', o58_subfuncao, '.',
+                LPAD(o58_programa::text, 4, '0'), '.', o58_projativ, '.', o56_elemento, '.', o58_codigo) AS estrutural"),
                 'orcdotacao.o58_anousu',
                 'acordoitem.ac20_sequencial AS acordoitem',
                 'acordoitem.ac20_valortotal AS valor',
