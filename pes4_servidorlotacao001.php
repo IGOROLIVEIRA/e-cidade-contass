@@ -25,25 +25,20 @@
  *                                licenca/licenca_pt.txt
  */
 
-require("libs/db_stdlib.php");
-require("libs/db_conecta.php");
-include("libs/db_sessoes.php");
-include("libs/db_usuariosonline.php");
-include("dbforms/db_funcoes.php");
-include("dbforms/db_classesgenericas.php");
-include("classes/db_rhpessoalmov_classe.php");
-include("classes/db_rhlota_classe.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
+require_once("dbforms/db_funcoes.php");
+require_once("dbforms/db_classesgenericas.php");
+require_once("classes/db_rhpessoalmov_classe.php");
+require_once("classes/db_rhlota_classe.php");
 
-
-include("classes/db_orcorgao_classe.php");
-include("classes/db_orcunidade_classe.php");
-include("classes/db_rhlotaexe_classe.php");
-include("classes/db_rhlotacalend_classe.php");
 
 
 
 $clrotulo = new rotulocampo;
-$cl_rhpessoalmov = new cl_rhpessoalmov;
+$clrhpessoalmov = new cl_rhpessoalmov;
 $clrhlota = new cl_rhlota;
 
 $clrotulo->label("rh02_anousu");
@@ -56,28 +51,34 @@ $clrotulo->label("r70_codigo_2");
 db_postmemory($HTTP_GET_VARS);
 db_postmemory($HTTP_POST_VARS);
 if (isset($salvar)) {
-  if ($r70_descr_2 != null) {
-    if ($funcionariosSelecionados != null) {
+  db_inicio_transacao();
+  $sqlErro = false;
+  $erroMsg = "Lotações alteradas com sucesso!";
 
-      foreach ($funcionariosSelecionados as $func) {
+  if ($r70_codigo_2 != null && $funcionariosSelecionados != null) {
 
-        db_query("UPDATE rhpessoalmov SET rh02_lota = '" . $r70_codigo_2 . "' WHERE rh02_seqpes = '" . $func . "' AND rh02_lota = '" . $r70_codigo . "' ");
+    foreach ($funcionariosSelecionados as $seqpes) {
+      $clrhpessoalmov->alterarLotacao($seqpes, $r70_codigo_2);
+      if ($clrhpessoalmov->erro_status === "0") {
+        $sqlErro = true;
+        $erroMsg = $clrhpessoalmov->erro_msg;
+        break;
       }
     }
   }
-  if ($r70_descr != null) {
-    if ($funcionarios != null) {
+  if ($r70_codigo != null && $funcionarios != null && $sqlErro === false) {
 
-      foreach ($funcionarios as $func) {
-
-        db_query("UPDATE rhpessoalmov SET rh02_lota = '" . $r70_codigo . "' WHERE rh02_seqpes = '" . $func . "' AND rh02_lota = '" . $r70_codigo_2 . "'");
+    foreach ($funcionarios as $seqpes) {
+      $clrhpessoalmov->alterarLotacao($seqpes, $r70_codigo);
+      if ($clrhpessoalmov->erro_status === "0") {
+        $sqlErro = true;
+        $erroMsg = $clrhpessoalmov->erro_msg;
+        break;
       }
     }
-  } else {
-    echo "<script>";
-    echo "alert('Não foi possível realizar a alteração de lotação, por gentileza, verifique se os campos forão preenchidos corretamente.')";
-    echo "</script>";
   }
+  db_msgbox($erroMsg);
+  db_fim_transacao($sqlErro);
 }
 
 if (isset($rh02_anousu) && isset($rh02_mesusu) && isset($r70_descr) && isset($r70_codigo) && isset($r70_descr_2) && isset($r70_codigo_2)) {
