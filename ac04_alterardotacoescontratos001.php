@@ -116,7 +116,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
     }
 
     function js_emite() {
-        const query = 'anoOrigem=' + $F('iAnoOrigem') + '&anoDestino=' + anoDestino;
+        const query = 'anoOrigem=' + $F('iAnoOrigem') + '&anoDestino=' + anoDestino + '&codigoInstituicao=' + codigoInstituicao;
 
         jan = window.open('ac04_alterardotacoescontratos002.php?' + query, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
         jan.moveTo(0, 0);
