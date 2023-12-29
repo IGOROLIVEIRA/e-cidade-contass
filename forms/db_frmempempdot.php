@@ -36,6 +36,9 @@ $clrotulo->label("o47_anousu");
 $clrotulo->label("c53_descr");
 $clrotulo->label("e54_valor");
 $clrotulo->label("o56_elemento");
+$clrotulo->label("e60_codco");
+$oCodigoAcompanhamento  = new ControleOrcamentario();
+$clempempaut			= new cl_empempaut;
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -117,10 +120,28 @@ $clrotulo->label("o56_elemento");
       <td> <? db_input('o56_descr',50,"",true,'text',3,"");  ?>       </td>
       </tr>
   <tr>
-      <td nowrap title="<?=@$To58_codigo ?>" ><?=@$Lo58_codigo ?> </td>
+      <td nowrap title=Recurso> <strong>Recurso:</strong></td>
       <td> <? db_input('o58_codigo',8,"",true,'text',3,"");  ?> </td>
       <td> <? db_input('o15_descr',50,"",true,'text',3,"");  ?> </td>
       </tr>
+  <tr>
+      <?php 
+        $oCodigoAcompanhamento->setTipoDespesa($e60_tipodespesa);
+        $oCodigoAcompanhamento->setFonte($o58_codigo);
+        $oCodigoAcompanhamento->setEmendaParlamentar($e60_emendaparlamentar);
+        $oCodigoAcompanhamento->setEsferaEmendaParlamentar($e60_esferaemendaparlamentar);
+        $oCodigoAcompanhamento->setDeParaFonteCompleta();
+        $e60_codco = $oCodigoAcompanhamento->getCodigoParaEmpenho();
+        $oCodigoAcompanhamento->setCodCO($e60_codco);
+        $e60_codcodescr = $oCodigoAcompanhamento->getDescricaoCO();
+      if ($e60_codco != '0000') {
+      ?>
+
+      <td nowrap title="<?=@$Te60_codco ?>" ><?=@$Le60_codco ?> </td>
+      <td> <? db_input('e60_codco',8,"",true,'text',3,"");  ?> </td>
+      <td> <? db_input('e60_codcodescr',50,"",true,'text',3,"");  ?> </td>
+      <?php } ?>
+  </tr>
   <tr>
       <td>&nbsp;</td>
       <td colspan='2'>

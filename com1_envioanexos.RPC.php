@@ -68,7 +68,7 @@ switch ($oParam->exec) {
 
                 //envio
                 $clAvisoLicitacaoPNCP = new AvisoLicitacaoPNCP();
-                $rsApiPNCP = $clAvisoLicitacaoPNCP->enviarAnexos($oDadosAnexo->l216_tipoanexo, $oDadosAnexo->l213_descricao, $oDadosAnexo->l216_nomedocumento, $dadospncp->l213_anousu, $dadospncp->l213_numerocompra);
+                $rsApiPNCP = $clAvisoLicitacaoPNCP->enviarAnexos($oDadosAnexo->l216_tipoanexo, utf8_decode($oDadosAnexo->l213_descricao), $oDadosAnexo->l216_nomedocumento, $dadospncp->l213_anousu, $dadospncp->l213_numerocompra);
 
                 if ($rsApiPNCP[0] == 201) {
 

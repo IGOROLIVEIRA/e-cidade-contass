@@ -50,9 +50,9 @@ $db_opcao = 1;
 if ($licitacao) {
 
     $sWhere = "
-    	AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
+    	AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54)
                                      AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
-                                     WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106) 
+                                     WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106)
                                      AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
                                 END) >= 2020
     ";
@@ -147,6 +147,7 @@ if (isset($incluir) && isset($licitacao)) {
             $clliclancedital->l47_descrecurso = $descricao_recurso;
             $clliclancedital->l47_dataenvio = $data_formatada;
             $clliclancedital->l47_liclicita = $codigolicitacao;
+            $clliclancedital->l47_email = $email;
             $clliclancedital->incluir(null);
 
             if ($clliclancedital->erro_status == '0') {

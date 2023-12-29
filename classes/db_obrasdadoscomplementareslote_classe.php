@@ -66,6 +66,7 @@ class cl_obrasdadoscomplementareslote
 	var $db150_bdi = 0;
 	var $db150_cep = 0;
 	var $db150_seqobrascodigos = 0;
+    public $db150_planilhatce = 0;
 
 	// cria propriedade com as variaveis do arquivo
 	var $campos = "
@@ -275,6 +276,7 @@ class cl_obrasdadoscomplementareslote
                                         ,db150_numero
                                         ,db150_latitude
                                         ,db150_longitude
+                                        ,db150_planilhatce
                                         ,db150_classeobjeto
                                         ,db150_atividadeobra
                                         ,db150_atividadeservico
@@ -300,6 +302,7 @@ class cl_obrasdadoscomplementareslote
                                ,$this->db150_numero
                                ,$this->db150_latitude
                                ,$this->db150_longitude
+                               ,$this->db150_planilhatce
                                ,$this->db150_classeobjeto
                                ,$this->db150_atividadeobra
                                ,$this->db150_atividadeservico
@@ -412,14 +415,22 @@ class cl_obrasdadoscomplementareslote
 			$sql .= $virgula . " db150_logradouro = '$this->db150_logradouro' ";
 			$virgula = ",";
 		}
+
 		if (trim($this->db150_latitude) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_latitude"])) {
 			$sql .= $virgula . " db150_latitude = '$this->db150_latitude' ";
 			$virgula = ",";
 		}
+
 		if (trim($this->db150_longitude) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_longitude"])) {
 			$sql .= $virgula . " db150_longitude = '$this->db150_longitude' ";
 			$virgula = ",";
 		}
+
+		if (trim($this->db150_planilhatce) != "" || isset($GLOBALS["HTTP_POST_VARS"]["$this->db150_planilhatce"])) {
+			$sql .= $virgula . " db150_planilhatce = $this->db150_planilhatce ";
+			$virgula = ",";
+		}
+
 		if (trim($this->db150_classeobjeto) != "" || isset($GLOBALS["HTTP_POST_VARS"]["$this->db150_classeobjeto"])) {
 			$sql .= $virgula . " db150_classeobjeto = $this->db150_classeobjeto ";
 			$virgula = ",";
@@ -475,6 +486,7 @@ class cl_obrasdadoscomplementareslote
 				$sql .= " db150_sequencial = $db150_sequencial";
 			}
 		}
+
 		$result = db_query($sql);
 		if ($result == false) {
 			$this->erro_banco = str_replace("\n", "", @pg_last_error());

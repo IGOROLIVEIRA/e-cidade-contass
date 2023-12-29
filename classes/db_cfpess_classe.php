@@ -867,15 +867,6 @@ class cl_cfpess {
        $this->numrows_incluir= 0;
        return false;
      }
-     $resultUpate = $this->updateDtFechamento();
-     if($resultUpate==false) { 
-       $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg  .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       $this->numrows_incluir= 0;
-       return false;
-     }
      $this->erro_banco = "";
      $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$this->r11_anousu."-".$this->r11_mesusu."-".$this->r11_instit;
