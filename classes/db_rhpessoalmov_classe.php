@@ -3260,4 +3260,26 @@ class cl_rhpessoalmov
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         }
     }
+
+    /**
+     * sql para buscar servidores por ano, mes e lotacao
+     *
+     * @param int $anousu
+     * @param int $mesusu
+     * @param int $lotacao
+     * @return string
+     */
+    public function sqlServidoresLotacoes($anousu, $mesusu, $lotacao, $campos)
+    {
+        return "SELECT DISTINCT {$campos}
+        FROM rhpessoalmov
+        LEFT JOIN rhpesrescisao ON rh05_seqpes = rh02_seqpes
+        JOIN rhpessoal ON rh02_regist = rh01_regist
+        JOIN CGM ON rh01_numcgm = z01_numcgm
+        WHERE rh02_anousu = '" . $anousu . "'
+        AND rh02_mesusu = '" . $mesusu . "'
+        AND rh02_lota = '" . $lotacao . "'
+        AND ((EXTRACT(MONTH FROM rh05_recis) =  '" . $mesusu . "' AND EXTRACT(YEAR FROM rh05_recis) =  '" . $anousu . "')
+        OR rh05_recis is NULL)";
+    }
 }

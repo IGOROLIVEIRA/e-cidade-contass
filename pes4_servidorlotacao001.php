@@ -55,7 +55,17 @@ if (isset($salvar)) {
   $sqlErro = false;
   $erroMsg = "Lotações alteradas com sucesso!";
 
-  if ($r70_codigo_2 != null && $funcionariosSelecionados != null) {
+  if (empty($r70_codigo) || empty($r70_codigo_2)) {
+    $sqlErro = true;
+    $erroMsg = "Verifique o preenchimento das lotações";
+  }
+
+  if ($sqlErro === false && (count($funcionariosSelecionados) === 0 || count($funcionarios) === 0)) {
+    $sqlErro = true;
+    $erroMsg = "Verifique a seleção das lotações";
+  }
+
+  if ($sqlErro === false) {
 
     foreach ($funcionariosSelecionados as $seqpes) {
       $clrhpessoalmov->alterarLotacao($seqpes, $r70_codigo_2);
@@ -66,7 +76,7 @@ if (isset($salvar)) {
       }
     }
   }
-  if ($r70_codigo != null && $funcionarios != null && $sqlErro === false) {
+  if ($sqlErro === false) {
 
     foreach ($funcionarios as $seqpes) {
       $clrhpessoalmov->alterarLotacao($seqpes, $r70_codigo);
@@ -81,38 +91,18 @@ if (isset($salvar)) {
   db_fim_transacao($sqlErro);
 }
 
-if (isset($rh02_anousu) && isset($rh02_mesusu) && isset($r70_descr) && isset($r70_codigo) && isset($r70_descr_2) && isset($r70_codigo_2)) {
-
-
-  $sSqlAselecionar = "SELECT DISTINCT rh02_seqpes ,z01_nome, rh02_regist
-  FROM rhpessoalmov
-  LEFT JOIN rhpesrescisao ON rh05_seqpes = rh02_seqpes
-  JOIN rhpessoal ON rh02_regist = rh01_regist
-  JOIN CGM ON rh01_numcgm = z01_numcgm
-  WHERE rh02_anousu = '" . $rh02_anousu . "'
-  AND rh02_mesusu = '" . $rh02_mesusu . "'
-  AND rh02_lota = '" . $r70_codigo . "'
-  AND ((EXTRACT(MONTH FROM rh05_recis) =  '" . $rh02_mesusu . "' AND EXTRACT(YEAR FROM rh05_recis) =  '" . $rh02_anousu . "')
-  OR rh05_recis is NULL)";
-  //echo $sSqlAselecionar."<br>";
-  $rAselecionar = db_utils::getColectionByRecord(db_query($sSqlAselecionar));
+$selecionados = array();
+if (!empty($rh02_anousu) && !empty($rh02_mesusu) && !empty($r70_codigo)) {
+  $rAselecionar = db_utils::getColectionByRecord(db_query($clrhpessoalmov->sqlServidoresLotacoes($rh02_anousu, $rh02_mesusu, $r70_codigo, "rh02_seqpes ,z01_nome, rh02_regist")));
   $selecionados = array();
-
   foreach ($rAselecionar as $sel) {
     $selecionados[$sel->rh02_seqpes] = $sel->rh02_regist . ' - ' . $sel->z01_nome;
   }
-  $sSqlAselecionar2 = "SELECT DISTINCT rh02_seqpes ,z01_nome, rh02_regist
-  FROM rhpessoalmov
-  LEFT JOIN rhpesrescisao ON rh05_seqpes = rh02_seqpes
-  JOIN rhpessoal ON rh02_regist = rh01_regist
-  JOIN CGM ON rh01_numcgm = z01_numcgm
-  WHERE rh02_anousu = '" . $rh02_anousu . "'
-  AND rh02_mesusu = '" . $rh02_mesusu . "'
-  AND rh02_lota = '" . $r70_codigo_2 . "'
-  AND ((EXTRACT(MONTH FROM rh05_recis)  = '" . $rh02_mesusu . "' AND EXTRACT(YEAR FROM rh05_recis)  = '" . $rh02_anousu . "')
-  OR rh05_recis is NULL)";
-  //echo $sSqlAselecionar2;
-  $rAselecionar2 = db_utils::getColectionByRecord(db_query($sSqlAselecionar2));
+}
+
+$selecionados2 = array();
+if (!empty($rh02_anousu) && !empty($rh02_mesusu) && !empty($r70_codigo_2)) {
+  $rAselecionar2 = db_utils::getColectionByRecord(db_query($clrhpessoalmov->sqlServidoresLotacoes($rh02_anousu, $rh02_mesusu, $r70_codigo_2, "rh02_seqpes ,z01_nome, rh02_regist")));
   $selecionados2 = array();
   foreach ($rAselecionar2 as $sel) {
     $selecionados2[$sel->rh02_seqpes] = $sel->rh02_regist . ' - ' . $sel->z01_nome;
@@ -290,7 +280,6 @@ if (isset($rh02_anousu) && isset($rh02_mesusu) && isset($r70_descr) && isset($r7
 
     function js_preenchepesquisa(chave, r70_descr) {
 
-      debugger;
       if (typeof r70_descr !== "boolean") {
         document.form1.r70_codigo.value = chave;
         document.form1.r70_descr.value = r70_descr;
