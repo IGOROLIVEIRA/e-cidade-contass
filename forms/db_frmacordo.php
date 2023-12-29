@@ -686,10 +686,10 @@ db_app::load("dbtextFieldData.widget.js");
 
                                                     <?
                                                     $aVigencias = array(
-                                                    1 => 'Sim',
-                                                    2 => 'Não'
+                                                    2 => 'Não',
+                                                    1 => 'Sim'
                                                     );
-                                                    db_select('ac16_vigencia', $aVigencias, true, $db_opcao, "onchange='js_alteracaoVigencia(this.value)';", "");
+                                                    db_select('ac16_vigenciaindeterminada', $aVigencias, true, $db_opcao, "onchange='js_alteracaoVigencia(this.value)';", "");
                                                     ?>
                                                 </td>
                                             </tr>
@@ -2008,8 +2008,8 @@ db_app::load("dbtextFieldData.widget.js");
 
     <?php
         if ($db_opcao != 1) {
-            echo "js_alteracaoVigencia($('ac16_vigencia').value);";
-            echo "document.getElementById('ac16_vigencia').setAttribute('disabled','disabled');";
+            echo "js_alteracaoVigencia($('ac16_vigenciaindeterminada').value);";
+            echo "document.getElementById('ac16_vigenciaindeterminada').setAttribute('disabled','disabled');";
         } 
     ?>
 
@@ -2018,6 +2018,7 @@ db_app::load("dbtextFieldData.widget.js");
         if(vigenciaIndeterminada == 1){
             document.getElementsByClassName('vigencia_final')[0].style.display = 'none';
             document.getElementsByClassName('vigencia_final')[1].style.display = 'none';
+            document.getElementById('ac16_datafim').value = '';
             return;
         }
         document.getElementsByClassName('vigencia_final')[0].style.display = '';
@@ -2031,7 +2032,7 @@ db_app::load("dbtextFieldData.widget.js");
         let origem = $('ac16_origem').value;
         let leiLicitacao = $('leidalicitacao').value;
 
-        js_alteracaoVigencia($('ac16_vigencia').value);
+        js_alteracaoVigencia($('ac16_vigenciaindeterminada').value);
 
         if(origem == "2" && origensValidas.includes(tipoOrigem) && leiLicitacao == "1"){
             document.getElementById('tr_vigenciaindeterminada').style.display = '';

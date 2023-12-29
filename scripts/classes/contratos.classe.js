@@ -420,7 +420,7 @@ contrato = function () {
         var iIndicereajuste           = $F('ac16_indicereajuste');
         var sDescricaoreajuste        = $F('ac16_descricaoreajuste');
         var sDescricaoindice          = $F('ac16_descricaoindice');
-        var iVigenciaIndeterminada    = $F('ac16_vigencia');
+        var iVigenciaIndeterminada    = $F('ac16_vigenciaindeterminada');
 
         vigenciaIsVisible = document.getElementById('tr_vigenciaindeterminada').style.display;
 
@@ -820,7 +820,7 @@ contrato = function () {
             $('ac16_descricaoreajuste').value            = oRetorno.contrato.sDescricaoreajuste.urlDecode();
             $('ac16_descricaoindice').value            = oRetorno.contrato.sDescricaoindice.urlDecode();
             $('ac16_valor').value                 = js_formatar(oRetorno.contrato.nValorContrato, 'f');
-            $('ac16_vigencia').value                = oRetorno.contrato.iVigenciaIndeterminada;
+            $('ac16_vigenciaindeterminada').value                = oRetorno.contrato.iVigenciaIndeterminada;
             
             if($('ac16_reajuste').value == 2){
                 $('tdcriterioreajuste').style.display = 'none';
@@ -897,7 +897,7 @@ contrato = function () {
                     var oRetorno = eval("(" + oAjax.responseText.urlDecode() + ")");
                     
                     $('leidalicitacao').value = oRetorno.leiLicitacao;
-                    js_alteracaoVigencia($('ac16_vigencia').value);
+                    js_alteracaoVigencia($('ac16_vigenciaindeterminada').value);
 
                     if(oRetorno.leiLicitacao == "1"){
                         document.getElementById('tr_vigenciaindeterminada').style.display = '';

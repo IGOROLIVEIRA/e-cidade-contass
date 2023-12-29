@@ -204,8 +204,11 @@ class cl_apostilamento
       $this->erro_status = "0";
       return false;
     }
-    if ($this->si03_valorapostila == null && $this->si03_tipoapostila != 3) {
-      $this->erro_sql = " Campo Valor da Aposlila nao Informado.";
+    
+    $apostilasSemValorUnitario = array(3,4,5,99);
+
+    if ($this->si03_valorapostila == null && !in_array($this->si03_tipoapostila,$apostilasSemValorUnitario)) {
+      $this->erro_sql = " Campo Valor da Aposlila nao Informadooo.";
       $this->erro_campo = "si03_valorapostila";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";

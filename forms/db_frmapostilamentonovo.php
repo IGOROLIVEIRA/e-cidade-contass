@@ -1466,7 +1466,18 @@ unset($_GET['viewAlterar']);
                 document.getElementById('oGridItensrow' + iIndice + 'cell9').style.display = "";
                 document.getElementById('col11').style.display = "";
 
-            } else {
+            }  else if(iTipo == "04" || iTipo == "05" || iTipo == "99"){
+                document.getElementById("si03_tipoalteracaoapostila").options[0].disabled = true;
+                document.getElementById("si03_tipoalteracaoapostila").options[1].disabled = true;
+                document.getElementById("si03_tipoalteracaoapostila").options[2].disabled = false;
+                $("si03_tipoalteracaoapostila").value = 3;
+                document.getElementById("si03_tipoalteracaoapostila").disabled = true;
+                document.getElementById('valorunitario' + iIndice).addClassName('readonly');
+                document.getElementById('valorunitario' + iIndice).readOnly = true;
+                document.getElementById('oGridItensrow' + iIndice + 'cell9').style.display = "";
+                document.getElementById('col11').style.display = "";
+            }
+            else {
                 $("si03_tipoalteracaoapostila").value = 1;
                 document.getElementById("si03_tipoalteracaoapostila").options[0].disabled = false;
                 document.getElementById("si03_tipoalteracaoapostila").options[1].disabled = false;
@@ -1701,5 +1712,6 @@ unset($_GET['viewAlterar']);
         document.getElementById('tr_descricaoindice').style.display = "";
         document.getElementById('si03_indicereajuste').value = "0";
         document.getElementById('ac26_descricaoreajuste').value = "";
+        document.getElementById("tr_descricaoreajuste").style.display = 'none';
     }
 </script>

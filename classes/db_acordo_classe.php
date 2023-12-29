@@ -86,6 +86,7 @@ class cl_acordo
     var $ac16_indicereajuste = null;
     var $ac16_descricaoreajuste = null;
     var $ac16_descricaoindice = null;
+    var $ac16_vigenciaindeterminada = null;
     /**
      * A descrição do status do campo ac16_providencia podem ser checados na tabela providencia
      */
@@ -142,6 +143,7 @@ class cl_acordo
     ac16_indicereajuste = ;
     ac16_descricaoreajuste = ;
     ac16_descricaoindice = ;
+    ac16_vigenciaindeterminada = int = Vigência Indeterminada;
     ";
     //funcao construtor da classe
     function cl_acordo()
@@ -257,6 +259,7 @@ class cl_acordo
             $this->ac16_tipocadastro = ($this->ac16_tipocadastro === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_tipocadastro"] : $this->ac16_tipocadastro);
             $this->ac16_providencia = ($this->ac16_providencia === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_providencia"] : $this->ac16_providencia);
             $this->ac16_datareferencia = ($this->ac16_datareferencia === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_datareferencia"] : $this->ac16_datareferencia);
+            $this->ac16_vigenciaindeterminada = ($this->ac16_vigenciaindeterminada === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_vigenciaindeterminada"] : $this->ac16_vigenciaindeterminada);
         } else {
             $this->ac16_sequencial = ($this->ac16_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_sequencial"] : $this->ac16_sequencial);
         }
@@ -346,7 +349,7 @@ class cl_acordo
             $this->erro_status = "0";
             return false;
         }
-        if ($this->ac16_datafim == null) {
+        if ($this->ac16_datafim == null && $ac16_vigencia == "1") {
             $this->erro_sql = " Campo Data de Fim não informado.";
             $this->erro_campo = "ac16_datafim_dia";
             $this->erro_banco = "";
@@ -574,6 +577,7 @@ class cl_acordo
      ,ac16_periodoreajuste
      ,ac16_descricaoreajuste
      ,ac16_descricaoindice
+     ,ac16_vigenciaindeterminada
      )
      values (
      $this->ac16_sequencial
@@ -619,6 +623,7 @@ class cl_acordo
      ," . ($this->ac16_periodoreajuste == "null" || $this->ac16_periodoreajuste == "" ? "''" : "'" . $this->ac16_periodoreajuste . "'") . "
      ," . ($this->ac16_descricaoreajuste == "null" || $this->ac16_descricaoreajuste == "" ? 'null' : "'" . $this->ac16_descricaoreajuste . "'") . "
      ," . ($this->ac16_descricaoindice == "null" || $this->ac16_descricaoindice == "" ? 'null' : "'" . $this->ac16_descricaoindice . "'") . "
+     ,$this->ac16_vigenciaindeterminada
      )";
 
         $result = db_query($sql);
@@ -1145,6 +1150,14 @@ class cl_acordo
             $sql .= $virgula . " ac16_providencia = $this->ac16_providencia ";
         }
 
+        if (trim($this->ac16_vigenciaindeterminada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_vigenciaindeterminada"])) {
+            $sql .= $virgula . " ac16_vigenciaindeterminada = $this->ac16_vigenciaindeterminada ";
+        }
+
+        if (trim($this->ac16_vigenciaindeterminada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_vigenciaindeterminada"])) {
+            $sql .= $virgula . " ac16_vigenciaindeterminada = $this->ac16_vigenciaindeterminada ";
+        }
+        
         $sql .= " where ";
         if ($ac16_sequencial != null) {
             $sql .= " ac16_sequencial = $this->ac16_sequencial";
