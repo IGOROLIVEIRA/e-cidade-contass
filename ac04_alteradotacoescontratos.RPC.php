@@ -78,9 +78,6 @@ if (!isset($oParam->somenteConsulta) && !$oParam->somenteConsulta) {
     $resultadoDotacoesAcordosOrcamentos = $acordosDotacoesAnoOrigem
         ->whereIn('estrutural', $orcamentosDotacoesAnoDestino->pluck('estrutural'));
 
-    $dotacoesAcordosOrcamentosNaoInseridas = $acordosDotacoesAnoOrigem
-        ->whereNotIn('estrutural', $orcamentosDotacoesAnoDestino->pluck('estrutural'));
-
     $naoEncontrado = $resultadoDotacoesAcordosOrcamentos->isEmpty();
 
     $oRetorno->message = $naoEncontrado
