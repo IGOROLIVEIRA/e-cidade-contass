@@ -23,48 +23,25 @@ if (isset($incluir) || isset($alterar)) {
 
 
   if (isset($incluir)) {
-    $dataAux = $si06_dataadesao_ano + 1;
-    $resultado = db_query("select * from adesaoregprecos where si06_dataadesao >= '$si06_dataadesao_ano-01-01 00:00:00' 
-    and si06_dataadesao < '$dataAux-01-01 00:00:00' and si06_numeroadm = $si06_numeroadm");
 
-    $objeto = db_utils::fieldsMemory($resultado, 0);
+    $rsAdesao = db_query("select * from adesaoregprecos where si06_anomodadm = $si06_anomodadm and si06_numeroadm = $si06_numeroadm");
 
-    if ($objeto->si06_dataadesao != null) {
-      $erro_msg = 'Erro, o número do processo de adesão informado já está sendo utilizado no exercício de ' . $si06_dataadesao_ano;
+    if(pg_num_rows($rsAdesao) > 0){
+      $erro_msg = 'Erro, o número do processo de adesão informado já está sendo utilizado no exercício de ' . $si06_anomodadm;
       $sqlerro = true;
     }
+
   }
-
-
+  
   if (isset($alterar)) {
+    $rsAdesao = db_query("select * from adesaoregprecos where si06_numeroadm = $si06_numeroadm and si06_anomodadm != (select si06_anomodadm from adesaoregprecos where si06_sequencial = $si06_sequencial) and si06_anomodadm = $si06_anomodadm;");
 
-    $resultado = db_query("select * from adesaoregprecos where si06_numeroadm = $si06_numeroadm  ");
-    $objeto = db_utils::fieldsMemory($resultado, 0);
-    $tamanho = pg_num_rows($resultado);
-
-    $registroDePrecoSelecionado = db_query("select * from adesaoregprecos where si06_sequencial = $si06_sequencial");
-    $objetoRegistroDePrecoSelecionado = db_utils::fieldsMemory($registroDePrecoSelecionado, 0);
-    $anoAdesaoSelecionado = substr($objetoRegistroDePrecoSelecionado->si06_dataadesao, 0, strpos($objetoRegistroDePrecoSelecionado->si06_dataadesao, "-"));
-
-
-    for ($i = 0; $i < $tamanho; $i++) {
-      $objeto = db_utils::fieldsMemory($resultado, $i);
-      $ano = substr($objeto->si06_dataadesao, 0, strpos($objeto->si06_dataadesao, "-"));
-
-      if ($objeto->si06_dataadesao != null && ($si06_dataadesao_ano == $ano && $si06_dataadesao_ano != $anoAdesaoSelecionado)) {
-        $erro_msg = 'Erro, o número do processo de adesão informado já está sendo utilizado no exercício de ' . $ano;
-        $sqlerro = true;
-      }
+    if(pg_num_rows($rsAdesao) > 0){
+      $erro_msg = 'Erro, o número do processo de adesão informado já está sendo utilizado no exercício de ' . $si06_anomodadm;
+      $sqlerro = true;
     }
+
   }
-
-
-
-  if (!intval($si06_edital) && !$sqlerro) {
-    $erro_msg = 'Valor do campo Edital inválido. Verifique! ';
-    $sqlerro = true;
-  }
-
 
   $sDataAta = join('-', array_reverse(explode('/', $si06_dataata)));
   $sDataAbertura = join('-', array_reverse(explode('/', $si06_dataabertura)));
@@ -88,18 +65,6 @@ if (!$sqlerro) {
     $db_opcao = 1;
 
     db_inicio_transacao();
-
-    //  /**
-    //    * Verificar Encerramento Periodo Contabil
-    //    */
-    //  if (!empty($si06_dataadesao)) {
-    //    $clcondataconf = new cl_condataconf;
-    //    if (!$clcondataconf->verificaPeriodoContabil($si06_dataadesao)) {
-    //      $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg;
-    //      $cladesaoregprecos->erro_status="0";
-    //      $sqlerro  = true;
-    //    }
-    //  }
 
     /**
      * Verificar Encerramento Periodo Patrimonial
@@ -125,13 +90,16 @@ if (!$sqlerro) {
     }
     if ($cladesaoregprecos->erro_status == "0") {
 
-      $cladesaoregprecos->erro(true, false);
       $db_botao = true;
       echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
       if ($cladesaoregprecos->erro_campo != "") {
         echo "<script> document.form1." . $cladesaoregprecos->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
         echo "<script> document.form1." . $cladesaoregprecos->erro_campo . ".focus();</script>";
       }
+
+      $erro_msg = $cladesaoregprecos->erro_msg;
+      $sqlerro = true;
+      
     } else {
       if (!$sqlerro) {
         $sSql = "select * from adesaoregprecos order by si06_sequencial desc limit 1;";
@@ -145,7 +113,6 @@ if (!$sqlerro) {
                 parent.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=" . $si06_sequencial . "';
             </script>";
       }
-      //$cladesaoregprecos->erro(true,true);
     }
     db_fim_transacao();
   }
@@ -154,18 +121,6 @@ if (!$sqlerro) {
     db_inicio_transacao();
     $db_opcao = 2;
     $sqlerro  = false;
-
-    //  /**
-    //    * Verificar Encerramento Periodo Contabil
-    //    */
-    //  if (!empty($si06_dataadesao)) {
-    //    $clcondataconf = new cl_condataconf;
-    //    if (!$clcondataconf->verificaPeriodoContabil($si06_dataadesao)) {
-    //      $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg." $si06_dataadesao";
-    //      $cladesaoregprecos->erro_status="0";
-    //      $sqlerro  = true;
-    //    }
-    //  }
 
     /**
      * Verificar Encerramento Periodo Patrimonial
@@ -263,12 +218,6 @@ if (!$sqlerro) {
   }
 }
 
-if ($sqlerro) {
-  echo "<script>";
-  echo "alert('$erro_msg');";
-  echo "</script>";
-}
-
 ?>
 <html>
 
@@ -295,27 +244,17 @@ if ($sqlerro) {
 </body>
 
 </html>
-<script>
-  //js_tabulacaoforms("form1","si06_orgaogerenciador",true,1,"si06_orgaogerenciador",true);
-</script>
-<?
-/*if(isset($incluir)){
-  if($cladesaoregprecos->erro_status=="0"){
 
-    $cladesaoregprecos->erro(true,false);
-    $db_botao=true;
-    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    if($cladesaoregprecos->erro_campo!=""){
-      echo "<script> document.form1.".$cladesaoregprecos->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$cladesaoregprecos->erro_campo.".focus();</script>";
-    }
-  }else{
-    $cladesaoregprecos->erro(true,true);
-  }
-}*/
+<?
+
+if($sqlerro){
+  echo "<script>";
+  echo "alert('$erro_msg');";
+  echo "</script>";
+}
+
 if (isset($alterar)) {
   if ($cladesaoregprecos->erro_status == "0") {
-    // $cladesaoregprecos->erro(true, false);
     $db_botao = true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
     if ($cladesaoregprecos->erro_campo != "") {
