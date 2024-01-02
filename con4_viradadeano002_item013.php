@@ -297,7 +297,6 @@ if ($sqlerro == false) {
                         break;
                     }
                 }
-                $sqlAcertaRP = "SELECT fc_acerta_tipo_rp({$anodestino})";
             }
 
         }
@@ -318,3 +317,5 @@ if ($sqlerro == false) {
     }
 
 }
+
+db_query("SELECT fc_acerta_tipo_rp({$anodestino})");
