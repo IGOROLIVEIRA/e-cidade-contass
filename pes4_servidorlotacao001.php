@@ -93,19 +93,19 @@ if (isset($salvar)) {
 
 $selecionados = array();
 if (!empty($rh02_anousu) && !empty($rh02_mesusu) && !empty($r70_codigo)) {
-  $rAselecionar = db_utils::getColectionByRecord(db_query($clrhpessoalmov->sqlServidoresLotacoes($rh02_anousu, $rh02_mesusu, $r70_codigo, "rh02_seqpes ,z01_nome, rh02_regist")));
-  $selecionados = array();
-  foreach ($rAselecionar as $sel) {
-    $selecionados[$sel->rh02_seqpes] = $sel->rh02_regist . ' - ' . $sel->z01_nome;
+  $result = db_query($clrhpessoalmov->sqlServidoresLotacoes($rh02_anousu, $rh02_mesusu, $r70_codigo, "rh02_seqpes ,z01_nome, rh02_regist"));
+  for ($cont = 0; $cont < pg_num_rows($result); $cont++) {
+    $servidor = db_utils::fieldsMemory($result, $cont);
+    $selecionados[$servidor->rh02_seqpes] = $servidor->rh02_regist . ' - ' . $servidor->z01_nome;
   }
 }
 
 $selecionados2 = array();
 if (!empty($rh02_anousu) && !empty($rh02_mesusu) && !empty($r70_codigo_2)) {
-  $rAselecionar2 = db_utils::getColectionByRecord(db_query($clrhpessoalmov->sqlServidoresLotacoes($rh02_anousu, $rh02_mesusu, $r70_codigo_2, "rh02_seqpes ,z01_nome, rh02_regist")));
-  $selecionados2 = array();
-  foreach ($rAselecionar2 as $sel) {
-    $selecionados2[$sel->rh02_seqpes] = $sel->rh02_regist . ' - ' . $sel->z01_nome;
+  $result = db_query($clrhpessoalmov->sqlServidoresLotacoes($rh02_anousu, $rh02_mesusu, $r70_codigo_2, "rh02_seqpes ,z01_nome, rh02_regist"));
+  for ($cont = 0; $cont < pg_num_rows($result); $cont++) {
+    $servidor = db_utils::fieldsMemory($result, $cont);
+    $selecionados2[$servidor->rh02_seqpes] = $servidor->rh02_regist . ' - ' . $servidor->z01_nome;
   }
 }
 
