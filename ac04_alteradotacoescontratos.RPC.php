@@ -56,6 +56,8 @@ $anoOrigem = (int) $oParam->anoOrigem;
 
 $anoDestino = (int) $oParam->anoDestino;
 
+$codigoInstituicao = (int) $oParam->codigoInstituicao;
+
 $acordos = new Acordo();
 
 $orcamentosDotacoes = new OrcDotacao();
@@ -65,18 +67,16 @@ $acordoItemDotacao = new AcordoItemDotacao();
 if (!isset($oParam->somenteConsulta) && !$oParam->somenteConsulta) {
     $acordosDotacoesAnoOrigem = $acordos
         ->getAcordosDotacoesComPosicoes()
+        ->where('ac16_instit', $codigoInstituicao)
         ->where('orcdotacao.o58_anousu', $anoOrigem)
         ->get();
 
     $orcamentosDotacoesAnoDestino = $orcamentosDotacoes
-        ->getOrcamentosDotacoesAnoDestino($anoOrigem, $anoDestino)
+        ->getOrcamentosDotacoesAnoDestino($anoOrigem, $anoDestino, $codigoInstituicao)
         ->get();
 
     $resultadoDotacoesAcordosOrcamentos = $acordosDotacoesAnoOrigem
-        ->whereIn('estrutural', $orcamentosDotacoesAnoDestino->pluck('estrutural'))->take(3);
-
-    $dotacoesAcordosOrcamentosNaoInseridas = $acordosDotacoesAnoOrigem
-        ->whereNotIn('estrutural', $orcamentosDotacoesAnoDestino->pluck('estrutural'));
+        ->whereIn('estrutural', $orcamentosDotacoesAnoDestino->pluck('estrutural'));
 
     $naoEncontrado = $resultadoDotacoesAcordosOrcamentos->isEmpty();
 

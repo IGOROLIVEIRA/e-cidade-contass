@@ -40,11 +40,12 @@ $orcamentosDotacoes = new OrcDotacao();
 
 $acordosDotacoesAnoOrigem = $acordos
     ->getAcordosDotacoesComPosicoes()
+    ->where('ac16_instit', $codigoInstituicao)
     ->where('orcdotacao.o58_anousu', $anoOrigem)
     ->get();
 
 $orcamentosDotacoesAnoDestino = $orcamentosDotacoes
-    ->getOrcamentosDotacoesAnoDestino($anoOrigem, $anoDestino)
+    ->getOrcamentosDotacoesAnoDestino($anoOrigem, $anoDestino, $codigoInstituicao)
     ->get();
 
 $dotacoesAcordosOrcamentosNaoInseridas = $acordosDotacoesAnoOrigem

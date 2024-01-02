@@ -510,17 +510,19 @@ if ($x->consultarDataDoSistema == true) {
         new Ajax.Request('ac04_alteradotacoescontratos.RPC.php', {
             method: 'post',
             parameters: 'json=' + Object.toJSON(oParametros),
+            start_time: new Date().getTime(),
             onComplete: function(oResponse) {
                 const oRetorno = eval("(" + oResponse.responseText + ")");
+                let timeout = new Date().getTime() - this.start_time;
                 if (oRetorno.materiaisSemDotacoes === true) {
                     if (oRetorno.todosItensSemDotacoes === true) {
                         setTimeout(function(){
                             alert(`Todos os itens deste contrato estão sem dotações para o ano ${anoOrigem}. Acessar a rotina Módulo Contratos > Procedimentos - Acordo - Alteração de Dotação e realizar a alteração para prosseguir com o procedimento.`);
-                        }, 7000);
+                        }, timeout);
                     } else {
                         setTimeout(function(){
                             alert(`Os itens ${oRetorno.itens} estão sem dotações para o ano ${anoOrigem}. Acessar a rotina Módulo Contratos > Procedimentos - Acordo - Alteração de Dotação e realizar a alteração para prosseguir com o procedimento.`);
-                        }, 7000);
+                        }, timeout);
                     }
                 }
             }

@@ -33,10 +33,10 @@ class OrcDotacao extends LegacyModel
         'o58_concarpeculiar',
     ];
 
-    public function getOrcamentosDotacoesAnoDestino (int $anoOrigem, int $anoDestino) {
+    public function getOrcamentosDotacoesAnoDestino (int $anoOrigem, int $anoDestino, int $codigoInstituicao) {
         return $this->newQuery()
             ->whereIn('o58_coddot', function ($query) {
-                global $anoOrigem;
+                global $anoOrigem, $codigoInstituicao;
                 $query->select('ac22_coddot')
                     ->from('acordo')
                     ->join('acordoposicao', 'acordoposicao.ac26_acordo', '=', 'acordo.ac16_sequencial')
@@ -47,6 +47,7 @@ class OrcDotacao extends LegacyModel
                             ->whereColumn('orcdotacao.o58_anousu', '=', 'acordoitemdotacao.ac22_anousu');
                     })
                     ->where('acordo.ac16_anousu', $anoOrigem)
+                    ->where('acordo.ac16_instit', $codigoInstituicao)
                     ->whereIn('ac26_sequencial', function ($subquery) {
                         $subquery->selectRaw('max(ac26_sequencial)')
                             ->from('acordoposicao')
@@ -71,7 +72,8 @@ class OrcDotacao extends LegacyModel
                     ELSE ''
                 END,
                 o58_unidade, '.',
-                o58_funcao, '.', o58_subfuncao, '.', o58_programa, '.', o58_projativ, '.', orcelemento.o56_elemento, '.', o58_codigo) AS estrutural"),
+                o58_funcao, '.', o58_subfuncao, '.',
+                LPAD(o58_programa::text, 4, '0'), '.', o58_projativ, '.', orcelemento.o56_elemento, '.', o58_codigo) AS estrutural"),
                 'o58_anousu'
             );
     }

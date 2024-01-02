@@ -442,18 +442,16 @@ unset($_GET['viewAlterar']);
                 } else {
                     $('justificativa').style.display = 'none';
                 }
-
-            validaAcordoDotacoesAnoOrigem(chave1);
-
             }).setMessage("Aguarde, pesquisando acordos.")
             .execute();
+
         $('ac16_sequencial').value = chave1;
         $('ac16_resumoobjeto').value = chave2;
 
         pesquisarDadosAcordo(chave1);
         db_iframe_acordo.hide();
 
-        // validaAcordoDotacoesAnoOrigem($('ac16_sequencial').value);
+        validaAcordoDotacoesAnoOrigem(chave1);
     }
 
     function validaAcordoDotacoesAnoOrigem(codigoAcordo) {
@@ -469,13 +467,19 @@ unset($_GET['viewAlterar']);
         new Ajax.Request('ac04_alteradotacoescontratos.RPC.php', {
             method: 'post',
             parameters: 'json=' + Object.toJSON(oParametros),
+            start_time: new Date().getTime(),
             onComplete: function(oResponse) {
                 const oRetorno = eval("(" + oResponse.responseText + ")");
+                let timeout = new Date().getTime() - this.start_time;
                 if (oRetorno.materiaisSemDotacoes === true) {
                     if (oRetorno.todosItensSemDotacoes === true) {
-                        alert(`Todos os itens deste contrato estão sem dotações para o ano ${anoOrigem}. Acessar a rotina Módulo Contratos > Procedimentos - Acordo - Alteração de Dotação e realizar a alteração para prosseguir com o procedimento.`);
+                        setTimeout(function(){
+                            alert(`Todos os itens deste contrato estão sem dotações para o ano ${anoOrigem}. Acessar a rotina Módulo Contratos > Procedimentos - Acordo - Alteração de Dotação e realizar a alteração para prosseguir com o procedimento.`);
+                        }, timeout);
                     } else {
-                        alert(`Os itens ${oRetorno.itens} estão sem dotações para o ano ${anoOrigem}. Acessar a rotina Módulo Contratos > Procedimentos - Acordo - Alteração de Dotação e realizar a alteração para prosseguir com o procedimento.`);
+                        setTimeout(function(){
+                            alert(`Os itens ${oRetorno.itens} estão sem dotações para o ano ${anoOrigem}. Acessar a rotina Módulo Contratos > Procedimentos - Acordo - Alteração de Dotação e realizar a alteração para prosseguir com o procedimento.`);
+                        }, timeout);
                     }
                 }
             }
