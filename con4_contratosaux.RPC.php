@@ -1512,6 +1512,13 @@ switch ($oParam->exec) {
         }
 
         break;
+
+        case 'getLeiLicitacao':
+            $cl_liclicita = new cl_liclicita;
+            $sQueryLicitacao = $cl_liclicita->sql_query_file($oParam->iLicitacao);
+            $oResultLicitacao = $cl_liclicita->sql_record($sQueryLicitacao);
+            $oRetorno->leiLicitacao = db_utils::fieldsMemory($oResultLicitacao,0)->l20_leidalicitacao;
+        break;
 }
 /**
  * Função que verifica se a data de assinatura do acordo é anterior a data de homologação da licitação

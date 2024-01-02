@@ -62,7 +62,7 @@ contratoaux = function () {
         var iIndicereajuste           = $F('ac16_indicereajuste');
         var sDescricaoreajuste        = $F('ac16_descricaoreajuste');
         var sDescricaoindice          = $F('ac16_descricaoindice');
-        var iVigenciaIndeterminada    = $F('ac16_vigencia');
+        var iVigenciaIndeterminada    = $F('ac16_vigenciaindeterminada');
 
         vigenciaIsVisible = document.getElementById('tr_vigenciaindeterminada').style.display;
 
@@ -562,7 +562,7 @@ contratoaux = function () {
         var iLicitacao                = $F('ac16_licitacao');
         var iLicoutroorgao            = $F('ac16_licoutroorgao');
         var iAdesaoregpreco           = $F('ac16_adesaoregpreco');
-        var iVigenciaIndeterminada    = $F('ac16_vigencia');
+        var iVigenciaIndeterminada    = $F('ac16_vigenciaindeterminada');
 
         vigenciaIsVisible = document.getElementById('tr_vigenciaindeterminada').style.display;
 
@@ -842,6 +842,7 @@ contratoaux = function () {
             CurrentWindow.corpo.iframe_acordopenalidade.location.href   = 'aco1_acordoacordopenalidade001.php?ac13_acordo='+
                 oRetorno.contrato.iSequencial;
             js_exibeBotaoJulgamento();
+            me.getLeiLicitacao();
 
         }
 
@@ -872,7 +873,7 @@ contratoaux = function () {
                     var oRetorno = eval("(" + oAjax.responseText.urlDecode() + ")");
                     
                     $('leidalicitacao').value = oRetorno.leiLicitacao;
-                    js_alteracaoVigencia($('ac16_vigencia').value);
+                    js_alteracaoVigencia($('ac16_vigenciaindeterminada').value);
 
                     if(oRetorno.leiLicitacao == "1"){
                         document.getElementById('tr_vigenciaindeterminada').style.display = '';

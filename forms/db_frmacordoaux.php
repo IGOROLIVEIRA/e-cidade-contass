@@ -205,7 +205,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                         8 => '8 - Licitação realizada por consorcio público',
                                                         9 => '9 - Licitação realizada por outro ente da federação',
                                                     );
-                                                    db_select('ac16_tipoorigem', $aValores, true, $db_opcao, "onchange='js_verificatipoorigem()'", "style='width:100%;'");
+                                                    db_select('ac16_tipoorigem', $aValores, true, $db_opcao, "onchange='js_verificatipoorigem();'", "style='width:100%;'");
 
                                                     ?>
                                                 </td>
@@ -516,7 +516,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                     1 => 'Sim',
                                                     2 => 'Não'
                                                     );
-                                                    db_select('ac16_vigencia', $aVigencias, true, $db_opcao, "onchange='js_alteracaoVigencia(this.value)';", "");
+                                                    db_select('ac16_vigenciaindeterminada', $aVigencias, true, $db_opcao, "onchange='js_alteracaoVigencia(this.value)';", "");
                                                     ?>
                                                 </td>
                                             </tr>
@@ -1590,7 +1590,6 @@ db_app::load("dbtextFieldData.widget.js");
      *funçao para verificar tipo origem do acordo para listar ancorar relacionada
      */
     function js_verificatipoorigem() {
-        js_alteracaoVigencia($('ac16_vigencia').value);
         iTipoOrigem = document.form1.ac16_tipoorigem.value;
         iOrigem = document.form1.ac16_origem.value;
 
@@ -1740,36 +1739,5 @@ db_app::load("dbtextFieldData.widget.js");
             document.form1.si06_objetoadesao.focus();
         }
     }
-
-    <?php
-        if ($db_opcao != 1) {
-            echo "js_alteracaoVigencia($('ac16_vigencia').value);";
-            echo "document.getElementById('ac16_vigencia').setAttribute('disabled','disabled');";
-        } 
-    ?>
-
-    function js_alteracaoVigencia(vigenciaIndeterminada){
-
-        leilicitacao = document.getElementById('leidalicitacao').value;
-        let aOrigensValidas = ["2","3"];
-        let iTipoOrigem = $('ac16_tipoorigem').value;
-
-        if(!aOrigensValidas.includes(iTipoOrigem)){
-            document.getElementById('tr_vigenciaindeterminada').style.display = 'none';
-            document.getElementsByClassName('vigencia_final')[0].style.display = '';
-            document.getElementsByClassName('vigencia_final')[1].style.display = '';
-            return false;
-        } 
-        
-        document.getElementById('tr_vigenciaindeterminada').style.display = '';
-
-        if(vigenciaIndeterminada == 1){
-            document.getElementsByClassName('vigencia_final')[0].style.display = 'none';
-            document.getElementsByClassName('vigencia_final')[1].style.display = 'none';
-            return;
-        }
-        document.getElementsByClassName('vigencia_final')[0].style.display = '';
-        document.getElementsByClassName('vigencia_final')[1].style.display = '';
-       
-    }
+    
 </script>

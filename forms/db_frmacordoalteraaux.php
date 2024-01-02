@@ -112,6 +112,11 @@ db_app::load("dbtextFieldData.widget.js");
   #ac16_objeto {
     width: 100%;
   }
+
+  #ac16_datainicio,
+    #ac16_datafim {
+        width: 112px;
+    }
 </style>
 <form name="form1" method="post" action="<?= $db_action ?>">
   <center>
@@ -547,7 +552,16 @@ db_app::load("dbtextFieldData.widget.js");
                       <b>Vigência</b>
                     </legend>
                     <table cellpadding="0" border="0" width="100%" class="table-vigencia">
-                      <tr>
+                      <tr id="tr_vigenciaindeterminada" style="display:none;">
+                          <td colspan="2">
+                            <b>Vigência Indeterminada:</b>
+                            <?
+                             $aVigencias = array(2 => 'Não',1 => 'Sim');
+                              db_select('ac16_vigenciaindeterminada', $aVigencias, true, $db_opcao, "onchange='js_alteracaoVigencia(this.value)';", "");
+                            ?>
+                          </td>
+                        </tr>
+                        <tr>
                         <td width="1%">
                           <b>Inicio:</b>
                         </td>
@@ -563,10 +577,10 @@ db_app::load("dbtextFieldData.widget.js");
                             "return parent.js_somardias();");
                           ?>
                         </td>
-                        <td>
+                        <td class="vigencia_final">
                           <b>Fim:</b>
                         </td>
-                        <td>
+                        <td class="vigencia_final">
                           <?
 
                           db_inputdata('ac16_datafim', @$ac16_datafim_dia, @$ac16_datafim_mes, @$ac16_datafim_ano,
@@ -613,6 +627,9 @@ db_app::load("dbtextFieldData.widget.js");
                   </fieldset>
                 </td>
               </tr>
+              <?
+              db_input('leidalicitacao', 50, 3, true, 'text', $db_opcao,"style='display:none'");
+              ?>
             </table>
           </fieldset>
         </td>
@@ -1576,6 +1593,7 @@ db_app::load("dbtextFieldData.widget.js");
 
     $('db_opcao').onclick = oContrato.alteraContrato;
     <?
+    echo $db_opcao;
     if ($db_opcao == 2) {
       echo "\noContrato.getContrato({$chavepesquisa});\n";
     } else {
@@ -1782,5 +1800,37 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('trdescricaoindicereajuste').style.display = 'none';
             document.getElementById('ac16_descricaoindice').value = '';
         }
+    }
+
+    function js_alteracaoVigencia(vigenciaIndeterminada){
+
+      if(vigenciaIndeterminada == 1){
+          document.getElementsByClassName('vigencia_final')[0].style.display = 'none';
+          document.getElementsByClassName('vigencia_final')[1].style.display = 'none';
+          document.getElementById('ac16_datafim').value = '';
+          return;
+      }
+      document.getElementsByClassName('vigencia_final')[0].style.display = '';
+      document.getElementsByClassName('vigencia_final')[1].style.display = '';
+
+      }
+
+      function exibicaoVigenciaIndeterminada(){
+      let origensValidas = ["2","3"];
+      let tipoOrigem = $('ac16_tipoorigem').value;
+      let origem = $('ac16_origem').value;
+      let leiLicitacao = $('leidalicitacao').value;
+
+      js_alteracaoVigencia($('ac16_vigenciaindeterminada').value);
+
+      if(origem == "2" && origensValidas.includes(tipoOrigem) && leiLicitacao == "1"){
+          document.getElementById('tr_vigenciaindeterminada').style.display = '';
+          return;
+      }
+
+      document.getElementById('tr_vigenciaindeterminada').style.display = 'none';
+      document.getElementsByClassName('vigencia_final')[0].style.display = '';
+      document.getElementsByClassName('vigencia_final')[1].style.display = '';
+
     }
 </script>
