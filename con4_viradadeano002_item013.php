@@ -123,7 +123,6 @@ if ($sqlerro==false) {
         $sqlemp2 .= "   and conplano.c60_codcon = {$e64_codele} ;";
 		  }
 
-      //die($sqlemp2);
       $resultemp2 = db_query($sqlemp2);
       $linhasemp2 = pg_num_rows($resultemp2);
 			if ($linhasemp2 == 0) {
@@ -202,7 +201,6 @@ if ($sqlerro==false) {
         		break;
         	}
 
-          //echo "<br> Empenho $e60_numemp não encontrado no emprestotipo $e64_codele $c60_estrut";
           $cldb_viradaitemlog->c35_log = "Empenho $e60_numemp não encontrado no emprestotipo  $e64_codele    $c60_estrut processado utilizando o tipo 999";
           $cldb_viradaitemlog->c35_codarq        = 1010;
           $cldb_viradaitemlog->c35_db_viradaitem = $cldb_viradaitem->c31_sequencial;
@@ -222,7 +220,6 @@ if ($sqlerro==false) {
 
     if($sqlerro==false) {
 
-      //echo("Processando restos anteriores a ".$this->anousu);
       $sqlemp4  = "select e91_numemp,e91_vlremp,e91_vlranu,e91_vlrliq,e91_vlrpag,e91_elemento,e91_recurso,e91_codtipo,e91_rpcorreto ";
       $sqlemp4 .= "from empresto where e91_anousu = ".$anoorigem ;
       $resultemp4 = db_query($sqlemp4);
@@ -252,7 +249,7 @@ if ($sqlerro==false) {
 
         for ($v=0; $v<$linhasemp5; $v++) {
           db_fieldsmemory($resultemp5,$v);
-          //$rest = pg_fetch_array($this->result,$v);
+
           if ($c71_coddoc == 31 || $c71_coddoc == 32) {
             $vlranu += $sum;
           }
@@ -318,9 +315,4 @@ if ($sqlerro==false) {
     }
   }
 
-  //if ($sqlerro == true) {
-  //  echo "<br>Ocorreu um erro durante o processamento do item $c33_descricao. Processamento cancelado.";
-  //}
-  //xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 }
-?>
