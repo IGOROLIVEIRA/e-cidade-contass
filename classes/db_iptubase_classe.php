@@ -177,7 +177,7 @@ class cl_iptubase {
                                ,$this->j01_numcgm 
                                ,$this->j01_idbql 
                                ,".($this->j01_baixa == "null" || $this->j01_baixa == ""?"null":"'".$this->j01_baixa."'")." 
-                               ,$this->j01_unidade 
+                               ,'$this->j01_unidade' 
                                ,$this->j01_codave 
                                ,$this->j01_fracao 
                       )";
@@ -285,7 +285,7 @@ class cl_iptubase {
         if(trim($this->j01_unidade)=="" && isset($GLOBALS["HTTP_POST_VARS"]["j01_unidade"])){ 
            $this->j01_unidade = "001" ; 
         } 
-       $sql  .= $virgula." j01_unidade = $this->j01_unidade ";
+       $sql  .= $virgula." j01_unidade = '$this->j01_unidade' ";
        $virgula = ",";
      }
      if(trim($this->j01_fracao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["j01_fracao"])){ 
