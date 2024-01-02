@@ -42,14 +42,16 @@ class LoteFabrica
 
             if ($resultado->descricaolote !== $descricaoLote) {
                 $lote = new Lote();
+                $lote->setNumero($numeroLote);
                 $lote->setDescricao($resultado->descricaolote);
-                $lote->setExclusivoMPE($resultado->exclusivompelote);
+                $lote->setExclusivoMPE($resultado->exclusivompe);
                 $lote->setcotaReservada($resultado->cotareservada);
                 $lote->setJustificativa("");
                 $descricaoLote = $resultado->descricaolote;
-                $numeroLote++;
 
                 $lotes[] = $lote;
+
+                $numeroLote++;
             }
 
             $lote->setItens(
@@ -74,7 +76,7 @@ class LoteFabrica
 
         for ($i = 0; $i < $numrows; $i++) {
             $lote = new Lote();
-            $lote->setNumero($i);
+            $lote->setNumero($i+1);
             $lote->setDescricao($resultado->descricaolote);
             $lote->setExclusivoMPE($resultado->exclusivompe);
             $lote->setcotaReservada($resultado->cotareservada);

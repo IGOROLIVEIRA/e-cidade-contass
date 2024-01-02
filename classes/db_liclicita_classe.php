@@ -866,6 +866,16 @@ class cl_liclicita
             return false;
         }
 
+        if ($this->l20_tipoprocesso == "0") {
+            $this->erro_sql = " Campo Tipo de processo não foi informado.";
+            $this->erro_campo = "l20_tipoprocesso";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
         if (db_getsession('DB_anousu') >= 2020) {
             $this->l20_cadinicial = 1;
             $this->l20_exercicioedital = db_getsession('DB_anousu');
@@ -1199,15 +1209,22 @@ class cl_liclicita
         if (trim($this->l20_tipoprocesso != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_tipoprocesso"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
             $sql .= $virgula . " l20_tipoprocesso = '$this->l20_tipoprocesso' ";
             $virgula = ",";
-            //            if (trim($this->l20_tipoprocesso) == null || trim($this->l20_tipoprocesso) == 0) {
-            //                $this->erro_sql = "obrigatorio preencher os campos: Tipo de Processo";
-            //                $this->erro_campo = "l20_tipoprocesso";
-            //                $this->erro_banco = "";
-            //                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-            //                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            //                $this->erro_status = "0";
-            //                return false;
-            //            }
+        }
+
+        if ($this->l20_tipoprocesso == null) {
+            $this->l20_tipoprocesso = 'null';
+            $sql .= $virgula . " l20_tipoprocesso = $this->l20_tipoprocesso ";
+            $virgula = ",";
+        }
+
+        if ($this->l20_tipoprocesso == "0") {
+            $this->erro_sql = " Campo Tipo de processo não foi informado.";
+            $this->erro_campo = "l20_tipoprocesso";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
         }
 
         if (trim($this->l20_veicdivulgacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_veicdivulgacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
@@ -1790,7 +1807,7 @@ class cl_liclicita
         }
 
         if (trim($this->l20_criterioadjudicacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_criterioadjudicacao"])) {
-            $sql .= $virgula . " l20_criterioadjudicacao =' $this->l20_criterioadjudicacao' ";
+            $sql .= $virgula . " l20_criterioadjudicacao = $this->l20_criterioadjudicacao ";
             $virgula = ",";
         }
 
@@ -1920,7 +1937,6 @@ class cl_liclicita
             $sql .= $virgula . " l20_receita = '$this->l20_receita'";
             $virgula = ",";
         }
-
 
         $sql .= " where ";
         if ($l20_codigo != null) {
@@ -3583,7 +3599,8 @@ class cl_liclicita
            WHEN l03_pctipocompratribunal = 51 THEN 3
            WHEN l03_pctipocompratribunal = 53 THEN 6
            WHEN l03_pctipocompratribunal = 52 THEN 7
-           WHEN l03_pctipocompratribunal = 50 THEN 5
+           WHEN l03_pctipocompratribunal = 50 and l03_presencial='f' THEN 4
+           WHEN l03_pctipocompratribunal = 50 and l03_presencial='t' THEN 5
            WHEN l03_pctipocompratribunal = 101 THEN 8
            WHEN l03_pctipocompratribunal = 100 THEN 9
            WHEN l03_pctipocompratribunal = 102 THEN 12
@@ -3756,7 +3773,8 @@ class cl_liclicita
                     WHEN l03_pctipocompratribunal = 51 THEN 3
                     WHEN l03_pctipocompratribunal = 53 THEN 6
                     WHEN l03_pctipocompratribunal = 52 THEN 7
-                    WHEN l03_pctipocompratribunal = 50 THEN 5
+                    WHEN l03_pctipocompratribunal = 50 and l03_presencial='t' THEN 5
+                    WHEN l03_pctipocompratribunal = 50 and l03_presencial='f' THEN 4
                     WHEN l03_pctipocompratribunal = 101 THEN 8
                     WHEN l03_pctipocompratribunal = 100 THEN 9
                     WHEN l03_pctipocompratribunal = 102 THEN 12
@@ -4486,5 +4504,26 @@ class cl_liclicita
         where e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' ";
 
         return $sql;
+    }
+
+    public function queryFornecedoresGanhadores(int $codigoLicitacao): string
+    {
+        return "SELECT DISTINCT
+             z01_numcgm,
+             z01_nome,
+             z01_cgccpf
+         FROM liclicita
+         INNER JOIN liclicitem ON l21_codliclicita=l20_codigo
+         INNER JOIN pcorcamitemlic ON pc26_liclicitem=l21_codigo
+         INNER JOIN pcorcamitem ON pc22_orcamitem=pc26_orcamitem
+         INNER JOIN pcorcamjulg ON pc24_orcamitem=pc22_orcamitem
+         INNER JOIN pcorcamforne ON pc21_orcamforne=pc24_orcamforne
+         INNER JOIN pcorcamval ON pc23_orcamitem=pc22_orcamitem
+             AND pc23_orcamforne = pc21_orcamforne
+         INNER JOIN cgm ON z01_numcgm=pc21_numcgm
+         WHERE
+             l20_codigo={$codigoLicitacao}
+             AND pc24_pontuacao = 1
+             ORDER BY z01_nome;";
     }
 }

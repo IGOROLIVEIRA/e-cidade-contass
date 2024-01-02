@@ -56,6 +56,7 @@ class cl_liclancedital
 	var $l47_dataenviosicom_ano = null;
 	var $l47_dataenviosicom = null;
 	var $l47_liclicita = null;
+    public ?string $l47_email = '';
 
 	// cria propriedade com as variaveis do arquivo
 	var $campos = "
@@ -176,6 +177,15 @@ class cl_liclancedital
 			return false;
 		}
 
+		if ($this->l47_email == "" || $this->l47_email == null) {
+			$this->erro_banco = str_replace("\n", "", @pg_last_error());
+			$this->erro_sql = "O campo email é obrigatório";
+			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+			$this->erro_status = "0";
+			return false;
+		}
+
 		if ((!$this->l47_origemrecurso || $this->l47_origemrecurso == null) && !in_array($iTribunal, array(100, 101, 102, 103))) {
 			$this->erro_banco = str_replace("\n", "", @pg_last_error());
 			$this->erro_sql = "Verifique a origem do recurso";
@@ -214,6 +224,7 @@ class cl_liclancedital
                          ,l47_descrecurso
                          ,l47_dataenvio
                          ,l47_liclicita
+                         ,l47_email
                 )
                 values (
 						$this->l47_sequencial
@@ -222,6 +233,7 @@ class cl_liclancedital
 						,'$this->l47_descrecurso'
 						," . ($this->l47_dataenvio == "null" || $this->l47_dataenvio == "" ? "null" : "'" . $this->l47_dataenvio . "'") . "
 						,$this->l47_liclicita
+                        ,'$this->l47_email'
                 	)";
 
 		$result = db_query($sql);
@@ -320,6 +332,11 @@ class cl_liclancedital
 
 		if (trim($this->l47_dataenviosicom) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_dataenviosicom"])) {
 			$sql .= $virgula . " l47_dataenviosicom = '$this->l47_dataenviosicom' ";
+			$virgula = ",";
+		}
+
+		if (trim($this->l47_email) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_email"])) {
+			$sql .= $virgula . " l47_email = '$this->l47_email' ";
 			$virgula = ",";
 		}
 
@@ -574,4 +591,22 @@ class cl_liclancedital
 		}
 		return $sql;
 	}
+
+    /**
+     * Get the value of l47_email
+     */
+    public function getL47Email(): ?string
+    {
+        return $this->l47_email;
+    }
+
+    /**
+     * Set the value of l47_email
+     */
+    public function setL47Email(?string $l47_email): self
+    {
+        $this->l47_email = $l47_email;
+
+        return $this;
+    }
 }

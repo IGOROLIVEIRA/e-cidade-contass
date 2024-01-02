@@ -52,6 +52,7 @@ jobs/configuracoes/taskManager/fila/*.xml
 cache/menus/*
 cache/forms/*
 cache/preferencias/*
+config/apipcp/.env
 node_modules
 .env
 phinx.yml

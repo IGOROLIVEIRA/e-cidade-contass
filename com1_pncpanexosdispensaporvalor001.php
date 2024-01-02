@@ -95,7 +95,7 @@ $oRotulo->label("pc80_resumo");
 
                                 $oTipo = db_utils::fieldsMemory($result_tipo, $iIndiceTipo);
 
-                                $tipo[$oTipo->l213_sequencial] = $oTipo->l213_descricao;
+                                $tipo[$oTipo->l213_sequencial] = utf8_decode($oTipo->l213_descricao);
                             }
 
                             if ($cltipoanexo->numrows == 0) {
@@ -411,8 +411,10 @@ $oRotulo->label("pc80_resumo");
 
         var oParametros = new Object();
 
+        const iCodigoProcesso = $('pc80_codproc').value;
         oParametros.exec = 'excluir';
         oParametros.iCodigoDocumento = iCodigoDocumento;
+        oParametros.iCodigoProcesso = iCodigoProcesso;
 
         var oAjax = new Ajax.Request(
             sUrlRpc, {
@@ -893,7 +895,7 @@ $oRotulo->label("pc80_resumo");
                 asynchronous: false,
 
                 /**
-                 * 
+                 *
                  * Retorno do RPC
                  */
                 onComplete: function(oAjax) {
@@ -958,7 +960,7 @@ $oRotulo->label("pc80_resumo");
                 asynchronous: false,
 
                 /**
-                 * 
+                 *
                  * Retorno do RPC
                  */
                 onComplete: function(oAjax) {

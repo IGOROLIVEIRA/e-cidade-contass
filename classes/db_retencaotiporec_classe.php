@@ -595,5 +595,46 @@ class cl_retencaotiporec {
      }
      return $sql;
   }
+  function sql_query_buscar_retencao ( $e21_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+
+  	$sql = "select ";
+    if($campos != "*" ){
+       $campos_sql = split("#",$campos);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }else{
+       $sql .= $campos;
+     }
+     $sql .= " from empnota ";
+     $sql .= " inner join empempenho on	e69_numemp = e60_numemp ";
+     $sql .= " inner join pagordemnota on	e71_codnota = e69_codnota ";
+     $sql .= " inner join pagordem on	e50_codord= e71_codord	 ";
+     $sql .= " inner join retencaopagordem on e20_pagordem = e50_codord ";
+     $sql .= " inner join retencaoreceitas on e23_retencaopagordem  = e20_sequencial ";
+     $sql .= " inner join retencaotiporec on e21_sequencial = e23_retencaotiporec	 ";
+     $sql .= " inner join cgm on z01_numcgm = 	e60_numcgm ";
+     $sql2 = "";
+     if($dbwhere==""){
+       if($e21_sequencial!=null ){
+         $sql2 .= " where retencaotiporec.e21_sequencial = $e21_sequencial "; 
+       } 
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
 }
 ?>

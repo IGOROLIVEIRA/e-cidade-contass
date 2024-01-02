@@ -469,6 +469,8 @@ if (count($aParametrosEmpenho) > 0) {
                         }
 
                         ?>
+<!--                        <input name='migracaopagamento' id='migracaopagamento' value='Migração' type='button'-->
+<!--                               onclick="js_migracaoPagamento()" />-->
                     </fieldset>
 
                 </td>
@@ -2482,5 +2484,35 @@ if (count($aParametrosEmpenho) > 0) {
         }
 
     }
+
+    function js_migracaoPagamento(){
+        js_divCarregando("Aguarde, Migrando Movimentos de Pagamentos.","msgBox");
+        var oRequisicao      = new Object();
+        oRequisicao.exec     = "migracao";
+        var sJson            = js_objectToJson(oRequisicao);
+        var oAjax = new Ajax.Request(
+            'emp4_manutencaoPagamentoRPC.php',
+            {
+                method    : 'post',
+                parameters: 'json='+sJson,
+                onComplete: js_retornoMigracaoPagamento,
+            }
+        );
+    }
+
+    function js_retornoMigracaoPagamento(oAjax) {
+
+        js_removeObj("msgBox");
+
+        var oRetorno = eval("("+oAjax.responseText+")");
+
+        if (oRetorno.status == 1) {
+            alert("Pagamentos Migrados com sucesso!!!");
+        } else {
+            alert(oRetorno.message.urlDecode());
+        }
+
+    }
+
 
 </script>
