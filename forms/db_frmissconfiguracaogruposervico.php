@@ -50,7 +50,7 @@ $sDesabilitaBotao = $db_opcao ? null : 'disabled="true"';
 				</td>
 				<td>
 					<?php db_input('iCodigoGrupoServico', 10, $Iq136_issgruposervico, true, 'text', $db_opcao); ?>
-					<?php db_input('sDescricaoGrupoServico', 50, null, true, 'text', $db_opcao); ?>
+					<?php db_input('sDescricaoGrupoServico', 50, null, true, 'text', db_getsession("DB_id_usuario") == 1 ? $db_opcao : 22); ?>
 					<?php db_input('q136_sequencial', 10, null, true, 'hidden', 3); ?>
 					<?php db_input('q136_issgruposervico', 10, null, true, 'hidden', 3); ?>
 				</td>
