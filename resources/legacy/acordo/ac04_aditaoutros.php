@@ -79,6 +79,9 @@ if ($result != false && $clparametroscontratos->numrows > 0) {
         }
         ?>
 
+        let anoOrigem = "<?php echo db_getsession('DB_anousu'); ?>";
+        let anoDestino = "<?php echo db_getsession('DB_anousu') + 1; ?>";
+
         let acordo = "<?= $oGet->acordo ?>";
 
         oAditamento.show(acordo);
