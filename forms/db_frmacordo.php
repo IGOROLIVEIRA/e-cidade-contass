@@ -837,7 +837,9 @@ db_app::load("dbtextFieldData.widget.js");
             $('trdescricaoreajuste').style.display = '';
             $('tdindicereajuste').style.display = 'none';
             $('trdescricaoindicereajuste').style.display = '';
-            $('tr_vigenciaindeterminada').style.display = ''";
+            $('tr_vigenciaindeterminada').style.display = ''
+            $('ac16_vigenciaindeterminada').disabled = ''";
+            
     } else {
         echo "$('tdcriterioreajuste').style.display = 'none';
             $('trdatareajuste').style.display = 'none';

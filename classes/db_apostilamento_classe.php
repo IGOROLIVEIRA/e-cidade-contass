@@ -208,7 +208,7 @@ class cl_apostilamento
     $apostilasSemValorUnitario = array(3,4,5,99);
 
     if ($this->si03_valorapostila == null && !in_array($this->si03_tipoapostila,$apostilasSemValorUnitario)) {
-      $this->erro_sql = " Campo Valor da Aposlila nao Informadooo.";
+      $this->erro_sql = " Campo Valor da Apostila não informado.";
       $this->erro_campo = "si03_valorapostila";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
