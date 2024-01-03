@@ -72,7 +72,7 @@ if (!isset($oParam->somenteConsulta) && !$oParam->somenteConsulta) {
         ->get();
 
     $orcamentosDotacoesAnoDestino = $orcamentosDotacoes
-        ->getOrcamentosDotacoesAnoDestino($anoOrigem, $anoDestino, $codigoInstituicao)
+        ->getOrcamentosDotacoesAnoDestino($anoDestino, $codigoInstituicao)
         ->get();
 
     $resultadoDotacoesAcordosOrcamentos = $acordosDotacoesAnoOrigem
