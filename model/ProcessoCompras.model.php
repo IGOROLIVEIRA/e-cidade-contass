@@ -158,6 +158,8 @@ class ProcessoCompras
      */
     protected $iCategoriaprocesso;
 
+    protected $iCriteriojulgamento;
+
     /**
      *
      */
@@ -191,6 +193,7 @@ class ProcessoCompras
                 $this->setAmparoLegal($oDadosProcesso->pc80_amparolegal);
                 $this->setCategoriaProcesso($oDadosProcesso->pc80_categoriaprocesso);
                 $this->setModalidadeContratacao($oDadosProcesso->pc80_modalidadecontratacao);
+                $this->setCriterioJulgamento($oDadosProcesso->pc80_criteriojulgamento);
                 /*FIM - OC3770*/
                 unset($oDadosProcesso);
             }
@@ -236,6 +239,20 @@ class ProcessoCompras
     public function setAmparoLegal($iAmparolegal)
     {
         $this->iAmparolegal = $iAmparolegal;
+    }
+
+    public function getCriterioJulgamento()
+    {
+        return $this->iCriteriojulgamento;
+    }
+
+    /**
+     * Retorna o valor da propriedade iCriteriojulgamento
+     * @return integer
+     */
+    public function setCriterioJulgamento($iCriteriojulgamento)
+    {
+        $this->iCriteriojulgamento = $iCriteriojulgamento;
     }
 
     public function getCategoriaProcesso()
@@ -587,6 +604,7 @@ class ProcessoCompras
         $oDaoPcProc->pc80_amparolegal = $this->getAmparoLegal();
         $oDaoPcProc->pc80_categoriaprocesso = $this->getCategoriaProcesso();
         $oDaoPcProc->pc80_modalidadecontratacao = $this->getModalidadeContratacao();
+        $oDaoPcProc->pc80_criteriojulgamento = $this->getCriterioJulgamento();
 
         if (empty($this->iCodigo)) {
 
