@@ -1063,5 +1063,45 @@ class cl_empagemov {
      }
      return $sql;
   }
+
+  function consultaEstornoPorMovimento($e81_codmov=null,$sCampos="*",$ordem=null,$dbWhere=""){
+    $sql = "select ";
+     if($sCampos != "*" ){
+       $camposSql = explode("#",$sCampos);
+       $virgula = "";
+       for($i=0;$i<sizeof($camposSql);$i++){
+         $sql .= $virgula.$camposSql[$i];
+         $virgula = ",";
+       }
+     }else{
+       $sql .= $sCampos;
+     }
+     $sql .= " from empagemov ";
+     $sql .= "      inner join empord       on e81_codmov = e82_codmov ";
+     $sql .= "      inner join pagordem     on e82_codord = e50_codord ";
+     $sql .= "      inner join conlancamord on e50_codord = c80_codord";
+     $sql .= "      inner join conlancam    on c80_codlan = c70_codlan";
+     $sql .= "      inner join conlancamdoc on c70_codlan = c71_codlan";
+     $sql .= "      inner join conhistdoc   on c71_coddoc = c53_coddoc";
+     $sql2 = "";
+     if($dbWhere==""){
+       if($e81_codmov!=null ){
+         $sql2 .= " where e81_codmov = " . $e81_codmov . " and c4.c53_tipo = 31 and e81_cancelado is not null";
+       }
+     }else if($dbWhere != ""){
+       $sql2 = " where $dbWhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $camposSql = explode("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($camposSql);$i++){
+         $sql .= $virgula.$camposSql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
 }
 ?>

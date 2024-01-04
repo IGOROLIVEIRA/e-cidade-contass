@@ -297,7 +297,7 @@ function js_abre(){
    if(query == ''){
      alert("Selecione alguma ordem de pagamento ou indique o período!");
    }else{
-        var sUrl = 'emp2_emitenotaliq002.php?aFornecedor=' + aFornecedores + '&historico=' + historico + '&valor_ordem=' + valor_ordem + "&recursos="+ js_campo_recebe_valores_recursos() + query;
+        var sUrl = 'emp2_emitenotadespesa002.php?aFornecedor=' + aFornecedores + '&historico=' + historico + '&valor_ordem=' + valor_ordem + "&recursos="+ js_campo_recebe_valores_recursos() + query;
         jan = window.open(sUrl,
                        '',
                        'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
