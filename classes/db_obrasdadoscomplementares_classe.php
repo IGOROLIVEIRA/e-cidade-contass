@@ -69,6 +69,7 @@ class cl_obrasdadoscomplementares
 	var $db150_bdi = 0;
 	var $db150_cep = 0;
 	var $db150_seqobrascodigos = 0;
+    public $db150_planilhatce = 0;
 
 	// cria propriedade com as variaveis do arquivo
 	var $campos = "
@@ -82,7 +83,7 @@ class cl_obrasdadoscomplementares
                     db150_numero = int4 = Número do local da obra
                     db150_logradouro = varchar(150) = Logradouro
                     db150_grauslatitude = int4 = Graus da Latitude
-                    db150_minutolatitude = int4 = Minuto da Latitude 
+                    db150_minutolatitude = int4 = Minuto da Latitude
                     db150_segundolatitude = numeric = Segundo da Latitude
                     db150_grauslongitude = int4 = Graus da Longitude
                     db150_minutolongitude = int4 = Minuto da Longitude
@@ -283,6 +284,7 @@ class cl_obrasdadoscomplementares
                                         ,db150_grauslongitude
                                         ,db150_minutolongitude
                                         ,db150_segundolongitude
+                                        ,db150_planilhatce
                                         ,db150_classeobjeto
                                         ,db150_atividadeobra
                                         ,db150_atividadeservico
@@ -311,6 +313,7 @@ class cl_obrasdadoscomplementares
                                ,'$this->db150_grauslongitude'
                                ,'$this->db150_minutolongitude'
                                ,'$this->db150_segundolongitude'
+                               ,$this->db150_planilhatce
                                ,$this->db150_classeobjeto
                                ,$this->db150_atividadeobra
                                ,$this->db150_atividadeservico
@@ -441,6 +444,12 @@ class cl_obrasdadoscomplementares
 			$sql .= $virgula . " db150_segundolongitude = '$this->db150_segundolongitude' ";
 			$virgula = ",";
 		}
+
+        if (trim($this->db150_planilhatce) != "" || isset($GLOBALS["HTTP_POST_VARS"]["$this->db150_planilhatce"])) {
+			$sql .= $virgula . " db150_planilhatce = $this->db150_planilhatce ";
+			$virgula = ",";
+		}
+
 		if (trim($this->db150_classeobjeto) != "" || isset($GLOBALS["HTTP_POST_VARS"]["$this->db150_classeobjeto"])) {
 			$sql .= $virgula . " db150_classeobjeto = $this->db150_classeobjeto ";
 			$virgula = ",";

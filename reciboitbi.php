@@ -1073,7 +1073,7 @@ if ($settings->k03_ativo_integracao_pix && !empty($pdf1->it14_valorpaga)) {
 }
 
 if ($usePixIntegration) {
-    $body['codigoGuiaRecebimento'] = "{$pdf1->numpreitbi}1";
+    $body['codigoGuiaRecebimento'] = $codigo_barras;
     $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
     $body['valorOriginalSolicitacao'] = $pdf1->it14_valorpaga;
     $body['k00_numpre'] = $pdf1->numpreitbi;

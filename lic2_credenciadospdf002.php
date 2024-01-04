@@ -35,9 +35,9 @@ inner join pcorcamitemproc on
 	pc31_pcprocitem = pc81_codprocitem
 inner join itemprecoreferencia on
 	si02_itemproccompra = pc31_orcamitem
-inner join credenciamento on
+right join credenciamento on
 	l205_item = l21_codpcprocitem
-inner join cgm on
+right join cgm on
 	l205_fornecedor = z01_numcgm
 inner join solicitempcmater on
 	pc16_solicitem = pc81_solicitem

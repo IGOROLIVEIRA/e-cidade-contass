@@ -34,6 +34,7 @@ include("classes/db_empempenho_classe.php");
 include("classes/db_conlancam_classe.php");
 include("classes/db_empdiaria_classe.php");
 require_once("std/Modification.php");
+require_once ("libs/db_liborcamento.php");
 
 $clmatordem = new cl_matordem;
 $clpagordem   = new cl_pagordem;
@@ -379,6 +380,48 @@ if (isset($alterar)) {
 }
 db_fim_transacao($sqlerroReinf);
 
+db_inicio_transacao();
+
+if (isset($alterar) && $ct01_codcategoria) {
+
+  // Esocial
+  $sqlerroEsocial = false;
+  if (!$sqlerroEsocial) {
+      $aEmpenho = explode("/",$e60_codemp);
+      $clpagordemEsocial      = new cl_pagordem;
+      $where = " e60_codemp =  '".$aEmpenho[0]."' and e60_anousu = ".$aEmpenho[1]." and e60_instit = ".db_getsession("DB_instit");
+      $sql = $clpagordemEsocial->sql_record($clpagordemEsocial->sql_query_emp(null,"*",null,$where));
+   
+      if ($clpagordemEsocial->numrows > 0) {
+          $oEsocial= db_utils::fieldsMemory($sql, 0);
+          
+          $clpagordemEsocial = new cl_pagordem;
+          $clpagordemEsocial->e50_retencaoir                = $reinfRetencao;
+          $clpagordemEsocial->e50_naturezabemservico        = $naturezaCod;
+          $clpagordemEsocial->e50_cattrabalhador            = $ct01_codcategoria;
+          $clpagordemEsocial->e50_cattrabalhadorremurenacao = $ct01_codcategoriaremuneracao;
+          $clpagordemEsocial->e50_empresadesconto           = $numempresa;
+          $clpagordemEsocial->e50_contribuicaoPrev          = $contribuicaoPrev;
+          $clpagordemEsocial->e50_valorremuneracao          = str_replace(',', '', $valorremuneracao);
+          $clpagordemEsocial->e50_valordesconto             = str_replace(',', '', $valordesconto);
+
+          if ($competencia && $competencia != "undefined") {
+            $clpagordemEsocial->e50_datacompetencia         = formateDateReverse($competencia);
+          }
+          
+          $clpagordemEsocial->alterar($oEsocial->e50_codord,null);
+          $erro_msg_esocial = $clpagordemEsocial->erro_status;
+
+      } 
+  }
+
+  if($erro_msg_esocial == 1){
+      $erro_msg .= "\n\nDados do Esocial atualizados.";
+  } else{
+     $erro_msg .= "\n\nFalhas ao Salvar Dados do Esocial.";
+  }
+}
+db_fim_transacao($sqlerroEsocial);
 ?>
 <html>
 <head>
@@ -406,5 +449,12 @@ if(isset($alterar)){
     }else{
         db_msgbox($erro_msg);
     }
+}
+function formateDateReverse(string $date): string
+{
+   
+    $data_objeto = DateTime::createFromFormat('d/m/Y', $date);
+    $data_formatada = $data_objeto->format('Y-m-d');
+    return date('Y-m-d', strtotime($data_formatada));
 }
 ?>

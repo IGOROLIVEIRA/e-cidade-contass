@@ -75,8 +75,14 @@ class cl_empempenho
     var $e60_convenio = null;
     var $e60_numconvenio = null;
     var $e60_dataconvenio = null;
+    var $e60_dataconvenio_dia = null;
+    var $e60_dataconvenio_mes = null;
+    var $e60_dataconvenio_ano = null;
     /*OC4604 - LQD*/
     var $e60_datasentenca = null;
+    var $e60_datasentenca_dia = null;
+    var $e60_datasentenca_mes = null;
+    var $e60_datasentenca_ano = null;
     var $e60_tipodespesa = null;
     /*FIM OC4604 - LQD*/
     /*OC4401*/
@@ -87,6 +93,7 @@ class cl_empempenho
     var $e60_emendaparlamentar = null;
     var $e60_esferaemendaparlamentar = null;
     /** FIM - OC19656 */
+    var $e60_codco = null;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  e60_numemp = int4 = Número
@@ -121,6 +128,7 @@ class cl_empempenho
                  e60_emendaparlamentar = int8 = emenda parlamentar
                  e60_esferaemendaparlamentar = int8 = esfera emenda parlamentar
                  e60_vlrutilizado = float8 = Valor utilizado
+                 e60_codco = varchar(4) = codigo co
                  ";
     //funcao construtor da classe
     function cl_empempenho()
@@ -205,7 +213,8 @@ class cl_empempenho
         $this->e60_tipodespesa = ($this->e60_tipodespesa == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_tipodespesa"] : $this->e60_tipodespesa);
         $this->e60_emendaparlamentar = ($this->e60_emendaparlamentar == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_emendaparlamentar"] : $this->e60_emendaparlamentar);
         $this->e60_esferaemendaparlamentar = ($this->e60_esferaemendaparlamentar == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_esferaemendaparlamentar"] : $this->e60_esferaemendaparlamentar);
-    }
+        $this->e60_codco = ($this->e60_codco == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_codco"] : $this->e60_codco);
+    } 
     // funcao para inclusao
     function incluir($e60_numemp)
     {
@@ -418,6 +427,9 @@ class cl_empempenho
         if ($this->e60_esferaemendaparlamentar == null) {
             $this->e60_esferaemendaparlamentar = 0;
         }
+        if ($this->e60_codco == null) {
+            $this->e60_codco = '0000';
+        }
         $sql = "insert into empempenho(
                                        e60_numemp
                                       ,e60_codemp
@@ -451,6 +463,7 @@ class cl_empempenho
                                       ,e60_emendaparlamentar
                                       ,e60_esferaemendaparlamentar
                                       ,e60_vlrutilizado
+                                      ,e60_codco
                        )
                 values (
                                 $this->e60_numemp
@@ -485,6 +498,7 @@ class cl_empempenho
                                ,$this->e60_emendaparlamentar
                                ,$this->e60_esferaemendaparlamentar
                                ,$this->e60_vlrutilizado
+                               ,'$this->e60_codco'
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -870,6 +884,10 @@ class cl_empempenho
                 $this->erro_status = "0";
                 return false;
             }
+        }
+        if (trim($this->e60_codco) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_codco"])) {
+            $sql  .= $virgula . " e60_codco = '$this->e60_codco'";
+            $virgula = ",";
         }
         if (trim($this->e60_dataconvenio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_dataconvenio_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["e60_dataconvenio_dia"] != "")) {
             $sql  .= $virgula . " e60_dataconvenio = '$this->e60_dataconvenio' ";
