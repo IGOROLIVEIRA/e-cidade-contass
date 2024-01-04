@@ -60,7 +60,7 @@ if (isset($salvar)) {
     $erroMsg = "Verifique o preenchimento das lotações";
   }
 
-  if ($sqlErro === false && (count($funcionariosSelecionados) === 0 || count($funcionarios) === 0)) {
+  if ($sqlErro === false && (count($funcionariosSelecionados) === 0 && count($funcionarios) === 0)) {
     $sqlErro = true;
     $erroMsg = "Verifique a seleção das lotações";
   }
