@@ -1941,6 +1941,7 @@ if (count($aParametrosEmpenho) > 0) {
             $('showautenticar').style.visibility = 'visible';
             $('autenticar').checked               = false;
             $('showreemissao').style.visibility = 'visible';
+            $('reemisaoop').checked              = true;
 
         } else {
 
@@ -2162,7 +2163,7 @@ if (count($aParametrosEmpenho) > 0) {
             sListaMovimento += sVirgula+""+aMovimento;
             sVirgula         = ",";
         });
-        window.open('emp2_emitenotaliqpormovimento002.php?e50_codord='+sListaOrdem+'&e81_codmov='+sListaMovimento,
+        window.open('emp2_emitenotadespesa002.php?sOrdens='+sListaOrdem+'&sMovimentos='+sListaMovimento,
             '',
             'location=0'
         );

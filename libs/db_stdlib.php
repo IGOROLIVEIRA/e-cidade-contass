@@ -1043,6 +1043,8 @@ function db_formatar($str, $tipo, $caracter = " ", $quantidade = 0, $TipoDePreen
             return substr($str, 0, 1) . "." . substr($str, 1, 1) . "." . substr($str, 2, 1) . "." . substr($str, 3, 1) . "." . substr($str, 4, 1) . "." . substr($str, 5, 2) . "." . substr($str, 7, 2) . "." . substr($str, 9, 2) . "." . substr($str, 11, 2);
         case "elemento":
             return substr($str, 1, 1) . "." . substr($str, 2, 1) . "." . substr($str, 3, 1) . "." . substr($str, 4, 1) . "." . substr($str, 5, 2) . "." . substr($str, 7, 2) . "." . substr($str, 9, 2) . "." . substr($str, 11, 2);
+        case "elemento_alt":
+            return substr($str, 1, 1) . "." . substr($str, 2, 1) . "." . substr($str, 3, 1) . "" . substr($str, 4, 1) . "." . substr($str, 5, 2) . "." . substr($str, 7, 2);
         case "recurso":
             return str_pad($str, 4, "0", STR_PAD_LEFT);
         case "atividade":

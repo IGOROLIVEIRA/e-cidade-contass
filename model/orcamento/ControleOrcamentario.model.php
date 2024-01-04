@@ -345,4 +345,31 @@ class ControleOrcamentario
             '7001' => 'Transferências do Estado decorrentes de emendas parlamentares não impositivas'
         );
     }
+
+    public function getDescricaoResumoCO()
+    {
+        $this->setDescricaoResumoCO();
+        $this->sDescricao = $this->sDescricaoPorCO[$this->iCodco];
+        return $this->sDescricao;
+    }
+
+    public function setDescricaoResumoCO()
+    {
+        $this->sDescricaoPorCO = array(
+            '0000' => 'SEM IDENTIFICAÇÃO DE CO',
+            '1001' => 'MANUTENÇÃO E DESENVOLVIMENTO DO ENSINO',
+            '1002' => 'AÇÕES E SERVIÇOS PÚBLICOS DE SAÚDE',
+            '1070' => 'APLICAÇÃO NA REMUNERAÇÃO DO FUNDEB',
+            '1111' => 'BENEF. PREV. PODER EXECUTIVO CAPITALIZAÇÃO',
+            '1121' => 'BENEF. PREV. PODER LEGISLATIVO CAPITALIZAÇÃO',
+            '2111' => 'BENEF. PREV. PODER EXECUTIVO REPARTIÇÃO',
+            '2121' => 'BENEF. PREV. PODER LEGISLATIVO REPARTIÇÃO ',
+            '3110' => 'EMEN. PARLAMENTARES INDIVIDUAIS(UNIÃO)',
+            '3120' => 'EMEN. PARLAMENTARES DE BANCADA(UNIÃO)',
+            '3210' => 'EMEN. PARLAMENTARES INDIVIDUAIS(ESTADO)',
+            '3220' => 'EMEN. PARLAMENTARES DE BANCADA(ESTADO)',
+            '7000' => 'EMEN. PARLAMENTARES NÃO IMPOSITIVAS(UNIÃO)',
+            '7001' => 'EMEN. PARLAMENTARES NÃO IMPOSITIVAS(ESTADO)',
+        );
+    }
 }
