@@ -107,7 +107,7 @@ if($tipofun == 'E'){
             ||  lpad(trim(to_char(coalesce(rh16_ctps_s,0),'99999')),5,'0')
        ||';'||  rpad(coalesce(to_char(rh01_nasc,'DDMMYYYY'),''),8)
        ||';'||  rpad(coalesce(rh01_natura,''),25,' ')
-       ||';'||  '  '
+       ||';'||  rpad(coalesce(z01_uf,''),2,' ')
        ||';'||  coalesce(case rh01_estciv
                     when 1 then '1'
                     when 2 then '2'
@@ -115,8 +115,8 @@ if($tipofun == 'E'){
                     when 4 then '6'
                     when 5 then '5'
                 end,'')  
-
        ||';'||  rpad(coalesce(conjuge,''),40,' ')
+       ||';'||  rpad(coalesce(cpfconjuge,''),11,' ')
        ||';'||  rpad(coalesce(z01_pai,''),32,' ')
        ||';'||  rpad(coalesce(z01_mae,''),32,' ')
        ||';'||  coalesce(case rh01_sexo
@@ -125,17 +125,23 @@ if($tipofun == 'E'){
                 end,'')  
        ||';'||  lpad(coalesce(z01_ident,''),15,'0')
        ||';'||  lpad(coalesce(z01_identorgao,''),5,'0')
-       ||';'||  'RS'           
-       ||';'||  rpad(coalesce(to_char(z01_identdtexp,'DDMMYYYY'),''),8) 
-       ||';'||  '298'
+       ||';'||  ' '
+       ||';'||  rpad(coalesce(to_char(z01_identdtexp,'DDMMYYYY'),''),8)
+       ||';'||  lpad(coalesce(rh16_carth_n::char(12),''),12,' ')
+       ||';'||  rpad(coalesce(to_char(rh16_carth_val,'DDMMYYYY'),''),8) 
+       ||';'||  rpad(coalesce(to_char(rh16_cnh_exp,'DDMMYYYY'),''),8)
+       ||';'||  rpad(coalesce(rh37_descr,''),100,' ') 
        ||';'||  to_char(coalesce(rh01_admiss,'01-01-1999'),'DDMMYYYY')
        ||';'||  rpad(trim(coalesce(z01_ender,''))||','||coalesce(z01_numero::char(4),''),40,' ')
+       ||';'||  rpad(coalesce(z01_numero::char(4),' '),4,' ')
+       ||';'||  rpad(coalesce(z01_comcon,''),100,' ')
        ||';'||  rpad(coalesce(z01_bairro,''),25,' ')
        ||';'||  rpad(coalesce(z01_munic,''),25,' ')
        ||';'||  rpad(coalesce(z01_uf,''),2,' ')
        ||';'||  rpad(coalesce(z01_cep,''),8,' ')
-       ||';'||  '51'
+       ||';'||  '55'
        ||';'||  lpad(coalesce(z01_telef,''),12,'0')
+       ||';'||  lpad(coalesce(z01_telcel,''),12,'0')
        ||';'||  rpad(coalesce(z01_email,''),50,' ')
        ||';'||  coalesce(case rh21_instru
                     when 1 then '8'
@@ -167,10 +173,11 @@ from rhpessoal
                                and rh30_instit    = rh02_instit
      left join  rhpesbanco      on rh44_seqpes    = rh02_seqpes
      left join (select rh31_regist,
-	               max(case when rh31_gparen = 'C' then rh31_nome else '' end) as conjuge
+	               max(case when rh31_gparen = 'C' then rh31_nome else '' end) as conjuge,
+                   rh31_cpf as cpfconjuge
 		from rhdepend
 		where rh31_gparen in ('C')
-		group by rh31_regist) as dep on dep.rh31_regist = rh01_regist
+		group by rh31_regist,rh31_cpf) as dep on dep.rh31_regist = rh01_regist
      left join (select r14_regist,
                         to_char(sum(case when r14_pd = 1 then r14_valor else 0 end ),'99999999.99') as provento
                    from gerfsal 
@@ -659,7 +666,7 @@ order by z01_nome";
 
  
   }
-  //echo "<br><br><br><br><br>".$sql;exit;
+ //echo "<br><br><br><br><br>".$sql;exit;
   $result = db_query($sql);
  //db_criatabela($result);exit;
   if($exporta == 'C'){
@@ -700,9 +707,11 @@ order by z01_nome";
        str_pad('Cidade',20).
        str_pad('UF',2);
        fputs($arquivo,$sql1."\r\n");
+  }elseif($exporta == 'D'){
+    fputs($arquivo,"nome;nomeabrev;cpf;pis;ctps;nascimento;naturalidade;uf;estadocivil;conjugue;cpfconjugue;pai;mae;sexo;identidade;orgaoidentidade;uforgaoemissor;expedicaoidentidade;cnh;cnhvalidade;cnhexpedicao;cargo;admissao;endereco;numero;complemento;bairro;municipio;uf;cep;ddi;telefone;celular;email;grauinstrucao;rendabruta"."\r\n");
   }
 
-  for($x = 0;$x < pg_numrows($result);$x++){
+  for($x = 0;$x < pg_num_rows($result);$x++){
     db_fieldsmemory($result,$x);
     fputs($arquivo,$tipo."\r\n");
   }
