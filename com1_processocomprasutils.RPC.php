@@ -30,13 +30,17 @@ switch ($oParam->exec) {
                                           FROM amparocflicita
                                           INNER JOIN cflicita ON cflicita.l03_codigo=l213_modalidade
                                           WHERE l03_pctipocompratribunal= $oParam->modalidade
-                                              AND l03_instit = " . db_getsession('DB_instit') . "))";
+                                              AND l03_instit = " . db_getsession('DB_instit') . ")) order  by l212_codigo";
         $result_tipo = db_query($sql);
 
         for ($iCont = 0; $iCont < pg_num_rows($result_tipo); $iCont++) {
-            $oItensObra = db_utils::fieldsMemory($result_tipo, $iCont);
-            $oRetorno->amparolegal[] = $oItensObra;
+            $oAmparolegal = db_utils::fieldsMemory($result_tipo, $iCont);
+            $oAmparo = new stdClass();
+            $oAmparo->l212_codigo = $oAmparolegal->l212_codigo;
+            $oAmparo->l212_lei = urlencode(utf8_decode($oAmparolegal->l212_lei));
+            $oRetorno->amparolegal[] = $oAmparo;
         }
+
         break;
 }
 

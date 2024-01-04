@@ -1036,7 +1036,7 @@ $clrotulo->label("descrdepto");
             }
 
             oRetorno.amparolegal.forEach(function (amparo, iseq){
-                listaamparolegal.add(new Option(amparo.l212_lei, amparo.l212_codigo));
+                listaamparolegal.add(new Option(amparo.l212_lei.urlDecode(), amparo.l212_codigo));
             });
         }
 
