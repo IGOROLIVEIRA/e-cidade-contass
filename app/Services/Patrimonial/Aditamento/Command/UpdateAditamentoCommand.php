@@ -54,6 +54,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
      */
     public function execute(Aditamento $aditamento): bool
     {
+
         $this->validaNumeroAditamento($aditamento);
 
         $acordoPosicao = $this->formatAcordoPosicao($aditamento);
@@ -166,6 +167,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
      */
     private function formatAcordoPosicao(Aditamento $aditamento): array
     {
+
         $acordoPosicao = [
             'ac26_acordoposicaotipo' => $aditamento->getTipoAditivo(),
             'ac26_numeroaditamento'  => $aditamento->getNumeroAditamento(),
@@ -176,6 +178,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
             $acordoPosicao['ac26_indicereajuste'] = $aditamento->getIndiceReajuste();
             $acordoPosicao['ac26_percentualreajuste'] = $aditamento->getPercentualReajuste();
         }
+
         return $acordoPosicao;
     }
 

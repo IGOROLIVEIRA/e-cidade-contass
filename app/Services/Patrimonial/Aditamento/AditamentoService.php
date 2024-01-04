@@ -5,6 +5,7 @@ namespace App\Services\Patrimonial\Aditamento;
 use App\Domain\Patrimonial\Aditamento\Factory\AditamentoFactory;
 use App\Repositories\Patrimonial\AcordoPosicaoRepository;
 use App\Services\Contracts\Patrimonial\Aditamento\AditamentoServiceInterface;
+use App\Services\Patrimonial\Aditamento\Command\GetUltimaPosicaoCommand;
 use App\Services\Patrimonial\Aditamento\Command\UpdateAditamentoCommand;
 use App\Services\Patrimonial\Aditamento\Command\ValidaDataAssinaturaCommand;
 use Exception;
@@ -30,15 +31,13 @@ class AditamentoService implements AditamentoServiceInterface
     public function getDadosAditamento(int $ac16Sequencial): array
     {
         $acordoPosicao = $this->acordoPosicaoRepository->getAditamentoUltimaPosicao($ac16Sequencial);
-        $numeroAditamento = (int)$acordoPosicao->ac26_numeroaditamento;
 
-        $acordoPosicaoAnterior = null;
-        if( $numeroAditamento > 1) {
-            $acordoPosicaoAnterior = $this->acordoPosicaoRepository->getAditamentoByNumero($ac16Sequencial, $numeroAditamento - 1);
-        } else {
-            $acordoPosicaoAnterior = $this->acordoPosicaoRepository->getPosicaoInicial($ac16Sequencial);
-        }
-        
+        $acordoPosicaoAnterior = GetUltimaPosicaoCommand::execute(
+            $this->acordoPosicaoRepository,
+            $acordoPosicao,
+            $ac16Sequencial
+        );
+
         $aditamentoFactory = new AditamentoFactory();
         $aditamento = $aditamentoFactory->createByEloquentModel($acordoPosicao, $acordoPosicaoAnterior);
 
