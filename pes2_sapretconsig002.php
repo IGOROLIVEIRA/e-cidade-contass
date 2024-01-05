@@ -45,10 +45,6 @@ $dbwheredesc = " rh23_rubric is null ";
 $dbwhereprov = " rh23_rubric is not null ";
 $dbwhererubs = "";
 
-if (trim($recrs) != "") {
-    $dbwheredesc .= "and rh25_recurso in (" . $recrs . ") ";
-}
-
 if (trim($rubrs) != "") {
     $dbwhererubs = " and #s#_rubric in ('" . str_replace(",", "','", $rubrs) . "')";
 }

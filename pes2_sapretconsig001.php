@@ -179,7 +179,7 @@ $db_botao = true;
               $aux->linhas = 10;
               $aux->vwidth = "400";
               $aux->tamanho_campo_descricao = 38;
-        $aux->completar_com_zeros_codigo = true;
+              $aux->completar_com_zeros_codigo = true;
               $aux->funcao_gera_formulario();
               ?>
             </table>
