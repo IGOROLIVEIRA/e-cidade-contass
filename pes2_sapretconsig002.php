@@ -332,8 +332,6 @@ foreach ($aDadoDesc as $dado) {
     //}
 }
 
-//echo "<pre>"; print_r($aDadoDesc); die;
-
 if ($quebra == 'f') {
     // agrupar dados por rubrica
     $aRubrica = array();
@@ -439,14 +437,13 @@ if ($quebra == 't') {
             }
         }
     }
-
+    // ordena array de forma crescente
     ksort($aRecurso);
 
+    // ordena subarray de forma crescente
     foreach ($aRecurso as &$subarray) {
         ksort($subarray);
     }
-
-    //echo "<pre>"; print_r($aRecurso); die;
 }
 
 //verifica se existem dados para exibir o relatório
@@ -558,6 +555,7 @@ if ($quebra == 'f') {
     }
     $pdf->Output();
 } else {
+    //quebra por página sim
     foreach ($aRecurso as $key => $valor) {
 
         if ($pdf->gety() > $pdf->h - 30 || $troca != 0) {
