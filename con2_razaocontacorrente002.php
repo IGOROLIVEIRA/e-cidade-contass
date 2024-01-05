@@ -245,7 +245,7 @@ function getSaldosFinal ($dtInicial, $dtFinal, $iContaCorrente, $iReduzido, $iNu
                             else 0
                        end ) as credito ";
 
-    $sWhere  = "     c69_data <= '{$dDataFinal}' ";
+    $sWhere  = "     c69_data >= '{$dDataFinal}' ";
     $sWhere .= " and c19_contacorrente = {$iContaCorrente} ";
     $sWhere .= " and c19_reduz  = {$iReduzido} ";
     $sWhere .= " and c19_sequencial  = {$c19_sequencial} ";
@@ -411,6 +411,10 @@ foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
   $nSaldoFinal     = ($oSaldosFinal->nTotalDebito - $oSaldosFinal->nTotalCredito);
 
   if($bContaSomenteComSaldo == 1 && $nSaldoFinal == 0 ){
+    continue;
+  }
+  $resto = 0.00001;
+  if($bContaSomenteComSaldo == 1 && (abs($oSaldosFinal->nTotalDebito - $oSaldosFinal->nTotalCredito) < $resto) ){
     continue;
   }
   // escrevemos os atributos
