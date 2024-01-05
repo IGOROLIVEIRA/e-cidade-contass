@@ -4,10 +4,12 @@ namespace App\Services\Patrimonial\Aditamento\Command;
 
 use App\Domain\Patrimonial\Aditamento\Aditamento;
 use App\Domain\Patrimonial\Aditamento\Item;
+use App\Repositories\Contracts\Patrimonial\AcordoItemDotacaoRepositoryInterface;
 use App\Repositories\Contracts\Patrimonial\AcordoItemPeriodoRepositoryInterface;
 use App\Repositories\Contracts\Patrimonial\AcordoItemRepositoryInterface;
 use App\Repositories\Contracts\Patrimonial\AcordoPosicaoAditamentoRepositoryInterface;
 use App\Repositories\Contracts\Patrimonial\AcordoPosicaoRepositoryInterface;
+use App\Repositories\Patrimonial\AcordoItemDotacaoRepository;
 use App\Repositories\Patrimonial\AcordoItemPeriodoRepository;
 use App\Repositories\Patrimonial\AcordoItemRepository;
 use App\Repositories\Patrimonial\AcordoPosicaoAditamentoRepository;
@@ -39,12 +41,15 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
      */
     private AcordoItemPeriodoRepositoryInterface $acordItemPeriodRepository;
 
+    private AcordoItemDotacaoRepositoryInterface $acordoItemDotacaoRepository;
+
     public function __construct()
     {
         $this->acordoPosicaoRepository = new AcordoPosicaoRepository();
         $this->acordoItemRepository = new AcordoItemRepository();
         $this->acordoPosAditRepository = new AcordoPosicaoAditamentoRepository();
         $this->acordItemPeriodRepository = new AcordoItemPeriodoRepository();
+        $this->acordoItemDotacaoRepository = new AcordoItemDotacaoRepository();
     }
 
     /**
@@ -116,6 +121,20 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
 
                 if (!$resultItem) {
                     throw new Exception("Não foi possível atualizar aditamento. Erro em acordoitem, no item: ".  $codigoItem);
+                }
+
+                $quantidadeDotacoes = $this->acordoItemDotacaoRepository->getQtdDotacaoByAcordoItem($codigoItem);
+
+                if ($quantidadeDotacoes == 1) {
+                    $resultDotacao = $this->acordoItemDotacaoRepository->updateByAcordoItem($codigoItem,
+                    [
+                        'ac22_quantidade' => $item->getQuantidade(),
+                        'ac22_valor' => $item->getValorUnitario()
+                    ]);
+
+                    if (!$resultDotacao) {
+                        throw new Exception('Erro ao atualizar dotação');
+                    }
                 }
 
                 if($aditamento->isAlteracaoPrazo() || $aditamento->isAcdcConjugado()) {

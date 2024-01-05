@@ -368,18 +368,45 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
           }else{
               $('justificativa').style.display = 'none';
           }
-
       }).setMessage("Aguarde, pesquisando acordos.")
           .execute();
 
-
-
       me.oTxtCodigoAcordo.setValue(chave1);
       me.oTxtDescricaoAcordo.setValue(chave2);
+
       db_iframe_acordo.hide();
       me.pesquisarDadosAcordo();
 
+    validaAcordoDotacoesAnoOrigem(chave1);
+  }
 
+  function validaAcordoDotacoesAnoOrigem(codigoAcordo) {
+    let oParametros = {};
+    oParametros.anoOrigem = anoOrigem;
+    oParametros.anoDestino = anoDestino;
+    oParametros.codigoAcordo = codigoAcordo;
+    oParametros.somenteConsulta = true;
+
+    new Ajax.Request('ac04_alteradotacoescontratos.RPC.php', {
+      method: 'post',
+      parameters: 'json=' + Object.toJSON(oParametros),
+      start_time: new Date().getTime(),
+      onComplete: function(oResponse) {
+        const oRetorno = eval("(" + oResponse.responseText + ")");
+        let timeout = new Date().getTime() - this.start_time;
+        if (oRetorno.materiaisSemDotacoes === true) {
+          if (oRetorno.todosItensSemDotacoes === true) {
+            setTimeout(function(){
+              alert(`Todos os itens deste contrato estão sem dotações para o ano ${anoOrigem}. Acessar a rotina Módulo Contratos > Procedimentos - Acordo - Alteração de Dotação e realizar a alteração para prosseguir com o procedimento.`);
+            }, timeout);
+          } else {
+            setTimeout(function(){
+              alert(`Os itens ${oRetorno.itens} estão sem dotações para o ano ${anoOrigem}. Acessar a rotina Módulo Contratos > Procedimentos - Acordo - Alteração de Dotação e realizar a alteração para prosseguir com o procedimento.`);
+            }, timeout);
+          }
+        }
+      }
+    });
   }
 
   function js_retornoGetLeilicitacao(oAjax){
