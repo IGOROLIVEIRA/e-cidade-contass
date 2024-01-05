@@ -46,7 +46,7 @@ $dbwhereprov = " rh23_rubric is not null ";
 $dbwhererubs = "";
 
 if (trim($recrs) != "") {
-    $dbwhere = " rh25_recurso in (" . $recrs . ")";
+    $dbwheredesc .= "and rh25_recurso in (" . $recrs . ") ";
 }
 
 if (trim($rubrs) != "") {
@@ -267,8 +267,6 @@ $sqlDesc = $clgerasql->gerador_sql(
     $dbwheredesc . "group by rh25_recurso, o15_descr, " . $sigla . "_rubric, rh27_descr, x." . $sigla . "_regist"
 );
 
-//print_r($sqlDesc); die;
-
 $resultDesc = $clgerasql->sql_record($sqlDesc);
 $aDadoDesc = array();
 
@@ -326,7 +324,7 @@ foreach ($aDadoDesc as $dado) {
             $percentualexc = $calcexc->valorprovento / $dado->totalproventosfinal * 100;
             $valorexcecao  = $dado->valordesc * $percentualexc / 100;
             $sumvalorexcecao += $valorexcecao;
-            $dado->valorexcecaoformat = round($sumvalorexcecao,2);
+            $dado->valorexcecaoformat = round($sumvalorexcecao, 2);
             $dado->recursoexcecao = $calcexc->recursoexc;
             $dado->descrrecursoexc = $calcexc->descrrecursoexc;
         }
@@ -340,54 +338,120 @@ foreach ($aDadoDesc as $dado) {
 
 //echo "<pre>"; print_r($aDadoDesc); die;
 
-// agrupar dados por rubrica
-$aRubrica = array();
+if ($quebra == 'f') {
+    // agrupar dados por rubrica
+    $aRubrica = array();
 
-foreach ($aDadoDesc as $item) {
-    $key = $item->rubrica . '|' . $item->recurso;
-    if (!isset($aRubrica[$key])) {
-        $aRubrica[$key] = (object) array(
-            'rubrica' => $item->rubrica,
-            'descrrubrica' => $item->descrrubrica,
-            'recurso' => $item->recurso,
-            'descricaorecurso' => $item->descricaorecurso,
-            'valordescfinal' => $item->valordescfinal
-
-        );
-    } else {
-        $aRubrica[$key]->valordescfinal += $item->valordescfinal;
-    }
-
-    if ($item->recursoexcecao !== null) {
-        $keyExcecao = $item->rubrica . '|' . $item->recursoexcecao;
-        if (!isset($aRubrica[$keyExcecao])) {
-            $aRubrica[$keyExcecao] = (object) array(
+    foreach ($aDadoDesc as $item) {
+        $key = $item->rubrica . '|' . $item->recurso;
+        if (!isset($aRubrica[$key])) {
+            $aRubrica[$key] = (object) array(
                 'rubrica' => $item->rubrica,
                 'descrrubrica' => $item->descrrubrica,
-                'recursoexcecao' => $item->recursoexcecao,
-                'descrrecursoexc' => $item->descrrecursoexc,
-                'valorexcecaoformat' => $item->valorexcecaoformat
+                'recurso' => $item->recurso,
+                'descricaorecurso' => $item->descricaorecurso,
+                'valordescfinal' => $item->valordescfinal
+
             );
         } else {
-            $aRubrica[$keyExcecao]->valorexcecaoformat += $item->valorexcecaoformat;
+            $aRubrica[$key]->valordescfinal += $item->valordescfinal;
+        }
+
+        if ($item->recursoexcecao !== null) {
+            $keyExcecao = $item->rubrica . '|' . $item->recursoexcecao;
+            if (!isset($aRubrica[$keyExcecao])) {
+                $aRubrica[$keyExcecao] = (object) array(
+                    'rubrica' => $item->rubrica,
+                    'descrrubrica' => $item->descrrubrica,
+                    'recursoexcecao' => $item->recursoexcecao,
+                    'descrrecursoexc' => $item->descrrecursoexc,
+                    'valorexcecaoformat' => $item->valorexcecaoformat
+                );
+            } else {
+                $aRubrica[$keyExcecao]->valorexcecaoformat += $item->valorexcecaoformat;
+            }
+        }
+    }
+
+    ksort($aRubrica);
+
+    foreach ($aRubrica as &$rubRecurso) {
+        ksort($rubRecurso);
+    }
+
+    //totalizar recurso
+    $aTotalizaRecurso = array();
+
+    foreach ($aRubrica as $rubrica) {
+        $recurso = $rubrica->recurso;
+        $recursoexcecao = $rubrica->recursoexcecao;
+
+        if (!isset($aTotalizaRecurso[$recurso])) {
+            $aTotalizaRecurso[$recurso] = (object) array(
+                'recurso' => $recurso,
+                'descricaorecurso' => $rubrica->descricaorecurso,
+                'valordescfinal' => $rubrica->valordescfinal
+            );
+        } else {
+            $aTotalizaRecurso[$recurso]->valordescfinal += $rubrica->valordescfinal;
+        }
+
+        if (!isset($aTotalizaRecurso[$recursoexcecao])) {
+            $aTotalizaRecurso[$recursoexcecao] = (object) array(
+                'recurso' => $recursoexcecao,
+                'descricaorecurso' => $rubrica->descrrecursoexc,
+                'valordescfinal' => $rubrica->valorexcecaoformat
+            );
+        } else {
+            $aTotalizaRecurso[$recursoexcecao]->valordescfinal += $rubrica->valorexcecaoformat;
         }
     }
 }
 
-//ordena recursos por rubrica
-function compararPorRubrica($a, $b)
-{
-    $comparaRubrica = strcmp($a->rubrica, $b->rubrica);
-    if ($comparaRubrica === 0) {
-        $comparacaoRecurso = strcmp($a->recurso, $b->recurso);
-        if ($comparacaoRecurso === 0) {
-            return strcmp($a->recursoexcecao, $b->recursoexcecao);
+//quando optar por quebra, o relatorio será estruturado por recurso não mais por rubrica
+if ($quebra == 't') {
+
+    //agrupa por recurso
+    $aRecurso = array();
+    foreach ($aDadoDesc as $item) {
+        $key = $item->recurso . " - " . $item->descricaorecurso;
+        if (!isset($aRecurso[$key][$item->rubrica])) {
+            $aRecurso[$key][$item->rubrica] = (object) array(
+                'rubrica' => $item->rubrica,
+                'descrrubrica' => $item->descrrubrica,
+                'recurso' => $item->recurso,
+                'descricaorecurso' => $item->descricaorecurso,
+                'valordescfinal' => $item->valordescfinal
+
+            );
+        } else {
+            $aRecurso[$key][$item->rubrica]->valordescfinal += $item->valordescfinal;
         }
-        return $comparacaoRecurso;
+
+        if ($item->recursoexcecao !== null) {
+            $keyExcecao = $item->recursoexcecao . " - " . $item->descrrecursoexc;
+            if (!isset($aRecurso[$keyExcecao][$item->rubrica])) {
+                $aRecurso[$keyExcecao][$item->rubrica] = (object) array(
+                    'rubrica' => $item->rubrica,
+                    'descrrubrica' => $item->descrrubrica,
+                    'recurso' => $item->recursoexcecao,
+                    'descricaorecurso' => $item->descrrecursoexc,
+                    'valordescfinal' => $item->valorexcecaoformat
+                );
+            } else {
+                $aRecurso[$keyExcecao][$item->rubrica]->valordescfinal += $item->valorexcecaoformat;
+            }
+        }
     }
-    return $comparaRubrica;
+
+    ksort($aRecurso);
+
+    foreach ($aRecurso as &$subarray) {
+        ksort($subarray);
+    }
+
+    //echo "<pre>"; print_r($aRecurso); die;
 }
-usort($aRubrica, 'compararPorRubrica');
 
 //verifica se existem dados para exibir o relatório
 if ($resultDesc === false || ($resultDesc !== false && $clgerasql->numrows_exec == 0)) {
@@ -407,79 +471,132 @@ $troca = 1;
 $alt = 4;
 
 $rubri_ant = "";
+$recursoant = "";
 $total_rub = 0;
 $total_ger = 0;
 $cor = 1;
 $proxpag = true;
 
-foreach ($aRubrica as $key => $valor) {
+if ($quebra == 'f') {
 
-    if ($pdf->gety() > $pdf->h - 30 || $troca != 0) {
-        $pdf->addpage();
-        $pdf->setfont('arial', 'b', 8);
-        $pdf->cell(15, $alt, 'RUBRICA', 1, 0, "C", 1);
-        $pdf->cell(75, $alt, 'DESCRIÇÃO', 1, 0, "C", 1);
-        $pdf->cell(75, $alt, 'RECURSO', 1, 0, "C", 1);
-        $pdf->cell(25, $alt, 'DESCONTO', 1, 1, "C", 1);
-        $troca = 0;
-        $cor = 1;
-        $proxpag = true;
-    }
+    foreach ($aRubrica as $key => $valor) {
 
-    $cor = 0;
-    if (strlen($aRubrica[$key]->descricaorecurso) > 45) {
-        $altcol = 2;
-    } else {
-        $altcol = 1;
-    }
+        if ($pdf->gety() > $pdf->h - 30 || $troca != 0) {
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 8);
+            $pdf->cell(15, $alt, 'RUBRICA', 1, 0, "C", 1);
+            $pdf->cell(75, $alt, 'DESCRIÇÃO', 1, 0, "C", 1);
+            $pdf->cell(75, $alt, 'RECURSO', 1, 0, "C", 1);
+            $pdf->cell(25, $alt, 'DESCONTO', 1, 1, "C", 1);
+            $troca = 0;
+            $cor = 1;
+            $proxpag = true;
+        }
 
-    for ($x = 0; $x < sizeof($aRubrica[$key]); $x++) {
-
-        if ($rubri_ant != $aRubrica[$key]->rubrica || $proxpag == true) {
-            if ($rubri_ant != $aRubrica[$key]->rubrica && $rubri_ant != "") {
-                $pdf->setfont('arial', 'b', 7);
-                $pdf->cell(165, $alt, "Total da rubrica ", 0, 0, "R", 1);
-                $pdf->cell(25, $alt, db_formatar($total_rub, "f"), 0, 1, "R", 1);
-                $pdf->ln(2);
-                $total_rub = 0;
-                $cor = 0;
-            }
-            $pdf->setfont('arial', '', 7);
-            $pdf->cell(15, $alt * $altcol, $aRubrica[$key]->rubrica, 0, 0, "C", $cor);
-            $pdf->cell(75, $alt * $altcol, $aRubrica[$key]->descrrubrica, 0, 0, "L", $cor);
+        $cor = 0;
+        if (strlen($aRubrica[$key]->descricaorecurso) > 45) {
+            $altcol = 2;
         } else {
-            $pdf->setfont('arial', '', 7);
-            $pdf->cell(15, $alt * $altcol, "", 0, 0, "C", $cor);
-            $pdf->cell(75, $alt * $altcol, "", 0, 0, "L", $cor);
+            $altcol = 1;
         }
 
-        $pos_x = $pdf->x;
-        $pos_y = $pdf->y;
-        if ($aRubrica[$key]->recurso != null) {
-            $pdf->multicell(75, $alt, $aRubrica[$key]->recurso . " - " . $aRubrica[$key]->descricaorecurso, 0, "L", 0, 0);
-            $pdf->x = $pos_x + 75;
-            $pdf->y = $pos_y;
-            $pdf->cell(25, $alt * $altcol, db_formatar($aRubrica[$key]->valordescfinal, "f"), 0, 1, "R", $cor);
-        }
+        for ($x = 0; $x < sizeof($aRubrica[$key]); $x++) {
 
-        if ($aRubrica[$key]->recursoexcecao != null) {
-            //$pdf->x = 100;
-            $pdf->cell(75, $alt, $aRubrica[$key]->recursoexcecao . " - " . substr($aRubrica[$key]->descrrecursoexc, 0, 40), 0, "R", 1, 0);
-            $pdf->cell(25, $alt * $altcol, db_formatar($aRubrica[$key]->valorexcecaoformat, "f"), 0, 1, "R", $cor);
+            if ($rubri_ant != $aRubrica[$key]->rubrica || $proxpag == true) {
+                if ($rubri_ant != $aRubrica[$key]->rubrica && $rubri_ant != "") {
+                    $pdf->setfont('arial', 'b', 7);
+                    $pdf->cell(165, $alt, "Total da rubrica ", 0, 0, "R", 1);
+                    $pdf->cell(25, $alt, db_formatar($total_rub, "f"), 0, 1, "R", 1);
+                    $pdf->ln(2);
+                    $total_rub = 0;
+                    $cor = 0;
+                }
+                $pdf->setfont('arial', '', 7);
+                $pdf->cell(15, $alt * $altcol, $aRubrica[$key]->rubrica, 0, 0, "C", $cor);
+                $pdf->cell(75, $alt * $altcol, $aRubrica[$key]->descrrubrica, 0, 0, "L", $cor);
+            } else {
+                $pdf->setfont('arial', '', 7);
+                $pdf->cell(15, $alt * $altcol, "", 0, 0, "C", $cor);
+                $pdf->cell(75, $alt * $altcol, "", 0, 0, "L", $cor);
+            }
+
+            $pos_x = $pdf->x;
+            $pos_y = $pdf->y;
+            if ($aRubrica[$key]->recurso != null) {
+                $pdf->multicell(75, $alt, $aRubrica[$key]->recurso . " - " . $aRubrica[$key]->descricaorecurso, 0, "L", 0, 0);
+                $pdf->x = $pos_x + 75;
+                $pdf->y = $pos_y;
+                $pdf->cell(25, $alt * $altcol, db_formatar($aRubrica[$key]->valordescfinal, "f"), 0, 1, "R", $cor);
+            }
+
+            if ($aRubrica[$key]->recursoexcecao != null) {
+                $pdf->cell(75, $alt, $aRubrica[$key]->recursoexcecao . " - " . substr($aRubrica[$key]->descrrecursoexc, 0, 40), 0, "R", 1, 0);
+                $pdf->cell(25, $alt * $altcol, db_formatar($aRubrica[$key]->valorexcecaoformat, "f"), 0, 1, "R", $cor);
+            }
+            $total_rub += $aRubrica[$key]->valordescfinal + $aRubrica[$key]->valorexcecaoformat;
+            $total_ger += $aRubrica[$key]->valordescfinal + $aRubrica[$key]->valorexcecaoformat;
+            $rubri_ant = $aRubrica[$key]->rubrica;
+            $proxpag = false;
         }
-        $total_rub += $aRubrica[$key]->valordescfinal + $aRubrica[$key]->valorexcecaoformat;
-        $total_ger += $aRubrica[$key]->valordescfinal + $aRubrica[$key]->valorexcecaoformat;
-        $rubri_ant = $aRubrica[$key]->rubrica;
-        $proxpag = false;
     }
-}
-$pdf->ln(1);
-$pdf->setfont('arial', 'B', 7);
-$pdf->cell(165, $alt, "Total da rubrica ", 0, 0, "R", 1);
-$pdf->cell(25, $alt, db_formatar($total_rub, "f"), 0, 1, "R", 1);
-$pdf->ln(1);
-$pdf->setfont('arial', 'B', 8);
-$pdf->cell(165, $alt, "Total geral ", "T", 0, "R", 1);
-$pdf->cell(25, $alt, db_formatar($total_ger, "f"), "T", 1, "R", 1);
+    $pdf->ln(1);
+    $pdf->setfont('arial', 'B', 7);
+    $pdf->cell(165, $alt, "Total da rubrica ", 0, 0, "R", 1);
+    $pdf->cell(25, $alt, db_formatar($total_rub, "f"), 0, 1, "R", 1);
+    $pdf->ln(1);
 
-$pdf->Output();
+    $pdf->setfont('arial', 'B', 8);
+    $pdf->cell(165, $alt, "Total geral ", "T", 0, "R", 1);
+    $pdf->cell(25, $alt, db_formatar($total_ger, "f"), "T", 1, "R", 1);
+
+    //exibe total por recurso
+    $pdf->cell(0, $alt, 'Total dos Recursos ', 0, 1, "L", 0);
+    $pdf->setfont('arial', '', 7);
+    foreach ($aTotalizaRecurso as $recurso => $valor) {
+        if ($aTotalizaRecurso[$recurso]->recurso != null) {
+            for ($x = 0; $x < sizeof($aTotalizaRecurso[$recurso]); $x++) {
+                $pdf->cell(150, $alt, $aTotalizaRecurso[$recurso]->recurso . " - " . $aTotalizaRecurso[$recurso]->descricaorecurso, 0, 0, "L", '', '', '_');
+                $pdf->cell(25, $alt, db_formatar($aTotalizaRecurso[$recurso]->valordescfinal, "f"), 0, 1, "R");
+            }
+        }
+    }
+    $pdf->Output();
+} else {
+    foreach ($aRecurso as $key => $valor) {
+
+        if ($pdf->gety() > $pdf->h - 30 || $troca != 0) {
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 8);
+            $pdf->cell(15, $alt, 'RUBRICA', 1, 0, "C", 1);
+            $pdf->cell(75, $alt, 'DESCRIÇÃO', 1, 0, "C", 1);
+            $pdf->cell(75, $alt, 'RECURSO', 1, 0, "C", 1);
+            $pdf->cell(25, $alt, 'DESCONTO', 1, 1, "C", 1);
+            $troca = 0;
+            $cor = 1;
+        }
+        foreach ($valor as $index => $item) {
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(15, $alt, $item->rubrica, 0, 0, "C", 0);
+            $pdf->cell(75, $alt, $item->descrrubrica, 0, 0, "L", 0);
+            $pdf->cell(75, $alt, $item->recurso . " - " . substr($item->descricaorecurso, 0, 40), 0, 0, "L", 0);
+            $pdf->cell(25, $alt, db_formatar($item->valordescfinal, "f"), 0, 1, "R", 0);
+
+            $totalrecurso += $item->valordescfinal;
+            $totalrecursogeral += $item->valordescfinal;
+        }
+        if ($totalrecurso > 0) {
+            $pdf->setfont('arial', 'b', 7);
+            $pdf->cell(165, $alt, "Total do recurso: ", 0, 0, "R", 1);
+            $pdf->cell(25, $alt, db_formatar($totalrecurso, "f"), 0, 1, "R", 1);
+            $pdf->ln(2);
+            $totalrecurso = 0;
+            $cor = 0;
+        }
+        $troca = 1;
+    }
+    $pdf->setfont('arial', 'b', 8);
+    $pdf->cell(165, $alt, "Total Geral: ", "T", 0, "R", 1);
+    $pdf->cell(25, $alt, db_formatar($totalrecursogeral, "f"), "T", 1, "R", 1);
+
+    $pdf->Output();
+}
