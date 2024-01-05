@@ -270,7 +270,7 @@ for ($i = 0; $i < $clpagordem->numrows; $i++) {
     $pdf1->contaPagamento   = $conta;
     $pdf1->movimento        = $e81_codmov;
     $pdf1->tipoDocumento    = $rsForma . ($e81_numdoc == null ? '' : ' / ' . $e81_numdoc);
-    $pdf1->dataPagamento    = $e80_data == null ? '' : date('d/m/Y', strtotime($e80_data));
+    $pdf1->dataPagamento    = $e86_data == null ? '' : date('d/m/Y', strtotime($e86_data));
 
     $sqlTesoureiro = $clReponsaveis->sql_query(null,'z01_nome',null, " si166_tiporesponsavel = 5 and ('$e80_data' between si166_dataini and si166_datafim) and si166_instit = ".db_getsession("DB_instit"));
     $tesoureiro = db_utils::fieldsMemory(db_query($sqlTesoureiro), 0)->z01_nome;

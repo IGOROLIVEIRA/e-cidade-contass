@@ -1086,7 +1086,7 @@ class cl_empagemov {
      $sql2 = "";
      if($dbWhere==""){
        if($e81_codmov!=null ){
-         $sql2 .= " where e81_codmov = " . $e81_codmov . " and c4.c53_tipo = 31 and e81_cancelado is not null";
+         $sql2 .= " where e81_codmov = " . $e81_codmov . " and c53_tipo = 31 and e81_cancelado is not null";
        }
      }else if($dbWhere != ""){
        $sql2 = " where $dbWhere";
