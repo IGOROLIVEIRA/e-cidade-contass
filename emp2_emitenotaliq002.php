@@ -334,6 +334,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $pdf1->saldo_ant        = $e60_salant;
    $pdf1->empenhado        = $e60_vlremp;
    $pdf1->empenho_anulado  = $e60_vlranu;
+   $pdf1->codemp           = $e60_codemp;
    $pdf1->numemp           = $e60_codemp.'/'.$e60_anousu;
    $pdf1->orgao            = $o58_orgao;
    $pdf1->descr_orgao      = $o40_descr;

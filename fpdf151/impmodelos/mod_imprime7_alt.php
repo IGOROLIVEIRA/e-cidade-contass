@@ -18,7 +18,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   $this->objpdf->Setfont('Arial', 'B', 10);
   $this->objpdf->text(128, $xlin - 10, 'NOTA DE LIQUIDAÇÃO N' . CHR(176) . ': ');
   $this->objpdf->Setfont('Arial', 'B', 12);
-  $this->objpdf->text(179, $xlin - 10, $this->numliquidacao);
+  $this->objpdf->text(179, $xlin - 10, $this->codemp . ' / ' . $this->numliquidacao);
   $this->objpdf->Setfont('Arial', 'B', 10);
   $this->objpdf->text(128, $xlin - 6, 'ORDEM DE PAGAMENTO N' . CHR(176) . ': ');
   $this->objpdf->Setfont('Arial', 'B', 11);
@@ -189,9 +189,9 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     $this->objpdf->sety($xlin + 55);
     $this->objpdf->Setfont('Arial', 'B', 7);
     $this->objpdf->text($xcol + 1, $xlin + 58, 'NOTA FISCAL Nº: ');
-    $this->objpdf->text($xcol + 40, $xlin + 58, 'SÉRIE: ');
-    $this->objpdf->text($xcol + 65, $xlin + 58, 'EMITIDA EM: ');
-    $this->objpdf->text($xcol + 100, $xlin + 58, 'VENCIMENTO: ');
+    $this->objpdf->text($xcol + 51, $xlin + 58, 'SÉRIE: ');
+    $this->objpdf->text($xcol + 80, $xlin + 58, 'EMITIDA EM: ');
+    $this->objpdf->text($xcol + 112, $xlin + 58, 'VENCIMENTO: ');
     $adicionaLinha = 61;
     if ($this->nota->e69_chaveacesso != 'null') {
       $this->objpdf->text($xcol + 1, $xlin + $adicionaLinha, 'CHAVE DE ACESSO: ');
@@ -207,9 +207,9 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     }
     $this->objpdf->Setfont('Arial', '', 7);
     $this->objpdf->text($xcol + 22, $xlin + 58, $this->nota->e69_numero);
-    $this->objpdf->text($xcol + 49, $xlin + 58, $this->nota->e69_nfserie);
-    $this->objpdf->text($xcol + 81, $xlin + 58, date('d/m/Y', strtotime($this->nota->e69_dtnota)));
-    $this->objpdf->text($xcol + 118, $xlin + 58, $this->nota->e50_dtvencimento == null ? '' : date('d/m/Y', strtotime($this->nota->e50_dtvencimento)));
+    $this->objpdf->text($xcol + 60, $xlin + 58, $this->nota->e69_nfserie);
+    $this->objpdf->text($xcol + 96, $xlin + 58, date('d/m/Y', strtotime($this->nota->e69_dtnota)));
+    $this->objpdf->text($xcol + 130, $xlin + 58, $this->nota->e50_dtvencimento == null ? '' : date('d/m/Y', strtotime($this->nota->e50_dtvencimento)));
   }
 
   if (isset($this->conta_pagadora_reduz) && $this->conta_pagadora_reduz != '') {
