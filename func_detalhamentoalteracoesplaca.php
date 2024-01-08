@@ -14,7 +14,7 @@ $funcao_js        = "";
  * de retiradas e exibe na db_lovrot
  */
 $oGet               = db_utils::postMemory($_GET, false);
-$sCampos            = "ve76_sequencial,ve76_veiculo,ve76_placaanterior,ve76_placa,ve76_data,ve76_obs, nome as ve76_usuario";
+$sCampos            = "ve76_sequencial,ve76_veiculo,ve76_placaanterior,ve76_placa,ve76_data, LEFT(ve76_obs, 50) ve76_obs, '(' || id_usuario || ') ' || nome as ve76_usuario ";
 $sWhere             = "veiculos.veiculosplaca.ve76_veiculo = $oGet->veiculo";
 $sSqlBuscaAlteracoesPlaca = $clveiculosplaca->sql_query(null, $sCampos, "ve76_sequencial desc", $sWhere);
 ?>

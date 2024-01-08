@@ -53,7 +53,7 @@ $clrotulo->label("ve76_obs");
       </tr>
       <tr>
         <td colspan="3">
-          <? db_textarea('ve76_obs', 8, 70, $Ive76_obs, true, 'text', $db_opcao, 'onkeyup="js_limpaCaracteresEspeciais(this, /[^a-zA-Z0-9áéíóúãõâêîôûçÁÉÍÓÚÃÕÂÊÎÔÛÇ ]/g)"', "", "", 200); ?>
+          <? db_textarea('ve76_obs', 8, 70, $Ive76_obs, true, 'text', $db_opcao, 'onkeyup="js_limpaCaracteresEspeciais(this, /[^a-zA-Z0-9áéíóúãõâêîôûçÁÉÍÓÚÃÕÂÊÎÔÛÇ .,]/g)"', "", "", 200); ?>
         </td>
       </tr>
     </table>
@@ -150,6 +150,7 @@ $clrotulo->label("ve76_obs");
     document.getElementById('ve01_placa').value = veiculo.ve01_placa;
     document.getElementById('ve76_placa').value = "";
     document.getElementById('ve76_obs').value = "";
+    document.getElementById('ve76_obsobsdig').value = '0';
   }
 
   function alterarPlacaRPC(params, callback, loadingMessage) {

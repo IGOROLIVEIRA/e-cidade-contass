@@ -31,8 +31,8 @@ class cl_veiculosplaca
   var $campos = "
     ve76_sequencial = int8 = Sequencial
     ve76_veiculo = int4 = Código Veículo
-    ve76_placa = varchar(7) = Placa
-    ve76_placaanterior = varchar(7) = Placa Anterior
+    ve76_placa = varchar(8) = Placa
+    ve76_placaanterior = varchar(8) = Placa Anterior
     ve76_obs = varchar(200) = Observação
     ve76_data = date = Data
     ve76_usuario = int4 = Usuário

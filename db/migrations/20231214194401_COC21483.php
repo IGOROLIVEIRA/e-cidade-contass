@@ -53,7 +53,7 @@ class AddTableVeiculosplaca extends PostgresMigration
               ve76_sequencial int8 NOT NULL DEFAULT nextval('veiculosplaca_ve76_sequencial_seq'),
               ve76_veiculo int4 NOT NULL,
               ve76_placa varchar(8) NOT NULL,
-              ve76_placaanterior varchar(7),
+              ve76_placaanterior varchar(8),
               ve76_obs varchar(200),
               ve76_data date NOT NULL,
               ve76_usuario int4 NOT NULL,
@@ -70,7 +70,7 @@ class AddTableVeiculosplaca extends PostgresMigration
           VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_veiculo', 'int4', 'Código Veículo', '', 'Veículo', 4, false, false, false, 1, 'text', 'Veículo');
 
           INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
-          VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_placa', 'varchar(8)', 'Placa', '', 'Placa Atual', 8, false, false, false, 1, 'text', 'Placa Atual');
+          VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_placa', 'varchar(8)', 'Placa', '', 'Placa Atual', 8, false, true, false, 0, 'text', 'Placa Atual');
 
           INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
           VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_placaanterior', 'varchar(7)', 'Placa Anterior', '', 'Placa Anterior', 7, false, false, false, 1, 'text', 'Placa Anterior');
