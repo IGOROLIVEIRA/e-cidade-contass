@@ -22,6 +22,10 @@ class Sigaf2 extends AbstractMigration
             MAXVALUE 9223372036854775807
             START 1
             CACHE 1;
+
+            INSERT INTO db_itensmenu VALUES ((select max(id_item)+1 from db_itensmenu), 'Importação CATMAT', 'Importação CATMAT', 'far1_far_importacaocatmat.php', 1, 1, 'Importação CATMAT', 't');
+            INSERT INTO db_menu VALUES(3444,(select max(id_item) from db_itensmenu),15,6877);
+
         ";
 
         $this->execute($sql);
