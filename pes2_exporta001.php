@@ -154,8 +154,13 @@ if($tipofun == 'E'){
                     when 8 then '5'
                     when 9 then '6'
                 end,'')
-       ||';'||  lpad(translate(trim(coalesce(provento,'')),'.',','),19,'0')  as tipo
-
+       ||';'||  lpad(translate(trim(coalesce(rendabruta,'')),'.',','),19,'0')
+       ||';'||  lpad(translate(trim(coalesce(rendaliquida,'')),'.',','),19,'0')
+       ||';'||  lpad(coalesce(rh44_codban,''),10,'0')
+       ||';'||  lpad(coalesce(rh44_agencia,''),4,'0')
+       ||';'||  ' '
+       ||';'||  lpad(coalesce(rh44_conta,''),10,'0')
+       ||';'||  lpad(coalesce(rh44_dvconta,''),4,'0')   as tipo
 from rhpessoal
      inner join cgm             on rh01_numcgm    = z01_numcgm
      inner join rhpessoalmov    on rh02_anousu    = $ano
@@ -179,7 +184,8 @@ from rhpessoal
 		where rh31_gparen in ('C')
 		group by rh31_regist,rh31_cpf) as dep on dep.rh31_regist = rh01_regist
      left join (select r14_regist,
-                        to_char(sum(case when r14_pd = 1 then r14_valor else 0 end ),'99999999.99') as provento
+                        to_char(sum(case when r14_pd = 1 then r14_valor else 0 end ),'99999999.99') as rendabruta,
+                        to_char(sum(CASE WHEN r14_pd = 1 THEN r14_valor WHEN r14_pd = 2 THEN -r14_valor ELSE 0 END), '99999999.99') AS rendaliquida
                    from gerfsal 
                         inner join rhrubricas on rh27_rubric = r14_rubric
                                              and rh27_instit = ".db_getsession("DB_instit")."
@@ -708,7 +714,7 @@ order by z01_nome";
        str_pad('UF',2);
        fputs($arquivo,$sql1."\r\n");
   }elseif($exporta == 'D'){
-    fputs($arquivo,"nome;nomeabrev;cpf;pis;ctps;nascimento;naturalidade;uf;estadocivil;conjugue;cpfconjugue;pai;mae;sexo;identidade;orgaoidentidade;uforgaoemissor;expedicaoidentidade;cnh;cnhvalidade;cnhexpedicao;cargo;admissao;endereco;numero;complemento;bairro;municipio;uf;cep;ddi;telefone;celular;email;grauinstrucao;rendabruta"."\r\n");
+    fputs($arquivo,"nome;nomeabrev;cpf;pis;ctps;nascimento;naturalidade;uf;estadocivil;conjugue;cpfconjugue;pai;mae;sexo;identidade;orgaoidentidade;uforgaoemissor;expedicaoidentidade;cnh;cnhvalidade;cnhexpedicao;cargo;admissao;endereco;numero;complemento;bairro;municipio;uf;cep;ddi;telefone;celular;email;grauinstrucao;rendabruta;rendaliquida;banco;agencia;operacao;conta;dv"."\r\n");
   }
 
   for($x = 0;$x < pg_num_rows($result);$x++){
