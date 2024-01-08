@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class Oc21578_hotfix extends AbstractMigration
+class Oc21578Hotfix extends AbstractMigration
 {
   public function up()
   {
@@ -13,9 +13,9 @@ class Oc21578_hotfix extends AbstractMigration
     $sSql = "
           BEGIN;
 
-          ALTER TABLE empenho.empdiaria ALTER COLUMN e140_qtddiarias float4;
-          ALTER TABLE empenho.empdiaria ALTER COLUMN e140_qtdhospedagens float4;
-          ALTER TABLE empenho.empdiaria ALTER COLUMN e140_qtddiariaspernoite float4;
+          ALTER TABLE empenho.empdiaria ALTER COLUMN e140_qtddiarias TYPE float4;
+          ALTER TABLE empenho.empdiaria ALTER COLUMN e140_qtdhospedagens TYPE float4;
+          ALTER TABLE empenho.empdiaria ALTER COLUMN e140_qtddiariaspernoite TYPE float4;
 
           COMMIT;
     ";
