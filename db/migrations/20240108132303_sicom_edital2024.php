@@ -45,6 +45,35 @@ class SicomEdital2024 extends AbstractMigration
                 MAXVALUE 9223372036854775807
                 START 1
                 CACHE 1;
+
+
+                ALTER TABLE redispi102024 add column si183_emailcontato varchar(200);
+
+                ALTER TABLE redispi112024 add column si184_utilizacaoplanilhamodelo int8;
+
+                CREATE SEQUENCE redispi102024_si183_sequencial_seq
+                INCREMENT 1
+                MINVALUE 1
+                MAXVALUE 9223372036854775807
+                START 1
+                CACHE 1;
+
+
+                CREATE SEQUENCE redispi112024_si184_sequencial_seq
+                INCREMENT 1
+                MINVALUE 1
+                MAXVALUE 9223372036854775807
+                START 1
+                CACHE 1;
+
+
+                CREATE SEQUENCE redispi122024_si185_sequencial_seq
+                INCREMENT 1
+                MINVALUE 1
+                MAXVALUE 9223372036854775807
+                START 1
+                CACHE 1;
+
         ";
 
         $this->execute($sql);
