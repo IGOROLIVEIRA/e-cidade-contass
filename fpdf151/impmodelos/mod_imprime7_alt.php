@@ -395,9 +395,9 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     $this->objpdf->text($xcol + 174, $xlin + $contador, $this->diaria->e140_dtautorizacao);
     $contador += 3;
 
-    $this->objpdf->text($xcol + 32, $xlin + $contador, $this->diaria->e140_dtautorizacao);
+    $this->objpdf->text($xcol + 32, $xlin + $contador, $this->diaria->e140_dtinicial);
     $this->objpdf->text($xcol + 80, $xlin + $contador, $this->diaria->e140_horainicial);
-    $this->objpdf->text($xcol + 119, $xlin + $contador, $this->diaria->e140_dtautorizacao);
+    $this->objpdf->text($xcol + 119, $xlin + $contador, $this->diaria->e140_dtfinal);
     $this->objpdf->text($xcol + 165, $xlin + $contador, $this->diaria->e140_horafinal);
     $contador += 3;
 
