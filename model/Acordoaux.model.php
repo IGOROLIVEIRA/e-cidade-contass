@@ -484,7 +484,7 @@ class Acordoaux
     /**
      * Vigência Indeterminada;
      *
-     * @var integer
+     * @var bool
      */
     protected $iVigenciaIndeterminada;
 
@@ -1712,7 +1712,7 @@ class Acordoaux
         $oPosicao = $this->getUltimaPosicao();
 
         $oDataInicial = new DBDate($dtDataInicial);
-        if($this->getVigenciaIndeterminada() == 2){
+        if($this->getVigenciaIndeterminada() == "f"){
             $oDataFinal   = new DBDate($dtDataFinal);
         }
         $this->salvarVigencia($oPosicao, $oDataInicial, $oDataFinal);
@@ -1736,7 +1736,7 @@ class Acordoaux
         $oDaoAcordoVigencia->ac18_acordoposicao = $oPosicao->getCodigo();
         $oDaoAcordoVigencia->ac18_ativo = "true";
         $oDaoAcordoVigencia->ac18_datainicio = $oDataInicio->getDate(DBDate::DATA_EN);
-        $oDaoAcordoVigencia->ac18_datafim = $this->getVigenciaIndeterminada() == 2 ? $oDataFim->getDate(DBDate::DATA_EN) : null;
+        $oDaoAcordoVigencia->ac18_datafim = $this->getVigenciaIndeterminada() == "f" ? $oDataFim->getDate(DBDate::DATA_EN) : null;
         $oDaoAcordoVigencia->incluir(null);
 
         if ($oDaoAcordoVigencia->erro_status == 0) {

@@ -143,7 +143,7 @@ class cl_acordo
     ac16_indicereajuste = ;
     ac16_descricaoreajuste = ;
     ac16_descricaoindice = ;
-    ac16_vigenciaindeterminada = int = Vigência Indeterminada;
+    ac16_vigenciaindeterminada = bool = Vigência Indeterminada;
     ";
     //funcao construtor da classe
     function cl_acordo()
@@ -349,7 +349,7 @@ class cl_acordo
             $this->erro_status = "0";
             return false;
         }
-        if ($this->ac16_datafim == null && $ac16_vigencia == "1") {
+        if ($this->ac16_datafim == null && $this->ac16_vigenciaindeterminada != "t") {
             $this->erro_sql = " Campo Data de Fim não informado.";
             $this->erro_campo = "ac16_datafim_dia";
             $this->erro_banco = "";
@@ -623,7 +623,7 @@ class cl_acordo
      ," . ($this->ac16_periodoreajuste == "null" || $this->ac16_periodoreajuste == "" ? "''" : "'" . $this->ac16_periodoreajuste . "'") . "
      ," . ($this->ac16_descricaoreajuste == "null" || $this->ac16_descricaoreajuste == "" ? 'null' : "'" . $this->ac16_descricaoreajuste . "'") . "
      ," . ($this->ac16_descricaoindice == "null" || $this->ac16_descricaoindice == "" ? 'null' : "'" . $this->ac16_descricaoindice . "'") . "
-     ,$this->ac16_vigenciaindeterminada
+     ,'$this->ac16_vigenciaindeterminada'
      )";
 
         $result = db_query($sql);
@@ -1151,11 +1151,7 @@ class cl_acordo
         }
 
         if (trim($this->ac16_vigenciaindeterminada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_vigenciaindeterminada"])) {
-            $sql .= $virgula . " ac16_vigenciaindeterminada = $this->ac16_vigenciaindeterminada ";
-        }
-
-        if (trim($this->ac16_vigenciaindeterminada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_vigenciaindeterminada"])) {
-            $sql .= $virgula . " ac16_vigenciaindeterminada = $this->ac16_vigenciaindeterminada ";
+            $sql .= $virgula . " ac16_vigenciaindeterminada = '$this->ac16_vigenciaindeterminada' ";
         }
         
         $sql .= " where ";

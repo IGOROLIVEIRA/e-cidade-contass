@@ -718,6 +718,13 @@ switch ($oParam->exec) {
                     $oContrato->setDataAssinatura($oParam->contrato->dtAssinatura);
                 }
 
+                if($oParam->contrato->iVigenciaIndeterminada == "t"){
+                    $dataFinal   = new DBDate($oParam->contrato->dtInicio);
+                    $timestampDatafinal = strtotime ( '+10 years' , strtotime ( $dataFinal->getDate() ) ) ;
+                    $dataFinal = $dataFinal->createFromTimestamp($timestampDatafinal);
+                    $oParam->contrato->dtTermino = $dataFinal;
+                }
+                
                 $oContrato->setDataPublicacao($oParam->contrato->dtPublicacao);
                 $oContrato->setDataInicial($oParam->contrato->dtInicio);
                 $oContrato->setDataFinal($oParam->contrato->dtTermino);
@@ -1350,7 +1357,6 @@ switch ($oParam->exec) {
 
             $oDataInicialAcordo        = new DBDate($oContrato->getDataInicial());
             $oRetorno->dtInicialAcordo = $oDataInicialAcordo->convertTo(DBDate::DATA_PTBR);
-
             $oDataFinalAcordo         = new DBDate($oContrato->getDataFinal());
             $oRetorno->dtFinalAcordo  = $oDataFinalAcordo->convertTo(DBDate::DATA_PTBR);
 
@@ -1418,7 +1424,7 @@ switch ($oParam->exec) {
                             $iExecucaoFinal   = db_formatar($oItem->dtFinal, 'd');
                         }
 
-                        if ($iExecucaoInicial > $iExecucaoFinal) {
+                        if ($iExecucaoInicial > $iExecucaoFinal && $oContrato->getVigenciaIndeterminada() != "t") {
 
                             $oErro->codigomaterial = $oItem->codigomaterial;
                             throw new Exception(_M($sCaminhoMensagens . "periodo_item_maior_execucao", $oErro));

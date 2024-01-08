@@ -173,7 +173,7 @@ contratoaux = function () {
             return false;
         }
 
-        if (dtTermino == "" && iVigenciaIndeterminada == 2) {
+        if (dtTermino == "" && iVigenciaIndeterminada == "f") {
 
             alert('Informe a data de termino do Contrato.');
             $('ac16_datafim').focus();
@@ -637,7 +637,7 @@ contratoaux = function () {
             return false;
         }
 
-        if (dtTermino == ""  && iVigenciaIndeterminada == 2) {
+        if (dtTermino == ""  && iVigenciaIndeterminada == "f") {
 
             alert('Informe a data de termino do Contrato.');
             $('ac16_datafim').focus();

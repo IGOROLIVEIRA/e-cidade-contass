@@ -556,7 +556,7 @@ db_app::load("dbtextFieldData.widget.js");
                           <td colspan="2">
                             <b>Vigência Indeterminada:</b>
                             <?
-                             $aVigencias = array(2 => 'Não',1 => 'Sim');
+                              $aVigencias = array("f" => "Não","t" => "Sim");
                               db_select('ac16_vigenciaindeterminada', $aVigencias, true, $db_opcao, "onchange='js_alteracaoVigencia(this.value)';", "");
                             ?>
                           </td>
@@ -1593,7 +1593,6 @@ db_app::load("dbtextFieldData.widget.js");
 
     $('db_opcao').onclick = oContrato.alteraContrato;
     <?
-    echo $db_opcao;
     if ($db_opcao == 2) {
       echo "\noContrato.getContrato({$chavepesquisa});\n";
     } else {
@@ -1804,7 +1803,7 @@ db_app::load("dbtextFieldData.widget.js");
 
     function js_alteracaoVigencia(vigenciaIndeterminada){
 
-      if(vigenciaIndeterminada == 1){
+      if(vigenciaIndeterminada == "t"){
           document.getElementsByClassName('vigencia_final')[0].style.display = 'none';
           document.getElementsByClassName('vigencia_final')[1].style.display = 'none';
           document.getElementById('ac16_datafim').value = '';

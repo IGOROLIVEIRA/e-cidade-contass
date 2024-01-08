@@ -548,7 +548,7 @@ contrato = function () {
             return false;
         }
 
-        if (dtTermino == "" && iVigenciaIndeterminada == 2) {
+        if (dtTermino == "" && iVigenciaIndeterminada == "f") {
 
             alert('Informe a data de termino do Contrato.');
             $('ac16_datafim').focus();
@@ -821,7 +821,7 @@ contrato = function () {
             $('ac16_descricaoindice').value            = oRetorno.contrato.sDescricaoindice.urlDecode();
             $('ac16_valor').value                 = js_formatar(oRetorno.contrato.nValorContrato, 'f');
             $('ac16_vigenciaindeterminada').value                = oRetorno.contrato.iVigenciaIndeterminada;
-            
+            js_alteracaoVigencia($('ac16_vigenciaindeterminada').value);
             if($('ac16_reajuste').value == 2){
                 $('tdcriterioreajuste').style.display = 'none';
                 $('trdatareajuste').style.display = 'none';

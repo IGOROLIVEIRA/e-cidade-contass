@@ -685,10 +685,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                     <b>Vigência Indeterminada:</b>
 
                                                     <?
-                                                    $aVigencias = array(
-                                                    2 => 'Não',
-                                                    1 => 'Sim'
-                                                    );
+                                                    $aVigencias = array("f" => "Não","t" => "Sim");
                                                     db_select('ac16_vigenciaindeterminada', $aVigencias, true, $db_opcao, "onchange='js_alteracaoVigencia(this.value)';", "");
                                                     ?>
                                                 </td>
@@ -2018,7 +2015,7 @@ db_app::load("dbtextFieldData.widget.js");
 
     function js_alteracaoVigencia(vigenciaIndeterminada){
 
-        if(vigenciaIndeterminada == 1){
+        if(vigenciaIndeterminada == "t"){
             document.getElementsByClassName('vigencia_final')[0].style.display = 'none';
             document.getElementsByClassName('vigencia_final')[1].style.display = 'none';
             document.getElementById('ac16_datafim').value = '';

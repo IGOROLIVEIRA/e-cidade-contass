@@ -1288,8 +1288,8 @@ unset($_GET['viewAlterar']);
         oApostila.justificativa = $("si03_justificativa").value;
         oApostila.percentualreajuste = $("si03_percentualreajuste").value;
         oApostila.indicereajuste = $("si03_indicereajuste").value;
-        oApostila.descricaoindice = decodeURIComponent(encodeURIComponent($("si03_descricaoindice").value));
-        oApostila.descricaoreajuste = decodeURIComponent(encodeURIComponent($("ac26_descricaoreajuste").value));
+        oApostila.descricaoindice = decodeURIComponent(encodeURIComponent($("si03_descricaoindice").value.replace('"',"")));
+        oApostila.descricaoreajuste = decodeURIComponent(encodeURIComponent($("ac26_descricaoreajuste").value.replace('"',"")));
         oApostila.criterioreajuste = $("ac26_criterioreajuste").value;
 
         var oParam = {

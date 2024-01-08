@@ -512,10 +512,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                     <b>Vigência Indeterminada:</b>
 
                                                     <?
-                                                    $aVigencias = array(
-                                                    1 => 'Sim',
-                                                    2 => 'Não'
-                                                    );
+                                                    $aVigencias = array("f" => "Não","t" => "Sim");
                                                     db_select('ac16_vigenciaindeterminada', $aVigencias, true, $db_opcao, "onchange='js_alteracaoVigencia(this.value)';", "");
                                                     ?>
                                                 </td>

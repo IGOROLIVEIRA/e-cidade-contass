@@ -161,7 +161,7 @@ class cl_acordoaux {
                  ac16_indicereajuste = ;
                  ac16_descricaoreajuste = ;
                  ac16_descricaoindice = ;
-                 ac16_vigenciaindeterminada = int = Vigência Indeterminada;
+                 ac16_vigenciaindeterminada = bool = Vigência Indeterminada;
                  ";
    //funcao construtor da classe
    function cl_acordoaux() {
@@ -569,7 +569,7 @@ class cl_acordoaux {
                                ,".($this->ac16_licoutroorgao == "" ? 'null' : $this->ac16_licoutroorgao)."
                                ,".($this->ac16_adesaoregpreco == "" ? 'null' : $this->ac16_adesaoregpreco)."
                                ,$this->ac16_tipocadastro
-                               ,$this->ac16_vigenciaindeterminada
+                               ,'$this->ac16_vigenciaindeterminada'
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -1124,7 +1124,7 @@ class cl_acordoaux {
         }
 
         if (trim($this->ac16_vigenciaindeterminada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_vigenciaindeterminada"])) {
-          $sql .= $virgula . " ac16_vigenciaindeterminada = $this->ac16_vigenciaindeterminada ";
+          $sql .= $virgula . " ac16_vigenciaindeterminada = '$this->ac16_vigenciaindeterminada' ";
         }
 
      $sql .= " where ";
