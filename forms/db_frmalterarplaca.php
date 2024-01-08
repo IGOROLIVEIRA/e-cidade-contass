@@ -45,7 +45,7 @@ $clrotulo->label("ve76_obs");
       <tr>
         <td class="title">Nova Placa:</td>
         <td colspan="2">
-          <? db_input('ve76_placa', 30, $Ive76_placa, true, 'text', $db_opcao, '') ?>
+          <? db_input('ve76_placa', 30, $Ive76_placa, true, 'text', $db_opcao, 'onkeyup="js_limpaCaracteresEspeciais(this, /[^a-zA-Z0-9]/g)"') ?>
         </td>
       </tr>
       <tr>

@@ -27,14 +27,14 @@ class AddTableVeiculosplaca extends PostgresMigration
     $sql = "
         BEGIN;
           -- Cria itens de menu
-          INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Alteracão de Placa','Alteracão de Placa','',1,1,'Alteracão de Placa','t');
+          INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Alteração de Placa','Alteração de Placa','',1,1,'Alteração de Placa','t');
           INSERT INTO db_menu VALUES(5338,(select max(id_item) from db_itensmenu),9,633);
         
-          INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Alteracão','Alteracão','vei1_alterarplaca002.php',1,1,'Alteracão','t');
-          INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like 'Alteracão de Placa'),(select max(id_item) from db_itensmenu),1,633);
+          INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Alteração','Alteração','vei1_alterarplaca002.php',1,1,'Alteração','t');
+          INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like 'Alteração de Placa'),(select max(id_item) from db_itensmenu),1,633);
         
           INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Exclusão','Exclusão','vei1_alterarplaca003.php',1,1,'Exclusão','t');
-          INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like 'Alteracão de Placa'),(select max(id_item) from db_itensmenu),2,633);
+          INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like 'Alteração de Placa'),(select max(id_item) from db_itensmenu),2,633);
 
           -- Altera o campo placa para 8 caracteres
           ALTER TABLE veiculos.veiculos ALTER COLUMN ve01_placa TYPE varchar(8);

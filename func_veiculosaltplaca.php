@@ -116,16 +116,18 @@ $sql = $oDaoVeiculosPlaca->sql_query_ultima_alteracao($where);
       <td align="center" valign="top">
         <?
         
-        if (!isset($chave_ve01_codigo)) {
+        if (!isset($chave_ve01_codigo) || empty($chave_ve01_codigo)) {
           $repassa = array();
           db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa, false);
         } else {
-          if (!empty($chave_ve01_codigo)) {
 
+          $funcao_js = explode('|', $funcao_js)[0];
+
+          if (!empty($chave_ve01_codigo)) {
             $result = $oDaoVeiculosPlaca->sql_record($sql);
             if ($oDaoVeiculosPlaca->numrows != 0) {
               db_fieldsmemory($result, 0);
-              echo "<script>" . $funcao_js . "('$ve76_sequencial',false);</script>";
+              echo "<script>" . $funcao_js . "('". $ve76_sequencial ."',false);</script>";
             } else {
               echo "<script>" . $funcao_js . "(true,'Chave(" . $pesquisa_chave . ") não Encontrado');</script>";
             }
