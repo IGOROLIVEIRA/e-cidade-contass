@@ -18,14 +18,40 @@ db_app::load("time.js");
     <meta http-equiv="Expires" CONTENT="0">
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <style>
+    .custom-swal-container {
+        width: 70%;
+        max-width: 90%;
+        height: 90%;
+        left: 15%;
+    }
+    .custom-table {
+        width: 100%;
+        margin: 20px 0;
+        font-family: Arial, sans-serif;
+    }
+    .custom-table table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+    .custom-table th,
+    .custom-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    .custom-table th {
+        background-color: #f2f2f2;
+    }
 </style>
 
 <body bgcolor=#CCCCCC>
     <form action="">
         <fieldset style="margin-top:50px;">
-            <legend>Envio do evento R-4020 Pessoa jurídica </legend>
+            <legend>Envio do evento R-2055 Aquisição de produção rural </legend>
             <table style="width:100%">
                 <tr>
                     <td colspan="2">
@@ -91,10 +117,13 @@ db_app::load("time.js");
         oGridEvento = new DBGrid('gridEventos');
         oGridEvento.nameInstance = 'oGridEvento';
         oGridEvento.setCheckbox(0);
-        oGridEvento.setCellAlign(new Array("Center", "Center","Center", "Center", "Center", "Center", "Center"));
-        oGridEvento.setCellWidth(new Array("40%", "10%","10%", "10%", "10%", "10%", "10%"));
-        oGridEvento.setHeader(new Array("CNPJ Beneficiário","Identificador (OP)","Natureza do Rendimento","Data FG","Valor Bruto","Valor Base", " Valor IRRF","Destacar Campos"))
+        oGridEvento.setCellAlign(new Array("Center", "Center","Center", "Center", "Center", "Center"));
+        oGridEvento.setCellWidth(new Array("30%", "10%","10%", "10%", "10%", "30%"));
+        oGridEvento.setHeader(new Array("CPF/CNPJ Produtor","Valor Bruto","Valor CP", "Valor GILRAT","Valor Senar","Detalhes","Destacar Campos","Tipo Produtor","DadosExtras","ProdOptaCp"))
         oGridEvento.hasTotalValue = false;
+        for (let i = 7; i <= 10; i++) {
+            oGridEvento.aHeaders[i].lDisplayed = false;
+        }
         oGridEvento.setHeight(300);
         oGridEvento.show($('cntgrideventos'));
         
@@ -102,6 +131,15 @@ db_app::load("time.js");
         $("table" + oGridEvento.sName + "header").style.width = width;
         $(oGridEvento.sName + "body").style.width = width;
         $("table" + oGridEvento.sName + "footer").style.width = width;
+
+        document.getElementById('cntgrideventos').addEventListener('click', function(event) {
+            var target = event.target;
+
+            if (target.cellIndex === 6) {
+                var dados = target.textContent;
+                showDadosPopup(dados);
+            }
+        });
     }
     js_showGrid();
     
@@ -124,7 +162,7 @@ db_app::load("time.js");
         let ambiente = $F('ambiente');
         let status = $F('status');
         var oParam      = new Object();
-        oParam.exec     = "getEventos4020";
+        oParam.exec     = "getEventos2055";
         oParam.sMescompetencia = mescompetencia;
         oParam.sAnocompetencia = anocompetencia;
         oParam.sAmbiente       = ambiente
@@ -153,26 +191,28 @@ db_app::load("time.js");
         if (oRetornoEventos.iStatus == 1) {
 
             var seq = 0;
-            oRetornoEventos.efdreinfr4020.each(function(oLinha, iLinha) {
+            oRetornoEventos.efdreinfr2055.each(function(oLinha, iLinha) {
 
                 seq++;
                 var aLinha = new Array();
-                aLinha[0] = oLinha.CNPJBeneficiario;
-                aLinha[1] = oLinha.Identificador;
-                aLinha[2] = oLinha.NaturezaRendimento;
-                aLinha[3] = oLinha.DataFG;
-                aLinha[4] = oLinha.ValorBruto;
-                aLinha[5] = oLinha.ValorBase;
-                aLinha[6] = oLinha.ValorIRRF;
-                aLinha[7] = oLinha.DestacarCampos;
+                aLinha[0] = oLinha.CPFCNPJProdutor;
+                aLinha[1] = oLinha.ValorBruto;
+                aLinha[2] = oLinha.ValorCP;
+                aLinha[3] = oLinha.ValorGILRAT;
+                aLinha[4] = oLinha.ValorSenar;
+                aLinha[5] = "Clique aqui : ; ," + "<b style='color: #00008b;'>" + oLinha.DadosExtras + "</b>";
+                aLinha[6] = oLinha.DestacarCampos;
+                aLinha[7] = oLinha.TipoProdutor;
+                aLinha[8] = oLinha.DadosExtrasNotas;
+                aLinha[9] = oLinha.ProdOptaCp;
                 var status = $F('status');
                 if (oLinha.DestacarCampos == status) {
                     oGridEvento.addRow(aLinha);
                 }
 
                 var sTextEvent = " ";
-                if (aLinha[1] !== '') {
-                    sTextEvent += "<b>objeto: </b>" + aLinha[1];
+                if (aLinha[5] !== '') {
+                    sTextEvent += "<b>objeto: </b>" + aLinha[5];
                 } else {
                     sTextEvent += "<b>Nenhum dado  mostrar</b>";
                 }
@@ -195,7 +235,6 @@ db_app::load("time.js");
             });
         }
     }
-
     function js_transmitir() 
     {
         var aEventos = oGridEvento.getSelection("object");
@@ -221,7 +260,7 @@ db_app::load("time.js");
 
         var oParam = new Object();
         oParam.aEventos        = new Array();
-        oParam.exec            = "transmitirreinfR4020";
+        oParam.exec            = "transmitirreinf2055";
         oParam.sMescompetencia = mescompetencia;
         oParam.sAnocompetencia = anocompetencia;
         oParam.sAmbiente       = ambiente
@@ -230,22 +269,18 @@ db_app::load("time.js");
 
             with(aEventos[i]) {
                 var evento              = new Object();
-                evento.CNPJBeneficiario = aCells[1].getValue().substr(0,18);
-                evento.Identificador    = aCells[2].getValue();
-                evento.NatRendimento    = aCells[3].getValue();
-                evento.DataFG           = aCells[4].getValue();
-                evento.ValorBruto       = aCells[5].getValue().substr(2);
-                evento.ValorBase        = aCells[6].getValue().substr(2);
-                evento.ValorIRRF        = aCells[7].getValue().substr(2);
-                evento.Numcgm           = aCells[1].getValue();
-                oParam.aEventos.push(evento);
-            
-                var valor = aCells[3].getValue();
-                if (valor.length < 2) {
-                    var opserros          = new Object();
-                    opserros.op           = aCells[2].getValue();
-                    oParam.aOpsErros.push(opserros);
+                evento.CPFCNPJProdutor  = aCells[8].getValue() == "CPF" ? aCells[1].getValue().substr(0,14):aCells[1].getValue().substr(0,18);
+                evento.ValorBruto       = aCells[2].getValue().substr(2);
+                evento.ValorCP          = aCells[3].getValue().substr(2);
+                evento.ValorGILRAT      = aCells[4].getValue().substr(2);
+                evento.ValorSenar       = aCells[5].getValue().substr(2);
+                evento.Tipo             = aCells[8].getValue();
+                evento.DadosExtras      = aCells[9].getValue();
+                if(!validarIndAquisicao(aCells[9].getValue())){
+                    return false;
                 }
+                evento.ProdOptaCp       = aCells[10].getValue();
+                oParam.aEventos.push(evento);
             }   
         }
 
@@ -258,7 +293,51 @@ db_app::load("time.js");
             }
         );
     }
+    function validarIndAquisicao(dados) 
+    {
+        if (dados.length > 0) {
+            var data = dados.split(' ; ,');
+            var contTotal = 0;
+            var cont = 0
+            var numEmps = [];
+            for (let i = 1; i < data.length; i++) {
+                contTotal++
+                if (contTotal == 8) {
+                    let indAquisicao = data[i].substr(0,1);
+                    if (indAquisicao == 0 || indAquisicao == '') {
+                        numEmps[cont] = data[i+2];
+                        cont ++;
+                    }
+                }
+                if (i % 11 === 0) {
+                    contTotal = 0;
+                }
+                if (data.length == i + 1){
+                   if(!imprimirMensagem(numEmps)){
+                      return false;
+                   }
+                   return true;
+                }
+            }
 
+        }
+    }
+    function imprimirMensagem(numEmps) 
+    {
+        if (numEmps.length > 0) {
+            var dadosEmpenho = "";
+            for (let y = 0; y < numEmps.length; y++) {
+                if (y != 0) {
+                    dadosEmpenho += ", "
+                }
+                dadosEmpenho += numEmps[y]; 
+            }    
+            alert("Para realizar a transmissão do evento o campo Aquisição de Produção Rural no Empenho " + dadosEmpenho + " não poder ser  0 - Não se aplica. Realize a alteração da informação no empenho e tente novamente.");
+            return false;
+        }
+        return true;
+       
+    }
     function js_returnEnvEventos(oAjax) 
     {
         js_removeObj('msgBox');
@@ -272,9 +351,6 @@ db_app::load("time.js");
             }
         }
 
-        if (oRetornoEventos.sMessageOp) {
-            alert(oRetornoEventos.sMessageOp.urlDecode());
-        }
     }
     function limparBox()
     {
@@ -284,21 +360,128 @@ db_app::load("time.js");
                 gridContainer.removeChild(gridContainer.firstChild);
             }
         }
-
         oGridEvento = new DBGrid('gridEventos');
         oGridEvento.nameInstance = 'oGridEvento';
         oGridEvento.setCheckbox(0);
-        oGridEvento.setCellAlign(new Array("Center", "Center", "Center", "Center", "Center", "Center", "Center"));
-        oGridEvento.setCellWidth(new Array("40%", "10%","10%", "10%", "10%", "10%", "10%"));
-        oGridEvento.setHeader(new Array("CNPJ Beneficiário","Identificador (OP)","Natureza do Rendimento","Data FG","Valor Bruto","Valor Base", " Valor IRRF","Destacar Campos"))
+        oGridEvento.setCellAlign(new Array("Center", "Center","Center", "Center", "Center", "Center"));
+        oGridEvento.setCellWidth(new Array("30%", "10%","10%", "10%", "10%", "30%"));
+        oGridEvento.setHeader(new Array("CPF/CNPJ Produtor","Valor Bruto","Valor CP", "Valor GILRAT","Valor Senar","Detalhes","Destacar Campos","Tipo Produtor","DadosExtras","ProdOptaCp"))
         oGridEvento.hasTotalValue = false;
+        for (let i = 7; i <= 10; i++) {
+            oGridEvento.aHeaders[i].lDisplayed = false;
+        }
         oGridEvento.setHeight(300);
-        oGridEvento.show(gridContainer);
-        var width = gridContainer.scrollWidth - 30;
+        oGridEvento.show($('cntgrideventos'));
+        
+        var width = $('cntgrideventos').scrollWidth - 30;
         $("table" + oGridEvento.sName + "header").style.width = width;
         $(oGridEvento.sName + "body").style.width = width;
         $("table" + oGridEvento.sName + "footer").style.width = width;
 
+        document.getElementById('cntgrideventos').addEventListener('click', function(event) {
+            var target = event.target;
+
+            if (target.cellIndex === 8) {
+                    var dados = target.textContent;
+                    showDadosPopup(dados);
+                }
+        });
+
+    }
+    function showDadosPopup(dados) 
+    {
+        if (dados.length > 1) {
+            var totalValorBruto = 0;
+            var totalValorCp = 0;
+            var totalValorGilrat = 0;
+            var totalValorSenar = 0;
+            var contTotal = 0;
+            var dadosPrestador = '';
+            var data = dados.split(' ; ,');
+            var tableHTML = `<table ><tr>`;
+
+            const columnNames = [
+                'Nota Fiscal',
+                'Série',
+                'Data',
+                'Empenho',
+                'OP',
+                'Valor Bruto',
+                'Valor CP',
+                'Valor Gilrat',
+                'Valor Senar',
+                'Ind aquisição'
+            ];
+
+            for (let i = 0; i < columnNames.length; i++) {
+                tableHTML += `<th>${columnNames[i]}</th>`;
+            }
+
+            tableHTML += `</tr><tr>`;
+
+            for (let i = 1; i < data.length; i++) {
+                contTotal++
+                if (contTotal != 11 && contTotal != 10) {
+                    tableHTML += `<td>${data[i]}</td>`;
+                }
+                if (contTotal == 10) {
+                    tableHTML += `<td >
+                                    <div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">
+                                        ${data[i]}
+                                    </div>
+                                  </td>`;
+                }
+                if (contTotal == 6) {
+                    let numeroDecimal = parseFloat(data[i].substr(3).replace(".", "").replace(",", "."));
+                    totalValorBruto += numeroDecimal;
+                }
+                if (contTotal == 7) {
+                    let numeroDecimal = parseFloat(data[i].substr(3).replace(".", "").replace(",", "."));
+                    totalValorCp += numeroDecimal;
+                }
+                if (contTotal == 8) {
+                    let numeroDecimal = parseFloat(data[i].substr(3).replace(".", "").replace(",", "."));
+                    totalValorGilrat += numeroDecimal;
+                }
+                if (contTotal == 9) {
+                    let numeroDecimal = parseFloat(data[i].substr(3).replace(".", "").replace(",", "."));
+                    totalValorSenar += numeroDecimal;
+                }
+                if (contTotal == 11) {
+                    let prestador = data[i];
+                    dadosPrestador = prestador;
+                }
+                if (i % 11 === 0) {
+                    tableHTML += `</tr><tr>`;
+                    contTotal = 0;
+                }
+            }
+
+            tableHTML += `<tr>`;
+            tableHTML += `<th>Total</th>`;
+            tableHTML += `<th></th>`;
+            tableHTML += `<th></th>`;
+            tableHTML += `<th></th>`;
+            tableHTML += `<th></th>`;
+            tableHTML += `<th>R$ ${totalValorBruto.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</th>`;
+            tableHTML += `<th>R$ ${totalValorCp.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</th>`;
+            tableHTML += `<th>R$ ${totalValorGilrat.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</th>`;
+            tableHTML += `<th>R$ ${totalValorSenar.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</th>`;
+            tableHTML += `<th></th>`;
+            tableHTML += `</tr></table>`;
+
+            Swal.fire({
+                title: `Detalhes do Produtor<br/><br/>${dadosPrestador}`,
+                html: `<div class="custom-table">${tableHTML}</div>`,
+                icon: 'info',
+                customClass: {
+                    container: 'custom-swal-container',
+                },
+                grow: 'fullscreen',
+                heightAuto: false,
+                confirmButtonColor: '#006400',
+            });
+        }
     }
     
     var anoCompetenciaInput = document.getElementById("anocompetencia");
