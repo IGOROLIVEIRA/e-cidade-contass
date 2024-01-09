@@ -257,17 +257,14 @@ class cl_empagemov {
          $virgula = ",";
        }
      }
-     if(trim($this->e81_numdoc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e81_numdoc"])){ 
+    if(trim($this->e81_numdoc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e81_numdoc"])){ 
       $sql  .= $virgula." e81_numdoc = '$this->e81_numdoc' ";
       $virgula = ",";
-    } elseif(trim($this->e81_numdoc) == null ){ 
-      $sql  .= $virgula." e81_numdoc = null ";
-      $virgula = ",";
-    }
+    } 
      $sql .= " where ";
      if($e81_codmov!=null){
        $sql .= " e81_codmov = $this->e81_codmov";
-     }
+     } 
      $resaco = $this->sql_record($this->sql_query_file($this->e81_codmov));
      if($this->numrows>0){
        for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
