@@ -13,11 +13,19 @@ class ItensAdapter {
 
     const vigenciaInicio = this.#aditamento.vigenciaInicio;
     const vigenciaFim = this.#aditamento.vigenciaFim;
+    const relacaoItemPcmater = {};
 
     this.#aditamento.itens.forEach(item => {
       const itemAdaptado = {};
+
       itemAdaptado.codigo = codigo;
-      itemAdaptado.codigoitem = item.itemSequencial;
+      itemAdaptado.codigoitem = item.codigoPcMater;
+      itemAdaptado.acordoitemsequencial = item.itemSequencial;
+
+      let index = '_'+ item.codigoPcMater;
+      relacaoItemPcmater[index] = item.itemSequencial
+
+
       itemAdaptado.controlaquantidade = item.servicoQuantidade == true ? 't' : 'f';
       itemAdaptado.servico = item.tipoControle == true ? true : false;
 
@@ -44,7 +52,7 @@ class ItensAdapter {
       itensAdaptados.push(itemAdaptado);
     });
 
-    return itensAdaptados;
+    return { itensAdaptados, relacaoItemPcmater };
   }
 
 }

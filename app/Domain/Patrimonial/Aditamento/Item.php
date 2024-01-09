@@ -76,6 +76,14 @@ class Item
     private ?DateTime $fimExecucao = null;
 
     /**
+     * Undocumented variable
+     *
+     * @var array
+     */
+    private array $itemDotacoes = [];
+
+
+    /**
      * Get the value of itemSequencial
      */
     public function getItemSequencial(): int
@@ -315,6 +323,24 @@ class Item
     public function setQuantidadeAnterior(float $quantidadeAnterior): self
     {
         $this->quantidadeAnterior = $quantidadeAnterior;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of itemDotacoes
+     */
+    public function getItemDotacoes(): array
+    {
+        return $this->itemDotacoes;
+    }
+
+    /**
+     * Set the value of itemDotacoes
+     */
+    public function setItemDotacoes(array $itemDotacoes): self
+    {
+        $this->itemDotacoes = $itemDotacoes;
 
         return $this;
     }

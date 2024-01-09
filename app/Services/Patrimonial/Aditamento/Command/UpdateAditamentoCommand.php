@@ -16,6 +16,7 @@ use App\Repositories\Patrimonial\AcordoPosicaoAditamentoRepository;
 use App\Repositories\Patrimonial\AcordoPosicaoRepository;
 use App\Repositories\Patrimonial\AcordoVigenciaRepository;
 use App\Services\Contracts\Patrimonial\Aditamento\Command\UpdateAditamentoCommandInterface;
+use App\Services\DTO\Patrimonial\InsertItemDto;
 use Exception;
 use Illuminate\Database\Capsule\Manager as DB;
 
@@ -72,7 +73,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
             DB::beginTransaction();
 
             $resultAcordoPosicao = $this->acordoPosicaoRepository->update(
-                $aditamento->getAcordoPosicaoSequencial(),
+                $sequencialAcordoPosicao,
                 $acordoPosicao
             );
 
@@ -83,7 +84,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
             if ($aditamento->isAlteracaoVigencia() || $aditamento->isAcdcConjugado()) {
                 $acordoVigenciaRepository = new AcordoVigenciaRepository();
                 $resultVigencia =  $acordoVigenciaRepository->update(
-                    $aditamento->getAcordoPosicaoSequencial(),
+                    $sequencialAcordoPosicao,
                     [
                         'ac18_datainicio' => $vigenciaIncio,
                         'ac18_datafim' => $vigenciaFim
@@ -111,8 +112,21 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
             /** @var Item $item */
             foreach ($itens as $item) {
                 $codigoItem = $item->getItemSequencial();
-                $resultItem = $this->acordoItemRepository->update(
+
+                $acordoItem = $this->acordoItemRepository->getItemByPcmaterAndPosicao($codigoItem, $sequencialAcordoPosicao);
+
+                if(empty($acordoItem)) {
+                    $insertDto = new InsertItemDto(
+                        $item,
+                        $sequencialAcordoPosicao,
+                        $vigenciaIncio,
+                        $vigenciaFim
+                    );
+                }
+
+                $resultItem = $this->acordoItemRepository->updateByPcmaterAndPosicao(
                     $codigoItem,
+                    $sequencialAcordoPosicao,
                     [
                         'ac20_quantidade' => $item->getQuantidade(),
                         'ac20_valorunitario' => $item->getValorUnitario(),
@@ -157,7 +171,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
                         ]);
                 }
             }
-
+            die();
             DB::commit();
             return true;
         } catch (Exception $e) {
@@ -174,7 +188,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
                     $aditamento->getNumeroAditamento()
                 );
 
-        if (!empty($posicao) && (int)$posicao->ac26_sequencial !== $aditamento->getAcordoPosicaoSequencial()) {
+        if (!empty($posicao) && (int)$posicao->ac26_sequencial !== $sequencialAcordoPosicao) {
             throw new \Exception('Numero de aditamento já esta em uso');
         }
     }

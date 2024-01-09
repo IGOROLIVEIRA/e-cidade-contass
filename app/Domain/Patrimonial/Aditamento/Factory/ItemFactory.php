@@ -12,6 +12,28 @@ class ItemFactory
 {
     /**
      *
+     * @param Collection $itens
+     * @param Collection $itensPosicaoAnterior
+     * @return array
+     */
+    public function createListByCollection(Collection $itens, ?Collection $itensPosicaoAnterior = null): array
+    {
+        $listaItens = [];
+
+        /** @var AcordoItem $item */
+        foreach ($itens as $key => $item) {
+            $itemPosicaoAnterior = !empty($itensPosicaoAnterior)
+                ? $itensPosicaoAnterior[$key]
+                : null;
+
+            $listaItens[] = $this->createByEloquentModel($item, $itemPosicaoAnterior);
+        }
+
+        return $listaItens;
+    }
+
+    /**
+     *
      * @param AcordoItem $itemAcordo
      * @param AcordoItem $itemPosicaoAnterior
      * @return Item
@@ -51,28 +73,6 @@ class ItemFactory
 
     /**
      *
-     * @param Collection $itens
-     * @param Collection $itensPosicaoAnterior
-     * @return array
-     */
-    public function createListByCollection(Collection $itens, ?Collection $itensPosicaoAnterior = null): array
-    {
-        $listaItens = [];
-
-        /** @var AcordoItem $item */
-        foreach ($itens as $key => $item) {
-            $itemPosicaoAnterior = !empty($itensPosicaoAnterior)
-                ? $itensPosicaoAnterior[$key]
-                : null;
-
-            $listaItens[] = $this->createByEloquentModel($item, $itemPosicaoAnterior);
-        }
-
-        return $listaItens;
-    }
-
-    /**
-     *
      * @param array $itensRaw
      * @param array $selecionados
      * @return array
@@ -88,7 +88,7 @@ class ItemFactory
             }
 
             $item = new Item();
-            $item->setItemSequencial((int) $itemRaw->codigoitem)
+            $item->setCodigoPcMater((int) $itemRaw->codigoitem)
                 ->setQuantidade((float) $itemRaw->quantidade)
                 ->setValorUnitario((float) $itemRaw->valorunitario)
                 ->setValorTotal((float) $itemRaw->valortotal);
@@ -104,6 +104,12 @@ class ItemFactory
 
             $item->setInicioExecucao($dataInicio)
                  ->setFimExecucao($dataFim);
+
+            if (count($itemRaw->dotacoes) > 0 ) {
+                $itemDotacaoFactory = new ItemDotacaoFactory();
+                $itemDotacoes = $itemDotacaoFactory->createlistByStdLegacy($itemRaw->dotacoes, $item->getItemSequencial());
+                $item->setItemDotacoes($itemDotacoes);
+            }
 
             $listaItens[] = $item;
         }

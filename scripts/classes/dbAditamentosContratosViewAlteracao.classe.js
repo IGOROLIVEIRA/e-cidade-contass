@@ -14,7 +14,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
   this.lProvidencia = false;
   this.lReajuste = false;
   this.totalizador = false;
-  this.estadoTela = { changeTipoAdivito: false };
+  this.estadoTela = { changeTipoAdivito: false , relacaoCodigoItem: {}};
   this.desativaInputsCss = `
       background-color:#DEB887;
       pointer-events: none;
@@ -1692,6 +1692,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     $('btnItens').disabled = false;
     windowNovoItem.destroy();
     me.ajusteDotacao(aItensPosicao.length - 1, oNovoMaterial.elemento);
+    me.calculaValorTotal(aItensPosicao.length - 1);
   }
 
   this.preencheItens = function (aItens) {
@@ -2225,7 +2226,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     const oCboTipoAditivo = $('oCboTipoAditivo').value;
 
     if (oCboTipoAditivo == 14) {
-      console.log("passou linha 2228");
+
       $('oTextAreaDescricaoAlteracao').removeClassName('readonly');
       $('oTextAreaDescricaoAlteracao').readOnly = false;
 
@@ -2553,8 +2554,10 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
     adapatador = new ItensAdapter(aditamento)
 
-    aItensPosicao = adapatador.criarItens();
-    me.itensAdaptados = aItensPosicao;
+    itens  = adapatador.criarItens();
+    me.itensAdaptados = itens.itensAdaptados;
+    aItensPosicao = me.itensAdaptados;
+    me.estadoTela.relacaoItemPcmater = itens.relacaoItemPcmater;
     me.preencheItens(aItensPosicao);
     me.js_changeTipoAditivo();
     me.lidaLeiLicitacao(aditamento.acordoSequencial);

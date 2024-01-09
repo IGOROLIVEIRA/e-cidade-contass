@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Patrimonial;
 
+use App\Domain\Patrimonial\Aditamento\ItemDotacao;
 use App\Models\AcordoItemDotacao;
 use App\Repositories\Contracts\Patrimonial\AcordoItemDotacaoRepositoryInterface;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -24,7 +25,7 @@ class AcordoItemDotacaoRepository implements AcordoItemDotacaoRepositoryInterfac
         if ($result === 1)  {
             return true;
         }
-        
+
         return false;
     }
 
@@ -37,6 +38,26 @@ class AcordoItemDotacaoRepository implements AcordoItemDotacaoRepositoryInterfac
         }
 
         return count($acordosItemDotacoes->toArray());
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param ItemDotacao $itemDotacao
+     * @param integer $acordoItemSequencial
+     * @return boolean
+     */
+    public function saveByDomainAditamento(ItemDotacao $itemDotacao, int $acordoItemSequencial): bool
+    {
+        $data = [
+            'ac22_coddot'     => $itemDotacao->getCodigoDotacao(),
+            'ac22_anousu'     => $itemDotacao->getAnoDotacao(),
+            'ac22_acordoitem' =>  $acordoItemSequencial,
+            'ac22_valor'      => $itemDotacao->getValor(),
+            'ac22_quantidade' =>$itemDotacao->getQuantidade()
+        ];
+
+        return $this->model->create($data);
     }
 }
 
