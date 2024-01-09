@@ -63,6 +63,7 @@ class GerarABERLIC extends GerarAM
                 $aCSVABERLIC10['si46_leidalicitacao']             = $this->padLeftZero($aABERLIC10['si46_leidalicitacao'], 1);
                 $aCSVABERLIC10['si46_codorgaoresp']               = $this->padLeftZero($aABERLIC10['si46_codorgaoresp'], 2);
                 $aCSVABERLIC10['si46_codunidadesubresp']          = $this->padLeftZero($aABERLIC10['si46_codunidadesubresp'], 5);
+                $aCSVABERLIC10['si46_codunidadesubedital']        = $aABERLIC10['si46_codunidadesubedital'];
                 $aCSVABERLIC10['si46_exerciciolicitacao']         = $this->padLeftZero($aABERLIC10['si46_exerciciolicitacao'], 4);
                 $aCSVABERLIC10['si46_nroprocessolicitatorio']     = substr($aABERLIC10['si46_nroprocessolicitatorio'], 0, 12);
                 $aCSVABERLIC10['si46_codmodalidadelicitacao']     = $this->padLeftZero($aABERLIC10['si46_codmodalidadelicitacao'], 1);
