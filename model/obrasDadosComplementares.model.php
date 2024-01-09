@@ -66,6 +66,7 @@ class obrasDadosComplementares
   private $sLote = null;
   private $lLote = false;
   private $seqobrascodigo = null;
+  private ?int $planilhaTce;
 
 
   /**
@@ -953,6 +954,7 @@ class obrasDadosComplementares
       $oDaoObras->db150_latitude = $this->getLatitude();
       $oDaoObras->db150_longitude = $this->getLongitude();
       $oDaoObras->db150_lote = $aLotes[$count];
+      $oDaoObras->db150_planilhatce = $this->getPlanilhaTce();
       $oDaoObras->db150_classeobjeto = $this->getClasseObjeto();
       $oDaoObras->db150_grupobempublico = $this->getGrupoBemPublico();
       $oDaoObras->db150_subgrupobempublico = $this->getSubGrupoBemPublico();
@@ -1163,5 +1165,23 @@ class obrasDadosComplementares
     $table_base = ($oLicitacao->l20_datacria >= '2021-05-01') ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
 
     return $table_base;
+  }
+
+  /**
+   * Get the value of planilhaTce
+   */
+  public function getPlanilhaTce(): ?int
+  {
+    return $this->planilhaTce;
+  }
+
+  /**
+   * Set the value of planilhaTce
+   */
+  public function setPlanilhaTce(?int $planilhaTce): self
+  {
+    $this->planilhaTce = $planilhaTce;
+
+    return $this;
   }
 }

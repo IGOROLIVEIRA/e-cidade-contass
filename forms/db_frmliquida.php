@@ -64,6 +64,10 @@ $db_opcao_inf=1;
 }
 </style>
 <script language="JavaScript" type="text/javascript" src="scripts/widgets/DBToogle.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/classes/DBViewNotasPendentes.classe.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
 <form name=form1 action="" method="POST">
  <input type=hidden name=retencoes value ="">
  <input type=hidden name=e69_codnota value="<?=@$e69_codnota ?>">
@@ -451,7 +455,8 @@ function mensagemesocial(){
       document.getElementById('vlrremuneracao').style.display = "none";
       document.getElementById('vlrremuneracao1').style.display = "none";
       document.getElementById('vlrdesconto').style.display = "none";
-      document.getElementById('vlrdesconto1').style.display = "none";      document.getElementById('multiplosvinculos').style.display = "none";
+      document.getElementById('vlrdesconto1').style.display = "none";      
+      document.getElementById('multiplosvinculos').style.display = "none";
       document.getElementById('idvinculos').style.display = "none";
       document.form1.numempresa.value = '';
       document.form1.nomeempresa.value = '';
@@ -926,20 +931,20 @@ function js_liquidar(metodo){
         alert('Campo Data Inicial da Viagem Obrigatório.');
         return false;
       }
-      if($F('e140_dtfinal') == '' || $F('e140_dtfinal') == null){
-        alert('Campo Data Final da Viagem Obrigatório.');
-        return false;
-      }
-      if($F('e140_objetivo') == '' || $F('e140_objetivo') == null){
-        alert('Campo Objetivo da Viagem Obrigatório.');
-        return false;
-      }
       if($F('e140_horainicial') == '' || $F('e140_horainicial') == null){
         alert('Campo Hora Inicial Obrigatório.');
         return false;
       }
+      if($F('e140_dtfinal') == '' || $F('e140_dtfinal') == null){
+        alert('Campo Data Final da Viagem Obrigatório.');
+        return false;
+      }
       if($F('e140_horafinal') == '' || $F('e140_horafinal') == null){
         alert('Campo Hora Final Obrigatório.');
+        return false;
+      }
+      if($F('e140_objetivo') == '' || $F('e140_objetivo') == null){
+        alert('Campo Objetivo da Viagem Obrigatório.');
         return false;
       }
   }

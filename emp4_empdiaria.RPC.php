@@ -39,6 +39,7 @@ $oParam            = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oRetorno          = new stdClass();
 $oRetorno->status  = 1;
 $oRetorno->message = "";
+$clempdiaria       = new cl_empdiaria;
 
 switch ($oParam->exec) {
 
@@ -46,8 +47,7 @@ switch ($oParam->exec) {
     $e140_dtautorizacao = App\Support\String\DateFormatter::convertDateFormatBRToISO($oParam->e140_dtautorizacao);
     $e140_dtinicial = App\Support\String\DateFormatter::convertDateFormatBRToISO($oParam->e140_dtinicial);
     $e140_dtfinal = App\Support\String\DateFormatter::convertDateFormatBRToISO($oParam->e140_dtfinal);
-
-    $clempdiaria        = new cl_empdiaria;
+  
     $clempdiaria->e140_codord                = $oParam->e140_codord;
     $clempdiaria->e140_dtautorizacao         = $e140_dtautorizacao;
     $clempdiaria->e140_matricula             = $oParam->e140_matricula;
@@ -73,6 +73,26 @@ switch ($oParam->exec) {
       $oRetorno->message = "Incluido com sucesso!";
     } else {
       $oRetorno->message = $clempdiaria->erro_msg;
+    }
+    break;
+
+  case 'pesquisaDiaria':
+    $rsDiaria = $clempdiaria->sql_record($clempdiaria->sql_query(null,'empdiaria.*, z01_nome',null,'e140_codord = '.$oParam->iCodord));
+
+    $oDaoEmpenho = db_utils::getDao('empempenho');
+    $rsEmpempenho = $oDaoEmpenho->sql_record($oDaoEmpenho->sql_query($oParam->iNumemp,'e60_numcgm'));
+    $oRetorno->e60_numcgm = db_utils::fieldsMemory($rsEmpempenho, 0)->e60_numcgm;
+
+    $oDaoElementos   = db_utils::getDao('orcelemento');
+    $sWhereEmpenho   = " e60_numemp =  {$oParam->iNumemp}";
+    $rsDesdobramento = $oDaoElementos->sql_record($oDaoElementos->sql_query_estrut_empenho(null, "substr(o56_elemento,1,9) AS o56_elemento", null, $sWhereEmpenho));
+    $oRetorno->sDesdobramento = db_utils::fieldsMemory($rsDesdobramento, 0)->o56_elemento;
+
+    if (pg_num_rows($rsDiaria) > 0) {
+      $oRetorno->oDiaria = pg_fetch_object($rsDiaria);
+    } else {
+      $oRetorno->oDiaria = null;
+      $oRetorno->message = 'OP não possui Diária.';
     }
     break;
 

@@ -579,6 +579,19 @@ if (isset($alterar)) {
 				$sqlerro = true;
 			}
 		}
+
+        if(in_array($modalidade_tribunal, $aMod) && $l20_leidalicitacao == 1){
+			if($l20_tipoprocesso == "5" || $l20_tipoprocesso == "6"){
+				$l20_criterioadjudicacao = $criterioadjudicao_dispensainexibilidade;
+			} else {
+				$l20_criterioadjudicacao = "null";
+			}
+		}
+
+        if($l20_tipnaturezaproced == "1" || $l20_tipnaturezaproced == "3"){
+            $l20_usaregistropreco = "f";
+        } 
+
         if ($sqlerro == false) {
             $clliclicita->l20_amparolegal       = $oPost->l212_codigo;
             $clliclicita->l20_numero       = $iNumero;

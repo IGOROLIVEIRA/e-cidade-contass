@@ -90,6 +90,7 @@ require_once (modification("classes/db_conplanoreduz_classe.php"));
 require_once (modification("classes/db_empparamnum_classe.php"));
 require_once (modification("classes/db_concarpeculiar_classe.php"));
 require_once (modification("classes/db_empautorizliberado_classe.php"));
+require_once (modification("classes/db_empefdreinf_classe.php"));
 require_once modification("libs/db_app.utils.php");
 
 require_once(modification("model/configuracao/Instituicao.model.php"));
@@ -150,6 +151,7 @@ $oDaoEmpenhoNl    = new cl_empempenhonl;
 $cldb_depusu	  	= new cl_db_depusu;
 $clpctipocompra	  = new cl_pctipocompra;
 $clempautorizliberado = new cl_empautorizliberado;
+$clempefdreinf    = new cl_empefdreinf;
 
 //retorna os arrays de lancamento...
 $cltranslan       = new cl_translan;
@@ -273,6 +275,28 @@ if (!empty($iElemento)) {
 $dtDataUsu = $dDataMovimento == null ? date("Y-m-d", db_getsession('DB_datausu')) : $dDataMovimento;
 if(isset($incluir)) {
   // Data do sistema
+
+    $anoUsu = db_getsession("DB_anousu");
+    $sWhere = "e56_autori = " . $e54_autori . " and e56_anousu = " . $anoUsu;
+    $result = $clempautidot->sql_record($clempautidot->sql_query_dotacao(null, "o58_codigo", null, $sWhere));
+    $numrows = $clempautidot->numrows;
+    if ($numrows > 0) {
+        db_fieldsmemory($result, 0);
+    }	
+
+    $result  = $clempempaut->sql_record($clempempaut->sql_query_empenho(null, " e60_tipodespesa , e60_esferaemendaparlamentar , e60_emendaparlamentar ",null, " e61_autori = $chavepesquisa"));
+    $numrows = $clempempaut->numrows;
+    if ($numrows > 0) {
+        db_fieldsmemory($result, 0);
+    }	
+
+    $oCodigoAcompanhamento = new ControleOrcamentario();
+    $oCodigoAcompanhamento->setTipoDespesa($e60_tipodespesa);
+    $oCodigoAcompanhamento->setFonte($o58_codigo);
+    $oCodigoAcompanhamento->setEmendaParlamentar($e60_emendaparlamentar);
+    $oCodigoAcompanhamento->setEsferaEmendaParlamentar($e60_esferaemendaparlamentar);       
+    $oCodigoAcompanhamento->setDeParaFonteCompleta();
+    $e60_codco = $oCodigoAcompanhamento->getCodigoParaEmpenho();
 
   $clcondataconf = new cl_condataconf;
 
@@ -630,6 +654,7 @@ if(isset($incluir)) {
             $clempempenho->e60_instit         = db_getsession("DB_instit");
             $clempempenho->e60_datasentenca   = $e60_datasentenca;
             $clempempenho->e60_concarpeculiar = $e54_concarpeculiar;
+            $clempempenho->e60_codco          = $e60_codco;
 
             /**
              * Validação solicitada pela OC 6457
@@ -680,22 +705,6 @@ if(isset($incluir)) {
             }else{
                 $clempempenho->e60_tipodespesa = null;
                 $sqlerro = false;
-            }
-            /**
-             * Validação solicitada pela OC 8359
-             *
-             */
-
-            $elementosemp = array('3319091');
-
-            if(in_array(substr($o56_elemento,0,-6), $elementosemp)){
-                if($clempempenho->e60_datasentenca == null){
-                    if(substr($o56_elemento,0,-6) == '3319091'){
-                        $erro_msg = "Usuário: Para este elemento é obrigatório informar a data da sentença judicial";
-                        db_msgbox($erro_msg);
-                        $sqlerro = true;
-                    }
-                }
             }
 
             if ($sqlerro==false) {
@@ -923,6 +932,27 @@ if(isset($incluir)) {
     }
 
 
+      /*rotina que inclui na tabela empefdreinf*/
+      if ($sqlerro == false && $efd60_cessaomaoobra == 2) {
+        $clempefdreinf->efd60_cessaomaoobra = $efd60_cessaomaoobra;
+        $clempefdreinf->efd60_aquisicaoprodrural = $efd60_aquisicaoprodrural;
+        $clempefdreinf->efd60_possuicno = $efd60_possuicno;
+        $clempefdreinf->efd60_numcno = $efd60_numcno;
+        $clempefdreinf->efd60_indprestservico = $efd60_indprestservico;
+        $clempefdreinf->efd60_prescontricprb = $efd60_prescontricprb;
+        $clempefdreinf->efd60_tiposervico = $efd60_tiposervico;
+        $clempefdreinf->efd60_prodoptacp = $efd60_prodoptacp;
+        
+        if($clempefdreinf->numrows>0){
+            $clempefdreinf->alterar($e60_numemp);
+        } else {
+            $clempefdreinf->efd60_numemp = $e60_numemp;
+            $clempefdreinf->efd60_codemp = $e60_codemp;
+            $clempefdreinf->efd60_anousu = db_getsession("DB_anousu");
+            $clempefdreinf->efd60_instit = db_getsession("DB_instit");
+            $clempefdreinf->incluir($e60_numemp);
+        }
+    }
     /*rotina que inclui na tabela empemphist*/
     if ($sqlerro == false && $e57_codhist != "Nenhum") {
         $clempemphist->e63_numemp  = $e60_numemp;

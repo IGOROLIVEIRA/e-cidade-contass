@@ -696,6 +696,7 @@ switch ($oParam->exec) {
                 liclicita.l20_cadinicial,
                 liclancedital.l47_linkpub,
                 liclancedital.l47_descrecurso,
+                liclancedital.l47_email,
                 liclancedital.l47_dataenvio,
                 (CASE
                      WHEN pc50_pctipocompratribunal IN (48,
@@ -1528,7 +1529,7 @@ switch ($oParam->exec) {
                                 }
                             }
                             /**
-                             * Tipo de julgamento por lote 
+                             * Tipo de julgamento por lote
                              */
                             if ($oParam->tipojulg == 3) {
                                 $clliclicitemlote->l04_descricao = $pc68_nome;
@@ -1547,7 +1548,7 @@ switch ($oParam->exec) {
                                 if($clliclicitemlote->l04_seq == 1){
                                     $clliclicitemlote->l04_numerolote = null;
                                 }
-                                
+
                                 $clliclicitemlote->incluir(null);
 
                                 if ($clliclicitemlote->erro_status == 0) {

@@ -52,6 +52,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     this.exibeLote = false;
     // Por padrão seta o julgamento por item
     this.iTipoJulgamento = 1;
+    this.planilhaTce = 0;
 
 
     this.buscaLotes = (sequencial) => {
@@ -109,7 +110,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
                 onComplete: (objeto) => {
                     let response = eval('('+objeto.responseText+')');
                     me.exibeLote = (response.data >= '2021-05-01')? true : false;
-                    console.log('exibe',me.exibeLote);
                     me.iTipoJulgamento = response.tipo;
                 }
             }
@@ -163,19 +163,19 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     sContent += "         <td id='ctnCodigoObra" + sId + "'></td>";
     sContent += "         </td>";
     sContent += "       </tr>";
-    sContent += "       <tr>";
+    sContent += "       <tr style='display:none'>";
     sContent += "         <td id='ctnLabelPais" + sId + "'>";
     sContent += "           <b>País:</b>";
     sContent += "         </td>";
     sContent += "         <td id='ctnCodigoPais" + sId + "' colspan='5'></td>";
     sContent += "       </tr>";
-    sContent += "       <tr>";
+    sContent += "       <tr style='display:none'>";
     sContent += "         <td id='ctnLabelEstado" + sId + "' >";
     sContent += "           <b>Estado:</b>";
     sContent += "         </td>";
     sContent += "         <td id='ctnCodigoEstado" + sId + "' colspan='5'></td>";
     sContent += "       </tr>";
-    sContent += "       <tr>";
+    sContent += "       <tr style='display:none'>";
     sContent += "         <td id='ctnLabelMunicipio" + sId + "' >";
     sContent += "           <b>Município:</b>";
     sContent += "         </td>";
@@ -320,30 +320,38 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     sContent += "    <legend><b>Obras e serviços :</b></legend>";
     sContent += "     <table border='0' style=\"border-collapse:collapse;\">";
     sContent += "       <tr>";
-    sContent += "         <td id='ctnLabelClassesObjeto" + sId + "' >";
-    sContent += "           <b>Classe do objeto:</b>";
+    sContent += "         <td id='ctnLabelPlanilhaTce" + sId + "' >";
+    sContent += "           <b>Utilizou planilha modelo TCE/MG?</b>";
     sContent += "         </td>";
-    sContent += "         <td id='ctnClassesObjeto" + sId + "'></td>";
+    sContent += "         <td id='ctnPlanilhaTce" + sId + "'></td>";
     sContent += "         <td id='ctnLabelGrupoBemPub" + sId + "' >";
     sContent += "           <b>Grupo Bem Público:</b>";
     sContent += "         </td>";
     sContent += "         <td id='ctnGrupoBemPublico" + sId + "'></td>";
     sContent += "       </tr>";
     sContent += "       <tr>";
-    sContent += "         <td id='ctnLabelAtividadeObra" + sId + "' >";
-    sContent += "           <b>Atividade da Obra:</b>";
+    sContent += "         <td id='ctnLabelClassesObjeto" + sId + "' >";
+    sContent += "           <b>Classe do objeto:</b>";
     sContent += "         </td>";
-    sContent += "         <td id='ctnAtividadeObra" + sId + "'></td>";
+    sContent += "         <td id='ctnClassesObjeto" + sId + "'></td>";
     sContent += "         <td id='ctnLabelSubgrupoBem" + sId + "' >";
     sContent += "           <b>Subgrupo Bem Público:</b>";
     sContent += "         </td>";
     sContent += "         <td id='ctnSubGrupoBemPublico" + sId + "'></td>";
     sContent += "       </tr>";
     sContent += "       <tr>";
+    sContent += "         <td id='ctnLabelAtividadeObra" + sId + "' >";
+    sContent += "           <b>Atividade da Obra:</b>";
+    sContent += "         </td>";
+    sContent += "         <td id='ctnAtividadeObra" + sId + "'></td>";
     sContent += "         <td id='ctnLabelAtividadeServico" + sId + "' >";
     sContent += "           <b>Atividade do Serviço:</b>";
     sContent += "         </td>";
     sContent += "         <td id='ctnAtividadeServico" + sId + "'></td>";
+    sContent += "         <td id='ctnLabelAtividadeServEsp" + sId + "' >";
+    sContent += "           <b>Atividade dos Serviços Especializados:</b>";
+    sContent += "         </td>";
+    sContent += "         <td id='ctnAtividadeServEsp" + sId + "'></td>";
     sContent += "         <td id='ctnLabelBdi" + sId + "' >";
     sContent += "           <b>BDI:</b>";
     sContent += "         </td>";
@@ -356,12 +364,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     sContent += "         <td id='ctnDescrAtividadeServico" + sId + "' colspan='4'>";
     sContent += "         <textarea  id='txtDescrAtividadeServico" + sId + "' rows='2' style='width:100%'></textarea>";
     sContent += "         </td>";
-    sContent += "       </tr>";
-    sContent += "       <tr>";
-    sContent += "         <td id='ctnLabelAtividadeServEsp" + sId + "' >";
-    sContent += "           <b>Atividade dos Serviços Especializados:</b>";
-    sContent += "         </td>";
-    sContent += "         <td id='ctnAtividadeServEsp" + sId + "'></td>";
     sContent += "       </tr>";
     sContent += "       <tr id='trAtividadeServicoEsp" + sId + "' style='display: none'>";
     sContent += "         <td id='ctnLabelAtividadeServicoEsp" + sId + "'  nowrap>";
@@ -1151,48 +1153,87 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
     this.changeClasseObjeto = (e) => {
         let valor = e.target.value;
-        $('cboAtividadeObra' + sId).value = 0;
-        me.setAtividadeObra(0);
-        $('cboAtividadeServico' + sId).value = 0;
-        me.setAtividadeServico(0);
-        $('cboAtividadeServicoEsp' + sId).value = 0;
-        me.setAtividadeServicoEspecializado(0);
-
-        $('trAtividadeServico' + sId).style.display = 'none';
-        $('txtDescrAtividadeServico' + sId).value = '';
-        $('trAtividadeServicoEsp' + sId).style.display = 'none';
-        $('txtDescrAtividadeServicoEsp' + sId).value = '';
-
-        me.setClassesObjeto(valor);
-        switch (valor) {
-            case '1':
-                $('cboAtividadeObra' + sId).disabled = false;
-                $('cboAtividadeServico' + sId).disabled = true;
-                $('cboAtividadeServicoEsp' + sId).disabled = true;
-                break;
-            case '2':
-                $('cboAtividadeObra' + sId).disabled = true;
-                $('cboAtividadeServico' + sId).disabled = false;
-                $('cboAtividadeServicoEsp' + sId).disabled = true;
-                break;
-            case '3':
-                $('cboAtividadeObra' + sId).disabled = true;
-                $('cboAtividadeServico' + sId).disabled = true;
-                $('cboAtividadeServicoEsp' + sId).disabled = false;
-                break;
-            default:
-                $('cboAtividadeObra' + sId).disabled = true;
-                $('cboAtividadeServico' + sId).disabled = true;
-                $('cboAtividadeServicoEsp' + sId).disabled = true;
-                break;
-        }
-
-        // if(valor == 1){
-        //   // $('cboAtividadeObra'+sId).disabled = true;
-        //   $('cboAtividadeObra'+sId).disabled = '';
-        // }else{
-        // }
+        me.lidaAlteracaoClasseObjeto(valor);
     }
+
+    this.lidaAlteracaoClasseObjeto = (valor) => {
+      $('cboAtividadeObra' + sId).value = 0;
+      me.setAtividadeObra(0);
+      $('cboAtividadeServico' + sId).value = 0;
+      me.setAtividadeServico(0);
+      $('cboAtividadeServicoEsp' + sId).value = 0;
+      me.setAtividadeServicoEspecializado(0);
+
+      $('trAtividadeServico' + sId).style.display = 'none';
+      $('txtDescrAtividadeServico' + sId).value = '';
+      $('trAtividadeServicoEsp' + sId).style.display = 'none';
+      $('txtDescrAtividadeServicoEsp' + sId).value = '';
+
+      me.setClassesObjeto(valor);
+      switch (valor) {
+          case '1':
+              $('cboAtividadeObra' + sId).disabled = false;
+              $('ctnLabelAtividadeObra' + sId).style.display = '';
+              $('ctnAtividadeObra' + sId).style.display = '';
+
+              $('cboAtividadeServico' + sId).disabled = true;
+              $('ctnLabelAtividadeServico' + sId).style.display = 'none';
+              $('ctnAtividadeServico' + sId).style.display = 'none';
+
+              $('cboAtividadeServicoEsp' + sId).disabled = true;
+              $('ctnLabelAtividadeServEsp' + sId).style.display = 'none';
+              $('ctnAtividadeServEsp' + sId).style.display = 'none';
+              break;
+          case '2':
+              $('cboAtividadeObra' + sId).disabled = true;
+              $('ctnLabelAtividadeObra' + sId).style.display = 'none';
+              $('ctnAtividadeObra' + sId).style.display = 'none';
+
+              $('cboAtividadeServico' + sId).disabled = false;
+              $('ctnLabelAtividadeServico' + sId).style.display = '';
+              $('ctnAtividadeServico' + sId).style.display = '';
+
+              $('cboAtividadeServicoEsp' + sId).disabled = true;
+              $('ctnLabelAtividadeServEsp' + sId).style.display = 'none';
+              $('ctnAtividadeServEsp' + sId).style.display = 'none';
+              break;
+          case '3':
+              $('cboAtividadeObra' + sId).disabled = true;
+              $('ctnLabelAtividadeObra' + sId).style.display = 'none';
+              $('ctnAtividadeObra' + sId).style.display = 'none';
+
+              $('cboAtividadeServico' + sId).disabled = true;
+              $('ctnLabelAtividadeServico' + sId).style.display = 'none';
+              $('ctnAtividadeServico' + sId).style.display = 'none';
+
+              $('cboAtividadeServicoEsp' + sId).disabled = false;
+              $('ctnLabelAtividadeServEsp' + sId).style.display = '';
+              $('ctnAtividadeServEsp' + sId).style.display = '';
+              break;
+          default:
+              $('cboAtividadeObra' + sId).disabled = true;
+              $('ctnLabelAtividadeObra' + sId).style.display = 'none';
+              $('ctnAtividadeObra' + sId).style.display = 'none';
+
+              $('cboAtividadeServico' + sId).disabled = true;
+              $('ctnLabelAtividadeServico' + sId).style.display = 'none';
+              $('ctnAtividadeServico' + sId).style.display = 'none';
+
+              $('cboAtividadeServicoEsp' + sId).disabled = true;
+              $('ctnLabelAtividadeServEsp' + sId).style.display = 'none';
+              $('ctnAtividadeServEsp' + sId).style.display = 'none';
+
+              break;
+    }
+
+    }
+
+    me.oCboPlanilhaTce = new DBComboBox('cboPlanilhaTce' + sId, 'cboPlanilhaTce' + sId);
+    me.oCboPlanilhaTce.addStyle('width', '90%');
+    me.oCboPlanilhaTce.show($('ctnPlanilhaTce' + sId));
+    me.oCboPlanilhaTce.addItem(0, 'Selecione');
+    me.oCboPlanilhaTce.addItem(1, 'Sim');
+    me.oCboPlanilhaTce.addItem(2, 'Não');
 
     me.oCboClasseObjeto = new DBComboBox('cboClasseObjeto' + sId, 'cboClasseObjeto' + sId);
     me.oCboClasseObjeto.addStyle('width', '90%');
@@ -1202,7 +1243,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oCboClasseObjeto.addItem(2, 'Serviços');
     me.oCboClasseObjeto.addItem(3, 'Serviços técnicos especializados');
     $('ctnClassesObjeto' + sId).observe('change', me.changeClasseObjeto);
-
 
     /*-------------------------------------Fim da Manipulação do Classes do Objeto ------------------------------------------------*/
     /*-------------------------------------Início da Manipulação do Atividade da Obra ---------------------------------------------*/
@@ -2538,7 +2578,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oBdi.addEvent('onKeyUp', "js_ValidaCampos(this,4,\"Campo BDI\",\"f\",\"t\",event)");
     me.oBdi.setMaxLength(5);
     me.oBdi.show($('ctnBdi' + sId));
-  
+
     $('ctnBdi' + sId).observe('change', me.changeBdi);
     $('ctnBdi' + sId).observe('keyup',() => {
         me.js_formataValor($('txtBdi' + sId), 4);
@@ -2553,7 +2593,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         let oParam = new Object();
         oParam.exec = 'getBdi';
         oParam.licitacao = codLicitacao;
-    
+
         let oAjax = new Ajax.Request(
             'con4_endereco.RPC.php',
             {
@@ -2564,14 +2604,14 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             }
         )
     }
-    
+
     me.verificaBdi();
-    
+
     function retornoBdi(oAjax){
         let oRetorno = eval('(' + oAjax.responseText + ')');
-    
+
         if(oRetorno.bdi){
-            me.setBdi(oRetorno.bdi);    
+            me.setBdi(oRetorno.bdi);
             $('txtBdi'+sId).value = oRetorno.bdi;
             $('txtBdi'+sId).setAttribute('class', 'readonly');
             $('txtBdi'+sId).setAttribute('disabled', 'disabled');
@@ -3329,6 +3369,15 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         return this.iCodigoLocal;
     }
 
+
+    this.setPlanilhaTce = function (planilhaTce) {
+      this.planilhaTce = planilhaTce;
+  }
+
+  this.getPlanilhaTce = function () {
+      return this.planilhaTce;
+  }
+
      /**
      *Seta o codigo do endereco
      *@param {string} iCodigoEndereco
@@ -3871,8 +3920,11 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
                 }
                 $('txtLogradouro' + sId).value = '';
                 me.setLogradouro('');
+                $('cboPlanilhaTce' + sId).value = 0;
+                me.setPlanilhaTce('');
                 $('cboClasseObjeto' + sId).value = 0;
                 me.setClassesObjeto('');
+                me.lidaAlteracaoClasseObjeto(0);
                 $('cboAtividadeObra' + sId).value = 0;
                 $('cboAtividadeObra' + sId).disabled = true;
                 me.setAtividadeObra('');
@@ -4172,6 +4224,8 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             oEndereco.latitude = me.getLatitude();
             oEndereco.longitude = me.getLongitude();
         }
+
+        oEndereco.planilhaTce = $('cboPlanilhaTcepri').value;
         oEndereco.classeObjeto = me.getClassesObjeto();
         oEndereco.atividadeObra = me.getAtividadeObra();
         oEndereco.atividadeServico = me.getAtividadeServico();
@@ -4411,8 +4465,12 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
         $('txtCodigoNumero' + sId).value = dados.db150_numero;
         me.setNumero(dados.db150_numero);
+        $('cboPlanilhaTce' + sId).selectedIndex = dados.db150_planilhatce;
+        me.setPlanilhaTce(dados.db150_planilhatce);
         $('cboClasseObjeto' + sId).selectedIndex = dados.db150_classeobjeto;
         me.setClassesObjeto(dados.db150_classeobjeto);
+        me.lidaAlteracaoClasseObjeto(dados.db150_classeobjeto);
+
         dados.db150_atividadeobra = !dados.db150_atividadeobra ? 0 : dados.db150_atividadeobra;
         $('cboAtividadeObra' + sId).disabled = dados.db150_atividadeobra > 0 ? false : true;
         $('cboAtividadeObra' + sId).value = dados.db150_atividadeobra;

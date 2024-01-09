@@ -70,6 +70,7 @@ $clrotulo->label("e69_data");
   $sSqlNotasLiq .= "       e69_dtnota,  ";
   $sSqlNotasLiq .= "       e50_dtvencimento, ";
   $sSqlNotasLiq .= "       e53_codord,  ";
+  $sSqlNotasLiq .= "       e50_numliquidacao, ";
   $sSqlNotasLiq .= "       e69_dtinclusao,";
   $sSqlNotasLiq .= "       e69_dtservidor,";
   $sSqlNotasLiq .= "       e70_valor,   ";

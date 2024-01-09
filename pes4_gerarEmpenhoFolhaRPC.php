@@ -32,6 +32,7 @@ require_once("libs/db_sessoes.php");
 require_once("libs/db_liborcamento.php");
 require_once("libs/db_app.utils.php");
 require_once("dbforms/db_funcoes.php");
+require_once("model/orcamento/ControleOrcamentario.model.php");
 include("libs/JSON.php");
 db_app::import("exceptions.*");
 db_app::import("configuracao.*");
