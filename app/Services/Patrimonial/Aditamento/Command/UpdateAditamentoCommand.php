@@ -110,17 +110,26 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
 
             /** @var Item $item */
             foreach ($itens as $item) {
-                $codigoItem = $item->getItemSequencial();
+                $codigoItem = $item->getCodigoPcMater();
 
-                if ($aditamento->isAlteracaoProjetoEspecificacao())
-                $acordoItem = $this->acordoItemRepository->getItemByPcmaterAndPosicao($codigoItem, $sequencialAcordoPosicao);
-                if(empty($acordoItem) ) {
-                    $insertDto = new InsertItemDto(
-                        $item,
-                        $sequencialAcordoPosicao,
-                        $vigenciaIncio,
-                        $vigenciaFim
-                    );
+                if ($aditamento->isAlteracaoProjetoEspecificacao()){
+                    $acordoItem = $this->acordoItemRepository->getItemByPcmaterAndPosicao($codigoItem, $sequencialAcordoPosicao);
+                    if(empty($acordoItem) ) {
+                        $insertDto = new InsertItemDto(
+                            $item,
+                            $sequencialAcordoPosicao,
+                            $vigenciaIncio,
+                            $vigenciaFim
+                        );
+                        
+                        (new InsereItemAditamentoCommand(
+                            $this->acordoItemRepository,
+                            $this->acordItemPeriodRepository,
+                            $this->acordoItemDotacaoRepository,
+                            $insertDto
+                        ))->execute();
+                        continue;
+                    }
                 }
 
                 $resultItem = $this->acordoItemRepository->updateByPcmaterAndPosicao(
@@ -170,7 +179,6 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
                         ]);
                 }
             }
-            die();
             DB::commit();
             return true;
         } catch (Exception $e) {
@@ -187,7 +195,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
                     $aditamento->getNumeroAditamento()
                 );
 
-        if (!empty($posicao) && (int)$posicao->ac26_sequencial !== $sequencialAcordoPosicao) {
+        if (!empty($posicao) && (int)$posicao->ac26_sequencial !== $aditamento->getAcordoPosicaoSequencial()) {
             throw new \Exception('Numero de aditamento já esta em uso');
         }
     }

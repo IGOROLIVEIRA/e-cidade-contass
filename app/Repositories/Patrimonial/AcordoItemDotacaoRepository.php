@@ -41,20 +41,20 @@ class AcordoItemDotacaoRepository implements AcordoItemDotacaoRepositoryInterfac
     }
 
     /**
-     * Undocumented function
      *
      * @param ItemDotacao $itemDotacao
      * @param integer $acordoItemSequencial
-     * @return boolean
+     * @return AcordoItemDotacao|null
      */
-    public function saveByDomainAditamento(ItemDotacao $itemDotacao, int $acordoItemSequencial): bool
+    public function saveByDomainAditamento(ItemDotacao $itemDotacao, int $acordoItemSequencial): ?AcordoItemDotacao
     {
         $data = [
+            'ac22_sequencial' => $this->model->getNextval(),
             'ac22_coddot'     => $itemDotacao->getCodigoDotacao(),
             'ac22_anousu'     => $itemDotacao->getAnoDotacao(),
-            'ac22_acordoitem' =>  $acordoItemSequencial,
+            'ac22_acordoitem' => $acordoItemSequencial,
             'ac22_valor'      => $itemDotacao->getValor(),
-            'ac22_quantidade' =>$itemDotacao->getQuantidade()
+            'ac22_quantidade' => $itemDotacao->getQuantidade()
         ];
 
         return $this->model->create($data);

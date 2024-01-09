@@ -5,6 +5,12 @@ namespace App\Models;
 class AcordoItemPeriodo extends LegacyModel
 {
     /**
+     *
+     * @var string
+     */
+    protected string $sequenceName = 'acordoitemperiodo_ac41_sequencial_seq ';
+
+    /**
      * @var string
      */
     protected $table = 'acordoitemperiodo';

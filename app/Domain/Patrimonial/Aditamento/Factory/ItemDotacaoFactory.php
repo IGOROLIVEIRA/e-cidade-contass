@@ -11,15 +11,14 @@ class ItemDotacaoFactory
      * Undocumented function
      *
      * @param stdClass $dotacaoRaw
-     * @param integer $acordoItem
+     * @param integer|null $acordoItem
      * @return ItemDotacao
      */
-    public function createByStdLegacy(stdClass $dotacaoRaw, int $acordoItem): ItemDotacao
+    public function createByStdLegacy(stdClass $dotacaoRaw): ItemDotacao
     {
         $itemDotacao = new ItemDotacao(
             $dotacaoRaw->dotacao,
             db_getsession("DB_anousu"),db_getsession("DB_instit"),
-            $acordoItem,
             $dotacaoRaw->valor,
             $dotacaoRaw->quantidade
         );
@@ -34,12 +33,12 @@ class ItemDotacaoFactory
      * @param integer $acordoItem
      * @return array
      */
-    public function createlistByStdLegacy(array $itensDotacoes, int $acordoItem): array
+    public function createlistByStdLegacy(array $itensDotacoes): array
     {
         $lista = [];
 
         foreach ($itensDotacoes as $itemDotacao) {
-            $lista[] = $this->createlistByStdLegacy($itemDotacao, $acordoItem);
+            $lista[] = $this->createByStdLegacy($itemDotacao);
         }
 
         return $lista;

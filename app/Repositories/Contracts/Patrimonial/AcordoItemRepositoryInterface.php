@@ -18,18 +18,7 @@ interface AcordoItemRepositoryInterface
 
     public function getItemByPcmaterAndPosicao(int $pcMater,int $posicao): ?AcordoItem;
 
-    /**
-  * Undocumented function
-  *
-  * @param Item $item
-  * @param integer $sequencialAcordoPosicao
-  * @return boolean
-  */
-    public function saveByItemAditamento(Item $item, int $sequencialAcordoPosicao): bool;
 
-    /**
-     *
-     * @return AcordoItem|null
-     */
-    public function getUltimoItemSalvo(): ?AcordoItem;
+    public function saveByItemAditamento(Item $item, int $sequencialAcordoPosicao): ?AcordoItem;
+
 }

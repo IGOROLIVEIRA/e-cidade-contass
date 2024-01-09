@@ -91,7 +91,7 @@ class ItemFactory
             $item->setCodigoPcMater((int) $itemRaw->codigoitem)
                 ->setQuantidade((float) $itemRaw->quantidade)
                 ->setValorUnitario((float) $itemRaw->valorunitario)
-                ->setValorTotal((float) $itemRaw->valortotal);
+                ->setValorTotal((float) $itemRaw->valoraditado);
 
             $dataInicio = !empty($itemRaw->dtexecucaoinicio)
                 ? DateTime::createFromFormat($this->getFormatDate($itemRaw->dtexecucaoinicio),$itemRaw->dtexecucaoinicio)
@@ -107,8 +107,12 @@ class ItemFactory
 
             if (count($itemRaw->dotacoes) > 0 ) {
                 $itemDotacaoFactory = new ItemDotacaoFactory();
-                $itemDotacoes = $itemDotacaoFactory->createlistByStdLegacy($itemRaw->dotacoes, $item->getItemSequencial());
+                $itemDotacoes = $itemDotacaoFactory->createlistByStdLegacy($itemRaw->dotacoes);
                 $item->setItemDotacoes($itemDotacoes);
+            }
+
+            if (!empty($itemRaw->unidade)) {
+                $item->setUnidade((int)$itemRaw->unidade);
             }
 
             $listaItens[] = $item;

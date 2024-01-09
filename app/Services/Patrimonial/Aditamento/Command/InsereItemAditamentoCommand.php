@@ -49,26 +49,26 @@ class InsereItemAditamentoCommand
 
     /**
      *
-     * @return boolean
+     * @return void
      */
-    public function execute(): bool
+    public function execute()
     {
-        $item = $this->dto->getItem();
-        $resultItem = $this->acordoItemRepository
+         $item = $this->dto->getItem();
+        // var_dump($item);
+        // die();
+        $acordoItem = $this->acordoItemRepository
             ->saveByItemAditamento(
                 $item,
                 $this->dto->getSequencialAcordoPosicao()
             );
 
-        if (!$resultItem) {
+        if (empty($acordoItem)) {
             throw new \Exception("Erro ao inserir acordo item {$item->getCodigoPcMater()}");
         }
 
-        $acordoItem = $this->acordoItemRepository->getUltimoItemSalvo();
-
         /** @var ItemDotacao $itemDotacao */
         foreach ($item->getItemDotacoes() as $itemDotacao) {
-            $resultItemDotacao = $this->acordoItemDotacaoRepository->saveByDomainAditamento($itemDotacao, $acordoItem->ac22_sequencial);
+            $resultItemDotacao = $this->acordoItemDotacaoRepository->saveByDomainAditamento($itemDotacao, $acordoItem->ac20_sequencial);
             if (!$resultItemDotacao) {
                 throw new \Exception("Erro ao inserir item dotação {$itemDotacao->getCodigoDotacao()} no item {$item->getCodigoPcMater()}");
             }
@@ -76,7 +76,7 @@ class InsereItemAditamentoCommand
 
         $resultItemPeriodo = $this->acordItemPeriodRepository->insert(
             [
-                'ac41_acordoitem'    => $acordoItem->ac22_sequencial,
+                'ac41_acordoitem'    => $acordoItem->ac20_sequencial,
                 'ac41_datainicial'   => $item->getInicioExecucao()->format('Y-m-d'),
                 'ac41_datafinal'     => $item->getFimExecucao()->format('Y-m-d'),
                 'ac41_acordoposicao' => $this->dto->getSequencialAcordoPosicao()
@@ -86,7 +86,5 @@ class InsereItemAditamentoCommand
         if (!$resultItemPeriodo) {
             throw new \Exception("Erro ao inserir acordo periodo no item {$item->getCodigoPcMater()}");
         }
-
-        return true;
     }
 }

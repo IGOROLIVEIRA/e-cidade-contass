@@ -48,9 +48,6 @@ class AditamentoService implements AditamentoServiceInterface
 
     public function updateAditamento(stdClass $aditamentoRaw): array
     {
-        echo "<pre>";
-        var_dump($aditamentoRaw->aItens);
-        die();
         try {
             $aditamentoFactory = new AditamentoFactory();
             $aditamento = $aditamentoFactory->createByStdLegacy($aditamentoRaw);

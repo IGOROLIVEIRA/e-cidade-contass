@@ -7,9 +7,11 @@ use DateTime;
 class Item
 {
     /**
-     * @var integer
+     * Undocumented variable
+     *
+     * @var integer|null
      */
-    private int $itemSequencial;
+    private ?int $itemSequencial = null;
 
     /**
      * @var integer
@@ -76,6 +78,12 @@ class Item
     private ?DateTime $fimExecucao = null;
 
     /**
+     *
+     * @var integer|null
+     */
+    private ?int $unidade = null;
+
+    /**
      * Undocumented variable
      *
      * @var array
@@ -86,7 +94,7 @@ class Item
     /**
      * Get the value of itemSequencial
      */
-    public function getItemSequencial(): int
+    public function getItemSequencial(): ?int
     {
         return $this->itemSequencial;
     }
@@ -94,7 +102,7 @@ class Item
     /**
      * Set the value of itemSequencial
      */
-    public function setItemSequencial(int $itemSequencial): self
+    public function setItemSequencial(?int $itemSequencial): self
     {
         $this->itemSequencial = $itemSequencial;
 
@@ -344,4 +352,24 @@ class Item
 
         return $this;
     }
+
+    /**
+     * Get the value of unidade
+     */
+    public function getUnidade(): ?int
+    {
+        return $this->unidade;
+    }
+
+    /**
+     * Set the value of unidade
+     */
+    public function setUnidade(?int $unidade): self
+    {
+        $this->unidade = $unidade;
+
+        return $this;
+    }
+
+
 }

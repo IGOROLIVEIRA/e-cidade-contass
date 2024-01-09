@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Contracts\Patrimonial;
 
+use App\Models\AcordoItemPeriodo;
+
 interface AcordoItemPeriodoRepositoryInterface
 {
     /**
@@ -13,8 +15,9 @@ interface AcordoItemPeriodoRepositoryInterface
     public function update(int $codigoItem, array $dados): bool;
 
     /**
+     *
      * @param array $dados
-     * @return boolean
+     * @return AcordoItemPeriodo|null
      */
-    public function insert(array $dados): bool;
+    public function insert(array $dados): ?AcordoItemPeriodo;
 }

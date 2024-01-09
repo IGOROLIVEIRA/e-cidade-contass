@@ -30,12 +30,14 @@ class AcordoItemPeriodoRepository implements AcordoItemPeriodoRepositoryInterfac
         return $acordoItemPeriodo->update($dados);
     }
 
-      /**
+    /**
+     *
      * @param array $dados
-     * @return boolean
+     * @return AcordoItemPeriodo|null
      */
-    public function insert(array $dados): bool
+    public function insert(array $dados): ?AcordoItemPeriodo
     {
+        $dados['ac41_sequencial'] = $this->model->getNextval();
        return $this->model->create($dados);
     }
 }

@@ -34,12 +34,12 @@ class AcordoItemRepository implements AcordoItemRepositoryInterface
      * @param array $dados
      * @return boolean
      */
-    public function updateByPcmaterAndPosicao(int $pcMater,int $posicao, array $dados): bool
+    public function updateByPcmaterAndPosicao(int $pcMater, int $posicao, array $dados): bool
     {
         return DB::table('acordoitem')
-        ->where('ac20_pcmater', $pcMater)
-        ->where('ac20_posicao', $posicao)
-        ->update($dados);
+            ->where('ac20_pcmater', $pcMater)
+            ->where('ac20_acordoposicao', $posicao)
+            ->update($dados);
     }
 
     /**
@@ -48,42 +48,35 @@ class AcordoItemRepository implements AcordoItemRepositoryInterface
      * @param integer $posicao
      * @return AcordoItem|null
      */
-    public function getItemByPcmaterAndPosicao(int $pcMater,int $posicao): ?AcordoItem
+    public function getItemByPcmaterAndPosicao(int $pcMater, int $posicao): ?AcordoItem
     {
         return $this->model
-        ->where('ac20_pcmater', $pcMater)
-        ->where('ac20_posicao', $posicao)
-        ->first();
+            ->where('ac20_pcmater', $pcMater)
+            ->where('ac20_acordoposicao', $posicao)
+            ->first();
     }
 
     /**
+     * Undocumented function
      *
      * @param Item $item
      * @param integer $sequencialAcordoPosicao
-     * @return boolean
-     */
-    public function saveByItemAditamento(Item $item, int $sequencialAcordoPosicao): bool
-    {
-        $acordoItem = $this->model;
-        $acordoItem->ac20_acordoposicao = $sequencialAcordoPosicao;
-        $acordoItem->ac20_pcmater = $item->getCodigoPcMater();
-        $acordoItem->ac20_quantidade = $item->getQuantidade();
-        $acordoItem->ac20_valorunitario = $item->getValorUnitario();
-        $acordoItem->ac20_valortotal = $item->getValorTotal();
-        $result = $acordoItem->save();
-        if ($result) {
-            $this->ultimoItemSalvo = $acordoItem;
-        }
-
-        return $result;
-    }
-
-    /**
-     *
      * @return AcordoItem|null
      */
-    public function getUltimoItemSalvo(): ?AcordoItem
+    public function saveByItemAditamento(Item $item, int $sequencialAcordoPosicao): ?AcordoItem
     {
-        return $this->ultimoItemSalvo;
+
+        $acordoItem = new AcordoItem();
+        $dados = [
+            "ac20_sequencial" => $this->model->getNextval(),
+            "ac20_acordoposicao" => $sequencialAcordoPosicao,
+            "ac20_pcmater" => $item->getCodigoPcMater(),
+            "ac20_quantidade" => $item->getQuantidade(),
+            "ac20_valorunitario" => $item->getValorUnitario(),
+            "ac20_valortotal" => $item->getValorTotal(),
+            "ac20_matunid" => $item->getUnidade()
+        ];
+
+        return $acordoItem->create($dados);
     }
 }

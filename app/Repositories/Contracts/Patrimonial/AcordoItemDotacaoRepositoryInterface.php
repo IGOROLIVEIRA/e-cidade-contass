@@ -2,6 +2,7 @@
 namespace App\Repositories\Contracts\Patrimonial;
 
 use App\Domain\Patrimonial\Aditamento\ItemDotacao;
+use App\Models\AcordoItemDotacao;
 
 interface AcordoItemDotacaoRepositoryInterface
 {
@@ -20,11 +21,11 @@ interface AcordoItemDotacaoRepositoryInterface
      */
     public function getQtdDotacaoByAcordoItem(int $acordoItem): int;
 
-    /**
+     /**
      *
      * @param ItemDotacao $itemDotacao
      * @param integer $acordoItemSequencial
-     * @return boolean
+     * @return AcordoItemDotacao|null
      */
-    public function saveByDomainAditamento(ItemDotacao $itemDotacao, int $acordoItemSequencial): bool;
+    public function saveByDomainAditamento(ItemDotacao $itemDotacao, int $acordoItemSequencial): ?AcordoItemDotacao;
 }
