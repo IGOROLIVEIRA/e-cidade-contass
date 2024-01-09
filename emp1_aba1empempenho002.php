@@ -88,6 +88,38 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $db_opcao =  22;
 $db_botao = false;
+
+if(isset($alterar)){
+    if($sqlerro==false){
+
+        $result=$clempefdreinf->sql_record($clempefdreinf->sql_query_file($e60_numemp));
+    
+        $clempefdreinf->efd60_cessaomaoobra = $efd60_cessaomaoobra;
+        $clempefdreinf->efd60_aquisicaoprodrural = $efd60_aquisicaoprodrural;
+        $clempefdreinf->efd60_possuicno = $efd60_possuicno;
+        $clempefdreinf->efd60_numcno = $efd60_numcno;
+        $clempefdreinf->efd60_indprestservico = $efd60_indprestservico;
+        $clempefdreinf->efd60_prescontricprb = $efd60_prescontricprb;
+        $clempefdreinf->efd60_tiposervico = $efd60_tiposervico;
+        $clempefdreinf->efd60_prodoptacp = $efd60_prodoptacp;
+        
+        if($clempefdreinf->numrows>0){
+            $clempefdreinf->alterar($e60_numemp);
+        } else {
+            $clempefdreinf->efd60_numemp = $e60_numemp;
+            $clempefdreinf->efd60_codemp = $e60_codemp;
+            $clempefdreinf->efd60_anousu = db_getsession("DB_anousu");
+            $clempefdreinf->efd60_instit = db_getsession("DB_instit");
+            $clempefdreinf->incluir($e60_numemp);
+        }
+    
+        
+        if ($clempefdreinf->erro_status == 0) {
+            $sqlerro = true;
+            $erro_msg = $clempefdreinf->erro_msg;
+        }
+    }
+}
 if(isset($alterar)){
 
     $sqlerro=false;
@@ -116,7 +148,7 @@ if(isset($alterar)){
     }
 
     //Verifica se o periodo contabil esta encerrado na data do empenho
-    $sSqlConsultaFimPeriodoContabil   = "SELECT * FROM condataconf WHERE c99_anousu = ".db_getsession('DB_anousu')." and c99_instit = ".db_getsession('DB_instit');
+    $sSqlConsultaFimPeriodoContabil   = "SELECT * FROM condataconf WHERE c99_anousu = ".$data_empenho_ano." and c99_instit = ".db_getsession('DB_instit');
     $rsConsultaFimPeriodoContabil     = db_query($sSqlConsultaFimPeriodoContabil);    
 
     if($sqlerro == false){
@@ -125,9 +157,9 @@ if(isset($alterar)){
             $oFimPeriodoContabil = db_utils::fieldsMemory($rsConsultaFimPeriodoContabil, 0);
             
             if ($oFimPeriodoContabil->c99_data != '' && 
-            (db_strtotime($e60_emiss) < db_strtotime($oFimPeriodoContabil->c99_data) || 
-            db_strtotime($data_empenho) < db_strtotime($oFimPeriodoContabil->c99_data))) {
-                $erro_msg = "Período contábil encerrado.";
+            (db_strtotime($e60_emiss) <= db_strtotime($oFimPeriodoContabil->c99_data) || 
+            db_strtotime($data_empenho) <= db_strtotime($oFimPeriodoContabil->c99_data))) {
+                $erro_msg = "Período contábil encerrado. Apenas os dados para EFD-Reinf foram atualizados.";
                 $sqlerro = true;
             }
             
@@ -228,35 +260,6 @@ if(isset($alterar)){
         }
     }
 
-    if($sqlerro==false){
-
-        $result=$clempefdreinf->sql_record($clempefdreinf->sql_query_file($e60_numemp));
-       
-        $clempefdreinf->efd60_cessaomaoobra = $efd60_cessaomaoobra;
-        $clempefdreinf->efd60_aquisicaoprodrural = $efd60_aquisicaoprodrural;
-        $clempefdreinf->efd60_possuicno = $efd60_possuicno;
-        $clempefdreinf->efd60_numcno = $efd60_numcno;
-        $clempefdreinf->efd60_indprestservico = $efd60_indprestservico;
-        $clempefdreinf->efd60_prescontricprb = $efd60_prescontricprb;
-        $clempefdreinf->efd60_tiposervico = $efd60_tiposervico;
-        $clempefdreinf->efd60_prodoptacp = $efd60_prodoptacp;
-        
-        if($clempefdreinf->numrows>0){
-            $clempefdreinf->alterar($e60_numemp);
-        } else {
-            $clempefdreinf->efd60_numemp = $e60_numemp;
-            $clempefdreinf->efd60_codemp = $e60_codemp;
-            $clempefdreinf->efd60_anousu = db_getsession("DB_anousu");
-            $clempefdreinf->efd60_instit = db_getsession("DB_instit");
-            $clempefdreinf->incluir($e60_numemp);
-        }
-      
-        
-        if ($clempefdreinf->erro_status == 0) {
-            $sqlerro = true;
-            $erro_msg = $clempefdreinf->erro_msg;
-        }
-    }
 
     $anoUsu = db_getsession("DB_anousu");
     $sWhere = "e56_autori = " . $e54_autori . " and e56_anousu = " . $anoUsu;
