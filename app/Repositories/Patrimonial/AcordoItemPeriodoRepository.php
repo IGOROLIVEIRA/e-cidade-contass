@@ -29,4 +29,13 @@ class AcordoItemPeriodoRepository implements AcordoItemPeriodoRepositoryInterfac
         $acordoItemPeriodo = $this->model->where('ac41_acordoitem',$codigoItem)->first();
         return $acordoItemPeriodo->update($dados);
     }
+
+      /**
+     * @param array $dados
+     * @return boolean
+     */
+    public function insert(array $dados): bool
+    {
+       return $this->model->create($dados);
+    }
 }

@@ -47,6 +47,10 @@ class InsereItemAditamentoCommand
         $this->dto = $dto;
     }
 
+    /**
+     *
+     * @return boolean
+     */
     public function execute(): bool
     {
         $item = $this->dto->getItem();
@@ -78,5 +82,11 @@ class InsereItemAditamentoCommand
                 'ac41_acordoposicao' => $this->dto->getSequencialAcordoPosicao()
             ]
         );
+
+        if (!$resultItemPeriodo) {
+            throw new \Exception("Erro ao inserir acordo periodo no item {$item->getCodigoPcMater()}");
+        }
+
+        return true;
     }
 }

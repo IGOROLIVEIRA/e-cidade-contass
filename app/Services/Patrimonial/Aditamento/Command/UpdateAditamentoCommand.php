@@ -60,7 +60,6 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
      */
     public function execute(Aditamento $aditamento): bool
     {
-
         $this->validaNumeroAditamento($aditamento);
 
         $acordoPosicao = $this->formatAcordoPosicao($aditamento);
@@ -113,9 +112,9 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
             foreach ($itens as $item) {
                 $codigoItem = $item->getItemSequencial();
 
+                if ($aditamento->isAlteracaoProjetoEspecificacao())
                 $acordoItem = $this->acordoItemRepository->getItemByPcmaterAndPosicao($codigoItem, $sequencialAcordoPosicao);
-
-                if(empty($acordoItem)) {
+                if(empty($acordoItem) ) {
                     $insertDto = new InsertItemDto(
                         $item,
                         $sequencialAcordoPosicao,

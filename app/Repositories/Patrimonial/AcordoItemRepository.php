@@ -42,6 +42,12 @@ class AcordoItemRepository implements AcordoItemRepositoryInterface
         ->update($dados);
     }
 
+    /**
+     *
+     * @param integer $pcMater
+     * @param integer $posicao
+     * @return AcordoItem|null
+     */
     public function getItemByPcmaterAndPosicao(int $pcMater,int $posicao): ?AcordoItem
     {
         return $this->model
@@ -50,6 +56,12 @@ class AcordoItemRepository implements AcordoItemRepositoryInterface
         ->first();
     }
 
+    /**
+     *
+     * @param Item $item
+     * @param integer $sequencialAcordoPosicao
+     * @return boolean
+     */
     public function saveByItemAditamento(Item $item, int $sequencialAcordoPosicao): bool
     {
         $acordoItem = $this->model;

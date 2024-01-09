@@ -16,6 +16,8 @@ class Aditamento
 
     private const TIPO_ACDC_CONJUGADO = 14;
 
+    private const TIPO_ALTERACAO_PROJETO_ESPECIF = 12;
+
     /**
      * @var integer
      */
@@ -494,6 +496,11 @@ class Aditamento
     public function isAcdcConjugado(): bool
     {
         return $this->getTipoAditivo() === self::TIPO_ACDC_CONJUGADO;
+    }
+
+    public function isAlteracaoProjetoEspecificacao(): bool
+    {
+        return $this->getTipoAditivo() === self::TIPO_ALTERACAO_PROJETO_ESPECIF;
     }
 
     /**
