@@ -67,6 +67,7 @@ class GerarREDISPI extends GerarAM
                 $aCSVREDISPI10['si183_vlrecurso']                             = $this->sicomNumberReal($aREDISPI10['si183_vlrecurso'], 2);
                 $aCSVREDISPI10['si183_bdi']                                   = $aREDISPI10['si183_naturezaobjeto'] == '7' ? '' : $this->sicomNumberReal($aREDISPI10['si183_bdi'], 2);
                 $aCSVREDISPI10['si183_link']                                  = $aREDISPI10['si183_link'];
+                $aCSVREDISPI10['si183_emailcontato']                          = $aREDISPI10['si183_emailcontato'];
 
                 $this->sLinha = $aCSVREDISPI10;
                 $this->adicionaLinha();
@@ -94,7 +95,7 @@ class GerarREDISPI extends GerarAM
                         $aCSVREDISPI11['si184_codfuncao']                       = $this->padLeftZero(intval($aREDISPI11['si184_codfuncao']), 2);
                         $aCSVREDISPI11['si184_codsubfuncao']                    = $this->padLeftZero(intval($aREDISPI11['si184_codsubfuncao']), 3);
                         $aCSVREDISPI11['si184_codbempublico']                   = $this->padLeftZero($aREDISPI11['si184_codbempublico'], 4);
-
+                        $aCSVREDISPI11['si184_utilizacaoplanilhamodelo']        = $aREDISPI11['si184_utilizacaoplanilhamodelo'];
                         $this->sLinha = $aCSVREDISPI11;
                         $this->adicionaLinha();
                     }
@@ -117,7 +118,7 @@ class GerarREDISPI extends GerarAM
                         $aCSVREDISPI12['si185_numero']                      = $aREDISPI12['si185_numero'] ? $aREDISPI12['si185_numero'] : '';
                         $aCSVREDISPI12['si185_bairro']                      = $aREDISPI12['si185_bairro'];
                         $aCSVREDISPI12['si185_distrito']                    = $aREDISPI12['si185_distrito'];
-                        $aCSVREDISPI12['si185_cidade']                      = $aREDISPI12['si185_cidade'];
+                        $aCSVREDISPI12['si185_cidade']                      = '';
                         $aCSVREDISPI12['si185_cep']                         = $aREDISPI12['si185_cep'];
                         $aCSVREDISPI12['si185_latitude']                    = $this->sicomNumberReal($aREDISPI12['si185_latitude'], 6);
                         $aCSVREDISPI12['si185_longitude']                   = $this->sicomNumberReal($aREDISPI12['si185_longitude'], 6);
