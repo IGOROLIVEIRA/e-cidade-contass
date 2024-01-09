@@ -89,42 +89,59 @@ if (!isset($oParam->somenteConsulta) && !$oParam->somenteConsulta) {
     $oRetorno->naoEncontrado = $naoEncontrado;
 
     try {
-        $tamanhoChunk = 100;
-        $resultadoDotacoesArray = $resultadoDotacoesAcordosOrcamentos->toArray();
-        $resultadoChunks = array_chunk($resultadoDotacoesArray, $tamanhoChunk);
+        $tamanhoDoResultado = $resultadoDotacoesAcordosOrcamentos->count();
 
-        DB::beginTransaction();
-
-        foreach ($resultadoChunks as $chunk) {
-            $dadosParaInserir = [];
-
-            foreach ($chunk as $dotacao) {
-                $duplicados = AcordoItemDotacao::procuraPorCodigoDotacao($dotacao['dotacao'])
-                    ->procuraPorAno($oParam->anoDestino)
-                    ->procuraPorAcordoItem($dotacao['acordoitem'])
-                    ->procuraPorValor($dotacao['valor'])
-                    ->procuraPorQuantidade($dotacao['quantidade'])
-                    ->get();
-
-                 // Inibir a inserção de dados duplicados no banco.
-                if ($duplicados->isEmpty()) {
-                    $dadosParaInserir[] = [
-                        'ac22_sequencial' => $acordoItemDotacao->getProximoSequencial(),
-                        'ac22_coddot' => $dotacao['dotacao'],
-                        'ac22_anousu' => (int) $oParam->anoDestino,
-                        'ac22_acordoitem' => $dotacao['acordoitem'],
-                        'ac22_valor' => $dotacao['valor'],
-                        'ac22_quantidade' => $dotacao['quantidade'],
-                    ];
-                }
-            }
-
-            AcordoItemDotacao::insert($dadosParaInserir);
+        if ($tamanhoDoResultado <= 1000) {
+            $tamanhoChunk = 100;
+        } elseif ($tamanhoDoResultado <= 5000) {
+            $tamanhoChunk = 500;
+        } else {
+            $tamanhoChunk = 800;
         }
 
-        DB::commit();
+        $resultadoDotacoesArray = $resultadoDotacoesAcordosOrcamentos->toArray();
+
+        $dadosParaInserir = [];
+
+        foreach ($resultadoDotacoesArray as $dadocru) {
+            $duplicados = AcordoItemDotacao::procuraPorCodigoDotacao($dadocru['dotacao'])
+                ->procuraPorAno($oParam->anoDestino)
+                ->procuraPorAcordoItem($dadocru['acordoitem'])
+                ->procuraPorValor($dadocru['valor'])
+                ->procuraPorQuantidade($dadocru['quantidade'])
+                ->get();
+
+            // Inibir a inserção de dados duplicados no banco.
+            if ($duplicados->isEmpty()) {
+                $dadosParaInserir[] = [
+                    'ac22_sequencial' => $acordoItemDotacao->getNextval(),
+                    'ac22_coddot' => $dadocru['dotacao'],
+                    'ac22_anousu' => (int) $oParam->anoDestino,
+                    'ac22_acordoitem' => $dadocru['acordoitem'],
+                    'ac22_valor' => $dadocru['valor'],
+                    'ac22_quantidade' => $dadocru['quantidade'],
+                ];
+            }
+
+        }
+
+        $resultadoChunks = array_chunk($dadosParaInserir, $tamanhoChunk);
+
+        if (!empty($resultadoChunks)) {
+            DB::beginTransaction();
+
+            foreach ($resultadoChunks as $dotacao) {
+                AcordoItemDotacao::insert($dotacao);
+            }
+
+            DB::commit();
+        } else {
+            $oRetorno->message = urlencode("Nenhuma dotação foi alterada!");
+            $oRetorno->status = 3;
+        }
     } catch (\Exception $e) {
         DB::rollBack();
+
         $oRetorno->exception_message = urlencode($e->getMessage());
         $oRetorno->message = urlencode('Erro ao alterar dados das dotações de contratos!');
         $oRetorno->status = 2;

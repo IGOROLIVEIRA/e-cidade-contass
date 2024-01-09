@@ -74,79 +74,55 @@ db_app::load("scripts.js,
   <td>&nbsp;</td>
  </tr>
  <tr>
-  <td align="center" valign="top" bgcolor="#CCCCCC">
+  <td valign="top" bgcolor="#CCCCCC">
     <form name='form1'>
     <fieldset>
     <table>
       <tr>
-        <td nowrap title="<?=@$Te60_codemp?>">
+        <td nowrap title="<?=@$Te60_codemp?>" >
          <? db_ancora(@$Le60_codemp,"js_pesquisae60_codemp(true);",1); ?>
-        </td>
-        <td>
+        <span style="margin-left: 8px;">
          <? db_input('e60_codemp',13,$Ie60_codemp,true,'text',$db_opcao," onchange='js_pesquisae60_codemp(false);'","e60_codemp_ini")  ?>
           <strong> / </strong>
          <? db_input('e60_codemp',13,$Ie60_codemp,true,'text',$db_opcao,"","e60_codemp_fim" )  ?>
+        </span>
         </td>
       </tr>
       <tr>
-		<td nowrap title="<?=@$Te60_numemp?>">
+		<td nowrap title="<?=@$Te60_numemp?>" >
 		   <? db_ancora(@$Le60_numemp,"js_pesquisae60_numemp(true);",1); ?>
-		</td>
-		<td>
+      <span style="margin-left: 46px;">
 		   <? db_input('e60_numemp',13,$Ie60_numemp,true,'text',$db_opcao," onchange='js_pesquisae60_numemp(false);'")  ?>
+      </span>
 		</td>
       </tr>
       <tr>
-		<td nowrap title="<?=@$Te50_numliquidacao?>">
+		<td nowrap title="<?=@$Te50_numliquidacao?>" >
 		   <?= @$Le50_numliquidacao?>
-		</td>
-		<td>
 		   <? db_input('e50_numliquidacao',13,$Ie50_numliquidacao,true,'text',$db_opcao)  ?>
 		</td>
       </tr>
       <tr>
-	<td nowrap title="<?=@$Te50_codord?>">
+	<td nowrap title="<?=@$Te50_codord?>" >
 	   <b><? db_ancora("Ordem:","js_pesquisae50_codord(true);",1); ?></b>
-	</td>
-	<td>
+    <span style="margin-left: 91px;">
 	   <? db_input('e50_codord',13,$Ie50_codord,true,'text',$db_opcao," onchange='js_pesquisae50_codord(false);'","e50_codord_ini")  ?>
      <strong> / </strong>
      <? db_input('e50_codord',13,$Ie50_codord,true,'text',$db_opcao,"","e50_codord_fim")  ?>
+    </span>
 	</td>
       </tr>
      <tr>
      <td align="left" >
-       <b> Período:</b>
-     </td>
-     <td>
-      <?  db_inputdata('dtini',@$dia,@$mes,@$ano,true,'text',1,"");
+       <b> Período: </b>
+      <span style="margin-left: 85px;">
+        <?  db_inputdata('dtini',@$dia,@$mes,@$ano,true,'text',1,"");
           echo " a ";
           db_inputdata('dtfim',@$dia,@$mes,@$ano,true,'text',1,"");
-       ?>
+        ?>
+      </span>
      </td>
      </tr>
-     <tr>
-     <td align="left" >
-       <b> Valor:</b>
-     </td>
-     <td>
-      <?
-        db_input('valor_ordem',20,$Ie53_valor,true,'text',2);
-       ?>
-     </td>
-     </tr>
-
-     <tr>
-     <td align="left" >
-       <b> Histórico:</b>
-     </td>
-     <td>
-      <?
-        db_textarea('historico',5,60,0,true,'text',2);
-       ?>
-     </td>
-     </tr>
-
      <tr>
 
        <td colspan="2">
@@ -237,8 +213,6 @@ function js_abre(){
   var e60_codemp_ini = obj.e60_codemp_ini.value;
   var e60_codemp_fim = obj.e60_codemp_fim.value;
   var e60_numemp     = obj.e60_numemp.value;
-  var historico      = obj.historico.value;
-  var valor_ordem    = obj.valor_ordem.value;
   var dtini_dia      = sDtini[0];
   var dtini_mes      = sDtini[1];
   var dtini_ano      = sDtini[2];
@@ -297,7 +271,7 @@ function js_abre(){
    if(query == ''){
      alert("Selecione alguma ordem de pagamento ou indique o período!");
    }else{
-        var sUrl = 'emp2_emitenotadespesa002.php?aFornecedor=' + aFornecedores + '&historico=' + historico + '&valor_ordem=' + valor_ordem + "&recursos="+ js_campo_recebe_valores_recursos() + query;
+        var sUrl = 'emp2_emitenotadespesa002.php?aFornecedor=' + aFornecedores + "&recursos="+ js_campo_recebe_valores_recursos() + query;
         jan = window.open(sUrl,
                        '',
                        'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');

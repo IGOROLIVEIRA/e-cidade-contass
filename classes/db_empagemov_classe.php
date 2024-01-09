@@ -257,17 +257,14 @@ class cl_empagemov {
          $virgula = ",";
        }
      }
-     if(trim($this->e81_numdoc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e81_numdoc"])){ 
+    if(trim($this->e81_numdoc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e81_numdoc"])){ 
       $sql  .= $virgula." e81_numdoc = '$this->e81_numdoc' ";
       $virgula = ",";
-    } elseif(trim($this->e81_numdoc) == null ){ 
-      $sql  .= $virgula." e81_numdoc = null ";
-      $virgula = ",";
-    }
+    } 
      $sql .= " where ";
      if($e81_codmov!=null){
        $sql .= " e81_codmov = $this->e81_codmov";
-     }
+     } 
      $resaco = $this->sql_record($this->sql_query_file($this->e81_codmov));
      if($this->numrows>0){
        for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
@@ -1058,6 +1055,82 @@ class cl_empagemov {
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
+
+  function consultaMovimentosDaOp($e50_codord = null, $sCampos = "*", $ordem = null, $dbWhere = ""){
+    $sql = "select ";
+     if($sCampos != "*" ){
+       $camposSql = explode("#",$sCampos);
+       $virgula = "";
+       for($i=0;$i<sizeof($camposSql);$i++){
+         $sql .= $virgula.$camposSql[$i];
+         $virgula = ",";
+       }
+     }else{
+       $sql .= $sCampos;
+     }
+     $sql .= "      from";
+     $sql .= "        empagemov";
+     $sql .= "      inner join empagemovforma on";
+     $sql .= "        empagemovforma.e97_codmov = empagemov.e81_codmov";
+     $sql .= "      inner join empage on";
+     $sql .= "        empage.e80_codage = empagemov.e81_codage";
+     $sql .= "      inner join empagepag on";
+     $sql .= "        empagepag.e85_codmov = empagemov.e81_codmov";
+     $sql .= "      inner join empagetipo on";
+     $sql .= "        empagetipo.e83_codtipo = empagepag.e85_codtipo";
+     $sql .= "      inner join conplanoreduz on";
+     $sql .= "        conplanoreduz.c61_reduz = empagetipo.e83_conta";
+     $sql .= "        and conplanoreduz.c61_anousu = 2024";
+     $sql .= "        and conplanoreduz.c61_instit = 1";
+     $sql .= "      inner join conplanoconta on";
+     $sql .= "        conplanoconta.c63_codcon = conplanoreduz.c61_codcon";
+     $sql .= "        and conplanoconta.c63_anousu = conplanoreduz.c61_anousu";
+     $sql .= "      inner join conplanocontabancaria on";
+     $sql .= "        conplanocontabancaria.c56_codcon = conplanoconta.c63_codcon";
+     $sql .= "        and conplanocontabancaria.c56_anousu = conplanoconta.c63_anousu";
+     $sql .= "      inner join contabancaria on";
+     $sql .= "        contabancaria.db83_sequencial = conplanocontabancaria.c56_contabancaria";
+     $sql .= "      inner join empageconf on";
+     $sql .= "        empageconf.e86_codmov = empagemov.e81_codmov";
+     $sql .= "      inner join empempenho on";
+     $sql .= "        empempenho.e60_numemp = empagemov.e81_numemp";
+     $sql .= "      inner join orcdotacao on";
+     $sql .= "        orcdotacao.o58_coddot = empempenho.e60_coddot";
+     $sql .= "        and orcdotacao.o58_anousu = empempenho.e60_anousu";
+     $sql .= "      inner join orctiporec on";
+     $sql .= "        orctiporec.o15_codigo = orcdotacao.o58_codigo";
+     $sql .= "      inner join empord on";
+     $sql .= "        empord.e82_codmov = empagemov.e81_codmov";
+     $sql .= "      inner join pagordem on";
+     $sql .= "        pagordem.e50_codord = empord.e82_codord";
+     $sql .= "      left join empagemovconta on";
+     $sql .= "        empagemovconta.e98_codmov = empagemov.e81_codmov";
+     $sql .= "      left join pcfornecon on";
+     $sql .= "        pcfornecon.pc63_contabanco = empagemovconta.e98_contabanco";
+     $sql .= "      left join cgm on";
+     $sql .= "        cgm.z01_numcgm = pcfornecon.pc63_numcgm";
+     $sql .= "      left join (select distinct on (k12_codmov) * from corempagemov order by k12_codmov, k12_autent) as corempagemov";
+     $sql .= "        on empagemov.e81_codmov = corempagemov.k12_codmov";
+     $sql2 = "";
+     if($dbWhere==""){
+       if($e50_codord!=null ){
+         $sql2 .= " e50_codord = " . $e50_codord;
+       }
+     }else if($dbWhere != ""){
+       $sql2 = " where $dbWhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $camposSql = explode("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($camposSql);$i++){
+         $sql .= $virgula.$camposSql[$i];
          $virgula = ",";
        }
      }
