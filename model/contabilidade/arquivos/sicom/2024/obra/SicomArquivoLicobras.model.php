@@ -139,10 +139,12 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
                    ac16_valor as si195_vlcontrato,
                    ac16_tipounidtempoperiodo as si195_undmedidaprazoexecucao,
                    ac16_qtdperiodo as si195_prazoexecucao,
-                   ac16_tipoorigem
+                   ac16_tipoorigem,
+                   z01_cgccpf as si195_numdocumentocontratado
             FROM licobras
             INNER JOIN liclicita ON l20_codigo = obr01_licitacao
             INNER  JOIN acordo on ac16_licitacao = l20_codigo
+            INNER JOIN cgm on z01_numcgm = ac16_contratado
             INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
             INNER JOIN cflicita on l20_codtipocom = l03_codigo
             LEFT  JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
@@ -184,6 +186,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
         $cllicobras102024->si195_exerciciocontrato = $oDados10->si195_exerciciocontrato;
         $cllicobras102024->si195_dataassinatura = $oDados10->si195_dataassinatura;
         $cllicobras102024->si195_vlcontrato = $oDados10->si195_vlcontrato;
+        $cllicobras102024->si195_numdocumentocontratado = $oDados10->si195_numdocumentocontratado;
         $cllicobras102024->si195_undmedidaprazoexecucao = $oDados10->si195_undmedidaprazoexecucao;
         $cllicobras102024->si195_prazoexecucao = $oDados10->si195_prazoexecucao;
         $cllicobras102024->si195_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];

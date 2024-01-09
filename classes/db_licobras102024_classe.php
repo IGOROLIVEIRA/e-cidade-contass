@@ -35,6 +35,7 @@ class cl_licobras102024 {
   public $si195_vlcontrato = null;
   public $si195_undmedidaprazoexecucao = null;
   public $si195_prazoexecucao = null;
+  public $si195_numdocumentocontratado = null;
   public $si195_mes = 0;
   public $si195_instit = 0;
   // cria propriedade com as variaveis do arquivo
@@ -58,6 +59,7 @@ class cl_licobras102024 {
                  si195_vlcontrato = numeric = valor do contrato
                  si195_undmedidaprazoexecucao = int8 = und de execucao
                  si195_prazoexecucao = prazo de execucao
+                 si195_numdocumentocontratado = varchar(14) = numero documento contratado
                  si195_mes = int4 = Mes
                  si195_instit = int4 = Instituição
                  ";
@@ -99,6 +101,7 @@ class cl_licobras102024 {
       $this->si195_dataassinatura = ($this->si195_dataassinatura == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dataassinatura"]:$this->si195_dataassinatura);
       $this->si195_vlcontrato = ($this->si195_vlcontrato == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_vlcontrato"]:$this->si195_vlcontrato);
       $this->si195_undmedidaprazoexecucao = ($this->si195_undmedidaprazoexecucao == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_undmedidaprazoexecucao"]:$this->si195_undmedidaprazoexecucao);
+      $this->si195_numdocumentocontratado = ($this->si195_numdocumentocontratado == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_numdocumentocontratado"]:$this->si195_numdocumentocontratado);
       $this->si195_prazoexecucao = ($this->si195_prazoexecucao == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_prazoexecucao"]:$this->si195_prazoexecucao);
       $this->si195_mes = ($this->si195_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_mes"]:$this->si195_mes);
       $this->si195_instit = ($this->si195_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_instit"]:$this->si195_instit);
@@ -292,6 +295,7 @@ class cl_licobras102024 {
                                       ,si195_exerciciocontrato
                                       ,si195_dataassinatura
                                       ,si195_vlcontrato
+                                      ,si195_numdocumentocontratado
                                       ,si195_undmedidaprazoexecucao
                                       ,si195_prazoexecucao
                                       ,si195_mes
@@ -315,6 +319,7 @@ class cl_licobras102024 {
                                ,$this->si195_exerciciocontrato
                                ,'$this->si195_dataassinatura'
                                ,$this->si195_vlcontrato
+                               ,'$this->si195_numdocumentocontratado'
                                ,$this->si195_undmedidaprazoexecucao
                                ,$this->si195_prazoexecucao
                                ,$this->si195_mes

@@ -18,6 +18,7 @@ class cl_pessoasobra102024 {
   // cria variaveis do arquivo
   public $si194_sequencial = 0;
   public $si194_tiporegistro = 0;
+  public $si194_tipodocumento = null;
   public $si194_nrodocumento = null;
   public $si194_nome = null;
   public $si194_tipocadastro = 0;
@@ -28,6 +29,7 @@ class cl_pessoasobra102024 {
   public $campos = "
                  si194_sequencial = int8 = Sequencial
                  si194_tiporegistro = int8 = Tiporegistro
+                 si194_tipodocumento = int8 = Tipo De Documento
                  si194_nrodocumento = text = Numero Documento
                  si194_nome = text = Nome
                  si194_tipocadastro = int4 = Tipo Cadastro
@@ -57,6 +59,7 @@ class cl_pessoasobra102024 {
   function atualizacampos($exclusao=false) {
     if ($exclusao==false) {
       $this->si194_sequencial = ($this->si194_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_sequencial"]:$this->si194_sequencial);
+      $this->si194_tipodocumento = ($this->si194_tipodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_tipodocumento"]:$this->si194_tipodocumento);
       $this->si194_tiporegistro = ($this->si194_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_tiporegistro"]:$this->si194_tiporegistro);
       $this->si194_nrodocumento = ($this->si194_nrodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_nrodocumento"]:$this->si194_nrodocumento);
       $this->si194_nome = ($this->si194_nome == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_nome"]:$this->si194_nome);
@@ -64,7 +67,6 @@ class cl_pessoasobra102024 {
       $this->si194_justificativaalteracao = ($this->si194_justificativaalteracao == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_justificativaalteracao"]:$this->si194_justificativaalteracao);
       $this->si194_mes = ($this->si194_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_mes"]:$this->si194_mes);
       $this->si194_instit = ($this->si194_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_instit"]:$this->si194_instit);
-    } else {
     }
   }
 
@@ -120,15 +122,7 @@ class cl_pessoasobra102024 {
       $this->erro_status = "0";
       return false;
     }
-//    if ($this->si194_justificativaalteracao == null ) {
-//      $this->erro_sql = " Campo Justificativa Alteracao não informado.";
-//      $this->erro_campo = "si194_justificativaalteracao";
-//      $this->erro_banco = "";
-//      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//      $this->erro_status = "0";
-//      return false;
-//    }
+
     if ($this->si194_mes == null ) {
       $this->erro_sql = " Campo Mes não informado.";
       $this->erro_campo = "si194_mes";
@@ -149,6 +143,7 @@ class cl_pessoasobra102024 {
     }
     $sql = "insert into pessoasobra102024(
                                        si194_sequencial
+                                      ,si194_tipodocumento
                                       ,si194_tiporegistro
                                       ,si194_nrodocumento
                                       ,si194_nome
@@ -159,6 +154,7 @@ class cl_pessoasobra102024 {
                        )
                 values (
                                 $this->si194_sequencial
+                               ,$this->si194_tipodocumento
                                ,$this->si194_tiporegistro
                                ,'$this->si194_nrodocumento'
                                ,'$this->si194_nome'
@@ -190,11 +186,6 @@ class cl_pessoasobra102024 {
     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
     $this->erro_status = "1";
     $this->numrows_incluir= pg_affected_rows($result);
-    $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-    if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-        && ($lSessaoDesativarAccount === false))) {
-
-    }
     return true;
   }
 

@@ -84,6 +84,10 @@ class SicomArquivoPessoaObras extends SicomArquivoBase implements iPadArquivoBas
 
     $sql = "SELECT DISTINCT 10 AS si194_tiporegistro,
              cgm.z01_cgccpf AS si194_nrodocumento,
+             CASE
+                WHEN LENGTH(cgm.z01_cgccpf) = 11 THEN 2
+                ELSE 3
+             END AS si194_tipodocumento,
              cgm.z01_nome AS si194_nome,
              1 AS si194_tipocadastro,
              '' AS si194_justificativaalteracao
@@ -109,6 +113,7 @@ class SicomArquivoPessoaObras extends SicomArquivoBase implements iPadArquivoBas
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
       $clpessoasobra102024->si194_tiporegistro           = 10;
+      $clpessoasobra102024->si194_tipodocumento          = $oDados10->si194_tipodocumento;
       $clpessoasobra102024->si194_nrodocumento           = $oDados10->si194_nrodocumento;
       $clpessoasobra102024->si194_nome                   = $this->removeCaracteres($oDados10->si194_nome);
       $clpessoasobra102024->si194_tipocadastro           = $oDados10->si194_tipocadastro;
