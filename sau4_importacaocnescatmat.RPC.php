@@ -37,14 +37,20 @@ try {
 
             $aDadosPlanilha = $excelService->importFile($nome_arquivo);
 
-            db_inicio_transacao();
-                
-            db_fim_transacao();
+            foreach ($aDadosPlanilha as $key => $iCadMat){
+              echo "<pre>";
+              print_r($iCadMat);
+              exit;
+            }
+
+            //db_inicio_transacao();
+
+            //db_fim_transacao();
 
             break;
 
     }
-} catch ( Exception $oErro ) {
+ } catch ( Exception $oErro ) {
 
     db_fim_transacao(true);
     $oRetorno->iStatus   = 2;
