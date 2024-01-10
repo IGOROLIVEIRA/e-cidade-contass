@@ -355,7 +355,6 @@ try {
                 
                 $oEventos->CPFCNPJProdutor = clean_cpf_cnpj($oEventos->CPFCNPJProdutor);
 
-                // validarCredorSemAquisicao($oEventos->CPFCNPJProdutor,$oParam);
 
                 $clEfdReinf = new EFDReinfEventos($oEventos, $oParam, $cgc);
 
@@ -633,8 +632,8 @@ try {
         case "transmitirreinfR4010":
 
             $iUltimoDiaMes = date("d", mktime(0, 0, 0, $oParam->sMescompetencia + 1, 0, $oParam->sAnocompetencia));
-            $sDataInicial = db_getsession("DB_anousu") . "-{$oParam->sMescompetencia}-01";
-            $sDataFinal   = db_getsession("DB_anousu") . "-{$oParam->sMescompetencia}-{$iUltimoDiaMes}";
+            $sDataInicial = $oParam->sAnocompetencia . "-{$oParam->sMescompetencia}-01";
+            $sDataFinal   = $oParam->sAnocompetencia . "-{$oParam->sMescompetencia}-{$iUltimoDiaMes}";
 
             $clefdreinfR4010 = new cl_efdreinfr4010;
             $rsEfdreinfR4010 = $clefdreinfR4010->sql_record($clefdreinfR4010->sql_DadosEFDReinf(11, $sDataInicial, $sDataFinal, $sInstituicao));
@@ -801,8 +800,8 @@ try {
         case "transmitirreinfR4020":
 
                 $iUltimoDiaMes = date("d", mktime(0, 0, 0, $oParam->sMescompetencia + 1, 0, $oParam->sAnocompetencia));
-                $sDataInicial = db_getsession("DB_anousu") . "-{$oParam->sMescompetencia}-01";
-                $sDataFinal   = db_getsession("DB_anousu") . "-{$oParam->sMescompetencia}-{$iUltimoDiaMes}";
+                $sDataInicial = $oParam->sAnocompetencia . "-{$oParam->sMescompetencia}-01";
+                $sDataFinal   = $oParam->sAnocompetencia . "-{$oParam->sMescompetencia}-{$iUltimoDiaMes}";
     
                 $clefdreinfR4020 = new cl_efdreinfr4020;
                 $rsEfdreinfR4020 = $clefdreinfR4020->sql_record($clefdreinfR4020->sql_DadosEFDReinf(14, $sDataInicial, $sDataFinal, $sInstituicao));
@@ -1081,30 +1080,7 @@ try {
     $oRetorno->iStatus  = 2;
     $oRetorno->sMessage = $eErro->getMessage();
 }
-// function validarCredorSemAquisicao($CNPJPrestador,$oParam){
-  
-//     $iUltimoDiaMes = date("d", mktime(0, 0, 0, $oParam->sMescompetencia + 1, 0, $oParam->sAnocompetencia));
-//     $sDataInicialFiltros = $oParam->sAnocompetencia . "-{$oParam->sMescompetencia}-01";
-//     $sDataFinalFiltros   = $oParam->sAnocompetencia . "-{$oParam->sMescompetencia}-{$iUltimoDiaMes}";
 
-//     $sWhere  = " where e69_dtnota between '{$sDataInicialFiltros}' and '{$sDataFinalFiltros}' and efd60_aquisicaoprodrural is null and e23_ativo = true and z01_cgccpf = '$CNPJPrestador' and  (e21_retencaotipocalc in ('10','11','12') or efd60_aquisicaoprodrural != 0) ";
-//     $sGroupBY =" group by 1,2,3,4,5,6,7,8,9,10,11,12,e21_retencaotipocalc, e23_valorretencao";
-//     $clempnota           = new cl_empnota;
-//     $rsnotas2055 = $clempnota->sql_record($clempnota->sqlRelRetencoesReinfNotas($sWhere, $sGroupBY, null, null));
-//     $dadosEmpenhos = '';
-//     for ($i = 0; $i < pg_num_rows($rsnotas2055); $i++) {
-//         $oNota2055 = db_utils::fieldsMemory($rsnotas2055, $i);
-//         if ($i != 0) {
-//             $dadosEmpenhos .= ", ";
-//         }
-//         $dadosEmpenhos .= $oNota2055->e60_codemp."/".$oNota2055->e60_anousu;
-//     }
-//     if ($dadosEmpenhos) {
-//         throw new Exception( "22Para realizar a transmissão do evento o campo Aquisição de Produção Rural no Empenho ". $dadosEmpenhos ." não poder ser  0 - Não se aplica. Realize a alteração da informação no empenho e tente novamente.");
-//     }
-//     return true;
- 
-// }
 
 function formateDate(string $date): string
 {
