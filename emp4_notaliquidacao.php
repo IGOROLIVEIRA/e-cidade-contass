@@ -71,6 +71,12 @@ switch ($oParam->exec) {
 
       for ($i = 0; $i < $iTotNotas; $i++) {
 
+        $clEmpord = db_utils::getDao('empord');
+        $sMensagemErro = $clEmpord->verificaOpAuxiliar($oParam->aNotas[$i]->e50_codord);
+        if($sMensagemErro){
+          throw new Exception($sMensagemErro);
+        }
+
         $oNotaLiquidacao = new ordemPagamento($oParam->aNotas[$i]->e50_codord);
 
         $dtAto = '';

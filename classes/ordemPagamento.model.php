@@ -321,7 +321,7 @@ class ordemPagamento {
    */
   if (db_round(($oDadosOrdem->e53_vlrpag+$this->getValorPago()),2) > db_round($oDadosOrdem->e53_valor,2) ){
 
-    $sMsg = "Pagamento já foi efetuado.";
+    $sMsg = "Pagamento já foi efetuado. OP: ".$oDadosOrdem->e50_codord;
      throw new exception($sMsg);
      return false;
 

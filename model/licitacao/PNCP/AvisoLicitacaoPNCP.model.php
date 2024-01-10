@@ -283,7 +283,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
             'Tipo-Documento-Id: ' . $iTipoAnexo
         );
 
-        $optionspncp = $this->getParancurl('POST',$post_data,$headers,false,false);
+        $optionspncp = $this->getParancurl('POST',$post_data,$headers,false,true);
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);

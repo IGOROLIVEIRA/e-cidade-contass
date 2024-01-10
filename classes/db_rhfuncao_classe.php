@@ -54,6 +54,7 @@ class cl_rhfuncao {
     var $rh37_funcaogrupo = 0;
     var $rh37_atividadedocargo = null;
     var $rh37_exerceatividade = null;
+    var $rh37_dedicacaoexc = 'f';
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  rh37_instit = int4 = Cod. Instituição 
@@ -67,7 +68,8 @@ class cl_rhfuncao {
                  rh37_ativo = bool = Ativo
                  rh37_funcaogrupo = int4 = Grupo
                  rh37_atividadedocargo = varchar(150) = atividadedocargo
-                 rh37_exerceatividade = bool = Professor exerce suas atividades em sala de aula? 
+                 rh37_exerceatividade = bool = Professor exerce suas atividades em sala de aula?
+                 rh37_dedicacaoexc = bool = Dedicação Exclusiva 
                  ";
     //funcao construtor da classe
     function cl_rhfuncao() {
@@ -97,7 +99,8 @@ class cl_rhfuncao {
             $this->rh37_ativo = ($this->rh37_ativo == "f"?@$GLOBALS["HTTP_POST_VARS"]["rh37_ativo"]:$this->rh37_ativo);
             $this->rh37_funcaogrupo = ($this->rh37_funcaogrupo == ""?@$GLOBALS["HTTP_POST_VARS"]["rh37_funcaogrupo"]:$this->rh37_funcaogrupo);
             $this->rh37_atividadedocargo = ($this->rh37_atividadedocargo == ""?@$GLOBALS["HTTP_POST_VARS"]["rh37_atividadedocargo"]:$this->rh37_atividadedocargo);
-            $this->rh37_exerceatividade = ($this->rh37_exerceatividade == ""?@$GLOBALS["HTTP_POST_VARS"]["rh37_exerceatividade"]:$this->rh37_exerceatividade);
+            $this->rh37_dedicacaoexc = ($this->rh37_dedicacaoexc == ""?@$GLOBALS["HTTP_POST_VARS"]["rh37_dedicacaoexc"]:$this->rh37_dedicacaoexc);
+            
         }else{
             $this->rh37_instit = ($this->rh37_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["rh37_instit"]:$this->rh37_instit);
             $this->rh37_funcao = ($this->rh37_funcao == ""?@$GLOBALS["HTTP_POST_VARS"]["rh37_funcao"]:$this->rh37_funcao);
@@ -176,6 +179,7 @@ class cl_rhfuncao {
                                       ,rh37_funcaogrupo 
                                       ,rh37_atividadedocargo
                                       ,rh37_exerceatividade
+                                      ,rh37_dedicacaoexc
                        )
                 values (
                                 $this->rh37_instit 
@@ -190,6 +194,7 @@ class cl_rhfuncao {
                                ,$this->rh37_funcaogrupo 
                                ,'$this->rh37_atividadedocargo'
                                ,".($this->rh37_exerceatividade == "null" || $this->rh37_exerceatividade == ""?"null":"'".$this->rh37_exerceatividade."'")." 
+                               ,'$this->rh37_dedicacaoexc'
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -314,6 +319,10 @@ class cl_rhfuncao {
             
             $virgula = ",";
         } 
+        if(trim($this->rh37_dedicacaoexc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh37_dedicacaoexc"])){
+            $sql  .= $virgula." rh37_dedicacaoexc = '$this->rh37_dedicacaoexc' ";
+            $virgula = ",";
+        }
         if(trim($this->rh37_ativo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh37_ativo"])){
             $sql  .= $virgula." rh37_ativo = '$this->rh37_ativo' ";
             $virgula = ",";

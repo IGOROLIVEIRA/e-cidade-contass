@@ -60,7 +60,7 @@ class FilaESocialTask extends Task implements iTarefa
                 /**
                  * Conecta no banco com variaveis definidas no 'libs/db_conn.php'
                  */
-                if (!($conn = @pg_connect("host=$DB_SERVIDOR dbname=$row[0] port=$row[1] user=dbportal password=dbportal"))) {
+                if (!($conn = @pg_connect("host=localhost dbname=$row[0] port=$row[1] user=dbportal password=dbportal"))) {
                     throw new Exception("Erro ao conectar ao banco. host=$DB_SERVIDOR dbname=$row[0] port=$row[1] user=dbportal password=dbportal");
                 }
 
@@ -69,23 +69,19 @@ class FilaESocialTask extends Task implements iTarefa
                 $rs  = \db_query($sql . "\n");
 
                 if (!$rs || pg_num_rows($rs) == 0) {
-                    //throw new Exception("Agendamento nao encontrado.");
-                    echo "Agendamento não encontrado.";
-                    var_dump($row);
-                    continue;
+                    throw new Exception("Agendamento nao encontrado.");
                 }
                 $dao->setSituacaoProcessando();
                 if ($dao->erro_status == "0") {
-                    //throw new Exception("Erro ao Atualizar agendamentos para o status PROCESSANDO.");
-                    echo "Erro ao Atualizar agendamentos para o status PROCESSANDO.";
-                    var_dump($row);
-                    continue;
+                    throw new Exception("Erro ao Atualizar agendamentos para o status PROCESSANDO.");
                 }
                 for ($iCont = 0; $iCont < pg_num_rows($rs); $iCont++) {
                     $this->enviar($conn, \db_utils::fieldsMemory($rs, $iCont));
                 }
             } catch (\Exception $e) {
-                die("Erro na execução:\n{$e->getMessage()} \n");
+                echo "Erro na execução:\n{$e->getMessage()} \n";
+                var_dump($row);
+                continue;
             }
         }
     }
@@ -111,22 +107,22 @@ class FilaESocialTask extends Task implements iTarefa
             $retorno = $exportar->request();
 
             if (!$retorno) {
-                throw new Exception("Erro no envio das informações. \n {$exportar->getDescResposta()}");
+                throw new Exception("Erro no envio das informa??es. \n {$exportar->getDescResposta()}");
             }
             $dao->setSituacaoEnviado($dadosEnvio->rh213_sequencial);
             if ($dao->erro_status == "0") {
-                throw new Exception("Não foi possível alterar situação ENVIADO da fila.");
+                throw new Exception("N?o foi poss?vel alterar situa??o ENVIADO da fila.");
             }
 
             $dados[] = $exportar->getProtocoloEnvioLote();
 
             $dao->setProtocolo($dadosEnvio->rh213_sequencial, $exportar->getProtocoloEnvioLote());
             if ($dao->erro_status == "0") {
-                throw new Exception("Não foi possível adicionar o protocolo.");
+                throw new Exception("N?o foi poss?vel adicionar o protocolo.");
             }
 
             /**
-             * Esperar alguns segundos pois em muitos casos, o lote ainda não havia sido processado
+             * Esperar alguns segundos pois em muitos casos, o lote ainda n?o havia sido processado
              */
             sleep(15);
             $exportar = new ESocial(Registry::get('app.config'), "consulta.php");
@@ -146,9 +142,9 @@ class FilaESocialTask extends Task implements iTarefa
         } catch (\Exception $e) {
             $dao->setSituacaoErroEnvio($dadosEnvio->rh213_sequencial, $e->getMessage());
             if ($dao->erro_status == "0") {
-                echo "Erro na execução:\n Não foi possível alterar situação NAO ENVIADO da fila. \n {$dao->erro_msg}";
+                echo "Erro na execu??o:\n N?o foi poss?vel alterar situa??o NAO ENVIADO da fila. \n {$dao->erro_msg}";
             }
-            echo "Erro na execução:\n{$e->getMessage()} \n";
+            echo "Erro na execu??o:\n{$e->getMessage()} \n";
         }
     }
 
@@ -212,7 +208,7 @@ class FilaESocialTask extends Task implements iTarefa
 
                 if (!$rs || pg_num_rows($rs) == 0) {
                     //throw new Exception("Agendamento nao encontrado.");
-                    echo "Agendamento não encontrado.";
+                    echo "Agendamento n?o encontrado.";
                     continue;
                 }
 
@@ -240,7 +236,7 @@ class FilaESocialTask extends Task implements iTarefa
                     echo "{$exportar->getDescResposta()} Recibo de Envio {$exportar->getNumeroRecibo()}";
                 }
             } catch (\Exception $e) {
-                echo "Erro na execução:\n{$e->getMessage()} \n";
+                echo "Erro na execu??o:\n{$e->getMessage()} \n";
             }
         }
     }
@@ -261,7 +257,7 @@ class FilaESocialTask extends Task implements iTarefa
         $daoEsocialRecibo->rh215_dataentrega  = date("Y-m-d H:i:s");
         $daoEsocialRecibo->incluir();
         if ($daoEsocialRecibo->erro_status == 0) {
-            die("Não foi possível incluir recibo {$numeroRecibo}. \n" . $daoEsocialRecibo->erro_msg);
+            die("N?o foi poss?vel incluir recibo {$numeroRecibo}. \n" . $daoEsocialRecibo->erro_msg);
         }
     }
 
@@ -279,7 +275,7 @@ class FilaESocialTask extends Task implements iTarefa
         if (in_array("S{$evento}", $arrEvtPeriodicos)) {
             return 3;
         }
-        throw new Exception("Não foi possível encontrar a fase deste evento.");
+        throw new Exception("N?o foi poss?vel encontrar a fase deste evento.");
     }
 
     private function importarEvtRetorno($oXml, $dadosEvento)

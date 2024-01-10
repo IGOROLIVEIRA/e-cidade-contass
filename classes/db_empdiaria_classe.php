@@ -106,7 +106,6 @@ class cl_empdiaria
   // funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
-    $this->e140_codord = ($this->e140_codord === "" ? @$GLOBALS["HTTP_POST_VARS"]["e140_codord"] : $this->e140_codord);
     $this->e140_dtautorizacao = ($this->e140_dtautorizacao === "" ? @$GLOBALS["HTTP_POST_VARS"]["e140_dtautorizacao"] : $this->e140_dtautorizacao);
     $this->e140_matricula = ($this->e140_matricula === "" ? @$GLOBALS["HTTP_POST_VARS"]["e140_matricula"] : $this->e140_matricula);
     $this->e140_cargo = ($this->e140_cargo === "" ? @$GLOBALS["HTTP_POST_VARS"]["e140_cargo"] : $this->e140_cargo);
@@ -300,11 +299,21 @@ class cl_empdiaria
     $this->atualizacampos();
     $sql = " update empdiaria set ";
     $virgula = "";
-    if (trim($this->e140_codord) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_codord"])) {
-      $sql  .= $virgula . " e140_codord = '$this->e140_codord' ";
+    if (trim($this->e140_matricula) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_matricula"])) {
+      $sql  .= $virgula . " e140_matricula = '$this->e140_matricula' ";
       $virgula = ",";
-      if (trim($this->e140_codord) == null) {
-        $this->erro_sql = " Campo e140_codord nao declarado.";
+      if (trim($this->e140_matricula) == null) {
+        $this->erro_sql = " Campo e140_matricula nao declarado.";
+        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->e140_cargo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_cargo"])) {
+      $sql  .= $virgula . " e140_cargo = '$this->e140_cargo' ";
+      $virgula = ",";
+      if (trim($this->e140_cargo) == null) {
+        $this->erro_sql = " Campo e140_cargo nao declarado.";
         $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_status = "0";
         return false;
@@ -315,16 +324,6 @@ class cl_empdiaria
       $virgula = ",";
       if (trim($this->e140_dtautorizacao) == null) {
         $this->erro_sql = " Campo e140_dtautorizacao nao declarado.";
-        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_status = "0";
-        return false;
-      }
-    }
-    if (trim($this->e140_matricula) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_matricula"])) {
-      $sql  .= $virgula . " e140_matricula = '$this->e140_matricula' ";
-      $virgula = ",";
-      if (trim($this->e140_matricula) == null) {
-        $this->erro_sql = " Campo e140_matricula nao declarado.";
         $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_status = "0";
         return false;
@@ -393,82 +392,34 @@ class cl_empdiaria
     if (trim($this->e140_qtddiarias) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_qtddiarias"])) {
       $sql  .= $virgula . " e140_qtddiarias = $this->e140_qtddiarias ";
       $virgula = ",";
-      if (trim($this->e140_qtddiarias) == null) {
-        $this->erro_sql = " Campo e140_qtddiarias nao declarado.";
-        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_status = "0";
-        return false;
-      }
     }
     if (trim($this->e140_vrldiariauni) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_vrldiariauni"])) {
       $sql  .= $virgula . " e140_vrldiariauni = $this->e140_vrldiariauni ";
       $virgula = ",";
-      if (trim($this->e140_vrldiariauni) == null) {
-        $this->erro_sql = " Campo e140_vrldiariauni nao declarado.";
-        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_status = "0";
-        return false;
-      }
     }
     if (trim($this->e140_qtddiariaspernoite) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_qtddiariaspernoite"])) {
       $sql  .= $virgula . " e140_qtddiariaspernoite = $this->e140_qtddiariaspernoite ";
       $virgula = ",";
-      if (trim($this->e140_qtddiariaspernoite) == null) {
-        $this->erro_sql = " Campo e140_qtddiariaspernoite nao declarado.";
-        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_status = "0";
-        return false;
-      }
     }
     if (trim($this->e140_vrldiariaspernoiteuni) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_vrldiariaspernoiteuni"])) {
       $sql  .= $virgula . " e140_vrldiariaspernoiteuni = $this->e140_vrldiariaspernoiteuni ";
       $virgula = ",";
-      if (trim($this->e140_vrldiariaspernoiteuni) == null) {
-        $this->erro_sql = " Campo e140_vrldiariaspernoiteuni nao declarado.";
-        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_status = "0";
-        return false;
-      }
     }
     if (trim($this->e140_qtdhospedagens) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_qtdhospedagens"])) {
       $sql  .= $virgula . " e140_qtdhospedagens = $this->e140_qtdhospedagens ";
       $virgula = ",";
-      if (trim($this->e140_qtdhospedagens) == null) {
-        $this->erro_sql = " Campo e140_qtdhospedagens nao declarado.";
-        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_status = "0";
-        return false;
-      }
     }
     if (trim($this->e140_vrlhospedagemuni) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_vrlhospedagemuni"])) {
       $sql  .= $virgula . " e140_vrlhospedagemuni = $this->e140_vrlhospedagemuni ";
       $virgula = ",";
-      if (trim($this->e140_vrlhospedagemuni) == null) {
-        $this->erro_sql = " Campo e140_vrlhospedagemuni nao declarado.";
-        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_status = "0";
-        return false;
-      }
     }
     if (trim($this->e140_transporte) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_transporte"])) {
       $sql  .= $virgula . " e140_transporte = '$this->e140_transporte' ";
       $virgula = ",";
-      if (trim($this->e140_transporte) == null) {
-        $this->erro_sql = " Campo e140_transporte nao declarado.";
-        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_status = "0";
-        return false;
-      }
     }
     if (trim($this->e140_vlrtransport) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_vlrtransport"])) {
       $sql  .= $virgula . " e140_vlrtransport = $this->e140_vlrtransport ";
       $virgula = ",";
-      if (trim($this->e140_vlrtransport) == null) {
-        $this->erro_sql = " Campo e140_vlrtransport nao declarado.";
-        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_status = "0";
-        return false;
-      }
     }
     if (trim($this->e140_objetivo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_objetivo"])) {
       $sql  .= $virgula . " e140_objetivo = '$this->e140_objetivo' ";
@@ -651,7 +602,7 @@ class cl_empdiaria
       $this->erro_status = "0";
       return false;
     }
-    $this->numrows = pg_numrows($result);
+    $this->numrows = pg_num_rows($result);
     if ($this->numrows == 0) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql   = "Record Vazio na Tabela:empdiaria";
@@ -676,6 +627,9 @@ class cl_empdiaria
       $sql .= $campos;
     }
     $sql .= " from empdiaria ";
+    $sql .= " inner join pagordem on e140_codord = e50_codord ";
+    $sql .= " inner join empempenho on e50_numemp = e60_numemp ";
+    $sql .= " inner join cgm on e60_numcgm = z01_numcgm ";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($e140_sequencial != null) {

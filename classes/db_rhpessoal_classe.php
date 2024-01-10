@@ -90,6 +90,10 @@ class cl_rhpessoal
     public $rh01_matorgaobeneficio = null;
     public $rh01_concedido = null;
     public $rh01_cnpjrespmatricula = null;
+    public $rh01_dtingressocargoefetivo = null;
+    public $rh01_dtingressocargoefetivo_dia = null;
+    public $rh01_dtingressocargoefetivo_mes = null;
+    public $rh01_dtingressocargoefetivo_ano = null;
     // cria propriedade com as variaveis do arquivo
     public $campos = "
                  rh01_regist = int4 = Matrícula
@@ -123,6 +127,7 @@ class cl_rhpessoal
                  rh01_matorgaobeneficio = int8 =  Matricula no Órgão que deu Ensejo ao Benefício
                  rh01_concedido = boolean =  Concedido por determinação judicial
                  rh01_cnpjrespmatricula = varchar(14) =  Responsável Pela Matrícula
+                 rh01_dtingressocargoefetivo = date =  Data Ingresso Cargo Efetivo
                  ";
     //funcao construtor da classe
     public function cl_rhpessoal()
@@ -207,6 +212,14 @@ class cl_rhpessoal
             $this->rh01_observacao = ($this->rh01_observacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh01_observacao"] : $this->rh01_observacao);
             $this->rh01_rhsindicato = ($this->rh01_rhsindicato == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh01_rhsindicato"] : $this->rh01_rhsindicato);
             $this->rh01_reajusteparidade = ($this->rh01_reajusteparidade == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh01_reajusteparidade"] : $this->rh01_reajusteparidade);
+            if ($this->rh01_dtingressocargoefetivo == "") {
+                $this->rh01_dtingressocargoefetivo_dia = ($this->rh01_dtingressocargoefetivo_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh01_dtingressocargoefetivo_dia"] : $this->rh01_dtingressocargoefetivo_dia);
+                $this->rh01_dtingressocargoefetivo_mes = ($this->rh01_dtingressocargoefetivo_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh01_dtingressocargoefetivo_mes"] : $this->rh01_dtingressocargoefetivo_mes);
+                $this->rh01_dtingressocargoefetivo_ano = ($this->rh01_dtingressocargoefetivo_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh01_dtingressocargoefetivo_ano"] : $this->rh01_dtingressocargoefetivo_ano);
+                if ($this->rh01_dtingressocargoefetivo_dia != "") {
+                    $this->rh01_dtingressocargoefetivo = $this->rh01_dtingressocargoefetivo_ano . "-" . $this->rh01_dtingressocargoefetivo_mes . "-" . $this->rh01_dtingressocargoefetivo_dia;
+                }
+            }
         } else {
             $this->rh01_regist = ($this->rh01_regist == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh01_regist"] : $this->rh01_regist);
         }
@@ -369,10 +382,10 @@ class cl_rhpessoal
             return false;
         }
 
-        if($this->rh01_esocial == null || $this->rh01_esocial == ''){
+        if ($this->rh01_esocial == null || $this->rh01_esocial == '') {
             $this->rh01_esocial = $this->rh01_regist;
         }
-        
+
         $sql = "insert into rhpessoal(
                                        rh01_regist
                                       ,rh01_esocial 
@@ -405,6 +418,7 @@ class cl_rhpessoal
                                       ,rh01_matorgaobeneficio
                                       ,rh01_concedido
                                       ,rh01_cnpjrespmatricula
+                                      ,rh01_dtingressocargoefetivo
                        )
                 values (
                                 $this->rh01_regist
@@ -438,8 +452,9 @@ class cl_rhpessoal
                                ,$this->rh01_matorgaobeneficio
                                ,'$this->rh01_concedido'
                                ,'$this->rh01_cnpjrespmatricula'
+                               ," . ($this->rh01_dtingressocargoefetivo == "null" || $this->rh01_dtingressocargoefetivo == "" ? "null" : "'" . $this->rh01_dtingressocargoefetivo . "'") . "
                       )";
-             
+
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -854,6 +869,33 @@ class cl_rhpessoal
                 //     $this->erro_status = "0";
                 //     return false;
                 // }
+            }
+            if (trim($this->rh01_dtingressocargoefetivo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh01_dtingressocargoefetivo_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["rh01_dtingressocargoefetivo_dia"] != "")) {
+                $sql  .= $virgula . " rh01_dtingressocargoefetivo = '$this->rh01_dtingressocargoefetivo' ";
+                $virgula = ",";
+                if (trim($this->rh01_dtingressocargoefetivo) == null) {
+                    $this->erro_sql = " Campo Admissão não Informado.";
+                    $this->erro_campo = "rh01_dtingressocargoefetivo_dia";
+                    $this->erro_banco = "";
+                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                    $this->erro_status = "0";
+                    return false;
+                }
+            } else {
+                if (isset($GLOBALS["HTTP_POST_VARS"]["rh01_dtingressocargoefetivo_dia"])) {
+                    $sql  .= $virgula . " rh01_dtingressocargoefetivo = null ";
+                    $virgula = ",";
+                    if (trim($this->rh01_dtingressocargoefetivo) == null) {
+                        $this->erro_sql = " Campo Admissão não Informado.";
+                        $this->erro_campo = "rh01_dtingressocargoefetivo_dia";
+                        $this->erro_banco = "";
+                        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                        $this->erro_status = "0";
+                        return false;
+                    }
+                }
             }
         }
         $sql .= " where ";
@@ -2378,9 +2420,10 @@ class cl_rhpessoal
 
     public function verificaMatriculaECargo($iNumCgm)
     {
-        $sSql = "SELECT DISTINCT rh01_regist, rh37_descr";
+        $sSql = "SELECT DISTINCT rh01_regist, rh37_descr, z01_nome";
         $sSql .= " FROM rhpessoal";
         $sSql .= " LEFT JOIN rhfuncao ON rhfuncao.rh37_funcao = rh01_funcao AND rhfuncao.rh37_instit = rh01_instit  ";
+        $sSql .= " LEFT JOIN cgm ON z01_numcgm = rh01_numcgm";
         $sSql .= " WHERE rh01_regist = (";
         $sSql .= " SELECT max(rh01_regist)";
         $sSql .= " FROM rhpessoal";
@@ -2390,7 +2433,7 @@ class cl_rhpessoal
         $sSql .= " LEFT JOIN rhpessoalmov  ON  rhpessoalmov.rh02_regist = rhpessoal.rh01_regist";
         $sSql .= " LEFT JOIN rhpesrescisao ON  rh02_seqpes = rh05_seqpes";
         $sSql .= " WHERE rh05_recis IS NOT NULL AND rh01_numcgm = {$iNumCgm}))";
-        
+
         return $sSql;
     }
 }

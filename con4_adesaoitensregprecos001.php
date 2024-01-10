@@ -29,7 +29,7 @@ $clcriaabas     = new cl_criaabas;
   <tr> 
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
      <?
-	 $clcriaabas->identifica = array("db_ades"=>"Adesão de registro de preço","db_itens"=>"Itens adesão de Registro de preço"); 
+	 $clcriaabas->identifica = array("db_ades"=>"Adesão de Registro de Preço","db_itens"=>"Itens"); 
 	 $clcriaabas->src = array("db_ades"=>"sic1_adesaoregprecos001.php","db_itens"=>"sic1_itensregpreco001.php");
 	 $clcriaabas->disabled = array("db_itens"=>"true");
 	 $clcriaabas->sizecampo = array("db_ades"=>"25","db_itens"=>"30");
