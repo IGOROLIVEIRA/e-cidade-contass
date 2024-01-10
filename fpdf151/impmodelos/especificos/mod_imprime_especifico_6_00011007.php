@@ -18,7 +18,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     $this->objpdf->setfillcolor(255, 255, 255);
     $this->objpdf->Setfont('Arial', 'B', 10);
     $this->objpdf->text(128, $xlin - 13, 'NOTA DE EMPENHO N' . CHR(176) . ': ');
-    $this->objpdf->text(175, $xlin - 13, db_formatar($this->codemp, 's', '0', 6, 'e'));
+    $this->objpdf->text(175, $xlin - 13, db_formatar($this->codemp, 's'));
     $this->objpdf->text(134, $xlin - 8, 'DATA DE EMISSÃO : ');
     $this->objpdf->text(175, $xlin - 8, $this->emissao);
 
@@ -43,7 +43,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     $this->objpdf->text(40, $xlin + 1, db_formatar($this->cgcpref, 'cnpj') . $this->inscricaoestadualinstituicao);
 
     // retangulo dos dados da dotação
-    $this->objpdf->rect($xcol, $xlin + 2, $xcol + 100, 50, 2, 'DF', '1234');
+    $this->objpdf->rect($xcol, $xlin + 2, $xcol + 100, 54, 2, 'DF', '1234');
     $this->objpdf->Setfont('Arial', 'B', 7);
     $this->objpdf->text($xcol + 2, $xlin + 5, 'Órgão');
     $this->objpdf->text($xcol + 2, $xlin + 8.5, 'Unidade');
@@ -59,20 +59,20 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
         $this->objpdf->text($xcol + 30, $xlin + 36, 'Agencia:');
         $this->objpdf->text($xcol + 60, $xlin + 36, 'Conta:');
     }
-
-    $this->objpdf->text($xcol + 2, $xlin + 39.5, 'Reduzido');
+    $this->objpdf->text($xcol + 2, $xlin + 39.5, 'CO');
+    $this->objpdf->text($xcol + 2, $xlin + 42.5, 'Reduzido');
     if (isset($this->contrapartida) && $this->contrapartida != "") {
-        $this->objpdf->text($xcol + 30, $xlin + 40.5, 'CP');
+        $this->objpdf->text($xcol + 30, $xlin + 43.5, 'CP');
     }
-    $this->objpdf->text($xcol + 2, $xlin + 43, 'Processo');
-    $this->objpdf->text($xcol + 46, $xlin + 43, 'Nº da Modalidade');
+    $this->objpdf->text($xcol + 2, $xlin + 46, 'Processo');
+    $this->objpdf->text($xcol + 46, $xlin + 46, 'Nº da Modalidade');
     if($this->acordo != ''){
-        $this->objpdf->text($xcol + 2, $xlin + 46.5, 'Contrato');
-        $this->objpdf->text($xcol + 46, $xlin + 46.5, 'Código Contrato');
+        $this->objpdf->text($xcol + 2, $xlin + 49.5, 'Contrato');
+        $this->objpdf->text($xcol + 46, $xlin + 49.5, 'Código Contrato');
     }
-    $this->objpdf->text($xcol + 2, $xlin + 50, 'Tipo de Compra');
+    $this->objpdf->text($xcol + 2, $xlin + 55, 'Tipo de Compra');
     if ($this->prazo_ent != "") {
-        $this->objpdf->text($xcol + 2, $xlin + 47, 'Prazo Entrega');
+        $this->objpdf->text($xcol + 2, $xlin + 52.1, 'Prazo Entrega');
     }
 
     $this->objpdf->Setfont('Arial', '', 7);
@@ -84,9 +84,9 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
 
     $this->objpdf->text($xcol + 17, $xlin + 22.5, ':  ' . db_formatar($this->projativ, 'projativ') . ' - ' . substr($this->descr_projativ, 0, 42));
 
-    $this->objpdf->text($xcol + 17, $xlin + 26, ':  ' . db_formatar(substr($this->sintetico, 0, 42), 'elemento_int'));
+    $this->objpdf->text($xcol + 17, $xlin + 26, ':  ' . db_formatar($this->sintetico, 'elemento'));
     $this->objpdf->setxy($xcol + 18, $xlin + 27);
-    $this->objpdf->multicell(90, 3, substr($this->descr_sintetico, 0, 55), 0, "L");
+    $this->objpdf->multicell(90, 3, mb_strtoupper(substr($this->descr_sintetico, 0, 55)), 0, "L");
 
     $this->objpdf->text($xcol + 17, $xlin + 32.7, ':  ' . $this->recurso . ' - ' . substr($this->descr_recurso, 0, 42));
 
@@ -95,23 +95,23 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
         $this->objpdf->text($xcol + 47, $xlin + 36, $this->agencia);
         $this->objpdf->text($xcol + 77, $xlin + 36, $this->conta);
     }
-
-    $this->objpdf->text($xcol + 17, $xlin + 39.5, ':  ' . $this->coddot);
+    $this->objpdf->text($xcol + 17, $xlin + 39.5, ':  ' . $this->codco);
+    $this->objpdf->text($xcol + 17, $xlin + 42.5, ':  ' . $this->coddot);
     if (isset($this->contrapartida) && $this->contrapartida != "") {
-        $this->objpdf->text($xcol + 35, $xlin + 40.5, ':' . $this->contrapartida);
+        $this->objpdf->text($xcol + 35, $xlin + 43.5, ':' . $this->contrapartida);
     }
 
-    $this->objpdf->text($xcol + 17, $xlin + 43, ':  ' . $this->edital_licitacao);
-    $this->objpdf->text($xcol + 70, $xlin + 43, ': ' . $this->modalidade);
+    $this->objpdf->text($xcol + 17, $xlin + 46, ':  ' . $this->edital_licitacao);
+    $this->objpdf->text($xcol + 70, $xlin + 46, ': ' . $this->modalidade);
 
     if($this->acordo && $this->anoacordo){
-        $this->objpdf->text($xcol + 17, $xlin + 46.5, ':  ' . $this->acordo.'/'.$this->anoacordo);
-        $this->objpdf->text($xcol + 67, $xlin + 46.5, ':  ' . $this->seqacordo);
+        $this->objpdf->text($xcol + 17, $xlin + 49.5, ':  ' . $this->acordo.'/'.$this->anoacordo);
+        $this->objpdf->text($xcol + 67, $xlin + 49.5, ':  ' . $this->seqacordo);
     }
 
-    $this->objpdf->text($xcol + 24, $xlin + 50, ':  ' . $this->descr_tipocompra);
+    $this->objpdf->text($xcol + 24, $xlin + 55, ':  ' . $this->descr_tipocompra);
     if ($this->prazo_ent != "") {
-        $this->objpdf->text($xcol + 22, $xlin + 47, ':  ' . $this->prazo_ent);
+        $this->objpdf->text($xcol + 22, $xlin + 52.1, ':  ' . $this->prazo_ent);
     }
 
 
@@ -148,28 +148,28 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     $this->objpdf->text($xcol + 119, $xlin + 22, ': ' . $this->numero);
 
     // retangulo dos valores
-    $this->objpdf->rect($xcol + 106, $xlin + 24, 96, 9, 2, 'DF', '1234');
-    $this->objpdf->rect($xcol + 106, $xlin + 34.0, 47, 8, 2, 'DF', '1234');
-    $this->objpdf->rect($xcol + 155, $xlin + 34.0, 47, 8, 2, 'DF', '1234');
-    $this->objpdf->rect($xcol + 106, $xlin + 43.5, 47, 8, 2, 'DF', '1234');
-    $this->objpdf->rect($xcol + 155, $xlin + 43.5, 47, 8, 2, 'DF', '1234');
+    $this->objpdf->rect($xcol + 106, $xlin + 25, 96, 9, 2, 'DF', '1234');
+    $this->objpdf->rect($xcol + 106, $xlin + 36, 47, 8, 2, 'DF', '1234');
+    $this->objpdf->rect($xcol + 155, $xlin + 36, 47, 8, 2, 'DF', '1234');
+    $this->objpdf->rect($xcol + 106, $xlin + 45, 47, 8, 2, 'DF', '1234');
+    $this->objpdf->rect($xcol + 155, $xlin + 45, 47, 8, 2, 'DF', '1234');
     $this->objpdf->Setfont('Arial', '', 6);
-    $this->objpdf->text($xcol + 108, $xlin + 36.5, 'Valor Orçado');
-    $this->objpdf->text($xcol + 157, $xlin + 36.5, 'Saldo Anterior');
-    $this->objpdf->text($xcol + 108, $xlin + 47, 'Valor Empenhado');
-    $this->objpdf->text($xcol + 157, $xlin + 47, 'Saldo Atual');
+    $this->objpdf->text($xcol + 108, $xlin + 39, 'Valor Orçado');
+    $this->objpdf->text($xcol + 157, $xlin + 39, 'Saldo Anterior');
+    $this->objpdf->text($xcol + 108, $xlin + 48.5, 'Valor Empenhado');
+    $this->objpdf->text($xcol + 157, $xlin + 48.5, 'Saldo Atual');
 
     $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text($xcol + 108, $xlin + 27, 'PROCESSO DE COMPRA N' . CHR(176) . " " . db_formatar(pg_result($this->recorddositens, 0, $this->Snumeroproc), 's', '0', 6, 'e'));
-    $this->objpdf->text($xcol + 108, $xlin + 32, 'AUTORIZAÇÃO N' . chr(176) . ' ' . db_formatar($this->numaut, 's', '0', 5, 'e'));
-    $this->objpdf->text($xcol + 156, $xlin + 27, 'SEQ. DO EMPENHO N' . chr(176) . ' ' . db_formatar($this->numemp, 's', '0', 6, 'e'));
-    $this->objpdf->text($xcol + 156, $xlin + 32, 'PROC. ADMIN (P.A.) : ' . $this->processo_administrativo);
+    $this->objpdf->text($xcol + 108, $xlin + 28, 'PROCESSO DE COMPRA N' . CHR(176) . " " . db_formatar(pg_result($this->recorddositens, 0, $this->Snumeroproc), 's', '0', 6, 'e'));
+    $this->objpdf->text($xcol + 108, $xlin + 33, 'AUTORIZAÇÃO N' . chr(176) . ' ' . db_formatar($this->numaut, 's', '0', 5, 'e'));
+    $this->objpdf->text($xcol + 156, $xlin + 28, 'SEQ. DO EMPENHO N' . chr(176) . ' ' . db_formatar($this->numemp, 's', '0', 6, 'e'));
+    $this->objpdf->text($xcol + 156, $xlin + 33, 'PROC. ADMIN (P.A.) : ' . $this->processo_administrativo);
     $this->objpdf->Setfont('Arial', '', 8);
 
-    $this->objpdf->text($xcol + 130, $xlin + 38.0, db_formatar($this->orcado, 'f'));
-    $this->objpdf->text($xcol + 180, $xlin + 38.0, db_formatar($this->saldo_ant, 'f'));
-    $this->objpdf->text($xcol + 130, $xlin + 47.5, db_formatar($this->empenhado, 'f'));
-    $this->objpdf->text($xcol + 180, $xlin + 47.5, db_formatar($this->saldo_ant - $this->empenhado, 'f'));
+    $this->objpdf->text($xcol + 130, $xlin + 40, db_formatar($this->orcado, 'f'));
+    $this->objpdf->text($xcol + 180, $xlin + 40, db_formatar($this->saldo_ant, 'f'));
+    $this->objpdf->text($xcol + 130, $xlin + 50, db_formatar($this->empenhado, 'f'));
+    $this->objpdf->text($xcol + 180, $xlin + 50, db_formatar($this->saldo_ant - $this->empenhado, 'f'));
 
     // retangulo do corpo do empenho
     $this->objpdf->rect($xcol, $xlin + 60, 9, 100, 2, 'DF', '');
@@ -184,22 +184,22 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
 
     // retangulos do titulo do corpo do empenho
     $this->objpdf->Setfont('Arial', 'B', 7);
-    $this->objpdf->rect($xcol , $xlin + 54, 9, 6, 2, 'DF', '12');
-    $this->objpdf->rect($xcol + 9  , $xlin + 54, 15, 6, 2, 'DF', '12');
-    $this->objpdf->rect($xcol + 24 , $xlin + 54, 15, 6, 2, 'DF', '12');
-    $this->objpdf->rect($xcol + 39, $xlin + 54, 97, 6, 2, 'DF', '12');
-    $this->objpdf->rect($xcol + 136, $xlin + 54, 16, 6, 2, 'DF', '12');
-    $this->objpdf->rect($xcol + 152, $xlin + 54, 25, 6, 2, 'DF', '12');
-    $this->objpdf->rect($xcol + 177, $xlin + 54, 25, 6, 2, 'DF', '12');
+    $this->objpdf->rect($xcol , $xlin + 56, 9, 4, 2, 'DF', '12');
+    $this->objpdf->rect($xcol + 9  , $xlin + 56, 15, 4, 2, 'DF', '12');
+    $this->objpdf->rect($xcol + 24 , $xlin + 56, 15, 4, 2, 'DF', '12');
+    $this->objpdf->rect($xcol + 39, $xlin + 56, 97, 4, 2, 'DF', '12');
+    $this->objpdf->rect($xcol + 136, $xlin + 56, 16, 4, 2, 'DF', '12');
+    $this->objpdf->rect($xcol + 152, $xlin + 56, 25, 4, 2, 'DF', '12');
+    $this->objpdf->rect($xcol + 177, $xlin + 56, 25, 4, 2, 'DF', '12');
 
     // título do corpo do empenho
-    $this->objpdf->text($xcol + 1, $xlin + 58, 'SEQ.');
-    $this->objpdf->text($xcol + 12, $xlin + 58, 'QUANT');
-    $this->objpdf->text($xcol + 28, $xlin + 58, 'ITEM');
-    $this->objpdf->text($xcol + 70, $xlin + 58, 'MATERIAL OU SERVIÇO');
-    $this->objpdf->text($xcol + 138, $xlin + 58, 'UNIDADE');
-    $this->objpdf->text($xcol + 154, $xlin + 58, 'VALOR UNITÁRIO');
-    $this->objpdf->text($xcol + 181, $xlin + 58, 'VALOR TOTAL');
+    $this->objpdf->text($xcol + 1, $xlin + 59, 'SEQ.');
+    $this->objpdf->text($xcol + 12, $xlin + 59, 'QUANT');
+    $this->objpdf->text($xcol + 28, $xlin + 59, 'ITEM');
+    $this->objpdf->text($xcol + 70, $xlin + 59, 'MATERIAL OU SERVIÇO');
+    $this->objpdf->text($xcol + 138, $xlin + 59, 'UNIDADE');
+    $this->objpdf->text($xcol + 154, $xlin + 59, 'VALOR UNITÁRIO');
+    $this->objpdf->text($xcol + 181, $xlin + 59, 'VALOR TOTAL');
     $maiscol = 0;
 
     // monta os dados para itens do empenho
@@ -239,7 +239,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
                 $this->objpdf->cell(10, 4, '', 0, 0, "C", 0);
                 $this->objpdf->cell(15, 4, '', 0, 0, "C", 0);
                 $this->objpdf->cell(15, 4, '', 0, 0, "C", 0);
-                $this->objpdf->cell(95, 4, db_formatar(pg_result($this->recorddositens, $ii, $this->analitico), 'elemento_int') . ' - ' . pg_result($this->recorddositens, $ii, $this->descr_analitico), 0, 1, "L", 0);
+                $this->objpdf->cell(95, 4, substr(db_formatar(pg_result($this->recorddositens, $ii, $this->analitico), 'elemento_int'),2) . ' - ' . pg_result($this->recorddositens, $ii, $this->descr_analitico), 0, 1, "L", 0);
                 $ele = pg_result($this->recorddositens, $ii, $this->analitico);
             }
 
@@ -402,8 +402,17 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
 
                 $this->objpdf->setxy($xcol + 1, $xlin + 165);
                 $this->objpdf->text($xcol + 2, $xlin + 164, 'RESUMO : ', 0, 1, 'L', 0);
-                $this->objpdf->setxy($xcol + 1, $xlin + 161.5);
-                $this->objpdf->multicell(147, 3.5, $this->resumo, 0, 'J', 0, 14);
+                $this->objpdf->setxy($xcol + 1, $xlin + 164.5);
+    
+                $texto_resumo   = $this->resumo;
+                $qtd_string     = strlen($this->resumo); 
+                $tam_string     = $this->objpdf->GetStringWidth($this->resumo); 
+                $spaco_a_acupar = 700; 
+                while ($spaco_a_acupar < $tam_string) {
+                    $qtd_string--;
+                    $tam_string = $this->objpdf->GetStringWidth(substr($texto_resumo, 0, $qtd_string));
+                }
+                $this->objpdf->multicell(147, 3.5, substr($this->resumo, 0, $qtd_string), 0, 'J', 0, 14);
 
                 $this->objpdf->text($xcol + 159, $xlin + 187, 'T O T A L', 0, 1, 'L', 0);
                 $this->objpdf->setxy($xcol + 185, $xlin + 180);
@@ -540,7 +549,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
         $texto_resumo   = $this->resumo;
         $qtd_string     = strlen($this->resumo); /// numero de caracteres da string
         $tam_string     = $this->objpdf->GetStringWidth($this->resumo); /// espaco ocupado pela string
-        $spaco_a_acupar = 825; /// tamanho do espaco disponivel
+        $spaco_a_acupar = 700; /// tamanho do espaco disponivel
         while ($spaco_a_acupar < $tam_string) {
             $qtd_string--;
             $tam_string = $this->objpdf->GetStringWidth(substr($texto_resumo, 0, $qtd_string));

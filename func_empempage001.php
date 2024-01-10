@@ -82,18 +82,20 @@ $clempagemov->rotulo->label();
              end as e87_dataproc,
              e76_codret,
              case when e86_codmov is not null 
+                   and empagemov.e81_cancelado is null
                    and e86_cheque <> '0' 
                    and round(e81_valor,2)-round(e53_valor,2)-round(e53_vlranu,2)-round(e53_vlrpag,2) <= 0
                    and corconf.k12_id is not null then 'MOVIMENTO PAGO'
               else 
-                 ( case when e86_codmov is not null and e86_cheque <> '0'
+                 ( case when e86_codmov is not null and empagemov.e81_cancelado is null and e86_cheque <> '0'
                            and round(e81_valor,2)-round(e53_valor,2)-round(e53_vlranu,2)-round(e53_vlrpag,2) > 0 then 'A PAGAR'
-                   when e86_codmov is not null and e86_cheque = '0' or e86_cheque is not null and corempagemov.k12_id is not null then 'MOVIMENTO PAGO'
+                   when e86_codmov is not null and empagemov.e81_cancelado is null and (e86_cheque = '0' or e86_cheque is not null) and corempagemov.k12_id is not null then 'MOVIMENTO PAGO'
+                   when e86_codmov is not null and empagemov.e81_cancelado is not null and e86_cheque = '0' or e86_cheque is not null and corempagemov.k12_id is not null then 'MOVIMENTO ESTORNADO'
                        else e92_descrerro end)
-             end as e92_descrerro, e92_descrerro as dl_OcorrenciaRetorno","
+             end as e92_descrerro, e92_descrerro as dl_OcorrenciaRetorno, e81_cancelado as dl_Data_Estorno","
              e81_codage,
              e81_codmov","
-             e80_instit = " . db_getsession("DB_instit") . " and e60_numemp=$e60_numemp and e81_cancelado is null"
+             e80_instit = " . db_getsession("DB_instit") . " and e60_numemp=$e60_numemp "
              );
       db_lovrot($sql,15,"()","","");
        ?>

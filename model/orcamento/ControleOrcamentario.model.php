@@ -43,7 +43,9 @@ class ControleOrcamentario
     private $deParaFonte6Digitos;
     private $deParaFonte6DigitosEEsfera;
     private $iTipodespesa;
-    private $tipodespesaEmpRPPS;
+    private $sDescricao;
+    private $sDescricaoPorCO;
+    private $iCodco;
 
     public function __construct()
     {
@@ -69,6 +71,13 @@ class ControleOrcamentario
                 '18000002' => '1121',
                 '25000001' => '1001',
                 '25000002' => '1002',
+                '15020001' => '1001',
+                '15020002' => '1002',
+                '25020001' => '1001',
+                '25020002' => '1002',
+                '28000001' => '1111',
+                '28000002' => '1121',
+                '25420007' => '1070',
             );
         }
         if ($this->iTipodespesa) {
@@ -83,6 +92,13 @@ class ControleOrcamentario
                     '18000002' => '1121',
                     '25000001' => '1001',
                     '25000002' => '1002',
+                    '15020001' => '1001',
+                    '15020002' => '1002',
+                    '25020001' => '1001',
+                    '25020002' => '1002',
+                    '28000001' => '1111',
+                    '28000002' => '1121',
+                    '25420007' => '1070',
                 );
             }
             if ($this->iTipodespesa == 1) {
@@ -97,6 +113,14 @@ class ControleOrcamentario
                     '18000002' => '1121',
                     '25000001' => '1001',
                     '25000002' => '1002',
+                    '15020001' => '1001',
+                    '15020002' => '1002',
+                    '25020001' => '1001',
+                    '25020002' => '1002',
+                    '28000001' => '1111',
+                    '28000002' => '1121',
+                    '25420007' => '1070',
+                    '28000000' => '1111',
                 );
             }
             if ($this->iTipodespesa == 2) {
@@ -111,6 +135,14 @@ class ControleOrcamentario
                     '18000002' => '1121',
                     '25000001' => '1001',
                     '25000002' => '1002',
+                    '15020001' => '1001',
+                    '15020002' => '1002',
+                    '25020001' => '1001',
+                    '25020002' => '1002',
+                    '28000001' => '1111',
+                    '28000002' => '1121',
+                    '25420007' => '1070',
+                    '28000000' => '1121',
                 );
             }
         }
@@ -264,7 +296,7 @@ class ControleOrcamentario
             if (array_key_exists($this->iEsferaEmendaParlamentar, $this->deParaFonte6DigitosEEsfera[$iFonte6Digitos]))
                 if (array_key_exists($this->iEmendaParlamentar, $this->deParaFonte6DigitosEEsfera[$iFonte6Digitos][$this->iEsferaEmendaParlamentar])) {
                     $this->sCodigo = $this->deParaFonte6DigitosEEsfera[$iFonte6Digitos][$this->iEsferaEmendaParlamentar][$this->iEmendaParlamentar];
-                }
+                }      
         return;
     }
 
@@ -280,5 +312,64 @@ class ControleOrcamentario
     {
         $this->setCodigoPorFonte();
         return $this->sCodigo;
+    }
+
+    public function setCodCO($iCodco)
+    {
+        $this->iCodco= $iCodco;
+    }
+
+    public function getDescricaoCO()
+    {
+        $this->setDescricaoCO();
+        $this->sDescricao = $this->sDescricaoPorCO[$this->iCodco];
+        return $this->sDescricao;
+    }
+
+    public function setDescricaoCO()
+    {
+        $this->sDescricaoPorCO = array(
+            '0000' => 'Sem Identificação de CO',
+            '1001' => 'Despesas com manutenção e desenvolvimento do ensino',
+            '1002' => 'Despesas com ações e serviços públicos de saúde',
+            '1070' => 'Percentual aplicado no pagamento da remuneração dos profissionais da educação básica em efetivo exercício',
+            '1111' => 'Benefícios previdenciários - Poder Executivo - Fundo em Capitalização (Plano Previdenciário)',
+            '1121' => 'Benefícios previdenciários - Poder Legislativo - Fundo em Capitalização (Plano Previdenciário)',
+            '2111' => 'Benefícios previdenciários - Poder Executivo - Fundo em Repartição (Plano Financeiro)',
+            '2121' => 'Benefícios previdenciários - Poder Legislativo - Fundo em Repartição (Plano Financeiro)',
+            '3110' => 'Transferências da União decorrentes de emendas parlamentares individuais',
+            '3120' => 'Transferências da União decorrentes de emendas parlamentares de bancada',
+            '3210' => 'Transferências dos Estados decorrentes de emendas parlamentares individuais',
+            '3220' => 'Transferências dos Estados decorrentes de emendas parlamentares de bancada',
+            '7000' => 'Transferências da União decorrentes de emendas parlamentares não impositivas',
+            '7001' => 'Transferências do Estado decorrentes de emendas parlamentares não impositivas'
+        );
+    }
+
+    public function getDescricaoResumoCO()
+    {
+        $this->setDescricaoResumoCO();
+        $this->sDescricao = $this->sDescricaoPorCO[$this->iCodco];
+        return $this->sDescricao;
+    }
+
+    public function setDescricaoResumoCO()
+    {
+        $this->sDescricaoPorCO = array(
+            '0000' => 'SEM IDENTIFICAÇÃO DE CO',
+            '1001' => 'MANUTENÇÃO E DESENVOLVIMENTO DO ENSINO',
+            '1002' => 'AÇÕES E SERVIÇOS PÚBLICOS DE SAÚDE',
+            '1070' => 'APLICAÇÃO NA REMUNERAÇÃO DO FUNDEB',
+            '1111' => 'BENEF. PREV. PODER EXECUTIVO CAPITALIZAÇÃO',
+            '1121' => 'BENEF. PREV. PODER LEGISLATIVO CAPITALIZAÇÃO',
+            '2111' => 'BENEF. PREV. PODER EXECUTIVO REPARTIÇÃO',
+            '2121' => 'BENEF. PREV. PODER LEGISLATIVO REPARTIÇÃO ',
+            '3110' => 'EMEN. PARLAMENTARES INDIVIDUAIS(UNIÃO)',
+            '3120' => 'EMEN. PARLAMENTARES DE BANCADA(UNIÃO)',
+            '3210' => 'EMEN. PARLAMENTARES INDIVIDUAIS(ESTADO)',
+            '3220' => 'EMEN. PARLAMENTARES DE BANCADA(ESTADO)',
+            '7000' => 'EMEN. PARLAMENTARES NÃO IMPOSITIVAS(UNIÃO)',
+            '7001' => 'EMEN. PARLAMENTARES NÃO IMPOSITIVAS(ESTADO)',
+        );
     }
 }

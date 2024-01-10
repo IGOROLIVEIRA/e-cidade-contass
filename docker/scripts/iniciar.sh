@@ -31,15 +31,29 @@ if [[ -f "/var/www/html/.env" && -f "/var/www/html/libs/db_conn.php" ]]; then
 fi
 
 # Habilita o vhost do e-cidade no apache2
-a2ensite ecidade.conf
+sudo a2ensite ecidade.conf
 
-: ${WWW_UID:=33}
-: ${WWW_GID:=33}
+#: ${WWW_UID:=33}
+#: ${WWW_GID:=33}
 
 # Mapeia o usuário e grupo do apache caso tenham sido configurados
 # via variável de ambiente
-usermod -u $WWW_UID www-data
-groupmod -g $WWW_GID www-data
+#usermod -u $WWW_UID www-data
+#groupmod -g $WWW_GID www-data
+
+#sudo chown -R contass:www-data "$PWD"
+#sudo chmod -R 775 "$PWD"
+
+DB_CONN_DIST_FILE=libs/db_conn.php.dist
+DB_CONN_FILE=libs/db_conn.php
+if [ -f "$DB_CONN_DIST_FILE" ] && ! [ -f "$DB_CONN_FILE" ]; then
+    cp libs/db_conn.php.dist libs/db_conn.php
+fi
+
+COMPOSER_FILE=composer.json
+if [ -f "$COMPOSER_FILE" ]; then
+    composer install
+fi
 
 # Inicializa o supervisord
 exec /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf

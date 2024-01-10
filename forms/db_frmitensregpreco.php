@@ -56,7 +56,9 @@ $clrotulo->label("pc01_descrmater");
 
   $whereDescontoTabela = "";
 
-  if ($iDescontoTabela == 1) $whereDescontoTabela = " AND pc01_tabela = 't'";
+  if ($iCriterioAdjudicacao == 1) $whereDescontoTabela = " AND pc01_tabela = 't'";
+  if ($iCriterioAdjudicacao == 2) $whereDescontoTabela = " AND pc01_taxa = 't'";
+  
 
   $sSQL = "
     SELECT DISTINCT pc01_codmater,

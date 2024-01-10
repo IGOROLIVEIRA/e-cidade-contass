@@ -55,6 +55,12 @@ db_app::load("time.js");
                         </select>
                         <strong>Ano competência: </strong>
                             <input type="number" name="anocompetencia" id="anocompetencia" onkeydown="limparBox()" min="1111" max="9999" />
+                        <strong>Status: </strong>
+                        <select name="status" id="status" onchange="limparBox()">
+                            <option value="1">ENVIADOS</option>
+                            <option value="2" selected>PENDENTES DE ENVIO</option>
+                            <option value="3">TODOS</option>
+                        </select>
                             <input style="margin-left: 3%" type="button" value="Pesquisar" onclick="js_getEventos();">
                     </td>
                 </tr>
@@ -86,8 +92,9 @@ db_app::load("time.js");
         oGridEvento.setCheckbox(0);
         oGridEvento.setCellAlign(new Array("Center", "Center","Center", "Center", "Center", "Center", "Center"));
         oGridEvento.setCellWidth(new Array("40%", "10%","10%", "10%", "10%", "10%", "10%"));
-        oGridEvento.setHeader(new Array("CPF Beneficiário","Identificador (OP)","Natureza do Rendimento","Data FG","Valor Bruto","Valor Base", " Valor IRRF"))
+        oGridEvento.setHeader(new Array("CPF Beneficiário","Identificador (OP)","Natureza do Rendimento","Data FG","Valor Bruto","Valor Base", " Valor IRRF","Destacar Campos"))
         oGridEvento.hasTotalValue = false;
+        oGridEvento.aHeaders[8].lDisplayed = false;
         oGridEvento.setHeight(300);
         oGridEvento.show($('cntgrideventos'));
         
@@ -113,6 +120,7 @@ db_app::load("time.js");
             return false;
         }
 
+        let status = $F('status');
         let ambiente = $F('ambiente');
 
         var oParam      = new Object();
@@ -120,6 +128,7 @@ db_app::load("time.js");
         oParam.sMescompetencia = mescompetencia;
         oParam.sAnocompetencia = anocompetencia;
         oParam.sAmbiente       = ambiente
+        oParam.sStatus         = status;
         js_divCarregando('Aguarde, buscando dados do evento', 'msgBox');
         var oAjax = new Ajax.Request(
             'efd1_reinf.RPC.php', {
@@ -155,7 +164,11 @@ db_app::load("time.js");
                 aLinha[4] = oLinha.ValorBruto;
                 aLinha[5] = oLinha.ValorBase;
                 aLinha[6] = oLinha.ValorIRRF;
-                oGridEvento.addRow(aLinha);
+                aLinha[7] = oLinha.DestacarCampos;
+                var status = $F('status');
+                if (oLinha.DestacarCampos == status) {
+                    oGridEvento.addRow(aLinha);
+                }
 
                 var sTextEvent = " ";
                 if (aLinha[1] !== '') {
@@ -277,8 +290,9 @@ db_app::load("time.js");
         oGridEvento.setCheckbox(0);
         oGridEvento.setCellAlign(new Array("Center", "Center", "Center", "Center", "Center", "Center", "Center"));
         oGridEvento.setCellWidth(new Array("40%", "10%","10%", "10%", "10%", "10%", "10%"));
-        oGridEvento.setHeader(new Array("CPF Beneficiário","Identificador (OP)","Natureza do Rendimento","Data FG","Valor Bruto","Valor Base", " Valor IRRF"))
+        oGridEvento.setHeader(new Array("CPF Beneficiário","Identificador (OP)","Natureza do Rendimento","Data FG","Valor Bruto","Valor Base", " Valor IRRF","Destacar Campos"))
         oGridEvento.hasTotalValue = false;
+        oGridEvento.aHeaders[8].lDisplayed = false;
         oGridEvento.setHeight(300);
         oGridEvento.show(gridContainer);
         var width = gridContainer.scrollWidth - 30;

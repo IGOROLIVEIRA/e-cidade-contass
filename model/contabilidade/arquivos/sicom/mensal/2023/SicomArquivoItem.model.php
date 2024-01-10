@@ -51,6 +51,10 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
   {
   }
 
+  function tirarAcentos($string){
+    return preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/","/(ç)/","/(Ç)/"),explode(" ","a A e E i I o O u U n N c C"),$string);
+  }
+
   /**
    * selecionar os dados de indentificacao da remessa pra gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
@@ -75,34 +79,33 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
       }
     }
     $mes = intval($this->sDataFinal['5'] . $this->sDataFinal['6']);
+    $instit = db_getsession("DB_instit");
+
     $sSql = "SELECT    db150_tiporegistro AS tipoRegistro,
                        db150_coditem AS coditem,
-                       db150_dscitem AS dscItem,
+                       regexp_replace(pcmater.pc01_descrmater||' '||substring(pc01_complmater,1,900), ' +', ' ', 'g') AS dscItem,
                        db150_unidademedida AS unidadeMedida,
                        db150_tipocadastro AS tipoCadastro,
                        '' AS justificativaAlteracao
                 FROM historicomaterial
-                WHERE db150_instit = " . db_getsession("DB_instit") . "
+                INNER JOIN pcmater ON pc01_codmater = db150_pcmater
+                WHERE db150_instit in ($instit,0)
                     AND db150_mes = $mes
                 UNION
                 SELECT db150_tiporegistro AS tipoRegistro,
                        db150_coditem AS coditem,
-                       db150_dscitem AS dscItem,
+                       regexp_replace(pcmater.pc01_descrmater||' '||substring(pc01_complmater,1,900), ' +', ' ', 'g') AS dscItem,
                        db150_unidademedida AS unidadeMedida,
                        db150_tipocadastro AS tipoCadastro,
                        '' AS justificativaAlteracao
                 FROM historicomaterial
-                WHERE db150_instit = " . db_getsession("DB_instit") . "
+                INNER JOIN pcmater ON pc01_codmater = db150_pcmater
+                WHERE db150_instit in ($instit,0)
                     AND db150_tipocadastro = 2
                     AND db150_mes = $mes";
     $rsResult10 = db_query($sSql);
-
-    // matriz de entrada
-    $what = array("Â°", chr(13), chr(10), 'Ã¤', 'Ã£', 'Ã ', 'Ã¡', 'Ã¢', 'Ãª', 'Ã«', 'Ã¨', 'Ã©', 'Ã¯', 'Ã¬', 'Ã­', 'Ã¶', 'Ãµ', 'Ã²', 'Ã³', 'Ã´', 'Ã¼', 'Ã¹', 'Ãº', 'Ã»', 'Ã€', 'Ã', 'Ãƒ', 'Ã‰', 'Ã', 'Ã“', 'Ãš', 'Ã±', 'Ã‘', 'Ã§', 'Ã‡', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'Âª', 'Âº');
-
-    // matriz de saÃ­da
-    $by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
-    for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
+    //db_criatabela($rsResult10);exit;
+       for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $clitem10 = new cl_item102023();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
@@ -126,21 +129,20 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
       $sSqlitem .= " union
     	select si43_coditem,si43_unidademedida from item102014  where si43_instit = " . db_getsession('DB_instit') . " and si43_coditem=" . $oDados10->coditem;
       $rsResultitem = db_query($sSqlitem);
-
       /**
-       * verifica se jÃ¡ nao existe o registro  na base de dados do sicom
+       * verifica se já nao existe o registro  na base de dados do sicom
        */
       if (pg_num_rows($rsResultitem) == 0) {
 
-
         $clitem10->si43_tiporegistro = 10;
         $clitem10->si43_coditem = $oDados10->coditem;
-        $clitem10->si43_dscItem = trim(preg_replace("/[^a-zA-Z0-9 ]/", "", str_replace($what, $by, $oDados10->dscitem))) . " $oDados10->coditem";
-        $clitem10->si43_unidademedida = trim(preg_replace("/[^a-zA-Z0-9 ]/", "", str_replace($what, $by, $oDados10->unidademedida)));
+        $clitem10->si43_dscItem = preg_replace('/\s+/', ' ', (preg_replace("/[^a-zA-Z0-9 ]/", "",$this->tirarAcentos(strtoupper($oDados10->dscitem)))));
+        $clitem10->si43_unidademedida = $this->tirarAcentos($oDados10->unidademedida);
         $clitem10->si43_tipocadastro = $oDados10->tipocadastro;
         $clitem10->si43_justificativaalteracao = $oDados10->justificativaalteracao;
         $clitem10->si43_instit = db_getsession("DB_instit");
         $clitem10->si43_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+
         // echo pg_last_error();
         $clitem10->incluir(null);
         if ($clitem10->erro_status == 0) {
