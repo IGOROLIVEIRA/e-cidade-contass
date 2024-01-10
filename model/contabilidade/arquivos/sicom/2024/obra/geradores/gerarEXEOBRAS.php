@@ -51,6 +51,7 @@ class gerarEXEOBRAS extends GerarAM
                 $aCSVEXEOBRAS10['si197_codorgao'] = str_pad($aEXEOBRAS10['si197_codorgao'], 3, "0", STR_PAD_LEFT);
                 $aCSVEXEOBRAS10['si197_codunidadesub'] = substr($aEXEOBRAS10['si197_codunidadesub'], 0, 8);
                 $aCSVEXEOBRAS10['si197_nrocontrato'] = $aEXEOBRAS10['si197_nrocontrato'];
+                $aCSVEXEOBRAS10['si197_tipodocumento'] = $aEXEOBRAS10['si197_tipodocumento'];
                 $aCSVEXEOBRAS10['si197_exerciciocontrato'] = $aEXEOBRAS10['si197_exerciciocontrato'];
                 $aCSVEXEOBRAS10['si197_contdeclicitacao'] = $aEXEOBRAS10['si197_contdeclicitacao'];
                 $aCSVEXEOBRAS10['si197_exerciciolicitacao'] = $aEXEOBRAS10['si197_exerciciolicitacao'];

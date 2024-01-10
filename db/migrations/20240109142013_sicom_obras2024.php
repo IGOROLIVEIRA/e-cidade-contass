@@ -48,6 +48,28 @@ class SicomObras2024 extends AbstractMigration
             si195_instit int4 NULL
         );
 
+        DROP TABLE public.exeobras102024;
+
+        CREATE TABLE public.exeobras102024 (
+            si197_sequencial int8 NULL,
+            si197_tiporegistro int8 NULL,
+            si197_codorgao varchar(3) NULL,
+            si197_codunidadesub varchar(8) NULL,
+            si197_nrocontrato int8 NULL,
+            si197_tipodocumento int8 NULL,
+            si197_exerciciocontrato int8 NULL,
+            si197_contdeclicitacao int8 NULL,
+            si197_exerciciolicitacao int8 NULL,
+            si197_nroprocessolicitatorio int8 NULL,
+            si197_codunidadesubresp int8 NULL,
+            si197_nrolote int8 NULL,
+            si197_codobra int8 NULL,
+            si197_objeto text NULL,
+            si197_linkobra text NULL,
+            si197_mes int8 NULL,
+            si197_instit int4 NULL
+        );
+
         ";
         $this->execute($sql);
     }

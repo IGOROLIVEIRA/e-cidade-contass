@@ -63,6 +63,14 @@ $clcgm->rotulo->label("z01_uf");
 
 $clrotulo->label("DBtxt30");
 $clrotulo->label("DBtxt31");
+//verifico tipo de instituicao
+$rsTipoinstit = db_query("SELECT si09_tipoinstit FROM infocomplementaresinstit WHERE si09_instit = ".db_getsession('DB_instit'));
+db_fieldsmemory($rsTipoinstit,0);
+
+if($si09_tipoinstit == "51" && $obras == "true"){
+    $filtro = 2;
+}
+
 
 if (!isset($funcao_js)) {
     $funcao_js = '';
