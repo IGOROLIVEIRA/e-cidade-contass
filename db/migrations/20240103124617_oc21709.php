@@ -42,9 +42,15 @@ class Oc21709 extends AbstractMigration
         $this->insertMenu($descrMenuPai, 2);
     }
 
-    public function getNextSeqMenuId($idPrincipalMenu): string
+    public function getNextSeqMenuId($idPrincipalMenu): ?string
     {
-        $sql = "SELECT max(menusequencia)+1 as count FROM db_menu  WHERE id_item = {$idPrincipalMenu}";
-        return implode(" ", $this->fetchRow($sql));
+        $sql = "SELECT max(menusequencia) + 1 AS codmenu FROM db_menu WHERE id_item = {$idPrincipalMenu}";
+        $result = $this->fetchRow($sql);
+
+        if ($result && isset($result['codmenu'])) {
+            return (string) $result['codmenu'];
+        }
+        return null;
     }
+
 }

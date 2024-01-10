@@ -28,7 +28,7 @@ require_once 'dbforms/db_funcoes.php';
                     </td>
                     <td>
                         <select multiple="multiple" style="width: 180%" id="tipo">
-                        <?
+                        <?php
                         $aTipos = array(
                             "0" => "Selecione",
                             "1" => "Contas e Reduzidos PCASP",
@@ -84,9 +84,9 @@ require_once 'dbforms/db_funcoes.php';
 
         const selectElement = document.getElementById('tipo');
 
-        var selectedValues = [];
+        const selectedValues = [];
 
-        for (var i = 0; i < selectElement.options.length; i++) {
+        for (let i = 0; i < selectElement.options.length; i++) {
             if (selectElement.options[i].selected || selectElement.options[i].getAttribute('selected')) {
                 selectedValues.push(idCampo[selectElement.options[i].value]);
             }
