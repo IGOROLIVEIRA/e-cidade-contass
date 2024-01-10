@@ -219,8 +219,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     sContent += "                    <tr> ";
     sContent += "                      <td><label class=\"bold\" for=\"oTxtDataInicial\">Inicial:</td> ";
     sContent += "                      <td id=\"ctnVigenciaInicial\"></td> ";
-    sContent += "                      <td><label class=\"bold\" for=\"oTxtDataFinal\">Final:<label></td> ";
-    sContent += "                      <td id=\"ctnVigenciaFinal\"></td> ";
+    sContent += "                      <td class='datafinal'><label class='bold datafinal' for=\"oTxtDataFinal\">Final:<label></td> ";
+    sContent += "                      <td class='datafinal' id=\"ctnVigenciaFinal\"></td> ";
     sContent += "                    </tr> ";
     sContent += "                  </table> ";
     sContent += "               </fieldset> ";
@@ -526,6 +526,12 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
             var aDataInicial = oRetorno.datainicial.split("/");
             var aDataFinal = oRetorno.datafinal.split("/");
+
+            if(oRetorno.vigenciaindeterminada == "t"){
+                document.getElementsByClassName('datafinal')[0].style.display = 'none';
+                document.getElementsByClassName('datafinal')[1].style.display = 'none';
+                document.getElementsByClassName('datafinal')[2].style.display = 'none';
+            }
 
             me.oTxtDataInicial.setData(aDataInicial[0], aDataInicial[1], aDataInicial[2]);
             me.oTxtDataFinal.setData(aDataFinal[0], aDataFinal[1], aDataFinal[2]);

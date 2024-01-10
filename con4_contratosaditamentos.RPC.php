@@ -65,6 +65,7 @@ try {
             $oRetorno->datafinal         = $oContrato->getDataFinal();
             $oRetorno->valores           = $oContrato->getValoresItens();
             $oRetorno->seqaditivo        = $oContrato->getProximoNumeroAditivo($oParam->iAcordo);
+            $oRetorno->vigenciaindeterminada = $oContrato->getVigenciaIndeterminada();
             $oAditivo = db_utils::getDao('acordoposicaoaditamento');
             $oResult = $oAditivo->sql_query(null, "*", null, "ac16_sequencial={$oParam->iAcordo}");
             //echo $oResult;

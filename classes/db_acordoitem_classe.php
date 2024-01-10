@@ -972,6 +972,7 @@ class cl_acordoitem {
               ac26_data as data_posicao,
               ac16_datainicio as datainicio,
               ac16_datafim as datafim,
+              ac16_vigenciaindeterminada,
               pc01_codmater as codigomaterial,
               pc01_descrmater as material,
               ac20_quantidade as qtd_total,

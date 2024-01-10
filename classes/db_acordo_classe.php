@@ -623,7 +623,7 @@ class cl_acordo
      ," . ($this->ac16_periodoreajuste == "null" || $this->ac16_periodoreajuste == "" ? "''" : "'" . $this->ac16_periodoreajuste . "'") . "
      ," . ($this->ac16_descricaoreajuste == "null" || $this->ac16_descricaoreajuste == "" ? 'null' : "'" . $this->ac16_descricaoreajuste . "'") . "
      ," . ($this->ac16_descricaoindice == "null" || $this->ac16_descricaoindice == "" ? 'null' : "'" . $this->ac16_descricaoindice . "'") . "
-     ,'$this->ac16_vigenciaindeterminada'
+     ,".($this->ac16_vigenciaindeterminada == "null" || $this->ac16_vigenciaindeterminada == ""?"'false'":"'".$this->ac16_vigenciaindeterminada."'")."
      )";
 
         $result = db_query($sql);

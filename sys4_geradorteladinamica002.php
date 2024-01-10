@@ -70,6 +70,7 @@ acordo.ac16_dataassinatura AS ASSINATURA,
 acordo.ac16_datafim AS VENCIMENTO,
 acordo.ac16_objeto AS OBJETO,
 acordo.ac16_contratado AS CODIGO,
+ac16_vigenciaindeterminada,
 cgm.z01_nome AS CONTRATADO,
 acordo.ac16_valor as valor,
 ac28_descricao as origem,
@@ -166,7 +167,10 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
   }
 
   $pdf->Cell(70, 5 * $linhas, substr($oDadosAcordo->contratado, 0, 50), 1, 0, "C");
-  $pdf->Cell(20, 5 * $linhas, date('d/m/Y', strtotime($oDadosAcordo->vencimento)), 1, 0, "C");
+
+  $dataVigencia = $oDadosAcordo->ac16_vigenciaindeterminada == "t" ? "-" : date('d/m/Y', strtotime($oDadosAcordo->vencimento));
+
+  $pdf->Cell(20, 5 * $linhas, $dataVigencia, 1, 0, "C");
 
   if ($oDadosAcordo->assinatura != null) {
     $pdf->Cell(20, 5 * $linhas, date('d/m/Y', strtotime($oDadosAcordo->assinatura)), 1, 0, "C");

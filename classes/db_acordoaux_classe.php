@@ -569,7 +569,7 @@ class cl_acordoaux {
                                ,".($this->ac16_licoutroorgao == "" ? 'null' : $this->ac16_licoutroorgao)."
                                ,".($this->ac16_adesaoregpreco == "" ? 'null' : $this->ac16_adesaoregpreco)."
                                ,$this->ac16_tipocadastro
-                               ,'$this->ac16_vigenciaindeterminada'
+                               ,".($this->ac16_vigenciaindeterminada == "null" || $this->ac16_vigenciaindeterminada == ""?"'false'":"'".$this->ac16_vigenciaindeterminada."'")."
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -580,7 +580,7 @@ class cl_acordoaux {
          $this->erro_banco = "Acordo já Cadastrado";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }else{
-         $this->erro_sql   = "Acordo ($this->ac16_sequencial) nao Incluído. Inclusao Abortada.";
+         $this->erro_sql   = "$sql Acordo ($this->ac16_sequencial) nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }
