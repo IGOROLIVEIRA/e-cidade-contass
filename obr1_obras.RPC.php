@@ -389,7 +389,6 @@ switch ($oParam->exec) {
         $clcondataconf = new cl_condataconf;
 
         try {
-
             foreach ($oParam->itens as $item) {
 
                 /**
@@ -414,7 +413,7 @@ switch ($oParam->exec) {
                 }
 
                 $pcmater = substr($item->obr06_pcmater, 0, -1);
-                $verificaItem = $cllicitemobra->sql_record($cllicitemobra->sql_query_file(null, "obr06_sequencial", null, "obr06_pcmater = $pcmater"));
+                $verificaItem = $cllicitemobra->sql_record($cllicitemobra->sql_query_file(null, "obr06_sequencial", null, "obr06_pcmater = $pcmater AND obr06_ordem = $item->obr06_ordem"));
                 if (pg_num_rows($verificaItem) <= 0) {
                     db_inicio_transacao();
 
@@ -427,6 +426,7 @@ switch ($oParam->exec) {
                     $cllicitemobra->obr06_dtregistro        = $item->obr06_dtregistro;
                     $cllicitemobra->obr06_dtcadastro        = $item->obr06_dtcadastro;
                     $cllicitemobra->obr06_instit            = db_getsession("DB_instit");
+                    $cllicitemobra->obr06_ordem             = $item->obr06_ordem;
                     $cllicitemobra->incluir();
 
                     if ($cllicitemobra->erro_status == 0) {
@@ -451,6 +451,7 @@ switch ($oParam->exec) {
                     $cllicitemobra->obr06_dtregistro        = $item->obr06_dtregistro;
                     $cllicitemobra->obr06_dtcadastro        = $item->obr06_dtcadastro;
                     $cllicitemobra->obr06_instit            = db_getsession("DB_instit");
+                    $cllicitemobra->obr06_ordem             = $item->obr06_ordem;
 
                     $cllicitemobra->alterar($obr06_sequencial);
 
@@ -476,8 +477,8 @@ switch ($oParam->exec) {
             $cllicitemobra = new cl_licitemobra();
 
             $pcmater = substr($item->obr06_pcmater, 0, -1);
-            $verificaItem = $cllicitemobra->sql_record($cllicitemobra->sql_query_file(null, "obr06_sequencial", null, "obr06_pcmater = $pcmater and obr06_tabela = $item->obr06_tabela"));
-
+            $sql = $cllicitemobra->sql_query_file(null, "obr06_sequencial", null, "obr06_pcmater = $pcmater AND obr06_ordem = $item->obr06_ordem ");
+            $verificaItem = $cllicitemobra->sql_record($sql);
             if (pg_num_rows($verificaItem) > 0) {
                 db_fieldsmemory($verificaItem, 0);
                 /*
@@ -490,7 +491,7 @@ switch ($oParam->exec) {
                     $oRetorno->message = urlencode($erro);
                     $oRetorno->status = 2;
                 } else {
-                    $oRetorno->itens[] = $item->obr06_pcmater;
+                    $oRetorno->itens[] = $item->obr06_pcmater."-".$item->obr06_ordem;
                     $oRetorno->status = 1;
                     $oRetorno->message = urlencode("Itens Excluido com Sucesso!.");
                 }

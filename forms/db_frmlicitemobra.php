@@ -106,17 +106,17 @@ $cllicitemobra->rotulo->label();
     <?php
 
     if (!empty($l20_codigo)) {
-        $sCampos  = " distinct obr06_sequencial,pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,obr06_versaotabela";
-        $sOrdem   = "pc01_codmater";
+        $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,obr06_versaotabela,l21_ordem";
+        $sOrdem   = "l21_ordem";
         $sWhere   = "l21_codliclicita = {$l20_codigo} and pc01_obras = 't' and pc10_instit = " . db_getsession('DB_instit');
         $sSqlItemLicitacao = $cllicitemobra->sql_query_itens_obras_licitacao(null, $sCampos, $sOrdem, $sWhere);
-            $sResultitens = $cllicitemobra->sql_record($sSqlItemLicitacao);
+        $sResultitens = $cllicitemobra->sql_record($sSqlItemLicitacao);
         $aItensObras = db_utils::getCollectionByRecord($sResultitens);
         $numrows = $cllicitemobra->numrows;
     }
 
     if (!empty($pc80_codproc)) {
-        $sCampos  = " distinct obr06_sequencial,pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,obr06_versaotabela,pc11_seq";
+        $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,obr06_versaotabela,pc11_seq";
         $sOrdem   = "pc11_seq";
         $sWhere   = "pc80_codproc = {$pc80_codproc} and pc01_obras = 't' and pc10_instit = " . db_getsession('DB_instit');
         $sSqlItemProcessodeCompras = $cllicitemobra->sql_query_itens_obras_processodecompras(null, $sCampos, $sOrdem, $sWhere);
@@ -132,6 +132,7 @@ $cllicitemobra->rotulo->label();
             <thead>
                 <tr>
                     <td class="table_header" style="width: 35px; height:30px;" onclick="marcarTodos();">M</td>
+                    <td class="table_header" style="width: 75px">Ordem</td>
                     <td class="table_header" style="width: 75px">Item</td>
                     <td class="table_header" style="width: 353px">Descrição Item</td>
                     <td class="table_header" style="width: 215px">Tabela</td>
@@ -144,13 +145,21 @@ $cllicitemobra->rotulo->label();
             <tbody>
                 <?php
                 foreach ($aItensObras as $key => $aItem) :
-                    if ($aItem->obr06_tabela == "") {
-                        $iItem = $aItem->pc01_codmater . "0";
-                    } else {
-                        $iItem = $aItem->pc01_codmater . $aItem->obr06_tabela;
+                    
+                    // A ordem foi adicionada para diferenciar os itens com o mesmo código de matérial
+                    if(isset($aItem->l21_ordem)) {
+                        $ordem = $aItem->l21_ordem;
+                    } else if (isset($aItem->pc11_seq)) {
+                        $ordem = $aItem->pc11_seq;
                     }
-                   
 
+                    if ($aItem->obr06_tabela == "") {
+                        $iItem = $aItem->pc01_codmater . "0" ."-". $ordem;
+                    } else {
+                        $iItem = $aItem->pc01_codmater . $aItem->obr06_tabela ."-". $ordem;
+                    }
+
+                    
                 ?>
                     <tr class="normal" id="<?= "linha_" . $iItem  ?>">
                         <input type="hidden" id=<?= 'obr06_dtcadastro_' . $iItem ?> value="<?= $aItem->obr06_dtcadastro ?>">
@@ -159,13 +168,18 @@ $cllicitemobra->rotulo->label();
                             <input type="checkbox" class="marca_itens[<?= $iItem ?>]" name="aItonsMarcados" value="<?= $iItem ?>" id="<?= $iItem ?>">
                         </th>
 
+                        <th class="linhagrid" style="width: 35px">
+                            <?= $ordem ?>
+                            <input type="hidden" name="obr06_ordem" value="<?=$ordem ?>" id="obr06_ordem_<?=$iItem?>">
+                        </th>
+
                         <td class="linhagrid" style="width: 75px">
                             <?= $aItem->pc01_codmater ?>
-                            <input type="hidden" name="" value="<?= $aItem->pc01_codmater ?>" id="<?= $iItem ?>">
+                            <input type="hidden" name="obr06_pcmater" value="<?= $aItem->pc01_codmater ?>" id="obr06_pcmater_<?=$iItem?>">
                         </td>
                         <td class="linhagrid" style="width: 353px">
                             <?= $aItem->pc01_descrmater ?>
-                            <input type="hidden" name="" value="<?= $aItem->pc01_descrmater ?>" id="<?= $iItem ?>">
+                            <input type="hidden" name="pc01_descrmater" value="<?= $aItem->pc01_descrmater ?>" id="pc01_descrmater_<?= $iItem ?>">
                         </td>
                         <td class="linhagrid" style="width: 215px">
                             <select name="tabela" id="<?= 'obr06_tabela_' . $iItem ?>" onchange='js_validatabelaLinha(this.id)'>
@@ -186,7 +200,7 @@ $cllicitemobra->rotulo->label();
                             <input type="text" name="" value="<?= mb_convert_encoding($aItem->obr06_descricaotabela, "ISO-8859-1", "UTF-8") ?>" id="<?= 'obr06_descricaotabela_' . $iItem ?>" <?= $aItem->obr06_tabela !== "3" ? "disabled style='background-color: #E6E4F1'" : "" ?>>
                         </td>
                         <td class="linhagrid" style="width: 87px">
-                            <input type="button" name="" value="Excluir" id="<?= $iItem ?>" onclick="excluirLinha(<?= $iItem ?>)">
+                            <input type="button" name="" value="Excluir" id="<?= $iItem ?>" onclick="excluirLinha('<?= $iItem ?>')">
                         </td>
                     </tr>
                 <?php
@@ -569,13 +583,15 @@ $cllicitemobra->rotulo->label();
             "3": {}
         };
 
+        // Definir como será a validação para códigos duplicadas no sistema
+        /*
         let existeCodigoDuplicado = false;
 
-        aItens().forEach(function(item) {
+        aItens().forEach((item) => {
             const tabela = document.getElementById('obr06_tabela_' + item.id);
             const codigoTabela = document.getElementById('obr06_codigotabela_' + item.id);
 
-            if (tabela.value !== "4") {
+            if (tabela.value !== "4" && codigoTabela.value !== null && codigoTabela.value !== undefined && codigoTabela.value.trim() !== '') {
                 const codigo = codigoTabela.value;
                 const tipo = tabela.value;
 
@@ -605,6 +621,7 @@ $cllicitemobra->rotulo->label();
             alert('Usuário: Os itens grifados estão com o mesmo código da tabela. O código deverá ser único para cada item.');
             return false;
         }
+        */
 
         const itensEnviar = [];
 
@@ -639,7 +656,7 @@ $cllicitemobra->rotulo->label();
                     itensEnviar.forEach(function(item) {
                         if (!item.obr06_dtcadastro) {
                             item.obr06_dtcadastro = dtcadastro;
-                            document.getElementById('obr06_dtcadastro_' + item.obr06_pcmater).value = dtcadastro;
+                            document.getElementById('obr06_dtcadastro_' + item.obr06_pcmater + '-' + item.obr06_ordem).value = dtcadastro;
                         }
                     });
                 } else {
@@ -656,15 +673,17 @@ $cllicitemobra->rotulo->label();
                 }, retornoAjax);
             }
         } catch (e) {
+            debugger;
             alert(e.toString());
         }
         return false;
     }
 
     function NovoItem(coditem) {
-        const obr06_pcmater = coditem;
+        const obr06_pcmater = coditem.split("-")[0];
         const obr06_tabela = document.getElementById('obr06_tabela_' + coditem).value;
         const obr06_dtcadastro = document.getElementById('obr06_dtcadastro_' + coditem).value;
+        const obr06_ordem = document.getElementById('obr06_ordem_' + coditem).value;
 
         let obr06_descricaotabela = null;
         let obr06_codigotabela = null;
@@ -689,7 +708,8 @@ $cllicitemobra->rotulo->label();
             obr06_descricaotabela,
             obr06_codigotabela,
             obr06_versaotabela,
-            obr06_dtcadastro
+            obr06_dtcadastro,
+            obr06_ordem
         }
     }
 
@@ -821,7 +841,6 @@ $cllicitemobra->rotulo->label();
     }
 
     function aplicaTabelaNosCampos(value) {
-        //debugger;
         aItens().forEach(function(item) {
             if (item.checked === true) {
                 habilitaDesabilitaTabela(value, item.id);
@@ -856,9 +875,10 @@ $cllicitemobra->rotulo->label();
                 let coditem = item.id;
 
                 var novoItem = {
-                    obr06_pcmater: coditem,
-                    obr06_tabela: document.getElementById('obr06_tabela_' + coditem).value,
+                    obr06_pcmater: coditem.split("-")[0],
+                    obr06_ordem: document.getElementById('obr06_ordem_' + coditem).value,
                 };
+                
                 itensEnviar.push(novoItem);
             });
             excluirItemAjax({
@@ -901,11 +921,11 @@ $cllicitemobra->rotulo->label();
 
     function excluirLinha(codigo) {
         var itensEnviar = [];
-
+        debugger;
         try {
             var novoItem = {
-                obr06_pcmater: codigo,
-                obr06_tabela: document.getElementById('obr06_tabela_' + codigo).value,
+                obr06_pcmater: codigo.split("-")[0],
+                obr06_ordem: document.getElementById('obr06_ordem_' + codigo).value,
             };
             itensEnviar.push(novoItem);
             excluirlinhaAjax({
