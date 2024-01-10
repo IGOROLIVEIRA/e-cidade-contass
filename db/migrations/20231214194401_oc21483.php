@@ -15,6 +15,7 @@ class AddTableVeiculosplaca extends PostgresMigration
   {
     $sql = "
             BEGIN;
+              ALTER TABLE veiculos.veiculos ALTER COLUMN ve01_placa TYPE varchar(7);
               DROP TABLE IF EXISTS veiculos.veiculosplaca;
               DROP SEQUENCE IF EXISTS veiculos.veiculosplaca_ve76_sequencial_seq;
             COMMIT;
