@@ -14,7 +14,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
   this.lProvidencia = false;
   this.lReajuste = false;
   this.totalizador = false;
-  this.estadoTela = { changeTipoAdivito: false , relacaoCodigoItem: {}};
+  this.estadoTela = { changeTipoAdivito: false, totalizadorNoCarregamento: false };
   this.desativaInputsCss = `
       background-color:#DEB887;
       pointer-events: none;
@@ -1104,7 +1104,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
     if (Object.keys(oSelecionados).length == 0 && $('oCboTipoAditivo').value == 13) {
       return alert('Nenhum item selecionado para aditar.');
-  }
+    }
 
     let lAditar = true;
 
@@ -1215,11 +1215,11 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
           return alert("Desmarque os itens que não foram aditados!");
         }
         let cboTipo = $('oCboTipoAditivo').value;
-        let qtanter =  oSelecionados[iIndice].aCells[4].getValue().getNumber();
+        let qtanter = oSelecionados[iIndice].aCells[4].getValue().getNumber();
         let vlranter = oSelecionados[iIndice].aCells[5].getValue().getNumber();
 
 
-        if (cboTipo == 9 || cboTipo == 10 ) {
+        if (cboTipo == 9 || cboTipo == 10) {
           let codigoItemFiltro = oSelecionados[iIndice].aCells[2].getValue();
           const itemFiltrado = me.itensAdaptados.filter(item => item.codigoitem == codigoItemFiltro);
           qtanter = itemFiltrado[0].qtdePosicaoanterior;
@@ -1230,8 +1230,8 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
         if ($('oCboTipoAditivo').value == 9
           && (oItemAdicionar.quantidade < qtanter || oItemAdicionar.valorunitario < vlranter)) {
           lAditar = false;
-           alert("Não é possí­vel realizar DECRÉSCIMOS de itens no tipo ACRÉSCIMO de itens!");
-           return;
+          alert("Não é possí­vel realizar DECRÉSCIMOS de itens no tipo ACRÉSCIMO de itens!");
+          return;
         }
 
         if ($('oCboTipoAditivo').value == 10
@@ -1328,7 +1328,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       oParam.aItens.push(oItemAdicionar);
     });
 
-    if ( !lAditar) {
+    if (!lAditar) {
       return;
     }
 
@@ -1687,16 +1687,15 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     }
 
     aItensPosicao.push(oNovoMaterial);
-    me.preencheItens(aItensPosicao);
+    me.preencheItens(aItensPosicao, true);
 
     $('btnItens').disabled = false;
     windowNovoItem.destroy();
     me.ajusteDotacao(aItensPosicao.length - 1, oNovoMaterial.elemento);
-    me.calculaValorTotal(aItensPosicao.length - 1);
   }
 
-  this.preencheItens = function (aItens) {
-
+  this.preencheItens = function (aItens, ignorarCalculoCarregamento = false) {
+    console.log("preencheItens");
     var sizeLabelItens = 0;
     if (aItens.length < 12) {
       sizeLabelItens = (aItens.length / 2) * 50;
@@ -2022,17 +2021,24 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       oDBHint.setHideEvents(aEventsOut);
       oDBHint.setPosition('B', 'L');
       oDBHint.make($("oGridItensrow" + id + "cell2"), 3);
-
-      me.calculaTotalNoCarregamento(aItens[id], id);
-
     });
+
+    aItens.each(function (element, id) {
+      if (aItens[id].novo !== true) {
+        me.calculaTotalPosicAnterior(element, id);
+      } else {
+        me.calculaValorTotal(id);
+      }
+    });
+
+
   }
 
   /**
    * Calcula o valor da coluna Valor Total
    */
   this.calculaValorTotal = function (iLinha) {
-
+    console.log("calula valor total")
     let aLinha = me.oGridItens.aRows[iLinha],
       nQuantidade = aLinha.aCells[6].getValue().getNumber(),
       nUnitario = aLinha.aCells[7].getValue().getNumber(),
@@ -2040,6 +2046,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       nUnitarioA = Number(aLinha.aCells[5].getValue().split('.').join("").replace(",", "."));//OC5304
     valor1 = nQuantidade.toString();
     valor = valor1.split('.');
+
 
     if (valor.length > 1) {
       casas = valor[1].length;
@@ -2049,12 +2056,13 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
     let cboTipo = $('oCboTipoAditivo').value;
 
-    if ( cboTipo == 10 || cboTipo == 9) {
+    if (cboTipo == 10 || cboTipo == 9) {
       let codigoItemFiltro = aLinha.aCells[2].getValue();
       const itemFiltrado = me.itensAdaptados.filter(item => item.codigoitem == codigoItemFiltro);
       nQuantidadeA = itemFiltrado[0].qtdePosicaoanterior;
       nUnitarioA = itemFiltrado[0].vlunitPosicaoanterior;
     }
+    console.log(nQuantidade, nUnitario, nQuantidadeA, nUnitarioA);
 
 
     aItensPosicao[iLinha].novaquantidade = nQuantidade;
@@ -2063,6 +2071,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     nValorTotal = nQuantidade * nUnitario;
     valorTotal = nQuantidadeA * nUnitarioA;
 
+    console.log(nValorTotal, valorTotal);
 
     aLinha.aCells[8].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
 
@@ -2086,8 +2095,8 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
   /**
    * Calcula o valor da coluna Valor Total
    */
-  this.calculaTotalNoCarregamento = function (item, iLinha) {
-
+  this.calculaTotalPosicAnterior = function (item, iLinha) {
+    console.log('Calcula Valor Total no carregamento');
     let aLinha = me.oGridItens.aRows[iLinha],
       nQuantidade = aLinha.aCells[6].getValue().getNumber(),
       nUnitario = aLinha.aCells[7].getValue().getNumber(),
@@ -2554,7 +2563,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
     adapatador = new ItensAdapter(aditamento)
 
-    itens  = adapatador.criarItens();
+    itens = adapatador.criarItens();
     me.itensAdaptados = itens.itensAdaptados;
     aItensPosicao = me.itensAdaptados;
     me.estadoTela.relacaoItemPcmater = itens.relacaoItemPcmater;
@@ -2603,7 +2612,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
         if (oRetorno.erro == true) {
           if (oRetorno.datareferencia) {
-           return alert(`O período já foi encerrado para envio do SICOM. Altere a Data de Assinatura para uma data posterior. `)
+            return alert(`O período já foi encerrado para envio do SICOM. Altere a Data de Assinatura para uma data posterior. `)
           }
 
           return alert(oRetorno.message.urlDecode());
