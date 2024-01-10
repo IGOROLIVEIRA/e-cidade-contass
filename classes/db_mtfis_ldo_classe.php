@@ -25,6 +25,7 @@ class cl_mtfis_ldo {
   public $mtfis_rclano2 = 0;
   public $mtfis_rclano3 = 0;
   public $mtfis_instit = 0;
+  public $mtfis_mfrpps = 0;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
                  mtfis_sequencial = int4 = Sequencial
@@ -36,6 +37,7 @@ class cl_mtfis_ldo {
                  mtfis_rclano2 = float4 = RCL DO ANO 2
                  mtfis_rclano3 = float4 = RCL DO ANO 3
                  mtfis_instit = int4 = Instituição
+                 mtfis_mfrpps = int8 = Metas Fiscais RPPS
                  ";
 
   //funcao construtor da classe
@@ -67,6 +69,7 @@ class cl_mtfis_ldo {
        $this->mtfis_rclano2 = ($this->mtfis_rclano2 == ""?@$GLOBALS["HTTP_POST_VARS"]["mtfis_rclano2"]:$this->mtfis_rclano2);
        $this->mtfis_rclano3 = ($this->mtfis_rclano3 == ""?@$GLOBALS["HTTP_POST_VARS"]["mtfis_rclano3"]:$this->mtfis_rclano3);
        $this->mtfis_instit = ($this->mtfis_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["mtfis_instit"]:$this->mtfis_instit);
+       $this->mtfis_mfrpps = ($this->mtfis_mfrpps == ""?@$GLOBALS["HTTP_POST_VARS"]["mtfis_mfrpps"]:$this->mtfis_mfrpps);
      } else {
        $this->mtfis_sequencial = ($this->mtfis_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["mtfis_sequencial"]:$this->mtfis_sequencial);
      }
@@ -147,7 +150,16 @@ class cl_mtfis_ldo {
        $this->erro_status = "0";
        return false;
      }
-     if ($mtfis_sequencial == "" || $mtfis_sequencial == null ) {
+     if ($this->mtfis_mfrpps == null ) {
+      $this->erro_sql = " Campo Metas Fiscais RPPS não informado.";
+      $this->erro_campo = "mtfis_mfrpps";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    } 
+    if ($mtfis_sequencial == "" || $mtfis_sequencial == null ) {
        $result = db_query("select nextval('mtfis_ldo_mtfis_sequencial_seq')");
        if ($result==false) {
          $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -189,6 +201,7 @@ class cl_mtfis_ldo {
                                       ,mtfis_rclano2
                                       ,mtfis_rclano3
                                       ,mtfis_instit
+                                      ,mtfis_mfrpps
                        )
                 values (
                                 $this->mtfis_sequencial
@@ -200,6 +213,7 @@ class cl_mtfis_ldo {
                                ,$this->mtfis_rclano2
                                ,$this->mtfis_rclano3
                                ,$this->mtfis_instit
+                               ,$this->mtfis_mfrpps
                       )";
 
      $result = db_query($sql);
@@ -373,6 +387,19 @@ class cl_mtfis_ldo {
          return false;
        }
      }
+     if (trim($this->mtfis_mfrpps)!="" || isset($GLOBALS["HTTP_POST_VARS"]["mtfis_mfrpps"])) {
+      $sql  .= $virgula." mtfis_mfrpps = $this->mtfis_mfrpps ";
+      $virgula = ",";
+      if (trim($this->mtfis_mfrpps) == null ) {
+        $this->erro_sql = " Campo Metas Fiscais RPPS não informado.";
+        $this->erro_campo = "mtfis_mfrpps";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      $sql .= " where ";
      if ($mtfis_sequencial!=null) {
        $sql .= " mtfis_sequencial = $this->mtfis_sequencial";
