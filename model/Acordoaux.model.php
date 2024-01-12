@@ -1710,11 +1710,9 @@ class Acordoaux
         $dtDataInicial = $this->getDataInicial();
         $dtDataFinal = $this->getDataFinal();
         $oPosicao = $this->getUltimaPosicao();
-
         $oDataInicial = new DBDate($dtDataInicial);
-        if($this->getVigenciaIndeterminada() == "f"){
-            $oDataFinal   = new DBDate($dtDataFinal);
-        }
+        $oDataFinal   = new DBDate($dtDataFinal);
+
         $this->salvarVigencia($oPosicao, $oDataInicial, $oDataFinal);
     }
 
@@ -1736,7 +1734,7 @@ class Acordoaux
         $oDaoAcordoVigencia->ac18_acordoposicao = $oPosicao->getCodigo();
         $oDaoAcordoVigencia->ac18_ativo = "true";
         $oDaoAcordoVigencia->ac18_datainicio = $oDataInicio->getDate(DBDate::DATA_EN);
-        $oDaoAcordoVigencia->ac18_datafim = $this->getVigenciaIndeterminada() == "f" ? $oDataFim->getDate(DBDate::DATA_EN) : null;
+        $oDaoAcordoVigencia->ac18_datafim = $oDataFim->getDate(DBDate::DATA_EN);
         $oDaoAcordoVigencia->incluir(null);
 
         if ($oDaoAcordoVigencia->erro_status == 0) {

@@ -224,7 +224,7 @@ class cl_acordo
             $this->ac16_origem = ($this->ac16_origem == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_origem"] : $this->ac16_origem);
             $this->ac16_reajuste = ($this->ac16_reajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_reajuste"] : $this->ac16_reajuste);
             $this->ac16_criterioreajuste = ($this->ac16_criterioreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_criterioreajuste"] : $this->ac16_criterioreajuste);
-            $this->ac16_periodoreajust = ($this->ac16_periodoreajust == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_periodoreajust"] : $this->ac16_periodoreajust);
+            $this->ac16_periodoreajuste = ($this->ac16_periodoreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_periodoreajuste"] : $this->ac16_periodoreajuste);
             $this->ac16_indicereajuste = ($this->ac16_indicereajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_indicereajuste"] : $this->ac16_indicereajuste);
             $this->ac16_descricaoreajuste = ($this->ac16_descricaoreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_descricaoreajuste"] : $this->ac16_descricaoreajuste);
             $this->ac16_descricaoindice = ($this->ac16_descricaoindice == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_descricaoindice"] : $this->ac16_descricaoindice);

@@ -1499,7 +1499,7 @@ unset($_GET['viewAlterar']);
                 document.getElementById('oGridItensrow' + iIndice + 'cell9').style.display = "";
                 document.getElementById('col11').style.display = "";
 
-            }  else if(iTipo == "04" || iTipo == "05"){
+            }  else if(iTipo == "04" || iTipo == "05" || iTipo == "99"){
                 document.getElementById("si03_tipoalteracaoapostila").options[0].disabled = true;
                 document.getElementById("si03_tipoalteracaoapostila").options[1].disabled = true;
                 document.getElementById("si03_tipoalteracaoapostila").options[2].disabled = false;
@@ -1509,11 +1509,6 @@ unset($_GET['viewAlterar']);
                 document.getElementById('valorunitario' + iIndice).readOnly = true;
                 document.getElementById('oGridItensrow' + iIndice + 'cell9').style.display = "";
                 document.getElementById('col11').style.display = "";
-            } else if (iTipo == "99"){
-                $("si03_tipoalteracaoapostila").value = 1;
-                document.getElementById("si03_tipoalteracaoapostila").options[0].disabled = false;
-                document.getElementById("si03_tipoalteracaoapostila").options[1].disabled = false;
-                document.getElementById("si03_tipoalteracaoapostila").options[2].disabled = false;
             }
             else {
                 $("si03_tipoalteracaoapostila").value = 1;

@@ -703,6 +703,9 @@ contratoaux = function () {
         oParam.contrato.iAdesaoregpreco           = iAdesaoregpreco;
         oParam.contrato.iLicoutroorgao            = iLicoutroorgao;
         oParam.contrato.iVigenciaIndeterminada    = iVigenciaIndeterminada;
+        console.log(dtInicio);
+        console.log(dtTermino);
+
         js_divCarregando('Aguarde, salvando dados do contrato','msgbox');
         var oAjax   = new Ajax.Request(
             sURL,

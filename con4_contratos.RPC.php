@@ -718,6 +718,8 @@ switch ($oParam->exec) {
                     $oContrato->setDataAssinatura($oParam->contrato->dtAssinatura);
                 }
 
+                /* Quando a vigencia for indeterminada seta a datafinal para a datainicial +10 anos*/
+
                 if($oParam->contrato->iVigenciaIndeterminada == "t"){
                     $dataFinal   = new DBDate($oParam->contrato->dtInicio);
                     $timestampDatafinal = strtotime ( '+10 years' , strtotime ( $dataFinal->getDate() ) ) ;
