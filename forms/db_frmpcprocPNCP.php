@@ -50,6 +50,9 @@ $val = false;
     #l20_categoriaprocesso {
         width: 112px;
     }
+    #pc80_modalidadecontratacao {
+        width: 170px;
+    }
 </style>
 <form name="form1" method="post" action="">
     <fieldset style="width:775px;">
@@ -119,11 +122,6 @@ $val = false;
                             $pc10_data_ano = $arr_data[0];
                         }
                         $result_pcproc = $clpcproc->sql_record('select last_value+1 as pc80_codproc from pcproc_pc80_codproc_seq');
-                        if ($clpcproc->numrows > 0) {
-                            //db_fieldsmemory($result_pcproc,0);
-                        } else {
-                            //$pc80_codproc = 1;
-                        }
                         ?>
                     </td>
                     <td align="left" nowrap title="<?= @$Tpc80_codproc ?>">
@@ -301,35 +299,6 @@ $val = false;
                     </td>
                 </tr>
 
-                <tr id="dispensaporvalor3" style="display:none">
-                    <td>
-                        <label class="bold">Amparo Legal:</label>
-                    </td>
-                    <td>
-                        <?php
-                        $sql = "SELECT * FROM amparolegal
-                        WHERE l212_codigo IN
-                                (SELECT l213_amparo
-                                 FROM amparocflicita
-                                 WHERE l213_modalidade IN
-                                         (SELECT DISTINCT l03_codigo
-                                          FROM amparocflicita
-                                          INNER JOIN cflicita ON cflicita.l03_codigo=l213_modalidade
-                                          WHERE l03_pctipocompratribunal=101
-                                              AND l03_instit = " . db_getsession('DB_instit') . "))";
-                        $result_tipo = db_query($sql);
-
-                        for ($iIndiceTipo = 0; $iIndiceTipo < pg_numrows($result_tipo); $iIndiceTipo++) {
-
-                            $oTipo = db_utils::fieldsMemory($result_tipo, $iIndiceTipo);
-
-                            $tipo[$oTipo->l212_codigo] = $oTipo->l212_lei;
-                        }
-                        $tipo[0] = 'Selecione';
-                        db_select('pc80_amparolegal', $tipo, true, '', 'style="width:100%"');
-                        ?>
-                    </td>
-                </tr>
                 <tr id="dispensaporvalor5" style="display:none">
                     <td style="width: 158px">
                         <label class="bold">Modalidade de Contratação:</label>
@@ -337,12 +306,41 @@ $val = false;
                     <td>
                         <?php
                         $aModalidade = array(
-                            '' => 'Selecione',
+                            '0' => 'Selecione',
                             '8' => 'Dispensa sem Disputa',
                             '9' => 'Inexigibilidade',
                         );
 
-                        db_select('pc80_modalidadecontratacao', $aModalidade, true, '');
+                        db_select('pc80_modalidadecontratacao', $aModalidade, true, 1,"onchange='js_consultaamparolegal(this.value);'");
+                        ?>
+                    </td>
+                </tr>
+
+                <tr id="dispensaporvalor3" style="display:none">
+                    <td>
+                        <label class="bold">Amparo Legal:</label>
+                    </td>
+                    <td>
+                        <?php
+                        $tipo[0] = 'Selecione';
+                        db_select('pc80_amparolegal', $tipo, true, '', 'style="width:100%"');
+                        ?>
+                    </td>
+                </tr>
+                <tr id="dispensaporvalor6" style="display:none">
+                    <td>
+                        <label class="bold">Critério de Julgamento:</label>
+                    </td>
+                    <td>
+                        <?php
+                        $aCriteriojulgamento = array(
+                            '0' => 'Selecione',
+                            '1' => 'Menor preço',
+                            '2' => 'Maior desconto',
+                            '5' => 'Maior lance',
+                            '7' => 'Não se aplica'
+                        );
+                        db_select('pc80_criteriojulgamento', $aCriteriojulgamento, true, '', 'style="width:100%"');
                         ?>
                     </td>
                 </tr>
@@ -521,12 +519,13 @@ $val = false;
     }
 
     function js_verificadispensa() {
-        if ($F('pc80_dispvalor') == "t") {
+        if ($F('pc80_dispvalor') === "t") {
             $('dispensaporvalor1').style.display = '';
             $('dispensaporvalor2').style.display = '';
             $('dispensaporvalor3').style.display = '';
             $('dispensaporvalor4').style.display = '';
             $('dispensaporvalor5').style.display = '';
+            $('dispensaporvalor6').style.display = '';
             $('categoriaprocesso').style.display = '';
         } else {
             $('dispensaporvalor1').style.display = 'none';
@@ -534,7 +533,49 @@ $val = false;
             $('dispensaporvalor3').style.display = 'none';
             $('dispensaporvalor4').style.display = 'none';
             $('dispensaporvalor5').style.display = 'none';
+            $('dispensaporvalor6').style.display = 'none';
             $('categoriaprocesso').style.display = 'none';
         }
+    }
+
+    function js_consultaamparolegal(param){
+
+        let modalidade = 0;
+
+        if(param === '8'){
+           $('pc80_criteriojulgamento').value = 0;
+           modalidade = 101;
+        }else{
+           $('pc80_criteriojulgamento').value = 7;
+           modalidade = 100;
+        }
+
+        const oParam = {};
+        oParam.exec       = 'buscarAparolegal';
+        oParam.modalidade = modalidade;
+
+        const oAjax = new Ajax.Request(
+            'com1_processocomprasutils.RPC.php',
+            {
+                parameters: 'json=' + Object.toJSON(oParam),
+                asynchronous: false,
+                method: 'post',
+                onComplete: js_retornoAmparolegal
+            });
+    }
+
+    function js_retornoAmparolegal(oAjax){
+        const oRetorno = eval('(' + oAjax.responseText + ")");
+
+        let listaamparolegal = document.getElementById('pc80_amparolegal').options;
+
+        for (let x = listaamparolegal.length; x > 0; x --) {
+
+            listaamparolegal.remove(x);
+        }
+
+        oRetorno.amparolegal.forEach(function (amparo, iseq){
+            listaamparolegal.add(new Option(amparo.l212_lei.urlDecode(), amparo.l212_codigo));
+        });
     }
 </script>

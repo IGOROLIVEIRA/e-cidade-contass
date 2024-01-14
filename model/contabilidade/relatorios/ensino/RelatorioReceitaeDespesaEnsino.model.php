@@ -28,7 +28,6 @@
 /**
  * Class RelatorioReceitaeDespesaEnsino
  */
-
 class RelatorioReceitaeDespesaEnsino
 {
     private $aFontes;
@@ -398,6 +397,7 @@ class RelatorioReceitaeDespesaEnsino
             $this->setFontes(array("'118','119','1118','1119','15400007','15400000'"));
             $nSaldoApagarGeral118_119 = self::getSaldoApagarGeral();
         }
+        $nSaldoFonteAno101 = getSaldoPlanoContaFonte("'101','15000001','201','25000001'", $this->dtini, $this->dtfim, $this->instits);
 
         $nRPIncritosSemDesponibilidade101 = 0;
         $this->setFontes(array("'101','15000001','201','25000001'"));

@@ -345,6 +345,7 @@ $oVeiculo         = db_utils::fieldsMemory($rsBuscaVeiculo, false);
     $oTabDetalhes->add('manutenção de medidas' , 'Manutenções de Medida', "func_detalhamentomanutencaomedida.php{$sGetUrl}");
     $oTabDetalhes->add('Impressão'             , 'Impressão'            , "func_impressaofichaveiculo.php{$sGetUrl}");
     $oTabDetalhes->add('Transferências'        , 'Transferencia'        , "func_transferenciasveiculo.php{$sGetUrl}");
+    $oTabDetalhes->add('Placa'                 , 'Placa'                , "func_detalhamentoalteracoesplaca.php{$sGetUrl}");
     $oTabDetalhes->show();
     ?>
 </fieldset>

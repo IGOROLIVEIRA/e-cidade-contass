@@ -425,7 +425,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                 </tr>
 
-                                <tr id="l20_tipnaturezaproced">
+                                <tr id="tr_l20_tipnaturezaproced">
                                     <td nowrap title="<?= @$Tl20_tipnaturezaproced ?>" id="tipnaturezaproced">
                                         <?= @$Ll20_tipnaturezaproced ?>
                                     </td>
@@ -520,9 +520,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                             $l20_criterioadjudicacao = "";
                                         }
                                         $aCriterios = array("3" => "Outros", "1" => "Desconto sobre tabela", "2" => "Menor taxa ou percentual");
-                                        if (db_getsession('DB_anousu') >= 2019) {
-                                            //                                        $aCriterios["3"] = "Menor preço global";
-                                        }
                                         db_select("l20_criterioadjudicacao", $aCriterios, true, '');
                                         ?>
                                     </td>
@@ -1167,10 +1164,22 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                     </td>
                     <td>
                         <?
-                        $al20_tipoprocesso = array("0" => "", "1" => "1-Dispensa", "2" => "2-Inexigibilidade", "3" => "3-Inexigibilidade por credenciamento/chamada pública", "4" => "4-Dispensa por chamada publica");
-                        db_select("l20_tipoprocesso", $al20_tipoprocesso, true, $db_opcao);
+                        $al20_tipoprocesso = array("0" => "Selecione", "1" => "1-Dispensa", "2" => "2-Inexigibilidade", "3" => "3-Inexigibilidade por credenciamento/chamada pública", "4" => "4-Dispensa por chamada publica","5" => "5-Dispensa para Registro de Preços","6" => "6-Inexigibilidade para Registro de Preços");
+                        db_select("l20_tipoprocesso", $al20_tipoprocesso, true, $db_opcao,"onchange='js_alteracaoTipoProcesso(this.value)'");
                         ?>
                     </td>
+                </tr>
+
+                <tr id="tr_criterioadjudicao_dispensainexibilidade" style="display:none;" >
+                     <td>
+                        <label class="bold">Critério de Adjudicação:</label>
+                     </td>
+                     <td>
+                        <? 
+                        $aCriterios = array("1" => "1- Desconto sobre tabela", "2" => "2 - Menor taxa ou percentual", "3" => "3 - Outros");
+                        db_select("criterioadjudicao_dispensainexibilidade", $aCriterios, true, '');
+                        ?>
+                     </td>
                 </tr>
 
                 <tr>
@@ -1230,6 +1239,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     js_verificaDatasProposta();
 
+    <?php $postRequest = count($_POST)?>;
+    let postRequest = <? print $postRequest; ?>;
+    postRequest = postRequest == 0 ? false : true;
+    if(postRequest == false){
+        document.getElementById('criterioadjudicao_dispensainexibilidade').value = '3';
+    }
+
     // alterando a função padrao para verificar  as opçoes de convite e de INEXIGIBILIDADE
     function js_ProcCod_l20_codtipocom(proc, res) {
         document.getElementById('l20_numero').style.display = '';
@@ -1261,13 +1277,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
 
     function js_retornolicitacao(oAjax) {
-
         var oRetornoNatu = document.getElementById("l20_naturezaobjeto").value;
         var oRetornoamparo = document.getElementById("l212_codigo").value;
         if (oRetornoNatu == 1) {
             document.getElementById("respObras").style.display = "table-row";
         }
-
 
         var oRetorno = eval("(" + oAjax.responseText + ")");
         var l12_numeracaomanual = <? echo '"' . $l12_numeracaomanual . '"';      ?>;
@@ -1292,13 +1306,14 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         document.getElementById("l20_codtipocomdescr").style.width = "307px";
         document.getElementById("l20_tipliticacao").style.width = "307px";
         document.getElementById("l20_leidalicitacao").style.width = "307px";
-        document.getElementById("l20_tipnaturezaproced").style.width = "307px";
+        document.getElementById("tr_l20_tipnaturezaproced").style.width = "307px";
         document.getElementById("l20_regimexecucao").style.width = "307px";
         document.getElementById("l20_naturezaobjeto").style.width = "307px";
         document.getElementById("l20_criterioadjudicacao").style.width = "307px";
         document.getElementById("l212_codigo").style.width = "307px";
         document.getElementById("l20_tipojulg").style.width = "85px";
         document.getElementById("l20_tipoprocesso").style.width = "400px";
+        document.getElementById("criterioadjudicao_dispensainexibilidade").style.width = "400px";
         document.form1.modalidade_tribunal.value = oRetorno.tribunal;
 
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
@@ -1372,6 +1387,40 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }
 
         if (oRetorno.tribunal == 100 || oRetorno.tribunal == 101 || oRetorno.tribunal == 102 || oRetorno.tribunal == 103) {
+            let tipoprocesso = <? echo '"' . $l20_tipoprocesso . '"';?>;
+            let aDispensaInexibilidade = ["102","103"];
+            let modalidade_tribunal = document.getElementById('modalidade_tribunal').value;
+            if($('l20_leidalicitacao').value == "1" && !aDispensaInexibilidade.includes(modalidade_tribunal)){
+                document.getElementById('l20_tipoprocesso').innerHTML = "";
+                tipoProcesso = document.getElementById('l20_tipoprocesso').options;
+                tipoProcesso.add(new Option('Selecione', 0));
+                tipoProcesso.add(new Option('1- Dispensa', 1));
+                tipoProcesso.add(new Option('2- Inexibilidade', 2));
+                tipoProcesso.add(new Option('3- Inexigibilidade por credenciamento/chamada pública', 3));
+                tipoProcesso.add(new Option('4- Dispensa por chamada publica', 4));
+                tipoProcesso.add(new Option('5- Dispensa para Registro de Preços', 5));
+                tipoProcesso.add(new Option('6- Inexigibilidade para Registro de Preços', 6));
+            } else {
+                document.getElementById('l20_tipoprocesso').innerHTML = "";
+                tipoProcesso = document.getElementById('l20_tipoprocesso').options;
+                tipoProcesso.add(new Option('Selecione', 0));
+                tipoProcesso.add(new Option('1- Dispensa', 1));
+                tipoProcesso.add(new Option('2- Inexibilidade', 2));
+                tipoProcesso.add(new Option('3- Inexigibilidade por credenciamento/chamada pública', 3));
+                tipoProcesso.add(new Option('4- Dispensa por chamada publica', 4));
+            }
+
+            if(document.getElementById('db_opcao').name != "incluir"){
+                document.getElementById('l20_tipoprocesso').value = tipoprocesso;
+                let criterioadjudicacao = <? echo '"' . $l20_criterioadjudicacao . '"';?>;
+                if(tipoprocesso == "5" || tipoprocesso == "6"){
+                    document.getElementById('criterioadjudicao_dispensainexibilidade').value = criterioadjudicacao;
+                    document.getElementById('tr_criterioadjudicao_dispensainexibilidade').style.display = "";
+                } else {
+                    document.getElementById('tr_criterioadjudicao_dispensainexibilidade').style.display = "none";
+                }
+            }
+
             if(oRetorno.tribunal == 102 || oRetorno.tribunal == 103){
                 document.getElementById("linha_nroedital").style.display = '';
             }else{
@@ -1386,7 +1435,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                 document.getElementById("dataaberturapncp").style.display = 'none';
             }
             document.getElementById("respCondProcesso").style.display = "none"
-            document.getElementById("l20_tipnaturezaproced").style.display = "none";
+            document.getElementById("tr_l20_tipnaturezaproced").style.display = "none";
             document.getElementById("usaregistropreco").style.display = 'none';
             document.getElementById("trequipepregao").style.display = 'none';
             document.getElementById("l20_criterioadjudicacao").style.display = "none";
@@ -1434,18 +1483,19 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("local").style.display = 'none';
             document.getElementById("respAvaliaBens").style.display = "none";
             document.getElementById("respAberProcesso").style.display = "none";
-            document.getElementById("respEmissaoEdi").style.display = "none";
-
+            document.getElementById("respEmissaoEdi").style.display = "none";    
         } else {
             var codigo_lei = document.form1.l20_leidalicitacao.value;
             document.getElementById("linha_nroedital").style.display = '';
 
             if (codigo_lei == 1) {
                 document.getElementById("disputa").style.display = '';
+            }else{
+                document.getElementById("disputa").style.display = 'none';
             }
             document.getElementById("respCondProcesso").style.display = '';
             document.getElementById("l20_tipliticacao").style.display = '';
-            document.getElementById("l20_tipnaturezaproced").style.display = '';
+            document.getElementById("tr_l20_tipnaturezaproced").style.display = '';
             //document.getElementById("l20_regimexecucao").style.display = '';
             document.getElementById("l20_criterioadjudicacao").style.display = '';
             document.getElementById("respAutoProcesso").style.display = "none";
@@ -1489,6 +1539,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
             if (codigo_lei == 1) {
                 document.getElementById("disputa").style.display = '';
+            } else {
+                document.getElementById("disputa").style.display = 'none';
             }
             //OC17312toda vez que fizer uma alteração na modalidade a opção de lei de licitação volta para selecionar para que o usuario coloque novamente a lei
 
@@ -1506,7 +1558,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("numeroconvidado").style.display = 'inline';
             document.getElementById("recdocumentacao").style.display = 'inline';
             document.getElementById("local").style.display = 'inline';
-
         }
 
         let aModalidades = ['48', '49', '50', '52', '53', '54'];
@@ -1518,7 +1569,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         let listaExecucoes = document.getElementById('l20_regimexecucao').options;
     }
-
 
     if ($F('l20_equipepregao') != '') {
         let modalidade = document.form1.modalidade_tribunal.value; //document.form1.l20_codtipocomdescr.value;
@@ -2054,6 +2104,12 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     function js_confirmadatas() {
 
+        js_naturezaprocedimento(document.getElementById('l20_tipnaturezaproced').value);
+
+        if(document.getElementById('tr_l20_tipnaturezaproced').style.display == 'none'){
+            document.getElementById('l20_tipnaturezaproced').value = "0";
+        }
+
         if (document.getElementById('l20_numero').value == "0") {
             alert("Usuário: o campo Numeração não pode ser preenchido com valor 0");
             return false;
@@ -2241,6 +2297,12 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }else{
             document.getElementById("amparolegal").style.display = "none";
         }
+
+        if(lei == 1){
+            document.getElementById("disputa").style.display = "";
+        } else {
+            document.getElementById("disputa").style.display = "none";
+        }
     }
 
     function limitaTextareacpro(valor) {
@@ -2350,6 +2412,17 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         document.getElementById(varNomeCampo).value = chave2;
         db_iframe_cgm.hide();
     }
+
+    function js_alteracaoTipoProcesso(tipoProcesso){
+        if(tipoProcesso == "5" || tipoProcesso == "6"){
+            document.getElementById('tr_criterioadjudicao_dispensainexibilidade').style.display = "";
+            document.getElementById('l20_usaregistropreco').value = "t";
+            return;
+        }
+        document.getElementById('l20_usaregistropreco').value = "f";
+        document.getElementById('tr_criterioadjudicao_dispensainexibilidade').style.display = "none";
+    }
+
 </script>
 <?
 if (empty($l34_liclicita)) {

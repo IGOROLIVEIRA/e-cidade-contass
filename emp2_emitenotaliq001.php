@@ -37,6 +37,7 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("e60_codemp");
 $clrotulo->label("e60_numemp");
 $clrotulo->label("e50_codord");
+$clrotulo->label("e50_numliquidacao");
 $clrotulo->label("e53_valor");
 $db_opcao = 1;
 
@@ -93,6 +94,14 @@ db_app::load("scripts.js,
 		</td>
 		<td>
 		   <? db_input('e60_numemp',13,$Ie60_numemp,true,'text',$db_opcao," onchange='js_pesquisae60_numemp(false);'")  ?>
+		</td>
+      </tr>
+      <tr>
+		<td nowrap title="<?=@$Te50_numliquidacao?>">
+		   <?= @$Le50_numliquidacao?>
+		</td>
+		<td>
+		   <? db_input('e50_numliquidacao',13,$Ie50_numliquidacao,true,'text',$db_opcao)  ?>
 		</td>
       </tr>
       <tr>
@@ -237,6 +246,7 @@ function js_abre(){
   var dtfim_mes      = sDtfim[1];
   var dtfim_ano      = sDtfim[2];
   var aFornecedores  = getForncedores();
+  var e50_numliquidacao = obj.e50_numliquidacao.value;
 
   var query          = '';
 
@@ -259,8 +269,8 @@ function js_abre(){
        }
    }
 
-   query += "&e60_codemp_ini="+obj.e60_codemp_ini.value;
    if(e60_codemp_ini != '') {
+     query += "&e60_codemp_ini="+obj.e60_codemp_ini.value;
 
      if(e60_codemp_fim != '') {
        if(Number(e60_codemp_fim) < Number(e60_codemp_ini)) {
@@ -268,18 +278,27 @@ function js_abre(){
          return false;
        }
      }
+     query += "&e60_codemp_fim="+obj.e60_codemp_fim.value;
    }
-   query += "&e60_codemp_fim="+obj.e60_codemp_fim.value;
 
    if(e60_numemp != '') {
        query += "&e60_numemp="+e60_numemp;
+   }
+
+   if(e50_numliquidacao != ''){
+      if(e60_numemp != '' || (e60_codemp_ini != '' && e60_codemp_fim == '')){
+        query += "&e50_numliquidacao="+e50_numliquidacao;
+      }else{
+        alert("Indique o Sequencial do Empenho para utilizar o filtro Número da Liquidação.");
+        return false;
+      }
    }
 
    if(query == ''){
      alert("Selecione alguma ordem de pagamento ou indique o período!");
    }else{
         var sUrl = 'emp2_emitenotaliq002.php?aFornecedor=' + aFornecedores + '&historico=' + historico + '&valor_ordem=' + valor_ordem + "&recursos="+ js_campo_recebe_valores_recursos() + query;
-     jan = window.open(sUrl,
+        jan = window.open(sUrl,
                        '',
                        'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
      jan.moveTo(0,0);
@@ -363,4 +382,9 @@ function js_mostracodordem1(chave1,x){
   document.form1.e50_codord_ini.value = chave1;
   db_iframe_pagordem.hide();
 }
+
+var oDBToogleFornecedores = new DBToogle('fieldset_recursos', false);
+var oDBToogleRecursos = new DBToogle('LancadorFornecedor', false);
+$('tr_inicio_recursos').getElementsByTagName("table")[0].align = 'left';
+
 </script>

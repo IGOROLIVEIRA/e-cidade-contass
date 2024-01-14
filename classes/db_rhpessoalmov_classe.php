@@ -1348,7 +1348,7 @@ class cl_rhpessoalmov
             } else if (trim($this->rh02_cnpjcedente) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_cnpjcedente"]) && !in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
                 $this->rh02_cnpjcedente = "null";
             }
-            $sql  .= $virgula . " rh02_cnpjcedente = ".($this->rh02_cnpjcedente == "null" || $this->rh02_cnpjcedente == "" ? "null" : "'" . $this->rh02_cnpjcedente . "'")." ";
+            $sql  .= $virgula . " rh02_cnpjcedente = " . ($this->rh02_cnpjcedente == "null" || $this->rh02_cnpjcedente == "" ? "null" : "'" . $this->rh02_cnpjcedente . "'") . " ";
             $virgula = ",";
         }
 
@@ -3241,5 +3241,45 @@ class cl_rhpessoalmov
         LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
         WHERE rh01_instit = {$instit} AND rh01_admiss <= '{$primeirodia}' AND (rh05_recis IS NULL OR rh05_recis >= '{$primeirodia}')";
         return $sql;
+    }
+
+    /**
+     * Altera a lotacao do servidor
+     *
+     * @param int $seqpes
+     * @param int $lotacao
+     * @return void
+     */
+    public function alterarLotacao($seqpes, $lotacao)
+    {
+        $result = db_query("UPDATE rhpessoalmov SET rh02_lota = {$lotacao} WHERE rh02_seqpes = {$seqpes}");
+        if ($result === false) {
+            $this->erro_status = "0";
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
+            $this->erro_sql   = "Atualização para Lotação ({$lotacao}), seqpes ({$seqpes}) não Alterado. Alteração Abortada.";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        }
+    }
+
+    /**
+     * sql para buscar servidores por ano, mes e lotacao
+     *
+     * @param int $anousu
+     * @param int $mesusu
+     * @param int $lotacao
+     * @return string
+     */
+    public function sqlServidoresLotacoes($anousu, $mesusu, $lotacao, $campos)
+    {
+        return "SELECT DISTINCT {$campos}
+        FROM rhpessoalmov
+        LEFT JOIN rhpesrescisao ON rh05_seqpes = rh02_seqpes
+        JOIN rhpessoal ON rh02_regist = rh01_regist
+        JOIN CGM ON rh01_numcgm = z01_numcgm
+        WHERE rh02_anousu = '" . $anousu . "'
+        AND rh02_mesusu = '" . $mesusu . "'
+        AND rh02_lota = '" . $lotacao . "'
+        AND ((EXTRACT(MONTH FROM rh05_recis) =  '" . $mesusu . "' AND EXTRACT(YEAR FROM rh05_recis) =  '" . $anousu . "')
+        OR rh05_recis is NULL)";
     }
 }

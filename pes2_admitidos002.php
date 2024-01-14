@@ -212,8 +212,7 @@ if(isset($listarescis) || $adm_dem == 'd' ) {
 $dbwhere .= $dbwhereinativo.$dbwhererescis.$sWhere;
 
 $sql_dados = $clrhpessoal->sql_query_lotafuncres(null,"rh01_regist, z01_nome, z01_ident, z01_cgccpf, rh01_nasc, rh01_admiss, r70_estrut, r70_descr, rh37_funcao, rh37_descr,o40_orgao,o40_descr,rh03_padrao,rh05_recis".$camposQuebra,$orderby,$dbwhere);
-//echo $sql_dados;exit;
-$result_dados = $clrhpessoal->sql_record($sql_dados);//echo $sql_dados;db_criatabela($result_dados);exit;
+$result_dados = $clrhpessoal->sql_record($sql_dados);
 $numrows_dados = $clrhpessoal->numrows;
 if($numrows_dados == 0){
   db_redireciona("db_erros.php?fechar=true&db_erro=Não existem funcionários admitidos no período de ".db_formatar($datai,"d")." e ".db_formatar($dataf,"d").".");
@@ -346,4 +345,3 @@ $pdf->cell(190,$alt,"TOTAL :  ".$total."  FUNCIONÁRIOS","T",0,"R",0);
 
 
 $pdf->Output();
-?>

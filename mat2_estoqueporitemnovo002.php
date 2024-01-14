@@ -194,8 +194,8 @@ if ($iTotalItensEstoque > 0) {
 		}
 
 		$oItemEstoque                         = new stdClass();
-		$oItemEstoque->iCodigoDepartamento    = $oDadosItemEstoque->codigo_departamento;
-		$oItemEstoque->sDescricaoDepartamento = $oDadosItemEstoque->descricao_departamento;
+		$oItemEstoque->iCodigoDepartamento    = $oDadosItemEstoque->codigo_almoxarifado;
+		$oItemEstoque->sDescricaoDepartamento = $oDadosItemEstoque->descrisao_almoxarifado;
 		$oItemEstoque->iCodigoItem            = $oDadosItemEstoque->m60_codmater;
 		$oItemEstoque->sDescricaoItem         = $oDadosItemEstoque->m60_descr;
 		$oItemEstoque->iQuantidadeEstoque     = 0;
@@ -203,8 +203,8 @@ if ($iTotalItensEstoque > 0) {
 		$oItemEstoque->nValorEstoque          = 0;
 		$oItemEstoque->nPrecoMedio            = $oDadosItemEstoque->m71_valor / $oDadosItemEstoque->m71_quant;
 		$oItemEstoque->nValorUnitario         = $oDadosItemEstoque->m71_valor / $oDadosItemEstoque->m71_quant;
-		$oItemEstoque->iCodigoAlmoxarifado    = $oDadosItemEstoque->codigo_almoxarifado;
-		$oItemEstoque->sDescricaoAlmoxarifado = $oDadosItemEstoque->descrisao_almoxarifado;
+		$oItemEstoque->iCodigoAlmoxarifado    = $oDadosItemEstoque->codigo_departamento;
+		$oItemEstoque->sDescricaoAlmoxarifado = $oDadosItemEstoque->descricao_departamento;
 		$oItemEstoque->iCodigoEstoque         = $oDadosItemEstoque->m71_codmatestoque;
 		$oItemEstoque->sLote                  = $oDadosItemEstoque->m77_lote;
 		$oItemEstoque->dtValidade             = $oDadosItemEstoque->m77_dtvalidade;
