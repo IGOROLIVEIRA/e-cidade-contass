@@ -38,6 +38,7 @@ class cl_redispi112024
   var $si184_reg10 = 0;
   var $si184_mes = 0;
   var $si184_instit = 0;
+  var $si184_utilizacaoplanilhamodelo = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  si184_sequencial = int8 = sequencial
@@ -60,6 +61,7 @@ class cl_redispi112024
                  si184_reg10 = int8 = Registro 10
                  si184_mes = int8 = Mês
                  si184_instit = int8 = Instituição
+                 si184_utilizacaoplanilhamodelo = int8 = utiliza planilha
                  ";
 
   //funcao construtor da classe
@@ -106,6 +108,7 @@ class cl_redispi112024
       $this->si184_reg10 = ($this->si184_reg10 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si184_reg10"] : $this->si184_reg10);
       $this->si184_mes = ($this->si184_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si184_mes"] : $this->si184_mes);
       $this->si184_instit = ($this->si184_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si184_instit"] : $this->si184_instit);
+      $this->si184_utilizacaoplanilhamodelo = ($this->si184_utilizacaoplanilhamodelo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si184_utilizacaoplanilhamodelo"] : $this->si184_utilizacaoplanilhamodelo);
     } else {
       $this->si184_sequencial = ($this->si184_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si184_sequencial"] : $this->si184_sequencial);
     }
@@ -218,6 +221,7 @@ class cl_redispi112024
                                       ,si184_reg10
                                       ,si184_mes
                                       ,si184_instit
+                                      ,si184_utilizacaoplanilhamodelo
                        )
                 values (
                                 $this->si184_sequencial
@@ -241,6 +245,7 @@ class cl_redispi112024
                                ,$this->si184_reg10
                                ,$this->si184_mes
                                ,$this->si184_instit
+                               ,$this->si184_utilizacaoplanilhamodelo
                       )";
     $result = db_query($sql);
     if ($result == false) {

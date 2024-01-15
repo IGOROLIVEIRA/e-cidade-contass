@@ -54,6 +54,8 @@ class cl_ralic102024
   var $si180_instit = 0;
   var $si180_leidalicitacao = 0;
   var $si180_mododisputa = 0;
+  var $si180_emailcontato = 0;
+
   var $campos = "
                  si180_sequencial = int8 = sequencial
                  si180_tiporegistro = int8 = Tipo do registro
@@ -86,6 +88,7 @@ class cl_ralic102024
                  si180_instit = int8 = Instituição
                  si180_leidalicitacao = int8 = Lei da licitação
                  si180_mododisputa = int8 = Modo disputa
+                 si180_emailcontato = varchar(200) = email
                  ";
   // cria propriedade com as variaveis do arquivo
 
@@ -157,7 +160,7 @@ class cl_ralic102024
       $this->si180_instit = ($this->si180_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_instit"] : $this->si180_instit);
       $this->si180_leidalicitacao = ($this->si180_leidalicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_leidalicitacao"] : $this->si180_leidalicitacao);
       $this->si180_mododisputa = ($this->si180_mododisputa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_mododisputa"] : $this->si180_mododisputa);
-
+      $this->si180_emailcontato = ($this->si180_emailcontato == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_emailcontato"] : $this->si180_emailcontato);
 
       $this->si180_qtdlotes = ($this->si180_qtdlotes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_qtdlotes"] : $this->si180_qtdlotes);
     } else {
@@ -354,11 +357,12 @@ class cl_ralic102024
                                       ,si180_mododisputa
                                       ,si180_dtaberturaenvelopes
                                       ,si180_tipoorcamento
+                                      ,si180_emailcontato
                        )
                 values (
                                 $this->si180_sequencial
                                ,$this->si180_tiporegistro
-                               ,'$this->si180_codorgaoresp'
+                               ,$this->si180_codorgaoresp
                                ,'$this->si180_codunidadesubresp'
                                ,'$this->si180_codunidadesubrespestadual'
                                ,$this->si180_exerciciolicitacao
@@ -387,6 +391,7 @@ class cl_ralic102024
                                ,$this->si180_mododisputa
                                ," . ($this->si180_dtaberturaenvelopes == "null" || $this->si180_dtaberturaenvelopes == "" ? "null" : "'" . $this->si180_dtaberturaenvelopes . "'") . "
                                ,$this->si180_tipoorcamento
+                               ,'$this->si180_emailcontato'
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -447,7 +452,7 @@ class cl_ralic102024
       }
     }
     if (trim($this->si180_codorgaoresp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_codorgaoresp"])) {
-      $sql .= $virgula . " si180_codorgaoresp = '$this->si180_codorgaoresp' ";
+      $sql .= $virgula . " si180_codorgaoresp = $this->si180_codorgaoresp ";
       $virgula = ",";
     }
     if (trim($this->si180_codunidadesubresp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_codunidadesubresp"])) {

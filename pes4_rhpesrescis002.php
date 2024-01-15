@@ -29,50 +29,50 @@
 function cadastro_164()
 {
     global $cfpess,
-    $cadferia,
-    $d08_carnes,
-    $datafim,
-    $datainicio,
-    $gerfcom,
-    $gerffer,
-    $gerfsal ,
-    $gerfs13 ,
-    $lotacaoatual,
-    $m_media ,
-    $m_quant,
-    $m_rubr,
-    $m_tipo,
-    $m_valor,
-    $matri2,
-    $matric,
-    $matriz1,
-    $matriz2,
-    $max,
-    $nres,
-    $ns13,
-    $nsal,
-    $nsaldo,
-    $pessoal,
-    $pontofr,
-    $pontofs,
-    $pontofx,
-    $qten ,
-    $r01_aviso,
-    $r59_aviso,
-    $r01_caub,
-    $r01_causa,
-    $r01_mremun,$qmeses,
-    $r01_recis,
-    $r01_taviso,
-    $rescisao,
-    $rubricas,
-    $subpes,
-    $subpes_original,
-    $pagar_13_salario_na_rescisao,
-    $vlrn;
+        $cadferia,
+        $d08_carnes,
+        $datafim,
+        $datainicio,
+        $gerfcom,
+        $gerffer,
+        $gerfsal,
+        $gerfs13,
+        $lotacaoatual,
+        $m_media,
+        $m_quant,
+        $m_rubr,
+        $m_tipo,
+        $m_valor,
+        $matri2,
+        $matric,
+        $matriz1,
+        $matriz2,
+        $max,
+        $nres,
+        $ns13,
+        $nsal,
+        $nsaldo,
+        $pessoal,
+        $pontofr,
+        $pontofs,
+        $pontofx,
+        $qten,
+        $r01_aviso,
+        $r59_aviso,
+        $r01_caub,
+        $r01_causa,
+        $r01_mremun, $qmeses,
+        $r01_recis,
+        $r01_taviso,
+        $rescisao,
+        $rubricas,
+        $subpes,
+        $subpes_original,
+        $pagar_13_salario_na_rescisao,
+        $vlrn;
 
-    global $sequencia,$r01_admiss,$r01_recis, $r01_mrenum;
-    global $rh05_codigoseguranca, $rh05_trct, $rh05_saldofgts,$rh173_codigo;
+    global $sequencia, $r01_admiss, $r01_recis, $r01_mrenum;
+    global $rh05_codigoseguranca, $rh05_trct, $rh05_saldofgts, $rh173_codigo;
 
     $sql = "select rh22_codaec    as r11_codaec
 	rh22_natest    as r11_natest
@@ -110,15 +110,15 @@ function cadastro_164()
 	from rhcfpess,rhcfpessrub";
 
     //db_selectmax("cfpess",$sql);
-    db_selectmax("cfpess", "select * from cfpess where r11_anousu=".db_substr($subpes, 1, 4)." and r11_mesusu=".db_substr($subpes, -2)." and r11_instit = ".db_getsession("DB_instit"));
+    db_selectmax("cfpess", "select * from cfpess where r11_anousu=" . db_substr($subpes, 1, 4) . " and r11_mesusu=" . db_substr($subpes, -2) . " and r11_instit = " . db_getsession("DB_instit"));
 
     $refazer_13_do_mes = true;
     $subpes_original = $subpes;
 
     $m_rubr = array();
-    $m_quant= array();
-    $m_valor= array();
-    $m_media= array();
+    $m_quant = array();
+    $m_valor = array();
+    $m_media = array();
     $m_tipo = array();
     $qten   = array();
     $vlrn   = array();
@@ -127,7 +127,7 @@ function cadastro_164()
     global $Ipessoal;
     $Ipessoal = 0;
 
-    $condicaoaux = " and rh01_regist = " .db_sqlformat($matric);
+    $condicaoaux = " and rh01_regist = " . db_sqlformat($matric);
 
     $sql = "select rh01_regist as r01_regist,
 	rh02_hrsmen as r01_hrsmen,
@@ -142,7 +142,7 @@ function cadastro_164()
 	left join rhregime       on  rhregime.rh30_codreg    = rhpessoalmov.rh02_codreg
 	and  rhregime.rh30_instit    = rhpessoalmov.rh02_instit";
 
-    db_selectmax("pessoal", $sql.bb_condicaosubpes("rh02_").$condicaoaux);
+    db_selectmax("pessoal", $sql . bb_condicaosubpes("rh02_") . $condicaoaux);
 
 
     $lotacaoatual = $pessoal[0]["r01_lotac"];
@@ -152,24 +152,24 @@ function cadastro_164()
     if ($pagar_13_salario_na_rescisao == 'true') {
         if (db_boolean($rescisao[0]["r59_13sal"])) {
             $condicaoaux = " and r35_regist = " . db_sqlformat($matric);
-            if (db_selectmax("gerfs13", "select * from gerfs13 ". bb_condicaosubpesproc("r35_", $r01_recis).$condicaoaux)) {
-                db_delete("gerfs13", bb_condicaosubpesproc("r35_", $r01_recis).$condicaoaux);
+            if (db_selectmax("gerfs13", "select * from gerfs13 " . bb_condicaosubpesproc("r35_", $r01_recis) . $condicaoaux)) {
+                db_delete("gerfs13", bb_condicaosubpesproc("r35_", $r01_recis) . $condicaoaux);
                 $condicaoaux = " and r34_regist = " . db_sqlformat($matric);
-                db_delete("pontof13", bb_condicaosubpesproc("r34_", $r01_recis).$condicaoaux);
+                db_delete("pontof13", bb_condicaosubpesproc("r34_", $r01_recis) . $condicaoaux);
             }
         }
     }
 
     $condicaoaux = " and r19_regist = " . db_sqlformat($matric);
-    db_delete("pontofr", bb_condicaosubpes("r19_").$condicaoaux);
+    db_delete("pontofr", bb_condicaosubpes("r19_") . $condicaoaux);
     $nsal = 0;
     $nres = 0;
     $ns13 = 0;
     $nind = 0;
     $nm13 = 0;
     $ndias = 0;
-    $datres = db_str(db_year($r01_recis), 1, 4, "0")."/".db_str(db_month($r01_recis), 2, 0, '0');
-    $datavi = db_str(db_year($r01_aviso), 1, 4, "0")."/".db_str(db_month($r01_aviso), 2, 0, '0');
+    $datres = db_str(db_year($r01_recis), 1, 4, "0") . "/" . db_str(db_month($r01_recis), 2, 0, '0');
+    $datavi = db_str(db_year($r01_aviso), 1, 4, "0") . "/" . db_str(db_month($r01_aviso), 2, 0, '0');
     global $dias_mes;
     $meses_afastado = calcula_afastamentos();
     //echo "<BR> datres --> $datres datavi --> $datavi subpes --> $subpes r01_regime --> ".$pessoal[0]["r01_regime"];
@@ -183,7 +183,7 @@ function cadastro_164()
         } else {
             //echo "<BR> 3 passou aqui !!";
             $nres = 0;
-            $ndias = db_datedif($r01_recis, db_ctod("01/".db_substr($subpes, 6, 2)."/".db_substr($subpes, 1, 4))) + 1;
+            $ndias = db_datedif($r01_recis, db_ctod("01/" . db_substr($subpes, 6, 2) . "/" . db_substr($subpes, 1, 4))) + 1;
             $nsal = $ndias;
             if ($nsal == 31) {
                 //echo "<BR> 7 passou aqui !!";
@@ -198,7 +198,7 @@ function cadastro_164()
             //echo "<BR> 5 passou aqui !!";
             if ($r01_taviso != 2) { // Diferente de Indenizado
                 //echo "<BR> 6 passou aqui !!";
-                $nsal = db_datedif($r01_recis, db_ctod("01/".db_str(db_month($r01_recis), 2, 0, "0")."/".db_str(db_year($r01_recis), 4)));
+                $nsal = db_datedif($r01_recis, db_ctod("01/" . db_str(db_month($r01_recis), 2, 0, "0") . "/" . db_str(db_year($r01_recis), 4)));
                 if ($nsal == 31) {
                     //echo "<BR> 7 passou aqui !!";
                     $nsal = 30;
@@ -233,14 +233,14 @@ function cadastro_164()
     if (db_month($pessoal[0]["r01_admiss"]) == db_val(db_substr($subpes, 6, 2)) && db_year($pessoal[0]["r01_admiss"]) == db_val(db_substr($subpes, 1, 4))) {
         $nsal -= db_day($pessoal[0]["r01_admiss"]);
         //echo "<BR> 12 nsal --> $nsal";
-        $nsal++ ;
+        $nsal++;
         //echo "<BR> 13 nsal --> $nsal";
     }
     //// dias de salario a serem pagos na rescisao.
     //echo "<BR> 14 nsal --> $nsal";
     //echo "<BR> 14.1 ndias --> $ndias    dias_mes --> $dias_mes";
     global $dias_afastados;
-    $res_afastados = db_query("select 30 - fc_dias_trabalhados(" . db_sqlformat($matric).",".db_str(db_year($r01_recis), 4).",".db_str(db_month($r01_recis), 2, 0, "0").",false,".db_getsession('DB_instit').") as dias_afastados");
+    $res_afastados = db_query("select 30 - fc_dias_trabalhados(" . db_sqlformat($matric) . "," . db_str(db_year($r01_recis), 4) . "," . db_str(db_month($r01_recis), 2, 0, "0") . ",false," . db_getsession('DB_instit') . ") as dias_afastados");
     db_fieldsmemory($res_afastados, 0, 1);
     //echo "<BR> 14 dias_afastados --> $dias_afastados";
     if ($dias_afastados > 0) {
@@ -274,13 +274,15 @@ function cadastro_164()
         salres($matric, $nsal);
     }
 
-    $condicaoaux = " and r10_regist = " .db_sqlformat($matric);
-    db_selectmax("pontofs", "select * from pontofs " .bb_condicaosubpes("r10_").$condicaoaux);
+    $condicaoaux = " and r10_regist = " . db_sqlformat($matric);
+    db_selectmax("pontofs", "select * from pontofs " . bb_condicaosubpes("r10_") . $condicaoaux);
 
-    for ($Ipontofs=0;$Ipontofs<count($pontofs);$Ipontofs++) {
-        $condicaoaux = " where rh27_instit = ". db_getsession("DB_instit") ." and rh27_rubric = " .db_sqlformat($pontofs[$Ipontofs]["r10_rubric"]);
-        if (db_selectmax("rubricas", "select * from rhrubricas ".$condicaoaux)
-                        && $rubricas[0]["rh27_tipo"] == 2) {
+    for ($Ipontofs = 0; $Ipontofs < count($pontofs); $Ipontofs++) {
+        $condicaoaux = " where rh27_instit = " . db_getsession("DB_instit") . " and rh27_rubric = " . db_sqlformat($pontofs[$Ipontofs]["r10_rubric"]);
+        if (
+            db_selectmax("rubricas", "select * from rhrubricas " . $condicaoaux)
+            && $rubricas[0]["rh27_tipo"] == 2
+        ) {
             $matriz2[1] = $pontofs[$Ipontofs]["r10_regist"];
             $matriz2[2] = $pontofs[$Ipontofs]["r10_rubric"];
             $matriz2[5] = $lotacaoatual;
@@ -289,8 +291,8 @@ function cadastro_164()
             $matriz2[8] = db_val(db_substr($subpes, -2));
             $matriz2[9] = db_getsession("DB_instit");
 
-            $condicaoaux  = " and r19_regist = " .db_sqlformat($pessoal[0]["r01_regist"]);
-            $condicaoaux .= " and r19_rubric = " .db_sqlformat($pontofs[$Ipontofs]["r10_rubric"]);
+            $condicaoaux  = " and r19_regist = " . db_sqlformat($pessoal[0]["r01_regist"]);
+            $condicaoaux .= " and r19_rubric = " . db_sqlformat($pontofs[$Ipontofs]["r10_rubric"]);
             global $pontofr;
 
 
@@ -303,20 +305,20 @@ function cadastro_164()
             $nQuantidade = $pontofs[$Ipontofs]["r10_quant"];
 
             if (!!db_boolean($rubricas[0]["rh27_calcp"])) {
-                $nValor      =  round(($nValor/30) * $nsal);
+                $nValor      =  round(($nValor / 30) * $nsal);
                 echo "Valor Modificado: {$nValor}<br>";
             }
 
             if (!!db_boolean($rubricas[0]["rh27_propq"])) {
-                $nQuantidade =  round(($nQuantidade/30) * $nsal);
+                $nQuantidade =  round(($nQuantidade / 30) * $nsal);
                 echo "Quantidade Modificado: {$nQuantidade}<br>";
             }
 
             $matriz2[3] = $nValor;
             $matriz2[4] = $nQuantidade;
 
-            if (db_selectmax("pontofr", "select * from pontofr ". bb_condicaosubpes("r19_").$condicaoaux)) {
-                db_update("pontofr", $matriz1, $matriz2, bb_condicaosubpes("r19_").$condicaoaux);
+            if (db_selectmax("pontofr", "select * from pontofr " . bb_condicaosubpes("r19_") . $condicaoaux)) {
+                db_update("pontofr", $matriz1, $matriz2, bb_condicaosubpes("r19_") . $condicaoaux);
             } else {
                 db_insert("pontofr", $matriz1, $matriz2);
             }
@@ -326,18 +328,18 @@ function cadastro_164()
     if ($nres != 0) {
 
         // vai gerar o ponto de rescisao proporcional , baseado no ponto fixo
-        $condicaoaux = " and r90_regist = ".db_sqlformat($matric);
+        $condicaoaux = " and r90_regist = " . db_sqlformat($matric);
         $condicaoaux .= " and rh27_calc3 = 't'";
         global $pontofx;
-        db_selectmax("pontofx", "select pontofx.* from pontofx join rhrubricas on r90_rubric = rh27_rubric ".bb_condicaosubpes("r90_").$condicaoaux);
+        db_selectmax("pontofx", "select pontofx.* from pontofx join rhrubricas on r90_rubric = rh27_rubric " . bb_condicaosubpes("r90_") . $condicaoaux);
         $diasAviso = getQuantidadeDiasAviso($r01_recis, $pessoal[0]["r01_admiss"]);
-        for ($Ipontofx=0;$Ipontofx<count($pontofx);$Ipontofx++) {
-            $condicaoaux = " where rh27_instit = ". db_getsession("DB_instit") ." and rh27_rubric = ".db_sqlformat($pontofx[$Ipontofx]["r90_rubric"]);
+        for ($Ipontofx = 0; $Ipontofx < count($pontofx); $Ipontofx++) {
+            $condicaoaux = " where rh27_instit = " . db_getsession("DB_instit") . " and rh27_rubric = " . db_sqlformat($pontofx[$Ipontofx]["r90_rubric"]);
 
-            if (db_selectmax("rubricas", "select * from rhrubricas ".$condicaoaux)) {
+            if (db_selectmax("rubricas", "select * from rhrubricas " . $condicaoaux)) {
                 $matriz2[1] = $pontofx[$Ipontofx]["r90_regist"];
-                $matriz2[2] = db_str(db_val($pontofx[$Ipontofx]["r90_rubric"])+6000, 4);
-                $matriz2[3] = round((db_empty($pontofx[$Ipontofx]["r90_valor"])?0:($pontofx[$Ipontofx]["r90_valor"]/30)*$nres), 2);
+                $matriz2[2] = db_str(db_val($pontofx[$Ipontofx]["r90_rubric"]) + 6000, 4);
+                $matriz2[3] = round((db_empty($pontofx[$Ipontofx]["r90_valor"]) ? 0 : ($pontofx[$Ipontofx]["r90_valor"] / 30) * $nres), 2);
                 $matriz2[4] = $diasAviso;
                 $matriz2[5] = $lotacaoatual;
                 $matriz2[6] = "R";
@@ -373,10 +375,10 @@ function cadastro_164()
         $datarescisao = date("Y-m-d", db_mktime($r01_recis));
         $tipoferias = " ";
         $dias_diferenca_ferias = 0;
-        $condicaoaux =  " and r30_regist = ".db_sqlformat($matric);
+        $condicaoaux =  " and r30_regist = " . db_sqlformat($matric);
         $condicaoaux .= " order by r30_perai desc";
 
-        if (!db_selectmax("cadferia", "select * from cadferia ".bb_condicaosubpes("r30_").$condicaoaux)) {
+        if (!db_selectmax("cadferia", "select * from cadferia " . bb_condicaosubpes("r30_") . $condicaoaux)) {
             $datainicio = $pessoal[0]["r01_admiss"];
         } else {
             if ($cadferia[0]["r30_ndias"] > ($cadferia[0]["r30_dias1"] + $cadferia[0]["r30_dias2"] + $cadferia[0]["r30_abono"])) {
@@ -394,9 +396,9 @@ function cadastro_164()
             } else {
                 $dataconsiderar = db_substr(db_dtoc($datainicio), 1, 6);
             }
-            $datafim = date("Y-m-d", db_mktime(db_ctod($dataconsiderar.db_str((db_year($datainicio)+1), 4, 0, "0"))) - 86400);
+            $datafim = date("Y-m-d", db_mktime(db_ctod($dataconsiderar . db_str((db_year($datainicio) + 1), 4, 0, "0"))) - 86400);
             if (db_mktime($datafim) > db_mktime($datarescisao)) {
-                $datafim = $datarescisao       ;
+                $datafim = $datarescisao;
             }
         } else {
             $datafim = $cadferia[0]["r30_peraf"];
@@ -411,7 +413,7 @@ function cadastro_164()
                 if (bcdiv(db_datedif($datafim, $datainicio), 30, 0) == 12) {
                     $tipoferias = "V";
 
-                //echo "<BR> tipoferias 1.1 --> $tipoferias";
+                    //echo "<BR> tipoferias 1.1 --> $tipoferias";
                 } else {
                     $tipoferias = "P";
                     //echo "<BR> tipoferias 1.2 --> $tipoferias";
@@ -435,7 +437,7 @@ function cadastro_164()
                 ferias_para_rescisao($datainicio, $datafim, $tipoferias);
             }
             $datainicio = date("Y-m-d", (db_mktime($datafim) + 86400));
-            $datafim = date("Y-m-d", db_mktime(db_ctod(db_substr(db_dtoc($datainicio), 1, 6).db_str((db_year($datainicio)+1), 4, 0, "0"))) - 86400);
+            $datafim = date("Y-m-d", db_mktime(db_ctod(db_substr(db_dtoc($datainicio), 1, 6) . db_str((db_year($datainicio) + 1), 4, 0, "0"))) - 86400);
             //echo "<BR> datainicio   1.2 --> $datainicio";
             //echo "<BR> datafim      1.2 --> $datafim";
             if (db_mktime($datafim) > db_mktime($datarescisao)) {
@@ -461,19 +463,19 @@ function cadastro_164()
 
     $subpes = $subpes_original;
 
-    $condicaoaux = " and r14_regist = ".db_sqlformat($matric);
-    db_delete("gerfsal", bb_condicaosubpes("r14_").$condicaoaux);
+    $condicaoaux = " and r14_regist = " . db_sqlformat($matric);
+    db_delete("gerfsal", bb_condicaosubpes("r14_") . $condicaoaux);
 
-    $condicaoaux  = " and r60_numcgm = ".db_sqlformat($pessoal[0]["r01_numcgm"]);
-    $condicaoaux .= " and r60_tbprev = ".db_sqlformat($pessoal[0]["r01_tbprev"]);
-    db_delete("previden", bb_condicaosubpes("r60_").$condicaoaux);
+    $condicaoaux  = " and r60_numcgm = " . db_sqlformat($pessoal[0]["r01_numcgm"]);
+    $condicaoaux .= " and r60_tbprev = " . db_sqlformat($pessoal[0]["r01_tbprev"]);
+    db_delete("previden", bb_condicaosubpes("r60_") . $condicaoaux);
 
-    $condicaoaux  = " and r61_numcgm = ".db_sqlformat($pessoal[0]["r01_numcgm"]);
-    db_delete("ajusteir", bb_condicaosubpes("r61_").$condicaoaux);
+    $condicaoaux  = " and r61_numcgm = " . db_sqlformat($pessoal[0]["r01_numcgm"]);
+    db_delete("ajusteir", bb_condicaosubpes("r61_") . $condicaoaux);
 
     global $pensao;
     $condicaoaux  = " and  rh05_recis is null ";
-    $condicaoaux .= " and r52_regist = ".db_sqlformat($matric);
+    $condicaoaux .= " and r52_regist = " . db_sqlformat($matric);
     $condicaoaux .= " order by r52_regist ";
     $sql = "select distinct(r52_regist+r52_numcgm),
 	r52_regist,
@@ -483,13 +485,13 @@ function cadastro_164()
 	and pensao.r52_mesusu         = rhpessoalmov.rh02_mesusu
 	and pensao.r52_regist         = rhpessoalmov.rh02_regist
 	left join rhpesrescisao on rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
-	".bb_condicaosubpes("r52_").$condicaoaux ;
+	" . bb_condicaosubpes("r52_") . $condicaoaux;
     db_selectmax("pensao", $sql);
-    for ($Ipensao=0; $Ipensao<count($pensao); $Ipensao++) {
+    for ($Ipensao = 0; $Ipensao < count($pensao); $Ipensao++) {
         $matriz1 = array();
         $matriz2 = array();
-        $condicaoaux  = " and r52_regist = ".db_sqlformat($pensao[$Ipensao]["r52_regist"]);
-        $condicaoaux .= " and r52_numcgm = ".db_sqlformat($pensao[$Ipensao]["r52_numcgm"]);
+        $condicaoaux  = " and r52_regist = " . db_sqlformat($pensao[$Ipensao]["r52_regist"]);
+        $condicaoaux .= " and r52_numcgm = " . db_sqlformat($pensao[$Ipensao]["r52_numcgm"]);
 
         $matriz1[1] = "r52_valor";
         $matriz1[2] = "r52_valcom";
@@ -499,28 +501,28 @@ function cadastro_164()
         $matriz2[2] = 0;
         $matriz2[3] = 0;
         $matriz2[4] = 0;
-        $retornar = db_update("pensao", $matriz1, $matriz2, bb_condicaosubpes("r52_").$condicaoaux);
+        $retornar = db_update("pensao", $matriz1, $matriz2, bb_condicaosubpes("r52_") . $condicaoaux);
     }
 
     $matriz1 = array();
     $matriz2 = array();
-    $matriz1[1] = "rh05_seqpes" ;
-    $matriz1[2] = "rh05_recis"  ;
-    $matriz1[3] = "rh05_causa"  ;
-    $matriz1[4] = "rh05_caub"  ;
-    $matriz1[5] = "rh05_aviso"  ;
-    $matriz1[6] = "rh05_taviso" ;
-    $matriz1[7] = "rh05_mremun" ;
-    $matriz1[8] = "rh05_codigoseguranca" ;
-    $matriz1[9] = "rh05_trct" ;
-    $matriz1[10] = "rh05_saldofgts" ;
-    $matriz1[11] = "rh05_motivo" ;
-    $matriz2[1] = $sequencia ;
+    $matriz1[1] = "rh05_seqpes";
+    $matriz1[2] = "rh05_recis";
+    $matriz1[3] = "rh05_causa";
+    $matriz1[4] = "rh05_caub";
+    $matriz1[5] = "rh05_aviso";
+    $matriz1[6] = "rh05_taviso";
+    $matriz1[7] = "rh05_mremun";
+    $matriz1[8] = "rh05_codigoseguranca";
+    $matriz1[9] = "rh05_trct";
+    $matriz1[10] = "rh05_saldofgts";
+    $matriz1[11] = "rh05_motivo";
+    $matriz2[1] = $sequencia;
     $matriz2[2] = db_nulldata($r01_recis);
-    $matriz2[3] = $r01_causa  ;
-    $matriz2[4] = $r01_caub  ;
+    $matriz2[3] = $r01_causa;
+    $matriz2[4] = $r01_caub;
     $matriz2[5] = db_nulldata($r01_aviso);
-    $matriz2[6] = $r01_taviso ;
+    $matriz2[6] = $r01_taviso;
     $matriz2[7] = $r01_mremun;
     $matriz2[8] = $rh05_codigoseguranca;
     $matriz2[9] = $rh05_trct;
@@ -583,16 +585,16 @@ function salres($matric, $nsal)
     global $matriz1, $matriz2, $rubricas, $pontofx, $lotacaoatual, $subpes;
 
     $retornar = true;
-    $condicaoaux = " and r90_regist = ".db_sqlformat($matric);
+    $condicaoaux = " and r90_regist = " . db_sqlformat($matric);
 
-    db_selectmax("pontofx", "select * from pontofx ".bb_condicaosubpes("r90_").$condicaoaux);
+    db_selectmax("pontofx", "select * from pontofx " . bb_condicaosubpes("r90_") . $condicaoaux);
 
-    for ($Ipontofx=0;$Ipontofx<count($pontofx);$Ipontofx++) {
-        $condicaoaux = " where rh27_instit = ". db_getsession("DB_instit") ." and rh27_rubric = ".db_sqlformat($pontofx[$Ipontofx]["r90_rubric"]);
+    for ($Ipontofx = 0; $Ipontofx < count($pontofx); $Ipontofx++) {
+        $condicaoaux = " where rh27_instit = " . db_getsession("DB_instit") . " and rh27_rubric = " . db_sqlformat($pontofx[$Ipontofx]["r90_rubric"]);
 
-        if (db_selectmax("rubricas", "select * from rhrubricas ".$condicaoaux)) {
-            $valor  = round((!db_boolean($rubricas[0]["rh27_calcp"])?$pontofx[$Ipontofx]["r90_valor"]:($pontofx[$Ipontofx]["r90_valor"]/30)*$nsal), 2);
-            $quanti = round((!db_boolean($rubricas[0]["rh27_propq"])?$pontofx[$Ipontofx]["r90_quant"]:($pontofx[$Ipontofx]["r90_quant"]/30)*$nsal), 2);
+        if (db_selectmax("rubricas", "select * from rhrubricas " . $condicaoaux)) {
+            $valor  = round((!db_boolean($rubricas[0]["rh27_calcp"]) ? $pontofx[$Ipontofx]["r90_valor"] : ($pontofx[$Ipontofx]["r90_valor"] / 30) * $nsal), 2);
+            $quanti = round((!db_boolean($rubricas[0]["rh27_propq"]) ? $pontofx[$Ipontofx]["r90_quant"] : ($pontofx[$Ipontofx]["r90_quant"] / 30) * $nsal), 2);
             $matriz2[1] = $pontofx[$Ipontofx]["r90_regist"];
             $matriz2[2] = $pontofx[$Ipontofx]["r90_rubric"];
             $matriz2[3] = $valor;
@@ -615,7 +617,7 @@ function traz_aviso()
     global $r01_recis, $r01_aviso;
 
     $r01_aviso = $r01_recis - 30;
-    return true ;
+    return true;
 }
 
 
@@ -624,8 +626,8 @@ function traz_aviso()
 // ---------------- inicio do programa
 
 
-global $cfpess,$subpes,$d08_carnes,$db_debug,$matric,$sequencia,$r01_admiss,$r01_recis, $r59_aviso ;
-global $r01_causa, $r01_taviso, $r01_mremun, $r01_aviso,$pagar_13_salario_na_rescisao;
+global $cfpess, $subpes, $d08_carnes, $db_debug, $matric, $sequencia, $r01_admiss, $r01_recis, $r59_aviso;
+global $r01_causa, $r01_taviso, $r01_mremun, $r01_aviso, $pagar_13_salario_na_rescisao;
 
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
@@ -643,19 +645,19 @@ db_inicio_transacao();
 
 if (!isset($campomatriculas)) {
     $matric = $rh01_regist;
-    $r01_admiss = $rh01_admiss_ano."-".$rh01_admiss_mes."-".$rh01_admiss_dia;
+    $r01_admiss = $rh01_admiss_ano . "-" . $rh01_admiss_mes . "-" . $rh01_admiss_dia;
 } else {
     $matric = $r30_regist;
 }
 $sequencia = $rh02_seqpes;
-$r01_recis  = $rh05_recis_ano."-".$rh05_recis_mes."-".$rh05_recis_dia;
-$r01_aviso  = $rh05_aviso_ano."-".$rh05_aviso_mes."-".$rh05_aviso_dia;
+$r01_recis  = $rh05_recis_ano . "-" . $rh05_recis_mes . "-" . $rh05_recis_dia;
+$r01_aviso  = $rh05_aviso_ano . "-" . $rh05_aviso_mes . "-" . $rh05_aviso_dia;
 $r01_causa  = $rh05_causa;
 $r01_caub   = $rh05_caub;
 $r01_taviso = $rh05_taviso;
 $r01_mremun = $rh05_mremun;
 global $db_config;
-db_selectmax("db_config", "select lower(trim(munic)) as d08_carnes , cgc from db_config where codigo = ".db_getsession("DB_instit"));
+db_selectmax("db_config", "select lower(trim(munic)) as d08_carnes , cgc from db_config where codigo = " . db_getsession("DB_instit"));
 
 if (trim($db_config[0]["cgc"]) == "90940172000138") {
     $d08_carnes = "daeb";
@@ -666,21 +668,21 @@ if (trim($db_config[0]["cgc"]) == "90940172000138") {
 
 $db_erro = false;
 
-db_selectmax("rhregime", "select * from rhregime where rh30_codreg = ".$rh02_codreg ."
-		and rh30_instit = ".db_getsession("DB_instit"));
+db_selectmax("rhregime", "select * from rhregime where rh30_codreg = " . $rh02_codreg . "
+		and rh30_instit = " . db_getsession("DB_instit"));
 
-$subpes = db_anofolha().'/'.db_mesfolha();
+$subpes = db_anofolha() . '/' . db_mesfolha();
 
-$admissao_mais_um_ano = db_ctod(substr("#". db_dtoc($r01_admiss), 1, 6).db_str(db_year($r01_admiss)+1, 4));
+$admissao_mais_um_ano = db_ctod(substr("#" . db_dtoc($r01_admiss), 1, 6) . db_str(db_year($r01_admiss) + 1, 4));
 
-$menos_um_ano = (db_mktime($r01_recis) < db_mktime($admissao_mais_um_ano)? "S": "N");
+$menos_um_ano = (db_mktime($r01_recis) < db_mktime($admissao_mais_um_ano) ? "S" : "N");
 
-$condicao = " and r59_regime = ".$rhregime[0]["rh30_regime"];
-$condicao.= " and r59_causa  = ".$rh05_causa;
-$condicao.= " and trim(r59_caub)  = '".trim($rh05_caub)."'";
-$condicao.= " and r59_menos1  = '".$menos_um_ano."'";
+$condicao = " and r59_regime = " . $rhregime[0]["rh30_regime"];
+$condicao .= " and r59_causa  = " . $rh05_causa;
+$condicao .= " and trim(r59_caub)  = '" . trim($rh05_caub) . "'";
+$condicao .= " and r59_menos1  = '" . $menos_um_ano . "'";
 global $rescisao;
-db_selectmax("rescisao", "select * from rescisao ".bb_condicaosubpes("r59_").$condicao);
+db_selectmax("rescisao", "select * from rescisao " . bb_condicaosubpes("r59_") . $condicao);
 
 cadastro_164();
 
@@ -695,7 +697,7 @@ if (!isset($campomatriculas)) {
     $qry .= "&selecao=$selecao&tipo=$tipo&rh02_codreg=$rh02_codreg&rh02_seqpes=$rh02_seqpes&rh01_admiss=$rh01_admiss";
     $qry .= "&caub=$caub&causa=$causa&rescisao=$rescisao&taviso=$taviso&aviso=$aviso&remun=$remun";
     $qry .= "&descr=$descr&descr1=$descr1&rescisao=$rescisao&taviso=$taviso&aviso=$aviso&remun=$remun";
-    $qry .= "&recis_ano=$recis_ano&recis_mes=$recis_mes&recis_dia=$recis_dia&aviso_ano=$aviso_ano&aviso_mes=$aviso_mes&aviso_dia=$aviso_dia";
+    $qry .= "&recis_ano=$recis_ano&recis_mes=$recis_mes&recis_dia=$recis_dia&aviso_ano=$aviso_ano&aviso_mes=$aviso_mes&aviso_dia=$aviso_dia&rh173_codigo=$rh173_codigo&rh173_descricao=$rh173_descricao";
 
-    db_redireciona("pes4_rhpesrescis004.php".$qry);
+    db_redireciona("pes4_rhpesrescis004.php" . $qry);
 }

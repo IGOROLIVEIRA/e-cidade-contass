@@ -1110,52 +1110,180 @@ class cl_empnota {
      * @param $order
      * @return string
      */
-    public function sqlRelRetencoesPJ($where, $group, $order): string
+    public function sqlRelRetencoesPJ($where, $group, $order, $fields = null): string
     {
-        $sSqlNota = "SELECT DISTINCT e50_codord,
-                                    e60_codemp,
-                                    cgm.z01_nome,
-                                    cgm.z01_cgccpf,
-                                    e60_numcgm,
-                                    e69_numero,
-                                    e69_dtnota,
-                                    e50_data,
-                                    e70_vlrliq,
-                                    e60_anousu,
-                                    CASE
-                                        WHEN retencaotiporec.e21_retencaotipocalc IN (3, 4, 7) THEN (coalesce(e23_valorretencao, 0))
-                                        ELSE 0
-                                    END AS valor_inss,
-                                    CASE
-                                        WHEN retencaotiporec.e21_retencaotipocalc IN (1, 2) THEN (coalesce(e23_valorretencao, 0))
-                                        ELSE 0
-                                    END AS valor_irrf,
-                                    CASE
-                                        WHEN retencaotiporec.e21_retencaotipocalc IN (5, 6) THEN (coalesce(e23_valorretencao, 0))
-                                        ELSE 0
-                                    END AS outrasretencoes,
-                                    e69_nfserie,
-                                    e21_descricao
-                    FROM empnota
-                    INNER JOIN empempenho ON e69_numemp = e60_numemp
-                    INNER JOIN orcdotacao ON (o58_coddot, o58_anousu) = (e60_coddot, e60_anousu)
-                    INNER JOIN orctiporec ON o15_codigo = o58_codigo
-                    INNER JOIN cgm AS cgm ON e60_numcgm = cgm.z01_numcgm
-                    INNER JOIN empnotaele ON e69_codnota = e70_codnota
-                    INNER JOIN orcelemento ON empnotaele.e70_codele = orcelemento.o56_codele
-                    LEFT JOIN pagordemnota ON e71_codnota = e69_codnota AND e71_anulado IS FALSE
-                    LEFT JOIN pagordem ON e71_codord = e50_codord
-                    LEFT JOIN pagordemele ON e53_codord = e50_codord
-                    LEFT JOIN retencaopagordem ON pagordem.e50_codord = retencaopagordem.e20_pagordem
-                    LEFT JOIN retencaoreceitas ON retencaoreceitas.e23_retencaopagordem = retencaopagordem.e20_sequencial
-                    LEFT JOIN retencaotiporec ON retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec";
+        if ($fields == null) {
+            $fields = "DISTINCT e50_codord,
+                                e60_codemp,
+                                cgm.z01_nome,
+                                cgm.z01_cgccpf,
+                                e60_numcgm,
+                                e69_numero,
+                                e69_dtnota,
+                                e50_data,
+                                e70_vlrliq,
+                                e60_anousu,
+                                CASE
+                                    WHEN retencaotiporec.e21_retencaotipocalc IN (3, 4, 7) THEN (coalesce(e23_valorretencao, 0))
+                                    ELSE 0
+                                END AS valor_inss,
+                                CASE
+                                    WHEN retencaotiporec.e21_retencaotipocalc IN (1, 2) THEN (coalesce(e23_valorretencao, 0))
+                                    ELSE 0
+                                END AS valor_irrf,
+                                CASE
+                                    WHEN retencaotiporec.e21_retencaotipocalc IN (5, 6) THEN (coalesce(e23_valorretencao, 0))
+                                    ELSE 0
+                                END AS outrasretencoes,
+                                e69_nfserie,
+                                e21_descricao";
+        }
+
+        $sSqlNota = "SELECT {$fields}
+                     FROM empnota
+                     INNER JOIN empempenho ON e69_numemp = e60_numemp
+                     LEFT JOIN empefdreinf ON efd60_numemp = e60_numemp
+                     INNER JOIN orcdotacao ON (o58_coddot, o58_anousu) = (e60_coddot, e60_anousu)
+                     INNER JOIN orctiporec ON o15_codigo = o58_codigo
+                     INNER JOIN cgm AS cgm ON e60_numcgm = cgm.z01_numcgm
+                     INNER JOIN empnotaele ON e69_codnota = e70_codnota
+                     INNER JOIN orcelemento ON empnotaele.e70_codele = orcelemento.o56_codele
+                     LEFT JOIN pagordemnota ON e71_codnota = e69_codnota AND e71_anulado IS FALSE
+                     LEFT JOIN pagordem ON e71_codord = e50_codord
+                     LEFT JOIN pagordemele ON e53_codord = e50_codord
+                     INNER JOIN retencaopagordem ON pagordem.e50_codord = retencaopagordem.e20_pagordem
+                     INNER JOIN retencaoreceitas ON retencaoreceitas.e23_retencaopagordem = retencaopagordem.e20_sequencial
+                     INNER JOIN retencaotiporec ON retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec";
 
         $sSqlNota .= $where;
         $sSqlNota .= $group;
         $sSqlNota .= $order;
-
+       
         return $sSqlNota;
     }
+
+    public function sqlRelRetencoesReinf($where, $group, $order, $fields = null): string
+    {
+        if ($fields == null) {
+            $fields = " DISTINCT cgm.z01_nome,
+                        cgm.z01_cgccpf,
+                        e60_anousu,
+                        CASE
+                            WHEN retencaotiporec.e21_retencaotipocalc IN (10) THEN round(coalesce(e70_valor, 0), 2)
+                        ELSE 0
+                        END AS e70_valor,
+                        CASE
+                            WHEN retencaotiporec.e21_retencaotipocalc IN (10) THEN round(coalesce(e23_valorretencao, 0), 2)
+                        ELSE 0
+                        END AS valor_cp,
+                        CASE
+                            WHEN retencaotiporec.e21_retencaotipocalc IN (11) THEN round(coalesce(e23_valorretencao, 0), 2)
+                            ELSE 0
+                        END AS valor_gilrat,
+                        CASE
+                            WHEN retencaotiporec.e21_retencaotipocalc IN (12) THEN round(coalesce(e23_valorretencao, 0), 2)
+                            ELSE 0
+                        END AS valor_senar";
+        }
+
+        $sSqlNota = "WITH retencoesnovas AS
+                  (  SELECT {$fields}
+                     FROM empnota
+                     INNER JOIN empempenho ON e69_numemp = e60_numemp
+                     LEFT JOIN empefdreinf ON efd60_numemp = e60_numemp
+                     INNER JOIN orcdotacao ON (o58_coddot, o58_anousu) = (e60_coddot, e60_anousu)
+                     INNER JOIN orctiporec ON o15_codigo = o58_codigo
+                     INNER JOIN cgm AS cgm ON e60_numcgm = cgm.z01_numcgm
+                     INNER JOIN empnotaele ON e69_codnota = e70_codnota
+                     INNER JOIN orcelemento ON empnotaele.e70_codele = orcelemento.o56_codele
+                     LEFT JOIN pagordemnota ON e71_codnota = e69_codnota AND e71_anulado IS FALSE
+                     LEFT JOIN pagordem ON e71_codord = e50_codord
+                     LEFT JOIN pagordemele ON e53_codord = e50_codord
+                     INNER JOIN retencaopagordem ON pagordem.e50_codord = retencaopagordem.e20_pagordem
+                     INNER JOIN retencaoreceitas ON retencaoreceitas.e23_retencaopagordem = retencaopagordem.e20_sequencial
+                     INNER JOIN retencaotiporec ON retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec";
+
+        $sSqlNota .= $where;
+        $sSqlNota .= $group;
+        $sSqlNota .= ") SELECT z01_nome,
+                      z01_cgccpf,
+                      e60_anousu,
+                      sum(e70_valor) AS e70_valor ,
+                      sum(valor_cp) AS valor_cp,
+                      sum(valor_gilrat) AS valor_gilrat,
+                      sum(valor_senar) AS valor_senar
+              FROM retencoesnovas
+              GROUP BY 1, 2, 3";
+      
+        return $sSqlNota;
+    }
+    public function sqlRelRetencoesReinfNotas($where, $group, $order, $fields = null): string
+    {
+        if ($fields == null) {
+            $fields = " distinct e50_codord ,
+                        cgm.z01_nome,
+                        cgm.z01_cgccpf,
+                        efd60_prodoptacp,
+                        efd60_aquisicaoprodrural,
+                        e60_numemp,
+                        e60_anousu,
+                        e60_codemp,
+                        e69_numero,
+                        e69_nfserie,
+                        e69_dtnota,
+                        case
+                            when retencaotiporec.e21_retencaotipocalc IN (10) THEN round(coalesce(e70_valor, 0), 2)
+                            else 0 end as e70_valor,
+                        case
+                            when retencaotiporec.e21_retencaotipocalc in (10) then round(coalesce(e23_valorretencao,0),2)
+                            else 0 end as valor_cp,
+                        case
+                            when retencaotiporec.e21_retencaotipocalc in (11) then round(coalesce(e23_valorretencao,0),2)
+                            else 0 end as valor_gilrat,
+                        case
+                            when retencaotiporec.e21_retencaotipocalc in (12) then round(coalesce(e23_valorretencao,0),2)
+                            else 0 end as valor_senar";
+        }
+        $sSqlNota = "WITH retencoesnovas AS
+                  (  SELECT {$fields}
+                     FROM empnota
+                     INNER JOIN empempenho ON e69_numemp = e60_numemp
+                     LEFT JOIN empefdreinf ON efd60_numemp = e60_numemp
+                     INNER JOIN orcdotacao ON (o58_coddot, o58_anousu) = (e60_coddot, e60_anousu)
+                     INNER JOIN orctiporec ON o15_codigo = o58_codigo
+                     INNER JOIN cgm AS cgm ON e60_numcgm = cgm.z01_numcgm
+                     INNER JOIN empnotaele ON e69_codnota = e70_codnota
+                     INNER JOIN orcelemento ON empnotaele.e70_codele = orcelemento.o56_codele
+                     LEFT JOIN pagordemnota ON e71_codnota = e69_codnota AND e71_anulado IS FALSE
+                     LEFT JOIN pagordem ON e71_codord = e50_codord
+                     LEFT JOIN pagordemele ON e53_codord = e50_codord
+                     INNER JOIN retencaopagordem ON pagordem.e50_codord = retencaopagordem.e20_pagordem
+                     INNER JOIN retencaoreceitas ON retencaoreceitas.e23_retencaopagordem = retencaopagordem.e20_sequencial
+                     INNER JOIN retencaotiporec ON retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec";
+
+        $sSqlNota .= $where;
+        $sSqlNota .= $group;
+        $sSqlNota .= ") SELECT e50_codord,
+                      z01_nome,
+                      z01_cgccpf,
+                      efd60_prodoptacp,
+                      efd60_aquisicaoprodrural,
+                      e60_numemp,
+                      e60_anousu,
+                      e60_codemp,
+                      e69_numero,
+                      e69_nfserie,
+                      e69_dtnota,
+                      sum(e70_valor) AS e70_valor ,
+                      sum(valor_cp) AS valor_cp,
+                      sum(valor_gilrat) AS valor_gilrat,
+                      sum(valor_senar) AS valor_senar
+              FROM retencoesnovas
+              GROUP BY 1, 2, 3, 4, 5, 6, 7,8,9,10,11 ";
+     
+        return $sSqlNota;
+    }
+  
   
   
 }

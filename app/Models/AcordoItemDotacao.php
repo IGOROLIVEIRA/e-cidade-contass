@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Traits\LegacyAccount;
-use Illuminate\Database\Capsule\Manager as DB;
 
 class AcordoItemDotacao extends LegacyModel
 {
@@ -30,6 +29,8 @@ class AcordoItemDotacao extends LegacyModel
      * @var string
      */
     protected $primaryKey = 'ac22_sequencial';
+
+    protected string $sequenceName = 'acordoitemdotacao_ac22_sequencial_seq';
 
     protected $fillable = [
         'ac22_sequencial',
@@ -63,11 +64,5 @@ class AcordoItemDotacao extends LegacyModel
     public function scopeProcuraPorQuantidade($query, $quantidade)
     {
         return $query->where('ac22_quantidade', $quantidade);
-    }
-
-    public function getProximoSequencial() {
-        $proximo = DB::select("select nextval('acordoitemdotacao_ac22_sequencial_seq')");
-
-        return intval($proximo['0']->nextval);
     }
 }

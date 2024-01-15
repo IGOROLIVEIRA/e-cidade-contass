@@ -191,14 +191,13 @@ $aDataEmpenho = explode("-", $e60_emiss);
                     </td>
                     <td>
                         <?
-                        $result = $clempempaut->sql_record($clempempaut->sql_query(null,"e61_autori","","e61_numemp = $e60_numemp"));
+                        $result = $clempempaut->sql_record($clempempaut->sql_query(null,"e61_autori,e54_anousu","","e61_numemp = $e60_numemp"));
                         if($clempempaut->numrows > 0){
                             $oResult = db_utils::fieldsMemory($result,0);
                             $e54_autori = $oResult->e61_autori;
-                            $anoUsu = db_getsession("DB_anousu");
+                            $anoUsu =  $oResult->e54_anousu;
                             $sWhere = "e56_autori = ".$e54_autori." and e56_anousu = ".$anoUsu;
                             $result = $clempautidot->sql_record($clempautidot->sql_query_dotacao(null,"e56_coddot",null,$sWhere));
-
                             if($clempautidot->numrows > 0){
                                 $oResult = db_utils::fieldsMemory($result,0);
                                 $result = $clorcdotacao->sql_record($clorcdotacao->sql_query( $anoUsu,$oResult->e56_coddot,"o56_elemento,o56_codele"));

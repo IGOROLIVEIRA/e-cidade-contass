@@ -77,7 +77,7 @@ class cl_veiculos
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  ve01_codigo = int4 = Código do Veiculo
-                 ve01_placa = varchar(7) = Placa
+                 ve01_placa = varchar(8) = Placa
                  ve01_veiccadtipo = int4 = Tipo
                  ve01_veiccadmarca = int4 = Marca
                  ve01_veiccadmodelo = int4 = Modelo

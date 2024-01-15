@@ -44,7 +44,7 @@ class GerarRALIC extends GerarAM
 
         $aRALIC10 = pg_fetch_array($rsRALIC10, $iCont);
         $aCSVRALIC10['si180_tiporegistro']               = $this->padLeftZero($aRALIC10['si180_tiporegistro'], 2);
-        $aCSVRALIC10['si180_codorgaoresp']               = $this->padLeftZero($aRALIC10['si180_codorgaoresp'], 3);
+        $aCSVRALIC10['si180_codorgaoresp']               = $aRALIC10['si180_codorgaoresp'];
         $aCSVRALIC10['si180_codunidadesubresp']          = $this->padLeftZero($aRALIC10['si180_codunidadesubresp'], 5);
         $aCSVRALIC10['si180_codunidadesubrespestadual']  = !$aRALIC10['si180_codunidadesubrespestadual'] ? ' ' : $this->padLeftZero($aRALIC10['si180_codunidadesubrespestadual'], 4);
         $aCSVRALIC10['si180_exerciciolicitacao']         = $this->padLeftZero($aRALIC10['si180_exerciciolicitacao'], 4);
@@ -71,7 +71,7 @@ class GerarRALIC extends GerarAM
         $aCSVRALIC10['si180_origemrecurso']              = $aRALIC10['si180_origemrecurso'];
         $aCSVRALIC10['si180_dscorigemrecurso']           = substr($aRALIC10['si180_dscorigemrecurso'], 0, 150);
         $aCSVRALIC10['si180_qtdlotes']                   = $aRALIC10['si180_qtdlotes'];
-
+        $aCSVRALIC10['si180_emailcontato']               = $aRALIC10['si180_emailcontato'];
         $this->sLinha = $aCSVRALIC10;
         $this->adicionaLinha();
         for ($iCont2 = 0; $iCont2 < pg_num_rows($rsRALIC11); $iCont2++) {
@@ -96,7 +96,7 @@ class GerarRALIC extends GerarAM
             $aCSVRALIC11['si181_codsubfuncao']                    = $this->padLeftZero(intval($aRALIC11['si181_codsubfuncao']), 3);
             $aCSVRALIC11['si181_codbempublico']                   = $this->padLeftZero($aRALIC11['si181_codbempublico'], 4);
             $aCSVRALIC11['si181_nrolote']                         = ($aRALIC10['si180_qtdlotes'] != 1) ? $aRALIC11['si181_nrolote'] : '';
-
+            $aCSVRALIC11['si181_utilizacaoplanilhamodelo']        = $aRALIC11['si181_utilizacaoplanilhamodelo'];
             $this->sLinha = $aCSVRALIC11;
             $this->adicionaLinha();
           }
@@ -119,7 +119,7 @@ class GerarRALIC extends GerarAM
               $aCSVRALIC12['si182_numero']                      = !$aRALIC12['si182_numero'] ? '' : $aRALIC12['si182_numero'];
               $aCSVRALIC12['si182_bairro']                      = utf8_decode($aRALIC12['si182_bairro']);
               $aCSVRALIC12['si182_distrito']                    = utf8_decode($aRALIC12['si182_distrito']);
-              $aCSVRALIC12['si182_municipio']                   = $aRALIC12['si182_municipio'];
+              $aCSVRALIC12['si182_municipio']                   = '';
               $aCSVRALIC12['si182_cep']                         = $aRALIC12['si182_cep'];
               $aCSVRALIC12['si182_latitude']                    = $this->sicomNumberReal($aRALIC12['si182_latitude'], 6);
               $aCSVRALIC12['si182_longitude']                   = $this->sicomNumberReal($aRALIC12['si182_longitude'], 6);

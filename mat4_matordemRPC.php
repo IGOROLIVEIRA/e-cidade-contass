@@ -591,8 +591,8 @@ if ($method == "getDados") {
 
       $rsitens = db_query("select pc01_codmater from pcmater where pc01_codmater in
           (select distinct e62_item from empempitem
-          inner join matordemitem on e62_numemp = m52_numemp 
-          inner join pcmater on e62_item = pc01_codmater 
+          inner join matordemitem on e62_numemp = m52_numemp
+          inner join pcmater on e62_item = pc01_codmater
           where m52_codlanc in ($codigoslancamento)) and pc01_servico = 'f';");
 
       if (pg_numrows($rsitens) > 0) {
@@ -613,12 +613,22 @@ if ($method == "getDados") {
 } else if ($method == "confirmarEntrada") {
   try {
 
+    $selecionados = array_map(function ($item) {
+        return $item->iCodLanc;
+    }, $objJson->aItens);
+
+    $itens = $_SESSION["matordem{$objJson->m51_codordem}"];
+    $itensSelecionados = array_filter($itens, function($key) use($selecionados) {
+        return in_array($key, $selecionados);
+    },  ARRAY_FILTER_USE_KEY);
+
     db_inicio_transacao();
 
     $aDadosConsumoImediato = array(
-      'dpto' => $objJson->m51_depto,
-      'itens' => $_SESSION["matordem{$objJson->m51_codordem}"],
+        'dpto' => $objJson->m51_depto,
+        'itens' => $itensSelecionados,
     );
+
     //verifica se existe materiais com consumo imediato preenchido ou se pelo menos um ? material
 
     $haConsumo = false;
@@ -639,13 +649,13 @@ if ($method == "getDados") {
 
     $sComprasSemMaterial = '';
 
-    foreach ($_SESSION["matordem{$objJson->m51_codordem}"] as $iCodLanc => $oItem) {
+    foreach ($itensSelecionados as $iCodLanc => $oItem) {
 
       foreach ($oItem as $iIndice => $oItemFilho) {
 
-        if ($_SESSION["matordem{$objJson->m51_codordem}"][$iCodLanc][$iIndice]->m63_codmatmater == '') {
-          $sComprasSemMaterial .= "\n" . $_SESSION["matordem{$objJson->m51_codordem}"][$iCodLanc][$iIndice]->pc01_codmater . ' - ' .
-            $_SESSION["matordem{$objJson->m51_codordem}"][$iCodLanc][$iIndice]->pc01_descrmater;
+        if ($itensSelecionados[$iCodLanc][$iIndice]->m63_codmatmater == '') {
+          $sComprasSemMaterial .= "\n" .  $itensSelecionados[$iCodLanc][$iIndice]->pc01_codmater . ' - ' .
+          $itensSelecionados[$iCodLanc][$iIndice]->pc01_descrmater;
         }
       }
     }
@@ -753,7 +763,7 @@ if ($method == "getDados") {
         // Condicao da OC17910
         if ($objJson->iCgmEmitente > 0)
             $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->iCgmEmitente);
-        else 
+        else
             $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->m51_numcgm);
       $rsCgm     = $oDaoCgm->sql_record($sSqlCgm);
       $oDadosCgm = db_utils::fieldsMemory($rsCgm, 0);
