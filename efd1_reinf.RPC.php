@@ -52,7 +52,7 @@ try {
                         e60_codemp,
                         e60_anousu,
                         efd60_numcno";
-            $sWhere  = " where length(cgm.z01_cgccpf) = 14 and e69_dtnota between '{$sDataInicialFiltros}' and '{$sDataFinalFiltros}' and e23_ativo = true and e21_retencaotipocalc in (4) ";
+            $sWhere  = " where length(cgm.z01_cgccpf) = 14 and e69_dtnota between '{$sDataInicialFiltros}' and '{$sDataFinalFiltros}' and e23_ativo = true and e21_retencaotipocalc in (4) and e60_instit = {$sInstituicao}";
             $clempnota           = new cl_empnota;
             $rsEfdreinfR2010 = $clempnota->sql_record($clempnota->sqlRelRetencoesPJ($sWhere, null, " order by z01_cgccpf", $sCampos));
 
@@ -296,7 +296,7 @@ try {
             $sDataInicialFiltros = $oParam->sAnocompetencia . "-{$oParam->sMescompetencia}-01";
             $sDataFinalFiltros   = $oParam->sAnocompetencia . "-{$oParam->sMescompetencia}-{$iUltimoDiaMes}";
 
-            $sWhere  = " where e69_dtnota between '{$sDataInicialFiltros}' and '{$sDataFinalFiltros}' and e23_ativo = true and (e21_retencaotipocalc in ('10','11','12') or efd60_aquisicaoprodrural != 0)";
+            $sWhere  = " where e69_dtnota between '{$sDataInicialFiltros}' and '{$sDataFinalFiltros}' and e23_ativo = true and (e21_retencaotipocalc in ('10','11','12') or efd60_aquisicaoprodrural != 0) and e60_instit = {$sInstituicao}";
             $sGroupBY =" group by 1, 2, 3, 4, 5, 6, 7, e21_retencaotipocalc, e23_valorretencao";
             $clempnota           = new cl_empnota;
             $rsEfdreinfR2055 = $clempnota->sql_record($clempnota->sqlRelRetencoesReinf($sWhere, $sGroupBY, null, null));
@@ -752,7 +752,7 @@ try {
                         $oefdreinfr4010->NaturezaRendimento = $oEfdreinfr4010->natureza_rendimento ? $oEfdreinfr4010->natureza_rendimento : '';
                         $oefdreinfr4010->DataFG = formateDate($oEfdreinfr4010->data_pgto);
                         $oefdreinfr4010->ValorBruto = "R$" . db_formatar($oEfdreinfr4010->valor_bruto, 'f');
-                        $oefdreinfr4010->ValorBase = "R$" . db_formatar($oEfdreinfr4010->valor_base, 'f');
+                        $oefdreinfr4010->ValorBase = $oEfdreinfr4010->valor_base == 0 ? "R$" . db_formatar($oEfdreinfr4010->valor_bruto, 'f') : "R$" . db_formatar($oEfdreinfr4010->valor_base, 'f');
                         $oefdreinfr4010->ValorIRRF = "R$" . db_formatar($oEfdreinfr4010->valor_irrf, 'f');
                         $oefdreinfr4010->DestacarCampos  = $destacarcampos;
 
@@ -917,7 +917,7 @@ try {
                             $oefdreinfr4020->NaturezaRendimento = $oEfdreinfr4020->natureza_rendimento ? $oEfdreinfr4020->natureza_rendimento : '';
                             $oefdreinfr4020->DataFG = formateDate($oEfdreinfr4020->data_pgto);
                             $oefdreinfr4020->ValorBruto = "R$" . db_formatar($oEfdreinfr4020->valor_bruto, 'f');
-                            $oefdreinfr4020->ValorBase = "R$" . db_formatar($oEfdreinfr4020->valor_base, 'f');
+                            $oefdreinfr4020->ValorBase = $oEfdreinfr4020->valor_base == 0 ? "R$" . db_formatar($oEfdreinfr4020->valor_bruto, 'f') : "R$" . db_formatar($oEfdreinfr4020->valor_base, 'f');
                             $oefdreinfr4020->ValorIRRF = "R$" . db_formatar($oEfdreinfr4020->valor_irrf, 'f');
                             $oefdreinfr4020->DestacarCampos  = $destacarcampos;
     
