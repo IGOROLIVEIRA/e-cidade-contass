@@ -67,6 +67,7 @@ class cl_contratos102024
   var $si83_periodicidadereajuste = null;
   var $si83_dscreajuste = null;
   var $si83_dscindice = null;
+  var $si83_vigenciaindeterminada = null;
   var $campos = "
                  si83_sequencial = int8 = sequencial
                  si83_tiporegistro = int8 = Tipo do registro
@@ -108,6 +109,7 @@ class cl_contratos102024
                  si83_periodicidadereajuste = Periodo reajuste;
                  si83_dscreajuste = Descricao reajuste;
                  si83_dscindice = Descricao indice;
+                 si83_vigenciaindeterminada = int = Prazo de Vigência Indeterminada.
                  ";
   var $si83_datapublicacao = null;
   var $si83_veiculodivulgacao = null;
@@ -211,6 +213,7 @@ class cl_contratos102024
       $this->si83_instit = ($this->si83_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_instit"] : $this->si83_instit);
       $this->si83_tipocadastro = ($this->si83_tipocadastro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_tipocadastro"] : $this->si83_tipocadastro);
       $this->si83_unidadedemedidaprazoexec = ($this->si83_unidadedemedidaprazoexec == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_unidadedemedidaprazoexec"] : $this->si83_unidadedemedidaprazoexec);
+      $this->si83_vigenciaindeterminada = ($this->si83_vigenciaindeterminada == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_vigenciaindeterminada"] : $this->si83_vigenciaindeterminada);
     } else {
       $this->si83_sequencial = ($this->si83_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_sequencial"] : $this->si83_sequencial);
     }
@@ -294,6 +297,15 @@ class cl_contratos102024
       $this->erro_status = "0";
       return false;
     }
+    if ($this->si83_vigenciaindeterminada == null) {
+      $this->erro_sql = " Campo Vigencia Indeterminada nao Informado.";
+      $this->erro_campo = "si83_vigenciaindeterminada";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+      return false;
+    }
     if ($si83_sequencial == "" || $si83_sequencial == null) {
       $result = db_query("select nextval('contratos102024_si83_sequencial_seq')");
       if ($result == false) {
@@ -367,6 +379,7 @@ class cl_contratos102024
                                       ,si83_periodicidadereajuste
                                       ,si83_dscreajuste
                                       ,si83_dscindice
+                                      ,si83_vigenciaindeterminada
                        )
                 values (
                                 $this->si83_sequencial
@@ -409,6 +422,7 @@ class cl_contratos102024
                                ," . ($this->si83_periodicidadereajuste == "" ? "''" :  $this->si83_periodicidadereajuste) . "
                                ," . ($this->si83_dscreajuste == "" ? "''" : "'" . $this->si83_dscreajuste . "'") . "
                                ," . ($this->si83_dscindice == "" ? "''" : "'" . $this->si83_dscindice . "'") . "
+                               ,$this->si83_vigenciaindeterminada
                       )";
 
     $result = db_query($sql);
@@ -724,6 +738,10 @@ class cl_contratos102024
         $this->erro_status = "0";
         return false;
       }
+    }
+    if (trim($this->si83_vigenciaindeterminada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_vigenciaindeterminada"])) {
+      $sql  .= $virgula . " si83_vigenciaindeterminada = '$this->si83_vigenciaindeterminada' ";
+      $virgula = ",";
     }
     $sql .= " where ";
     if ($si83_sequencial != null) {

@@ -81,6 +81,7 @@ class GerarCONTRATOS extends GerarAM
                 $aCSVCONTRATOS10['si83_naturezaobjeto']               =   str_pad($aCONTRATOS10['si83_naturezaobjeto'], 1, "0", STR_PAD_LEFT);
                 $aCSVCONTRATOS10['si83_objetocontrato']               =   substr($aCONTRATOS10['si83_objetocontrato'], 0, 1000);
                 $aCSVCONTRATOS10['si83_datainiciovigencia']           =   implode("", array_reverse(explode("-", $aCONTRATOS10['si83_datainiciovigencia'])));
+                $aCSVCONTRATOS10['si83_vigenciaindeterminada']        =   $aCONTRATOS10['si83_vigenciaindeterminada'];
                 $aCSVCONTRATOS10['si83_datafinalvigencia']            =   implode("", array_reverse(explode("-", $aCONTRATOS10['si83_datafinalvigencia'])));
                 $aCSVCONTRATOS10['si83_vlcontrato']                   =   number_format($aCONTRATOS10['si83_vlcontrato'], 2, ",", "");
                 $aCSVCONTRATOS10['si83_formafornecimento']            =   substr($aCONTRATOS10['si83_formafornecimento'], 0, 50);
