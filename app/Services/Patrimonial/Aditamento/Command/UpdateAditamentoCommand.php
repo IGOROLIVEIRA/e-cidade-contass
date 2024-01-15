@@ -121,7 +121,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
                             $vigenciaIncio,
                             $vigenciaFim
                         );
-                        
+
                         (new InsereItemAditamentoCommand(
                             $this->acordoItemRepository,
                             $this->acordItemPeriodRepository,
@@ -217,6 +217,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
         if ($aditamento->isReajuste()) {
             $acordoPosicao['ac26_indicereajuste'] = $aditamento->getIndiceReajuste();
             $acordoPosicao['ac26_percentualreajuste'] = $aditamento->getPercentualReajuste();
+            $acordoPosicao['ac26_descricaoindice'] = $aditamento->getDescricaoIndice();
         }
 
         return $acordoPosicao;

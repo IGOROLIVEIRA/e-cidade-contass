@@ -2065,13 +2065,14 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     console.log(nQuantidade, nUnitario, nQuantidadeA, nUnitarioA);
 
 
+
     aItensPosicao[iLinha].novaquantidade = nQuantidade;
     aItensPosicao[iLinha].novounitario = nUnitario;
 
     nValorTotal = nQuantidade * nUnitario;
     valorTotal = nQuantidadeA * nUnitarioA;
 
-    console.log(nValorTotal, valorTotal);
+    console.log((nQuantidade - nQuantidadeA));
 
     aLinha.aCells[8].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
 
@@ -2103,6 +2104,10 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       nQuantidadeA = item.qtdePosicaoanterior,
       nUnitarioA = item.vlunitPosicaoanterior
 
+    if (cboTipo == 2 || cboTipo == 5) {
+      nQuantidadeA = aLinha.aCells[4].getValue().getNumber();
+    }
+
     let casas = 2;
 
     aItensPosicao[iLinha].novaquantidade = nQuantidade;
@@ -2110,7 +2115,6 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
     nValorTotal = nQuantidade * nUnitario;
     valorTotal = nQuantidadeA * nUnitarioA;
-
 
     aLinha.aCells[8].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
 
@@ -2556,6 +2560,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     $('oTextAreaDescricaoAlteracao').value = aditamento.descricaoAlteracao;
     $('oPercentualReajuste').value = aditamento.percentualReajuste;
     $('oIndiceReajuste').value = aditamento.indiceReajuste;
+    $('oTxtDescricaoIndice').value = aditamento.descricaoIndice;
     me.oTxtDataFinalCompara.setData(aditamento.vigenciaFim);
 
 
@@ -2567,10 +2572,12 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     me.itensAdaptados = itens.itensAdaptados;
     aItensPosicao = me.itensAdaptados;
     me.estadoTela.relacaoItemPcmater = itens.relacaoItemPcmater;
+    console.log(aItensPosicao);
     me.preencheItens(aItensPosicao);
     me.js_changeTipoAditivo();
     me.lidaLeiLicitacao(aditamento.acordoSequencial);
     me.ocultaDescricaoAlteracao();
+    me.js_exibedescricao();
     me.mostracampos();
 
   }
