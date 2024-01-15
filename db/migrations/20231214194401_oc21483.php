@@ -8,32 +8,15 @@ class AddTableVeiculosplaca extends PostgresMigration
 
   public function up()
   {
-    $this->_run();
-  }
-
-  public function down()
-  {
-    $sql = "
-            BEGIN;
-              ALTER TABLE veiculos.veiculos ALTER COLUMN ve01_placa TYPE varchar(7);
-              DROP TABLE IF EXISTS veiculos.veiculosplaca;
-              DROP SEQUENCE IF EXISTS veiculos.veiculosplaca_ve76_sequencial_seq;
-            COMMIT;
-        ";
-    $this->execute($sql);
-  }
-
-  private function _run()
-  {
-    $sql = "
+      $sql = "
         BEGIN;
           -- Cria itens de menu
           INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Alteração de Placa','Alteração de Placa','',1,1,'Alteração de Placa','t');
           INSERT INTO db_menu VALUES(5338,(select max(id_item) from db_itensmenu),9,633);
-        
+
           INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Alteração','Alteração','vei1_alterarplaca002.php',1,1,'Alteração','t');
           INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like 'Alteração de Placa'),(select max(id_item) from db_itensmenu),1,633);
-        
+
           INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Exclusão','Exclusão','vei1_alterarplaca003.php',1,1,'Exclusão','t');
           INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like 'Alteração de Placa'),(select max(id_item) from db_itensmenu),2,633);
 
@@ -63,33 +46,33 @@ class AddTableVeiculosplaca extends PostgresMigration
               FOREIGN KEY (ve76_veiculo) REFERENCES veiculos.veiculos(ve01_codigo)
           );
 
-          -- Insere campos no dicionário 
-          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
+          -- Insere campos no dicionário
+          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
           VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_sequencial', 'int8', 'Sequencial', '', 'Código', 8, false, false, false, 1, 'text', 'Código');
 
-          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
+          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
           VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_veiculo', 'int4', 'Código Veículo', '', 'Veículo', 4, false, false, false, 1, 'text', 'Veículo');
 
-          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
+          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
           VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_placa', 'varchar(8)', 'Placa', '', 'Placa Atual', 8, false, true, false, 0, 'text', 'Placa Atual');
 
-          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
+          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
           VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_placaanterior', 'varchar(7)', 'Placa Anterior', '', 'Placa Anterior', 7, false, false, false, 1, 'text', 'Placa Anterior');
 
-          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
+          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
           VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_obs', 'varchar(200)', 'Observação', '', 'Observação', 200, false, false, false, 1, 'text', 'Observação');
 
-          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
+          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
           VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_data', 'date', 'Data', '', 'Data', 10, false, false, false, 1, 'text', 'Data');
 
-          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
+          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
           VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_usuario', 'int4', 'Usuário', '', 'Usuário', 4, false, false, false, 1, 'text', 'Usuário');
 
-          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
+          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
           VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_criadoem', 'timestamp without time zone', 'Criado em', '', 'Criado em', null, false, false, false, 1, 'text', 'Criado em');
         COMMIT;
         ";
 
-    $this->execute($sql);
+      $this->execute($sql);
   }
 }
