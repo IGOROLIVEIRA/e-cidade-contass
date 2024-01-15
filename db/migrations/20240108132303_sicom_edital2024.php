@@ -9,7 +9,7 @@ class SicomEdital2024 extends AbstractMigration
     {
         $sql = "
                 ALTER TABLE ralic102024
-                ALTER COLUMN si180_emailcontato TYPE INTEGER USING si180_emailcontato::INTEGER;
+                ALTER COLUMN si180_codorgaoresp TYPE INTEGER USING si180_codorgaoresp::INTEGER;
 
                 ALTER TABLE ralic102024 add column si180_emailcontato varchar(200);
 
