@@ -1149,9 +1149,11 @@ class cl_acordo
         if (trim($this->ac16_providencia) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_providencia"])) {
             $sql .= $virgula . " ac16_providencia = $this->ac16_providencia ";
         }
-
+        //echo $this->ac16_vigenciaindeterminada;
         if (trim($this->ac16_vigenciaindeterminada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_vigenciaindeterminada"])) {
-            $sql .= $virgula . " ac16_vigenciaindeterminada = '$this->ac16_vigenciaindeterminada' ";
+            if($this->ac16_vigenciaindeterminada != "null"){
+                $sql .= $virgula . " ac16_vigenciaindeterminada = '$this->ac16_vigenciaindeterminada' ";
+            }
         }
         
         $sql .= " where ";
