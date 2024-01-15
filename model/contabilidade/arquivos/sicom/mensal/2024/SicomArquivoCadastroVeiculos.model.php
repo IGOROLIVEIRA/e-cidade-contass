@@ -640,7 +640,23 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
          * Registro 40
          */
 
-        $sql40 = "";
+        $sql40 = "SELECT si09_codorgaotce AS codOrgao,
+                           CASE
+                               WHEN veiculos.ve01_codigoant IS NULL
+                                    OR veiculos.ve01_codigoant = '' THEN CAST (veiculos.ve01_codigo AS varchar)
+                               ELSE veiculos.ve01_codigoant
+                           END AS codVeiculo,
+                           ve76_placa AS placa
+                    FROM veiculos
+                    INNER JOIN veiculosplaca ON ve76_veiculo = ve01_codigo
+                    INNER JOIN veiculos.veiccentral AS veiccentral ON (veiculos.ve01_codigo =veiccentral.ve40_veiculos)
+                    INNER JOIN veiculos.veiccadcentral AS veiccadcentral ON (veiccentral.ve40_veiccadcentral =veiccadcentral.ve36_sequencial)
+                    INNER JOIN configuracoes.db_depart AS db_depart ON (veiccadcentral.ve36_coddepto =db_depart.coddepto)
+                    INNER JOIN configuracoes.db_config AS db_config ON (db_depart.instit=db_config.codigo)
+                    LEFT JOIN infocomplementaresinstit ON si09_instit = db_depart.instit
+                    WHERE DATE_PART('YEAR',ve76_data) = " . db_getsession("DB_anousu") . "
+                    AND DATE_PART('MONTH',ve76_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+                    AND db_config.codigo =" . db_getsession("DB_instit");
         $rsResult40 = db_query($sql40);
 
         if (pg_num_rows($rsResult40) > 0) {
@@ -664,7 +680,25 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
         /*
          * Registro 50
          */
-        $sSql = "";
+        $sSql = "SELECT si09_codorgaotce AS codorgao,
+                           CASE
+                               WHEN veiculos.ve01_codigoant IS NULL
+                                    OR veiculos.ve01_codigoant = '' THEN CAST (veiculos.ve01_codigo AS varchar)
+                               ELSE veiculos.ve01_codigoant
+                           END AS codveiculo,
+                           ve04_veiccadtipobaixa AS tipobaixa,
+                           ve04_motivo AS descbaixa,
+                           ve04_data AS dtbaixa
+                    FROM veiculos
+                    INNER JOIN veicbaixa ON ve04_veiculo = ve01_codigo
+                    INNER JOIN veiculos.veiccentral AS veiccentral ON (veiculos.ve01_codigo =veiccentral.ve40_veiculos)
+                    INNER JOIN veiculos.veiccadcentral AS veiccadcentral ON (veiccentral.ve40_veiccadcentral =veiccadcentral.ve36_sequencial)
+                    INNER JOIN configuracoes.db_depart AS db_depart ON (veiccadcentral.ve36_coddepto =db_depart.coddepto)
+                    INNER JOIN configuracoes.db_config AS db_config ON (db_depart.instit=db_config.codigo)
+                    LEFT JOIN infocomplementaresinstit ON si09_instit = db_depart.instit
+                    WHERE DATE_PART('YEAR',ve04_data) = " . db_getsession("DB_anousu") . "
+                    AND DATE_PART('MONTH',ve04_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+                    AND db_config.codigo =" . db_getsession("DB_instit");
 
         $rsResult50 = db_query($sSql);
 
