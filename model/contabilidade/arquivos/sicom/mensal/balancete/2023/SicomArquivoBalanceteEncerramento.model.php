@@ -272,34 +272,19 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
         $obalancete10->excluir(NULL, "si177_mes = 13 and si177_instit = " . db_getsession("DB_instit"));
 
 
-        /*
-         * sql pega somente contas com movimento e/ou com saldo anterior
+        /**
+         *  Filtro para listar somente alguns registros
          */
-        $sqlReg10 = "select
-                    tiporegistro,
-                    contacontabil,
-                    coalesce(saldoinicialano,0) saldoinicialano,
-                    coalesce(debito,0) debito,
-                    coalesce(credito,0) credito,
-                    codcon,
-                    c61_reduz,
-                    c60_nregobrig,
-                    c60_identificadorfinanceiro,
-                    case when c60_naturezasaldo = 1 then 'D' when c60_naturezasaldo = 2 then 'C' else 'C' end as c60_naturezasaldo
-                         from
-                            (select 10 as tiporegistro,
-                                    case when c209_tceestrut is null then substr(c60_estrut,1,9) else c209_tceestrut end as contacontabil,
-                                    (select sum(c69_valor) as credito from conlancamval where c69_credito = c61_reduz and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and  DATE_PART('MONTH',c69_data) <= {$nMes}) as credito,
-                                    (select sum(c69_valor) as debito from conlancamval where c69_debito = c61_reduz and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and  DATE_PART('MONTH',c69_data) <= {$nMes}) as debito,
-                                    (c62_vlrdeb - c62_vlrcre) as saldoinicialano,c61_reduz, c60_nregobrig,
-                                    c60_codcon as codcon, c60_identificadorfinanceiro,c60_naturezasaldo
-                              from contabilidade.conplano
-						inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu and c61_instit = " . db_getsession("DB_instit") . "
-                        inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu
-                        left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
-                             where c60_nregobrig=14 and  c60_anousu = " . db_getsession("DB_anousu") . ") as x
-                        where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
+        $whereNumRegistro = "";
+        if ($this->iNumeroRegistro != 0) {
+            $whereNumRegistro =  " c60_nregobrig = {$this->iNumeroRegistro} and ";
+        }
 
+        /**
+         * Função do sql Reg10:
+         * Consultar contas com movimento e/ou com saldo anterior.
+         */
+        $sqlReg10 = $obalancete10->sql_query_reg10(null, $whereNumRegistro, null, db_getsession("DB_anousu"), $nMes, db_getsession("DB_instit"));
         $rsReg10 = db_query($sqlReg10) or die("Erro 20 ".$sqlReg10);
 
         $aDadosAgrupados10 = array();
