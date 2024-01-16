@@ -32,6 +32,9 @@ class GerarCVC extends GerarAM
     $sSql3 = "select * from cvc302024 where si148_mes = " . $this->iMes . " and si148_instit=" . db_getsession("DB_instit");
     $rsCVC30 = db_query($sSql3);
 
+    $sSql4 = "select * from cvc402024 where si150_mes = " . $this->iMes . " and si150_instit=" . db_getsession("DB_instit");
+    $rsCVC40 = db_query($sSql4);
+
     $sSql5 = "select * from cvc502024 where si149_mes = " . $this->iMes . " and si149_instit=" . db_getsession("DB_instit");
     $rsCVC50 = db_query($sSql5);
 
@@ -122,9 +125,9 @@ class GerarCVC extends GerarAM
         /**
          * Registros 40
          */
-        for ($iCont4 = 0; $iCont4 < pg_num_rows($rsCVC50); $iCont4++) {
+        for ($iCont4 = 0; $iCont4 < pg_num_rows($rsCVC40); $iCont4++) {
 
-            $aCVC40 = pg_fetch_array($rsCVC50, $iCont4);
+            $aCVC40 = pg_fetch_array($rsCVC40, $iCont4);
 
             $aCSVCVC40['si150_tiporegistro']  = $this->padLeftZero($aCVC40['si150_tiporegistro'], 2);
             $aCSVCVC40['si150_codorgao']      = $this->padLeftZero($aCVC40['si150_codorgao'], 2);

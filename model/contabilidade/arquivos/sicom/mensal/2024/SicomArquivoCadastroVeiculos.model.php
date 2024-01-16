@@ -290,7 +290,6 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $clcvc10->incluir(null);
                 if ($clcvc10->erro_status == 0) {
-                    exit("aqui 10");
                     throw new Exception($clcvc10->erro_msg);
                 }
             }
@@ -563,7 +562,6 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
             $clcvc20->incluir(null);
             if ($clcvc20->erro_status == 0) {
-                exit("aqui 20");
                 throw new Exception($clcvc20->erro_msg);
             }
         }
@@ -629,7 +627,6 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $clcvc30->incluir(null);
                 if ($clcvc30->erro_status == 0) {
-                    exit("aqui 30");
                     throw new Exception($clcvc30->erro_msg);
                 }
             }
@@ -662,6 +659,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
             for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
                 $oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
 
+                $clcvc40 = new cl_cvc402024();
                 $clcvc40->si150_tiporegistro = 40;
                 $clcvc40->si150_codorgao = $oDados40->codorgao;
                 $clcvc40->si150_codveiculo = $oDados40->codveiculo;
@@ -710,7 +708,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 $clcvc50 = new cl_cvc502024();
                 $oDados50 = db_utils::fieldsMemory($rsResult50, $iCont50);
 
-                $clcvc50->si149_tiporegistro = 40;
+                $clcvc50->si149_tiporegistro = 50;
                 $clcvc50->si149_codorgao = $oDados50->codorgao;
                 $clcvc50->si149_codveiculo = $oDados50->codveiculo;
                 $clcvc50->si149_situacaoveiculoequip = 1;
@@ -726,8 +724,6 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $clcvc50->incluir(null);
                 if ($clcvc50->erro_status == 0) {
-                    exit("aqui 50");
-
                     throw new Exception($clcvc50->erro_msg);
                 }
             }
