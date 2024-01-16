@@ -19,6 +19,7 @@ class cl_cvc402024
   // cria variaveis do arquivo
   var $si150_sequencial = 0;
   var $si150_tiporegistro = 0;
+  var $si150_codorgao = 0;
   var $si150_codveiculo = null;
   var $si150_placaatual = null;
   var $si150_mes = 0;
@@ -27,10 +28,11 @@ class cl_cvc402024
   var $campos = "
                  si150_sequencial = int8 = sequencial
                  si150_tiporegistro = int8 = Tipo do registro
-                 si150_codveiculo = varchar(2) = Código do órgão
-                 si150_placaatual = varchar(8) = Código da unidade
-                 si150_mes = varchar(10) = Código do veículo
-                 si150_instit = varchar(2) = Tipo de baixa
+                 si150_codorgao = int8 = codigo orgao
+                 si150_codveiculo = int8 = Código do veiculo
+                 si150_placaatual = varchar(8) = placa atual
+                 si150_mes = varchar(10) = mes
+                 si150_instit = varchar(2) = instituicao
                  ";
 
   //funcao construtor da classe
@@ -58,6 +60,7 @@ class cl_cvc402024
     if ($exclusao == false) {
       $this->si150_sequencial = ($this->si150_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si150_sequencial"] : $this->si150_sequencial);
       $this->si150_tiporegistro = ($this->si150_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si150_tiporegistro"] : $this->si150_tiporegistro);
+      $this->si150_codorgao = ($this->si150_codorgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si150_codorgao"] : $this->si150_codorgao);
       $this->si150_codveiculo = ($this->si150_codveiculo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si150_codveiculo"] : $this->si150_codveiculo);
       $this->si150_placaatual = ($this->si150_placaatual == "" ? @$GLOBALS["HTTP_POST_VARS"]["si150_placaatual"] : $this->si150_placaatual);
       $this->si150_mes = ($this->si150_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si150_mes"] : $this->si150_mes);
@@ -71,6 +74,7 @@ class cl_cvc402024
   function incluir($si150_sequencial)
   {
     $this->atualizacampos();
+
     if ($this->si150_tiporegistro == null) {
       $this->erro_sql = " Campo Tipo do registro nao Informado.";
       $this->erro_campo = "si150_tiporegistro";
@@ -81,29 +85,7 @@ class cl_cvc402024
 
       return false;
     }
-    if ($this->si149_dtbaixa == null) {
-      $this->si149_dtbaixa = "null";
-    }
-    if ($this->si149_mes == null) {
-      $this->erro_sql = " Campo Mês nao Informado.";
-      $this->erro_campo = "si149_mes";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
-      $this->erro_status = "0";
 
-      return false;
-    }
-    if ($this->si149_instit == null) {
-      $this->erro_sql = " Campo Instituição nao Informado.";
-      $this->erro_campo = "si149_instit";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
-      $this->erro_status = "0";
-
-      return false;
-    }
     if ($si150_sequencial == "" || $si150_sequencial == null) {
       $result = db_query("select nextval('cvc402024_si150_sequencial_seq')");
       if ($result == false) {
@@ -142,6 +124,7 @@ class cl_cvc402024
     $sql = "insert into cvc402024(
                                        si150_sequencial
                                       ,si150_tiporegistro
+                                      ,si150_codorgao
                                       ,si150_codveiculo
                                       ,si150_placaatual
                                       ,si150_mes
@@ -150,6 +133,7 @@ class cl_cvc402024
                 values (
                                 $this->si150_sequencial
                                ,$this->si150_tiporegistro
+                               ,$this->si150_codorgao
                                ,$this->si150_codveiculo
                                ,'$this->si150_placaatual'
                                ,$this->si150_mes

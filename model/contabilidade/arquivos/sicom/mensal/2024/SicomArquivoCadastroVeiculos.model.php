@@ -108,6 +108,14 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
             }
         }
 
+        $result = db_query($clcvc40->sql_query(null, "*", null, "si150_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si150_instit=" . db_getsession("DB_instit")));
+        if (pg_num_rows($result) > 0) {
+            $clcvc40->excluir(null, "si150_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si150_instit=" . db_getsession("DB_instit"));
+            if ($clcvc40->erro_status == 0) {
+                throw new Exception($clcvc40->erro_msg);
+            }
+        }
+
         $result = db_query($clcvc50->sql_query(null, "*", null, "si149_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si149_instit=" . db_getsession("DB_instit")));
         if (pg_num_rows($result) > 0) {
             $clcvc50->excluir(null, "si149_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si149_instit=" . db_getsession("DB_instit"));
@@ -116,18 +124,9 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
             }
         }
 
-        $sSql = "
+        $sSql10 = "
       SELECT DISTINCT '10' AS tipoRegistro,
                       si09_codorgaotce AS codOrgao,
-                      CASE
-                          WHEN (unveic.o41_codtri::INT != 0
-                                AND orveic.o40_codtri::INT = 0) THEN lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_codtri,3,0)
-                          WHEN (unveic.o41_codtri::INT = 0
-                                AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
-                          WHEN (unveic.o41_codtri::INT != 0
-                                AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
-                          ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0)
-                      END AS codunidadesub,
                       CASE
                           WHEN veiculos.ve01_codigoant IS NULL
                                OR veiculos.ve01_codigoant = '' THEN cast (veiculos.ve01_codigo as varchar)
@@ -165,17 +164,14 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
       WHERE db_config.codigo = " . db_getsession("DB_instit") . "
           AND DATE_PART('YEAR',veiculos.ve01_dtaquis) = " . db_getsession("DB_anousu") . "
           AND DATE_PART('MONTH',veiculos.ve01_dtaquis) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-        $rsResult10 = db_query($sSql);
+        $rsResult10 = db_query($sSql10);
 
         if (pg_num_rows($rsResult10) > 0) {
+
             for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
                 $clcvc10 = new cl_cvc102024();
                 $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-
-                if ($oDados10->subunidade == 1) {
-                    $oDados10->codunidadesub .= str_pad($oDados10->subunidade, 3, "0", STR_PAD_LEFT);
-                }
 
                 $sSqlBaixa = "
              select ve04_codigo
@@ -294,6 +290,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $clcvc10->incluir(null);
                 if ($clcvc10->erro_status == 0) {
+                    exit("aqui 10");
                     throw new Exception($clcvc10->erro_msg);
                 }
             }
@@ -566,6 +563,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
             $clcvc20->incluir(null);
             if ($clcvc20->erro_status == 0) {
+                exit("aqui 20");
                 throw new Exception($clcvc20->erro_msg);
             }
         }
@@ -631,6 +629,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $clcvc30->incluir(null);
                 if ($clcvc30->erro_status == 0) {
+                    exit("aqui 30");
                     throw new Exception($clcvc30->erro_msg);
                 }
             }
@@ -669,8 +668,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 $clcvc40->si150_placaatual = $oDados40->placa;
                 $clcvc40->si150_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $clcvc40->si150_instit = db_getsession("DB_instit");
-
                 $clcvc40->incluir(null);
+
                 if ($clcvc40->erro_status == 0) {
                     throw new Exception($clcvc40->erro_msg);
                 }
@@ -727,6 +726,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $clcvc50->incluir(null);
                 if ($clcvc50->erro_status == 0) {
+                    exit("aqui 50");
+
                     throw new Exception($clcvc50->erro_msg);
                 }
             }
