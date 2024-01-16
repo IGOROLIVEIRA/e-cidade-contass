@@ -73,7 +73,7 @@ class GerarCONTRATOS extends GerarAM
                 $aCSVCONTRATOS10['si83_exerciciocontrato']            =   str_pad($aCONTRATOS10['si83_exerciciocontrato'], 4, "0", STR_PAD_LEFT);
                 $aCSVCONTRATOS10['si83_dataassinatura']               =   implode("", array_reverse(explode("-", $aCONTRATOS10['si83_dataassinatura'])));
                 $aCSVCONTRATOS10['si83_contdeclicitacao']             =   str_pad($aCONTRATOS10['si83_contdeclicitacao'], 1, "0", STR_PAD_LEFT);
-                $aCSVCONTRATOS10['si83_codorgaoresp']                 =   $aCONTRATOS10['si83_codorgaoresp'] == 0 ? ' ' : str_pad($aCONTRATOS10['si83_codorgaoresp'], 2, '0', STR_PAD_LEFT);
+                $aCSVCONTRATOS10['si83_cnpjorgaoentresp']             =   $aCONTRATOS10['si83_cnpjorgaoentresp'];
                 $aCSVCONTRATOS10['si83_codunidadesubresp']            =   in_array($aCONTRATOS10['si83_contdeclicitacao'], array(1, 8, 9)) ? '' : str_pad($aCONTRATOS10['si83_codunidadesubresp'], 5, '0', STR_PAD_LEFT);
                 $aCSVCONTRATOS10['si83_nroprocesso']                  =   substr($aCONTRATOS10['si83_nroprocesso'], 0, 12);
                 $aCSVCONTRATOS10['si83_exercicioprocesso']            =   $aCONTRATOS10['si83_exercicioprocesso'] == 0 ? ' ' : $aCONTRATOS10['si83_exercicioprocesso'];
@@ -224,7 +224,12 @@ class GerarCONTRATOS extends GerarAM
                     $aCSVCONTRATOS20['si87_codunidadesub']     = $aCONTRATOS20['si87_codunidadesub'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS20['si87_codunidadesub'], 5); // campo 19
                 }
 
-                //$aCSVCONTRATOS20['si87_codunidadesub']                 =  str_pad($aCONTRATOS20['si87_codunidadesub'], 5, "0", STR_PAD_LEFT);
+                if (strlen($aCONTRATOS20['si87_codunidadesubatual']) > 5) {
+                    $aCSVCONTRATOS20['si87_codunidadesubatual']     = $aCONTRATOS20['si87_codunidadesubatual'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS20['si87_codunidadesubatual'], 8);
+                } else {
+                    $aCSVCONTRATOS20['si87_codunidadesubatual']     = $aCONTRATOS20['si87_codunidadesubatual'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS20['si87_codunidadesubatual'], 5);
+                }
+
                 $aCSVCONTRATOS20['si87_nrocontrato']                   =  substr($aCONTRATOS20['si87_nrocontrato'], 0, 14);
                 $aCSVCONTRATOS20['si87_dtassinaturacontoriginal']      =  implode("", array_reverse(explode("-", $aCONTRATOS20['si87_dtassinaturacontoriginal'])));
                 $aCSVCONTRATOS20['si87_nroseqtermoaditivo']            =  str_pad($aCONTRATOS20['si87_nroseqtermoaditivo'], 2, "0", STR_PAD_LEFT);

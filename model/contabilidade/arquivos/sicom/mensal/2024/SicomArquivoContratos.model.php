@@ -446,8 +446,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                       si06_departamento,
                       manutac_codunidsubanterior,
                       manutac_numeroant,
-                      m2.manutlic_codunidsubanterior
-                      CASE WHEN ac16_vigenciaindeterminada = 'true' THEN 1 ELSE 2 END AS ac16_vigenciaindeterminada
+                      m2.manutlic_codunidsubanterior,
+                      CASE WHEN ac16_vigenciaindeterminada = 'true' THEN 1 ELSE 2 END AS vigenciaindeterminada,
+                      cgm.z01_cgccpf
                 FROM acordoitem
                 INNER JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
                 INNER JOIN acordo ON ac16_sequencial = ac26_acordo
@@ -473,6 +474,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 LEFT JOIN pctipocompra p2 ON p2.pc50_codcom = c2.l03_codcom
                 INNER JOIN acordogrupo ON ac02_sequencial = ac16_acordogrupo
                 LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
+                LEFT JOIN cgm on lic211_orgao = z01_numcgm
                 WHERE ac16_datareferencia <= '{$this->sDataFinal}'
                 AND ac16_datareferencia >= '{$this->sDataInicial}'
                 AND ac16_instit = " . db_getsession("DB_instit");
@@ -578,7 +580,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos10->si83_exerciciocontrato = $oDados10->ac16_anousu; //campo 07
             $clcontratos10->si83_dataassinatura = $oDados10->ac16_dataassinatura; //campo 08
             $clcontratos10->si83_contdeclicitacao = $oDados10->contdeclicitacao; //campo 09
-            $clcontratos10->si83_codorgaoresp = ''; //campo 10
+            $clcontratos10->si83_cnpjorgaoentresp = ''; //campo 10
 
             if ($oDados10->ac16_origem == self::ORIGEM_PROCESSO_COMPRAS && in_array($oDados10->contdeclicitacao, array(2, 3))) {
                 $oDados10->l20_edital = $oDados10->editalmanual;
@@ -613,8 +615,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             }
 
             //LICITACAO DE OUTROS ORGAOS
-            if (in_array($oDados10->contdeclicitacao, array(5, 6, 7))) {
-                $clcontratos10->si83_codorgaoresp = $oDados10->lic211_codorgaoresplicit; //campo 10
+            if (in_array($oDados10->contdeclicitacao, array(5, 6, 7,9))) {
+                $clcontratos10->si83_cnpjorgaoentresp = $oDados10->z01_cgccpf; //campo 10
                 $clcontratos10->si83_codunidadesubresp = $oDados10->lic211_codunisubres; //campo 11
             }
 
@@ -642,8 +644,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos10->si83_objetocontrato = substr($this->removeCaracteres($oDados10->ac16_objeto), 0, 1000); //campo 16
             $clcontratos10->si83_tipoinstrumento = $oDados10->ac16_acordocategoria; //removido
             $clcontratos10->si83_datainiciovigencia = $oDados10->ac16_datainicio; //campo 17
-            $clcontratos10->si83_vigenciaindeterminada = $oDados10->ac16_vigenciaindeterminada; //campo 18
-            $clcontratos10->si83_datafinalvigencia = $oDados10->ac16_datafim; //campo 19
+            $clcontratos10->si83_vigenciaindeterminada = $oDados10->vigenciaindeterminada; //campo 18
+            $clcontratos10->si83_datafinalvigencia = $oDados10->vigenciaindeterminada == "1" ? '' : $oDados10->ac16_datafim; //campo 19
             $oAcordo = new Acordo($oDados10->ac16_sequencial);
             $clcontratos10->si83_vlcontrato = $oDados10->ac16_valor; //campo 20
             //OC10386
@@ -1062,29 +1064,30 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 } else {
                     $clcontratos20->si87_codunidadesub = $oDados20->manutac_codunidsubanterior; //campo 04
                 }
-                $clcontratos20->si87_nrocontrato = $oDados20->manutac_numeroant == '' ? $oDados20->ac16_numero : $oDados20->manutac_numeroant; //campo 05
-                $clcontratos20->si87_dtassinaturacontoriginal = $oDados20->ac16_dataassinatura; //campo 06
-                $clcontratos20->si87_nroseqtermoaditivo = $oDados20->ac26_numeroaditamento; //campo 07
-                $clcontratos20->si87_dtassinaturatermoaditivo = $oDados20->ac35_dataassinaturatermoaditivo; //campo 08
-                $clcontratos20->si87_tipotermoaditivo = $this->getTipoTermoAditivo($oAcordoPosicao); //campo 10
-                $clcontratos20->si87_dscalteracao = substr($this->removeCaracteres($oDados20->ac35_descricaoalteracao), 0, 250); //campo 11
+                $clcontratos20->si87_codunidadesubatual =  $sCodUnidade; //campo 05
+                $clcontratos20->si87_nrocontrato = $oDados20->manutac_numeroant == '' ? $oDados20->ac16_numero : $oDados20->manutac_numeroant; //campo 06
+                $clcontratos20->si87_dtassinaturacontoriginal = $oDados20->ac16_dataassinatura; //campo 07
+                $clcontratos20->si87_nroseqtermoaditivo = $oDados20->ac26_numeroaditamento; //campo 08
+                $clcontratos20->si87_dtassinaturatermoaditivo = $oDados20->ac35_dataassinaturatermoaditivo; //campo 09
+                $clcontratos20->si87_tipotermoaditivo = $this->getTipoTermoAditivo($oAcordoPosicao); //campo 11
+                $clcontratos20->si87_dscalteracao = substr($this->removeCaracteres($oDados20->ac35_descricaoalteracao), 0, 250); //campo 12
                 $oDataTermino = new DBDate($oAcordoPosicao->getVigenciaFinal()); //317
                 if (in_array($oAcordoPosicao->getTipo(), array(6, 13))) {
-                    $clcontratos20->si87_novadatatermino = $oDataTermino->getDate(); //campo 12
+                    $clcontratos20->si87_novadatatermino = $oDataTermino->getDate(); //campo 13
                 } else {
-                    $clcontratos20->si87_novadatatermino = ""; //campo 12
+                    $clcontratos20->si87_novadatatermino = ""; //campo 13
                 }
                 if ($this->getTipoTermoAditivo($oAcordoPosicao) == '4') {
-                    $clcontratos20->si87_percentualreajuste = $oDados20->ac26_percentualreajuste; //campo 13
-                    $clcontratos20->si87_indiceunicoreajuste = $oDados20->ac26_indicereajuste; //campo 14
+                    $clcontratos20->si87_percentualreajuste = $oDados20->ac26_percentualreajuste; //campo 14
+                    $clcontratos20->si87_indiceunicoreajuste = $oDados20->ac26_indicereajuste; //campo 15
                 } else {
-                    $clcontratos20->si87_percentualreajuste = ''; //campo 13
-                    $clcontratos20->si87_indiceunicoreajuste = ''; //campo 14
+                    $clcontratos20->si87_percentualreajuste = ''; //campo 14
+                    $clcontratos20->si87_indiceunicoreajuste = ''; //campo 15
                 }
                 if ($oDados20->ac26_indicereajuste == '6') {
-                    $clcontratos20->si87_dscreajuste = $this->removeCaracteres($oDados20->ac26_descricaoindice); //campo 15
+                    $clcontratos20->si87_dscreajuste = $this->removeCaracteres($oDados20->ac26_descricaoindice); //campo 16
                 } else {
-                    $clcontratos20->si87_dscreajuste = ''; //campo 15
+                    $clcontratos20->si87_dscreajuste = ''; //campo 16
                 }
 
 
@@ -1148,10 +1151,10 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     $tipoalteracao = 2;
                 }
 
-                $clcontratos20->si87_tipoalteracaovalor = $tipoalteracao; //campo 10
-                $clcontratos20->si87_valoraditivo = ($tipoalteracao == 3 ? 0 : abs($valortotaladitado)); //campo 16
-                $clcontratos20->si87_datapublicacao = $oDados20->ac35_datapublicacao; //campo 17
-                $clcontratos20->si87_veiculodivulgacao = $this->removeCaracteres($oDados20->ac35_veiculodivulgacao); //campo 18
+                $clcontratos20->si87_tipoalteracaovalor = $tipoalteracao; //campo 11
+                $clcontratos20->si87_valoraditivo = ($tipoalteracao == 3 ? 0 : abs($valortotaladitado)); //campo 17
+                $clcontratos20->si87_datapublicacao = $oDados20->ac35_datapublicacao; //campo 18
+                $clcontratos20->si87_veiculodivulgacao = $this->removeCaracteres($oDados20->ac35_veiculodivulgacao); //campo 19
                 $clcontratos20->si87_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $clcontratos20->si87_instit = db_getsession("DB_instit");
                 $clcontratos20->incluir(null);
@@ -1368,29 +1371,30 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 } else {
                     $clcontratos20->si87_codunidadesub = $oDados20->manutac_codunidsubanterior; //campo 04
                 }
-                $clcontratos20->si87_nrocontrato = $oDados20->manutac_numeroant =='' ? $oDados20->ac16_numero : $oDados20->manutac_numeroant; //campo 05
-                $clcontratos20->si87_dtassinaturacontoriginal = $oDados20->ac16_dataassinatura; //campo 06
-                $clcontratos20->si87_nroseqtermoaditivo = $oDados20->ac26_numeroaditamento; //campo 07
-                $clcontratos20->si87_dtassinaturatermoaditivo = $oDados20->ac35_dataassinaturatermoaditivo; //campo 08
-                $clcontratos20->si87_tipotermoaditivo = $this->getTipoTermoAditivo($oAcordoPosicao); //campo 10
-                $clcontratos20->si87_dscalteracao = substr($this->removeCaracteres($oDados20->ac35_descricaoalteracao), 0, 250); //campo 11
+                $clcontratos20->si87_codunidadesubatual = $sCodUnidade; //campo 05
+                $clcontratos20->si87_nrocontrato = $oDados20->manutac_numeroant =='' ? $oDados20->ac16_numero : $oDados20->manutac_numeroant; //campo 06
+                $clcontratos20->si87_dtassinaturacontoriginal = $oDados20->ac16_dataassinatura; //campo 07
+                $clcontratos20->si87_nroseqtermoaditivo = $oDados20->ac26_numeroaditamento; //campo 08
+                $clcontratos20->si87_dtassinaturatermoaditivo = $oDados20->ac35_dataassinaturatermoaditivo; //campo 09
+                $clcontratos20->si87_tipotermoaditivo = $this->getTipoTermoAditivo($oAcordoPosicao); //campo 11
+                $clcontratos20->si87_dscalteracao = substr($this->removeCaracteres($oDados20->ac35_descricaoalteracao), 0, 250); //campo 12
                 $oDataTermino = new DBDate($oAcordoPosicao->getVigenciaFinal()); //317
                 if (in_array($oAcordoPosicao->getTipo(), array(6, 13,14))) {
-                    $clcontratos20->si87_novadatatermino = $oDataTermino->getDate(); //campo 12
+                    $clcontratos20->si87_novadatatermino = $oDataTermino->getDate(); //campo 13
                 } else {
-                    $clcontratos20->si87_novadatatermino = ""; //campo 12
+                    $clcontratos20->si87_novadatatermino = ""; //campo 13
                 }
                 if ($this->getTipoTermoAditivo($oAcordoPosicao) == '4') {
-                    $clcontratos20->si87_percentualreajuste = $oDados20->ac26_percentualreajuste; //campo 13
-                    $clcontratos20->si87_indiceunicoreajuste = $oDados20->ac26_indicereajuste; //campo 14
+                    $clcontratos20->si87_percentualreajuste = $oDados20->ac26_percentualreajuste; //campo 14
+                    $clcontratos20->si87_indiceunicoreajuste = $oDados20->ac26_indicereajuste; //campo 15
                 } else {
-                    $clcontratos20->si87_percentualreajuste = ''; //campo 13
-                    $clcontratos20->si87_indiceunicoreajuste = ''; //campo 14
+                    $clcontratos20->si87_percentualreajuste = ''; //campo 14
+                    $clcontratos20->si87_indiceunicoreajuste = ''; //campo 15
                 }
                 if ($oDados20->ac26_indicereajuste == '6') {
-                    $clcontratos20->si87_dscreajuste = $this->removeCaracteres($oDados20->ac26_descricaoindice); //campo 15
+                    $clcontratos20->si87_dscreajuste = $this->removeCaracteres($oDados20->ac26_descricaoindice); //campo 16
                 } else {
-                    $clcontratos20->si87_dscreajuste = ''; //campo 15
+                    $clcontratos20->si87_dscreajuste = ''; //campo 16
                 }
                 $iTotalPosicaoAnterior = 0;
                 $iTotalPosicaoAditivo = 0;
@@ -1446,10 +1450,10 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     $tipoalteracao = 3;
                 }
 
-                $clcontratos20->si87_tipoalteracaovalor = $tipoalteracao; //campo 09
-                $clcontratos20->si87_valoraditivo = ($tipoalteracao == 3 ? 0 : abs($valortotaladitado)); //campo 16
-                $clcontratos20->si87_datapublicacao = $oDados20->ac35_datapublicacao; //campo 17
-                $clcontratos20->si87_veiculodivulgacao = $this->removeCaracteres($oDados20->ac35_veiculodivulgacao); //campo 18
+                $clcontratos20->si87_tipoalteracaovalor = $tipoalteracao; //campo 10
+                $clcontratos20->si87_valoraditivo = ($tipoalteracao == 3 ? 0 : abs($valortotaladitado)); //campo 17
+                $clcontratos20->si87_datapublicacao = $oDados20->ac35_datapublicacao; //campo 18
+                $clcontratos20->si87_veiculodivulgacao = $this->removeCaracteres($oDados20->ac35_veiculodivulgacao); //campo 19
                 $clcontratos20->si87_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $clcontratos20->si87_instit = db_getsession("DB_instit");
                 $clcontratos20->incluir(null);
@@ -2014,6 +2018,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         } else {
                             $clcontratos20->si87_codunidadesub = $dados->manutac_codunidsubanterior;
                         }
+                        $clcontratos20->si87_codunidadesubatual = $dados->sCodUnidade;
                         $clcontratos20->si87_nrocontrato = $dados->ac16_numero;
                         $clcontratos20->si87_dtassinaturacontoriginal = $dados->ac16_dataassinatura;
                         $clcontratos20->si87_nroseqtermoaditivo = $dados->ac26_numeroaditamento;

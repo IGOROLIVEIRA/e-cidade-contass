@@ -49,6 +49,7 @@ class cl_contratos202024 {
    var $si87_dscreajuste = null;
    var $si87_mes = 0;
    var $si87_instit = 0;
+   var $si87_codunidadesubatual = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si87_sequencial = int8 = sequencial
@@ -72,6 +73,7 @@ class cl_contratos202024 {
                  si87_dscreajuste = varchar(300) - Descrução do Reajuste;
                  si87_mes = int8 = Mês
                  si87_instit = int8 = Instituição
+                 si87_codunidadesubatual = varchar(8) = Código Unidade Sub Atual;
                  ";
    //funcao construtor da classe
    function cl_contratos202024() {
@@ -140,6 +142,7 @@ class cl_contratos202024 {
        $this->si87_dscreajuste = ($this->si87_dscreajuste == ""?@$GLOBALS["HTTP_POST_VARS"]["si87_dscreajuste"]:$this->si87_dscreajuste);
        $this->si87_mes = ($this->si87_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si87_mes"]:$this->si87_mes);
        $this->si87_instit = ($this->si87_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si87_instit"]:$this->si87_instit);
+       $this->si87_codunidadesubatual = ($this->si87_codunidadesubatual == ""?@$GLOBALS["HTTP_POST_VARS"]["si87_codunidadesubatual"]:$this->si87_codunidadesubatual);
      }else{
        $this->si87_sequencial = ($this->si87_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si87_sequencial"]:$this->si87_sequencial);
      }
@@ -253,6 +256,7 @@ class cl_contratos202024 {
                                       ,si87_percentualreajuste
                                       ,si87_indiceunicoreajuste
                                       ,si87_dscreajuste
+                                      ,si87_codunidadesubatual
                        )
                 values (
                                 $this->si87_sequencial
@@ -276,6 +280,7 @@ class cl_contratos202024 {
                                ," . ($this->si87_percentualreajuste == "" ? "0" :  $this->si87_percentualreajuste) . "
                                ," . ($this->si87_indiceunicoreajuste == "" ? "0" :  $this->si87_indiceunicoreajuste) . "
                                ," . ($this->si87_dscreajuste == "" ? "''" : "'" . $this->si87_dscreajuste . "'") . "
+                               ,'$this->si87_codunidadesubatual'
                       )";
      $result = db_query($sql);
      // print_r($sql);
@@ -373,6 +378,10 @@ class cl_contratos202024 {
        $sql  .= $virgula." si87_codunidadesub = '$this->si87_codunidadesub' ";
        $virgula = ",";
      }
+     if(trim($this->si87_codunidadesubatual)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si87_codunidadesubatual"])){
+      $sql  .= $virgula." si87_codunidadesubatual = '$this->si87_codunidadesubatual' ";
+      $virgula = ",";
+    }
      if(trim($this->si87_nrocontrato)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si87_nrocontrato"])){
         if(trim($this->si87_nrocontrato)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si87_nrocontrato"])){
            $this->si87_nrocontrato = "0" ;
