@@ -398,10 +398,7 @@ if (isset($incluir) && trim($incluir) != "") {
 
             if (!$sqlerro && $incluir && pg_numrows($rsLotes) == pg_numrows($rsCodigos)) {
                 if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-
-                    if (in_array(intval($natureza_objeto), array(1, 7))) {
-                        echo "<script> parent.parent.window.location.href='lic4_editalabas.php?licitacao=$licitacao';</script>";
-                    }
+                    echo "<script> parent.parent.window.location.href='lic4_editalabas.php?licitacao=$licitacao';</script>";
                 }
             }
 
