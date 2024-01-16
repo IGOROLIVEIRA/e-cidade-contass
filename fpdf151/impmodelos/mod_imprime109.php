@@ -146,7 +146,6 @@ for ($i = 0;$i < 2;$i++){
   $this->objpdf->setxy(181,$xlin+92);
   $this->objpdf->cell(25,9,$this->valorMulta,0,0,"R");
 
-
   $this->objpdf->setx(15);
 
   ///Totais
