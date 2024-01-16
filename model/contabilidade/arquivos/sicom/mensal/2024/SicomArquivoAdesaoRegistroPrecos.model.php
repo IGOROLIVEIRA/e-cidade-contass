@@ -6,7 +6,7 @@ require_once("classes/db_regadesao112024_classe.php");
 require_once("classes/db_regadesao122024_classe.php");
 require_once("classes/db_regadesao132024_classe.php");
 require_once("classes/db_regadesao142024_classe.php");
-require_once("classes/db_regadesao152024_classe.php");
+require_once("classes/db_regadesao202024_classe.php");
 require_once("classes/db_regadesao202024_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarREGADESAO.model.php");
 
@@ -144,24 +144,24 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
     $regadesao12 = new cl_regadesao122024();
     $regadesao13 = new cl_regadesao132024();
     $regadesao14 = new cl_regadesao142024();
-    $regadesao15 = new cl_regadesao152024();
     $regadesao20 = new cl_regadesao202024();
+    $regadesao40 = new cl_regadesao402024();
 
     db_inicio_transacao();
 
-    $result = db_query($regadesao20->sql_query(NULL, "*", NULL, "si73_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si73_instit=" . db_getsession("DB_instit")));
+    $result = db_query($regadesao40->sql_query(NULL, "*", NULL, "si73_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si73_instit=" . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      $regadesao20->excluir(NULL, "si73_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si73_instit=" . db_getsession("DB_instit"));
-      if ($regadesao20->erro_status == 0) {
-        throw new Exception($regadesao20->erro_msg);
+      $regadesao40->excluir(NULL, "si73_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si73_instit=" . db_getsession("DB_instit"));
+      if ($regadesao40->erro_status == 0) {
+        throw new Exception($regadesao40->erro_msg);
       }
     }
 
-    $result = db_query($regadesao15->sql_query(NULL, "*", NULL, "si72_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si72_instit=" . db_getsession("DB_instit")));
+    $result = db_query($regadesao20->sql_query(NULL, "*", NULL, "si72_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si72_instit=" . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      $regadesao15->excluir(NULL, "si72_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si72_instit=" . db_getsession("DB_instit"));
-      if ($regadesao15->erro_status == 0) {
-        throw new Exception($regadesao15->erro_msg);
+      $regadesao20->excluir(NULL, "si72_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si72_instit=" . db_getsession("DB_instit"));
+      if ($regadesao20->erro_status == 0) {
+        throw new Exception($regadesao20->erro_msg);
       }
     }
 
@@ -207,7 +207,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
 
     db_fim_transacao();
 
-    $sSql = "select adesaoregprecos.*,si06_dataadesao as exercicioadesao,orgaogerenciador.z01_nome as nomeorgaogerenciador,responsavel.z01_cgccpf as cpfresponsavel,
+    $sSql = "select adesaoregprecos.*,si06_dataadesao as exercicioadesao,orgaogerenciador.z01_cgccpf as cnpjorgaogerenciador,responsavel.z01_cgccpf as cpfresponsavel,
                        infocomplementaresinstit.si09_codorgaotce as codorgao,si06_anoproc as exerciciolicitacao,
                 (SELECT CASE
                  WHEN o41_subunidade != 0
@@ -236,38 +236,43 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
                 and date_part('year',si06_dataadesao) = " . db_getsession("DB_anousu");
 
     $rsResult10 = db_query($sSql);
+//    echo $sSql;
+//    db_criatabela($rsResult10);exit;
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
       $regadesao10 = new cl_regadesao102024();
-      $regadesao10->si67_tiporegistro = 10;
-      $regadesao10->si67_tipocadastro = $oDados10->si06_cadinicial;
-      $regadesao10->si67_codorgao = $oDados10->codorgao;
+      $regadesao10->si67_tiporegistro = 10;//1
+      $regadesao10->si67_tipocadastro = $oDados10->si06_cadinicial;//2
+      $regadesao10->si67_codorgao = $oDados10->codorgao;//3
       if ($oDados10->si06_codunidadesubant != "") {
-        $regadesao10->si67_codunidadesub = $oDados10->si06_codunidadesubant;
+        $regadesao10->si67_codunidadesub = $oDados10->si06_codunidadesubant;//4
       } else {
-        $regadesao10->si67_codunidadesub = $oDados10->codunidadesub;
+        $regadesao10->si67_codunidadesub = $oDados10->codunidadesub;//4
       }
-      $regadesao10->si67_nroprocadesao = $oDados10->si06_numeroadm;
-      $regadesao10->si63_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
-      $regadesao10->si67_dtabertura = $oDados10->si06_dataabertura;
-      $regadesao10->si67_nomeorgaogerenciador = $oDados10->nomeorgaogerenciador;
-      $regadesao10->si67_exerciciolicitacao = $oDados10->exerciciolicitacao;
-      $regadesao10->si67_nroprocessolicitatorio = $oDados10->si06_numeroprc;
-      $regadesao10->si67_codmodalidadelicitacao = $oDados10->si06_modalidade;
-      $regadesao10->si67_nroedital = $oDados10->si06_edital;
-      $regadesao10->si67_exercicioedital = $oDados10->exerciciolicitacao;
-      $regadesao10->si67_dtataregpreco = $oDados10->si06_dataata;
-      $regadesao10->si67_dtvalidade = $oDados10->si06_datavalidade;
-      $regadesao10->si67_naturezaprocedimento = $oDados10->si06_orgarparticipante;
-      $regadesao10->si67_dtpublicacaoavisointencao = $oDados10->si06_publicacaoaviso;
-      $regadesao10->si67_objetoadesao = $this->removeCaracteres($oDados10->si06_objetoadesao);
-      $regadesao10->si67_cpfresponsavel = $oDados10->cpfresponsavel;
-      $regadesao10->si67_descontotabela = $oDados10->si06_descontotabela;
-      $regadesao10->si67_processoporlote = $oDados10->si06_processoporlote;
-      $regadesao10->si67_leidalicitacao = $oDados10->si06_leidalicitacao;
-      $regadesao10->si67_instit = db_getsession("DB_instit");
-      $regadesao10->si67_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+      $regadesao10->si67_nroprocadesao = $oDados10->si06_numeroadm;//5
+      $regadesao10->si63_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);//6
+      $regadesao10->si67_dtabertura = $oDados10->si06_dataabertura;//7
+      $regadesao10->si67_cnpjorgaogerenciador = $oDados10->cnpjorgaogerenciador;//8
+      $regadesao10->si67_exerciciolicitacao = $oDados10->exerciciolicitacao;//9
+      $regadesao10->si67_nroprocessolicitatorio = $oDados10->si06_numeroprc;//10
+      $regadesao10->si67_codmodalidadelicitacao = $oDados10->si06_modalidade;//11
+      $regadesao10->si67_regimecontratacao = $oDados10->si06_regimecontratacao;//12
+      $regadesao10->si67_tipocriterio = $oDados10->si06_criterioadjudicacao;//13
+      if($oDados10->si06_regimecontratacao == "1"){
+         $regadesao10->si67_nroedital = $oDados10->si06_edital;//14
+         $regadesao10->si67_exercicioedital = $oDados10->exerciciolicitacao;//15
+      }
+      $regadesao10->si67_dtataregpreco = $oDados10->si06_dataata;//16
+      $regadesao10->si67_dtvalidade = $oDados10->si06_datavalidade;//17
+      $regadesao10->si67_naturezaprocedimento = $oDados10->si06_orgarparticipante;//18
+      $regadesao10->si67_dtpublicacaoavisointencao = $oDados10->si06_publicacaoaviso;//19
+      $regadesao10->si67_objetoadesao = $this->removeCaracteres($oDados10->si06_objetoadesao);//20
+      $regadesao10->si67_cpfresponsavel = $oDados10->cpfresponsavel;//21
+      $regadesao10->si67_processoporlote = $oDados10->si06_processoporlote;//23
+      $regadesao10->si67_leidalicitacao = $oDados10->si06_leidalicitacao;//24
+      $regadesao10->si67_instit = db_getsession("DB_instit");//25
+      $regadesao10->si67_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];//26
       $regadesao10->incluir(null);
 
 
@@ -379,62 +384,62 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
                 pc01_descrmater||'. '||pc01_complmater as pc01_descrmater,
                 m61_abrev,
                 sum(pc11_quant) as pc11_quant
-from (
-SELECT DISTINCT pc01_servico,
-                pc11_codigo,
-                pc11_seq,
-                pc11_quant,
-                pc11_prazo,
-                pc11_pgto,
-                pc11_resum,
-                pc11_just,
-                m61_abrev,
-                m61_descr,
-                pc17_quant,
-                pc01_codmater,
-                pc01_descrmater,pc01_complmater,
-                pc10_numero,
-                pc90_numeroprocesso AS processo_administrativo,
-                (pc11_quant * pc11_vlrun) AS pc11_valtot,
-                m61_usaquant
-FROM solicitem
-INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
-LEFT JOIN solicitaprotprocesso ON solicitaprotprocesso.pc90_solicita = solicita.pc10_numero
-LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
-LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-LEFT JOIN pcprocitem ON pcprocitem.pc81_solicitem = solicitem.pc11_codigo
-LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
-LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
-LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
-LEFT JOIN orcelemento ON solicitemele.pc18_codele = orcelemento.o56_codele
-AND orcelemento.o56_anousu = " . db_getsession("DB_anousu") . "
-WHERE pc81_codproc = $oDados10->si06_processocompra
-  AND pc10_instit = " . db_getsession("DB_instit") . "
-ORDER BY pc11_seq) as x GROUP BY
-                pc01_codmater,
-                pc01_descrmater,pc01_complmater,m61_abrev ) as matquan join
-(SELECT DISTINCT
-                pc11_seq,
-                round(si02_vlprecoreferencia,2) as si02_vlprecoreferencia,
-                pc01_codmater,
-                si01_datacotacao,
-                si07_numerolote,
-                CASE
-      WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
-    ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) END AS coditem
-FROM pcproc
-JOIN pcprocitem ON pc80_codproc = pc81_codproc
-JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
-JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
-JOIN solicitem ON pc81_solicitem = pc11_codigo
-JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
-JOIN pcmater ON pc16_codmater = pc01_codmater
-JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
-JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-JOIN itensregpreco ON si07_item = pc01_codmater AND si07_sequencialadesao = $oDados10->si06_sequencial
-WHERE pc80_codproc = $oDados10->si06_processocompra
-ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq";
+                from (
+                SELECT DISTINCT pc01_servico,
+                                pc11_codigo,
+                                pc11_seq,
+                                pc11_quant,
+                                pc11_prazo,
+                                pc11_pgto,
+                                pc11_resum,
+                                pc11_just,
+                                m61_abrev,
+                                m61_descr,
+                                pc17_quant,
+                                pc01_codmater,
+                                pc01_descrmater,pc01_complmater,
+                                pc10_numero,
+                                pc90_numeroprocesso AS processo_administrativo,
+                                (pc11_quant * pc11_vlrun) AS pc11_valtot,
+                                m61_usaquant
+                FROM solicitem
+                INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+                LEFT JOIN solicitaprotprocesso ON solicitaprotprocesso.pc90_solicita = solicita.pc10_numero
+                LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+                LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+                LEFT JOIN pcprocitem ON pcprocitem.pc81_solicitem = solicitem.pc11_codigo
+                LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+                LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+                LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
+                LEFT JOIN orcelemento ON solicitemele.pc18_codele = orcelemento.o56_codele
+                AND orcelemento.o56_anousu = " . db_getsession("DB_anousu") . "
+                WHERE pc81_codproc = $oDados10->si06_processocompra
+                  AND pc10_instit = " . db_getsession("DB_instit") . "
+                ORDER BY pc11_seq) as x GROUP BY
+                                pc01_codmater,
+                                pc01_descrmater,pc01_complmater,m61_abrev ) as matquan join
+                (SELECT DISTINCT
+                                pc11_seq,
+                                round(si02_vlprecoreferencia,2) as si02_vlprecoreferencia,
+                                pc01_codmater,
+                                si01_datacotacao,
+                                si07_numerolote,
+                                CASE
+                      WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
+                    ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) END AS coditem
+                FROM pcproc
+                JOIN pcprocitem ON pc80_codproc = pc81_codproc
+                JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+                JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+                JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+                JOIN solicitem ON pc81_solicitem = pc11_codigo
+                JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
+                JOIN pcmater ON pc16_codmater = pc01_codmater
+                JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+                JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
+                JOIN itensregpreco ON si07_item = pc01_codmater AND si07_sequencialadesao = $oDados10->si06_sequencial
+                WHERE pc80_codproc = $oDados10->si06_processocompra
+                ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq";
       $rsResult14 = db_query($sSql);
       for ($iCont14 = 0; $iCont14 < pg_num_rows($rsResult14); $iCont14++) {
 
@@ -464,87 +469,96 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
         }
       }
 
-      $sSql = "select si07_numerolote,si07_precounitario,si07_quantidadelicitada,si07_quantidadeaderida,
-case when length(z01_cgccpf) = 11 then 1 when length(z01_cgccpf) = 14 then 2 else 0 end as tipodocumento,
-z01_cgccpf,
-CASE
-      WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
-    ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) END AS coditem
-from itensregpreco
-INNER JOIN adesaoregprecos on  si07_sequencialadesao = si06_sequencial and si06_descontotabela = 2
-INNER join cgm on si07_fornecedor = z01_numcgm
-inner join pcmater on
-                   		pcmater.pc01_codmater = si07_item
-where si07_sequencialadesao = {$oDados10->si06_sequencial}";
-      $rsResult15 = db_query($sSql);
-      for ($iCont15 = 0; $iCont15 < pg_num_rows($rsResult15); $iCont15++) {
+      //REGISTRO 20
+      if($oDados10->si06_regimecontratacao == "3") {
 
-        $oDados15 = db_utils::fieldsMemory($rsResult15, $iCont15);
-        $regadesao15 = new cl_regadesao152024();
-        $regadesao15->si72_tiporegistro = 15;
-        $regadesao15->si72_codorgao = $oDados10->codorgao;
-        if ($oDados10->si06_codunidadesubant != "") {
-          $regadesao15->si72_codunidadesub = $oDados10->si06_codunidadesubant;
-        } else {
-          $regadesao15->si72_codunidadesub = $oDados10->codunidadesub;
-        }
-        $regadesao15->si72_nroprocadesao = $oDados10->si06_numeroadm;
-        $regadesao15->si72_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
-        $regadesao15->si72_nrolote = $oDados15->si07_numerolote;
-        $regadesao15->si72_coditem = $oDados15->coditem;
-        $regadesao15->si72_precounitario = $oDados15->si07_precounitario;
-        $regadesao15->si72_quantidadelicitada = $oDados15->si07_quantidadelicitada;
-        $regadesao15->si72_quantidadeaderida = $oDados15->si07_quantidadeaderida;
-        $regadesao15->si72_tipodocumento = $oDados15->tipodocumento;
-        $regadesao15->si72_nrodocumento = $oDados15->z01_cgccpf;
-        $regadesao15->si72_instit = db_getsession("DB_instit");
-        $regadesao15->si72_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-        $regadesao15->si72_reg10 = $regadesao10->si67_sequencial;
+          $sSql = "select si07_numerolote,si07_precounitario,si07_quantidadelicitada,si07_quantidadeaderida,
+                        case when length(z01_cgccpf) = 11 then 1 when length(z01_cgccpf) = 14 then 2 else 0 end as tipodocumento,
+                        z01_cgccpf,
+                        CASE
+                              WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
+                            ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) END AS coditem
+                        from itensregpreco
+                        INNER JOIN adesaoregprecos on  si07_sequencialadesao = si06_sequencial and si06_descontotabela = 2
+                        INNER join cgm on si07_fornecedor = z01_numcgm
+                        inner join pcmater on
+                                                pcmater.pc01_codmater = si07_item
+                        where si07_sequencialadesao = {$oDados10->si06_sequencial}";
+          $rsResult20 = db_query($sSql);
+          for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-        $regadesao15->incluir(null);
-        if ($regadesao15->erro_status == 0) {
-          throw new Exception($regadesao15->erro_msg);
-        }
+              $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
+              $regadesao20 = new cl_regadesao402024();
+              $regadesao20->si72_tiporegistro = 20;
+              $regadesao20->si72_codorgao = $oDados10->codorgao;
+              if ($oDados10->si06_codunidadesubant != "") {
+                  $regadesao20->si72_codunidadesub = $oDados10->si06_codunidadesubant;
+              } else {
+                  $regadesao20->si72_codunidadesub = $oDados10->codunidadesub;
+              }
+              $regadesao20->si72_nroprocadesao = $oDados10->si06_numeroadm;
+              $regadesao20->si72_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
+              $regadesao20->si72_nrolote = $oDados20->si07_numerolote;
+              $regadesao20->si72_coditem = $oDados20->coditem;
+              $regadesao20->si72_precounitario = $oDados20->si07_precounitario;
+              $regadesao20->si72_quantidadelicitada = $oDados20->si07_quantidadelicitada;
+              $regadesao20->si72_quantidadeaderida = $oDados20->si07_quantidadeaderida;
+              $regadesao20->si72_tipodocumento = $oDados20->tipodocumento;
+              $regadesao20->si72_nrodocumento = $oDados20->z01_cgccpf;
+              $regadesao20->si72_instit = db_getsession("DB_instit");
+              $regadesao20->si72_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+              $regadesao20->si72_reg10 = $regadesao10->si67_sequencial;
+
+              $regadesao20->incluir(null);
+              if ($regadesao20->erro_status == 0) {
+                  throw new Exception($regadesao20->erro_msg);
+              }
+          }
       }
 
-      $sSql = "select si07_numerolote,si07_precounitario,si07_quantidadelicitada,si07_quantidadeaderida,si07_percentual,
-case when length(z01_cgccpf) = 11 then 1 when length(z01_cgccpf) = 14 then 2 else 0 end as tipodocumento,
-z01_cgccpf,
-CASE
-      WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
-    ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) END AS coditem
-from itensregpreco
-INNER JOIN adesaoregprecos on  si07_sequencialadesao = si06_sequencial and si06_descontotabela = 1
-INNER join cgm on si07_fornecedor = z01_numcgm
-inner join pcmater on
-                   		pcmater.pc01_codmater = si07_item
-where si07_sequencialadesao = {$oDados10->si06_sequencial}";
-      $rsResult20 = db_query($sSql);
-      for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
+        //REGISTRO 40
+      if($oDados10->si06_criterioadjudicacao == "2"){
 
-        $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
-        $regadesao20 = new cl_regadesao202024();
-        $regadesao20->si73_tiporegistro = 20;
-        $regadesao20->si73_codorgao = $oDados10->codorgao;
-        if ($oDados10->si06_codunidadesubant != "") {
-          $regadesao20->si73_codunidadesub = $oDados10->si06_codunidadesubant;
-        } else {
-          $regadesao20->si73_codunidadesub = $oDados10->codunidadesub;
-        }
-        $regadesao20->si73_nroprocadesao = $oDados10->si06_numeroadm;
-        $regadesao20->si73_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
-        $regadesao20->si73_nrolote = $oDados20->si07_numerolote;
-        $regadesao20->si73_coditem = $oDados20->coditem;
-        $regadesao20->si73_percdesconto = $oDados20->si07_percentual;
-        $regadesao20->si73_tipodocumento = $oDados20->tipodocumento;
-        $regadesao20->si73_nrodocumento = $oDados20->z01_cgccpf;
-        $regadesao20->si73_instit = db_getsession("DB_instit");
-        $regadesao20->si73_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+          $sSql = "select si07_numerolote,si07_precounitario,si07_quantidadelicitada,si07_quantidadeaderida,si07_percentual,
+                case when length(z01_cgccpf) = 11 then 1 when length(z01_cgccpf) = 14 then 2 else 0 end as tipodocumento,
+                z01_cgccpf,
+                CASE
+                      WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
+                    ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) END AS coditem
+                from itensregpreco
+                INNER JOIN adesaoregprecos on  si07_sequencialadesao = si06_sequencial and si06_descontotabela = 1
+                INNER join cgm on si07_fornecedor = z01_numcgm
+                inner join pcmater on
+                                        pcmater.pc01_codmater = si07_item
+                where si07_sequencialadesao = {$oDados10->si06_sequencial}";
+          $rsResult40 = db_query($sSql);
 
-        $regadesao20->incluir(null);
-        if ($regadesao20->erro_status == 0) {
-          throw new Exception($regadesao20->erro_msg);
-        }
+          for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
+
+              $oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
+              $regadesao40 = new cl_regadesao402024();
+              $regadesao40->si73_tiporegistro = 40;
+              $regadesao40->si73_codorgao = $oDados10->codorgao;
+              if ($oDados10->si06_codunidadesubant != "") {
+                  $regadesao40->si73_codunidadesub = $oDados10->si06_codunidadesubant;
+              } else {
+                  $regadesao40->si73_codunidadesub = $oDados10->codunidadesub;
+              }
+              $regadesao40->si73_nroprocadesao = $oDados10->si06_numeroadm;
+              $regadesao40->si73_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
+              $regadesao40->si73_nrolote = $oDados40->si07_numerolote;
+              $regadesao40->si73_coditem = $oDados40->coditem;
+              $regadesao40->si73_percdesconto = $oDados40->si07_percentual;
+              $regadesao40->si73_tipodocumento = $oDados40->tipodocumento;
+              $regadesao40->si73_nrodocumento = $oDados40->z01_cgccpf;
+              $regadesao40->si73_instit = db_getsession("DB_instit");
+              $regadesao40->si73_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+
+              $regadesao40->incluir(null);
+              if ($regadesao40->erro_status == 0) {
+                  throw new Exception($regadesao40->erro_msg);
+              }
+          }
       }
     }
 
