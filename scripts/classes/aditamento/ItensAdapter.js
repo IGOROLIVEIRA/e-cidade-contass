@@ -48,6 +48,7 @@ class ItensAdapter {
       itemAdaptado.valorunitario = item.valorUnitario;
       itemAdaptado.vlunitPosicaoanterior = item.valorAnteriorUnitario > 0 ? item.valorAnteriorUnitario : item.valorUnitario;
       itemAdaptado.vlunitanterior =  item.valorUnitario;
+      itemAdaptado.eExecutado = item.eExecutado;
 
       itensAdaptados.push(itemAdaptado);
     });

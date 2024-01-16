@@ -72,4 +72,9 @@ class AcordoItem extends LegacyModel
     {
         return $this->hasOne(AcordoItemPeriodo::class,'ac41_acordoitem', 'ac20_sequencial');
     }
+
+    public function itemExecutado()
+    {
+        return $this->hasOne(AcordoItemExecutado::class, 'ac29_acordoitem', 'ac20_sequencial');
+    }
 }

@@ -90,6 +90,12 @@ class Item
      */
     private array $itemDotacoes = [];
 
+    /**
+     *
+     * @var boolean
+     */
+    private bool $eExecutado = false;
+
 
     /**
      * Get the value of itemSequencial
@@ -372,4 +378,22 @@ class Item
     }
 
 
+
+    /**
+     * Get the value of eExecutado
+     */
+    public function isEExecutado(): bool
+    {
+        return $this->eExecutado;
+    }
+
+    /**
+     * Set the value of eExecutado
+     */
+    public function setEExecutado(bool $eExecutado): self
+    {
+        $this->eExecutado = $eExecutado;
+
+        return $this;
+    }
 }

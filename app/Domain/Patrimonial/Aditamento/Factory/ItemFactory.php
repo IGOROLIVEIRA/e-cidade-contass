@@ -4,6 +4,7 @@ namespace App\Domain\Patrimonial\Aditamento\Factory;
 
 use App\Domain\Patrimonial\Aditamento\Item;
 use App\Models\AcordoItem;
+use App\Repositories\Patrimonial\AcordoItemExecutadoRepository;
 use DateTime;
 use Illuminate\Database\Eloquent\Collection;
 use League\Fractal\Resource\Collection as ResourceCollection;
@@ -41,7 +42,6 @@ class ItemFactory
     public function createByEloquentModel(AcordoItem $itemAcordo, ?AcordoItem $itemPosicaoAnterior = null): Item
     {
         $item = new Item();
-        $existePosicaoAnterior = empty($itemPosicaoAnterior);
 
         $item->setItemSequencial((int) $itemAcordo->ac20_sequencial)
             ->setCodigoPcMater((int) $itemAcordo->ac20_pcmater)
@@ -63,9 +63,13 @@ class ItemFactory
 
         $item->setInicioExecucao($dataInicio)
             ->setFimExecucao($dataFim);
-        if ( !$existePosicaoAnterior ) {
+
+        if (!empty($itemPosicaoAnterior)) {
             $item->setQuantidadeAnterior((float) $itemPosicaoAnterior->ac20_quantidade)
                 ->setValorAnteriorUnitario((float) $itemPosicaoAnterior->ac20_valorunitario);
+
+            $eExecutado = (new AcordoItemExecutadoRepository())->eItemExecutado($itemPosicaoAnterior->ac20_sequencial);
+            $item->setEExecutado($eExecutado);
         }
 
         return $item;

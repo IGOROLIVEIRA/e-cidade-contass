@@ -1218,12 +1218,13 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
         let qtanter = oSelecionados[iIndice].aCells[4].getValue().getNumber();
         let vlranter = oSelecionados[iIndice].aCells[5].getValue().getNumber();
 
-
         if (cboTipo == 9 || cboTipo == 10) {
           let codigoItemFiltro = oSelecionados[iIndice].aCells[2].getValue();
           const itemFiltrado = me.itensAdaptados.filter(item => item.codigoitem == codigoItemFiltro);
-          qtanter = itemFiltrado[0].qtdePosicaoanterior;
-          vlranter = itemFiltrado[0].vlunitPosicaoanterior;
+          if (!me.usarQuantidadeAtual(itemFiltrado[0])) {
+            qtanter = itemFiltrado[0].qtdePosicaoanterior;
+            vlranter = itemFiltrado[0].vlunitPosicaoanterior;
+          }
         }
 
 
@@ -2024,7 +2025,8 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     });
 
     aItens.each(function (element, id) {
-      if (aItens[id].novo !== true) {
+      if (aItens[id].novo !== true && me.totalizadorNoCarregamento) {
+        me.totalizadorNoCarregamento = false;
         me.calculaTotalPosicAnterior(element, id);
       } else {
         me.calculaValorTotal(id);
@@ -2038,7 +2040,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
    * Calcula o valor da coluna Valor Total
    */
   this.calculaValorTotal = function (iLinha) {
-    console.log("calula valor total")
+
     let aLinha = me.oGridItens.aRows[iLinha],
       nQuantidade = aLinha.aCells[6].getValue().getNumber(),
       nUnitario = aLinha.aCells[7].getValue().getNumber(),
@@ -2059,8 +2061,14 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     if (cboTipo == 10 || cboTipo == 9) {
       let codigoItemFiltro = aLinha.aCells[2].getValue();
       const itemFiltrado = me.itensAdaptados.filter(item => item.codigoitem == codigoItemFiltro);
-      nQuantidadeA = itemFiltrado[0].qtdePosicaoanterior;
-      nUnitarioA = itemFiltrado[0].vlunitPosicaoanterior;
+      console.log(me.usarQuantidadeAtual(itemFiltrado));
+
+      if (!me.usarQuantidadeAtual(itemFiltrado[0])) {
+        console.log("PAssou aqui");
+        nQuantidadeA = itemFiltrado[0].qtdePosicaoanterior;
+        nUnitarioA = itemFiltrado[0].vlunitPosicaoanterior;
+      }
+
     }
     console.log(nQuantidade, nUnitario, nQuantidadeA, nUnitarioA);
 
@@ -2097,14 +2105,14 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
    * Calcula o valor da coluna Valor Total
    */
   this.calculaTotalPosicAnterior = function (item, iLinha) {
-    console.log('Calcula Valor Total no carregamento');
+
     let aLinha = me.oGridItens.aRows[iLinha],
       nQuantidade = aLinha.aCells[6].getValue().getNumber(),
       nUnitario = aLinha.aCells[7].getValue().getNumber(),
       nQuantidadeA = item.qtdePosicaoanterior,
       nUnitarioA = item.vlunitPosicaoanterior
 
-    if (cboTipo == 2 || cboTipo == 5) {
+    if (me.usarQuantidadeAtual(item)) {
       nQuantidadeA = aLinha.aCells[4].getValue().getNumber();
     }
 
@@ -2573,6 +2581,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     aItensPosicao = me.itensAdaptados;
     me.estadoTela.relacaoItemPcmater = itens.relacaoItemPcmater;
     console.log(aItensPosicao);
+    me.totalizadorNoCarregamento = true;
     me.preencheItens(aItensPosicao);
     me.js_changeTipoAditivo();
     me.lidaLeiLicitacao(aditamento.acordoSequencial);
@@ -2664,5 +2673,19 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
     }).setMessage("Aguarde, validando periodo sicom")
       .execute();
+  }
+
+  this.usarQuantidadeAtual = function (item = null) {
+    const cboTipo = parseInt($('oCboTipoAditivo').value);
+    console.log(typeof cboTipo);
+    const cboTipoInalteraQtd = [2, 5];
+    const cboDependeExecucao = [9, 10, 11];
+    console.log(item);
+    console.log(cboDependeExecucao.includes(cboTipo) && item.eExecutado === true);
+    if (cboTipoInalteraQtd.includes(cboTipo)) return true;
+
+    if (cboDependeExecucao.includes(cboTipo) && item.eExecutado === true) return true;
+
+    return false;
   }
 }
