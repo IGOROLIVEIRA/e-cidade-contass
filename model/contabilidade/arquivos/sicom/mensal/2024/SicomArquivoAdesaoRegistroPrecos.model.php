@@ -236,8 +236,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
                 and date_part('year',si06_dataadesao) = " . db_getsession("DB_anousu");
 
     $rsResult10 = db_query($sSql);
-//    echo $sSql;
-//    db_criatabela($rsResult10);exit;
+
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
@@ -470,7 +469,6 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       }
 
       //REGISTRO 20
-      if($oDados10->si06_regimecontratacao == "3") {
 
           $sSql = "select si07_numerolote,si07_precounitario,si07_quantidadelicitada,si07_quantidadeaderida,
                         case when length(z01_cgccpf) = 11 then 1 when length(z01_cgccpf) = 14 then 2 else 0 end as tipodocumento,
@@ -479,12 +477,13 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
                               WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
                             ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) END AS coditem
                         from itensregpreco
-                        INNER JOIN adesaoregprecos on  si07_sequencialadesao = si06_sequencial and si06_descontotabela = 2
+                        INNER JOIN adesaoregprecos on  si07_sequencialadesao = si06_sequencial
                         INNER join cgm on si07_fornecedor = z01_numcgm
                         inner join pcmater on
                                                 pcmater.pc01_codmater = si07_item
-                        where si07_sequencialadesao = {$oDados10->si06_sequencial}";
+                        where si07_sequencialadesao = {$oDados10->si06_sequencial} and si06_criterioadjudicacao = 3";
           $rsResult20 = db_query($sSql);
+
           for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
               $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
@@ -514,10 +513,8 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
                   throw new Exception($regadesao20->erro_msg);
               }
           }
-      }
 
         //REGISTRO 40
-      if($oDados10->si06_criterioadjudicacao == "2"){
 
           $sSql = "select si07_numerolote,si07_precounitario,si07_quantidadelicitada,si07_quantidadeaderida,si07_percentual,
                 case when length(z01_cgccpf) = 11 then 1 when length(z01_cgccpf) = 14 then 2 else 0 end as tipodocumento,
@@ -526,11 +523,11 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
                       WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
                     ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) END AS coditem
                 from itensregpreco
-                INNER JOIN adesaoregprecos on  si07_sequencialadesao = si06_sequencial and si06_descontotabela = 1
+                INNER JOIN adesaoregprecos on  si07_sequencialadesao = si06_sequencial
                 INNER join cgm on si07_fornecedor = z01_numcgm
                 inner join pcmater on
                                         pcmater.pc01_codmater = si07_item
-                where si07_sequencialadesao = {$oDados10->si06_sequencial}";
+                where si07_sequencialadesao = {$oDados10->si06_sequencial} and si06_criterioadjudicacao in (1,2)";
           $rsResult40 = db_query($sSql);
 
           for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
@@ -559,7 +556,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
                   throw new Exception($regadesao40->erro_msg);
               }
           }
-      }
+
     }
 
     $oGerarREGADESAO = new GerarREGADESAO();
