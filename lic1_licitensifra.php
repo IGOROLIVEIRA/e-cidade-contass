@@ -229,6 +229,15 @@ $codtribunal = $codtribunal->l03_pctipocompratribunal;
             alert('Item incluído com sucesso!');
 
             parent.parent.iframe_liclicita.bloquearRegistroPreco;
+            
+            // Regras para redirecionamento edital
+            // Se (l20_tipojulg == 1) AND
+            // Modalidade in (1 => "Dispensa", 2 => "Dispensa por Chamada Pública", 3 => "Inexigibilidade por credenciamento" ou 4 =>"Inexigibilidade") AND
+            // Codigo do Tribunal in (100,101,102 e 103)
+            let codigosTribunal = [100,101,102,103];
+            if (parseInt(tipoJulgamento, 10) === 1 && codigosTribunal.includes(parseInt(codtribunal, 10))) {
+                parent.parent.window.location.href='lic4_editalabas.php?licitacao=<?= $licitacao ?>';
+            }
 
             parent.location.href = `lic1_liclicitemalt001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`;
 
