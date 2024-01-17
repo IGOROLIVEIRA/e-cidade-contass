@@ -32,6 +32,7 @@ class cl_contratos212024 {
    var $si88_reg20 = 0;
    var $si88_instit = 0;
    var $si88_nrolote = 0;
+   var $si88_obrordem = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si88_sequencial = int8 = sequencial
@@ -50,6 +51,7 @@ class cl_contratos212024 {
                  si88_reg20 = int8 = reg20
                  si88_instit = int8 = Instituição
                  si88_nrolote = int8 = Numero do Lote
+                 si88_obrordem = int = ordem item obra
                  ";
    //funcao construtor da classe
    function cl_contratos212024() {
@@ -85,6 +87,7 @@ class cl_contratos212024 {
        $this->si88_descoutrosmateriais = ($this->si88_descoutrosmateriais == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_descoutrosmateriais"]:$this->si88_descoutrosmateriais);
        $this->si88_itemplanilha = ($this->si88_itemplanilha == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_itemplanilha"]:$this->si88_itemplanilha);
        $this->si88_nrolote = ($this->si88_nrolote == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_nrolote"]:$this->si88_nrolote);
+       $this->si88_obrordem = ($this->si88_obrordem == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_obrordem"]:$this->si88_obrordem);
      }else{
        $this->si88_sequencial = ($this->si88_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_sequencial"]:$this->si88_sequencial);
      }
@@ -193,6 +196,7 @@ class cl_contratos212024 {
                                       ,si88_reg20
                                       ,si88_instit
                                       ,si88_nrolote
+                                      ,si88_obrordem
                        )
                 values (
                                 $this->si88_sequencial
@@ -211,6 +215,7 @@ class cl_contratos212024 {
                                ,$this->si88_reg20
                                ,$this->si88_instit
                                ," . ($this->si88_nrolote == "" ? "0" :  $this->si88_nrolote) . "
+                               ,".($this->si88_obrordem == "null" || $this->si88_obrordem == ""? "null" : $this->si88_obrordem)."
                       )";
      $result = db_query($sql);
      if($result==false){

@@ -31,6 +31,7 @@ class cl_contratos112024 {
    var $si84_mes = 0;
    var $si84_reg10 = 0;
    var $si84_instit = 0;
+   var $si84_obrordem = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si84_sequencial = int8 = sequencial
@@ -48,6 +49,7 @@ class cl_contratos112024 {
                  si84_mes = int8 = Mês
                  si84_reg10 = int8 = reg10
                  si84_instit = int8 = Instituição
+                 si84_obrordem = int = ordem item obra;
                  ";
    //funcao construtor da classe
    function cl_contratos112024() {
@@ -82,6 +84,7 @@ class cl_contratos112024 {
        $this->si84_descoutrosmateriais = ($this->si84_descoutrosmateriais == ""?@$GLOBALS["HTTP_POST_VARS"]["si84_descoutrosmateriais"]:$this->si84_descoutrosmateriais);
        $this->si84_itemplanilha = ($this->si84_itemplanilha == ""?@$GLOBALS["HTTP_POST_VARS"]["si84_itemplanilha"]:$this->si84_itemplanilha);
        $this->si84_nrolote = ($this->si84_nrolote == ""?@$GLOBALS["HTTP_POST_VARS"]["si84_nrolote"]:$this->si84_nrolote);
+       $this->si84_obrordem = ($this->si84_obrordem == ""?@$GLOBALS["HTTP_POST_VARS"]["si84_obrordem"]:$this->si84_obrordem);
      }else{
        $this->si84_sequencial = ($this->si84_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si84_sequencial"]:$this->si84_sequencial);
      }
@@ -188,6 +191,7 @@ class cl_contratos112024 {
                                       ,si84_reg10
                                       ,si84_instit
                                       ,si84_nrolote
+                                      ,si84_obrordem
                        )
                 values (
                                 $this->si84_sequencial
@@ -205,6 +209,7 @@ class cl_contratos112024 {
                                ,$this->si84_reg10
                                ,$this->si84_instit
                                ," . ($this->si84_nrolote == "" ? "0" :  $this->si84_nrolote) . "
+                               ,".($this->si84_obrordem == "null" || $this->si84_obrordem == ""? "null" : $this->si84_obrordem)."
                       )";
      $result = db_query($sql);//die($sql);
      if($result==false){

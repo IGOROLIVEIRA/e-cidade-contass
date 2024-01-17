@@ -791,7 +791,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             $oContrato11->si84_coditemsimcro = null; //campo 07
                             $oContrato11->si84_descoutrosmateriais = $this->removeCaracteres(mb_convert_encoding($oDadosItensObra->obr06_descricaotabela, "ISO-8859-1", "UTF-8"));
                         }
-                        $oContrato11->si84_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
+                        $oContrato11->si84_obrordem = $oDadosItensObra->obr06_ordem; // campo 09
+                        $oContrato11->si84_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 10
                         $aDadosAgrupados[$sHash] = $oContrato11;
                     } else {
                         $aDadosAgrupados[$sHash]->si84_quantidadeitem += $oItens->getQuantidade();
@@ -817,6 +818,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     $clcontratos11->si84_coditemsinapi = $oDadosReg11->si84_coditemsinapi;
                     $clcontratos11->si84_descoutrosmateriais = $oDadosReg11->si84_descoutrosmateriais;
                     $clcontratos11->si84_itemplanilha = $oDadosReg11->si84_itemplanilha;
+                    $clcontratos11->si84_obrordem = $oDadosReg11->si84_obrordem;
 
                     $clcontratos11->incluir(null);
                     if ($clcontratos11->erro_status == 0) {
@@ -1000,6 +1002,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 ac26_indicereajuste,
                 ac26_percentualreajuste,
                 ac26_descricaoindice,
+                ac26_descricaoreajuste,
+                ac26_criterioreajuste,
                 ac02_acordonatureza,
                 manutac_codunidsubanterior,
                 manutac_numeroant,
@@ -1077,17 +1081,31 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 } else {
                     $clcontratos20->si87_novadatatermino = ""; //campo 13
                 }
+                //echo print_r($oDados20);
                 if ($this->getTipoTermoAditivo($oAcordoPosicao) == '4') {
                     $clcontratos20->si87_percentualreajuste = $oDados20->ac26_percentualreajuste; //campo 14
-                    $clcontratos20->si87_indiceunicoreajuste = $oDados20->ac26_indicereajuste; //campo 15
+                    $clcontratos20->si87_criterioreajuste = $oDados20->ac26_criterioreajuste; //campo 15
                 } else {
                     $clcontratos20->si87_percentualreajuste = ''; //campo 14
-                    $clcontratos20->si87_indiceunicoreajuste = ''; //campo 15
+                    $clcontratos20->si87_criterioreajuste = ''; //campo 15
                 }
-                if ($oDados20->ac26_indicereajuste == '6') {
-                    $clcontratos20->si87_dscreajuste = $this->removeCaracteres($oDados20->ac26_descricaoindice); //campo 16
+
+                if($this->getTipoTermoAditivo($oAcordoPosicao) == '4' && $oDados20->ac26_criterioreajuste == '1'){
+                    $clcontratos20->si87_indiceunicoreajuste = $oDados20->ac26_indicereajuste; //campo 17
                 } else {
-                    $clcontratos20->si87_dscreajuste = ''; //campo 16
+                    $clcontratos20->si87_indiceunicoreajuste = ''; //campo 17
+                }
+
+                if(in_array($oDados20->ac26_criterioreajuste, array("2","3"))){
+                    $clcontratos20->si87_descricaoindice = $this->removeCaracteres($oDados20->ac26_descricaoindice); // campo 16
+                } else {
+                    $clcontratos20->si87_descricaoindice = ''; //campo 16
+                }
+
+                if ($oDados20->ac26_indicereajuste == '6') {
+                    $clcontratos20->si87_descricaoreajuste = $this->removeCaracteres($oDados20->ac26_descricaoreajuste); //campo 18
+                } else {
+                    $clcontratos20->si87_descricaoreajuste = ''; //campo 18
                 }
 
 
@@ -1152,9 +1170,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 }
 
                 $clcontratos20->si87_tipoalteracaovalor = $tipoalteracao; //campo 11
-                $clcontratos20->si87_valoraditivo = ($tipoalteracao == 3 ? 0 : abs($valortotaladitado)); //campo 17
-                $clcontratos20->si87_datapublicacao = $oDados20->ac35_datapublicacao; //campo 18
-                $clcontratos20->si87_veiculodivulgacao = $this->removeCaracteres($oDados20->ac35_veiculodivulgacao); //campo 19
+                $clcontratos20->si87_valoraditivo = ($tipoalteracao == 3 ? 0 : abs($valortotaladitado)); //campo 19
+                $clcontratos20->si87_datapublicacao = $oDados20->ac35_datapublicacao; //campo 20
+                $clcontratos20->si87_veiculodivulgacao = $this->removeCaracteres($oDados20->ac35_veiculodivulgacao); //campo 21
                 $clcontratos20->si87_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $clcontratos20->si87_instit = db_getsession("DB_instit");
                 $clcontratos20->incluir(null);
@@ -1281,7 +1299,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 $clcontratos21->si88_coditemsimcro = null; //campo 07
                                 $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres(mb_convert_encoding($oDadosItensObra->obr06_descricaotabela, "ISO-8859-1", "UTF-8")); //campo 08
                             }
-                            $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
+                            $clcontratos21->si88_obrordem = $oDadosItensObra->obr06_ordem; //campo 09
+                            $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 10
                             $clcontratos21->incluir(null);
 
                             if ($clcontratos21->erro_status == 0) {
@@ -1347,6 +1366,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                     $clcontratos21->si88_coditemsimcro = null; //campo 07
                                     $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres(mb_convert_encoding($oDadosItensObra->obr06_descricaotabela, "ISO-8859-1", "UTF-8")); //campo 08
                                 }
+                                $clcontratos21->si88_obrordem = $oDadosItensObra->obr06_ordem; //campo 09
                                 $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
                                 $clcontratos21->incluir(null);
 
@@ -1386,15 +1406,26 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 }
                 if ($this->getTipoTermoAditivo($oAcordoPosicao) == '4') {
                     $clcontratos20->si87_percentualreajuste = $oDados20->ac26_percentualreajuste; //campo 14
-                    $clcontratos20->si87_indiceunicoreajuste = $oDados20->ac26_indicereajuste; //campo 15
+                    $clcontratos20->si87_criterioreajuste = $oDados20->ac26_criterioreajuste; //campo 15
                 } else {
                     $clcontratos20->si87_percentualreajuste = ''; //campo 14
-                    $clcontratos20->si87_indiceunicoreajuste = ''; //campo 15
+                    $clcontratos20->si87_criterioreajuste = ''; //campo 15
                 }
-                if ($oDados20->ac26_indicereajuste == '6') {
-                    $clcontratos20->si87_dscreajuste = $this->removeCaracteres($oDados20->ac26_descricaoindice); //campo 16
+                if($this->getTipoTermoAditivo($oAcordoPosicao) == '4' && $oDados20->ac26_criterioreajuste == '1'){
+                    $clcontratos20->si87_indiceunicoreajuste = $oDados20->ac26_indicereajuste; //campo 17
                 } else {
-                    $clcontratos20->si87_dscreajuste = ''; //campo 16
+                    $clcontratos20->si87_indiceunicoreajuste = ''; //campo 17
+                }
+                if(in_array($oDados20->ac26_criterioreajuste, array("2","3"))){
+                    $clcontratos20->si87_descricaoindice = $this->removeCaracteres($oDados20->ac26_descricaoindice); // campo 16
+                } else {
+                    $clcontratos20->si87_descricaoindice = ''; //campo 16
+                }
+
+                if ($oDados20->ac26_indicereajuste == '6') {
+                    $clcontratos20->si87_descricaoreajuste = $this->removeCaracteres($oDados20->ac26_descricaoreajuste); //campo 18
+                } else {
+                    $clcontratos20->si87_descricaoreajuste = ''; //campo 18
                 }
                 $iTotalPosicaoAnterior = 0;
                 $iTotalPosicaoAditivo = 0;
@@ -1451,9 +1482,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 }
 
                 $clcontratos20->si87_tipoalteracaovalor = $tipoalteracao; //campo 10
-                $clcontratos20->si87_valoraditivo = ($tipoalteracao == 3 ? 0 : abs($valortotaladitado)); //campo 17
-                $clcontratos20->si87_datapublicacao = $oDados20->ac35_datapublicacao; //campo 18
-                $clcontratos20->si87_veiculodivulgacao = $this->removeCaracteres($oDados20->ac35_veiculodivulgacao); //campo 19
+                $clcontratos20->si87_valoraditivo = ($tipoalteracao == 3 ? 0 : abs($valortotaladitado)); //campo 19
+                $clcontratos20->si87_datapublicacao = $oDados20->ac35_datapublicacao; //campo 20
+                $clcontratos20->si87_veiculodivulgacao = $this->removeCaracteres($oDados20->ac35_veiculodivulgacao); //campo 21
                 $clcontratos20->si87_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $clcontratos20->si87_instit = db_getsession("DB_instit");
                 $clcontratos20->incluir(null);
@@ -2090,9 +2121,13 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
        si03_percentualreajuste,
        si03_descricaoindice,
        manutac_codunidsubanterior,
-       manutac_numeroant
+       manutac_numeroant,
+       ac26_criterioreajuste,
+       ac26_descricaoindice,
+       ac26_descricaoreajuste
         FROM apostilamento
         INNER JOIN acordo ON si03_acordo=ac16_sequencial
+        INNER JOIN acordoposicao ON si03_acordoposicao = ac26_sequencial
         LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
         WHERE si03_datareferencia <='{$this->sDataFinal}'
         AND si03_datareferencia >= '{$this->sDataInicial}'
@@ -2133,26 +2168,40 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             } else {
                 $clcontratos30->si89_codunidadesub = $oDados30->manutac_codunidsubanterior; //campo 03
             }
-            $clcontratos30->si89_nrocontrato = $oDados30->manutac_numeroant =='' ? $oDados30->ac16_numeroacordo : $oDados30->manutac_numeroant; //campo 04
-            $clcontratos30->si89_dtassinaturacontoriginal = $oDados30->si03_dataassinacontrato; //campo 05
-            $clcontratos30->si89_tipoapostila = $oDados30->si03_tipoapostila; //campo 06
-            $clcontratos30->si89_nroseqapostila = $oDados30->si03_numapostilamento; //campo 07
-            $clcontratos30->si89_dataapostila = $oDados30->si03_dataapostila; //campo 08
-            $clcontratos30->si89_tipoalteracaoapostila = $oDados30->tipoalteracaoapostila; //campo 09
-            $clcontratos30->si89_dscalteracao = substr($this->removeCaracteres($oDados30->si03_descrapostila), 0, 250); //campo 10
+            $clcontratos30->si89_codunidadesubatual = $sCodUnidadeSub; //campo 04
+            $clcontratos30->si89_nrocontrato = $oDados30->manutac_numeroant =='' ? $oDados30->ac16_numeroacordo : $oDados30->manutac_numeroant; //campo 05
+            $clcontratos30->si89_dtassinaturacontoriginal = $oDados30->si03_dataassinacontrato; //campo 06
+            $clcontratos30->si89_tipoapostila = $oDados30->si03_tipoapostila; //campo 07
+            $clcontratos30->si89_nroseqapostila = $oDados30->si03_numapostilamento; //campo 08
+            $clcontratos30->si89_dataapostila = $oDados30->si03_dataapostila; //campo 09
+            $clcontratos30->si89_tipoalteracaoapostila = $oDados30->tipoalteracaoapostila; //campo 10
+            $clcontratos30->si89_dscalteracao = substr($this->removeCaracteres($oDados30->si03_descrapostila), 0, 250); //campo 11
             if ($oDados30->tipoalteracaoapostila == '1') {
-                $clcontratos30->si89_percentualreajuste = $oDados30->si03_percentualreajuste; //campo 11
-                $clcontratos30->si89_indiceunicoreajuste = $oDados30->si03_indicereajuste; //campo 12
+                $clcontratos30->si89_percentualreajuste = $oDados30->si03_percentualreajuste; //campo 12
+                $clcontratos30->si89_criterioreajuste = $oDados30->ac26_criterioreajuste; // campo 13
             } else {
-                $clcontratos30->si89_percentualreajuste = ''; //campo 11
-                $clcontratos30->si89_indiceunicoreajuste = ''; //campo 12
+                $clcontratos30->si89_percentualreajuste = ''; //campo 12
+                $clcontratos30->si89_criterioreajuste = ''; // campo 13
             }
+
+            if($oDados30->ac26_criterioreajuste == "1"){
+                $clcontratos30->si89_indiceunicoreajuste = $oDados30->si03_indicereajuste; //campo 15
+            } else {
+                $clcontratos30->si89_indiceunicoreajuste = ''; //campo 15
+            }
+
+            if(in_array($oDados30->ac26_criterioreajuste, array("2","3"))){
+                $clcontratos30->si89_descricaoindice = $this->removeCaracteres($oDados30->ac26_descricaoindice); // campo 14
+            } else {
+                $clcontratos30->si89_descricaoindice = ''; // 14
+            }
+
             if ($oDados30->si03_indicereajuste == '6') {
-                $clcontratos30->si89_dscreajuste = $this->removeCaracteres($oDados30->si03_descricaoindice); //campo 13
+                $clcontratos30->si89_dscreajuste = $this->removeCaracteres($oDados30->ac26_descricaoreajuste); //campo 16
             } else {
-                $clcontratos30->si89_dscreajuste = ''; //campo 13
+                $clcontratos30->si89_dscreajuste = ''; //campo 16
             }
-            $clcontratos30->si89_valorapostila = $oDados30->si03_valorapostila; //campo 14
+            $clcontratos30->si89_valorapostila = $oDados30->si03_valorapostila; //campo 17
             $clcontratos30->si89_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clcontratos30->si89_instit = $oDados30->si03_instit;
             $clcontratos30->incluir(null);
@@ -2211,10 +2260,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $clcontratos40->si91_codunidadesub              = $sCodUnidadeSub; //campo 03
             }
 
-            $clcontratos40->si91_nrocontrato                = $oDados40->manutac_acordo =='' ? $oDados40->ac16_numeroacordo : $oDados40->manutac_acordo; //campo 04
-            $clcontratos40->si91_dtassinaturacontoriginal   = $oDados40->ac16_dataassinatura; //campo 05
-            $clcontratos40->si91_datarescisao               = $oDados40->ac16_datarescisao; //campo 06
-            $clcontratos40->si91_valorcancelamentocontrato  = $oDados40->ac16_valorrescisao; //campo 07
+            $clcontratos40->si91_codunidadesubatual         = $sCodUnidadeSub; // campo 04
+            $clcontratos40->si91_nrocontrato                = $oDados40->manutac_acordo =='' ? $oDados40->ac16_numeroacordo : $oDados40->manutac_acordo; //campo 05
+            $clcontratos40->si91_dtassinaturacontoriginal   = $oDados40->ac16_dataassinatura; //campo 06
+            $clcontratos40->si91_datarescisao               = $oDados40->ac16_datarescisao; //campo 07
+            $clcontratos40->si91_valorcancelamentocontrato  = $oDados40->ac16_valorrescisao; //campo 08
             $clcontratos40->si91_mes                        = date('m', strtotime($this->sDataFinal));
             $clcontratos40->si91_instit                     = $oDados40->ac16_instit;
 

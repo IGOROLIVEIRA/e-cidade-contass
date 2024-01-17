@@ -46,7 +46,9 @@ class cl_contratos202024 {
    var $si87_veiculodivulgacao = null;
    var $si87_percentualreajuste = null;
    var $si87_indiceunicoreajuste = null;
-   var $si87_dscreajuste = null;
+   var $si87_descricaoreajuste = null;
+   var $si87_descricaoindice = null;
+   var $si87_criterioreajuste = null;
    var $si87_mes = 0;
    var $si87_instit = 0;
    var $si87_codunidadesubatual = null;
@@ -70,7 +72,9 @@ class cl_contratos202024 {
                  si87_veiculodivulgacao = varchar(50) = Veículo de  Divulgação
                  si87_percentualreajuste = float8 = Percentual do Reajuste;
                  si87_indiceunicoreajuste = int8 = Indice do Reajuste;
-                 si87_dscreajuste = varchar(300) - Descrução do Reajuste;
+                 si87_descricaoreajuste = varchar(300) - Descrução do Reajuste;
+                 si87_descricaoindice = varchar(300) = Descrição do Indice;
+                 si87_criterioreajuste = int = Criterio Reajuste;
                  si87_mes = int8 = Mês
                  si87_instit = int8 = Instituição
                  si87_codunidadesubatual = varchar(8) = Código Unidade Sub Atual;
@@ -139,7 +143,9 @@ class cl_contratos202024 {
        $this->si87_veiculodivulgacao = ($this->si87_veiculodivulgacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si87_veiculodivulgacao"]:$this->si87_veiculodivulgacao);
        $this->si87_percentualreajuste = ($this->si87_percentualreajuste == ""?@$GLOBALS["HTTP_POST_VARS"]["si87_percentualreajuste"]:$this->si87_percentualreajuste);
        $this->si87_indiceunicoreajuste = ($this->si87_indiceunicoreajuste == ""?@$GLOBALS["HTTP_POST_VARS"]["si87_indiceunicoreajuste"]:$this->si87_indiceunicoreajuste);
-       $this->si87_dscreajuste = ($this->si87_dscreajuste == ""?@$GLOBALS["HTTP_POST_VARS"]["si87_dscreajuste"]:$this->si87_dscreajuste);
+       $this->si87_descricaoreajuste = ($this->si87_descricaoreajuste == ""?@$GLOBALS["HTTP_POST_VARS"]["si87_descricaoreajuste"]:$this->si87_descricaoreajuste);
+       $this->si87_descricaoindice = ($this->si87_descricaoindice == ""?@$GLOBALS["HTTP_POST_VARS"]["si87_descricaoindice"]:$this->si87_descricaoindice);
+       $this->si87_criterioreajuste = ($this->si87_criterioreajuste == ""?@$GLOBALS["HTTP_POST_VARS"]["si87_criterioreajuste"]:$this->si87_criterioreajuste);
        $this->si87_mes = ($this->si87_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si87_mes"]:$this->si87_mes);
        $this->si87_instit = ($this->si87_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si87_instit"]:$this->si87_instit);
        $this->si87_codunidadesubatual = ($this->si87_codunidadesubatual == ""?@$GLOBALS["HTTP_POST_VARS"]["si87_codunidadesubatual"]:$this->si87_codunidadesubatual);
@@ -255,8 +261,10 @@ class cl_contratos202024 {
                                       ,si87_instit
                                       ,si87_percentualreajuste
                                       ,si87_indiceunicoreajuste
-                                      ,si87_dscreajuste
+                                      ,si87_descricaoreajuste
+                                      ,si87_descricaoindice
                                       ,si87_codunidadesubatual
+                                      ,si87_criterioreajuste
                        )
                 values (
                                 $this->si87_sequencial
@@ -279,11 +287,13 @@ class cl_contratos202024 {
                                ,$this->si87_instit
                                ," . ($this->si87_percentualreajuste == "" ? "0" :  $this->si87_percentualreajuste) . "
                                ," . ($this->si87_indiceunicoreajuste == "" ? "0" :  $this->si87_indiceunicoreajuste) . "
-                               ," . ($this->si87_dscreajuste == "" ? "''" : "'" . $this->si87_dscreajuste . "'") . "
+                               ," . ($this->si87_descricaoreajuste == "" ? "''" : "'" . $this->si87_descricaoreajuste . "'") . "
+                               ," . ($this->si87_descricaoindice == "" ? "''" : "'" . $this->si87_descricaoindice . "'") . "
                                ,'$this->si87_codunidadesubatual'
+                               ,".($this->si87_criterioreajuste == "null" || $this->si87_criterioreajuste == ""? "null" : $this->si87_criterioreajuste)."
                       )";
      $result = db_query($sql);
-     // print_r($sql);
+    // print_r($sql);
      if($result==false){
        $this->erro_banco = str_replace("
 ","",@pg_last_error());
@@ -334,7 +344,7 @@ class cl_contratos202024 {
        $resac = db_query("insert into db_acount values($acount,2010316,2011600,'','".AddSlashes(pg_result($resaco,0,'si87_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010316,2010473,'','".AddSlashes(pg_result($resaco,0,'si87_percentualreajuste'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010316,2010473,'','".AddSlashes(pg_result($resaco,0,'si87_indiceunicoreajuste'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,2010316,2010473,'','".AddSlashes(pg_result($resaco,0,'si87_dscreajuste'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,2010316,2010473,'','".AddSlashes(pg_result($resaco,0,'si87_descricaoreajuste'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
    }
@@ -463,8 +473,12 @@ class cl_contratos202024 {
       $sql  .= $virgula." si87_indiceunicoreajuste = '$this->si87_indiceunicoreajuste' ";
       $virgula = ",";
     }
-    if(trim($this->si87_dscreajuste)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si87_dscreajuste"])){
-      $sql  .= $virgula." si87_dscreajuste = '$this->si87_dscreajuste' ";
+    if(trim($this->si87_descricaoreajuste)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si87_descricaoreajuste"])){
+      $sql  .= $virgula." si87_descricaoreajuste = '$this->si87_descricaoreajuste' ";
+      $virgula = ",";
+    }
+    if(trim($this->si87_descricaoindice)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si87_descricaoindice"])){
+      $sql  .= $virgula." si87_descricaoindice = '$this->si87_descricaoindice' ";
       $virgula = ",";
     }
      if(trim($this->si87_mes)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si87_mes"])){
@@ -544,8 +558,8 @@ class cl_contratos202024 {
            $resac = db_query("insert into db_acount values($acount,2010316,2010473,'".AddSlashes(pg_result($resaco,$conresaco,'si87_percentualreajuste'))."','$this->si87_percentualreajuste',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["si87_indiceunicoreajuste"]) || $this->si87_indiceunicoreajuste != "")
            $resac = db_query("insert into db_acount values($acount,2010316,2010473,'".AddSlashes(pg_result($resaco,$conresaco,'si87_indiceunicoreajuste'))."','$this->si87_indiceunicoreajuste',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si87_dscreajuste"]) || $this->si87_dscreajuste != "")
-           $resac = db_query("insert into db_acount values($acount,2010316,2010473,'".AddSlashes(pg_result($resaco,$conresaco,'si87_dscreajuste'))."','$this->si87_dscreajuste',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["si87_descricaoreajuste"]) || $this->si87_descricaoreajuste != "")
+           $resac = db_query("insert into db_acount values($acount,2010316,2010473,'".AddSlashes(pg_result($resaco,$conresaco,'si87_descricaoreajuste'))."','$this->si87_descricaoreajuste',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $result = db_query($sql);
@@ -614,7 +628,7 @@ class cl_contratos202024 {
          $resac = db_query("insert into db_acount values($acount,2010316,2011600,'','".AddSlashes(pg_result($resaco,$iresaco,'si87_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010316,2010473,'','".AddSlashes(pg_result($resaco,$iresaco,'si87_percentualreajuste'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010316,2010473,'','".AddSlashes(pg_result($resaco,$iresaco,'si87_indiceunicoreajuste'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,2010316,2010473,'','".AddSlashes(pg_result($resaco,$iresaco,'si87_dscreajuste'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,2010316,2010473,'','".AddSlashes(pg_result($resaco,$iresaco,'si87_descricaoreajuste'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $sql = " delete from contratos202024
