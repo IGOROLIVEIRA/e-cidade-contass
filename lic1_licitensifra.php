@@ -239,14 +239,26 @@ $codtribunal = $codtribunal->l03_pctipocompratribunal;
                 parent.parent.window.location.href='lic4_editalabas.php?licitacao=<?= $licitacao ?>';
             }
 
-            parent.location.href = `lic1_liclicitemalt001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`;
-
-            if (tipoJulgamento == '3') {
-                parent.parent.iframe_liclicitemlote.location.href = `lic1_liclicitemlote001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`;
-                parent.parent.document.formaba.liclicitemlote.disabled = false;
+            // Redireciona para o caso onde todos os itens já tem lote
+            if (parseInt(tipoJulgamento, 10) === 3 && codigosTribunal.includes(parseInt(codtribunal, 10))) {
+                var oAjax = new Ajax.Request('lic4_licitacao.RPC.php', {
+                    method: 'POST',
+                    parameters: `json={"licitacao": ${licitacao}, "exec": "itensSemLoteCount"}`,
+                    onComplete: (res) => {
+                        const retorno = eval("(" + res.responseText + ")");
+                        if (retorno.status === 1 && retorno.itenssemlotcount === "0") {
+                            parent.parent.window.location.href = 'lic4_editalabas.php?licitacao=<?= $licitacao ?>';
+                        } else {
+                            redirectTo(`lic1_liclicitemalt001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`);
+                        }
+                    },
+                    onError: () => redirectTo(`lic1_liclicitemalt001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`)
+                });
+            } else {
+                redirectTo(`lic1_liclicitemalt001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`);
             }
-
         }
+        
         if (oRetorno.status == 2) {
             js_removeObj('msgbox');
             alert('Inclusão abortada, processo de compra por lote!');
@@ -257,9 +269,14 @@ $codtribunal = $codtribunal->l03_pctipocompratribunal;
             //db_msgbox(@$erro_msg);
             db_msgbox("Operação Cancelada!!Contate Suporte!!");
         }
+        
         parent.procs.document.form1.submit();
         oItensLicitacao.oGridItens.clearAll(true);
         oItensLicitacao.hide();
 
+    }
+
+    function redirectTo(url) {
+        parent.location.href = url;
     }
 </script>
