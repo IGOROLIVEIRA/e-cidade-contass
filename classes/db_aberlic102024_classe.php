@@ -79,6 +79,7 @@ class cl_aberlic102024
   var $si46_linkedital = null;
   var $si46_diariooficialdivulgacao =0;
   var $si46_mododisputa =0;
+  var $si46_codunidadesubedital = null;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  si46_sequencial = int8 = sequencial
@@ -125,6 +126,7 @@ class cl_aberlic102024
                  si46_linkedital = text = Link do Edital
                  si46_diariooficialdivulgacao = int8 = Diário Oficla de Divulgação
                  si46_mododisputa = Modo Disputa
+                 si46_codunidadesubedital = int = codunidadesubedital
                  ";
 
   //funcao construtor da classe
@@ -236,6 +238,7 @@ class cl_aberlic102024
       $this->si46_linkedital = ($this->si46_linkedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_linkedital"] : $this->si46_linkedital);
       $this->si46_diariooficialdivulgacao = ($this->si46_diariooficialdivulgacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_diariooficialdivulgacao"] : $this->si46_diariooficialdivulgacao);
       $this->si46_mododisputa = ($this->si46_mododisputa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_mododisputa"] : $this->si46_mododisputa);
+      $this->si46_codunidadesubedital = ($this->si46_codunidadesubedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_codunidadesubedital"] : $this->si46_codunidadesubedital);
     } else {
       $this->si46_sequencial = ($this->si46_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_sequencial"] : $this->si46_sequencial);
     }
@@ -446,6 +449,7 @@ class cl_aberlic102024
                                       ,si46_linkedital
                                       ,si46_diariooficialdivulgacao
                                       ,si46_mododisputa
+                                      ,si46_codunidadesubedital
                        )
                 values (
                                 $this->si46_sequencial
@@ -492,6 +496,7 @@ class cl_aberlic102024
                                ,'$this->si46_linkedital'
                                ,$this->si46_diariooficialdivulgacao
                                ,$this->si46_mododisputa
+                               ,'$this->si46_codunidadesubedital'
                       )";
 
     $result = db_query($sql);

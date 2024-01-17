@@ -51,6 +51,9 @@ db_app::load("time.js");
     .custom-table th {
         background-color: #f2f2f2;
     }
+    input {
+            border-radius: 5px;
+        }
 </style>
 
 <body bgcolor=#CCCCCC>
@@ -207,7 +210,7 @@ db_app::load("time.js");
                 aLinha[6] = oLinha.Protocolo;
                 aLinha[7] = oLinha.DataEnvio;
                 aLinha[8] = oLinha.Status;
-                aLinha[9] = oLinha.Status != 'ENVIADO' ? "Clique aqui : " + "<b style='color: #00008b;'>" + oLinha.DscResp + "</b>" : "Clique aqui : " + "<b style='color: #00008b;'> Todos eventos processados com sucesso. </b>";
+                aLinha[9] = oLinha.DscResp ? "Clique aqui : " + "<b style='color: #00008b;'>" + oLinha.DscResp + "</b>" : "Clique aqui : " + "<b style='color: #00008b;'> Todos eventos processados com sucesso. </b>";
 
                 oGridEvento.addRow(aLinha);
 

@@ -202,24 +202,6 @@ class cl_efdreinfr4020
             $this->erro_status = "0";
             return false;
         }
-        if ($this->efd02_protocolo == null) {
-            $this->erro_sql = " Campo efd02_protocolo não informado.";
-            $this->erro_campo = "efd02_protocolo";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if ($this->efd02_dataenvio == null) {
-            $this->erro_sql = " Campo efd02_dataenvio não informado.";
-            $this->erro_campo = "efd02_dataenvio";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
         if ($this->efd02_numcgm == null) {
             $this->erro_sql = " Campo efd02_numcgm não informado.";
             $this->erro_campo = "efd02_numcgm";
@@ -230,32 +212,8 @@ class cl_efdreinfr4020
             return false;
         }
         if ($this->efd02_status == null) {
-            $this->erro_sql = " Campo efd02_status não informado.";
-            $this->erro_campo = "efd02_status";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
+            $this->efd02_status == 'null';
         }
-        if ($this->efd02_descResposta == null) {
-            $this->erro_sql = " Campo efd02_descResposta não informado.";
-            $this->erro_campo = "efd02_descResposta";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        // if ($this->efd02_dscResp == null) {
-        //     $this->erro_sql = " Campo efd02_dscResp não informado.";
-        //     $this->erro_campo = "efd02_dscResp";
-        //     $this->erro_banco = "";
-        //     $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        //     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        //     $this->erro_status = "0";
-        //     return false;
-        // }
         if ($this->efd02_sequencial == "" || $this->efd02_sequencial == null) {
             $result = db_query("select nextval('efdreinfr4020_efd02_sequencial_seq')");
             if ($result == false) {

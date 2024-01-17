@@ -8,7 +8,6 @@ require_once("libs/db_app.utils.php");
 require_once("libs/db_utils.php");
 ?>
 <html>
-
 <head>
     <title>Contass Contabilidade Ltda - Página Inicial</title>
     <meta http-equiv="Expires" CONTENT="0">
@@ -26,7 +25,11 @@ require_once("libs/db_utils.php");
     db_app::load('scripts.js, prototype.js, strings.js,DBLookUp.widget.js,EmissaoRelatorio.js');
     ?>
 </head>
-
+<style>
+     input {
+            border-radius: 5px;
+        }
+</style>
 <body class="body-default">
     <div class="container">
         <fieldset>
