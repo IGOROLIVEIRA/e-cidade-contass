@@ -36,6 +36,7 @@ class ItensAdapter {
       itemAdaptado.dotacoesoriginal = [];
       itemAdaptado.elemento = 0;
 
+      console.log(item.fimExecucao, vigenciaFim);
 
       itemAdaptado.periodoini = item.inicioExecucao ?? vigenciaInicio;
       itemAdaptado.periodofim = item.fimExecucao ?? vigenciaFim;

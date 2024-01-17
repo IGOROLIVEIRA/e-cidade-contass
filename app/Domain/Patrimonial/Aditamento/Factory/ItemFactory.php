@@ -41,6 +41,9 @@ class ItemFactory
      */
     public function createByEloquentModel(AcordoItem $itemAcordo, ?AcordoItem $itemPosicaoAnterior = null): Item
     {
+        // echo "<pre>";
+        // var_dump($itemAcordo->itemPeriodo);
+        // die();
         $item = new Item();
 
         $item->setItemSequencial((int) $itemAcordo->ac20_sequencial)
@@ -92,7 +95,9 @@ class ItemFactory
             }
 
             $item = new Item();
-            $item->setCodigoPcMater((int) $itemRaw->codigoitem)
+
+            $item->setItemSequencial((int) $itemRaw->acordoitemsequencial)
+                ->setCodigoPcMater((int) $itemRaw->codigoitem)
                 ->setQuantidade((float) $itemRaw->quantidade)
                 ->setValorUnitario((float) $itemRaw->valorunitario)
                 ->setValorTotal((float) $itemRaw->valoraditado);

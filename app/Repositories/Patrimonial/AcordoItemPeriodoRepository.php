@@ -4,6 +4,7 @@ namespace App\Repositories\Patrimonial;
 
 use App\Models\AcordoItemPeriodo;
 use App\Repositories\Contracts\Patrimonial\AcordoItemPeriodoRepositoryInterface;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class AcordoItemPeriodoRepository implements AcordoItemPeriodoRepositoryInterface
 {
@@ -26,8 +27,7 @@ class AcordoItemPeriodoRepository implements AcordoItemPeriodoRepositoryInterfac
      */
     public function update(int $codigoItem, array $dados): bool
     {
-        $acordoItemPeriodo = $this->model->where('ac41_acordoitem',$codigoItem)->first();
-        return $acordoItemPeriodo->update($dados);
+       return DB::table('acordoitemperiodo')->where('ac41_acordoitem',$codigoItem)->update($dados);
     }
 
     /**

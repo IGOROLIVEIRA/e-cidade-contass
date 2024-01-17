@@ -68,6 +68,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
         $vigenciaFim = $aditamento->getVigenciaFim()->format('Y-m-d');
         $sequencialAcordoPosicao = $aditamento->getAcordoPosicaoSequencial();
 
+
         try {
             DB::beginTransaction();
 
@@ -93,7 +94,6 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
                 if (!$resultVigencia) {
                     throw new Exception("Não foi possível atualizar aditamento. Erro em acordoVigencia!");
                 }
-
             }
 
 
@@ -110,11 +110,12 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
 
             /** @var Item $item */
             foreach ($itens as $item) {
-                $codigoItem = $item->getCodigoPcMater();
+                $codigoItemPcMater = $item->getCodigoPcMater();
+                $codigoItem = $item->getItemSequencial();
 
-                if ($aditamento->isAlteracaoProjetoEspecificacao()){
+                if ($aditamento->isAlteracaoProjetoEspecificacao()) {
                     $acordoItem = $this->acordoItemRepository->getItemByPcmaterAndPosicao($codigoItem, $sequencialAcordoPosicao);
-                    if(empty($acordoItem) ) {
+                    if (empty($acordoItem)) {
                         $insertDto = new InsertItemDto(
                             $item,
                             $sequencialAcordoPosicao,
@@ -133,50 +134,63 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
                 }
 
                 $resultItem = $this->acordoItemRepository->updateByPcmaterAndPosicao(
-                    $codigoItem,
+                    $codigoItemPcMater,
                     $sequencialAcordoPosicao,
                     [
                         'ac20_quantidade' => $item->getQuantidade(),
                         'ac20_valorunitario' => $item->getValorUnitario(),
                         'ac20_valortotal' => $item->getValorTotal()
-                    ]);
+                    ]
+                );
 
                 if (!$resultItem) {
-                    throw new Exception("Não foi possível atualizar aditamento. Erro em acordoitem, no item: ".  $codigoItem);
+                    throw new Exception("Não foi possível atualizar aditamento. Erro em acordoitem, no item: " .  $codigoItem);
                 }
 
                 $quantidadeDotacoes = $this->acordoItemDotacaoRepository->getQtdDotacaoByAcordoItem($codigoItem);
 
                 if ($quantidadeDotacoes == 1) {
-                    $resultDotacao = $this->acordoItemDotacaoRepository->updateByAcordoItem($codigoItem,
-                    [
-                        'ac22_quantidade' => $item->getQuantidade(),
-                        'ac22_valor' => $item->getValorUnitario()
-                    ]);
+                    $resultDotacao = $this->acordoItemDotacaoRepository->updateByAcordoItem(
+                        $codigoItem,
+                        [
+                            'ac22_quantidade' => $item->getQuantidade(),
+                            'ac22_valor' => $item->getValorUnitario()
+                        ]
+                    );
 
                     if (!$resultDotacao) {
                         throw new Exception('Erro ao atualizar dotação');
                     }
                 }
 
-                if($aditamento->isAlteracaoPrazo() || $aditamento->isAcdcConjugado()) {
-                    $this->acordItemPeriodRepository->update(
+                if ($aditamento->isAlteracaoPrazo() || $aditamento->isAcdcConjugado()) {
+                    $resultPeriodo = $this->acordItemPeriodRepository->update(
                         $codigoItem,
                         [
                             'ac41_datainicial' => $item->getInicioExecucao()->format('Y-m-d'),
                             'ac41_datafinal'   => $item->getFimExecucao()->format('Y-m-d'),
                             'ac41_acordoposicao' => $sequencialAcordoPosicao
-                        ]);
+                        ]
+                    );
+                    
+                    if (!$resultPeriodo) {
+                        throw new Exception("Erro ao atualizar acordo item periodo");
+                    }
                 }
 
-                if($aditamento->isVigenciaExecucao()) {
-                    $this->acordItemPeriodRepository->update(
+                if ($aditamento->isVigenciaExecucao()) {
+                    $resultPeriodo = $this->acordItemPeriodRepository->update(
                         $codigoItem,
                         [
                             'ac41_datainicial' => $vigenciaIncio,
                             'ac41_datafinal'   => $vigenciaFim,
                             'ac41_acordoposicao' => $sequencialAcordoPosicao
-                        ]);
+                        ]
+                    );
+
+                    if (!$resultPeriodo) {
+                        throw new Exception("Erro ao atualizar acordo item periodo");
+                    }
                 }
             }
             DB::commit();
@@ -190,10 +204,10 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
     private function validaNumeroAditamento(Aditamento $aditamento): void
     {
         $posicao = $this->acordoPosicaoRepository
-                ->getAcordoPorNumeroAditamento(
-                    $aditamento->getAcordoSequencial(),
-                    $aditamento->getNumeroAditamento()
-                );
+            ->getAcordoPorNumeroAditamento(
+                $aditamento->getAcordoSequencial(),
+                $aditamento->getNumeroAditamento()
+            );
 
         if (!empty($posicao) && (int)$posicao->ac26_sequencial !== $aditamento->getAcordoPosicaoSequencial()) {
             throw new \Exception('Numero de aditamento já esta em uso');
@@ -238,8 +252,8 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
             'ac35_justificativa' => $aditamento->getJustificativa(),
             'ac35_descricaoalteracao' => $aditamento->getDescricaoAlteracao(),
             'ac35_datareferencia' => !empty($aditamento->getDataReferencia())
-                                    ? $aditamento->getDataReferencia()->format('Y-m-d')
-                                    : $dataAssinatura
+                ? $aditamento->getDataReferencia()->format('Y-m-d')
+                : $dataAssinatura
         ];
     }
 }

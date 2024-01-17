@@ -1180,7 +1180,8 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       oItemAdicionar.valor = oItem.valor;
       oItemAdicionar.dtexecucaoinicio = oItem.periodoini;
       oItemAdicionar.dtexecucaofim = oItem.periodofim;
-      oItemAdicionar.controlaServico = oItem.ServicoQuantidade;
+      oItemAdicionar.controlaServico = oItem.controlaquantidade;
+
 
       if ($('oCboTipoAditivo').value == 14) {
         var dt1 = me.oTxtDataFinal.getValue().split("/");
@@ -1209,6 +1210,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
         oItemAdicionar.tipoalteracaoitem = oSelecionados[iIndice].aCells[14].getValue();
         oItemAdicionar.servico = oItem.servico;
         oItemAdicionar.controlaServico = oItem.servico;
+        oItemAdicionar.acordoitemsequencial = oItem.acordoitemsequencial;
 
         if (me.validaItensNaoAditados(oSelecionados[iIndice])) {
           lAditar = false;
@@ -1319,6 +1321,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
         oItemAdicionar.valorunitario = 0;
         oItemAdicionar.valor = 0;
       }
+      console.log(oItemAdicionar);
       oParam.aItens.push(oItemAdicionar);
     });
 
@@ -1689,7 +1692,6 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
   }
 
   this.preencheItens = function (aItens, ignorarCalculoCarregamento = false) {
-    console.log("preencheItens");
     var sizeLabelItens = 0;
     if (aItens.length < 12) {
       sizeLabelItens = (aItens.length / 2) * 50;
@@ -2039,8 +2041,8 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       nUnitario = aLinha.aCells[7].getValue().getNumber(),
       nQuantidadeA = aLinha.aCells[4].getValue().getNumber(),//OC5304
       nUnitarioA = Number(aLinha.aCells[5].getValue().split('.').join("").replace(",", "."));//OC5304
-    valor1 = nQuantidade.toString();
-    valor = valor1.split('.');
+    let valor1 = nQuantidade.toString();
+    let valor = valor1.split('.');
 
 
     if (valor.length > 1) {
@@ -2054,18 +2056,13 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     if (cboTipo == 10 || cboTipo == 9) {
       let codigoItemFiltro = aLinha.aCells[2].getValue();
       const itemFiltrado = me.itensAdaptados.filter(item => item.codigoitem == codigoItemFiltro);
-      console.log(me.usarQuantidadeAtual(itemFiltrado));
 
       if (!me.usarQuantidadeAtual(itemFiltrado[0])) {
-        console.log("PAssou aqui");
         nQuantidadeA = itemFiltrado[0].qtdePosicaoanterior;
         nUnitarioA = itemFiltrado[0].vlunitPosicaoanterior;
       }
 
     }
-    console.log(nQuantidade, nUnitario, nQuantidadeA, nUnitarioA);
-
-
 
     aItensPosicao[iLinha].novaquantidade = nQuantidade;
     aItensPosicao[iLinha].novounitario = nUnitario;
@@ -2073,7 +2070,6 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     nValorTotal = nQuantidade * nUnitario;
     valorTotal = nQuantidadeA * nUnitarioA;
 
-    console.log((nQuantidade - nQuantidadeA));
 
     aLinha.aCells[8].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
 
@@ -2573,7 +2569,6 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     me.itensAdaptados = itens.itensAdaptados;
     aItensPosicao = me.itensAdaptados;
     me.estadoTela.relacaoItemPcmater = itens.relacaoItemPcmater;
-    console.log(aItensPosicao);
     me.totalizadorNoCarregamento = true;
     me.preencheItens(aItensPosicao);
     me.js_changeTipoAditivo();
@@ -2670,11 +2665,10 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
   this.usarQuantidadeAtual = function (item = null) {
     const cboTipo = parseInt($('oCboTipoAditivo').value);
-    console.log(typeof cboTipo);
+
     const cboTipoInalteraQtd = [2, 5];
     const cboDependeExecucao = [9, 10, 11];
-    console.log(item);
-    console.log(cboDependeExecucao.includes(cboTipo) && item.eExecutado === true);
+
     if (cboTipoInalteraQtd.includes(cboTipo)) return true;
 
     if (cboDependeExecucao.includes(cboTipo) && item.eExecutado === true) return true;
