@@ -426,8 +426,17 @@ if (isset($testanome) && $testanome == 'true' && !isset($pesquisa_chave)) {
                         if (isset($z01_tipcre_cnpj)) {
                             $sSqlConv .= " and LENGTH(z01_cgccpf) = 14 ";
                         }
+
+                        if($filtro == 1){
+                            $AndFiltroCPF = " AND LENGTH(z01_cgccpf) = 11";
+                        }elseif ($filtro ==2){
+                            $AndFiltroCPF = " AND LENGTH(z01_cgccpf) = 14";
+                        }else{
+                            $AndFiltroCPF = "";
+                        }
+
                         $nomeDigitadoParaPesquisa = strtoupper($nomeDigitadoParaPesquisa);
-                        $sql = $clnome->sqlnome($nomeDigitadoParaPesquisa, $campos, $filtro, $sSqlConv);
+                        $sql = $clnome->sqlnome($nomeDigitadoParaPesquisa, $campos, $filtro, $sSqlConv.$AndFiltroCPF);
                     } else if (isset($numcgmDigitadoParaPesquisa) && $numcgmDigitadoParaPesquisa != "") {
 
                         if (!is_int((int)$numcgmDigitadoParaPesquisa)) {
