@@ -32,11 +32,14 @@ class GerarCVC extends GerarAM
     $sSql3 = "select * from cvc302024 where si148_mes = " . $this->iMes . " and si148_instit=" . db_getsession("DB_instit");
     $rsCVC30 = db_query($sSql3);
 
-    $sSql4 = "select * from cvc402024 where si149_mes = " . $this->iMes . " and si149_instit=" . db_getsession("DB_instit");
+    $sSql4 = "select * from cvc402024 where si150_mes = " . $this->iMes . " and si150_instit=" . db_getsession("DB_instit");
     $rsCVC40 = db_query($sSql4);
 
+    $sSql5 = "select * from cvc502024 where si149_mes = " . $this->iMes . " and si149_instit=" . db_getsession("DB_instit");
+    $rsCVC50 = db_query($sSql5);
 
-    if (pg_num_rows($rsCVC10) == 0 && pg_num_rows($rsCVC20) == 0 && pg_num_rows($rsCVC30) == 0 && pg_num_rows($rsCVC40) == 0) {
+
+    if (pg_num_rows($rsCVC10) == 0 && pg_num_rows($rsCVC20) == 0 && pg_num_rows($rsCVC30) == 0 && pg_num_rows($rsCVC50) == 0) {
 
       $aCSV['tiporegistro'] = '99';
       $this->sLinha = $aCSV;
@@ -52,7 +55,6 @@ class GerarCVC extends GerarAM
 
         $aCSVCVC10['si146_tiporegistro']    = $this->padLeftZero($aCVC10['si146_tiporegistro'], 2);
         $aCSVCVC10['si146_codorgao']        = $this->padLeftZero($aCVC10['si146_codorgao'], 2);
-        $aCSVCVC10['si146_codunidadesub']   = $this->padLeftZero($aCVC10['si146_codunidadesub'], 5);
         $aCSVCVC10['si146_codveiculo']      = substr($aCVC10['si146_codveiculo'], 0, 10);
         $aCSVCVC10['si146_tpveiculo']       = $this->padLeftZero($aCVC10['si146_tpveiculo'], 2);
         $aCSVCVC10['si146_subtipoveiculo']  = $this->padLeftZero($aCVC10['si146_subtipoveiculo'], 2);
@@ -82,7 +84,6 @@ class GerarCVC extends GerarAM
 
         $aCSVCVC20['si147_tiporegistro']          = $this->padLeftZero($aCVC20['si147_tiporegistro'], 2);
         $aCSVCVC20['si147_codorgao']              = $this->padLeftZero($aCVC20['si147_codorgao'], 2);
-        $aCSVCVC20['si147_codunidadesub']         = $this->padLeftZero($aCVC20['si147_codunidadesub'], 5);
         $aCSVCVC20['si147_codveiculo']            = substr($aCVC20['si147_codveiculo'], 0, 10);
         $aCSVCVC20['si147_origemgasto']           = $this->padLeftZero($aCVC20['si147_origemgasto'], 1);
         $aCSVCVC20['si147_codunidadesubempenho']  = $aCVC20['si147_codunidadesubempenho'] == '' ? ' ' : $this->padLeftZero($aCVC20['si147_codunidadesubempenho'], 5);
@@ -94,7 +95,6 @@ class GerarCVC extends GerarAM
         $aCSVCVC20['si147_qtdeutilizada']         = $this->sicomNumberReal($aCVC20['si147_qtdeutilizada'], 4);
         $aCSVCVC20['si147_vlgasto']               = $this->sicomNumberReal($aCVC20['si147_vlgasto'], 2);
         $aCSVCVC20['si147_dscpecasservicos']      = substr($aCVC20['si147_dscpecasservicos'], 0, 50);
-        $aCSVCVC20['si147_atestadocontrole']      = $this->padLeftZero($aCVC20['si147_atestadocontrole'], 1);
 
         $this->sLinha = $aCSVCVC20;
         $this->adicionaLinha();
@@ -110,7 +110,6 @@ class GerarCVC extends GerarAM
 
         $aCSVCVC30['si148_tiporegistro']              = $this->padLeftZero($aCVC30['si148_tiporegistro'], 2);
         $aCSVCVC30['si148_codorgao']                  = $this->padLeftZero($aCVC30['si148_codorgao'], 2);
-        $aCSVCVC30['si148_codunidadesub']             = $this->padLeftZero($aCVC30['si148_codunidadesub'], 5);
         $aCSVCVC30['si148_codveiculo']                = substr($aCVC30['si148_codveiculo'], 0, 10);
         $aCSVCVC30['si148_nomeestabelecimento']       = substr($aCVC30['si148_nomeestabelecimento'], 0, 250);
         $aCSVCVC30['si148_localidade']                = substr($aCVC30['si148_localidade'], 0, 250);
@@ -123,22 +122,38 @@ class GerarCVC extends GerarAM
         $this->adicionaLinha();
       }
 
+        /**
+         * Registros 40
+         */
+        for ($iCont4 = 0; $iCont4 < pg_num_rows($rsCVC40); $iCont4++) {
+
+            $aCVC40 = pg_fetch_array($rsCVC40, $iCont4);
+
+            $aCSVCVC40['si150_tiporegistro']  = $this->padLeftZero($aCVC40['si150_tiporegistro'], 2);
+            $aCSVCVC40['si150_codorgao']      = $this->padLeftZero($aCVC40['si150_codorgao'], 2);
+            $aCSVCVC40['si150_codveiculo']    = $aCVC40['si150_codveiculo'];
+            $aCSVCVC40['si150_placaatual']    = $aCVC40['si150_placaatual'];
+
+            $this->sLinha = $aCSVCVC40;
+            $this->adicionaLinha();
+        }
+
       /**
-       * Registros 40
+       * Registros 50
        */
-      for ($iCont4 = 0; $iCont4 < pg_num_rows($rsCVC40); $iCont4++) {
+      for ($iCont5 = 0; $iCont5 < pg_num_rows($rsCVC50); $iCont5++) {
 
-        $aCVC40 = pg_fetch_array($rsCVC40, $iCont4);
+        $aCVC50 = pg_fetch_array($rsCVC50, $iCont5);
 
-        $aCSVCVC40['si149_tiporegistro']  = $this->padLeftZero($aCVC40['si149_tiporegistro'], 2);
-        $aCSVCVC40['si149_codorgao']      = $this->padLeftZero($aCVC40['si149_codorgao'], 2);
-        $aCSVCVC40['si149_codunidadesub'] = $this->padLeftZero($aCVC40['si149_codunidadesub'], 5);
-        $aCSVCVC40['si149_codveiculo']    = substr($aCVC40['si149_codveiculo'], 0, 10);
-        $aCSVCVC40['si149_tipobaixa']     = $this->padLeftZero($aCVC40['si149_tipobaixa'], 2);
-        $aCSVCVC40['si149_descbaixa']     = substr($aCVC40['si149_descbaixa'], 0, 50);
-        $aCSVCVC40['si149_dtbaixa']       = $this->sicomDate($aCVC40['si149_dtbaixa']);
+        $aCSVCVC50['si149_tiporegistro']            = $this->padLeftZero($aCVC50['si149_tiporegistro'], 2);
+        $aCSVCVC50['si149_codorgao']                = $this->padLeftZero($aCVC50['si149_codorgao'], 2);
+        $aCSVCVC50['si149_codveiculo']              = substr($aCVC50['si149_codveiculo'], 0, 10);
+        $aCSVCVC50['si149_situacaoveiculoequip']    = substr($aCVC50['si149_situacaoveiculoequip'], 0, 10);
+        $aCSVCVC50['si149_tipobaixa']               = $this->padLeftZero($aCVC50['si149_tipobaixa'], 2);
+        $aCSVCVC50['si149_descbaixa']               = substr($aCVC50['si149_descbaixa'], 0, 50);
+        $aCSVCVC50['si149_dtbaixa']                 = $this->sicomDate($aCVC50['si149_dtbaixa']);
 
-        $this->sLinha = $aCSVCVC40;
+        $this->sLinha = $aCSVCVC50;
         $this->adicionaLinha();
       }
 
