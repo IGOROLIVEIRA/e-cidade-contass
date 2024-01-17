@@ -67,9 +67,9 @@ class GerarRALIC extends GerarAM
         $aCSVRALIC10['si180_tipoorcamento']              = $aRALIC10['si180_tipoorcamento'];
         $aCSVRALIC10['si180_vlcontratacao']              = $aRALIC10['si180_tipoorcamento'] == 2 ? ' ' : $this->sicomNumberReal($aRALIC10['si180_vlcontratacao'], 2);
         if($aRALIC10['si180_naturezaobjeto'] == '1' || $aRALIC10['si180_naturezaobjeto'] == '7'){
-            $aCSVRALIC10['si180_bdi']                     = '';
-        }else{
             $aCSVRALIC10['si180_bdi']                     = $this->sicomNumberReal($aRALIC10['si180_bdi'], 2);
+        }else{
+            $aCSVRALIC10['si180_bdi']                     = '';
         }
         $aCSVRALIC10['si180_mesexercicioreforc']         = $this->padLeftZero($aRALIC10['si180_mesexercicioreforc'], 6);
         $aCSVRALIC10['si180_origemrecurso']              = $aRALIC10['si180_origemrecurso'];
