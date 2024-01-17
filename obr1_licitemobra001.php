@@ -107,7 +107,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 </style>
 </html>
 <script>
-  js_tabulacaoforms("form1","obr06_pcmater",true,1,"obr06_pcmater",true);
+  js_tabulacaoforms("form1","l20_codigo",true,1,"l20_codigo",true);
 </script>
 <?
 if(isset($incluir)){
