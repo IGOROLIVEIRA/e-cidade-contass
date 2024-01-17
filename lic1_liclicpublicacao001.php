@@ -480,9 +480,7 @@ $codigoModalidade = (db_utils::fieldsMemory($resource, 0))->codigomodalidade;
 
         if (oRetorno.status == 1) {
             alert("Publicações alteradas com sucesso");
-            if (naturezaObjeto == 1 || naturezaObjeto == 7) {
-                parent.window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
-            }
+            parent.window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
         } else {
             alert(sMensagem);
         }

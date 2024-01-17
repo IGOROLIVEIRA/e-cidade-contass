@@ -160,68 +160,17 @@ class cl_efdreinfnotasr2055
             $this->erro_status = "0";
             return false;
         }
-        if ($this->efd08_protocolo == null) {
-            $this->erro_sql = " Campo efd08_protocolo não informado.";
-            $this->erro_campo = "efd08_protocolo";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if ($this->efd08_serie == null) {
-            $this->erro_sql = " Campo efd08_serie não informado.";
-            $this->erro_campo = "efd08_serie";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
         if ($this->efd08_vlrBruto == null) {
-            $this->erro_sql = " Campo efd08_vlrBruto não informado.";
-            $this->erro_campo = "efd08_vlrBruto";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
+            $this->efd08_vlrBruto = 'null';
         }
         if ($this->efd08_vlrCP == null) {
-            $this->erro_sql = " Campo efd08_vlrCP não informado.";
-            $this->erro_campo = "efd08_vlrCP";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
+            $this->efd08_vlrCP = 'null';
         }
         if ($this->efd08_vlrGilrat == null) {
-            $this->erro_sql = " Campo efd08_vlrGilrat não informado.";
-            $this->erro_campo = "efd08_vlrGilrat";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
+            $this->efd08_vlrGilrat = 'null';
         }
         if ($this->efd08_vlrSenar == null) {
-            $this->erro_sql = " Campo efd08_vlrSenar não informado.";
-            $this->erro_campo = "efd08_vlrSenar";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if ($this->efd08_numnotafiscal == null) {
-            $this->erro_sql = " Campo efd08_numnotafiscal não informado.";
-            $this->erro_campo = "efd08_numnotafiscal";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
+            $this->efd08_vlrSenar = 'null';
         }
         if ($this->efd08_numeroop == null) {
             $this->efd08_numeroop = "";

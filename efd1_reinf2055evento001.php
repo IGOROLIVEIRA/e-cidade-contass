@@ -46,6 +46,9 @@ db_app::load("time.js");
     .custom-table th {
         background-color: #f2f2f2;
     }
+    input {
+            border-radius: 5px;
+        }
 </style>
 
 <body bgcolor=#CCCCCC>
@@ -86,6 +89,12 @@ db_app::load("time.js");
                             <option value="1">ENVIADOS</option>
                             <option value="2" selected>PENDENTES DE ENVIO</option>
                             <option value="3">TODOS</option>
+                        </select>
+                        <strong>Listar: </strong>
+                        <select name="listar" id="listar" onchange="limparBox()">
+                            <option value="50">50</option>
+                            <option value="100" selected>100</option>
+                            <option value="0">TODOS</option>
                         </select>
                             <input style="margin-left: 3%" type="button" value="Pesquisar" onclick="js_getEventos();">
                         </td>
@@ -191,6 +200,7 @@ db_app::load("time.js");
         if (oRetornoEventos.iStatus == 1) {
 
             var seq = 0;
+            var selectedRecords = 0; 
             oRetornoEventos.efdreinfr2055.each(function(oLinha, iLinha) {
 
                 seq++;
@@ -206,8 +216,11 @@ db_app::load("time.js");
                 aLinha[8] = oLinha.DadosExtrasNotas;
                 aLinha[9] = oLinha.ProdOptaCp;
                 var status = $F('status');
-                if (oLinha.DestacarCampos == status) {
+                let listar = $F('listar');
+
+                if (oLinha.DestacarCampos == status && (selectedRecords < listar || listar == 0)) {
                     oGridEvento.addRow(aLinha);
+                    selectedRecords++;
                 }
 
                 var sTextEvent = " ";
@@ -255,6 +268,11 @@ db_app::load("time.js");
 
         if (aEventos.length == 0) {
             alert('Nenhuma OP Selecionada');
+            return false;
+        }
+
+        if (aEventos.length > 100) {
+            alert('Não é possivel selecionar mais de 100 registros para envio.');
             return false;
         }
 
@@ -348,6 +366,7 @@ db_app::load("time.js");
                 alert(oRetornoEventos.sMessage.urlDecode());
             } else {
                 alert(oRetornoEventos.sMessage.urlDecode());
+                js_getEventos();
             }
         }
 

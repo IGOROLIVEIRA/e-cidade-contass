@@ -125,7 +125,7 @@ $db_botao = true;
                 </tr>
 
                 <?php if (!in_array($tipo_tribunal, array(100, 101, 102, 103, 104))) : ?>
-                  <tr style="display: <?= in_array($natureza_objeto, array(1, 7)) ? '' : 'none' ?>;">
+                  <tr>
                     <td nowrap title="Origem do recurso">
                       <b>Origem do recurso:</b>
                     </td>
