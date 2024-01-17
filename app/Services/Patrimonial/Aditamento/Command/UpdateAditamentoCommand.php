@@ -211,7 +211,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
         $acordoPosicao = [
             'ac26_acordoposicaotipo' => $aditamento->getTipoAditivo(),
             'ac26_numeroaditamento'  => $aditamento->getNumeroAditamento(),
-            'ac26_vigenciaalterada'  => $aditamento->getVigenciaAlterada(),
+            'ac26_vigenciaalterada'  => $aditamento->getVigenciaAlterada()
         ];
 
         if ($aditamento->isReajuste()) {
@@ -236,6 +236,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
             'ac35_datapublicacao' => $aditamento->getDataPublicacao()->format('Y-m-d'),
             'ac35_veiculodivulgacao' => $aditamento->getVeiculoDivulgacao(),
             'ac35_justificativa' => $aditamento->getJustificativa(),
+            'ac35_descricaoalteracao' => $aditamento->getDescricaoAlteracao(),
             'ac35_datareferencia' => !empty($aditamento->getDataReferencia())
                                     ? $aditamento->getDataReferencia()->format('Y-m-d')
                                     : $dataAssinatura

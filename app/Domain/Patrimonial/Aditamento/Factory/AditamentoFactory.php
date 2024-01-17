@@ -70,6 +70,7 @@ class AditamentoFactory
             ->setVeiculoDivulgacao(mb_convert_encoding($aditamentoRaw->veiculodivulgacao, "ISO-8859-1", "UTF-8"))
             ->setJustificativa(mb_convert_encoding($aditamentoRaw->justificativa, "ISO-8859-1", "UTF-8"))
             ->setPosicaoAditamentoSequencial((int)$aditamentoRaw->posicaoAditamentoSequencial)
+            ->setDescricaoAlteracao($aditamentoRaw->descricaoalteracao ?? '')
             ->setVigenciaInicio(DateTime::createFromFormat('d/m/Y', $aditamentoRaw->datainicial))
             ->setVigenciaFim(DateTime::createFromFormat('d/m/Y', $aditamentoRaw->datafinal));
 

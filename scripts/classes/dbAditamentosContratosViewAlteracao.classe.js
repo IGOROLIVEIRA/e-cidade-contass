@@ -1259,16 +1259,9 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
         }
 
-        /*if (($('oCboTipoAditivo').value == 7 || $('oCboTipoAditivo').value == 14 ) && oItemAdicionar.tipoalteracaoitem == 0) {
-
-          lAditar = false;
-          return alert("Selecione os tipos em todos os itens que sero alterados!");
-        }*/
-
         if (($('oCboTipoAditivo').value == 9
           || $('oCboTipoAditivo').value == 10
           || $('oCboTipoAditivo').value == 11
-          || $('oCboTipoAditivo').value == 14
         ) && valorAditadoReal == 0) {
           lAditar = false;
           return alert("Desmarque os itens que não foram aditados!");
@@ -2613,7 +2606,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
   this.alterarAdiamento = (aditamento) => {
     aditamento.acordoPosicaoSequencial = me.estadoTela.acordoPosicaoSeq;
     aditamento.posicaoAditamentoSequencial = me.estadoTela.posicaoAditamentoSequencial;
-
+    console.log(aditamento)
     const oParam = {
       exec: 'processarAlteracaoAditivo',
       aditamento
