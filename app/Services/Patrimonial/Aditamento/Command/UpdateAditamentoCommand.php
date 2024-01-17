@@ -9,6 +9,7 @@ use App\Repositories\Contracts\Patrimonial\AcordoItemPeriodoRepositoryInterface;
 use App\Repositories\Contracts\Patrimonial\AcordoItemRepositoryInterface;
 use App\Repositories\Contracts\Patrimonial\AcordoPosicaoAditamentoRepositoryInterface;
 use App\Repositories\Contracts\Patrimonial\AcordoPosicaoRepositoryInterface;
+use App\Repositories\Contracts\Patrimonial\AcordoVigenciaRepositoryInterface;
 use App\Repositories\Patrimonial\AcordoItemDotacaoRepository;
 use App\Repositories\Patrimonial\AcordoItemPeriodoRepository;
 use App\Repositories\Patrimonial\AcordoItemRepository;
@@ -42,7 +43,13 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
      */
     private AcordoItemPeriodoRepositoryInterface $acordItemPeriodRepository;
 
+    /**
+     *
+     * @var AcordoItemDotacaoRepositoryInterface
+     */
     private AcordoItemDotacaoRepositoryInterface $acordoItemDotacaoRepository;
+
+    private AcordoVigenciaRepositoryInterface $acordoVigenciaRepository;
 
     public function __construct()
     {
@@ -51,6 +58,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
         $this->acordoPosAditRepository = new AcordoPosicaoAditamentoRepository();
         $this->acordItemPeriodRepository = new AcordoItemPeriodoRepository();
         $this->acordoItemDotacaoRepository = new AcordoItemDotacaoRepository();
+        $this->acordoVigenciaRepository = new AcordoVigenciaRepository();
     }
 
     /**
@@ -172,24 +180,23 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
                             'ac41_acordoposicao' => $sequencialAcordoPosicao
                         ]
                     );
-                    
+
                     if (!$resultPeriodo) {
                         throw new Exception("Erro ao atualizar acordo item periodo");
                     }
                 }
 
                 if ($aditamento->isVigenciaExecucao()) {
-                    $resultPeriodo = $this->acordItemPeriodRepository->update(
-                        $codigoItem,
+                    $resultVigencia = $this->acordoVigenciaRepository->update(
+                        $sequencialAcordoPosicao,
                         [
-                            'ac41_datainicial' => $vigenciaIncio,
-                            'ac41_datafinal'   => $vigenciaFim,
-                            'ac41_acordoposicao' => $sequencialAcordoPosicao
+                            'ac18_datainicio' => $vigenciaIncio,
+                            'ac18_datafim'   => $vigenciaFim,
                         ]
                     );
 
-                    if (!$resultPeriodo) {
-                        throw new Exception("Erro ao atualizar acordo item periodo");
+                    if (!$resultVigencia) {
+                        throw new Exception("Erro ao atualizar acordo vigencia");
                     }
                 }
             }

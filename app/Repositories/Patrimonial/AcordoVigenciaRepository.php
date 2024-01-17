@@ -5,8 +5,7 @@ namespace App\Repositories\Patrimonial;
 
 use App\Models\AcordoVigencia;
 use App\Repositories\Contracts\Patrimonial\AcordoVigenciaRepositoryInterface;
-
-;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class AcordoVigenciaRepository implements AcordoVigenciaRepositoryInterface
 {
@@ -29,7 +28,6 @@ class AcordoVigenciaRepository implements AcordoVigenciaRepositoryInterface
      */
     public function update(int $codigoPosicao, array $dados): bool
     {
-        $acordoVigencia = $this->model->where('ac18_acordoposicao',$codigoPosicao)->first();
-        return $acordoVigencia->update($dados);
+        return DB::table('acordovigencia')->where('ac18_acordoposicao',$codigoPosicao)->update($dados);
     }
 }

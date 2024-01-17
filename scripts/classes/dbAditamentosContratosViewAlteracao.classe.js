@@ -1254,6 +1254,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
           var data_1 = new Date(datafimE);
           var data_2 = new Date(datafimV);
+          console.log(data_1, data_2);
           if (data_1 > data_2) {
             lAditar = false;
             return alert("Data final da execução de um item não pode ser maior que a data final da vigência do contrato!");
