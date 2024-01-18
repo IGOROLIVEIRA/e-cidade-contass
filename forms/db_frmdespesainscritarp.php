@@ -18,6 +18,8 @@
 
     $sql = "SELECT * FROM
     (SELECT fonte,
+            codigo,
+            descricao,
             empenho,
             credor,
             round(sum(e60_vlremp - e60_vlranu - e60_vlrliq),2) AS vlr_n_lqd,
@@ -26,6 +28,8 @@
             e60_anousu
      FROM
          (SELECT o15_codtri AS fonte,
+                 o15_codigo AS codigo,
+                 o15_descr  AS descricao,
                  e60_codemp AS empenho,
                  z01_numcgm,
                  z01_numcgm||'-'||z01_nome AS credor,
@@ -63,15 +67,15 @@
           WHERE e60_instit = ".db_getsession("DB_instit")." and e60_anousu = $anousu
               AND c75_data BETWEEN '$perini' AND '$perfin'
               $where
-          GROUP BY 1,2,3,4,c53_tipo,c70_valor,e60_anousu
-          ORDER BY 2, 3) AS x
-     GROUP BY 1, 2, 3,z01_numcgm, e60_anousu
-     ORDER BY 1, 2, 3) AS total
+          GROUP BY fonte, codigo, empenho, z01_numcgm, c53_tipo, c70_valor, e60_anousu
+          ORDER BY codigo, empenho) AS x
+     GROUP BY fonte, descricao, empenho, codigo, credor,z01_numcgm, e60_anousu
+     ORDER BY fonte, codigo DESC, empenho::integer) AS total
      WHERE (vlr_n_lqd > 0 OR vlr_lqd > 0)";
-    //                die($sql);exit;
     $rsEmpenhos = db_query($sql);
 
     ?>
+    <br>
     <form name="form1" method="post" action="" style="" onsubmit="return validaForm(this);">
         <table>
             <tr>
@@ -79,13 +83,17 @@
                     <center><strong>Despesas do Exercicio Inscritas em Resto a Pagar</strong></center>
                 </td>
             </tr>
+            <tr></tr>
             <tr>
                 <td>
                     <?php
                     $clorctiporec = new cl_orctiporec();
-                    $recursos = $clorctiporec->sql_record($clorctiporec->sql_query_file(null,"o15_codtri,o15_descr",null,"o15_codtri != ''"));
+                    $recursos = $clorctiporec->sql_record($clorctiporec->sql_query_file(null,"distinct on (o15_codtri) o15_codtri ,o15_descr","o15_codtri","o15_codtri != '' and (o15_datalimite is null or o15_datalimite >= '".date('Y-m-d', db_getsession('DB_datausu'))."')"));
                     db_selectrecord("o15_codtri",$recursos,true,$db_opcao,"","","",true,"js_filtrafonte(this.value)");
                     ?>
+                </td>
+                <td>
+                    <input type="button" id = "deletarDados" value="Apagar Dados" onclick="js_deletarInscricao()">
                 </td>
             </tr>
         </table>
@@ -94,6 +102,7 @@
         $iTotalFontes = 0;
         $arrayEmpenhos = 0;
         $oTotalrpfonte = array();
+        $arrayFontesCodigo = array();
 
         foreach ($aEmpenhos as $chave => $emp){
             $iFonte = $emp->fonte;
@@ -107,23 +116,27 @@
 
         foreach ($aEmpenhos as $key => $oEmp):
             $iFonte = $oEmp->fonte;
+            $iFonteCodigo = $oEmp->codigo;
+            $iFonteDescricao = $oEmp->descricao;
             $iEmpenho = $oEmp->empenho;
 
             if (!isset($arrayFontes[$iFonte])) {
                 ?>
-                <center>
+                <!-- <center>
                     <input type="submit" value="Salvar">
-                </center>
+                </center> -->
+                <br>
+                <br>
                 <br>
                 <table>
                     <tr class="DBGrid">
-                        <td class="table_header" style="width: 30px;"> Fonte </td>
-                        <td class="table_header" style="width: 75px;"> <?= $iFonte ?> </td>
-                        <th class="table_header" style="width: 156px;" rowspan="2"> Disponibilidade Total </th>
+                        <td class="table_header" style="width: 40px;"> Fonte </td>
+                        <td class="table_header" style="width: 50px;"> <?= $iFonte ?> </td>
+                        <th class="table_header" style="width: 70px;" rowspan="2"> Disp. Total </th>
                         <td class="table_header" style="width: 100px;">
                             <input type="text" name="aFonte[<?= $iFonte ?>][disp_total]" value="0" style="width: 100px; background: #DEB887;" readonly="true">
                         </td>
-                        <th class="table_header" style="width: 110px;">Saldo Utilizado</th>
+                        <th class="table_header" style="width: 90px;">Saldo Utilizado</th>
                         <td class="table_header" style="width: 100px;">
                             <input type="text" name="aFonte[<?= $iFonte ?>][vlr_utilizado]" value="0" style="width: 100px; background: #DEB887;" readonly="true">
                         </td>
@@ -136,24 +149,42 @@
                         <td class="table_header" style="width: 70px;">
                             <input type="text" name="aFonte[<?= $iFonte ?>][vlr_totalrp]" value="<?= $oTotalrpfonte[$iFonte]->saldo?>" style="width: 95px; background: #DEB887;" readonly="true">
                         </td>
-                        <th rowspan="2">
+                        <th rowspan="4">
                             <input type="button" nome="" value="Aplicar Disp. T" rowspan="2" onclick="js_aplicardisptotal(<?= $iFonte ?>)">
+                            <input type="button" nome="" value="RPP" rowspan="3" onclick="js_aplicardisptotalRPP(<?= $iFonte ?>)">
+                            <input type="button" nome="" value="RPNP" rowspan="3" onclick="js_aplicardisptotalRPNP(<?= $iFonte ?>)">
+                            <input type="submit" value="Salvar">
                         </th>
                         </td>
                     </tr>
                 </table>
+                <?
+            }
+
+            if (!isset($arrayFontesCodigo[$iFonteCodigo])) {
+                ?>
+
+                <br>
+                <table>
+                    <tr class="DBGrid">
+                        <td class="table_header" style="width: 50px;"> Fonte </td>
+                        <td class="table_header" style="width: 100px;"> <?= $iFonteCodigo ?> </td>
+                        <td class="table_header" style="width: 900px;"> <?= $iFonteDescricao ?> </td>
+                        <td><input type="submit" value="Salvar"></td>
+                    </tr>
+                </table>
                 <table>
                     <tr>
-                        <th class="table_header" style="width: 33px; cursor: pointer;" onclick="marcarTodos(<?= $iFonte ?>);">M</th>
-                        <th class="table_header" style="width: 70px;">Nº Empenho</th>
+                        <th class="table_header" style="width: 33px; cursor: pointer;" onclick="marcarTodos(<?= $iFonteCodigo ?>);">M</th>
+                        <th class="table_header" style="width: 70px;">Nº Empenho</th>                        
                         <th class="table_header" style="width: 240px;">Credor</th>
-                        <th class="table_header" style="width: 100px;">Saldo não Liquidado</th>
                         <th class="table_header" style="width: 110px;">Saldo Liquidado</th>
+                        <th class="table_header" style="width: 100px;">Saldo não Liquidado</th>
+                        <th class="table_header" style="width: 100px;">Valor de Disp. RPP</th>                        
                         <th class="table_header" style="width: 100px;">Valor de Disp. RPNP</th>
-                        <th class="table_header" style="width: 100px;">Valor de Disp. RPP</th>
-                        <th class="table_header" style="width: 100px;">Valor Sem Disp. RPNP</th>
                         <th class="table_header" style="width: 100px;">Valor Sem Disp. RPP</th>
-                        <th class="table_header" style="width: 100px;">Dis. RPP e RPNP</th>
+                        <th class="table_header" style="width: 100px;">Valor Sem Disp. RPNP</th>                        
+                        <th class="table_header" style="width: 100px;">Aplicar Dis. RPNP e RPP</th>
                     </tr>
                 </table>
                 <?
@@ -163,7 +194,7 @@
             <table class="DBGrid">
 
                 <th class="table_header" style="width: 33px">
-                    <input type="checkbox" class="marca_itens[<?= $iFonte ?>]" name="aItensMarcados" value="<?= $iEmpenho ?>" id="<?= $iEmpenho?>">
+                    <input type="checkbox" class="marca_itens[<?= $iFonte ?>] codigo_item[<?= $iFonteCodigo ?>]" name="aItensMarcados" value="<?= $iEmpenho ?>" id="<?= $iEmpenho?>">
                 </th>
 
                 <td class="linhagrid" style="width: 70px">
@@ -176,30 +207,30 @@
                     <input type="hidden" name="aEmpenho[<?= $iEmpenho ?>][credor][<?= $iFonte ?>]" value="<?= str_replace('&','',$oEmp->credor) ?>" id="<?= $iFonte?>">
                 </td>
 
-                <td class="linhagrid" style="width: 100px;">
-                    <?= $oEmp->vlr_n_lqd ?>
-                    <input type="hidden" name="aEmpenho[<?= $iEmpenho ?>][vlr_n_lqd][<?= $iFonte ?>]" value="<?= $oEmp->vlr_n_lqd ?>" id="<?= $iFonte?>">
-                </td>
-
                 <td class="linhagrid" style="width: 110px;">
                     <?= $oEmp->vlr_lqd ?>
                     <input type="hidden" name="aEmpenho[<?= $iEmpenho ?>][vlr_lqd][<?= $iFonte ?>]" value="<?= $oEmp->vlr_lqd ?>" id="<?= $iFonte?>">
                 </td>
 
-                <td class="linhagrid">
-                    <input type="text" style="width: 100px" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPNP][<?= $iFonte ?>]" value="0" onKeyUp="return sem_virgula(this);" onchange="adicionarEdicaoRPNP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>">
+                <td class="linhagrid" style="width: 100px;">
+                    <?= $oEmp->vlr_n_lqd ?>
+                    <input type="hidden" name="aEmpenho[<?= $iEmpenho ?>][vlr_n_lqd][<?= $iFonte ?>]" value="<?= $oEmp->vlr_n_lqd ?>" id="<?= $iFonte?>">
                 </td>
 
                 <td class="linhagrid">
-                    <input type="text" style="width: 100px" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPP][<?= $iFonte ?>]" onKeyUp="return sem_virgula(this);" value="0" onchange="adicionarEdicaoRPP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>">
+                    <input type="text" style="<?echo ($anousu >= 2023 ? "width: 100px; background: #DEB887;" : "width: 100px;")?>" readonly="<?echo ($anousu >= 2023 ? "true" : "false")?>" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPP][<?= $iFonte ?>]" onKeyUp="return sem_virgula(this);" value="0" onchange="adicionarEdicaoRPP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>">
+                </td>
+
+                <td class="linhagrid">
+                    <input type="text" style="<?echo ($anousu >= 2023 ? "width: 100px; background: #DEB887;" : "width: 100px;")?>" readonly="<?echo ($anousu >= 2023 ? "true" : "false")?>" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPNP][<?= $iFonte ?>]" value="0" onKeyUp="return sem_virgula(this);" onchange="adicionarEdicaoRPNP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>">
                 </td>
 
                 <td class="linhagrid" style="width: 100px">
-                    <input type="text" name="aEmpenho[<?= $iEmpenho ?>][vlr_semRPNP][<?= $iFonte ?>]" value="0" style="width: 100px; background: #DEB887;" readonly="true" id="<?= $iFonte?>">
+                    <input type="text" name="aEmpenho[<?= $iEmpenho ?>][vlr_semRPP][<?= $iFonte ?>]" value="0" style="width: 100px; background: #DEB887;" readonly="true" id="<?= $iFonte?>">                    
                 </td>
 
                 <td class="linhagrid" style="width: 80px">
-                    <input type="text" name="aEmpenho[<?= $iEmpenho ?>][vlr_semRPP][<?= $iFonte ?>]" value="0" style="width: 100px; background: #DEB887;" readonly="true" id="<?= $iFonte?>">
+                    <input type="text" name="aEmpenho[<?= $iEmpenho ?>][vlr_semRPNP][<?= $iFonte ?>]" value="0" style="width: 100px; background: #DEB887;" readonly="true" id="<?= $iFonte?>">    
                 </td>
 
                 <td class="linhagrid" style="width: 70px; display: none">
@@ -208,13 +239,16 @@
                 </td>
 
                 <td class="linhagrid" style="width: 100px;">
-                    <input type="button" name="aEmpenho[<?= $iEmpenho ?>][aplicar][<?= $iFonte ?>]" value="Aplicar" id="<?= $iFonte?>" onclick="js_aplicar(<?= $iFonte ?>,<?= $iEmpenho?>)">
+                    <input type="button" name="aEmpenho[<?= $iEmpenho ?>][aplicar][<?= $iFonte ?>]" value="RPP" id="<?= $iFonte?>" onclick="js_aplicarRPP(<?= $iFonte ?>,<?= $iEmpenho?>)">                    
+                    <input type="button" name="aEmpenho[<?= $iEmpenho ?>][aplicar][<?= $iFonte ?>]" value="RPNP" id="<?= $iFonte?>" onclick="js_aplicarRPNP(<?= $iFonte ?>,<?= $iEmpenho?>)">    
+                    <input type="button" name="aEmpenho[<?= $iEmpenho ?>][aplicar][<?= $iFonte ?>]" value="TODOS" id="<?= $iFonte?>" onclick="js_aplicar(<?= $iFonte ?>,<?= $iEmpenho?>)">                    
                 </td>
             </table>
             <?
             $iTotalFontes++;
 
             $arrayFontes[$iFonte] = $iFonte;
+            $arrayFontesCodigo[$iFonteCodigo] = $iFonteCodigo;
 
             ?>
 
@@ -235,7 +269,7 @@
 
      js_carregafonte();
      js_buscarDisponibilidade(document.getElementById('o15_codtri').value);
-     js_buscarVlrDisp(document.getElementById('o15_codtri').value);
+    //  js_buscarVlrDisp(document.getElementById('o15_codtri').value);
      carregaritens(document.getElementById('o15_codtri').value);
 
 
@@ -270,9 +304,17 @@
         });
     }
 
+    function aItensFonteCodigo(fonte) {
+        var itensNum = document.getElementsByClassName("codigo_item["+ fonte +"]");
+
+        return Array.prototype.map.call(itensNum, function (item) {
+            return item;
+        });
+    }
+
     function marcarTodos(fonte) {
 
-        aItensFonte(fonte).forEach(function (item) {
+        aItensFonteCodigo(fonte).forEach(function (item) {
 
             var check = item.classList.contains('marcado');
 
@@ -315,8 +357,6 @@
         let vlr_disponivel     = document.form1['aFonte['+fonte+'][vlr_disponivel]'].value;
         let vlr_dispCaixa      = document.form1['aFonte['+fonte+'][disp_total]'].value;
         let vlr_utilizado      = document.form1['aFonte['+fonte+'][vlr_utilizado]'].value;
-        console.log('passou aqui');
-        console.log(vlr_utilizado);
         if(vlr_n_lqd == 0){
             alert("Não existe saldo não liquidado para este empenho!");
             // document.form1['aEmpenho[' + codigo + '][vlr_dispRPNP]['+fonte+']'].style.background = '#DEB887';
@@ -425,7 +465,6 @@
     function getItensFormulario() {
         return aItens().filter(function (item) {
             return item;
-            // console.log(item);
         });
     }
 
@@ -446,9 +485,13 @@
         try {
             itens.forEach(function (item) {
 
-                var fonte = item.className.substring(12);
-                fonte = fonte.replace(']','');
-                fonte = fonte.replace(' marcado','');
+                var classes = Array.from(item.classList);
+                var fonte = classes.find(function (classe) {
+                    return classe.startsWith('marca_itens');
+                });
+
+                fonte = fonte.substring(12);
+                fonte = fonte.replace(']','');                
 
                 var elemento = 'aEmpenho[' + item.value + ']';
                 var elementofonte = 'aFonte[' + fonte + ']';
@@ -517,7 +560,6 @@
         var itens = JSON.parse(oRetorno.responseText.urlDecode());
         if(typeof itens.itens !== 'undefined') {
           itens.itens.forEach(function (item, b) {
-            // console.log(item);
             if (document.form1['aEmpenho[' + item.c223_codemp + '][vlr_dispRPNP][' + item.c223_fonte + ']'] != undefined) {
               document.form1['aEmpenho[' + item.c223_codemp + '][vlr_dispRPNP][' + item.c223_fonte + ']'].value = item.c223_vlrdisrpnp;
               document.form1['aEmpenho[' + item.c223_codemp + '][vlr_dispRPP][' + item.c223_fonte + ']'].value = item.c223_vlrdisrpp;
@@ -529,6 +571,7 @@
             }
           });
         }
+        js_buscarVlrDisp();
     }
 
     async function buscaritens(params, onComplete) {
@@ -537,9 +580,7 @@
             method:'post',
             parameters:'json=' + JSON.stringify(params),
             onComplete: async function (res) {
-              console.log('calling');
               const result = await resolverDepoisDe2Segundos();
-              console.log(result);
               js_removeObj('div_aguarde');
               onComplete(res);
             }
@@ -553,6 +594,7 @@
 
 
     function js_buscarVlrDisp(fonte) {
+        js_divCarregando('', 'div_aguarde_disptotal');
         buscaritens({
             exec: 'getUtilizado',
             fonte: fonte
@@ -571,6 +613,7 @@
                 }
             });
         }
+        js_removeObj('div_aguarde_disptotal')
     }
 
     function js_calcularVlrDis(params, onComplete) {
@@ -597,9 +640,7 @@
     }
 
    async function js_carregarDisponibilidade(oRetorno){
-        console.log('calling');
         const result = await resolverDepoisDe2Segundos();
-        console.log(result);
         var oDisponiblidade = JSON.parse(oRetorno.responseText.urlDecode());
         oDisponiblidade.dispobilidade.forEach(function (dispfonte, key) {
 
@@ -630,8 +671,6 @@
     }
 
     function js_aplicardisptotal(fonte) {
-
-        console.log('aplic total');
 
         let VlrDispTotal = document.form1['aFonte[' + fonte + '][disp_total]'].value;
         let VlrTotalRP   = document.form1['aFonte[' + fonte + '][vlr_totalrp]'].value;
@@ -666,6 +705,66 @@
         }
     }
 
+    function js_aplicardisptotalRPNP(fonte) {
+
+        let VlrDispTotal = document.form1['aFonte[' + fonte + '][disp_total]'].value;
+        let VlrTotalRP   = document.form1['aFonte[' + fonte + '][vlr_totalrp]'].value;
+
+        if(Number(VlrTotalRP) > Number(VlrDispTotal)){
+            alert("Erro! Valor Total RP maior que Valor Disp. Total");
+            getItensMarcadosFonte(fonte).forEach(function (itens, key) {
+                itens.checked = false;
+            });
+        }else {
+            let VlrUtilizadoFonte = 0;
+            getItensMarcadosFonte(fonte).forEach(function (itens, key) {
+                itens.checked = true;
+                let vlr_n_lqd      = document.form1['aEmpenho[' + itens.value + '][vlr_n_lqd]['+ fonte +']'].value;
+                VlrUtilizadoFonte += Number(vlr_n_lqd);
+                document.form1['aEmpenho['+ itens.value +'][vlr_dispRPNP]['+ fonte +']'].value = vlr_n_lqd;
+            });
+            if(VlrUtilizadoFonte > VlrDispTotal){
+                alert("Erro! Valor utilizado maior que valor Disponivel");
+                getItensMarcadosFonte(fonte).forEach(function (itens, key) {
+                    itens.checked = false;
+                    document.form1['aEmpenho['+ itens.value +'][vlr_dispRPNP]['+ fonte +']'].value = 0;
+                });
+            }
+            document.form1['aFonte[' + fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizadoFonte,2);
+            document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(VlrDispTotal) - Number(VlrUtilizadoFonte),2);
+        }
+    }
+
+        function js_aplicardisptotalRPP(fonte) {
+
+        let VlrDispTotal = document.form1['aFonte[' + fonte + '][disp_total]'].value;
+        let VlrTotalRP   = document.form1['aFonte[' + fonte + '][vlr_totalrp]'].value;
+
+        if(Number(VlrTotalRP) > Number(VlrDispTotal)){
+            alert("Erro! Valor Total RP maior que Valor Disp. Total");
+            getItensMarcadosFonte(fonte).forEach(function (itens, key) {
+                itens.checked = false;
+            });
+        }else {
+            let VlrUtilizadoFonte = 0;
+            getItensMarcadosFonte(fonte).forEach(function (itens, key) {
+                itens.checked = true;
+                let vlr_lqd        = document.form1['aEmpenho[' + itens.value + '][vlr_lqd]['+ fonte +']'].value;
+                VlrUtilizadoFonte += Number(vlr_lqd);
+                document.form1['aEmpenho['+ itens.value +'][vlr_dispRPP]['+ fonte +']'].value = vlr_lqd;
+            });
+            if(VlrUtilizadoFonte > VlrDispTotal){
+                alert("Erro! Valor utilizado maior que valor Disponivel");
+                getItensMarcadosFonte(fonte).forEach(function (itens, key) {
+                    itens.checked = false;
+                    document.form1['aEmpenho['+ itens.value +'][vlr_dispRPP]['+ fonte +']'].value = 0;
+                });
+            }
+            document.form1['aFonte[' + fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizadoFonte,2);
+            document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(VlrDispTotal) - Number(VlrUtilizadoFonte),2);
+        }
+    }
+
     async function js_aplicar(fonte,emp) {
 
         let vlr_dispRPNP = document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].value;
@@ -676,10 +775,6 @@
         let VlrTotalRP   = document.form1['aFonte[' + fonte + '][vlr_totalrp]'].value;
         let VlrDisponivel   = document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value;
         document.getElementById(emp).checked = true;
-        // console.log('vlr_dispRPNP',vlr_dispRPNP);
-        // console.log('vlr_n_lqd',vlr_n_lqd);
-        // console.log('vlr_lqd',vlr_lqd);
-        // console.log('VlrDisponivel',VlrDisponivel);
         let saldo = Number(vlr_n_lqd) + Number(vlr_lqd);
         if(Number(VlrDisponivel) == 0 || Number(saldo) > Number(VlrDisponivel) ){
             alert("Erro! Não existe saldo Disponivel para essa Operação");
@@ -690,9 +785,7 @@
                 document.getElementById(emp).checked = false;
             } else {
 
-                console.log('calling');
                 const result = await resolverDepoisDe2Segundos();
-                console.log(result);
                 if (Number(vlr_lqd) == 0) {
                     // alert("Não existe saldo liquidado para este empenho!");
                     document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].style.background = '#DEB887';
@@ -721,9 +814,7 @@
                         // alert("Erro! Valor de Disp. RPNP maior que valor não liquidado");
                         document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].value = 0;
                     } else {
-                        console.log('calling');
                         const result = await resolverDepoisDe2Segundos();
-                        console.log(result);
 
                         // let resultvlrsemRPNP = vlr_n_lqd - vlr_dispRPNP;
                         // document.form1['aEmpenho[' + emp + '][vlr_semRPNP][' + fonte + ']'].value = js_roundDecimal(resultvlrsemRPNP, 2);
@@ -756,6 +847,154 @@
 
             document.form1['aFonte[' + fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizadoFonte, 2);
             document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(VlrDispTotal) - Number(js_roundDecimal(VlrUtilizadoFonte,2)), 2);
+        }
+    }
+
+    async function js_aplicarRPP(fonte,emp) {
+
+        let vlr_dispRPNP = document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].value;
+        let vlr_dispRPP  = document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].value;
+        let vlr_n_lqd    = document.form1['aEmpenho[' + emp + '][vlr_n_lqd][' + fonte + ']'].value;
+        let vlr_lqd      = document.form1['aEmpenho[' + emp + '][vlr_lqd][' + fonte + ']'].value;
+        let VlrDispTotal = document.form1['aFonte[' + fonte + '][disp_total]'].value;
+        let VlrTotalRP   = document.form1['aFonte[' + fonte + '][vlr_totalrp]'].value;
+        let VlrDisponivel   = document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value;
+        document.getElementById(emp).checked = true;
+        let saldo = Number(vlr_n_lqd) + Number(vlr_lqd);
+        if(Number(VlrDisponivel) == 0 || Number(saldo) > Number(VlrDisponivel) ){
+            alert("Erro! Não existe saldo Disponivel para essa Operação");
+            document.getElementById(emp).checked = false;
+        }else {
+            if (Number(VlrTotalRP) > (VlrDispTotal) && Number(VlrDispTotal) == 0) {
+                alert("Erro! Valor Total RP maior que Valor Disp. Total");
+                document.getElementById(emp).checked = false;
+            } else {
+                const result = await resolverDepoisDe2Segundos();
+                if (Number(vlr_lqd) == 0) {
+                    document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].style.background = '#DEB887';
+                    document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].value = 0;
+                } else {
+                    if (Number(vlr_dispRPP) > Number(vlr_lqd)) {
+                        document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].value = 0;
+                    } else {
+                        if (vlr_dispRPP == 0 || vlr_dispRPP == '') {
+                            document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].value = vlr_lqd;
+                        } else {
+                            document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].value = vlr_dispRPP;
+                        }
+                    }
+                }
+                if(document.form1['aEmpenho[' + emp + '][vlr_semRPP][' + fonte + ']'].value !== null) {
+                  if(document.form1['aEmpenho[' + emp + '][vlr_semRPP][' + fonte + ']'].value !== 0) {
+                    document.form1['aEmpenho[' + emp + '][vlr_semRPP][' + fonte + ']'].value = 0;
+                  }
+                }
+            }
+            /**
+             *Calcular valor Disponivel
+            */
+            let VlrUtilizadoFonte = 0;
+            aItensFonte(fonte).forEach(function (itens, key) {
+                // itens.checked = true;
+                let vlr_dispRPNP = document.form1['aEmpenho[' + itens.value + '][vlr_dispRPNP][' + fonte + ']'].value;
+                let vlr_dispRPP = document.form1['aEmpenho[' + itens.value + '][vlr_dispRPP][' + fonte + ']'].value;
+                VlrUtilizadoFonte += Number(vlr_dispRPNP) + Number(vlr_dispRPP);
+            });
+
+            document.form1['aFonte[' + fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizadoFonte, 2);
+            document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(VlrDispTotal) - Number(js_roundDecimal(VlrUtilizadoFonte,2)), 2);
+        }
+    }
+
+    async function js_aplicarRPNP(fonte,emp) {
+
+        let vlr_dispRPNP = document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].value;
+        let vlr_dispRPP  = document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].value;
+        let vlr_n_lqd    = document.form1['aEmpenho[' + emp + '][vlr_n_lqd][' + fonte + ']'].value;
+        let vlr_lqd      = document.form1['aEmpenho[' + emp + '][vlr_lqd][' + fonte + ']'].value;
+        let VlrDispTotal = document.form1['aFonte[' + fonte + '][disp_total]'].value;
+        let VlrTotalRP   = document.form1['aFonte[' + fonte + '][vlr_totalrp]'].value;
+        let VlrDisponivel   = document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value;
+        document.getElementById(emp).checked = true;
+        let saldo = Number(vlr_n_lqd) + Number(vlr_lqd);
+        if(Number(VlrDisponivel) == 0 || Number(saldo) > Number(VlrDisponivel) ){
+            alert("Erro! Não existe saldo Disponivel para essa Operação");
+            document.getElementById(emp).checked = false;
+        }else {
+            if (Number(VlrTotalRP) > (VlrDispTotal) && Number(VlrDispTotal) == 0) {
+                alert("Erro! Valor Total RP maior que Valor Disp. Total");
+                document.getElementById(emp).checked = false;
+            } else {
+                const result = await resolverDepoisDe2Segundos();
+                if (vlr_n_lqd == 0) {
+                    document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].style.background = '#DEB887';
+                    document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].value = 0;
+                } else {
+                    if (Number(vlr_dispRPNP) > Number(vlr_n_lqd)) {
+                        document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].value = 0;
+                    } else {
+                        const result = await resolverDepoisDe2Segundos();
+                        if (vlr_dispRPNP == 0 || vlr_dispRPNP == '') {
+                            document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].value = js_roundDecimal(vlr_n_lqd, 2);
+                        } else {
+                            document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].value = js_roundDecimal(vlr_dispRPNP, 2);
+                        }
+                    }
+                }
+                if(document.form1['aEmpenho[' + emp + '][vlr_semRPNP][' + fonte + ']'].value !== null) {
+                if(document.form1['aEmpenho[' + emp + '][vlr_semRPNP][' + fonte + ']'].value !== 0 ) {
+                    document.form1['aEmpenho[' + emp + '][vlr_semRPNP][' + fonte + ']'].value = 0;
+                }
+                }
+            }
+            /**
+             *Calcular valor Disponivel
+            */
+            let VlrUtilizadoFonte = 0;
+            aItensFonte(fonte).forEach(function (itens, key) {
+                let vlr_dispRPNP = document.form1['aEmpenho[' + itens.value + '][vlr_dispRPNP][' + fonte + ']'].value;
+                let vlr_dispRPP = document.form1['aEmpenho[' + itens.value + '][vlr_dispRPP][' + fonte + ']'].value;
+                VlrUtilizadoFonte += Number(vlr_dispRPNP) + Number(vlr_dispRPP);
+            });
+
+            document.form1['aFonte[' + fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizadoFonte, 2);
+            document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(VlrDispTotal) - Number(js_roundDecimal(VlrUtilizadoFonte,2)), 2);
+        }
+    }
+
+    function js_deletarInscricao(){
+        const fonte = document.getElementById('o15_codtri').value;
+        let sMensagem = "Esse processo irá apagar todas as inscrições de empenho da fonte "+fonte+". Deseja mesmo continuar?";
+
+        if(fonte == ''){
+            alert('Fonte invalida.');
+            return false;
+        }else{
+            if(fonte == 1){
+                sMensagem = "Esse processo irá apagar todas as inscrições de empenho de todas as fontes. Deseja mesmo continuar?";
+            }
+            if(!confirm(sMensagem)){
+                return false;
+            }else{
+
+            let oParam = new Object();
+            oParam.exec = 'deletarDados';
+            oParam.fonte = fonte;        
+            const oAjax = new Ajax.Request(
+                            'despesainscritarp.RPC.php',
+                            {
+                            method: 'post',
+                            parameters: 'json='+Object.toJSON(oParam),
+                            onComplete: async function (res) {
+                                    let msg = JSON.parse(res.responseText.urlDecode());
+                                    alert(msg.message);
+                                    const result = await resolverDepoisDe2Segundos();
+                                    js_removeObj('div_aguarde');
+                                    window.location.reload();
+                                }
+                            }
+                            );
+            }
         }
     }
 
