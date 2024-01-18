@@ -85,8 +85,8 @@ class SicomArquivoPessoaObras extends SicomArquivoBase implements iPadArquivoBas
     $sql = "SELECT DISTINCT 10 AS si194_tiporegistro,
              cgm.z01_cgccpf AS si194_nrodocumento,
              CASE
-                WHEN LENGTH(cgm.z01_cgccpf) = 11 THEN 2
-                ELSE 3
+                WHEN LENGTH(cgm.z01_cgccpf) = 11 THEN 1
+                ELSE 2
              END AS si194_tipodocumento,
              cgm.z01_nome AS si194_nome,
              1 AS si194_tipocadastro,

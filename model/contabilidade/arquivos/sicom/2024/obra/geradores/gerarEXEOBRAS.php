@@ -51,7 +51,6 @@ class gerarEXEOBRAS extends GerarAM
                 $aCSVEXEOBRAS10['si197_codorgao'] = str_pad($aEXEOBRAS10['si197_codorgao'], 3, "0", STR_PAD_LEFT);
                 $aCSVEXEOBRAS10['si197_codunidadesub'] = substr($aEXEOBRAS10['si197_codunidadesub'], 0, 8);
                 $aCSVEXEOBRAS10['si197_nrocontrato'] = $aEXEOBRAS10['si197_nrocontrato'];
-                $aCSVEXEOBRAS10['si197_tipodocumento'] = $aEXEOBRAS10['si197_tipodocumento'];
                 $aCSVEXEOBRAS10['si197_exerciciocontrato'] = $aEXEOBRAS10['si197_exerciciocontrato'];
                 $aCSVEXEOBRAS10['si197_contdeclicitacao'] = $aEXEOBRAS10['si197_contdeclicitacao'];
                 $aCSVEXEOBRAS10['si197_exerciciolicitacao'] = $aEXEOBRAS10['si197_exerciciolicitacao'];
@@ -59,15 +58,15 @@ class gerarEXEOBRAS extends GerarAM
                 $aCSVEXEOBRAS10['si197_codunidadesubresp'] = str_pad($aEXEOBRAS10['si197_codunidadesubresp'], 5, "0", STR_PAD_LEFT);
 
                 /*
-* Trecho do código responsável por gerar sequenciais para o número do lote
-* de acordo a l04_descricao e número do lote.
-*/
+                * Trecho do código responsável por gerar sequenciais para o número do lote
+                * de acordo a l04_descricao e número do lote.
+                */
 
                 $nrolote = $aEXEOBRAS10['si197_nrolote'];
                 $sql = "select liclicitemlote.* from liclicitem
-join liclicita on l20_codigo=l21_codliclicita
-join liclicitemlote on l04_liclicitem=l21_codigo
-where l04_codigo=$nrolote order by l04_descricao;";
+                        join liclicita on l20_codigo=l21_codliclicita
+                        join liclicitemlote on l04_liclicitem=l21_codigo
+                        where l04_codigo=$nrolote order by l04_descricao;";
                 $rslotedescricao = db_query($sql);
                 $rslotedescricao = pg_fetch_array($rslotedescricao, 0);
 

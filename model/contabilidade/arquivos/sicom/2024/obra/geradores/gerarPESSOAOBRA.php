@@ -40,7 +40,7 @@ class gerarPESSOAOBRA extends GerarAM
 
         $aCSVPESSOAOBRA10['si194_tiporegistro']             = str_pad($aPESSPAOBRA10['si194_tiporegistro'], 2, "0", STR_PAD_LEFT);
         $aCSVPESSOAOBRA10['si194_tipodocumento']            = $aPESSPAOBRA10['si194_tipodocumento'];
-        $aCSVPESSOAOBRA10['si194_nrodocumento']             = substr($aPESSPAOBRA10['si194_nrodocumento'], 0, 50);
+        $aCSVPESSOAOBRA10['si194_nrodocumento']             = $aPESSPAOBRA10['si194_nrodocumento'];
         $aCSVPESSOAOBRA10['si194_nome']                     = substr($aPESSPAOBRA10['si194_nome'], 0, 120);
         $aCSVPESSOAOBRA10['si194_tipocadastro']             = $aPESSPAOBRA10['si194_tipocadastro'];
         $aCSVPESSOAOBRA10['si194_justificativaalteracao']   = $aPESSPAOBRA10['si194_justificativaalteracao'];

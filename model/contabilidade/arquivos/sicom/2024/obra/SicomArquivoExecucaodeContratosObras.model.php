@@ -175,6 +175,7 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
                 WHEN LENGTH(cgm.z01_cgccpf) = 11 THEN 2
                 ELSE 3
              END AS si197_tipodocumento,
+             cgm.z01_cgccpf as si197_numerodocumento
       FROM acordo
       INNER JOIN cgm on z01_numcgm = ac16_contratado
       INNER JOIN liclicita ON l20_codigo = ac16_licitacao
@@ -206,6 +207,7 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
       $clexeobras102024->si197_codunidadesub = $oDados10->si197_codunidadesub;
       $clexeobras102024->si197_nrocontrato = $oDados10->si197_nrocontrato;
       $clexeobras102024->si197_tipodocumento = $oDados10->si197_tipodocumento;
+      $clexeobras102024->si197_numerodocumento = $oDados10->si197_numerodocumento;
       $clexeobras102024->si197_exerciciocontrato = $oDados10->si197_exerciciocontrato;
       if($oDados10->ac16_tipoorigem){
         $clexeobras102024->si197_contdeclicitacao = $oDados10->ac16_tipoorigem;
