@@ -90,7 +90,7 @@ try{
                 $where .= " c223_anousu = ".db_getsession("DB_anousu");
             }else{
                 $where = "c223_fonte = {$oParam->fonte}";
-                $where .= " and c223_anousu = ".db_getsession("DB_anosusu");
+                $where .= " and c223_anousu = ".db_getsession("DB_anousu");
             }
 
             $result = $cldespesainscritarp->sql_record($cldespesainscritarp->sql_query_file(null,"*",null,$where));
@@ -155,6 +155,23 @@ try{
             }
 
             break;
+        
+        case 'deletarDados':
+
+            $fonte = $oParam->fonte;
+
+            if($fonte == 1){
+                $dbWhere = " c223_anousu = ".db_getsession("DB_anousu"). " and c223_instit = " . db_getsession("DB_instit");
+            }else{
+                $dbWhere = " c223_fonte = $fonte and c223_anousu = ".db_getsession("DB_anousu"). " and c223_instit = " . db_getsession("DB_instit");
+            }
+
+            $cldespesainscritarp->excluir(null, $dbWhere);
+
+            if ($cldespesainscritarp->erro_status != 1) {
+                $oRetorno->message = utf8_encode("Ocorreu um erro na hora de exclusão!");
+            }
+            $oRetorno->message = utf8_encode("Dados excluidos com sucesso!");
     }
 
 } catch (Exception $eErro) {
