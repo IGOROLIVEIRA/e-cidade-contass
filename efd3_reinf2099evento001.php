@@ -20,6 +20,9 @@ db_app::load("time.js");
     <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <style>
+      input {
+            border-radius: 5px;
+        }
 </style>
 
 <body bgcolor=#CCCCCC>
@@ -180,7 +183,7 @@ db_app::load("time.js");
                 aLinha[7] = oLinha.dataenvio;
                 aLinha[8] = oLinha.protocolo;
                 aLinha[9] = oLinha.status;
-                aLinha[10] = oLinha.status != 'ENVIADO' ? "Clique aqui :" + "<b style='color: #00008b;'>"+oLinha.dscResp+"</b>" : "Clique aqui : " + "<b style='color: #00008b;'> Todos eventos processados com sucesso. </b>";
+                aLinha[10] = oLinha.dscResp ? "Clique aqui :" + "<b style='color: #00008b;'>"+oLinha.dscResp+"</b>" : "Clique aqui : " + "<b style='color: #00008b;'> Todos eventos processados com sucesso. </b>";
 
                 oGridEvento.addRow(aLinha);
 
