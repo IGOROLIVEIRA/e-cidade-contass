@@ -642,7 +642,6 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             }
             $clcontratos10->si83_naturezaobjeto = $oDados10->ac02_acordonatureza; //campo 15
             $clcontratos10->si83_objetocontrato = substr($this->removeCaracteres($oDados10->ac16_objeto), 0, 1000); //campo 16
-            $clcontratos10->si83_tipoinstrumento = $oDados10->ac16_acordocategoria; //removido
             $clcontratos10->si83_datainiciovigencia = $oDados10->ac16_datainicio; //campo 17
             $clcontratos10->si83_vigenciaindeterminada = $oDados10->vigenciaindeterminada; //campo 18
             $clcontratos10->si83_datafinalvigencia = $oDados10->vigenciaindeterminada == "1" ? '' : $oDados10->ac16_datafim; //campo 19

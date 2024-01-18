@@ -36,7 +36,6 @@ class cl_contratos102024
   var $si83_tipoprocesso = 0;
   var $si83_naturezaobjeto = 0;
   var $si83_objetocontrato = null;
-  var $si83_tipoinstrumento = 0;
   var $si83_datainiciovigencia_dia = null;
   var $si83_datainiciovigencia_mes = null;
   var $si83_datainiciovigencia_ano = null;
@@ -86,7 +85,6 @@ class cl_contratos102024
                  si83_tipoprocesso = int8 = Tipo de processo
                  si83_naturezaobjeto = int8 = Natureza do objeto
                  si83_objetocontrato = varchar(500) = Objeto do contrato
-                 si83_tipoinstrumento = int8 = Tipo de  Instrumento
                  si83_datainiciovigencia = date = Data inicial da  vigência
                  si83_datafinalvigencia = date = Data final da  vigência
                  si83_vlcontrato = float8 = Valor do contrato
@@ -175,7 +173,6 @@ class cl_contratos102024
       $this->si83_tipoprocesso = ($this->si83_tipoprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_tipoprocesso"] : $this->si83_tipoprocesso);
       $this->si83_naturezaobjeto = ($this->si83_naturezaobjeto == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_naturezaobjeto"] : $this->si83_naturezaobjeto);
       $this->si83_objetocontrato = ($this->si83_objetocontrato == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_objetocontrato"] : $this->si83_objetocontrato);
-      $this->si83_tipoinstrumento = ($this->si83_tipoinstrumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_tipoinstrumento"] : $this->si83_tipoinstrumento);
       if ($this->si83_datainiciovigencia == "") {
         $this->si83_datainiciovigencia_dia = ($this->si83_datainiciovigencia_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_datainiciovigencia_dia"] : $this->si83_datainiciovigencia_dia);
         $this->si83_datainiciovigencia_mes = ($this->si83_datainiciovigencia_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_datainiciovigencia_mes"] : $this->si83_datainiciovigencia_mes);
@@ -254,9 +251,6 @@ class cl_contratos102024
     }
     if ($this->si83_naturezaobjeto == null) {
       $this->si83_naturezaobjeto = "0";
-    }
-    if ($this->si83_tipoinstrumento == null) {
-      $this->si83_tipoinstrumento = "0";
     }
     if ($this->si83_tipocadastro == null) {
       $this->si83_tipocadastro = "0";
@@ -356,7 +350,6 @@ class cl_contratos102024
                                       ,si83_tipoprocesso
                                       ,si83_naturezaobjeto
                                       ,si83_objetocontrato
-                                      ,si83_tipoinstrumento
                                       ,si83_datainiciovigencia
                                       ,si83_datafinalvigencia
                                       ,si83_vlcontrato
@@ -399,7 +392,6 @@ class cl_contratos102024
                                ,$this->si83_tipoprocesso
                                ,$this->si83_naturezaobjeto
                                ,'$this->si83_objetocontrato'
-                               ,$this->si83_tipoinstrumento
                                ," . ($this->si83_datainiciovigencia == "null" || $this->si83_datainiciovigencia == "" ? "null" : "'" . $this->si83_datainiciovigencia . "'") . "
                                ," . ($this->si83_datafinalvigencia == "null" || $this->si83_datafinalvigencia == "" ? "null" : "'" . $this->si83_datafinalvigencia . "'") . "
                                ,$this->si83_vlcontrato
@@ -471,7 +463,6 @@ class cl_contratos102024
       $resac = db_query("insert into db_acount values($acount,2010312,2011318,'','" . AddSlashes(pg_result($resaco, 0, 'si83_tipoprocesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010411,'','" . AddSlashes(pg_result($resaco, 0, 'si83_naturezaobjeto')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010412,'','" . AddSlashes(pg_result($resaco, 0, 'si83_objetocontrato')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010312,2010413,'','" . AddSlashes(pg_result($resaco, 0, 'si83_tipoinstrumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010414,'','" . AddSlashes(pg_result($resaco, 0, 'si83_datainiciovigencia')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010415,'','" . AddSlashes(pg_result($resaco, 0, 'si83_datafinalvigencia')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010416,'','" . AddSlashes(pg_result($resaco, 0, 'si83_vlcontrato')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -637,13 +628,6 @@ class cl_contratos102024
       $sql  .= $virgula . " si83_objetocontrato = '$this->si83_objetocontrato' ";
       $virgula = ",";
     }
-    if (trim($this->si83_tipoinstrumento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_tipoinstrumento"])) {
-      if (trim($this->si83_tipoinstrumento) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si83_tipoinstrumento"])) {
-        $this->si83_tipoinstrumento = "0";
-      }
-      $sql  .= $virgula . " si83_tipoinstrumento = $this->si83_tipoinstrumento ";
-      $virgula = ",";
-    }
     if (trim($this->si83_datainiciovigencia) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_datainiciovigencia_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si83_datainiciovigencia_dia"] != "")) {
       $sql  .= $virgula . " si83_datainiciovigencia = '$this->si83_datainiciovigencia' ";
       $virgula = ",";
@@ -786,8 +770,6 @@ class cl_contratos102024
           $resac = db_query("insert into db_acount values($acount,2010312,2010411,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_naturezaobjeto')) . "','$this->si83_naturezaobjeto'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si83_objetocontrato"]) || $this->si83_objetocontrato != "")
           $resac = db_query("insert into db_acount values($acount,2010312,2010412,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_objetocontrato')) . "','$this->si83_objetocontrato'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si83_tipoinstrumento"]) || $this->si83_tipoinstrumento != "")
-          $resac = db_query("insert into db_acount values($acount,2010312,2010413,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_tipoinstrumento')) . "','$this->si83_tipoinstrumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si83_datainiciovigencia"]) || $this->si83_datainiciovigencia != "")
           $resac = db_query("insert into db_acount values($acount,2010312,2010414,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_datainiciovigencia')) . "','$this->si83_datainiciovigencia'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si83_datafinalvigencia"]) || $this->si83_datafinalvigencia != "")
@@ -894,7 +876,6 @@ class cl_contratos102024
         $resac = db_query("insert into db_acount values($acount,2010312,2011318,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_tipoprocesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010411,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_naturezaobjeto')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010412,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_objetocontrato')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010312,2010413,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_tipoinstrumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010414,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_datainiciovigencia')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010415,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_datafinalvigencia')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010416,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_vlcontrato')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
