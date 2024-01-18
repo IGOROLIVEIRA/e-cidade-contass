@@ -1,30 +1,4 @@
 <?php
-/*
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2009  DBselller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
-
 //MODULO: issqn
 
 include("dbforms/db_classesgenericas.php");
@@ -190,7 +164,7 @@ $aTiposRetencoesINSS = array(
                     <fieldset>
                         <legend><b>Serviços</b></legend>
                         <table>
-                            <?
+                            <?php
                             $q62_issnotaavulsa = $get->q51_sequencial;
                             db_input('q62_issnotaavulsa', 10, $Iq62_issnotaavulsa, true, 'hidden', $db_opcao, " onchange='js_pesquisaq62_issnotaavulsa(false);'");
                             db_input('q62_sequencial', 10, $Iq62_sequencial, true, 'hidden', $db_opcao, "");
@@ -199,7 +173,7 @@ $aTiposRetencoesINSS = array(
                             ?>
                             <tr>
                                 <td nowrap title="Códido do Serviço">
-                                    <strong><? db_ancora("Código do Serviço:", "js_pesquisa_servico(true);", $db_opcao); ?></strong>
+                                    <strong><?php db_ancora("Código do Serviço:", "js_pesquisa_servico(true);", $db_opcao); ?></strong>
                                 </td>
                                 <td colspan='3'>
                                     <?php
@@ -227,7 +201,7 @@ $aTiposRetencoesINSS = array(
                                     <?= @$Lq62_vlruni ?>
                                 </td>
                                 <td>
-                                    <?
+                                    <?php
                                     db_input('q62_vlruni', 12, $Iq62_vlruni, true, 'text', $db_opcao, "onblur='js_calcula()'");
                                     ?>
                                 </td>
@@ -235,7 +209,7 @@ $aTiposRetencoesINSS = array(
                                     <?= @$Lq62_vlrtotal ?>
                                 </td>
                                 <td>
-                                    <?
+                                    <?php
                                     db_input('q62_vlrtotal', 15, $Iq62_vlrtotal, true, 'text', 3, "")
                                     ?>
                                 </td>
@@ -346,7 +320,7 @@ $aTiposRetencoesINSS = array(
                                     <?= @$Lq62_obs ?>
                                 </td>
                                 <td colspan='3'>
-                                    <?
+                                    <?php
                                     db_textarea('q62_obs', 0, 57, $Iq62_obs, true, 'text', $db_opcao, "onkeyup='js_controlatextarea(this.name,200);'");
                                     ?>
                                 </td>
@@ -382,7 +356,7 @@ $aTiposRetencoesINSS = array(
                        id="recibo" value="Emitir Recibo">
                 <input name='notaavulsa' <?= (!$hasServico ? 'style="display:none;"' : '') ?> onclick='return js_verificaNota();' type='submit' id='nota'
                        value='Emitir nota'>
-                <?
+                <?php
                 $fTotal = 0;
                 $sql = "select sum(q62_vlrissqn) as totalissqn,";
                 $sql .= "sum(q62_vlruni) as q62_vlrini,";
@@ -393,12 +367,6 @@ $aTiposRetencoesINSS = array(
  									where q62_issnotaavulsa = " . $q62_issnotaavulsa;
                 $oTotal = db_utils::fieldsMemory(pg_query($sql), 0);
                 $totalissqn = $oTotal->totalissqn;
-                //      if (($lGeraNota and $emitenota) or ($oPar->q60_notaavulsavlrmin > $totalissqn )){
-                //
-                //           echo " <input name='notaavulsa' onclick='return js_verificaNota();' type='submit' id='nota' value='Emitir nota'>";
-                //
-                //      }
-
                 ?>
             </td>
             </tr>
@@ -406,7 +374,7 @@ $aTiposRetencoesINSS = array(
         <table>
             <tr>
                 <td valign="top" align="center">
-                    <?
+                    <?php
                     $chavepri = array("q62_sequencial" => $get->q51_sequencial);
                     $cliframe_alterar_excluir->chavepri = $chavepri;
                     $cliframe_alterar_excluir->sql = $clissnotaavulsaservico->sql_query_file(null, "*", "q62_sequencial"
