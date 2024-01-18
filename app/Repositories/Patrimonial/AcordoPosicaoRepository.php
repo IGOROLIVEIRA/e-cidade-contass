@@ -44,7 +44,8 @@ class AcordoPosicaoRepository implements AcordoPosicaoRepositoryInterface
         $acordoPosicao = $this->model
             ->with(['itens', 'posicaoAditamento', 'acordo'])
             ->where('ac26_acordo', $ac26Acordo)
-            ->whereNotNull('ac26_numeroaditamento')
+            ->where('ac26_numeroaditamento','<>', '')
+            //->whereNull('ac26_numeroapostilamento')
             ->orderBy('ac26_numero', 'desc')
             ->first();
 
