@@ -184,7 +184,7 @@ class TransferenciaFinanceira extends Transferencia {
     $iCodigoSlipRecebido = $this->getCodigoSlip();
     $this->setCodigoSlip(null);
     parent::salvar();
-
+    $sDataLancamento = $sDataEstorno;
     $this->executaAutenticacao($sDataEstorno);
 
     $oDaoTipoOperacaoVinculo                        = db_utils::getDao('sliptipooperacaovinculo');
@@ -216,7 +216,7 @@ class TransferenciaFinanceira extends Transferencia {
 
     $this->salvarVinculoComProcesso();
 
-    $this->executarLancamentoContabil();
+    $this->executarLancamentoContabil($sDataLancamento);
     return true;
   }
 
