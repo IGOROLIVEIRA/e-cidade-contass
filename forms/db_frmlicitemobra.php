@@ -864,6 +864,7 @@ $cllicitemobra->rotulo->label();
             });
             excluirItemAjax({
                 exec: 'ExcluirItemObra',
+                ano: "<?= $ano ?>",
                 itens: itensEnviar,
             }, retornoexclusaoAjax);
         } catch (e) {
