@@ -97,6 +97,9 @@ if($sqlerro==false) {
           $clrhlotavinc->rh25_anousu   = $anodestino;
           $clrhlotavinc->rh25_projativ = $rh25_projativ;
           $clrhlotavinc->rh25_recurso  = $rh25_recurso;
+          $clrhlotavinc->rh25_programa  = $rh25_programa;
+          $clrhlotavinc->rh25_subfuncao  = $rh25_subfuncao;
+          $clrhlotavinc->rh25_funcao  = $rh25_funcao;
           $clrhlotavinc->incluir(null);
           if ($clrhlotavinc->erro_status==0) {
             $sqlerro   = true;

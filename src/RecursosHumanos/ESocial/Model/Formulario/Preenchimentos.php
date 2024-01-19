@@ -844,6 +844,7 @@ inner join db_config on
                             db_config.codigo = rhpessoal.rh01_instit
 WHERE rh30_vinculo IN ('I',
                        'P')
+  AND (date_part('month', rh01_admiss) = date_part('month', fc_getsession('DB_datausu')::date) AND date_part('year', rh01_admiss) = fc_getsession('DB_anousu')::int)
   AND r59_anousu IS NULL ";
         if ($matricula != null) {
             $sql .= " and rh01_regist in ($matricula) ";
@@ -1242,7 +1243,7 @@ WHERE rh30_vinculo IN ('I',
         $anofolha = db_anofolha();
         $mesfolha = db_mesfolha();
 
-            $sql = "SELECT distinct z01_cgccpf from rhpessoal
+        $sql = "SELECT distinct z01_cgccpf from rhpessoal
             left join rhpessoalmov on
                 rh02_anousu = fc_getsession('DB_anousu')::int
                 and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
@@ -1276,12 +1277,12 @@ WHERE rh30_vinculo IN ('I',
                 rh05_recis is null
                 ) ";
 
-            if ($matricula != null) {
-                $sql .= " and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
-            }
+        if ($matricula != null) {
+            $sql .= " and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
+        }
 
-            $sql .= ' limit 1';
-        
+        $sql .= ' limit 1';
+
         $rs = \db_query($sql);
         // echo $sql;
         // db_criatabela($rs);

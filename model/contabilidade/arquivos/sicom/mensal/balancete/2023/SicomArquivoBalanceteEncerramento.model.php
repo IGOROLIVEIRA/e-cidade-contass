@@ -79,7 +79,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
         $sSqlunidade = "select si09_codunidadesubunidade from infocomplementaresinstit where si09_tipoinstit = {$iTipoInstit}";
         $iCodUnidadeTce = db_utils::fieldsMemory(db_query($sSqlunidade), 0)->si09_codunidadesubunidade;
         if ($iCodUnidadeTce == "") {
-            throw new Exception("N√£o foi poss√≠vel encontrar o c√≥digo do TCE do institui√ß√£o {$iTipoInstit} em " . db_getsession('DB_anousu') . " Verifique o cadastro da institui√ß√£o no m√≥dulo Configura√ß√µes, menu Cadastros->Instiui√ß√µes.");
+            throw new Exception("N„o foi possÌvel encontrar o cÛdigo do TCE do instituiÁ„o {$iTipoInstit} em " . db_getsession('DB_anousu') . " Verifique o cadastro da instituiÁ„o no mÛdulo ConfiguraÁıes, menu Cadastros->InstiuiÁıes.");
         }
 
         return $iCodUnidadeTce;
@@ -89,7 +89,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
         $sSqltipoistint = "select si09_tipoinstit from infocomplementaresinstit inner join db_config on codigo = si09_instit where codigo = {$CodInstit}";
         $iTipoInstit = db_utils::fieldsMemory(db_query($sSqltipoistint), 0)->si09_tipoinstit;
         if ($iTipoInstit == "") {
-            throw new Exception("N√£o foi poss√≠vel encontrar o c√≥digo do TCE do institui√ß√£o {$CodInstit} em " . db_getsession('DB_anousu') . " Verifique o cadastro da institui√ß√£o no m√≥dulo Configura√ß√µes, menu Cadastros->Instiui√ß√µes.");
+            throw new Exception("N„o foi possÌvel encontrar o cÛdigo do TCE do instituiÁ„o {$CodInstit} em " . db_getsession('DB_anousu') . " Verifique o cadastro da instituiÁ„o no mÛdulo ConfiguraÁıes, menu Cadastros->InstiuiÁıes.");
         }
 
         return $iTipoInstit;
@@ -97,8 +97,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
 
     /**
-     *  Fun√ß√£o que busca dotacao pelo codigo do orgao e unidade no exercicio da sessao.
-     *  Se n√£o encontrar, busca o padr√£o.
+     *  FunÁ„o que busca dotacao pelo codigo do orgao e unidade no exercicio da sessao.
+     *  Se n„o encontrar, busca o padr„o.
      */
     public function getDotacaoByCodunidadesub($iOrgao, $iUnidade)
     {
@@ -125,7 +125,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 $sCodUnidadesub = db_utils::fieldsMemory(db_query("select si08_codunidadesub from infocomplementares where si08_instit = " . db_getsession('DB_instit') . " and si08_anousu = " . db_getsession('DB_anousu')), 0)->si08_codunidadesub;
 
                 if ($sCodUnidadesub == "") {
-                    throw new Exception("N√£o foi encontrado registro na tabela infocomplementares para a institui√ß√£o " . db_getsession('DB_instit') . ", ano " . db_getsession('DB_anousu') . ". Favor realizar o cadastro pelo menu: Sicom->Cadastros->Informa√ß√µes Complementares.");
+                    throw new Exception("N„o foi encontrado registro na tabela infocomplementares para a instituiÁ„o " . db_getsession('DB_instit') . ", ano " . db_getsession('DB_anousu') . ". Favor realizar o cadastro pelo menu: Sicom->Cadastros->InformaÁıes Complementares.");
                 }
             }
 
@@ -143,14 +143,14 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
         $sSqlorgao = "select si09_codorgaotce as codorgao, numcgm from infocomplementaresinstit inner join db_config on codigo = si09_instit where si09_tipoinstit = {$iTipoInstit}";
         $iCodOrgaoTce = db_utils::fieldsMemory(db_query($sSqlorgao), 0)->codorgao;
         if ($iCodOrgaoTce == "") {
-            throw new Exception("N√£o foi poss√≠vel encontrar o c√≥digo do TCE do institui√ß√£o {$iTipoInstit} em " . db_getsession('DB_anousu') . " Verifique o cadastro da institui√ß√£o no m√≥dulo Configura√ß√µes, menu Cadastros->Instiui√ß√µes.");
+            throw new Exception("N„o foi possÌvel encontrar o cÛdigo do TCE do instituiÁ„o {$iTipoInstit} em " . db_getsession('DB_anousu') . " Verifique o cadastro da instituiÁ„o no mÛdulo ConfiguraÁıes, menu Cadastros->InstiuiÁıes.");
         }
 
         return $iCodOrgaoTce;
     }
 
     /**
-     * Busca c√≥digo fundo tce mg pertecente no cadastro da institui√ß√£o. Caso n√£o seja cadastrado, retorna o valor padr√£o "00000000"
+     * Busca cÛdigo fundo tce mg pertecente no cadastro da instituiÁ„o. Caso n„o seja cadastrado, retorna o valor padr„o "00000000"
      */
     public function getCodFundo(){
         $sSqlCodFundo = "select si09_codfundotcemg from infocomplementaresinstit where si09_instit = " . db_getsession('DB_instit');
@@ -170,7 +170,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
     {
 
         /**
-         * selecionar arquivo xml de acordo com o tipo da institui√ß√£o
+         * selecionar arquivo xml de acordo com o tipo da instituiÁ„o
          */
         $sSql = "SELECT * FROM db_config ";
         $sSql .= "	WHERE prefeitura = 't'";
@@ -179,7 +179,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
         $sCnpj = db_utils::fieldsMemory($rsInst, 0)->cgc;
         $iTipoInstit = db_utils::fieldsMemory($rsInst, 0)->si09_tipoinstit;
         /*
-         * Se for c√¢mara n√£o busca receita.
+         * Se for c‚mara n„o busca receita.
          */
         if ($iTipoInstit != 1) {
 
@@ -196,7 +196,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
         }
         /**
-         * Array com os estrutruais do or√ßamento modalidade aplica√ß√£o.
+         * Array com os estrutruais do orÁamento modalidade aplicaÁ„o.
          */
         $aContasModalidadeAplicacao = array('52211', '52212', '52213', '52219', '62211', '62212');
 
@@ -272,40 +272,25 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
         $obalancete10->excluir(NULL, "si177_mes = 13 and si177_instit = " . db_getsession("DB_instit"));
 
 
-        /*
-         * sql pega somente contas com movimento e/ou com saldo anterior
+        /**
+         *  Filtro para listar somente alguns registros
          */
-        $sqlReg10 = "select
-                    tiporegistro,
-                    contacontabil,
-                    coalesce(saldoinicialano,0) saldoinicialano,
-                    coalesce(debito,0) debito,
-                    coalesce(credito,0) credito,
-                    codcon,
-                    c61_reduz,
-                    c60_nregobrig,
-                    c60_identificadorfinanceiro,
-                    case when c60_naturezasaldo = 1 then 'D' when c60_naturezasaldo = 2 then 'C' else 'C' end as c60_naturezasaldo
-                         from
-                            (select 10 as tiporegistro,
-                                    case when c209_tceestrut is null then substr(c60_estrut,1,9) else c209_tceestrut end as contacontabil,
-                                    (select sum(c69_valor) as credito from conlancamval where c69_credito = c61_reduz and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and  DATE_PART('MONTH',c69_data) <= {$nMes}) as credito,
-                                    (select sum(c69_valor) as debito from conlancamval where c69_debito = c61_reduz and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and  DATE_PART('MONTH',c69_data) <= {$nMes}) as debito,
-                                    (c62_vlrdeb - c62_vlrcre) as saldoinicialano,c61_reduz, c60_nregobrig,
-                                    c60_codcon as codcon, c60_identificadorfinanceiro,c60_naturezasaldo
-                              from contabilidade.conplano
-						inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu and c61_instit = " . db_getsession("DB_instit") . "
-                        inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu
-                        left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
-                             where c60_nregobrig=14 and  c60_anousu = " . db_getsession("DB_anousu") . ") as x
-                        where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
+        $whereNumRegistro = "";
+        if ($this->iNumeroRegistro != 0) {
+            $whereNumRegistro =  " c60_nregobrig = {$this->iNumeroRegistro} and ";
+        }
 
+        /**
+         * FunÁ„o do sql Reg10:
+         * Consultar contas com movimento e/ou com saldo anterior.
+         */
+        $sqlReg10 = $obalancete10->sql_query_reg10(null, $whereNumRegistro, null, db_getsession("DB_anousu"), $nMes, db_getsession("DB_instit"));
         $rsReg10 = db_query($sqlReg10) or die("Erro 20 ".$sqlReg10);
 
         $aDadosAgrupados10 = array();
 
         /**
-         * Busca c√≥digo fundo tce mg pertecente no cadastro da institui√ß√£o
+         * Busca cÛdigo fundo tce mg pertecente no cadastro da instituiÁ„o
          */
         $sCodFundo = $this->getCodFundo();
 
@@ -317,7 +302,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             $nCreditos = $oReg10->credito;
             $nDebitos = $oReg10->debito;
             /*
-             * Verifica se √© Janeiro. Caso n√£o seja, o saldo inicial, debito e credito do mes de referencia √© buscado pelo SQL abaixo.
+             * Verifica se È Janeiro. Caso n„o seja, o saldo inicial, debito e credito do mes de referencia È buscado pelo SQL abaixo.
              */
             if ($nMes != 1) {
 
@@ -398,12 +383,12 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             }
 
             /*
-             * Cria o $sHash para agrupar as contas e realizar o somat√≥rio.
+             * Cria o $sHash para agrupar as contas e realizar o somatÛrio.
              */
             $sHash = $oReg10->contacontabil;
 
             /*
-             * Guarda os dados agrupados no array $aDadosAgrupados10. Caso j√° exista, faz apenas a atualiza√ß√£o da soma dos saldos
+             * Guarda os dados agrupados no array $aDadosAgrupados10. Caso j· exista, faz apenas a atualizaÁ„o da soma dos saldos
              */
             if (!isset($aDadosAgrupados10[$sHash])) {
 
@@ -462,7 +447,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
         foreach ($aDadosAgrupados10 as $reg10Hash => $oContas10) {
 
             /*
-             * DADOS PARA GERA√á√ÉO DO REGISTRO 11 CELULA DA DESPESA,
+             * DADOS PARA GERA«√O DO REGISTRO 11 CELULA DA DESPESA,
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 11
              */
 
@@ -573,7 +558,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $oReg11 = db_utils::fieldsMemory($rsDotacoes, $iCont11);
 
                     /*
-                     * Contabilidade->procedimentos->Utilitarios->Implanta√ß√£o de Saldo.
+                     * Contabilidade->procedimentos->Utilitarios->ImplantaÁ„o de Saldo.
                      */
                     $sWhere = "";
                     if ($nContaCorrente == 102) {
@@ -666,7 +651,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                            GROUP BY c28_tipo) AS debitos";
                     /**
                      * Regra para calco dos saldos do encerramento
-                     * Saldo Inicial = saldofinal calculado com a movimenta√ß√£o (debitos e creditos) sem os documentos do tipo 1000
+                     * Saldo Inicial = saldofinal calculado com a movimentaÁ„o (debitos e creditos) sem os documentos do tipo 1000
                      * Saldo Final   = saldo final calcoulado com a movimentado (debitos e creditos) que contenham APENAS os documentos do tipo 1000
                      */
                     if ($this->bEncerramento) {
@@ -739,7 +724,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                 }
                             }
                             /**
-                             * Verifica se a contacontabil faz parte do Or√ßamento por modalidade de aplica√ß√£o e trata o elemento.
+                             * Verifica se a contacontabil faz parte do OrÁamento por modalidade de aplicaÁ„o e trata o elemento.
                              */
                             if (in_array(substr($oContas10->si177_contacontaabil, 0, 5), $aContasModalidadeAplicacao)) {
 
@@ -805,13 +790,13 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             }
 
             /*
-             * DADOS PARA GERA√á√ÉO DO REGISTRO 12 CELULA DA RECEITA,
+             * DADOS PARA GERA«√O DO REGISTRO 12 CELULA DA RECEITA,
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 12
              */
 
             if ($oContas10->nregobrig == 12) {
                 /*
-                 * Buscar o vinculo da conta pcasp com o plano or√ßament√°rio
+                 * Buscar o vinculo da conta pcasp com o plano orÁament·rio
                  *
                  */
                 $sSqlVinculoContaOrcamento = "
@@ -827,14 +812,14 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                 $rsVinculoContaOrcamento = db_query($sSqlVinculoContaOrcamento) or die("erro 28".$sSqlVinculoContaOrcamento);
 
-                //Constante da contacorrente or√ßament√°ria
+                //Constante da contacorrente orÁament·ria
                 $nContaCorrente = 100;
 
                 for ($iContVinculo = 0; $iContVinculo < pg_num_rows($rsVinculoContaOrcamento); $iContVinculo++) {
 
                     $objContas = db_utils::fieldsMemory($rsVinculoContaOrcamento, $iContVinculo);
 
-                    //Verifica os saldos de cada estrutural do or√ßamento vinculado ao PCASP
+                    //Verifica os saldos de cada estrutural do orÁamento vinculado ao PCASP
                     $sSqlReg12saldos = " SELECT
                                           (SELECT case when round(coalesce(saldoimplantado,0) + coalesce(debitoatual,0) - coalesce(creditoatual,0),2) = '0.00' then null else round(coalesce(saldoimplantado,0) + coalesce(debitoatual,0) - coalesce(creditoatual,0),2) end AS saldoinicial
                                            FROM
@@ -917,7 +902,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                            GROUP BY c28_tipo) AS debitos";
                     /**
                      * Regra para calco dos saldos do encerramento
-                     * Saldo Inicial = saldofinal calculado com a movimenta√ß√£o (debitos e creditos) sem os documentos do tipo 1000
+                     * Saldo Inicial = saldofinal calculado com a movimentaÁ„o (debitos e creditos) sem os documentos do tipo 1000
                      * Saldo Final   = saldo final calcoulado com a movimentado (debitos e creditos) que contenham APENAS os documentos do tipo 1000
                      */
                     if ($this->bEncerramento) {
@@ -1037,7 +1022,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             }
 
             /*
-             * DADOS PARA GERA√á√ÉO DO REGISTRO 13 - PROGRAMA E A√á√ÉO,
+             * DADOS PARA GERA«√O DO REGISTRO 13 - PROGRAMA E A«√O,
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 13
              */
 
@@ -1253,7 +1238,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             }
 
             /**
-             * DADOS PARA GERA√á√ÉO DO REGISTRO 14 RESTOS A PAGAR,
+             * DADOS PARA GERA«√O DO REGISTRO 14 RESTOS A PAGAR,
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 14
              *
              */
@@ -1295,14 +1280,14 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                 $rsRestos = db_query($sSqlRestos) or die("erro aqui 2".$sSqlRestos);
 
-                //Constante da contacorrente or√ßament√°ria
+                //Constante da contacorrente orÁament·ria
                 $nContaCorrente = 106;
 
                 for ($iContRp = 0; $iContRp < pg_num_rows($rsRestos); $iContRp++) {
 
                     $oReg14 = db_utils::fieldsMemory($rsRestos, $iContRp);
 
-                    //Verifica os saldos de cada estrutural do or√ßamento vinculado ao PCASP
+                    //Verifica os saldos de cada estrutural do orÁamento vinculado ao PCASP
                     $sSqlReg14saldos = " SELECT
                                       (SELECT case when round(coalesce(saldoimplantado,0) + coalesce(debitoatual,0) - coalesce(creditoatual,0),2) = '0.00' then null else round(coalesce(saldoimplantado,0) + coalesce(debitoatual,0) - coalesce(creditoatual,0),2) end AS saldoinicial
                                        FROM
@@ -1456,9 +1441,9 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                             /**
                              * Realiza o tratamento do codunidadesub e do codunidadesuborig
-                             * 1. Toma-se como verdade que o codunidadesub √© sempre igual ao codunidadesuborig, ou seja, n√£o houve altera√ß√£o
+                             * 1. Toma-se como verdade que o codunidadesub È sempre igual ao codunidadesuborig, ou seja, n„o houve alteraÁ„o
                              * 2. Verifica se existe dotacao em 2023 passando a unidade e o orgao
-                             * 3. Caso nao exista, ent√£o buscamos o padrao e passamos para o sCodunidadesub, e o valor do sCodunidadesub √© passado para o $sCodunidadesubOrig
+                             * 3. Caso nao exista, ent„o buscamos o padrao e passamos para o sCodunidadesub, e o valor do sCodunidadesub È passado para o $sCodunidadesubOrig
                              */
 
                             $sCodunidadesub = $oReg14->codunidadesub;
@@ -1478,7 +1463,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                                 /*
                                  * Verifica se o empenho existe na tabela dotacaorpsicom
-                                 * Caso exista, busca os dados da dota√ß√£o.
+                                 * Caso exista, busca os dados da dotaÁ„o.
                                  * */
 
                                 $sSqlDotacaoRpSicom = "select *
@@ -1555,7 +1540,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             }
 
             /*
-             * DADOS PARA GERA√á√ÉO DO REGISTRO 15 Atributo de Super√°vit Financeiro,
+             * DADOS PARA GERA«√O DO REGISTRO 15 Atributo de Super·vit Financeiro,
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 15
              *
              */
@@ -1563,7 +1548,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             if ($oContas10->nregobrig == 15) {
 
                 /*
-                 * Busca os saldos das contas pelo reduzido na fun√ß√£o fc_saltessaldo();
+                 * Busca os saldos das contas pelo reduzido na funÁ„o fc_saltessaldo();
                  * */
                 foreach ($oContas10->contas as $oReduz) {
 
@@ -1679,7 +1664,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             }
 
             /*
-             * DADOS PARA GERA√á√ÉO DO REGISTRO 16 Controle por Fonte de Recursos e Atributo SF,
+             * DADOS PARA GERA«√O DO REGISTRO 16 Controle por Fonte de Recursos e Atributo SF,
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 16
              *
              */
@@ -1704,7 +1689,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $oReg16Font = db_utils::fieldsMemory($rsReg16Font, $iContFont16);
 
                     /*
-                     * Verifica os saldos de cada estrutural do or√ßamento vinculado ao PCASP
+                     * Verifica os saldos de cada estrutural do orÁamento vinculado ao PCASP
                      *
                      */
 
@@ -1824,7 +1809,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             }
 
             /*
-             * DADOS PARA GERA√á√ÉO DO REGISTRO 17 Controle por Fonte de Recursos, Atributo SF e Conta Banc√°ria,
+             * DADOS PARA GERA«√O DO REGISTRO 17 Controle por Fonte de Recursos, Atributo SF e Conta Banc·ria,
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 17
              *
              */
@@ -2143,7 +2128,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
 
             /*
-             * DADOS PARA GERA√á√ÉO DO REGISTRO 18 Controle por Fonte de Recursos,
+             * DADOS PARA GERA«√O DO REGISTRO 18 Controle por Fonte de Recursos,
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 18
              *
              */
@@ -2342,7 +2327,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             }
 
             /*
-             * DADOS PARA GERA√á√ÉO DO REGISTRO 19 Identifica√ß√£o do Cons√≥rcio,
+             * DADOS PARA GERA«√O DO REGISTRO 19 IdentificaÁ„o do ConsÛrcio,
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 19
              * @todo: validar SQL
              */
@@ -2350,7 +2335,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             if ($oContas10->nregobrig == 19) {
 
                 /*
-                 * Buscar o vinculo da conta pcasp com o plano or√ßament√°rio
+                 * Buscar o vinculo da conta pcasp com o plano orÁament·rio
                  *
                  * */
                 $sSqlconsor = "";
@@ -2368,7 +2353,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $objContasconsor = db_utils::fieldsMemory($rsSqlconsor, $iContconsor);
 
                     /*
-                     * Verifica os saldos de cada estrutural do or√ßamento vinculado ao PCASP
+                     * Verifica os saldos de cada estrutural do orÁamento vinculado ao PCASP
                      * @todo: validar filtro de busca
                      */
 
@@ -2411,7 +2396,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             }
 
             /*
-             * DADOS PARA GERA√á√ÉO DO REGISTRO 20 Controle por Cons√≥rcio e Classifica√ß√£o por Fun√ß√£o, Natureza da Despesa e Fonte de Recursos*
+             * DADOS PARA GERA«√O DO REGISTRO 20 Controle por ConsÛrcio e ClassificaÁ„o por FunÁ„o, Natureza da Despesa e Fonte de Recursos*
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 20
              * @todo: validar SQL
              */
@@ -2419,7 +2404,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             if ($oContas10->nregobrig == 20) {
 
                 /*
-                 * Buscar o vinculo da conta pcasp com o plano or√ßament√°rio
+                 * Buscar o vinculo da conta pcasp com o plano orÁament·rio
                  *
                  * */
                 $sSqlconscf = "";
@@ -2437,7 +2422,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $objContasconscf = db_utils::fieldsMemory($rsSqlconscf, $iContconscf);
 
                     /*
-                     * Verifica os saldos de cada estrutural do or√ßamento vinculado ao PCASP
+                     * Verifica os saldos de cada estrutural do orÁamento vinculado ao PCASP
                      * @todo: criar sql e validar filtro de busca
                      */
 
@@ -2487,7 +2472,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             }
 
             /*
-             * DADOS PARA GERA√á√ÉO DO REGISTRO 21 Identifica√ß√£o do Cons√≥rcio e Fonte de Recursos*
+             * DADOS PARA GERA«√O DO REGISTRO 21 IdentificaÁ„o do ConsÛrcio e Fonte de Recursos*
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 21
              * @todo: validar SQL, definir contacorrente
              */
@@ -2495,7 +2480,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             if ($oContas10->nregobrig == 21) {
 
                 /*
-                 * Buscar o vinculo da conta pcasp com o plano or√ßament√°rio
+                 * Buscar o vinculo da conta pcasp com o plano orÁament·rio
                  *
                  * */
                 $sSqlconsorfr = "";
@@ -2513,7 +2498,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $objContasconsorfr = db_utils::fieldsMemory($rsSqlconsorfr, $iContconsorfr);
 
                     /*
-                     * Verifica os saldos de cada estrutural do or√ßamento vinculado ao PCASP
+                     * Verifica os saldos de cada estrutural do orÁamento vinculado ao PCASP
                      * @todo: criar sql e validar filtro de busca
                      */
 
@@ -2558,7 +2543,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             }
 
             /*
-             * DADOS PARA GERA√á√ÉO DO REGISTRO 22 Conta Banc√°ria e Atributo SF (Somente F)
+             * DADOS PARA GERA«√O DO REGISTRO 22 Conta Banc·ria e Atributo SF (Somente F)
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 22
              * @todo: validar SQL, definir nContacorrente
              */
@@ -2566,7 +2551,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             if ($oContas10->nregobrig == 22) {
 
                 /*
-                 * Buscar o vinculo da conta pcasp com o plano or√ßament√°rio
+                 * Buscar o vinculo da conta pcasp com o plano orÁament·rio
                  *
                  * */
                 $sSqlctbsf = "";
@@ -2584,7 +2569,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $objContasctbsf = db_utils::fieldsMemory($rsSqlctbsf, $iContctbsf);
 
                     /*
-                     * Verifica os saldos de cada estrutural do or√ßamento vinculado ao PCASP
+                     * Verifica os saldos de cada estrutural do orÁamento vinculado ao PCASP
                      * @todo: criar sql e validar filtro de busca
                      */
 
@@ -2629,7 +2614,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 }
             }
             /*
-               * DADOS PARA GERA√á√ÉO DO REGISTRO 24 Orgao
+               * DADOS PARA GERA«√O DO REGISTRO 24 Orgao
                * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 24
                *
                */
@@ -2776,7 +2761,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             }
 
             /*
-             * DADOS PARA GERA√á√ÉO DO REGISTRO 25 Orgao
+             * DADOS PARA GERA«√O DO REGISTRO 25 Orgao
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 25
              *
              */
@@ -2888,7 +2873,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             }
 
             /*
-             * DADOS PARA GERA√á√ÉO DO REGISTRO 26 Atributo de Super√°vit Financeiro,
+             * DADOS PARA GERA«√O DO REGISTRO 26 Atributo de Super·vit Financeiro,
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 26 OU 15
              *
              */
@@ -2896,7 +2881,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             if ($oContas10->nregobrig == 26) {
 
                 /*
-                 * Busca os saldos das contas pelo reduzido na fun√ß√£o fc_saltessaldo();
+                 * Busca os saldos das contas pelo reduzido na funÁ„o fc_saltessaldo();
                  * */
                 foreach ($oContas10->contas as $oReduz) {
 
@@ -3030,8 +3015,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             if ($this->bEncerramento) {
                 /**
                  * Caso seja encerramento:
-                 * 1. O saldo inicial √© o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
-                 * 2. Calculamos um novo saldo final baseado na movimenta√ß√£o (debitos e creditos) que tenha apenas o documento 1000
+                 * 1. O saldo inicial È o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
+                 * 2. Calculamos um novo saldo final baseado na movimentaÁ„o (debitos e creditos) que tenha apenas o documento 1000
                  */
                 $obalancete10->si177_saldoinicial = $obalancete10->si177_saldofinal == '' ? 0 : $obalancete10->si177_saldofinal;
                 $obalancete10->si177_naturezasaldoinicial = $oDado10->si177_saldofinal == 0 ? $oDado10->naturezasaldo : ($oDado10->si177_saldofinal > 0 ? 'D' : 'C');
@@ -3083,8 +3068,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 if ($this->bEncerramento) {
                     /**
                      * Caso seja encerramento:
-                     * 1. O saldo inicial √© o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
-                     * 2. Calculamos um novo saldo final baseado na movimenta√ß√£o (debitos e creditos) que tenha apenas o documento 1000
+                     * 1. O saldo inicial È o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
+                     * 2. Calculamos um novo saldo final baseado na movimentaÁ„o (debitos e creditos) que tenha apenas o documento 1000
                      */
                     $obalreg11->si178_saldoinicialcd = $obalreg11->si178_saldofinalcd == '' ? 0 : $obalreg11->si178_saldofinalcd;
                     $obalreg11->si178_naturezasaldoinicialcd = $reg11->si178_saldofinalcd == 0 ? $oDado10->naturezasaldo : ($reg11->si178_saldofinalcd > 0 ? 'D' : 'C');
@@ -3131,8 +3116,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 if ($this->bEncerramento) {
                     /**
                      * Caso seja encerramento:
-                     * 1. O saldo inicial √© o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
-                     * 2. Calculamos um novo saldo final baseado na movimenta√ß√£o (debitos e creditos) que tenha apenas o documento 1000
+                     * 1. O saldo inicial È o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
+                     * 2. Calculamos um novo saldo final baseado na movimentaÁ„o (debitos e creditos) que tenha apenas o documento 1000
                      */
                     $obalreg12->si179_saldoinicialcr = $obalreg12->si179_saldofinalcr == '' ? 0 : $obalreg12->si179_saldofinalcr;
                     $obalreg12->si179_naturezasaldoinicialcr = $reg12->si179_saldofinalcr == 0 ? $oDado10->naturezasaldo : ($reg12->si179_saldofinalcr > 0 ? 'D' : 'C');
@@ -3175,8 +3160,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 if ($this->bEncerramento) {
                     /**
                      * Caso seja encerramento:
-                     * 1. O saldo inicial √© o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
-                     * 2. Calculamos um novo saldo final baseado na movimenta√ß√£o (debitos e creditos) que tenha apenas o documento 1000
+                     * 1. O saldo inicial È o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
+                     * 2. Calculamos um novo saldo final baseado na movimentaÁ„o (debitos e creditos) que tenha apenas o documento 1000
                      */
                     $obalreg13->si180_saldoIniciaipa = $obalreg13->si180_saldofinaipa == '' ? 0 : $obalreg13->si180_saldofinaipa;
                     $obalreg13->si180_naturezasaldoIniciaipa = $reg13->si180_saldofinaipa == 0 ? $oDado10->naturezasaldo : ($reg13->si180_saldofinaipa > 0 ? 'D' : 'C');
@@ -3227,8 +3212,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 if ($this->bEncerramento) {
                     /**
                      * Caso seja encerramento:
-                     * 1. O saldo inicial √© o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
-                     * 2. Calculamos um novo saldo final baseado na movimenta√ß√£o (debitos e creditos) que tenha apenas o documento 1000
+                     * 1. O saldo inicial È o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
+                     * 2. Calculamos um novo saldo final baseado na movimentaÁ„o (debitos e creditos) que tenha apenas o documento 1000
                      */
                     $obalreg14->si181_saldoinicialrsp = $obalreg14->si181_saldofinalrsp == '' ? 0 : $obalreg14->si181_saldofinalrsp;
                     $obalreg14->si181_naturezasaldoinicialrsp = $reg14->si181_saldofinalrsp == 0 ? $oDado10->naturezasaldo : ($reg14->si181_saldofinalrsp > 0 ? 'D' : 'C');
@@ -3268,8 +3253,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 if ($this->bEncerramento) {
                     /**
                      * Caso seja encerramento:
-                     * 1. O saldo inicial √© o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
-                     * 2. Calculamos um novo saldo final baseado na movimenta√ß√£o (debitos e creditos) que tenha apenas o documento 1000
+                     * 1. O saldo inicial È o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
+                     * 2. Calculamos um novo saldo final baseado na movimentaÁ„o (debitos e creditos) que tenha apenas o documento 1000
                      */
                     $obalreg15->si182_saldoinicialsf = $obalreg15->si182_saldofinalsf == '' ? 0 : $obalreg15->si182_saldofinalsf;
                     $obalreg15->si182_naturezasaldoinicialsf = $reg15->si182_saldofinalsf == 0 ? $oDado10->naturezasaldo : ($reg15->si182_saldofinalsf > 0 ? 'D' : 'C');
@@ -3313,8 +3298,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 if ($this->bEncerramento) {
                     /**
                      * Caso seja encerramento:
-                     * 1. O saldo inicial √© o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
-                     * 2. Calculamos um novo saldo final baseado na movimenta√ß√£o (debitos e creditos) que tenha apenas o documento 1000
+                     * 1. O saldo inicial È o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
+                     * 2. Calculamos um novo saldo final baseado na movimentaÁ„o (debitos e creditos) que tenha apenas o documento 1000
                      */
                     $obalreg16->si183_saldoinicialfontsf = $obalreg16->si183_saldofinalfontsf == '' ? 0 : $obalreg16->si183_saldofinalfontsf;
                     $obalreg16->si183_naturezasaldoinicialfontsf = $reg16->si183_saldofinalfontsf == 0 ? $oDado10->naturezasaldo : ($reg16->si183_saldofinalfontsf > 0 ? 'D' : 'C');
@@ -3356,8 +3341,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 if ($this->bEncerramento) {
                     /**
                      * Caso seja encerramento:
-                     * 1. O saldo inicial √© o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
-                     * 2. Calculamos um novo saldo final baseado na movimenta√ß√£o (debitos e creditos) que tenha apenas o documento 1000
+                     * 1. O saldo inicial È o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
+                     * 2. Calculamos um novo saldo final baseado na movimentaÁ„o (debitos e creditos) que tenha apenas o documento 1000
                      */
                     $obalreg17->si184_saldoinicialctb = $obalreg17->si184_saldofinalctb == '' ? 0 : $obalreg17->si184_saldofinalctb;
                     $obalreg17->si184_naturezasaldoinicialctb = $reg17->si184_saldofinalctb == 0 ? $oDado10->naturezasaldo : ($reg17->si184_saldofinalctb > 0 ? 'D' : 'C');
@@ -3397,8 +3382,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 if ($this->bEncerramento) {
                     /**
                      * Caso seja encerramento:
-                     * 1. O saldo inicial √© o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
-                     * 2. Calculamos um novo saldo final baseado na movimenta√ß√£o (debitos e creditos) que tenha apenas o documento 1000
+                     * 1. O saldo inicial È o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
+                     * 2. Calculamos um novo saldo final baseado na movimentaÁ„o (debitos e creditos) que tenha apenas o documento 1000
                      */
                     $obalreg18->si185_saldoinicialfr = $obalreg18->si185_saldofinalfr == '' ? 0 : $obalreg18->si185_saldofinalfr;
                     $obalreg18->si185_naturezasaldoinicialfr = $reg18->si185_saldofinalfr == 0 ? $oDado10->naturezasaldo : ($reg18->si185_saldofinalfr > 0 ? 'D' : 'C');
@@ -3554,8 +3539,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 if ($this->bEncerramento) {
                     /**
                      * Caso seja encerramento:
-                     * 1. O saldo inicial √© o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
-                     * 2. Calculamos um novo saldo final baseado na movimenta√ß√£o (debitos e creditos) que tenha apenas o documento 1000
+                     * 1. O saldo inicial È o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
+                     * 2. Calculamos um novo saldo final baseado na movimentaÁ„o (debitos e creditos) que tenha apenas o documento 1000
                      */
                     $obalreg24->si191_saldoinicialorgao = $obalreg24->si191_saldofinalorgao == '' ? 0 : $obalreg24->si191_saldofinalorgao;
                     $obalreg24->si191_naturezasaldoinicialorgao = $reg24->si191_saldofinalorgao == 0 ? $oDado10->naturezasaldo : ($reg24->si191_saldofinalorgao > 0 ? 'D' : 'C');

@@ -274,7 +274,7 @@ for ($iInd = 0; $iInd < $clacordo->numrows; $iInd++) {
   $oDadosAcordo->getTipoAcordo      = $oAcordoCompleto->ac04_descricao;
   $oDadosAcordo->getContratado      = $oAcordo->getContratado()->getCodigo()." - ".$oAcordo->getContratado()->getNome();
   $oDadosAcordo->getAssinatura      = $oAcordo->getDataAssinatura();
-  $oDadosAcordo->getVigencia        = $oAcordo->getDataInicial().' a '.$oAcordo->getDataFinal();
+  $oDadosAcordo->getVigencia        = $oAcordo->getVigenciaIndeterminada() == 't' ? $oAcordo->getDataInicial() : $oAcordo->getDataInicial().' a '.$oAcordo->getDataFinal();
   $oDadosAcordo->getValorTotal      = "";
   $oDadosAcordo->getResumoObjeto    = $oAcordo->getResumoObjeto();
   $oDadosAcordo->getSituacao        = $oAcordo->getDescricaoSituacao();
@@ -287,6 +287,7 @@ for ($iInd = 0; $iInd < $clacordo->numrows; $iInd++) {
   $oDadosAcordo->getCategoriaAcordo = $oAcordo->getCategoriaAcordo();
   $oDadosAcordo->sClassificacao     = $oAcordo->getClassificacao()->getDescricao();
   $oDadosAcordo->sNumero            = $oAcordo->getNumeroAcordo() . '/' . $oAcordo->getAno(); 
+  $oDadosAcordo->vigenciaIndeterminada = $oAcordo->getVigenciaIndeterminada();
   
   $iCategoriaAcordo = 0;
   if ($oAcordo->getCategoriaAcordo() != '') {
@@ -667,7 +668,10 @@ function imprimirCabecalhoAcordos($oPdf, $oDado, $lImprime, $iFonte, $iAlt) {
   $oPdf->Cell(107 ,$iAlt,$oDado->getAssinatura,0,0,'L',0);
 
   $oPdf->SetFont('Arial','B',$iFonte);
-  $oPdf->Cell(32 ,$iAlt,'Vigência: ',0,0,'R',0);
+
+  $tituloVigencia = $oDado->vigenciaIndeterminada == "t" ? "Vigência Inicial: " : "Período de Vigência: ";
+
+  $oPdf->Cell(32 ,$iAlt,$tituloVigencia,0,0,'R',0);
   $oPdf->SetFont('Arial','',$iFonte-1);
   $oPdf->Cell(107 ,$iAlt,$oDado->getVigencia ,0,0,'L',0);
   $oPdf->ln();

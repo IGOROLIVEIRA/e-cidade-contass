@@ -78,10 +78,11 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
 
 
     $pdf->SetFont('arial', 'B', 10);
-    $pdf->Cell(30, 6, "Data de Vigência: ", 0, 0, "L", 0);
+    $tituloVigencia = $acordo->ac16_vigenciaindeterminada == "t" ? "Vigência Inicial: " : "Período de Vigência: ";
+    $pdf->Cell(35, 6, $tituloVigencia, 0, 0, "L", 0);
     $pdf->SetFont('arial', '', 10);
-    $periodovigencia = implode('/', array_reverse(explode('-', $vigencia->ac18_datainicio))) . " até " . implode('/', array_reverse(explode('-', $vigencia->ac18_datafim)));
-    $pdf->Cell(150, 6,  $periodovigencia, 0, 1, "L", 0);
+    $dataVigencia = $acordo->ac16_vigenciaindeterminada == "t" ? date("d/m/Y", strtotime($vigencia->ac18_datainicio)) : date("d/m/Y", strtotime($vigencia->ac18_datainicio)) . ' até ' . date("d/m/Y", strtotime($vigencia->ac18_datafim));
+    $pdf->Cell(140, 6,  $dataVigencia, 0, 1, "L", 0);
 
     $pdf->setfont('arial', 'B', 10);
     $pdf->Cell(35, 6, "Data de Publicação: ", 0, 0, "L", 0);

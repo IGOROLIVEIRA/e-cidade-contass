@@ -42,6 +42,7 @@ class cl_redispi102024
   var $si183_link = '';
   var $si183_leidalicitacao = 0;
   var $si183_regimeexecucaoobras = 0;
+  var $si183_emailcontato = null;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  si183_sequencial = int8 = sequencial
@@ -66,6 +67,7 @@ class cl_redispi102024
                  si183_instit = int8 = Instituição
                  si183_leidalicitacao = Lei da Licitação
                  si183_regimeexecucaoobras = Regime execução obras
+                 si183_emailcontato = varchar(200) = email de contato
                  ";
 
   // funcao construtor da classe
@@ -120,6 +122,7 @@ class cl_redispi102024
       $this->si183_instit = ($this->si183_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si183_instit"] : $this->si183_instit);
       $this->si183_leidalicitacao = ($this->si183_leidalicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si183_leidalicitacao"] : $this->si183_leidalicitacao);
       $this->si183_regimeexecucaoobras = ($this->si183_regimeexecucaoobras == "" ? @$GLOBALS["HTTP_POST_VARS"]["si183_regimeexecucaoobras"] : $this->si183_regimeexecucaoobras);
+      $this->si183_emailcontato = ($this->si183_emailcontato == "" ? @$GLOBALS["HTTP_POST_VARS"]["si183_emailcontato"] : $this->si183_emailcontato);
     } else {
       $this->si183_sequencial = ($this->si183_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si183_sequencial"] : $this->si183_sequencial);
     }
@@ -263,6 +266,7 @@ class cl_redispi102024
                                       ,si183_instit
                                       ,si183_leidalicitacao
                                       ,si183_regimeexecucaoobras
+                                      ,si183_emailcontato
                        )
                 values (
                                 $this->si183_sequencial
@@ -287,6 +291,7 @@ class cl_redispi102024
                                ,$this->si183_instit
                                ,$this->si183_leidalicitacao
                                ,$this->si183_regimeexecucaoobras
+                               ,'$this->si183_emailcontato'
                       )";
     $result = db_query($sql);
     if ($result == false) {

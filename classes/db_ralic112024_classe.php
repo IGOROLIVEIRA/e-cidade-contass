@@ -37,6 +37,7 @@ class cl_ralic112024
   var $si181_mes = 0;
   var $si181_instit = 0;
   var $si181_reg10 = 0;
+  var $si181_utilizacaoplanilhamodelo = 0;
   var $campos = "
                  si181_sequencial = int8 = sequencial
                  si181_tiporegistro = int8 = Tipo do registro
@@ -58,6 +59,7 @@ class cl_ralic112024
                  si181_nrolote = int4 = Número do lote
                  si181_mes = int8 = Mês
                  si181_instit = int8 = Instituição
+                 si181_utilizacaoplanilhamodelo= int8 = Utilizacao planilha modelo
                  ";
   // cria propriedade com as variaveis do arquivo
 
@@ -105,6 +107,7 @@ class cl_ralic112024
       $this->si181_reg10 = ($this->si181_reg10 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si181_reg10"] : $this->si181_reg10);
       $this->si181_mes = ($this->si181_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si181_mes"] : $this->si181_mes);
       $this->si181_instit = ($this->si181_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si181_instit"] : $this->si181_instit);
+      $this->si181_utilizacaoplanilhamodelo = ($this->si181_utilizacaoplanilhamodelo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si181_utilizacaoplanilhamodelo"] : $this->si181_utilizacaoplanilhamodelo);
     } else {
       $this->si181_sequencial = ($this->si181_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si181_sequencial"] : $this->si181_sequencial);
     }
@@ -220,6 +223,7 @@ class cl_ralic112024
                                       ,si181_reg10
                                       ,si181_mes
                                       ,si181_instit
+                                      ,si181_utilizacaoplanilhamodelo
                        )
                 values (
                                 $this->si181_sequencial
@@ -243,8 +247,8 @@ class cl_ralic112024
                                ,$this->si181_reg10
                                ,$this->si181_mes
                                ,$this->si181_instit
+                               ,$this->si181_utilizacaoplanilhamodelo
                       )";
-    // echo $sql;
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("

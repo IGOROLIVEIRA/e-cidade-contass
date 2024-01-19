@@ -2269,6 +2269,7 @@ order by
           and  extract(year from ac36_datainicial) =  {$iAnoInicial})"
                 );
                 $rsAcordoPosicao    = $oDaoAcordoPosicao->sql_record($sSqlAcordoPosicao);
+                throw new Exception($sSqlAcordoPosicao);
 
 
 

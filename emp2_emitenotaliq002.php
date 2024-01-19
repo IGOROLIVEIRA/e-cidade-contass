@@ -208,6 +208,7 @@ if(isset($oParametros)){
 for($i = 0;$i < $clpagordem->numrows;$i++){
 
   db_fieldsmemory($result,$i);
+  // var_dump($e50_codord);
   $oRetencaoNota = new retencaoNota($e71_codnota);
   $oRetencaoNota->setINotaLiquidacao($e50_codord);
 
@@ -251,10 +252,8 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    if(pg_num_rows($resultDiaria) > 0){
     $diaria = db_utils::fieldsMemory($resultDiaria,0);
     
-    $sqlMatricula = $clRhpessoal->verificaMatriculaECargo($z01_numcgm);
-    $matricula = db_utils::fieldsMemory(db_query($sqlMatricula),0);
-    $diaria->matricula = $matricula->rh01_regist;
-    $diaria->cargo = $matricula->rh37_descr;
+    $diaria->matricula = $diaria->e140_matricula;
+    $diaria->cargo = $diaria->e140_cargo;
 
     $separador = '/ *-/';
     $diaria->origem = preg_split($separador, $diaria->e140_origem);
@@ -264,8 +263,10 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
     $diaria->e140_dtinicial = $diaria->e140_dtinicial == null ? '' : date('d/m/Y', strtotime($diaria->e140_dtinicial));
     $diaria->e140_dtfinal = $diaria->e140_dtfinal == null ? '' : date('d/m/Y', strtotime($diaria->e140_dtfinal));
 
-    $pdf1->diaria           = $diaria;
-   }
+    $pdf1->diaria = $diaria;
+  } else {
+    $pdf1->diaria = null;
+  }
 
    $sSqlFuncaoOrdenaPagamento = $clemite_nota_liq->get_sql_funcao_ordena_pagamento($cgmpaga);
    $pdf1->cargoordenapagamento = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenaPagamento),0)->cargoordenapagamento;

@@ -274,8 +274,9 @@ AND e60_codemp = '$codemp'";
         $aFontesExistentes = array();
 
         foreach ($empenhos as $emp) {
-
-            $sSql = "SELECT * FROM despesasinscritasRP WHERE c223_codemp = $emp and c223_instit = " . db_getsession("DB_instit") . " and  c223_anousu = " . db_getsession("DB_anousu");
+            $sSql = "SELECT despesasinscritasRP.*, empempenho.e60_codco FROM despesasinscritasRP 
+            INNER JOIN empempenho ON c223_codemp = e60_codemp::int8 and e60_anousu = " . db_getsession("DB_anousu") . " and e60_instit = " . db_getsession("DB_instit") . "
+            WHERE c223_codemp = $emp and c223_instit = " . db_getsession("DB_instit") . " and  c223_anousu = " . db_getsession("DB_anousu");
             $rsResult10 = db_query($sSql);
 
             for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
@@ -332,6 +333,8 @@ AND e60_codemp = '$codemp'";
                 $iderp112024->si180_reg10 = $iderp102024->si179_sequencial;
                 $iderp112024->si180_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $iderp112024->si180_instit = db_getsession('DB_instit');
+                $iderp112024->si180_codco = $empliq->e60_codco == null ? '0000' : $empliq->e60_codco;
+                $iderp112024->si180_disponibilidadecaixa = 2;
                 $iderp112024->incluir(null);
 
                 if ($iderp112024->erro_status == 0) {
@@ -364,6 +367,8 @@ AND e60_codemp = '$codemp'";
             $iderp112024->si180_reg10 = $iderp102024->si179_sequencial;
             $iderp112024->si180_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $iderp112024->si180_instit = db_getsession('DB_instit');
+            $iderp112024->si180_codco = $empliq->e60_codco == null ? '0000' : $empliq->e60_codco;
+            $iderp112024->si180_disponibilidadecaixa = $empliq->c223_vlrdisrpnp > 0 ? 1 : 2;
             $iderp112024->incluir(null);
 
             if ($iderp112024->erro_status == 0) {
@@ -410,6 +415,8 @@ AND e60_codemp = '$codemp'";
                 $iderp112024->si180_reg10 = $iderp102024->si179_sequencial;
                 $iderp112024->si180_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $iderp112024->si180_instit = db_getsession('DB_instit');
+                $iderp112024->si180_codco = $empnaoliq->e60_codco == null ? '0000' : $empnaoliq->e60_codco;
+                $iderp112024->si180_disponibilidadecaixa = 2;
                 $iderp112024->incluir(null);
 
                 if ($iderp112024->erro_status == 0) {
@@ -442,6 +449,8 @@ AND e60_codemp = '$codemp'";
             $iderp112024->si180_reg10 = $iderp102024->si179_sequencial;
             $iderp112024->si180_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $iderp112024->si180_instit = db_getsession('DB_instit');
+            $iderp112024->si180_codco = $empnaoliq->e60_codco == null ? '0000' : $empnaoliq->e60_codco;
+            $iderp112024->si180_disponibilidadecaixa = $empnaoliq->c223_vlrdisrpnp > 0 ? 1 : 2;
             $iderp112024->incluir(null);
 
             if ($iderp112024->erro_status == 0) {
@@ -466,7 +475,6 @@ AND e60_codemp = '$codemp'";
             AND c224_instit = ". db_getsession('DB_instit')."
             AND (c224_vlrcaixabruta != 0
             OR c224_rpexercicioanterior != 0
-            OR c224_vlrrestoarecolher != 0
             OR c224_vlrdisponibilidadecaixa != 0 ";
             if ($sFontesExistentes != '') {
                 $sSql20 .= " OR c224_fonte IN ({$sFontesExistentes}) ";
@@ -479,7 +487,6 @@ AND e60_codemp = '$codemp'";
             AND c224_instit = ". db_getsession('DB_instit')."
             AND (c224_vlrcaixabruta != 0
             OR c224_rpexercicioanterior != 0
-            OR c224_vlrrestoarecolher != 0
             OR c224_vlrdisponibilidadecaixa != 0)
             AND c224_fonte NOT IN ('148','149','150','151','152','248','249','250','251','252') order by c224_fonte";
         }
@@ -516,7 +523,7 @@ AND e60_codemp = '$codemp'";
         }else{
             $iderp202024->si181_tiporegistro = 20;
             $iderp202024->si181_codorgao = $sCodorgao;
-            $iderp202024->si181_codfontrecursos = '100';
+            $iderp202024->si181_codfontrecursos = '1500000';
             $iderp202024->si181_vlcaixabruta = '0.00';
             $iderp202024->si181_vlrspexerciciosanteriores = '0.00';
             $iderp202024->si181_vlrestituiveisrecolher = '0.00';
