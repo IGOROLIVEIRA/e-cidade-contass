@@ -394,20 +394,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     liclicita.l20_codepartamento,
                     liclicita.l20_naturezaobjeto,
                     liclicita.l20_tipojulg,
-                CASE
-                    WHEN p1.pc50_pctipocompratribunal = 100 THEN 2
-                    WHEN p1.pc50_pctipocompratribunal = 101 THEN 1
-                    WHEN p1.pc50_pctipocompratribunal = 102 THEN 3
-                    WHEN p1.pc50_pctipocompratribunal = 103 THEN 4
-                    ELSE 0
-                END AS tipoprocesso,
-                CASE
-                    WHEN p2.pc50_pctipocompratribunal = 100 THEN 2
-                    WHEN p2.pc50_pctipocompratribunal = 101 THEN 1
-                    WHEN p2.pc50_pctipocompratribunal = 102 THEN 3
-                    WHEN p2.pc50_pctipocompratribunal = 103 THEN 4
-                    ELSE 0
-                END AS tipoprocessolicitacao,
+                    liclicita.l20_tipoprocesso,
                     ac16_tipoorigem AS contdeclicitacao,
                     ac16_origem,
                 (CASE
@@ -545,7 +532,6 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $oDados10->l20_edital = $oLicitacao->l20_edital;
                 $oDados10->l20_anousu = $oLicitacao->l20_anousu;
                 $oDados10->l20_naturezaobjeto = $oLicitacao->l20_naturezaobjeto;
-                $oDados10->tipoprocesso = empty($oLicitacao->tipoprocesso) ? 0 : $oLicitacao->tipoprocesso;
                 $oDados10->l20_codigo = $oLicitacao->l20_codigo;
             }
             /*
@@ -635,11 +621,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $clcontratos10->si83_nroprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_edital : ' '; //campo 12
                 $clcontratos10->si83_exercicioprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_anousu : ' '; //campo 13
             }
-            if ($oDados10->tipoprocesso == '' || $oDados10->tipoprocesso == 0) {
-                $clcontratos10->si83_tipoprocesso = $oDados10->tipoprocessolicitacao; //campo 14
-            } else {
-                $clcontratos10->si83_tipoprocesso = $oDados10->tipoprocesso; //campo 14
-            }
+            
+            $clcontratos10->si83_tipoprocesso = $oDados10->l20_tipoprocesso; //campo 14
+           
             $clcontratos10->si83_naturezaobjeto = $oDados10->ac02_acordonatureza; //campo 15
             $clcontratos10->si83_objetocontrato = substr($this->removeCaracteres($oDados10->ac16_objeto), 0, 1000); //campo 16
             $clcontratos10->si83_datainiciovigencia = $oDados10->ac16_datainicio; //campo 17
