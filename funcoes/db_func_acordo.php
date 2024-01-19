@@ -34,7 +34,7 @@ $campos .= "acordo.ac16_resumoobjeto::text, ";
 $campos .= "acordo.ac16_valor,";
 $campos .= "acordo.ac16_dataassinatura, ";
 $campos .= "CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datainicio END ac16_datainicio, ";
-$campos .= "CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datafim END ac16_datafim, ";
+$campos .= "CASE WHEN ac16_vigenciaindeterminada='t' THEN null WHEN ac16_semvigencia='t' THEN null ELSE ac16_datafim END ac16_datafim, ";
 $campos .= "CASE 
        	   		WHEN acordo.ac16_origem = 1 THEN 'Processo de Compras'
        	   		WHEN acordo.ac16_origem = 2 THEN 'Licitação'

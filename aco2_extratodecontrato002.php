@@ -17,7 +17,7 @@ $clacordoposicao     = new cl_acordoposicao;
 $clacordoitem        = new cl_acordoitem;
 
 //consulta dos dados do acordo
-$sSql = db_query("select distinct ac16_sequencial, ac16_numero||'/'||ac16_anousu numcontrato,descrdepto,ac16_dataassinatura,z01_nome,ac16_valor,ac16_datainicio,ac16_datafim,ac16_objeto from acordo inner join db_depart on coddepto = ac16_coddepto inner join cgm on z01_numcgm = ac16_contratado inner join acordoposicao on ac26_acordo = ac16_sequencial and ac26_acordoposicaotipo = 1 where ac16_sequencial = {$sequencial}");
+$sSql = db_query("select distinct ac16_sequencial, ac16_numero||'/'||ac16_anousu numcontrato,descrdepto,ac16_dataassinatura,z01_nome,ac16_valor,ac16_datainicio,ac16_datafim,ac16_objeto,ac16_vigenciaindeterminada from acordo inner join db_depart on coddepto = ac16_coddepto inner join cgm on z01_numcgm = ac16_contratado inner join acordoposicao on ac26_acordo = ac16_sequencial and ac26_acordoposicaotipo = 1 where ac16_sequencial = {$sequencial}");
 
 if (pg_numrows($sSql) == 0) {
     db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado.');
@@ -62,10 +62,12 @@ $oPDF->setfont('arial', '', 8);
 $oPDF->cell(50, $iAlt, $oDados->z01_nome, 0, 1, "L", 0);
 
 $oPDF->setfont('arial', 'b', 8);
-$oPDF->cell(30, $iAlt, 'Vigência: ', 0, 0, "L", 0);
+$tituloVigencia = $oDados->ac16_vigenciaindeterminada == "t" ? "Vigência Inicial: " : "Período de Vigência: ";
+$oPDF->cell(30, $iAlt, $tituloVigencia, 0, 0, "L", 0);
 $oPDF->setfont('arial', '', 8);
-$oPDF->cell(20, $iAlt, $oDados->ac16_datainicio . ' até ', 0, 0, "L", 0);
-$oPDF->cell(20, $iAlt, $oDados->ac16_datafim, 0, 1, "L", 0);
+$dataVigencia = $oDados->ac16_vigenciaindeterminada == "t" ? $oDados->ac16_datainicio : $oDados->ac16_datainicio . ' até ' . $oDados->ac16_datafim;
+$oPDF->cell(20, $iAlt, $dataVigencia, 0, 1, "L", 0);
+//$oPDF->cell(20, $iAlt, $oDados->ac16_datafim, 0, 1, "L", 0);
 
 $oPDF->setfont('arial', 'b', 8);
 $oPDF->cell(30, $iAlt, 'Valor do Contrato: ', 0, 0, "L", 0);

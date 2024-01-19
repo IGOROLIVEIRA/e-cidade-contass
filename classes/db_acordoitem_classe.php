@@ -972,6 +972,7 @@ class cl_acordoitem {
               ac26_data as data_posicao,
               ac16_datainicio as datainicio,
               ac16_datafim as datafim,
+              ac16_vigenciaindeterminada,
               pc01_codmater as codigomaterial,
               pc01_descrmater as material,
               ac20_quantidade as qtd_total,
@@ -1064,7 +1065,9 @@ class cl_acordoitem {
             si03_percentualreajuste,
             si03_indicereajuste,
             si03_datareferencia,
-            si03_justificativa
+            si03_justificativa,
+            ac26_descricaoreajuste,
+            ac26_criterioreajuste
         FROM apostilamento
         INNER JOIN acordo ON ac16_sequencial = si03_acordo
         INNER JOIN acordoposicao ON acordoposicao.ac26_acordo = acordo.ac16_sequencial

@@ -67,7 +67,7 @@ try {
                 if ($oParam->sStatus != 3) {
                     $destacarcampos = 2;
                     $instituicao = db_getsession("DB_instit");
-                    $sWhereNotas = " efd05_cnpjprestador = '{$oEfdreinfr2010->z01_cgccpf}' and efd06_numeroop = '{$oEfdreinfr2010->e50_codord}' and efd06_numdocto = '{$oEfdreinfr2010->e69_numero}' and efd05_instit = {$instituicao} and efd05_ambiente = {$oParam->sAmbiente} and efd05_status = 2";
+                    $sWhereNotas = " efd05_cnpjprestador = '{$oEfdreinfr2010->z01_cgccpf}' and efd06_numeroop = '{$oEfdreinfr2010->e50_codord}' and efd06_numdocto = '{$oEfdreinfr2010->e69_numero}' and efd05_instit = {$instituicao} and efd05_ambiente = {$oParam->sAmbiente} and (efd05_status = 2 or efd05_dscresp like 'Não é permitido o envio de mais de um evento para o mesmo contribuinte, num mesmo período de apuração%')";
                     $cldestacarcampos = new cl_efdreinfr2010;
                     $rsDestacarcampos = $cldestacarcampos->sql_record($cldestacarcampos->sql_query_file(null,"*",null,$sWhereNotas));
 
@@ -155,12 +155,18 @@ try {
                 $clEfdReinf = new EFDReinfEventos($oEventos, $oParam, $cgc);
                 
                 $rsApiConsulta = $clEfdReinf->buscarReinfR2010($oDados, $oCertificado, $protocoloEnvio);
-                
-                $statusConsulta         = $rsApiConsulta->retornoLoteEventosAssincrono->status->cdResposta;
-                $descRespostaConsulta   = (string) $rsApiConsulta->retornoLoteEventosAssincrono->status->descResposta;
-                $dhRecepcaoConsulta     = $rsApiConsulta->retornoLoteEventosAssincrono->dadosRecepcaoLote->dhRecepcao;
-                $dscRespConsulta        = (string) $rsApiConsulta->retornoLoteEventosAssincrono->retornoEventos->evento->retornoEvento->Reinf->evtTotal->ideRecRetorno->ideStatus->regOcorrs->dscResp;
-                $codRespConsulta        = $rsApiConsulta->retornoLoteEventosAssincrono->retornoEventos->evento->retornoEvento->Reinf->evtRet->ideRecRetorno->ideStatus->regOcorrs->codResp;
+                               
+                if ($protocoloEnvio) {
+                    $statusConsulta         = $rsApiConsulta->retornoLoteEventosAssincrono->status->cdResposta;
+                    $descRespostaConsulta   = (string) $rsApiConsulta->retornoLoteEventosAssincrono->status->descResposta;
+                    $dhRecepcaoConsulta     = $rsApiConsulta->retornoLoteEventosAssincrono->dadosRecepcaoLote->dhRecepcao;
+                    $dscRespConsulta        = (string) $rsApiConsulta->retornoLoteEventosAssincrono->retornoEventos->evento->retornoEvento->Reinf->evtTotal->ideRecRetorno->ideStatus->regOcorrs->dscResp;
+                    $codRespConsulta        = $rsApiConsulta->retornoLoteEventosAssincrono->retornoEventos->evento->retornoEvento->Reinf->evtRet->ideRecRetorno->ideStatus->regOcorrs->codResp;
+                } else {
+                    $statusConsulta         = $rsApiEnvio->retornoLoteEventosAssincrono->status->cdResposta;
+                    $descRespostaConsulta   = (string) $rsApiEnvio->retornoLoteEventosAssincrono->status->descResposta;
+                    $dscRespConsulta        = (string) $rsApiEnvio->retornoLoteEventosAssincrono->status->ocorrencias->ocorrencia->descricao;
+                } 
 
                 $clefdreinfR2010 = new cl_efdreinfr2010;
                 $clefdreinfR2010->efd05_mescompetencia     = $oParam->sMescompetencia;
@@ -178,7 +184,7 @@ try {
                 $clefdreinfR2010->efd05_optantecprb        = $oEventos->OptanteCPRB;
                 $clefdreinfR2010->efd05_status             = $statusConsulta;
                 $clefdreinfR2010->efd05_descResposta       = utf8_decode($descRespostaConsulta);
-                $clefdreinfR2010->efd05_dscResp            = utf8_decode($dscRespConsulta);
+                $clefdreinfR2010->efd05_dscResp            = removeAspas(utf8_decode($dscRespConsulta));
                 $clefdreinfR2010->incluir();
 
                 if ($clefdreinfR2010->erro_status == 0) {
@@ -245,13 +251,34 @@ try {
             break;
         case "getConsultarEvento2010":
 
+            $status = '';
+            $sCampos = " distinct efd05_sequencial,
+            efd05_mescompetencia,
+            efd05_cnpjprestador,
+            efd05_estabelecimento,
+            case when efd05_status = 2 or efd05_dscresp like 'Não é permitido o envio de mais de um evento para o mesmo contribuinte, num mesmo período de apuração%'  then 2 else efd05_status end as efd05_status,
+            efd05_dscresp,
+            efd05_descResposta,
+            efd05_ambiente,
+            efd05_protocolo,
+            efd60_numcno,
+            efd05_valorbruto,
+            efd05_valorbase,
+            efd05_valorretidocp,
+            efd05_optantecprb,
+            efd05_indprestservico,
+            efd05_dataenvio,
+            efd60_possuicno
+            ";
             if ($oParam->sStatus) {
                 $status = " and efd05_status = $oParam->sStatus ";
+                if ($oParam->sStatus == 2)
+                    $status = " and (efd05_status = 2 or efd05_dscresp like 'Não é permitido o envio de mais de um evento para o mesmo contribuinte, num mesmo período de apuração%') ";
+                if ($oParam->sStatus == 3)
+                    $status = " and (( efd05_status = 3 or efd05_status is null ) and efd05_dscresp not like 'Não é permitido o envio de mais de um evento para o mesmo contribuinte, num mesmo período de apuração%') ";
+          
             }
-            $sCampos = "
-                distinct efdreinfr2010.*,
-                efd60_possuicno
-                ";
+
             $instituicao = db_getsession("DB_instit");
             $sWhere = " efd05_mescompetencia = '{$oParam->sMescompetencia}' and efd05_anocompetencia = '$oParam->sAnocompetencia' and efd05_ambiente = '$oParam->sAmbiente' and efd05_instit = {$instituicao} $status  ";
         
@@ -283,8 +310,8 @@ try {
                 $oefdreinfr2010->Protocolo       = $oEfdreinfr2010->efd05_protocolo;
                 $oefdreinfr2010->DataEnvio       = formateDate(substr($oEfdreinfr2010->efd05_dataenvio, 0, 10)) . " - " . substr($oEfdreinfr2010->efd05_dataenvio, 11, 8);
                 $oefdreinfr2010->Status          = messageStatus($oEfdreinfr2010->efd05_status);
-                $oefdreinfr2010->DscResp         = $oEfdreinfr2010->efd05_dscresp;
-
+                $oefdreinfr2010->DscResp         = $oEfdreinfr2010->efd05_status ? $oEfdreinfr2010->efd05_dscresp : "Erro no envio";;
+                
                 $itens[] = $oefdreinfr2010;
                 
             }
@@ -308,7 +335,7 @@ try {
                 if ($oParam->sStatus != 3) {
                     $destacarcampos = 2;
                     $instituicao = db_getsession("DB_instit");
-                    $sWhereNotas = " efd07_cpfcnpjprodutor = '{$oEfdreinfr2055->z01_cgccpf}' and efd07_instit = {$instituicao} and efd07_ambiente = {$oParam->sAmbiente} and efd07_status = 2";
+                    $sWhereNotas = " efd07_cpfcnpjprodutor = '{$oEfdreinfr2055->z01_cgccpf}' and efd07_instit = {$instituicao} and efd07_ambiente = {$oParam->sAmbiente} and ( efd07_status = 2 or efd07_dscresp like 'Não é permitido o envio de mais de um evento para o contribuinte, num mesmo período de apuração%')";
                     $cldestacarcampos = new cl_efdreinfr2055;
                     $rsDestacarcampos = $cldestacarcampos->sql_record($cldestacarcampos->sql_query_file(null,"*",null,$sWhereNotas));
                     if (pg_num_rows($rsDestacarcampos) > 0) {
@@ -373,11 +400,17 @@ try {
                 $clEfdReinf = new EFDReinfEventos($oEventos, $oParam, $cgc);
                 $rsApiConsulta = $clEfdReinf->buscarReinfR2055($oDados, $oCertificado, $protocoloEnvio);
 
-                $statusConsulta         = $rsApiConsulta->retornoLoteEventosAssincrono->status->cdResposta;
-                $descRespostaConsulta   = (string) $rsApiConsulta->retornoLoteEventosAssincrono->status->descResposta;
-                $dhRecepcaoConsulta     = $rsApiConsulta->retornoLoteEventosAssincrono->dadosRecepcaoLote->dhRecepcao;
-                $dscRespConsulta        = (string) $rsApiConsulta->retornoLoteEventosAssincrono->retornoEventos->evento->retornoEvento->Reinf->evtTotal->ideRecRetorno->ideStatus->regOcorrs->dscResp;
-                $codRespConsulta        = $rsApiConsulta->retornoLoteEventosAssincrono->retornoEventos->evento->retornoEvento->Reinf->evtRet->ideRecRetorno->ideStatus->regOcorrs->codResp;
+                if ($protocoloEnvio) {
+                    $statusConsulta         = $rsApiConsulta->retornoLoteEventosAssincrono->status->cdResposta;
+                    $descRespostaConsulta   = (string) $rsApiConsulta->retornoLoteEventosAssincrono->status->descResposta;
+                    $dhRecepcaoConsulta     = $rsApiConsulta->retornoLoteEventosAssincrono->dadosRecepcaoLote->dhRecepcao;
+                    $dscRespConsulta        = (string) $rsApiConsulta->retornoLoteEventosAssincrono->retornoEventos->evento->retornoEvento->Reinf->evtTotal->ideRecRetorno->ideStatus->regOcorrs->dscResp;
+                    $codRespConsulta        = $rsApiConsulta->retornoLoteEventosAssincrono->retornoEventos->evento->retornoEvento->Reinf->evtRet->ideRecRetorno->ideStatus->regOcorrs->codResp;
+                } else {
+                    $statusConsulta         = $rsApiEnvio->retornoLoteEventosAssincrono->status->cdResposta;
+                    $descRespostaConsulta   = (string) $rsApiEnvio->retornoLoteEventosAssincrono->status->descResposta;
+                    $dscRespConsulta        = (string) $rsApiEnvio->retornoLoteEventosAssincrono->status->ocorrencias->ocorrencia->descricao;
+                }
 
                 $clefdreinfR2055 = new cl_efdreinfr2055;
                 $clefdreinfR2055->efd07_mescompetencia     = $oParam->sMescompetencia;
@@ -393,7 +426,7 @@ try {
                 $clefdreinfR2055->efd07_dataenvio          = $dhRecepcaoEnvio;
                 $clefdreinfR2055->efd07_status             = $statusConsulta;
                 $clefdreinfR2055->efd07_descResposta       = utf8_decode($descRespostaConsulta);
-                $clefdreinfR2055->efd07_dscResp            = utf8_decode($dscRespConsulta);
+                $clefdreinfR2055->efd07_dscResp            =  removeAspas(utf8_decode($dscRespConsulta));
 
                 $clefdreinfR2055->incluir();
 
@@ -464,14 +497,31 @@ try {
             break;
         case "getConsultarEvento2055":
 
+            $status = '';
+            $sCampos = "distinct efd07_cpfcnpjprodutor,
+                        efd07_protocolo,
+                        z01_nome,
+                        efd07_valorbruto,
+                        efd07_valorcp,
+                        efd07_valorgilrat,
+                        efd07_valorsenar,
+                        efd07_dataenvio,
+                        case when efd07_status = 2 or efd07_dscresp like 'Não é permitido o envio de mais de um evento para o contribuinte, num mesmo período de apuração%'  then 2 else efd07_status end as efd07_status,
+                        efd07_dscresp,
+                        efd07_descResposta
+            ";
             if ($oParam->sStatus) {
                 $status = " and efd07_status = $oParam->sStatus ";
+                if ($oParam->sStatus == 2)
+                    $status = " and (efd07_status = 2 OR efd07_dscresp LIKE 'Não é permitido o envio de mais de um evento para o contribuinte, num mesmo período de apuração%') ";
+                if ($oParam->sStatus == 3)
+                    $status = " and ((efd07_status = 3 or efd07_status is null ) and efd07_dscresp NOT LIKE 'Não é permitido o envio de mais de um evento para o contribuinte, num mesmo período de apuração%') ";
             }
             $instituicao = db_getsession("DB_instit");
             $sWhere = " efd07_mescompetencia = '{$oParam->sMescompetencia}' and efd07_anocompetencia = '$oParam->sAnocompetencia' and efd07_ambiente = '$oParam->sAmbiente' and efd07_instit = {$instituicao} $status  ";
         
             $clefdreinfr2055 = new cl_efdreinfr2055;
-            $rsEfdreinfR2055 = $clefdreinfr2055->sql_record($clefdreinfr2055->sql_query_file(null,"distinct efd07_cpfcnpjprodutor,efdreinfr2055.*,cgm.*",null,$sWhere));
+            $rsEfdreinfR2055 = $clefdreinfr2055->sql_record($clefdreinfr2055->sql_query_file(null,"$sCampos",null,$sWhere));
 
             for ($iCont = 0; $iCont < pg_num_rows($rsEfdreinfR2055); $iCont++) {
 
@@ -496,9 +546,9 @@ try {
                 $oefdreinfr2055->ValorGILRAT     = "R$" . db_formatar($oEfdreinfr2055->efd07_valorgilrat, 'f');
                 $oefdreinfr2055->ValorSenar      = "R$" . db_formatar($oEfdreinfr2055->efd07_valorsenar, 'f');;
                 $oefdreinfr2055->Protocolo       = $oEfdreinfr2055->efd07_protocolo;
-                $oefdreinfr2055->DataEnvio       = formateDate(substr($oEfdreinfr2055->efd07_dataenvio, 0, 10)) . " - " . substr($oEfdreinfr2055->efd07_dataenvio, 11, 8);
+                $oefdreinfr2055->DataEnvio       = $oEfdreinfr2055->efd07_dataenvio ? formateDate(substr($oEfdreinfr2055->efd07_dataenvio, 0, 10)) . " - " . substr($oEfdreinfr2055->efd07_dataenvio, 11, 8) : "";
                 $oefdreinfr2055->Status          = messageStatus($oEfdreinfr2055->efd07_status);
-                $oefdreinfr2055->DscResp         = $oEfdreinfr2055->efd07_dscresp;
+                $oefdreinfr2055->DscResp         = $oEfdreinfr2055->efd07_status ? $oEfdreinfr2055->efd07_dscresp : "Erro no envio";
 
                 $itens[] = $oefdreinfr2055;
                 
@@ -574,21 +624,19 @@ try {
             $clefdreinfR2099->efd04_protocolo    = $protocoloEnvio;
             $clefdreinfR2099->efd04_status       = $statusConsulta;
             $clefdreinfR2099->efd04_descResposta = utf8_decode($descRespostaConsulta);
-            $clefdreinfR2099->efd04_dscResp      = $dscRespConsulta;
+            $clefdreinfR2099->efd04_dscResp      =  removeAspas(utf8_decode($dscRespConsulta));
             $clefdreinfR2099->efd04_dataenvio    = $dhRecepcaoEnvio;
 
-            if ($protocoloEnvio) {
-                $clefdreinfR2099->incluir();
+            $clefdreinfR2099->incluir();
 
-                if ($clefdreinfR2099->erro_status == 0) {
+            if ($clefdreinfR2099->erro_status == 0) {
                     throw new Exception($clefdreinfR2099->erro_msg);
-                }
             }
 
             if ($descRespostaConsulta) {
                 $oRetorno->sMessage = "O lote foi processado. Acesse o menu de consultas para verificar o status do evento.";
             } else {
-                $oRetorno->sMessage = $rsApiEnvio;
+                $oRetorno->sMessage = $rsApiEnvio->retornoLoteEventosAssincrono->status->descResposta;
             }
             break;
         case "getEventos2099":
@@ -693,7 +741,7 @@ try {
                     $clefdreinfR4010->efd03_numcgm             = searchCgm($oEventos->Numcgm);
                     $clefdreinfR4010->efd03_status             = $statusConsulta;
                     $clefdreinfR4010->efd03_descResposta       = utf8_decode($descRespostaConsulta);
-                    $clefdreinfR4010->efd03_dscResp            = utf8_decode($dscRespConsulta);
+                    $clefdreinfR4010->efd03_dscResp            = removeAspas(utf8_decode($dscRespConsulta));
                     $clefdreinfR4010->incluir();
 
                     if ($clefdreinfR4010->erro_status == 0) {
@@ -735,7 +783,7 @@ try {
                 if ($oParam->sStatus != 3) {
                     $destacarcampos = 2;
                     $instituicao = db_getsession("DB_instit");
-                    $sWhereNotas = " efd03_cpfbeneficiario = '{$oEfdreinfr4010->cpf}' and efd03_identificadorop = '{$oEfdreinfr4010->op}' and efd03_instit = {$instituicao} and efd03_ambiente = {$oParam->sAmbiente} and efd03_status = 2";
+                    $sWhereNotas = " efd03_cpfbeneficiario = '{$oEfdreinfr4010->cpf}' and efd03_identificadorop = '{$oEfdreinfr4010->op}' and efd03_instit = {$instituicao} and efd03_ambiente = {$oParam->sAmbiente} and ( efd03_status = 2 or efd03_dscresp not like 'Não é permitido o envio de mais de um evento num mesmo período de apuração, mesmo estabelecimento%')";
                     $cldestacarcampos = new cl_efdreinfr4010;
                     $rsDestacarcampos = $cldestacarcampos->sql_record($cldestacarcampos->sql_query_file(null,"*",null,$sWhereNotas));
     
@@ -766,13 +814,39 @@ try {
             break;
         case "getConsultarEvento4010":
 
+            $status = '';
+            $sCampos = "efd03_cpfbeneficiario,
+                        z01_nome,
+                        efd03_identificadorop,
+                        efd03_naturezarendimento,
+                        efd03_datafg,
+                        efd03_valorbruto,
+                        efd03_valorbase,
+                        efd03_valorirrf,
+                        efd03_protocolo,
+                        efd03_dataenvio,
+                        case
+                            when efd03_status = 2
+                            or efd03_dscresp like 'Não é permitido o envio de mais de um evento num mesmo período de apuração, mesmo estabelecimento%' then 2
+                            else efd03_status
+                        end as efd03_status,
+                        efd03_dscresp,
+                        efd03_descResposta
+            "; 
+
             if ($oParam->sStatus) {
                 $status = " and efd03_status = $oParam->sStatus ";
-            }
+                if ($oParam->sStatus == "2") {
+                    $status = " and ( efd03_status = 2 or efd03_dscresp like 'Não é permitido o envio de mais de um evento num mesmo período de apuração, mesmo estabelecimento%') "; 
+                }
+                if ($oParam->sStatus == "3") {
+                    $status = " and (( efd03_status = 3 or efd03_status is null ) and efd03_dscresp not like 'Não é permitido o envio de mais de um evento num mesmo período de apuração, mesmo estabelecimento%') "; 
+                }
+            } 
             $instituicao = db_getsession("DB_instit");
             $sWhere = " efd03_mescompetencia = '{$oParam->sMescompetencia}' and efd03_anocompetencia = '$oParam->sAnocompetencia' and efd03_ambiente = '$oParam->sAmbiente' and efd03_instit = {$instituicao} $status  ";
             $clefdreinfR4010 = new cl_efdreinfr4010;
-            $rsEfdreinfR4010 = $clefdreinfR4010->sql_record($clefdreinfR4010->sql_query_file(null, "*", null, $sWhere));
+            $rsEfdreinfR4010 = $clefdreinfR4010->sql_record($clefdreinfR4010->sql_query_file(null, $sCampos, null, $sWhere));
 
             for ($iCont = 0; $iCont < pg_num_rows($rsEfdreinfR4010); $iCont++) {
 
@@ -789,7 +863,7 @@ try {
                 $oefdreinfr4010->Protocolo =  $oEfdreinfr4010->efd03_protocolo;
                 $oefdreinfr4010->Status =  messageStatus($oEfdreinfr4010->efd03_status);
                 $oefdreinfr4010->Dataenvio = formateDate(substr($oEfdreinfr4010->efd03_dataenvio, 0, 10)) . " - " . substr($oEfdreinfr4010->efd03_dataenvio, 11, 8);
-                $oefdreinfr4010->MsgRetornoErro =  $oEfdreinfr4010->efd03_dscresp;
+                $oefdreinfr4010->MsgRetornoErro =  $oEfdreinfr4010->efd03_status ? $oEfdreinfr4010->efd03_dscresp : "Erro no envio";
 
                 $itens[] = $oefdreinfr4010;
             }
@@ -837,13 +911,18 @@ try {
                         $oDados = $clEfdReinf->montarDadosReinfR4020();
                         $clEfdReinf = new EFDReinfEventos($oEventos, $oParam, $cgc);
                         $rsApiConsulta = $clEfdReinf->buscarReinfR4020($oDados, $oCertificado, $protocoloEnvio);
-    
-                        $statusConsulta         = $rsApiConsulta->retornoLoteEventosAssincrono->status->cdResposta;
-                        $descRespostaConsulta   = (string) $rsApiConsulta->retornoLoteEventosAssincrono->status->descResposta;
-                        $dhRecepcaoConsulta     = $rsApiConsulta->retornoLoteEventosAssincrono->dadosRecepcaoLote->dhRecepcao;
-                        $dscRespConsulta        = (string) $rsApiConsulta->retornoLoteEventosAssincrono->retornoEventos->evento->retornoEvento->Reinf->evtRet->ideRecRetorno->ideStatus->regOcorrs->dscResp;
-                        $codRespConsulta        = $rsApiConsulta->retornoLoteEventosAssincrono->retornoEventos->evento->retornoEvento->Reinf->evtRet->ideRecRetorno->ideStatus->regOcorrs->codResp;
-    
+                        
+                        if ($protocoloEnvio) {
+                            $statusConsulta         = $rsApiConsulta->retornoLoteEventosAssincrono->status->cdResposta;
+                            $descRespostaConsulta   = (string) $rsApiConsulta->retornoLoteEventosAssincrono->status->descResposta;
+                            $dhRecepcaoConsulta     = $rsApiConsulta->retornoLoteEventosAssincrono->dadosRecepcaoLote->dhRecepcao;
+                            $dscRespConsulta        = (string) $rsApiConsulta->retornoLoteEventosAssincrono->retornoEventos->evento->retornoEvento->Reinf->evtRet->ideRecRetorno->ideStatus->regOcorrs->dscResp;
+                            $codRespConsulta        = $rsApiConsulta->retornoLoteEventosAssincrono->retornoEventos->evento->retornoEvento->Reinf->evtRet->ideRecRetorno->ideStatus->regOcorrs->codResp;
+                        } else {
+                            $statusConsulta         = $rsApiEnvio->retornoLoteEventosAssincrono->status->cdResposta;
+                            $descRespostaConsulta   = (string) $rsApiEnvio->retornoLoteEventosAssincrono->status->descResposta;
+                            $dscRespConsulta        = (string) $rsApiEnvio->retornoLoteEventosAssincrono->status->ocorrencias->ocorrencia->descricao;
+                        }    
                         $clefdreinfR4020 = new cl_efdreinfr4020;
                         $clefdreinfR4020->efd02_cnpjbeneficiario   = substr(clean_cpf_cnpj($oEventos->CNPJBeneficiario), 0, 14);
                         $clefdreinfR4020->efd02_identificadorop    = $oEventos->Identificador;
@@ -861,7 +940,7 @@ try {
                         $clefdreinfR4020->efd02_numcgm             = searchCgm($oEventos->Numcgm);
                         $clefdreinfR4020->efd02_status             = $statusConsulta;
                         $clefdreinfR4020->efd02_descResposta       = utf8_decode($descRespostaConsulta);
-                        $clefdreinfR4020->efd02_dscResp            = utf8_decode($dscRespConsulta);
+                        $clefdreinfR4020->efd02_dscResp            =  removeAspas(utf8_decode($dscRespConsulta));
                         $clefdreinfR4020->incluir();
     
                         if ($clefdreinfR4020->erro_status == 0) {
@@ -901,7 +980,7 @@ try {
                     if ($oParam->sStatus != 3) {
                         $destacarcampos = 2;
                         $instituicao = db_getsession("DB_instit");
-                        $sWhereNotas = " efd02_cnpjbeneficiario = '{$oEfdreinfr4020->cnpj}' and efd02_identificadorop = '{$oEfdreinfr4020->op}' and efd02_instit = {$instituicao} and efd02_ambiente = {$oParam->sAmbiente} and efd02_status = 2";
+                        $sWhereNotas = " efd02_cnpjbeneficiario = '{$oEfdreinfr4020->cnpj}' and efd02_identificadorop = '{$oEfdreinfr4020->op}' and efd02_instit = {$instituicao} and efd02_ambiente = {$oParam->sAmbiente} and (efd02_status = 2 or efd02_dscresp like 'Não é permitido o envio de mais de um evento num mesmo período de apuração, mesmo estabelecimento%')";
                         $cldestacarcampos = new cl_efdreinfr4020;
                         $rsDestacarcampos = $cldestacarcampos->sql_record($cldestacarcampos->sql_query_file(null,"*",null,$sWhereNotas));
         
@@ -930,14 +1009,39 @@ try {
     
             break;
         case "getConsultarEvento4020":
-    
-                if ($oParam->sStatus)
+
+                $status = '';
+                $sCampos = "efd02_cnpjbeneficiario,
+                z01_nome,
+                efd02_identificadorop,
+                efd02_naturezarendimento,
+                efd02_datafg,
+                efd02_valorbruto,
+                efd02_valorbase,
+                efd02_valorirrf,
+                efd02_protocolo,
+                efd02_dataenvio,
+                case
+                    when efd02_status = 2
+                    or efd02_dscresp like 'Não é permitido o envio de mais de um evento num mesmo período de apuração, mesmo estabelecimento%' then 2
+                    else efd02_status
+                end as efd02_status,
+                efd02_dscresp,
+                efd02_descResposta
+            "; 
+                if ($oParam->sStatus) {
                     $status = " and efd02_status = $oParam->sStatus ";
+                    if ($oParam->sStatus == "2") {
+                        $status = " and ( efd02_status = 2 or efd02_dscresp like 'Não é permitido o envio de mais de um evento num mesmo período de apuração, mesmo estabelecimento%') "; 
+                    }
+                    if ($oParam->sStatus == "3") {
+                        $status = " and ( ( efd02_status = 3 or efd02_status is null ) and efd02_dscresp not like 'Não é permitido o envio de mais de um evento num mesmo período de apuração, mesmo estabelecimento%') "; 
+                    }
+                } 
                 $instituicao = db_getsession("DB_instit");
                 $sWhere = " efd02_mescompetencia = '{$oParam->sMescompetencia}' and efd02_anocompetencia = '$oParam->sAnocompetencia' and efd02_ambiente = '$oParam->sAmbiente' and efd02_instit = {$instituicao} $status  ";
                 $clefdreinfR4020 = new cl_efdreinfr4020;
-                $rsEfdreinfR4020 = $clefdreinfR4020->sql_record($clefdreinfR4020->sql_query_file(null, "*", null, $sWhere));
-    
+                $rsEfdreinfR4020 = $clefdreinfR4020->sql_record($clefdreinfR4020->sql_query_file(null, $sCampos, null, $sWhere));
                 for ($iCont = 0; $iCont < pg_num_rows($rsEfdreinfR4020); $iCont++) {
     
                     $oEfdreinfr4020 = db_utils::fieldsMemory($rsEfdreinfR4020, $iCont);
@@ -952,7 +1056,7 @@ try {
                     $oefdreinfr4020->Protocolo =  $oEfdreinfr4020->efd02_protocolo;
                     $oefdreinfr4020->Status =  messageStatus($oEfdreinfr4020->efd02_status);
                     $oefdreinfr4020->Dataenvio =  formateDate(substr($oEfdreinfr4020->efd02_dataenvio, 0, 10)) . " - " . substr($oEfdreinfr4020->efd02_dataenvio, 11, 8);
-                    $oefdreinfr4020->MsgRetornoErro =  $oEfdreinfr4020->efd02_dscresp;
+                    $oefdreinfr4020->MsgRetornoErro =  $oEfdreinfr4020->efd02_status ?  $oEfdreinfr4020->efd02_dscresp : "Erro no envio";
                     $itens[] = $oefdreinfr4020;
                 }
     
@@ -1009,24 +1113,26 @@ try {
                 $oDados = $clEfdReinf->montarDadosReinfR4099();
                 $rsApiConsulta = $clEfdReinf->buscarReinfR4099($oDados, $oCertificado, $protocoloEnvio);
     
-                $statusConsulta         = $rsApiConsulta->retornoLoteEventosAssincrono->status->cdResposta;
-                $descRespostaConsulta   = (string) $rsApiConsulta->retornoLoteEventosAssincrono->status->descResposta;
-                $dhRecepcaoConsulta     = $rsApiConsulta->retornoLoteEventosAssincrono->dadosRecepcaoLote->dhRecepcao;
-                $dscRespConsulta        = (string) $rsApiConsulta->retornoLoteEventosAssincrono->retornoEventos->evento->retornoEvento->Reinf->evtRetCons->ideRecRetorno->ideStatus->regOcorrs->dscResp;
-                $codRespConsulta        = $rsApiConsulta->retornoLoteEventosAssincrono->retornoEventos->evento->retornoEvento->Reinf->evtRetCons->ideRecRetorno->ideStatus->regOcorrs->codResp;
-    
+                if ($protocoloEnvio) {
+                    $statusConsulta         = $rsApiConsulta->retornoLoteEventosAssincrono->status->cdResposta;
+                    $descRespostaConsulta   = (string) $rsApiConsulta->retornoLoteEventosAssincrono->status->descResposta;
+                    $dhRecepcaoConsulta     = $rsApiConsulta->retornoLoteEventosAssincrono->dadosRecepcaoLote->dhRecepcao;
+                    $dscRespConsulta        = (string) $rsApiConsulta->retornoLoteEventosAssincrono->retornoEventos->evento->retornoEvento->Reinf->evtRetCons->ideRecRetorno->ideStatus->regOcorrs->dscResp;
+                    $codRespConsulta        = $rsApiConsulta->retornoLoteEventosAssincrono->retornoEventos->evento->retornoEvento->Reinf->evtRetCons->ideRecRetorno->ideStatus->regOcorrs->codResp;
+                } else {
+                    $statusConsulta         = $rsApiEnvio->retornoLoteEventosAssincrono->status->cdResposta;
+                    $descRespostaConsulta   = (string) $rsApiEnvio->retornoLoteEventosAssincrono->status->descResposta;
+                    $dscRespConsulta        = (string) $rsApiEnvio->retornoLoteEventosAssincrono->status->ocorrencias->ocorrencia->descricao;
+                }
+
                 $clefdreinfR4099->efd01_protocolo    = $protocoloEnvio;
                 $clefdreinfR4099->efd01_status       = $statusConsulta;
                 $clefdreinfR4099->efd01_descResposta = utf8_decode($descRespostaConsulta);
-                $clefdreinfR4099->efd01_dscResp      = utf8_decode($dscRespConsulta);
+                $clefdreinfR4099->efd01_dscResp      = removeAspas(utf8_decode($dscRespConsulta));
                 $clefdreinfR4099->efd01_dataenvio    = $dhRecepcaoEnvio;
-    
-                if ($protocoloEnvio) {
-                    $clefdreinfR4099->incluir();
-    
-                    if ($clefdreinfR4099->erro_status == 0) {
-                        throw new Exception($clefdreinfR4099->erro_msg);
-                    }
+                $clefdreinfR4099->incluir();
+                if ($clefdreinfR4099->erro_status == 0) {
+                    throw new Exception($clefdreinfR4099->erro_msg);
                 }
     
                 if ($descRespostaConsulta) {
@@ -1147,7 +1253,7 @@ function messageStatus($status)
             return "ERRO NO ENVIO";
             break;
         default:
-            return " ";
+            return "ERRO NO ENVIO";
             break;
     }
 }

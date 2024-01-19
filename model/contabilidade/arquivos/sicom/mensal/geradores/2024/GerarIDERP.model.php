@@ -50,7 +50,7 @@ class GerarIDERP extends GerarAM
                 $aIDERP10['si179_codunidadesub'] = $this->padLeftZero($oiderp10['si179_codunidadesub'], 5);
                 $aIDERP10['si179_nroempenho'] = $oiderp10['si179_nroempenho'];
                 $aIDERP10['si179_tiporestospagar'] = $oiderp10['si179_tiporestospagar'];
-                $aIDERP10['si179_disponibilidadecaixa'] = $oiderp10['si179_disponibilidadecaixa'];
+                // $aIDERP10['si179_disponibilidadecaixa'] = $oiderp10['si179_disponibilidadecaixa'];
                 $aIDERP10['si179_vlinscricao'] = $this->sicomNumberReal($oiderp10['si179_vlinscricao'], 2);
                 $this->sLinha = $aIDERP10;
                 $this->adicionaLinha();
@@ -63,6 +63,8 @@ class GerarIDERP extends GerarAM
                         $aIDERP11['si180_tiporegistro'] = $this->padLeftZero($oiderp11['si180_tiporegistro'], 2);
                         $aIDERP11['si180_codiderp'] = $oiderp11['si180_codiderp'];
                         $aIDERP11['si180_codfontrecursos'] = $oiderp11['si180_codfontrecursos'];
+                        $aIDERP11['si180_codco'] = $oiderp11['si180_codco'];
+                        $aIDERP11['si180_disponibilidadecaixa'] = $oiderp11['si180_disponibilidadecaixa'];
                         $aIDERP11['si180_vlinscricaofonte'] = $this->sicomNumberReal($oiderp11['si180_vlinscricaofonte'], 2);
                         $this->sLinha = $aIDERP11;
                         $this->adicionaLinha();
