@@ -20,8 +20,6 @@ class Oc21751 extends AbstractMigration
                     ALTER TABLE contratos302024 ADD COLUMN si89_criterioreajuste int;
                     ALTER TABLE contratos302024 ADD COLUMN si89_descricaoindice varchar (300);
                     ALTER TABLE contratos402024 ADD COLUMN si91_codunidadesubatual varchar (8);
-                    ALTER TABLE contratos112024 ADD COLUMN si84_obrordem int;
-                    ALTER TABLE contratos212024 ADD COLUMN si88_obrordem int;
 
                     DROP TABLE public.contratos102024 cascade;
 
@@ -81,7 +79,6 @@ class Oc21751 extends AbstractMigration
                         si84_coditemsinapi varchar(15) NULL,
                         si84_coditemsimcro varchar(15) NULL,
                         si84_descoutrosmateriais varchar(250) NULL,
-                        si84_obrordem int4 NULL,
                         si84_itemplanilha int8 NULL DEFAULT 0,
                         si84_quantidadeitem float8 NOT NULL DEFAULT 0,
                         si84_valorunitarioitem float8 NOT NULL DEFAULT 0,
@@ -133,7 +130,6 @@ class Oc21751 extends AbstractMigration
                         si88_coditemsinapi varchar(15) NULL,
                         si88_coditemsimcro varchar(15) NULL,
                         si88_descoutrosmateriais varchar(250) NULL,
-                        si88_obrordem int4 NULL,
                         si88_itemplanilha int8 NULL DEFAULT 0,
                         si88_tipoalteracaoitem int8 NOT NULL DEFAULT 0,
                         si88_quantacrescdecresc float8 NOT NULL DEFAULT 0,
