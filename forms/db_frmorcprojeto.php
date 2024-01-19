@@ -237,7 +237,15 @@ function js_validacaracter() {
       return false;
 
     }
-   
+
+    if ((aTiposModalidade.indexOf(iTipoSup) > -1) && bModalidadeAplic == '' || bModalidadeAplic == null) {
+
+        alert("Para utilizar esse tipo de suplementação é necessário definir no cadastro das leis se o orçamento foi aprovado por modalidade de aplicação!");
+        document.getElementById('o39_tiposuplementacao').options[0].selected = true;
+        document.getElementById('o39_tiposuplementacao').onchange();
+        return false;
+
+    }
        
 
   }
