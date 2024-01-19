@@ -11,7 +11,6 @@ db_app::load("estilos.css, grid.style.css");
 db_app::load("time.js");
 ?>
 <html>
-
 <head>
     <title>Contass Contabilidade Ltda - Página Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -28,29 +27,28 @@ db_app::load("time.js");
         height: 90%;
         left: 15%;
     }
-
     .custom-table {
         width: 100%;
         margin: 20px 0;
         font-family: Arial, sans-serif;
     }
-
     .custom-table table {
         width: 100%;
         border-collapse: collapse;
         border-spacing: 0;
     }
-
     .custom-table th,
     .custom-table td {
         border: 1px solid #ddd;
         padding: 8px;
         text-align: left;
     }
-
     .custom-table th {
         background-color: #f2f2f2;
     }
+    input {
+            border-radius: 5px;
+        }
 </style>
 
 <body bgcolor=#CCCCCC>
@@ -209,7 +207,7 @@ db_app::load("time.js");
                 aLinha[8] = oLinha.Protocolo;
                 aLinha[9] = oLinha.DataEnvio;
                 aLinha[10] = oLinha.Status;
-                aLinha[11]= oLinha.Status != 'ENVIADO' ? "Clique aqui : " + "<b style='color: #00008b;'>" + oLinha.DscResp + "</b>" : "Clique aqui : " + "<b style='color: #00008b;'> Todos eventos processados com sucesso. </b>";
+                aLinha[11] = oLinha.DscResp ? "Clique aqui : " + "<b style='color: #00008b;'>" + oLinha.DscResp + "</b>" : "Clique aqui : " + "<b style='color: #00008b;'> Todos eventos processados com sucesso. </b>";
 
                 oGridEvento.addRow(aLinha);
 

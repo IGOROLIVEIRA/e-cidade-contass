@@ -20,7 +20,6 @@ class cl_cvc302024
   var $si148_sequencial = 0;
   var $si148_tiporegistro = 0;
   var $si148_codorgao = null;
-  var $si148_codunidadesub = null;
   var $si148_codveiculo = null;
   var $si148_nomeestabelecimento = null;
   var $si148_localidade = null;
@@ -35,7 +34,6 @@ class cl_cvc302024
                  si148_sequencial = int8 = sequencial
                  si148_tiporegistro = int8 = Tipo do  registro
                  si148_codorgao = varchar(2) = Código do órgão
-                 si148_codunidadesub = varchar(8) = Código da  unidade
                  si148_codveiculo = varchar(10) = Código do Veiculo
                  si148_nomeestabelecimento = varchar(250) = Nome do estabelecimento de ensino
                  si148_localidade = varchar(250) = Localidade
@@ -73,7 +71,6 @@ class cl_cvc302024
       $this->si148_sequencial = ($this->si148_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si148_sequencial"] : $this->si148_sequencial);
       $this->si148_tiporegistro = ($this->si148_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si148_tiporegistro"] : $this->si148_tiporegistro);
       $this->si148_codorgao = ($this->si148_codorgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si148_codorgao"] : $this->si148_codorgao);
-      $this->si148_codunidadesub = ($this->si148_codunidadesub == "" ? @$GLOBALS["HTTP_POST_VARS"]["si148_codunidadesub"] : $this->si148_codunidadesub);
       $this->si148_codveiculo = ($this->si148_codveiculo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si148_codveiculo"] : $this->si148_codveiculo);
       $this->si148_nomeestabelecimento = ($this->si148_nomeestabelecimento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si148_nomeestabelecimento"] : $this->si148_nomeestabelecimento);
       $this->si148_localidade = ($this->si148_localidade == "" ? @$GLOBALS["HTTP_POST_VARS"]["si148_localidade"] : $this->si148_localidade);
@@ -171,7 +168,6 @@ class cl_cvc302024
                                        si148_sequencial
                                       ,si148_tiporegistro
                                       ,si148_codorgao
-                                      ,si148_codunidadesub
                                       ,si148_codveiculo
                                       ,si148_nomeestabelecimento
                                       ,si148_localidade
@@ -186,7 +182,6 @@ class cl_cvc302024
                                 $this->si148_sequencial
                                ,$this->si148_tiporegistro
                                ,'$this->si148_codorgao'
-                               ,'$this->si148_codunidadesub'
                                ,'$this->si148_codveiculo'
                                ,'$this->si148_nomeestabelecimento'
                                ,'$this->si148_localidade'
@@ -232,7 +227,6 @@ class cl_cvc302024
       $resac = db_query("insert into db_acount values($acount,2010377,2011124,'','" . AddSlashes(pg_result($resaco, 0, 'si148_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010377,2011125,'','" . AddSlashes(pg_result($resaco, 0, 'si148_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010377,2011126,'','" . AddSlashes(pg_result($resaco, 0, 'si148_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010377,2011127,'','" . AddSlashes(pg_result($resaco, 0, 'si148_codunidadesub')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010377,2011128,'','" . AddSlashes(pg_result($resaco, 0, 'si148_codveiculo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010377,2011129,'','" . AddSlashes(pg_result($resaco, 0, 'si148_nomeestabelecimento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010377,2011130,'','" . AddSlashes(pg_result($resaco, 0, 'si148_localidade')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -276,10 +270,6 @@ class cl_cvc302024
     }
     if (trim($this->si148_codorgao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si148_codorgao"])) {
       $sql .= $virgula . " si148_codorgao = '$this->si148_codorgao' ";
-      $virgula = ",";
-    }
-    if (trim($this->si148_codunidadesub) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si148_codunidadesub"])) {
-      $sql .= $virgula . " si148_codunidadesub = '$this->si148_codunidadesub' ";
       $virgula = ",";
     }
     if (trim($this->si148_codveiculo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si148_codveiculo"])) {
@@ -364,8 +354,6 @@ class cl_cvc302024
           $resac = db_query("insert into db_acount values($acount,2010377,2011125,'" . AddSlashes(pg_result($resaco, $conresaco, 'si148_tiporegistro')) . "','$this->si148_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si148_codorgao"]) || $this->si148_codorgao != "")
           $resac = db_query("insert into db_acount values($acount,2010377,2011126,'" . AddSlashes(pg_result($resaco, $conresaco, 'si148_codorgao')) . "','$this->si148_codorgao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si148_codunidadesub"]) || $this->si148_codunidadesub != "")
-          $resac = db_query("insert into db_acount values($acount,2010377,2011127,'" . AddSlashes(pg_result($resaco, $conresaco, 'si148_codunidadesub')) . "','$this->si148_codunidadesub'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si148_codveiculo"]) || $this->si148_codveiculo != "")
           $resac = db_query("insert into db_acount values($acount,2010377,2011128,'" . AddSlashes(pg_result($resaco, $conresaco, 'si148_codveiculo')) . "','$this->si148_codveiculo'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si148_nomeestabelecimento"]) || $this->si148_nomeestabelecimento != "")
@@ -440,7 +428,6 @@ class cl_cvc302024
         $resac = db_query("insert into db_acount values($acount,2010377,2011124,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si148_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010377,2011125,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si148_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010377,2011126,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si148_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010377,2011127,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si148_codunidadesub')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010377,2011128,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si148_codveiculo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010377,2011129,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si148_nomeestabelecimento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010377,2011130,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si148_localidade')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");

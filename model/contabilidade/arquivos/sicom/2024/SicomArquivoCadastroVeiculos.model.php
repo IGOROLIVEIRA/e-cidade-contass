@@ -4,7 +4,7 @@ require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once ("classes/db_cvc102024_classe.php");
 require_once ("classes/db_cvc202024_classe.php");
 require_once ("classes/db_cvc302024_classe.php");
-require_once ("classes/db_cvc402024_classe.php");
+require_once("classes/db_cvc502024_classe.php");
 
 
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarCVC.model.php");

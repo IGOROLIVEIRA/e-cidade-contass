@@ -157,23 +157,8 @@ class cl_efdreinfr2099
             $this->erro_status = "0";
             return false;
         }
-        if ($this->efd04_protocolo == null) {
-            $this->erro_sql = " Campo efd04_protocolo não informado.";
-            $this->erro_campo = "efd04_protocolo";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
         if ($this->efd04_status == null) {
-            $this->erro_sql = " Campo efd04_status não informado.";
-            $this->erro_campo = "efd04_status";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
+            $this->efd04_status = 'null';
         }
         if ($this->efd04_servicoprev == null) {
             $this->erro_sql = " Campo efd04_servicoprev não informado.";
@@ -193,26 +178,8 @@ class cl_efdreinfr2099
             $this->erro_status = "0";
             return false;
         }
-        if ($this->efd04_descResposta == null) {
-            $this->erro_sql = " Campo efd04_descResposta não informado.";
-            $this->erro_campo = "efd04_descResposta";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
         if ($this->efd04_dscResp == null) {
             $this->efd04_dscResp = "";
-        }
-        if ($this->efd04_dataenvio == null) {
-            $this->erro_sql = " Campo efd04_dataenvio não informado.";
-            $this->erro_campo = "efd04_dataenvio";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
         }
         if ($this->efd04_sequencial == "" || $this->efd04_sequencial == null) {
             $result = db_query("select nextval('efdreinfr2099_efd04_sequencial_seq')");
