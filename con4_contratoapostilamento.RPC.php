@@ -104,6 +104,9 @@ try {
             $date = new DateTime( $record->si03_datareferencia );
             $oDadosAcordo->si03_datareferencia = $date->format( 'd/m/Y' );
             $oDadosAcordo->si03_descrapostila = utf8_encode($record->si03_descrapostila);
+            $oDadosAcordo->si03_descrapostila = utf8_encode($record->si03_descrapostila);
+            $oDadosAcordo->ac26_descricaoreajuste = utf8_encode($record->ac26_descricaoreajuste);
+            $oDadosAcordo->ac26_criterioreajuste = $record->ac26_criterioreajuste;
             $oRetorno->dadosAcordo = $oDadosAcordo;
             getItens($oParam, $oRetorno);
             break;
@@ -133,6 +136,20 @@ try {
             }
 
             break;
+
+            case "getLeiAndOrigem":
+                $sSQL = "select l20_leidalicitacao,ac16_tipoorigem from liclicita
+                inner join acordo on
+                    acordo.ac16_licitacao = liclicita.l20_codigo
+                where acordo.ac16_sequencial = $oParam->licitacao";
+    
+                $rsLeiAndOrigem     = db_query($sSQL);
+                $oLeiAndOrigem = db_utils::fieldsMemory($rsLeiAndOrigem, 0);
+    
+                $oRetorno->lei = $oLeiAndOrigem->l20_leidalicitacao;
+                $oRetorno->tipoorigem = $oLeiAndOrigem->ac16_tipoorigem;
+    
+                break;
     }
 
     db_fim_transacao(false);

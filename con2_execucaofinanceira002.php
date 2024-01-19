@@ -82,8 +82,12 @@ foreach ($arrayContratos as $iContrato){
     $oPdf->ln();
     $oPdf->cell(40 ,10,"Acordo: ".$oAcordo->getNumero()."/".$oAcordo->getAno(),"TBL" ,0,"L",1,0);
     $oPdf->cell(120,10,"Fornecedor: ".$oAcordo->getContratado()->getNome(),"TB"  ,0,"L",1,0);
-    $oPdf->cell(65 ,10,"Valor do Contrato: ".'R$'.number_format((double)$oAcordo->getValorContrato(),2,',','.'),"TB"  ,0,"L",1,0);
-    $oPdf->cell(58 ,10,"Vigência: ".$oDataInicial->getDate(DBDate::DATA_PTBR)." a ".$oDataFinal->getDate(DBDate::DATA_PTBR) ,"TBR" ,1,"L",1,0);
+    $oPdf->cell(61 ,10,"Valor do Contrato: ".'R$'.number_format((double)$oAcordo->getValorContrato(),2,',','.'),"TB"  ,0,"L",1,0);
+
+    $tituloVigencia = $oAcordo->getVigenciaIndeterminada() == "t" ? "Vigência Inicial: " : "Vigência: ";
+    $dataVigencia = $oAcordo->getVigenciaIndeterminada() == "t" ? $oDataInicial->getDate(DBDate::DATA_PTBR) : $oDataInicial->getDate(DBDate::DATA_PTBR) . ' até ' . $oDataFinal->getDate(DBDate::DATA_PTBR);
+
+    $oPdf->cell(62 ,10, $tituloVigencia . $dataVigencia ,"TBR" ,1,"L",1,0);
     $oPdf->cell(98,10,""                         ,"TBRL",0,"L",1,0);
     $oPdf->cell(96,10,"Movimentação do Empenho"  ,"TBRL",0,"C",1,0);
     $oPdf->cell(89 ,10,"Saldo a Pagar"          ,"TBRL",1,"C",1,0);

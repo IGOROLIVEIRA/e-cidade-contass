@@ -24,6 +24,8 @@ class cl_iderp112024 {
   public $si180_reg10 = 0;
   public $si180_mes = 0;
   public $si180_instit = 0;
+  public $si180_codco = '0000';
+  public $si180_disponibilidadecaixa = 0;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
                  si180_sequencial = int8 = Sequencial
@@ -34,6 +36,8 @@ class cl_iderp112024 {
                  si180_reg10 = int8 = Registro 10
                  si180_mes = int8 = Mês
                  si180_instit = float8 = Instituição
+                 si180_codco = varchar = Código de CO
+                 si180_disponibilidadecaixa = int8 = Situação dos restos a pagar
                  ";
 
   //funcao construtor da classe
@@ -64,6 +68,8 @@ class cl_iderp112024 {
        $this->si180_reg10 = ($this->si180_reg10 == ""?@$GLOBALS["HTTP_POST_VARS"]["si180_reg10"]:$this->si180_reg10);
        $this->si180_mes = ($this->si180_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si180_mes"]:$this->si180_mes);
        $this->si180_instit = ($this->si180_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si180_instit"]:$this->si180_instit);
+       $this->si180_codco = ($this->si180_codco == ""?@$GLOBALS["HTTP_POST_VARS"]["si180_codco"]:$this->si180_codco);
+       $this->si180_disponibilidadecaixa = ($this->si180_disponibilidadecaixa == ""?@$GLOBALS["HTTP_POST_VARS"]["si180_disponibilidadecaixa"]:$this->si180_disponibilidadecaixa);
      } else {
        $this->si180_sequencial = ($this->si180_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si180_sequencial"]:$this->si180_sequencial);
      }
@@ -167,6 +173,24 @@ class cl_iderp112024 {
        $this->erro_status = "0";
        return false;
      }
+     if ($this->si180_codco == null ) {
+      $this->erro_sql = " Campo Código de CO não informado.";
+      $this->erro_campo = "si180_codco";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->si180_disponibilidadecaixa == null ) {
+      $this->erro_sql = " Campo Situação dos restos a pagar não informado.";
+      $this->erro_campo = "si180_disponibilidadecaixa";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      $sql = "insert into iderp112024(
                                        si180_sequencial
                                       ,si180_tiporegistro
@@ -176,6 +200,8 @@ class cl_iderp112024 {
                                       ,si180_reg10
                                       ,si180_mes
                                       ,si180_instit
+                                      ,si180_codco
+                                      ,si180_disponibilidadecaixa
                        )
                 values (
                                 $this->si180_sequencial
@@ -186,6 +212,8 @@ class cl_iderp112024 {
                                ,$this->si180_reg10
                                ,$this->si180_mes
                                ,$this->si180_instit
+                               ,'$this->si180_codco'
+                               ,$this->si180_disponibilidadecaixa
                       )";
      $result = db_query($sql);
      if ($result==false) {
@@ -344,6 +372,32 @@ class cl_iderp112024 {
          return false;
        }
      }
+     if (trim($this->si180_codco)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si180_codco"])) {
+      $sql  .= $virgula." si180_codco = '$this->si180_codco' ";
+      $virgula = ",";
+      if (trim($this->si180_codco) == null ) {
+        $this->erro_sql = " Campo Código de CO não informado.";
+        $this->erro_campo = "si180_codco";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->si180_disponibilidadecaixa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si180_disponibilidadecaixa"])) {
+      $sql  .= $virgula." si180_disponibilidadecaixa = $this->si180_disponibilidadecaixa ";
+      $virgula = ",";
+      if (trim($this->si180_disponibilidadecaixa) == null ) {
+        $this->erro_sql = " Campo Situação dos restos a pagar não informado.";
+        $this->erro_campo = "si180_disponibilidadecaixa";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      $sql .= " where ";
      if ($si180_sequencial!=null) {
        $sql .= " si180_sequencial = $this->si180_sequencial";
@@ -529,7 +583,7 @@ class cl_iderp112024 {
        $sql .= $campos;
      }
      $sql .= " from iderp112024 ";
-     $sql .= "      inner join iderp102020  on  iderp102020.si179_sequencial = iderp112024.si180_reg10";
+     $sql .= "      inner join iderp102024  on  iderp102024.si179_sequencial = iderp112024.si180_reg10";
      $sql2 = "";
      if ($dbwhere=="") {
        if ($si180_sequencial!=null ) {

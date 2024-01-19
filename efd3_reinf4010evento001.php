@@ -19,6 +19,9 @@ db_app::load("time.js");
     <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <style>
+    input {
+            border-radius: 5px;
+        }
 </style>
 
 <body bgcolor=#CCCCCC>
@@ -167,7 +170,7 @@ db_app::load("time.js");
                 aLinha[5] = oLinha.ValorBase;
                 aLinha[6] = oLinha.ValorIRRF;
                 aLinha[7] = oLinha.Status;
-                aLinha[8] = oLinha.Status != 'ENVIADO' ? "Clique aqui :" + "<b style='color: #00008b;'>"+oLinha.MsgRetornoErro+"</b>" : oLinha.MsgRetornoErro;
+                aLinha[8] = oLinha.MsgRetornoErro ? "Clique aqui :" + "<b style='color: #00008b;'>"+oLinha.MsgRetornoErro+"</b>" : "Clique aqui : " + "<b style='color: #00008b;'> Todos eventos processados com sucesso. </b>";;
                 aLinha[9] = oLinha.Protocolo;
                 aLinha[10] = oLinha.Dataenvio;
                  

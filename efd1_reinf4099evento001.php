@@ -52,7 +52,11 @@ require_once("libs/db_utils.php");
     db_app::load('scripts.js, prototype.js, strings.js,DBLookUp.widget.js,EmissaoRelatorio.js');
     ?>
 </head>
-
+<style>
+     input {
+            border-radius: 5px;
+        }
+</style>
 <body class="body-default">
     <div class="container">
         <fieldset>

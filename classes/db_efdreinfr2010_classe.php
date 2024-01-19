@@ -177,24 +177,6 @@ class cl_efdreinfr2010
         if ($this->efd05_valorbase == null) {
             $this->efd05_valorbase = 0;
         }
-        if ($this->efd05_dataenvio == null) {
-            $this->erro_sql = " Campo efd05_dataenvio não informado.";
-            $this->erro_campo = "efd05_dataenvio";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if ($this->efd05_protocolo == null) {
-            $this->erro_sql = " Campo efd05_protocolo não informado.";
-            $this->erro_campo = "efd05_protocolo";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
         if ($this->efd05_valorretidocp == null) {
             $this->erro_sql = " Campo efd05_valorretidocp informado.";
             $this->erro_campo = "efd05_valorretidocp";           
@@ -214,22 +196,7 @@ class cl_efdreinfr2010
             return false;
         }
         if ($this->efd05_status == null) {
-            $this->erro_sql = " Campo efd05_status não informado.";
-            $this->erro_campo = "efd05_status";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if ($this->efd05_descResposta == null) {
-            $this->erro_sql = " Campo efd05_descResposta não informado.";
-            $this->erro_campo = "efd05_descResposta";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
+            $this->efd05_status = 'null';
         }
         if ($this->efd05_sequencial == "" || $this->efd05_sequencial == null) {
             $result = db_query("select nextval('efdreinfr2010_efd05_sequencial_seq')");
