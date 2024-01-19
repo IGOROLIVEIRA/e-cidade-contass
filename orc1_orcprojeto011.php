@@ -43,8 +43,13 @@ db_postmemory($HTTP_POST_VARS);
 $clorcprojeto = new cl_orcprojeto;
 
 $clppaleidadocomplementar 	= new cl_ppaleidadocomplementar;
-$sSqlModalidadeAplic 		= $clppaleidadocomplementar->sql_query_file(null, "o142_orcmodalidadeaplic", "o142_sequencial DESC LIMIT 1");
-$bModalidadeAplic 			= db_utils::fieldsmemory(db_query($sSqlModalidadeAplic))->o142_orcmodalidadeaplic;
+$sSqlAnoInicio 		= $clppaleidadocomplementar->sql_query_file(null, "o142_anoinicialppa", "o142_sequencial DESC LIMIT 1");
+$anoInicio = db_utils::fieldsmemory(db_query($sSqlAnoInicio))->o142_anoinicialppa;
+$anoSessao =  db_getsession('DB_anousu');
+$anoReferencia = $anoSessao - intval($anoInicio);
+$sCampos =  returnFieldNameModalidadeAplic($anoReferencia);
+$sSqlModalidadeAplic 		= $clppaleidadocomplementar->sql_query_file(null,$sCampos, "o142_sequencial DESC LIMIT 1");
+$bModalidadeAplic 			= db_utils::fieldsmemory(db_query($sSqlModalidadeAplic))->$sCampos;
 
 $clorcsuplementacaoparametro = new cl_orcsuplementacaoparametro;
 $sqlsuplementacaoparametro  = $clorcsuplementacaoparametro->sql_query(db_getsession('DB_anousu'),"*","");
@@ -152,4 +157,17 @@ if(isset($incluir)){
 
   };
 };
+function returnFieldNameModalidadeAplic($anoReferencia)
+{
+  switch($anoReferencia){
+    case 0:
+      return  "o142_orcmodalidadeaplic";
+    case 1:
+      return  "o142_orcmodalidadeaplicano2";
+    case 2:
+      return  "o142_orcmodalidadeaplicano3"; 
+    case 3:
+      return  "o142_orcmodalidadeaplicano4";             
+  }
+}
 ?>
