@@ -205,7 +205,7 @@ class GerarDISPENSA extends GerarAM
             $aCSVDISPENSA16['si80_codunidadesubresp'] = $this->padLeftZero($aDISPENSA16['si80_codunidadesubresp'], 5);
             $aCSVDISPENSA16['si80_exercicioprocesso'] = $this->padLeftZero($aDISPENSA16['si80_exercicioprocesso'], 4);
             $aCSVDISPENSA16['si80_nroprocesso'] = substr($aDISPENSA16['si80_nroprocesso'], 0, 12);
-            $aCSVDISPENSA16['si80_tipoprocesso'] = $this->padLeftZero($aDISPENSA16['si80_tipoprocesso'], 1);
+            $aCSVDISPENSA16['si80_tipoprocesso'] = $this->padLeftZero($aDISPENSA16['si80_tipoprocesso'], 1) == 0 ? '' : $this->padLeftZero($aDISPENSA16['si80_tipoprocesso'], 1);
             $aCSVDISPENSA16['si80_codorgao'] = $this->padLeftZero($aDISPENSA16['si80_codorgao'], 2);
             $aCSVDISPENSA16['si80_codunidadesub'] = $this->padLeftZero($aDISPENSA16['si80_codunidadesub'], 5);
             $aCSVDISPENSA16['si80_codfuncao'] = $this->padLeftZero($aDISPENSA16['si80_codfuncao'], 2);

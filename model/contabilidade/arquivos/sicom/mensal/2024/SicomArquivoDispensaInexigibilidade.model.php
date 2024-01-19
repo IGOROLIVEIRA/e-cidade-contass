@@ -300,7 +300,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
 	liclicita.l20_anousu as exercicioLicitacao,
 	liclicita.l20_edital as nroProcessoLicitatorio,
-	pctipocompratribunal.l44_codigotribunal as tipoProcesso,
+	liclicita.l20_tipoprocesso as tipoProcesso,
 	case when liclicita.l20_dataaber is null then liclicita.l20_datacria else liclicita.l20_dataaber end as dtAbertura,
 	liclicita.l20_naturezaobjeto as naturezaObjeto,
 	liclicita.l20_objeto as objeto,
@@ -391,7 +391,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
-		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
+		liclicita.l20_tipoprocesso as tipoProcesso,
 		liclicitemlote.l04_numerolote as nroLote,
 		liclicitemlote.l04_descricao as dscLote,
     manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
@@ -465,7 +465,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
-		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
+		liclicita.l20_tipoprocesso as tipoProcesso,
     CASE
     WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
   ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
@@ -543,7 +543,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
-		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
+		liclicita.l20_tipoprocesso as tipoProcesso,
 		dispensa112024.si75_nrolote as nroLote,
     CASE
     WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
@@ -620,7 +620,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
-		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
+		liclicita.l20_tipoprocesso as tipoProcesso,
 		(CASE parecerlicitacao.l200_tipoparecer WHEN 2 THEN 6
 			ELSE 7
 		END) as tipoResp,
@@ -659,7 +659,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
-		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
+		liclicita.l20_tipoprocesso as tipoProcesso,
 		(CASE liccomissaocgm.l31_tipo WHEN '1' THEN 1
 		WHEN '2' THEN 4 WHEN '3' THEN 2 WHEN '4' THEN 3 WHEN '8' THEN 5 END) as tipoResp,
 		cgm.z01_cgccpf as nroCPFResp,
@@ -858,7 +858,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
-		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
+		liclicita.l20_tipoprocesso as tipoProcesso,
 		dispensa112024.si75_nrolote as nroLote,
     CASE
     WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
@@ -977,7 +977,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
-		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
+		liclicita.l20_tipoprocesso as tipoProcesso,
 		infocomplementaresinstit.si09_codorgaotce as codorgaotce,
 		CASE WHEN o41_subunidade != 0
 		OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
@@ -1033,7 +1033,11 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 
         $dispensa16->si80_exercicioprocesso = $oDados16->exerciciolicitacao;
         $dispensa16->si80_nroprocesso = $oDados16->nroprocessolicitatorio;
-        $dispensa16->si80_tipoprocesso = $oDados16->tipoprocesso;
+        if($oDados16->tipoprocesso == "5" || $oDados16->tipoprocesso == "6"){
+          $dispensa16->si80_tipoprocesso = '';
+        } else {
+          $dispensa16->si80_tipoprocesso = $oDados16->tipoprocesso;
+        }
         $dispensa16->si80_codorgao = $oDados16->codorgaotce;
         $dispensa16->si80_codunidadesub = $oDados16->codunidadesub;
         $dispensa16->si80_codfuncao = $oDados16->codfuncao;
@@ -1076,7 +1080,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
 	liclicita.l20_anousu as exercicioLicitacao,
 	liclicita.l20_edital as nroProcessoLicitatorio,
-	pctipocompratribunal.l44_codigotribunal as tipoProcesso,
+	liclicita.l20_tipoprocesso as tipoProcesso,
 	(CASE length(cgm.z01_cgccpf) WHEN 11 THEN 1
 		ELSE 2
 	END) as tipoDocumento,
