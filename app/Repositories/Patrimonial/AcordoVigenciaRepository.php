@@ -30,4 +30,10 @@ class AcordoVigenciaRepository implements AcordoVigenciaRepositoryInterface
     {
         return DB::table('acordovigencia')->where('ac18_acordoposicao',$codigoPosicao)->update($dados);
     }
+
+    public function insert(array $dados): ?AcordoVigencia
+    {
+        $dados['ac41_sequencial'] = $this->model->getNextval();
+        return $this->model->create($dados);
+    }
 }

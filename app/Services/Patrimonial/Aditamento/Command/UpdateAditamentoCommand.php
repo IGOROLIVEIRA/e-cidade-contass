@@ -122,7 +122,8 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
                 $codigoItem = $item->getItemSequencial();
 
                 if ($aditamento->isAlteracaoProjetoEspecificacao()) {
-                    $acordoItem = $this->acordoItemRepository->getItemByPcmaterAndPosicao($codigoItem, $sequencialAcordoPosicao);
+                    $acordoItem = $this->acordoItemRepository->getItemByPcmaterAndPosicao($codigoItemPcMater, $sequencialAcordoPosicao);
+
                     if (empty($acordoItem)) {
                         $insertDto = new InsertItemDto(
                             $item,

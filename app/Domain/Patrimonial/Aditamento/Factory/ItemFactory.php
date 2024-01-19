@@ -7,7 +7,6 @@ use App\Models\AcordoItem;
 use App\Repositories\Patrimonial\AcordoItemExecutadoRepository;
 use DateTime;
 use Illuminate\Database\Eloquent\Collection;
-use League\Fractal\Resource\Collection as ResourceCollection;
 
 class ItemFactory
 {
@@ -88,17 +87,17 @@ class ItemFactory
     {
         $listaItens = [];
 
-
-         foreach ($itensRaw as $itemRaw) {
+         foreach ($itensRaw as $key => $itemRaw) {
             if (!in_array($itemRaw->codigoitem, $selecionados)) {
                 continue;
             }
 
             $item = new Item();
 
+
             $item->setItemSequencial((int) $itemRaw->acordoitemsequencial)
                 ->setCodigoPcMater((int) $itemRaw->codigoitem)
-                ->setQuantidade((float) $itemRaw->quantidade)
+                ->setQuantidade($itemRaw->quantidade)
                 ->setValorUnitario((float) $itemRaw->valorunitario)
                 ->setValorTotal((float) $itemRaw->valoraditado);
 
@@ -122,6 +121,13 @@ class ItemFactory
 
             if (!empty($itemRaw->unidade)) {
                 $item->setUnidade((int)$itemRaw->unidade);
+            }
+
+            if (!empty($itemRaw->codigoelemento)) {
+                $servicoQuantidade = $itemRaw->controlaServico === 't' ? true : false;
+                $item->setCodigoElemento($itemRaw->codigoelemento)
+                    ->setOrdem($key + 1)
+                    ->setServicoQuantidade($servicoQuantidade);
             }
 
             $listaItens[] = $item;

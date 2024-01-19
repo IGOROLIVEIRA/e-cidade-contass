@@ -28,7 +28,7 @@ class Item
     /**
      * @var float
      */
-    private float $quantidade;
+    private float $quantidade = 0;
 
     /**
      * @var float
@@ -53,12 +53,12 @@ class Item
     /**
      * @var boolean
      */
-    private bool $tipoControle;
+    private bool $tipoControle = true;
 
     /**
      * @var boolean
      */
-    private bool $servicoQuantidade;
+    private bool $servicoQuantidade = true;
 
     /**
      * @var integer
@@ -84,7 +84,18 @@ class Item
     private ?int $unidade = null;
 
     /**
-     * Undocumented variable
+     *
+     * @var integer|null
+     */
+    private ?int $codigoElemento = null;
+
+    /**
+     *
+     * @var integer|null
+     */
+    private ?int $ordem = null;
+
+    /**
      *
      * @var array
      */
@@ -393,6 +404,42 @@ class Item
     public function setEExecutado(bool $eExecutado): self
     {
         $this->eExecutado = $eExecutado;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of codigoElemento
+     */
+    public function getCodigoElemento(): ?int
+    {
+        return $this->codigoElemento;
+    }
+
+    /**
+     * Set the value of codigoElemento
+     */
+    public function setCodigoElemento(?int $codigoElemento): self
+    {
+        $this->codigoElemento = $codigoElemento;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of ordem
+     */
+    public function getOrdem(): ?int
+    {
+        return $this->ordem;
+    }
+
+    /**
+     * Set the value of ordem
+     */
+    public function setOrdem(?int $ordem): self
+    {
+        $this->ordem = $ordem;
 
         return $this;
     }

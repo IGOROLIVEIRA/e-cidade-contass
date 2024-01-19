@@ -5,6 +5,12 @@ namespace App\Models;
 class AcordoVigencia extends LegacyModel
 {
     /**
+     *
+     * @var string
+     */
+    protected string $sequenceName = 'acordovigencia_ac18_sequencial_seq';
+
+    /**
      * @var string
      */
     protected $table = 'acordovigencia';

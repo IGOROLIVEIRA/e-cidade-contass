@@ -1102,10 +1102,6 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       }
     }
 
-    if (Object.keys(oSelecionados).length == 0 && $('oCboTipoAditivo').value == 13) {
-      return alert('Nenhum item selecionado para aditar.');
-    }
-
     let lAditar = true;
 
     var dt1 = me.oTxtDataFinal.getValue().split("/");
@@ -1685,14 +1681,14 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     }
 
     aItensPosicao.push(oNovoMaterial);
-    me.preencheItens(aItensPosicao, true);
+    me.preencheItens(aItensPosicao);
 
     $('btnItens').disabled = false;
     windowNovoItem.destroy();
     me.ajusteDotacao(aItensPosicao.length - 1, oNovoMaterial.elemento);
   }
 
-  this.preencheItens = function (aItens, ignorarCalculoCarregamento = false) {
+  this.preencheItens = function (aItens) {
     var sizeLabelItens = 0;
     if (aItens.length < 12) {
       sizeLabelItens = (aItens.length / 2) * 50;
@@ -2021,8 +2017,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     });
 
     aItens.each(function (element, id) {
-      if (aItens[id].novo !== true && me.totalizadorNoCarregamento) {
-        me.totalizadorNoCarregamento = false;
+      if (aItens[id].novo !== true) {
         me.calculaTotalPosicAnterior(element, id);
       } else {
         me.calculaValorTotal(id);
