@@ -67,27 +67,6 @@ class Oc21751 extends AbstractMigration
                         CONSTRAINT contratos102024_sequ_pk PRIMARY KEY (si83_sequencial)
                     );
 
-                    DROP TABLE public.contratos112024;
-
-                    CREATE TABLE public.contratos112024 (
-                        si84_sequencial int8 NOT NULL DEFAULT 0,
-                        si84_tiporegistro int8 NOT NULL DEFAULT 0,
-                        si84_codcontrato int8 NOT NULL DEFAULT 0,
-                        si84_nrolote int4 NULL,
-                        si84_coditem int8 NOT NULL DEFAULT 0,
-                        si84_tipomaterial int8 NULL DEFAULT 0,
-                        si84_coditemsinapi varchar(15) NULL,
-                        si84_coditemsimcro varchar(15) NULL,
-                        si84_descoutrosmateriais varchar(250) NULL,
-                        si84_itemplanilha int8 NULL DEFAULT 0,
-                        si84_quantidadeitem float8 NOT NULL DEFAULT 0,
-                        si84_valorunitarioitem float8 NOT NULL DEFAULT 0,
-                        si84_mes int8 NOT NULL DEFAULT 0,
-                        si84_reg10 int8 NOT NULL DEFAULT 0,
-                        si84_instit int8 NULL DEFAULT 0,
-                        CONSTRAINT contratos112024_sequ_pk PRIMARY KEY (si84_sequencial)
-                    );
-
                     DROP TABLE public.contratos202024 cascade;
 
                     CREATE TABLE public.contratos202024 (
@@ -116,28 +95,6 @@ class Oc21751 extends AbstractMigration
                         si87_mes int8 NOT NULL DEFAULT 0,
                         si87_instit int8 NULL DEFAULT 0,
                         CONSTRAINT contratos202024_sequ_pk PRIMARY KEY (si87_sequencial)
-                    );
-
-                    DROP TABLE public.contratos212024;
-
-                    CREATE TABLE public.contratos212024 (
-                        si88_sequencial int8 NOT NULL DEFAULT 0,
-                        si88_tiporegistro int8 NOT NULL DEFAULT 0,
-                        si88_codaditivo int8 NOT NULL DEFAULT 0,
-                        si88_nrolote int4 NULL,
-                        si88_coditem int8 NOT NULL DEFAULT 0,
-                        si88_tipomaterial int8 NULL DEFAULT 0,
-                        si88_coditemsinapi varchar(15) NULL,
-                        si88_coditemsimcro varchar(15) NULL,
-                        si88_descoutrosmateriais varchar(250) NULL,
-                        si88_itemplanilha int8 NULL DEFAULT 0,
-                        si88_tipoalteracaoitem int8 NOT NULL DEFAULT 0,
-                        si88_quantacrescdecresc float8 NOT NULL DEFAULT 0,
-                        si88_valorunitarioitem float8 NOT NULL DEFAULT 0,
-                        si88_mes int8 NOT NULL DEFAULT 0,
-                        si88_reg20 int8 NOT NULL DEFAULT 0,
-                        si88_instit int8 NULL DEFAULT 0,
-                        CONSTRAINT contratos212024_sequ_pk PRIMARY KEY (si88_sequencial)
                     );
 
                     DROP TABLE public.contratos302024;
@@ -186,5 +143,7 @@ class Oc21751 extends AbstractMigration
                   COMMIT;
       
         ";
+
+        $this->execute($sSql);
     }
 }
