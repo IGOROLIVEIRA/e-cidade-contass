@@ -59,6 +59,8 @@ class cl_acordoposicao {
    var $ac26_percentualreajuste = 0;//LeiauteAM2023
    var $ac26_indicereajuste = null;//LeiauteAM2023
    var $ac26_descricaoindice = null;//LeiauteAM2023
+   var $ac26_descricaoreajuste = null;
+   var $ac26_criterioreajuste = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  ac26_sequencial = int4 = Código Sequencial
@@ -75,6 +77,8 @@ class cl_acordoposicao {
                  ac26_numeroapostilamento = varchar(20) = Número do apostilamento
                  ac26_vigenciaalterada = varchar(1) = Caso vigência alterada
                  ac26_vigenciaalterada = varchar(1) = Caso vigência alterada
+                 ac26_descricaoreajuste = varchar(300) = Descrição do critéiro de reajuste
+                 ac26_criterioreajuste = int4 = Critério de Reajuste
                  ";
    //funcao construtor da classe
    function cl_acordoposicao() {
@@ -113,6 +117,8 @@ class cl_acordoposicao {
        $this->ac26_percentualreajuste = ($this->ac26_percentualreajuste == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_percentualreajuste"]:$this->ac26_percentualreajuste);
        $this->ac26_indicereajuste = ($this->ac26_indicereajuste == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_indicereajuste"]:$this->ac26_indicereajuste);
        $this->ac26_descricaoindice = ($this->ac26_descricaoindice == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_descricaoindice"]:$this->ac26_descricaoindice);
+       $this->ac26_descricaoreajuste = ($this->ac26_descricaoreajuste == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_descricaoreajuste"]:$this->ac26_descricaoreajuste);
+       $this->ac26_criterioreajuste = ($this->ac26_criterioreajuste == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_criterioreajuste"]:$this->ac26_criterioreajuste);
        $this->ac26_numeroapostilamento = ($this->ac26_numeroapostilamento == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_numeroapostilamento"]:$this->ac26_numeroapostilamento);
      }else{
        $this->ac26_sequencial = ($this->ac26_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_sequencial"]:$this->ac26_sequencial);
@@ -216,6 +222,8 @@ class cl_acordoposicao {
                                       ,ac26_indicereajuste
                                       ,ac26_percentualreajuste
                                       ,ac26_descricaoindice
+                                      ,ac26_descricaoreajuste
+                                      ,ac26_criterioreajuste
                        )
                 values (
                                 $this->ac26_sequencial
@@ -232,6 +240,8 @@ class cl_acordoposicao {
                                ," . ($this->ac26_indicereajuste == "null" || $this->ac26_indicereajuste == "" ? '0' :  $this->ac26_indicereajuste )."
                                ," . ($this->ac26_percentualreajuste == "null" || $this->ac26_percentualreajuste == "" ? 'null' : "'" . $this->ac26_percentualreajuste . "'") . "
                                ," . ($this->ac26_descricaoindice == "null" || $this->ac26_descricaoindice == "" ? 'null' : "'" . $this->ac26_descricaoindice . "'") . "
+                               ," . ($this->ac26_descricaoreajuste == "null" || $this->ac26_descricaoreajuste == "" ? 'null' : "'" . $this->ac26_descricaoreajuste . "'") . "
+                               ," . ($this->ac26_criterioreajuste == "null" || $this->ac26_criterioreajuste == "" ? '0' :  $this->ac26_criterioreajuste )."
                       )";
 
      $result = db_query($sql);
@@ -976,13 +986,19 @@ class cl_acordoposicao {
     return $sql;
   }
 
-  public function updateNumeroApositilamento($ac26_acordo, $ac26_numeroapostilamento)
+  public function updateApositilamento($ac26_acordo, $apostilamento)
   {
+    
     $sql = "
     UPDATE
         acordoposicao
     SET
-        ac26_numeroapostilamento = $ac26_numeroapostilamento
+        ac26_numeroapostilamento = $apostilamento->si03_numapostilamento,
+        ac26_criterioreajuste = " . ($apostilamento->si03_criterioreajuste == "null" || $apostilamento->si03_criterioreajuste == "" ? 'null' : "'" . $apostilamento->si03_criterioreajuste . "'") . ",
+        ac26_descricaoreajuste = " . ($apostilamento->si03_descricaoreajuste == "null" || $apostilamento->si03_descricaoreajuste == "" ? 'null' : "'" . $apostilamento->si03_descricaoreajuste . "'") . ",
+        ac26_descricaoindice = " . ($apostilamento->si03_descricaoindice == "null" || $apostilamento->si03_descricaoindice == "" ? 'null' : "'" . $apostilamento->si03_descricaoindice . "'") . ",
+        ac26_indicereajuste = " . ($apostilamento->si03_indicereajuste == "null" || $apostilamento->si03_indicereajuste == "" ? '0' :  $apostilamento->si03_indicereajuste ).",
+        ac26_percentualreajuste = " . ($apostilamento->si03_percentualreajuste == "null" || $apostilamento->si03_percentualreajuste == "" ? 'null' :  $apostilamento->si03_percentualreajuste )."
     WHERE
         ac26_acordo = $ac26_acordo
         AND ac26_numeroapostilamento IS NOT NULL

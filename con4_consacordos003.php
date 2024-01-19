@@ -183,17 +183,24 @@ db_app::import("configuracao.DBDepartamento");
                                     ?>
                                 </td>
                                 <td width="150">
-                                    <b>Período de Vigência:</b>
+                                <?php
+                                    if($clAcordo->getVigenciaIndeterminada() == "t"){
+                                        echo("<b> Vigência Inicial:</b>");
+                                    } else {
+                                        echo("<b> Período de Vigência:</b>");
+                                    }
+                                ?>
                                 </td>
                                 <td class="tdBgColor">
 
                                     <?php
-                                    if (!$clAcordo->getSituacaoVigencia()) {
+                                    if($clAcordo->getVigenciaIndeterminada() == "t"){
+                                        $oDataInicial  = $clAcordo->getDataInicialVigenciaOriginal();
+                                        echo "{$oDataInicial->getDate(DBDate::DATA_PTBR)}";
+                                    } else {
                                         $oDataInicial  = $clAcordo->getDataInicialVigenciaOriginal();
                                         $oDataFinal    = $clAcordo->getDataFinalVigenciaOriginal();
                                         echo "{$oDataInicial->getDate(DBDate::DATA_PTBR)} até {$oDataFinal->getDate(DBDate::DATA_PTBR)}";
-                                    } else {
-                                        echo "-";
                                     }
                                     ?>
                                 </td>

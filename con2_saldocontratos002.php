@@ -120,6 +120,7 @@ coddepto as codigo_dpto,
 ac26_data as data_posicao,
 ac16_datainicio as datainicio,
 ac16_datafim as datafim,
+ac16_vigenciaindeterminada,
 pc01_codmater as codigomaterial,
 pc01_descrmater as material,
 ac20_quantidade as qtd_total,
@@ -356,7 +357,13 @@ function imprimirCabecalhoAcordos($oPdf, $iFonte, $iAlt, $lImprime, $material, $
     $oPdf->Ln();
     $oPdf->Cell(50, $iAlt, 'Nº Contrato: ' . $material->ac16_numero . '/' . $material->ac16_anousu/*date("m/Y", strtotime($material->data_posicao))*/, 0, 0, 'L', 0);
 
-    $oPdf->Cell(150, $iAlt, 'Vigência: ' . date("d/m/Y", strtotime($material->datainicio)) . ' a ' . date("d/m/Y", strtotime($material->datafim)), 0, 0, 'L', 0);
+    $material->datainicio = date("d/m/Y", strtotime($material->datainicio));
+    $material->datafim = date("d/m/Y", strtotime($material->datafim));
+
+    $tituloVigencia = $material->ac16_vigenciaindeterminada == "t" ? "Vigência Inicial: " : "Período de Vigência: ";
+    $dataVigencia = $material->ac16_vigenciaindeterminada == "t" ? $material->datainicio : $material->datainicio . ' até ' . $material->datafim;
+
+    $oPdf->Cell(150, $iAlt, $tituloVigencia . $dataVigencia, 0, 0, 'L', 0);
 
     $oPdf->Cell(100, $iAlt, 'Natureza: ' . $material->natureza, 0, 0, 'L', 0);
 
