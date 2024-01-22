@@ -2114,6 +2114,12 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
     aLinha.aCells[8].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
 
+    console.log(nQuantidade)
+    console.log(nQuantidadeA)
+    console.log(nValorTotal)
+    console.log(valorTotal)
+
+
     if (aItensPosicao[iLinha].servico == false && (aItensPosicao[iLinha].controlaquantidade == "t" || aItensPosicao[iLinha].controlaquantidade != "")) {
       aLinha.aCells[9].setContent(js_formatar((nQuantidade - nQuantidadeA), 'f', casas));//Quantidade Aditada OC5304
     }
@@ -2667,10 +2673,11 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
     const cboTipoInalteraQtd = [2, 5];
     const cboDependeExecucao = [9, 10, 11];
-
+    console.log('item executado ', item.eExecutado, item.servico);
     if (cboTipoInalteraQtd.includes(cboTipo)) return true;
 
-    if (cboDependeExecucao.includes(cboTipo) && item.eExecutado === true) return true;
+    if (cboDependeExecucao.includes(cboTipo)
+      && (item.eExecutado === true || item.servico)) return true;
 
     return false;
   }
