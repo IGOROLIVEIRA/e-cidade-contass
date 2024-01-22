@@ -6,7 +6,7 @@ class Oc21481 extends AbstractMigration
 {
     public function up()
     {
-        $sSql = 
+        $sSql =
         "
         BEGIN;
 
@@ -18,9 +18,9 @@ class Oc21481 extends AbstractMigration
         ALTER TABLE acordoposicao ADD COLUMN ac26_descricaoreajuste varchar (300);
 
         COMMIT;
-        
+
         ";
 
-        $this->excute($sSql);
+        $this->execute($sSql);
     }
 }

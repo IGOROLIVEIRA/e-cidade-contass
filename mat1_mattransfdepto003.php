@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlib.php");
@@ -66,9 +66,9 @@ if (isset ($cancelar)) {
 	if (isset ($confirma)) {
 
 		if ($confirma == "true") {
-			
+
 		  try {
-		    
+
 		    db_inicio_transacao();
 		    $oAlmoxarifado = new Almoxarifado(db_getsession('DB_coddepto'));
 		    $oAlmoxarifado->receberTransferencia($m80_codigo);
@@ -77,25 +77,25 @@ if (isset ($cancelar)) {
 		    db_fim_transacao(false);
 
 		  } catch (Exception $eErro) {
-		    
+
 		    db_fim_transacao(true);
 		    $sqlerro  = true;
 		    $msgaviso = str_replace("\n", "\\n", $eErro->getMessage());
 		    $erro_msg = $msgaviso;
 		  }
-		} 
+		}
 	} else {
-      
+
     try {
-      
+
       db_inicio_transacao();
       $oAlmoxarifado    = new Almoxarifado(db_getsession('DB_coddepto'));
       $oAlmoxarifado->cancelarTransferencia($m80_codigo);
       $erro_msg    = "Cancelamento efetuado com sucesso.";
       db_fim_transacao(false);
-      
+
     } catch (Exception $eErro) {
-      
+
       db_fim_transacao(true);
       $sqlerro  = true;
       $msgaviso = str_replace("\n", "\\n", $eErro->getMessage());
@@ -104,12 +104,12 @@ if (isset ($cancelar)) {
   }
 } else
 	if (isset ($chavepesquisa)) {
-	  $sCampos = "distinct 
+	  $sCampos = "distinct
 	              m83_coddepto as departamentodestino,
 	              a.descrdepto as descrdepartamentodestino,
 	              db_depart.coddepto as departamentoorigem,
 	              db_depart.descrdepto as descrdepartamentoorigem,
-	              matestoqueini.m80_codigo, 
+	              matestoqueini.m80_codigo,
 	              matestoqueini.m80_obs";
 		$result_dadostransf = $clmatestoquetransf->sql_record($clmatestoquetransf->sql_query_inill($chavepesquisa, $sCampos));
 		if ($clmatestoquetransf->numrows > 0) {
@@ -131,7 +131,7 @@ if (isset ($cancelar)) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -161,7 +161,7 @@ if (isset ($confirma)) {
 }
 if (isset ($cancelar)) {
 	db_msgbox($erro_msg);
-	
+
 	if ($sqlerro == false) {
 		echo "<script>location.href = 'mat1_mattransfdepto003.php$qry'</script>";
 	}

@@ -104,22 +104,54 @@ $cllicitemobra->rotulo->label();
     </fieldset>
 
     <?php
-
+   
+    $ano = 0;
     if (!empty($l20_codigo)) {
+        
+        // Carrega a data da licitação
+        $sResultLic = $clliclicita->sql_record($clliclicita->sql_query($l20_codigo, " distinct l20_anousu "));
+        if ($clliclicita->numrows > 0) {
+            $lic = db_utils::fieldsMemory($sResultLic, 0);
+            $ano = (int) $lic->l20_anousu;
+        }
+        
         $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,obr06_versaotabela,l21_ordem";
         $sOrdem   = "l21_ordem";
         $sWhere   = "l21_codliclicita = {$l20_codigo} and pc01_obras = 't' and pc10_instit = " . db_getsession('DB_instit');
-        $sSqlItemLicitacao = $cllicitemobra->sql_query_itens_obras_licitacao(null, $sCampos, $sOrdem, $sWhere);
+        
+        // Verifica o ano da licitação hotfix OC21089
+        if ($ano < 2024) {
+            $sSqlItemLicitacao = $cllicitemobra->sql_query_itens_obras_licitacao_sem_ordem(null, $sCampos, $sOrdem, $sWhere);
+        } else {
+            $sSqlItemLicitacao = $cllicitemobra->sql_query_itens_obras_licitacao(null, $sCampos, $sOrdem, $sWhere);
+        }
+        
         $sResultitens = $cllicitemobra->sql_record($sSqlItemLicitacao);
         $aItensObras = db_utils::getCollectionByRecord($sResultitens);
         $numrows = $cllicitemobra->numrows;
     }
 
     if (!empty($pc80_codproc)) {
+
+        // Carrega data processo compra hotfix OC21089
+        $sResultProc = $clproccop->sql_record($clproccop->sql_query($pc80_codproc, " distinct pc80_data "));
+        if ($clproccop->numrows > 0) {
+            $proc = db_utils::fieldsMemory($sResultProc, 0);
+            $ano = (int)substr($proc->pc80_data, 0, 4);
+        }
+
         $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,obr06_versaotabela,pc11_seq";
         $sOrdem   = "pc11_seq";
         $sWhere   = "pc80_codproc = {$pc80_codproc} and pc01_obras = 't' and pc10_instit = " . db_getsession('DB_instit');
-        $sSqlItemProcessodeCompras = $cllicitemobra->sql_query_itens_obras_processodecompras(null, $sCampos, $sOrdem, $sWhere);
+        
+        
+        // Verifica o ano do processo de compra  hotfix OC21089
+        if ($ano < 2024) {
+            $sSqlItemProcessodeCompras = $cllicitemobra->sql_query_itens_obras_processodecompras_sem_seq(null, $sCampos, $sOrdem, $sWhere);
+        } else {
+            $sSqlItemProcessodeCompras = $cllicitemobra->sql_query_itens_obras_processodecompras(null, $sCampos, $sOrdem, $sWhere);
+        }
+        
         $sResultitens = $cllicitemobra->sql_record($sSqlItemProcessodeCompras);
         $aItensObras = db_utils::getCollectionByRecord($sResultitens);
         $numrows = $cllicitemobra->numrows;
@@ -153,13 +185,11 @@ $cllicitemobra->rotulo->label();
                         $ordem = $aItem->pc11_seq;
                     }
 
-                    if ($aItem->obr06_tabela == "") {
-                        $iItem = $aItem->pc01_codmater . "0" ."-". $ordem;
-                    } else {
-                        $iItem = $aItem->pc01_codmater . $aItem->obr06_tabela ."-". $ordem;
+                    //hotfix OC21089
+                    $iItem = $aItem->pc01_codmater . ($aItem->obr06_tabela == "" ? "0" : $aItem->obr06_tabela);
+                    if ($ano >= 2024) {
+                        $iItem .= "-" . $ordem;
                     }
-
-                    
                 ?>
                     <tr class="normal" id="<?= "linha_" . $iItem  ?>">
                         <input type="hidden" id=<?= 'obr06_dtcadastro_' . $iItem ?> value="<?= $aItem->obr06_dtcadastro ?>">
@@ -570,59 +600,6 @@ $cllicitemobra->rotulo->label();
             return false;
         }
 
-        // Valida se existem campos repetidos no código da tabela
-        // A validação considera até os códigos que não estão marcadas para alteração
-        const codigosUsados = {
-            "1": {},
-            "2": {},
-            "3": {}
-        };
-        const elementosCodigos = {
-            "1": {},
-            "2": {},
-            "3": {}
-        };
-
-        // Definir como será a validação para códigos duplicadas no sistema
-        /*
-        let existeCodigoDuplicado = false;
-
-        aItens().forEach((item) => {
-            const tabela = document.getElementById('obr06_tabela_' + item.id);
-            const codigoTabela = document.getElementById('obr06_codigotabela_' + item.id);
-
-            if (tabela.value !== "4" && codigoTabela.value !== null && codigoTabela.value !== undefined && codigoTabela.value.trim() !== '') {
-                const codigo = codigoTabela.value;
-                const tipo = tabela.value;
-
-                // Se o código já foi usado, marca como duplicado
-                if (codigosUsados[tipo][codigo]) {
-                    existeCodigoDuplicado = true;
-                    codigoTabela.style.backgroundColor = "#6E9D88";
-                    // Atualiza a cor de fundo de todos os elementos com o mesmo código
-                    elementosCodigos[tipo][codigo].forEach(function(el) {
-                        el.style.backgroundColor = "#6E9D88";
-                    });
-                } else if (codigo !== "") {
-
-                    codigoTabela.style.backgroundColor = "#FFFFFF";
-
-                    // Adiciona o código e o elemento ao registro
-                    codigosUsados[tipo][codigo] = 1;
-                    if (!elementosCodigos[tipo][codigo]) {
-                        elementosCodigos[tipo][codigo] = [];
-                    }
-                    elementosCodigos[tipo][codigo].push(codigoTabela);
-                }
-            }
-        });
-
-        if (existeCodigoDuplicado) {
-            alert('Usuário: Os itens grifados estão com o mesmo código da tabela. O código deverá ser único para cada item.');
-            return false;
-        }
-        */
-
         const itensEnviar = [];
 
         try {
@@ -650,13 +627,16 @@ $cllicitemobra->rotulo->label();
             const dtcadastro = document.getElementById('obr06_dtcadastro').value;
             const itensSemDataCadastro = itensEnviar.filter(item => !item.obr06_dtcadastro);
 
+            const ano = <?= $ano ?>;
+
             if (itensSemDataCadastro.length > 0) {
                 var resposta = confirm('Usuário: A data não foi aplicada ao itens. Deseja continuar?');
                 if (resposta) {
                     itensEnviar.forEach(function(item) {
                         if (!item.obr06_dtcadastro) {
                             item.obr06_dtcadastro = dtcadastro;
-                            document.getElementById('obr06_dtcadastro_' + item.obr06_pcmater + '-' + item.obr06_ordem).value = dtcadastro;
+                            const id = (ano >= 2024) ? 'obr06_dtcadastro_' + item.obr06_pcmater + '-' + item.obr06_ordem : 'obr06_dtcadastro_' + item.obr06_pcmater;
+                            document.getElementById(id).value = dtcadastro;
                         }
                     });
                 } else {
@@ -670,10 +650,11 @@ $cllicitemobra->rotulo->label();
                 salvarItemAjax({
                     exec: 'SalvarItemObra',
                     itens: itensEnviar,
+                    ano: "<?=$ano?>"
                 }, retornoAjax);
             }
         } catch (e) {
-            debugger;
+            console.debug(e);
             alert(e.toString());
         }
         return false;
@@ -883,6 +864,7 @@ $cllicitemobra->rotulo->label();
             });
             excluirItemAjax({
                 exec: 'ExcluirItemObra',
+                ano: "<?= $ano ?>",
                 itens: itensEnviar,
             }, retornoexclusaoAjax);
         } catch (e) {
@@ -921,7 +903,6 @@ $cllicitemobra->rotulo->label();
 
     function excluirLinha(codigo) {
         var itensEnviar = [];
-        debugger;
         try {
             var novoItem = {
                 obr06_pcmater: codigo.split("-")[0],
@@ -930,6 +911,7 @@ $cllicitemobra->rotulo->label();
             itensEnviar.push(novoItem);
             excluirlinhaAjax({
                 exec: 'ExcluirItemObra',
+                ano: "<?= $ano ?>",
                 itens: itensEnviar,
             }, retornoexclusaolinhaAjax);
         } catch (e) {

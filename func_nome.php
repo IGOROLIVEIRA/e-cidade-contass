@@ -63,6 +63,14 @@ $clcgm->rotulo->label("z01_uf");
 
 $clrotulo->label("DBtxt30");
 $clrotulo->label("DBtxt31");
+//verifico tipo de instituicao
+$rsTipoinstit = db_query("SELECT si09_tipoinstit FROM infocomplementaresinstit WHERE si09_instit = ".db_getsession('DB_instit'));
+db_fieldsmemory($rsTipoinstit,0);
+
+if($si09_tipoinstit == "51" && $obras == "true"){
+    $filtro = 2;
+}
+
 
 if (!isset($funcao_js)) {
     $funcao_js = '';
@@ -418,8 +426,17 @@ if (isset($testanome) && $testanome == 'true' && !isset($pesquisa_chave)) {
                         if (isset($z01_tipcre_cnpj)) {
                             $sSqlConv .= " and LENGTH(z01_cgccpf) = 14 ";
                         }
+
+                        if($filtro == 1){
+                            $AndFiltroCPF = " AND LENGTH(z01_cgccpf) = 11";
+                        }elseif ($filtro ==2){
+                            $AndFiltroCPF = " AND LENGTH(z01_cgccpf) = 14";
+                        }else{
+                            $AndFiltroCPF = "";
+                        }
+
                         $nomeDigitadoParaPesquisa = strtoupper($nomeDigitadoParaPesquisa);
-                        $sql = $clnome->sqlnome($nomeDigitadoParaPesquisa, $campos, $filtro, $sSqlConv);
+                        $sql = $clnome->sqlnome($nomeDigitadoParaPesquisa, $campos, $filtro, $sSqlConv.$AndFiltroCPF);
                     } else if (isset($numcgmDigitadoParaPesquisa) && $numcgmDigitadoParaPesquisa != "") {
 
                         if (!is_int((int)$numcgmDigitadoParaPesquisa)) {
