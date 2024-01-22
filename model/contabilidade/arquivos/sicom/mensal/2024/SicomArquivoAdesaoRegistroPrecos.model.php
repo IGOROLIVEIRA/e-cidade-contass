@@ -240,7 +240,6 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-      $regadesao10 = new cl_regadesao102024();
       $regadesao10->si67_tiporegistro = 10;//1
       $regadesao10->si67_tipocadastro = $oDados10->si06_cadinicial;//2
       $regadesao10->si67_codorgao = $oDados10->codorgao;//3
@@ -487,7 +486,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
           for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
               $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
-              $regadesao20 = new cl_regadesao402024();
+              $regadesao20 = new cl_regadesao202024();
               $regadesao20->si72_tiporegistro = 20;
               $regadesao20->si72_codorgao = $oDados10->codorgao;
               if ($oDados10->si06_codunidadesubant != "") {
