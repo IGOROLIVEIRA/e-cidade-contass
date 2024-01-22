@@ -58,6 +58,8 @@ switch ($oParam->exec){
         break; // buscaVeiculosDepartamentos
 
     case 'insereTransfVeiculo':
+
+
         try {
             db_inicio_transacao();
 
@@ -97,15 +99,6 @@ switch ($oParam->exec){
 
             foreach ($dadosVeiculos as $dadosVeiculo) {
 
-                $vVeiculos = null;
-                $vVeiculos = verificaTransferenciaVeicMes($dadosVeiculo->ve01_placa,$oParam->data);
-                $oRetorno->e = $vVeiculos;
-                if ($vVeiculos != null) {
-                    $oRetorno->status   = 3;
-                    throw new Exception("Erro ao realizar Transferência!\nMOTIVO: Não é permitido mais de uma transferência de um veículo na mesma competência,\nou com datas menores a última transferência do veículo!\nCódigo(s) do(s) Veículo(s): ".implode(", ",$oParam->veiculos));
-                }
-
-
                 $oVeicTransf = new cl_veiculostransferencia;
                 $oVeicTransf->ve81_transferencia      = $transferencia->ve80_sequencial;
                 $oVeicTransf->ve81_codigo             = $dadosVeiculo->ve01_codigo;
@@ -139,122 +132,33 @@ switch ($oParam->exec){
                 //FIM OC 9284
                 $oVeicTransf->incluir(null);
 
-                $oBaixa = new cl_veicbaixa;
-                $oBaixa->ve04_veiculo = $dadosVeiculo->ve01_codigo;
-                $oBaixa->ve04_data    = $data;
-                $oBaixa->ve04_hora    = date("H:i");
-                $oBaixa->ve04_usuario = db_getsession('DB_id_usuario');
-                $oBaixa->ve04_motivo  = $oParam->motivo;
-                $oBaixa->ve04_veiccadtipobaixa = 7;
-                $oBaixa->incluir(null);
-
                 if ($oVeicTransf->erro_status == "0") {
                     throw new Exception($oVeicTransf->erro_msg);
                 }
 
-                if ($oBaixa->erro_status == "0") {
-                    throw new Exception($oBaixa->erro_msg);
-                }
-
-            }
-
-            foreach ($oParam->veiculos as $veiculo){
-                $clveiculos = new cl_veiculos();
-                $clveicretirada = new cl_veicretirada();
-                $clveiculoscomb = new cl_veiculoscomb();
-
-                $rsveiculo = $clveiculos->sql_record($clveiculos->sql_query_veiculo($veiculo,"distinct veiculos.*,veicresp.*,tipoveiculos.*"));
-                $aVeiculo = db_utils::fieldsMemory($rsveiculo,0);
-
-                //$rsultimamedida = $clveiculos->sql_record($clveiculos->sql_query_ultimamedida($veiculo));
-                //$aUltimamedida = db_utils::fieldsMemory($rsultimamedida,0);
-
-                $dtsession = date($data, db_getsession("DB_datausu"));
-
-                //Novo Veiculo
-                $clveiculos->ve01_placa                 = $aVeiculo->ve01_placa;
-                $clveiculos->ve01_veiccadtipo           = $aVeiculo->ve01_veiccadtipo;
-                $clveiculos->ve01_veiccadmarca          = $aVeiculo->ve01_veiccadmarca;
-                $clveiculos->ve01_veiccadmodelo         = $aVeiculo->ve01_veiccadmodelo;
-                $clveiculos->ve01_veiccadcor            = $aVeiculo->ve01_veiccadcor;
-                $clveiculos->ve01_veiccadproced         = $aVeiculo->ve01_veiccadproced;
-                $clveiculos->ve01_veiccadcateg          = $aVeiculo->ve01_veiccadcateg;
-                $clveiculos->ve01_chassi                = $aVeiculo->ve01_chassi;
-                $clveiculos->ve01_ranavam               = $aVeiculo->ve01_ranavam;
-                $clveiculos->ve01_placanum              = $aVeiculo->ve01_placanum;
-                $clveiculos->ve01_certif                = $aVeiculo->ve01_certif;
-                $clveiculos->ve01_quantpotencia         = $aVeiculo->ve01_quantpotencia;
-                $clveiculos->ve01_medidaini             = $aVeiculo->ve01_medidaini;
-                $clveiculos->ve01_quantcapacidad        = $aVeiculo->ve01_quantcapacidad;
-                $clveiculos->ve01_veiccadtipocapacidade = $aVeiculo->ve01_veiccadtipocapacidade;
-                $clveiculos->ve01_dtaquis               = $dtsession;
-                $clveiculos->ve01_veiccadcategcnh       = $aVeiculo->ve01_veiccadcategcnh;
-                $clveiculos->ve01_anofab                = $aVeiculo->ve01_anofab;
-                $clveiculos->ve01_anomod                = $aVeiculo->ve01_anomod;
-                $clveiculos->ve01_ceplocalidades        = $aVeiculo->ve01_ceplocalidades;
-                $clveiculos->ve01_ativo                 = $aVeiculo->ve01_ativo;
-                $clveiculos->ve01_veictipoabast         = $aVeiculo->ve01_veictipoabast;
-                $clveiculos->ve01_nroserie              = $aVeiculo->ve01_nroserie;
-                $clveiculos->ve01_codigoant             = null;
-                $clveiculos->ve01_codunidadesub         = null;
-                $clveiculos->ve01_veiccadpotencia       = $aVeiculo->ve01_veiccadpotencia;
-                $clveiculos->ve01_instit                = $aVeiculo->ve01_instit;
-
-                $sSqlTipoVeiculo = "SELECT si04_tipoveiculo
-                FROM tipoveiculos
-                WHERE si04_veiculos = $veiculo";
-                $rsTipoVeiculo = db_query($sSqlTipoVeiculo);
-                $iTipoVeiculo = db_utils::fieldsMemory($rsTipoVeiculo, 0)->si04_tipoveiculo;
-
-                $clveiculos->incluir(null, $iTipoVeiculo);
-
-                if ($clveiculos->erro_status == "0") {
-                    throw new Exception($clveiculos->erro_msg);
-                }
-
-                //criando a veicresp
-                $clveicresp = new cl_veicresp();
-                $clveicresp->ve02_veiculo = $clveiculos->ve01_codigo;
-                $clveicresp->ve02_numcgm  = $aVeiculo->ve02_numcgm;
-                $clveicresp->incluir(null);
-
-                //cria a tipoveiculos
-                $cltipoveiculos = new cl_tipoveiculos();
-                $cltipoveiculos->si04_veiculos      = $clveiculos->ve01_codigo;
-                $cltipoveiculos->si04_tipoveiculo   = $aVeiculo->si04_tipoveiculo;
-                $cltipoveiculos->si04_especificacao = $aVeiculo->si04_especificacao;
-                $cltipoveiculos->si04_situacao      = $aVeiculo->si04_situacao;
-                $cltipoveiculos->si04_descricao     = $aVeiculo->si04_descricao;
-                $cltipoveiculos->si04_numcgm        = $aVeiculo->si04_numcgm;
-                $cltipoveiculos->incluir(null);
-
-                //criando a veiculoscomb
-
-                $rscombustivel = $clveiculoscomb->sql_record($clveiculoscomb->sql_query_file(null,"distinct ve06_veiccadcomb combustivel,ve06_padrao padrao",null,"ve06_veiculos = $veiculo"));
-                $numrs = $clveiculoscomb->numrows;
-
-                for($n = 0; $n < $numrs; $n++){
-                  
-                  $dados = db_utils::fieldsmemory($rscombustivel,$n);
-
-                  $clveiculoscomb->ve06_veiccadcomb = $dados->combustivel;
-                  $clveiculoscomb->ve06_veiculos = $clveiculos->ve01_codigo;
-                  $dados->padrao == 'f' ? $clveiculoscomb->ve06_padrao = 'false' : $clveiculoscomb->ve06_padrao = 'true';
-                  $clveiculoscomb->incluir(null);
-                }
-
-                //incluindo central nova
-                $clveiccadcentral = new cl_veiccadcentral();
-                $rsVeiccadcentral = $clveiccadcentral->sql_record($clveiccadcentral->sql_query_file(null,"*",null,"ve36_coddepto = $oParam->departamento_destino"));
-                $destino = db_utils::fieldsMemory($rsVeiccadcentral,0);
-
                 $clveiccentral = new cl_veiccentral();
-                $clveiccentral->ve40_veiccadcentral = $destino->ve36_sequencial;
-                $clveiccentral->ve40_veiculos = $clveiculos->ve01_codigo;
+                $rsCentralVeiculo = $clveiccentral->sql_record($clveiccentral->sql_query_file(null,"ve40_sequencial","","ve40_veiculos = $dadosVeiculo->ve01_codigo"));
+                $aCentralExcluir = db_utils::fieldsMemory($rsCentralVeiculo,0)->ve40_sequencial;
+                //excluir central
+                $clveiccentral->excluir($aCentralExcluir);
+
+                if ($clveiccentral->erro_status == "0") {
+                    throw new Exception($clveiccentral->erro_msg);
+                }
+
+                //busco nova central
+                $rsNovaCentral = $clveiccentral->sql_record($clveiccentral->getCodCentralPorDepart(null,"DISTINCT ve40_veiccadcentral",null,"db_depart.coddepto = $oParam->departamento_destino"));
+                $aNovaCentral = db_utils::fieldsMemory($rsNovaCentral,0)->ve40_veiccadcentral;
+
+                //Inserir nova central
+                $clveiccentral->ve40_veiccadcentral = $aNovaCentral;
+                $clveiccentral->ve40_veiculos = $dadosVeiculo->ve01_codigo;
                 $clveiccentral->incluir(null);
 
-                //inativando veiculo antigo
-                alteraSituacaoViculo($veiculo);
+                if ($clveiccentral->erro_status == "0") {
+                    throw new Exception($clveiccentral->erro_msg);
+                }
+
             }
 
             db_fim_transacao();

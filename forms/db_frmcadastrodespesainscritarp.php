@@ -2,12 +2,12 @@
   <?php
 
   $clorctiporec = new cl_orctiporec();
-  $sql = "select distinct o15_codtri from orctiporec where o15_codtri != '' and o15_codtri::int >= 100 order by o15_codtri";
-  //    die($sql);
+  $sql = "select distinct o15_codtri from orctiporec where o15_codtri != '' and o15_codtri::int >= 100 and (o15_datalimite is null or o15_datalimite >= '".date('Y-m-d', db_getsession('DB_datausu'))."') order by o15_codtri";
   $recursos = $clorctiporec->sql_record($sql);
 
   ?>
-  <form name="form1" method="post" action="" style="" onsubmit="return validaForm(this);">
+  <form name="form1" method="post" action="" style="" >
+  <input type="hidden" value='Incluir' id="btmIncluir" name="incluir" disabled >
     <table>
       <tr>
         <td>
@@ -67,7 +67,7 @@
 
     <?php endforeach; ?>
     <center>
-      <input type="submit" value="Salvar" id="btmSalvar" name="incluir">
+      <input type="submit" value="Salvar" id="btmSalvar" name="salvar" onclick="document.getElementById('btmIncluir').disabled=false">      
       <input type="button" onclick="carregarSicom()" value="Atualizar" id="btmAtualizar" name="">
     </center>
   </form>
@@ -91,11 +91,13 @@
     var valores = JSON.parse(oRetorno.responseText.urlDecode());
     valores.fonte.forEach(function (fonte, b) {
 
-      document.form1['aFonte[' + fonte.c224_fonte + '][vlr_dispCaixaBruta]'].value = fonte.c224_vlrcaixabruta;
-      document.form1['aFonte[' + fonte.c224_fonte + '][vlr_rpExerAnteriores]'].value = fonte.c224_rpexercicioanterior;
-      // document.form1['aFonte[' + fonte.c224_fonte + '][vlr_restArecolher]'].value = fonte.c224_vlrrestoarecolher;
-      // document.form1['aFonte[' + fonte.c224_fonte + '][vlr_restRegAtivoFinan]'].value = fonte.c224_vlrrestoregativofinanceiro;
-      document.form1['aFonte[' + fonte.c224_fonte + '][vlr_DispCaixa]'].value = fonte.c224_vlrdisponibilidadecaixa;
+      if(document.form1['aFonte[' + fonte.c224_fonte + '][fonte]']){
+        document.form1['aFonte[' + fonte.c224_fonte + '][vlr_dispCaixaBruta]'].value = fonte.c224_vlrcaixabruta;
+        document.form1['aFonte[' + fonte.c224_fonte + '][vlr_rpExerAnteriores]'].value = fonte.c224_rpexercicioanterior;
+        // document.form1['aFonte[' + fonte.c224_fonte + '][vlr_restArecolher]'].value = fonte.c224_vlrrestoarecolher;
+        // document.form1['aFonte[' + fonte.c224_fonte + '][vlr_restRegAtivoFinan]'].value = fonte.c224_vlrrestoregativofinanceiro;
+        document.form1['aFonte[' + fonte.c224_fonte + '][vlr_DispCaixa]'].value = fonte.c224_vlrdisponibilidadecaixa;
+      }
 
     });
   }
@@ -127,7 +129,7 @@
   function Atualizar(oRetorno){
     var valoresSicom = JSON.parse(oRetorno.responseText.urlDecode());
     if(valoresSicom == 0){
-      alert('Gere os os arquivos CTB, CAIXA e CUTE do mês de dezembro para atualizar a disponibilidade');
+      alert('Gere o arquivo CTB do mês de dezembro para atualizar a disponibilidade');
       return false;
     }
 

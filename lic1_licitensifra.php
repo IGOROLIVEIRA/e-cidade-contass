@@ -229,15 +229,36 @@ $codtribunal = $codtribunal->l03_pctipocompratribunal;
             alert('Item incluído com sucesso!');
 
             parent.parent.iframe_liclicita.bloquearRegistroPreco;
-
-            parent.location.href = `lic1_liclicitemalt001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`;
-
-            if (tipoJulgamento == '3') {
-                parent.parent.iframe_liclicitemlote.location.href = `lic1_liclicitemlote001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`;
-                parent.parent.document.formaba.liclicitemlote.disabled = false;
+            
+            // Regras para redirecionamento edital
+            // Se (l20_tipojulg == 1) AND
+            // Modalidade in (1 => "Dispensa", 2 => "Dispensa por Chamada Pública", 3 => "Inexigibilidade por credenciamento" ou 4 =>"Inexigibilidade") AND
+            // Codigo do Tribunal in (100,101,102 e 103)
+            let codigosTribunal = [100,101,102,103];
+            if (parseInt(tipoJulgamento, 10) === 1 && codigosTribunal.includes(parseInt(codtribunal, 10))) {
+                parent.parent.window.location.href='lic4_editalabas.php?licitacao=<?= $licitacao ?>';
             }
 
+            // Redireciona para o caso onde todos os itens já tem lote
+            if (parseInt(tipoJulgamento, 10) === 3 && codigosTribunal.includes(parseInt(codtribunal, 10))) {
+                var oAjax = new Ajax.Request('lic4_licitacao.RPC.php', {
+                    method: 'POST',
+                    parameters: `json={"licitacao": ${licitacao}, "exec": "itensSemLoteCount"}`,
+                    onComplete: (res) => {
+                        const retorno = eval("(" + res.responseText + ")");
+                        if (retorno.status === 1 && retorno.itenssemlotcount === "0") {
+                            parent.parent.window.location.href = 'lic4_editalabas.php?licitacao=<?= $licitacao ?>';
+                        } else {
+                            redirectTo(`lic1_liclicitemalt001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`);
+                        }
+                    },
+                    onError: () => redirectTo(`lic1_liclicitemalt001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`)
+                });
+            } else {
+                redirectTo(`lic1_liclicitemalt001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`);
+            }
         }
+        
         if (oRetorno.status == 2) {
             js_removeObj('msgbox');
             alert('Inclusão abortada, processo de compra por lote!');
@@ -248,9 +269,14 @@ $codtribunal = $codtribunal->l03_pctipocompratribunal;
             //db_msgbox(@$erro_msg);
             db_msgbox("Operação Cancelada!!Contate Suporte!!");
         }
+        
         parent.procs.document.form1.submit();
         oItensLicitacao.oGridItens.clearAll(true);
         oItensLicitacao.hide();
 
+    }
+
+    function redirectTo(url) {
+        parent.location.href = url;
     }
 </script>

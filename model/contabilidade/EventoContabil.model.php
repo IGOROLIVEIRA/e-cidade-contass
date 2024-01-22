@@ -432,9 +432,14 @@ class EventoContabil {
 	  $oDaoLancamento->c70_valor  = $nValorTotal;
 	  $oDaoLancamento->c70_codlan = null;
 	  $oDaoLancamento->incluir(null);
-	  if ($oDaoLancamento->erro_status == 0) {
-
-	    $sErroMsg = "Não foi Possível incluir lancamento\nErro Técnico:{$oDaoLancamento->erro_msg}";
+	  if ($oDaoLancamento->erro_status == 0) {	
+		if (substr($oDaoLancamento->erro_banco,8,13)  == 'DATA INVALIDA' ) {
+			$mensagemErro = substr($oDaoLancamento->erro_banco,8,65);
+			$sErroMsg =" $mensagemErro ";
+		} 
+		else {
+			$sErroMsg = "Não foi Possível incluir lancamento\nErro Técnico:{$oDaoLancamento->erro_msg}";
+		}
 	    throw new BusinessException($sErroMsg);
 	  }
 

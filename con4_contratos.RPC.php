@@ -718,6 +718,15 @@ switch ($oParam->exec) {
                     $oContrato->setDataAssinatura($oParam->contrato->dtAssinatura);
                 }
 
+                /* Quando a vigencia for indeterminada seta a datafinal para a datainicial +10 anos*/
+
+                if($oParam->contrato->iVigenciaIndeterminada == "t"){
+                    $dataFinal   = new DBDate($oParam->contrato->dtInicio);
+                    $timestampDatafinal = strtotime ( '+10 years' , strtotime ( $dataFinal->getDate() ) ) ;
+                    $dataFinal = $dataFinal->createFromTimestamp($timestampDatafinal);
+                    $oParam->contrato->dtTermino = $dataFinal;
+                }
+                
                 $oContrato->setDataPublicacao($oParam->contrato->dtPublicacao);
                 $oContrato->setDataInicial($oParam->contrato->dtInicio);
                 $oContrato->setDataFinal($oParam->contrato->dtTermino);
@@ -762,6 +771,7 @@ switch ($oParam->exec) {
                 $oContrato->setIndiceReajuste($oParam->contrato->iIndicereajuste);
                 $oContrato->setDescricaoReajuste(db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sDescricaoreajuste));
                 $oContrato->setDescricaoIndice(db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sDescricaoindice));
+                $oContrato->setVigenciaIndeterminada($oParam->contrato->iVigenciaIndeterminada);
                 $oContrato->save();
                 /*
                * verificamos se existe empenhos a serem vinculados na seção
@@ -951,7 +961,7 @@ switch ($oParam->exec) {
             $oDadosContrato->sDescricaoreajuste           = urlencode($oContrato->getDescricaoReajuste());
             $oDadosContrato->sDescricaoindice           = urlencode($oContrato->getDescricaoIndice());
             $oDadosContrato->sPeriodoreajuste             = urlencode($oContrato->getPeriodoreajuste());
-
+            $oDadosContrato->iVigenciaIndeterminada       = $oContrato->getVigenciaIndeterminada();
             $oRetorno->contrato = $oDadosContrato;
         } catch (Exception $eErro) {
 
@@ -1349,7 +1359,6 @@ switch ($oParam->exec) {
 
             $oDataInicialAcordo        = new DBDate($oContrato->getDataInicial());
             $oRetorno->dtInicialAcordo = $oDataInicialAcordo->convertTo(DBDate::DATA_PTBR);
-
             $oDataFinalAcordo         = new DBDate($oContrato->getDataFinal());
             $oRetorno->dtFinalAcordo  = $oDataFinalAcordo->convertTo(DBDate::DATA_PTBR);
 
@@ -1417,7 +1426,7 @@ switch ($oParam->exec) {
                             $iExecucaoFinal   = db_formatar($oItem->dtFinal, 'd');
                         }
 
-                        if ($iExecucaoInicial > $iExecucaoFinal) {
+                        if ($iExecucaoInicial > $iExecucaoFinal && $oContrato->getVigenciaIndeterminada() != "t") {
 
                             $oErro->codigomaterial = $oItem->codigomaterial;
                             throw new Exception(_M($sCaminhoMensagens . "periodo_item_maior_execucao", $oErro));
@@ -1953,6 +1962,13 @@ switch ($oParam->exec) {
             $oRetorno->message = utf8_decode($oErro->getMessage());
             $oRetorno->status  = 2;
         }
+        break;
+
+        case 'getLeiLicitacao':
+            $cl_liclicita = new cl_liclicita;
+            $sQueryLicitacao = $cl_liclicita->sql_query_file($oParam->iLicitacao);
+            $oResultLicitacao = $cl_liclicita->sql_record($sQueryLicitacao);
+            $oRetorno->leiLicitacao = db_utils::fieldsMemory($oResultLicitacao,0)->l20_leidalicitacao;
         break;
 }
 /**

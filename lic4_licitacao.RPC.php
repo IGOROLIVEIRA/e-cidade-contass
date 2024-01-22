@@ -1786,5 +1786,25 @@ switch ($oParam->exec) {
 
 
         break;
+    
+    case 'itensSemLoteCount':
+        // Retorna a quantidade de itens sem lote
+        $sqlItensSemLote = "
+            SELECT 
+                COUNT(li.l21_codigo) AS itensSemLotCount
+            FROM 
+                liclicitem li
+            LEFT JOIN 
+                liclicitemlote lil ON li.l21_codigo = lil.l04_liclicitem
+            WHERE 
+                li.l21_codliclicita = $oParam->licitacao
+                AND lil.l04_liclicitem IS NULL;
+        ";
+
+        $rsItensSemLote = db_query($sqlItensSemLote);
+        $itensSemLote = db_utils::fieldsMemory($rsItensSemLote, 0);
+        $oRetorno->itenssemlotcount = $itensSemLote->itenssemlotcount;
+
+        break;
 }
 echo $oJson->encode($oRetorno);

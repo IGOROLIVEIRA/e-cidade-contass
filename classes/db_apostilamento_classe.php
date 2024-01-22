@@ -44,6 +44,7 @@ class cl_apostilamento
   var $si03_indicereajuste = 0;
   var $si03_percentualreajuste = null;
   var $si03_descricaoindice = null;
+
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  si03_sequencial = int8 = Codigo Sequencial
@@ -203,8 +204,11 @@ class cl_apostilamento
       $this->erro_status = "0";
       return false;
     }
-    if ($this->si03_valorapostila == null && $this->si03_tipoapostila != 3) {
-      $this->erro_sql = " Campo Valor da Aposlila nao Informado.";
+    
+    $apostilasSemValorUnitario = array(3,4,5,99);
+
+    if ($this->si03_valorapostila == null && !in_array($this->si03_tipoapostila,$apostilasSemValorUnitario)) {
+      $this->erro_sql = " Campo Valor da Apostila não informado.";
       $this->erro_campo = "si03_valorapostila";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -273,7 +277,6 @@ class cl_apostilamento
                                       ,si03_indicereajuste
                                       ,si03_percentualreajuste
                                       ,si03_descricaoindice
-
                        )
                 values (
                                 $this->si03_sequencial
@@ -295,7 +298,6 @@ class cl_apostilamento
                                ,$this->si03_indicereajuste
                                ,'$this->si03_percentualreajuste'
                                ," . ($this->si03_descricaoindice == "null" || $this->si03_descricaoindice == "" ? "null" : "'" . $this->si03_descricaoindice . "'") . "
-
                       )";
 
     $result = db_query($sql);
@@ -307,7 +309,7 @@ class cl_apostilamento
         $this->erro_banco = "apostilamento j Cadastrado";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       } else {
-        $this->erro_sql   = "apostilamento ($this->si03_sequencial) nao Includo. Inclusao Abortada.";
+        $this->erro_sql   = " apostilamento ($this->si03_sequencial) nao Includo. Inclusao Abortada.";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       }
@@ -607,6 +609,7 @@ class cl_apostilamento
       $sql  .= $virgula . " si03_acordo = $this->si03_acordo ";
       $virgula = ",";
     }
+
     $sql .= " where ";
     if ($si03_sequencial != null) {
       $sql .= " si03_sequencial = $this->si03_sequencial";

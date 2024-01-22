@@ -44,7 +44,7 @@ class GerarRALIC extends GerarAM
 
         $aRALIC10 = pg_fetch_array($rsRALIC10, $iCont);
         $aCSVRALIC10['si180_tiporegistro']               = $this->padLeftZero($aRALIC10['si180_tiporegistro'], 2);
-        $aCSVRALIC10['si180_codorgaoresp']               = $aRALIC10['si180_codorgaoresp'];
+        $aCSVRALIC10['si180_codorgaoresp']               = $this->padLeftZero($aRALIC10['si180_codorgaoresp'],3);
         $aCSVRALIC10['si180_codunidadesubresp']          = $this->padLeftZero($aRALIC10['si180_codunidadesubresp'], 5);
         $aCSVRALIC10['si180_codunidadesubrespestadual']  = !$aRALIC10['si180_codunidadesubrespestadual'] ? ' ' : $this->padLeftZero($aRALIC10['si180_codunidadesubrespestadual'], 4);
         $aCSVRALIC10['si180_exerciciolicitacao']         = $this->padLeftZero($aRALIC10['si180_exerciciolicitacao'], 4);
@@ -66,7 +66,11 @@ class GerarRALIC extends GerarAM
         $aCSVRALIC10['si180_regimeexecucaoobras']        = $aRALIC10['si180_regimeexecucaoobras'] == 0 ? '' : $aRALIC10['si180_regimeexecucaoobras'];
         $aCSVRALIC10['si180_tipoorcamento']              = $aRALIC10['si180_tipoorcamento'];
         $aCSVRALIC10['si180_vlcontratacao']              = $aRALIC10['si180_tipoorcamento'] == 2 ? ' ' : $this->sicomNumberReal($aRALIC10['si180_vlcontratacao'], 2);
-        $aCSVRALIC10['si180_bdi']                        = $aRALIC10['si180_naturezaobjeto'] == '7' ? '' : $this->sicomNumberReal($aRALIC10['si180_bdi'], 2);
+        if($aRALIC10['si180_naturezaobjeto'] == '1' || $aRALIC10['si180_naturezaobjeto'] == '7'){
+            $aCSVRALIC10['si180_bdi']                     = $this->sicomNumberReal($aRALIC10['si180_bdi'], 2);
+        }else{
+            $aCSVRALIC10['si180_bdi']                     = '';
+        }
         $aCSVRALIC10['si180_mesexercicioreforc']         = $this->padLeftZero($aRALIC10['si180_mesexercicioreforc'], 6);
         $aCSVRALIC10['si180_origemrecurso']              = $aRALIC10['si180_origemrecurso'];
         $aCSVRALIC10['si180_dscorigemrecurso']           = substr($aRALIC10['si180_dscorigemrecurso'], 0, 150);
