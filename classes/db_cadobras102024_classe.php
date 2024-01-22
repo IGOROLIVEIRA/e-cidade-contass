@@ -33,6 +33,7 @@ class cl_cadobras102024 {
   public $si198_tipovinculo = 0;
   public $si198_mes = 0;
   public $si198_instit = 0;
+  public $si198_tipodocumento = null;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
                  si198_sequencial = int8 = Sequencial
@@ -40,6 +41,7 @@ class cl_cadobras102024 {
                  si198_codorgaoresp = text = codorgaoresp
                  si198_codobra = int8 = codigoobra
                  si198_tiporesponsavel = int8 = Tipo responsavel
+                 si198_tipodocumento = int8 = tipo documento
                  si198_nrodocumento = text = Numero Documento
                  si198_tiporegistroconselho = int8 = tipoRegistroConselho
                  si198_dscoutroconselho = text = descricao outro conselho
@@ -76,6 +78,7 @@ class cl_cadobras102024 {
       $this->si198_codorgaoresp = ($this->si198_codorgaoresp == ""?@$GLOBALS["HTTP_POST_VARS"]["si198_codorgaoresp"]:$this->si198_codorgaoresp);
       $this->si198_codobra = ($this->si198_codobra == ""?@$GLOBALS["HTTP_POST_VARS"]["si198_codobra"]:$this->si198_codobra);
       $this->si198_tiporesponsavel = ($this->si198_tiporesponsavel == ""?@$GLOBALS["HTTP_POST_VARS"]["si198_tiporesponsavel"]:$this->si198_tiporesponsavel);
+      $this->si198_tipodocumento = ($this->si198_tipodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si198_tipodocumento"]:$this->si198_tipodocumento);
       $this->si198_nrodocumento = ($this->si198_nrodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si198_nrodocumento"]:$this->si198_nrodocumento);
       $this->si198_tiporegistroconselho = ($this->si198_tiporegistroconselho == ""?@$GLOBALS["HTTP_POST_VARS"]["si198_tiporegistroconselho"]:$this->si198_tiporegistroconselho);
       $this->si198_dscoutroconselho = ($this->si198_dscoutroconselho == ""?@$GLOBALS["HTTP_POST_VARS"]["si198_dscoutroconselho"]:$this->si198_dscoutroconselho);
@@ -220,6 +223,7 @@ class cl_cadobras102024 {
                                       ,si198_codorgaoresp
                                       ,si198_codobra
                                       ,si198_tiporesponsavel
+                                      ,si198_tipodocumento
                                       ,si198_nrodocumento
                                       ,si198_tiporegistroconselho
                                       ,si198_dscoutroconselho
@@ -236,6 +240,7 @@ class cl_cadobras102024 {
                                ,'$this->si198_codorgaoresp'
                                ,$this->si198_codobra
                                ,$this->si198_tiporesponsavel
+                               ,$this->si198_tipodocumento
                                ,'$this->si198_nrodocumento'
                                ,$this->si198_tiporegistroconselho
                                ,'$this->si198_dscoutroconselho'

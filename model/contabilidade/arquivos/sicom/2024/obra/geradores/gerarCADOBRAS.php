@@ -50,6 +50,7 @@ class gerarCADOBRAS extends GerarAM
                 $aCSVCADOBRAS10['si198_codorgaoresp'] = str_pad($aCADORBRAS10['si198_codorgaoresp'], 3, "0", STR_PAD_LEFT);
                 $aCSVCADOBRAS10['si198_codobra'] = $aCADORBRAS10['si198_codobra'];
                 $aCSVCADOBRAS10['si198_tiporesponsavel'] = $aCADORBRAS10['si198_tiporesponsavel'];
+                $aCSVCADOBRAS10['si198_tipodocumento'] = $aCADORBRAS10['si198_tipodocumento'];
                 $aCSVCADOBRAS10['si198_nrodocumento'] = $aCADORBRAS10['si198_nrodocumento'];
                 $aCSVCADOBRAS10['si198_tiporegistroconselho'] = $aCADORBRAS10['si198_tiporegistroconselho'];
                 $aCSVCADOBRAS10['si198_dscoutroconselho'] = $aCADORBRAS10['si198_dscoutroconselho'];
