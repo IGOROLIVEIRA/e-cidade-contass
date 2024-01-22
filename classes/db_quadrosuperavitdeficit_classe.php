@@ -202,7 +202,8 @@ class cl_quadrosuperavitdeficit
         }
 
         $sql .= " where ";
-        $sql .= "c241_fonte = '$this->c241_fonte' AND c241_instit = $this->c241_instit ";
+        $sql .= "c241_fonte = '$this->c241_fonte' AND c241_instit = $this->c241_instit AND c241_ano = $this->c241_ano";
+
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -278,7 +279,6 @@ class cl_quadrosuperavitdeficit
     // funcao do recordset
     function sql_record($sql)
     {
-
         $result = db_query($sql);
         if ($result == false) {
             $this->numrows    = 0;
