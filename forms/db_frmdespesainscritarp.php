@@ -218,11 +218,13 @@
                 </td>
 
                 <td class="linhagrid">
-                    <input type="text" style="<?echo ($anousu >= 2023 ? "width: 100px; background: #DEB887;" : "width: 100px;")?>" readonly="<?echo ($anousu >= 2023 ? "true" : "false")?>" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPP][<?= $iFonte ?>]" onKeyUp="return sem_virgula(this);" value="0" onchange="adicionarEdicaoRPP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>">
+                    <input type="text" style="width: 100px " name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPP][<?= $iFonte ?>]" onKeyUp="return sem_virgula(this);" value="0" onchange="adicionarEdicaoRPP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>">
+                    <!-- <input type="text" style="<?echo ($anousu >= 2023 ? "width: 100px; background: #DEB887;" : "width: 100px;")?>" readonly="<?echo ($anousu >= 2023 ? "true" : "false")?>" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPP][<?= $iFonte ?>]" onKeyUp="return sem_virgula(this);" value="0" onchange="adicionarEdicaoRPP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>"> -->
                 </td>
 
                 <td class="linhagrid">
-                    <input type="text" style="<?echo ($anousu >= 2023 ? "width: 100px; background: #DEB887;" : "width: 100px;")?>" readonly="<?echo ($anousu >= 2023 ? "true" : "false")?>" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPNP][<?= $iFonte ?>]" value="0" onKeyUp="return sem_virgula(this);" onchange="adicionarEdicaoRPNP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>">
+                    <input type="text" style="width: 100px" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPNP][<?= $iFonte ?>]" value="0" onKeyUp="return sem_virgula(this);" onchange="adicionarEdicaoRPNP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>">    
+                    <!-- <input type="text" style="<?echo ($anousu >= 2023 ? "width: 100px; background: #DEB887;" : "width: 100px;")?>" readonly="<?echo ($anousu >= 2023 ? "true" : "false")?>" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPNP][<?= $iFonte ?>]" value="0" onKeyUp="return sem_virgula(this);" onchange="adicionarEdicaoRPNP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>"> -->
                 </td>
 
                 <td class="linhagrid" style="width: 100px">
@@ -689,8 +691,13 @@
                 VlrUtilizadoFonte += Number(vlr_lqd) + Number(vlr_n_lqd);
 
                 document.form1['aEmpenho['+ itens.value +'][vlr_dispRPNP]['+ fonte +']'].value = vlr_n_lqd;
+                if (vlr_n_lqd != 0) {
+                    adicionarEdicaoRPNP(itens.value,fonte);
+                }
                 document.form1['aEmpenho['+ itens.value +'][vlr_dispRPP]['+ fonte +']'].value = vlr_lqd;
-
+                if (vlr_lqd != 0) {
+                    adicionarEdicaoRPP(itens.value,fonte);
+                }
             });
             if(VlrUtilizadoFonte > VlrDispTotal){
                 alert("Erro! Valor utilizado maior que valor Disponivel");
