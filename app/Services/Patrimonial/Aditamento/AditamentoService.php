@@ -8,6 +8,7 @@ use App\Services\Contracts\Patrimonial\Aditamento\AditamentoServiceInterface;
 use App\Services\Patrimonial\Aditamento\Command\GetUltimaPosicaoCommand;
 use App\Services\Patrimonial\Aditamento\Command\UpdateAditamentoCommand;
 use App\Services\Patrimonial\Aditamento\Command\ValidaDataAssinaturaCommand;
+use App\Services\Patrimonial\Aditamento\Command\VerificaAnulacaoAutorizacaoCommand;
 use Exception;
 use stdClass;
 
@@ -38,12 +39,21 @@ class AditamentoService implements AditamentoServiceInterface
             $ac16Sequencial
         );
 
+        $temAnulacao = ( new VerificaAnulacaoAutorizacaoCommand())->execute($acordoPosicaoAnterior);
+
+        if ($temAnulacao) {
+            return [
+                'status' => false,
+                'message' => 'Existe anulação na posição anterior.Será necessário criar novo aditivo.'
+            ];
+        }
+
         $aditamentoFactory = new AditamentoFactory();
         $aditamento = $aditamentoFactory->createByEloquentModel($acordoPosicao, $acordoPosicaoAnterior);
 
         $seriealizer = new AditamentoSerializeService($aditamento);
 
-        return $seriealizer->jsonSerialize();
+        return ['status'=> true,'aditamento' => $seriealizer->jsonSerialize()];
     }
 
     public function updateAditamento(stdClass $aditamentoRaw): array

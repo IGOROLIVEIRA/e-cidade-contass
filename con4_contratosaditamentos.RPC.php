@@ -289,9 +289,14 @@ try {
         case 'getAcordoAditvoAlteracao':
 
             $service = new AditamentoService();
+            $result = $service->getDadosAditamento((int)$oParam->ac16Sequencial);
 
-            $oRetorno->aditamento = $service->getDadosAditamento((int)$oParam->ac16Sequencial);
+            if (!$result['status']) {
+                throw new Exception($result['message']);
+                break;
+            }
 
+            $oRetorno->aditamento = $result['aditamento'];
             break;
 
         case 'processarAlteracaoAditivo':

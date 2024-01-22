@@ -3,8 +3,10 @@
 namespace App\Repositories\Patrimonial;
 
 use App\Models\AcordoItemExecutado;
+use App\Repositories\Contracts\Patrimonial\AcordoItemExecutadoRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 
-class AcordoItemExecutadoRepository
+class AcordoItemExecutadoRepository implements AcordoItemExecutadoRepositoryInterface
 {
     private AcordoItemExecutado $model;
 
@@ -25,5 +27,21 @@ class AcordoItemExecutadoRepository
 
         return false;
     }
+
+
+    /**
+     *
+     * @param integer $acordoItem
+     * @return Collection|null
+     */
+    public function buscaItensExecutado(int $acordoItem): ?Collection
+    {
+        $result = $this->model
+            ->where('ac29_acordoitem', $acordoItem)
+            ->get(['ac29_sequencial','ac29_acordoitem','ac29_valor']);
+
+        return $result;
+    }
+
 }
 
