@@ -89,6 +89,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
                 INNER JOIN pcmater ON pc01_codmater = db150_pcmater
                 WHERE db150_instit in ($instit,0)
                 AND db150_mes = $mes
+                AND DATE_PART('YEAR',db150_data)= " . db_getsession("DB_anousu") . "
                 UNION
                 SELECT db150_tiporegistro AS tipoRegistro,
                        db150_coditem AS coditem,
@@ -100,6 +101,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
                 INNER JOIN pcmater ON pc01_codmater = db150_pcmater
                 WHERE db150_instit in ($instit,0)
                 AND db150_tipocadastro = 2
+                AND DATE_PART('YEAR',db150_data)= " . db_getsession("DB_anousu") . "
                 AND db150_mes = $mes";
         $rsResult10 = db_query($sSql);
 
