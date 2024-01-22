@@ -27,7 +27,7 @@ class ItensAdapter {
 
 
       itemAdaptado.controlaquantidade = item.servicoQuantidade == true ? 't' : 'f';
-      itemAdaptado.servico = item.tipoControle == true ? true : false;
+      itemAdaptado.servico = item.tipoControle;
 
       itemAdaptado.descricaoitem = item.descricaoItem;
 

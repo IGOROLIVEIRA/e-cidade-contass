@@ -1937,6 +1937,9 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
         }
       }
 
+      console.log(oItem.servico);
+      console.log(oItem.controlaquantidade);
+      console.log(oItem.servico == true && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == ""));
 
       /**
        * Caso seja servico e nao controlar quantidade, a quantidade padrao sera 1
