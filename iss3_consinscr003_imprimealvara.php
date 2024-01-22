@@ -360,11 +360,12 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
       if (!empty($oAlvara->q123_sequencial)) {
 
         if ($pdf1->permanente == 't') {
-          $pdf1->validadealvara = "31/12/" . db_getsession('DB_anousu');
+          $iAnoValidade = date('Y', strtotime($oAlvara->q120_dtmov));
+          $pdf1->validadealvara = "31/12/" . $iAnoValidade;
           
-          $codInstituicao = array(Instituicao::COD_CLI_SERRANOPOLIS_DE_MINAS);
-          $iAnoValidade = db_getsession('DB_anousu') + 1;
+          $codInstituicao = array(Instituicao::COD_CLI_SERRANOPOLIS_DE_MINAS);          
           if (in_array($oInstit->getCodigoCliente(), $codInstituicao)) {
+            $iAnoValidade++;
             $pdf1->validadealvara = "31/01/" . $iAnoValidade;
           }          
 
