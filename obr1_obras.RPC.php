@@ -413,7 +413,15 @@ switch ($oParam->exec) {
                 }
 
                 $pcmater = substr($item->obr06_pcmater, 0, -1);
-                $verificaItem = $cllicitemobra->sql_record($cllicitemobra->sql_query_file(null, "obr06_sequencial", null, "obr06_pcmater = $pcmater AND obr06_ordem = $item->obr06_ordem"));
+
+                // Hotfix OC21089: Compatibilidade com anos anteriores à adição da ordem
+                if ((int) $oParam->ano < 2024) {
+                    $where = " obr06_pcmater = $pcmater ";
+                } else {
+                    $where = " obr06_pcmater = $pcmater AND obr06_ordem = $item->obr06_ordem ";
+                }
+
+                $verificaItem = $cllicitemobra->sql_record($cllicitemobra->sql_query_file(null, "obr06_sequencial", null, $where));
                 if (pg_num_rows($verificaItem) <= 0) {
                     db_inicio_transacao();
 
@@ -477,7 +485,15 @@ switch ($oParam->exec) {
             $cllicitemobra = new cl_licitemobra();
 
             $pcmater = substr($item->obr06_pcmater, 0, -1);
-            $sql = $cllicitemobra->sql_query_file(null, "obr06_sequencial", null, "obr06_pcmater = $pcmater AND obr06_ordem = $item->obr06_ordem ");
+            
+            // Hotfix OC21089: Compatibilidade com anos anteriores à adição da ordem
+            if ((int) $oParam->ano < 2024) {
+                $where = " obr06_pcmater = $pcmater ";
+            } else {
+                $where = " obr06_pcmater = $pcmater AND obr06_ordem = $item->obr06_ordem ";
+            }
+
+            $sql = $cllicitemobra->sql_query_file(null, "obr06_sequencial", null, $where);
             $verificaItem = $cllicitemobra->sql_record($sql);
             if (pg_num_rows($verificaItem) > 0) {
                 db_fieldsmemory($verificaItem, 0);
@@ -491,7 +507,7 @@ switch ($oParam->exec) {
                     $oRetorno->message = urlencode($erro);
                     $oRetorno->status = 2;
                 } else {
-                    $oRetorno->itens[] = $item->obr06_pcmater."-".$item->obr06_ordem;
+                    $oRetorno->itens[] = ((int) $oParam->ano < 2024) ? $item->obr06_pcmater : $item->obr06_pcmater."-".$item->obr06_ordem;
                     $oRetorno->status = 1;
                     $oRetorno->message = urlencode("Itens Excluido com Sucesso!.");
                 }

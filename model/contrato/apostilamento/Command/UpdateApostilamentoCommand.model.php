@@ -32,6 +32,9 @@ class UpdateApostilamentoCommand
         $oDaoApostilamento->si03_justificativa = utf8_decode($apostilamento->si03_justificativa);
         $oDaoApostilamento->si03_percentualreajuste = $apostilamento->si03_percentualreajuste;
         $oDaoApostilamento->si03_indicereajuste = $apostilamento->si03_indicereajuste;
+        $oDaoApostilamento->si03_descricaoreajuste = $apostilamento->si03_descricaoreajuste;
+        $oDaoApostilamento->si03_descricaoindice = $apostilamento->si03_descricaoindice;
+        $oDaoApostilamento->si03_criterioreajuste = $apostilamento->si03_criterioreajuste;
 
         $oDaoApostilamento->alterar($oDaoApostilamento->si03_sequencial);
 
@@ -39,7 +42,7 @@ class UpdateApostilamentoCommand
             throw new Exception($oDaoApostilamento->erro_msg);
         }
 
-        $cl_acordoposicao->updateNumeroApositilamento($iAcordo, $apostilamento->si03_numapostilamento);
+        $cl_acordoposicao->updateApositilamento($iAcordo, $apostilamento);
 
         if ($cl_acordoposicao->erro_status === 0) {
             throw new Exception($cl_acordoposicao->erro_msg);
