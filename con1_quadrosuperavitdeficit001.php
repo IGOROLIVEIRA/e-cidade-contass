@@ -12,10 +12,10 @@ include("classes/db_quadrosuperavitdeficit_classe.php");
 db_postmemory($HTTP_POST_VARS);
 
 if ($incluir) {
-    db_inicio_transacao();
-    $sqlerro = false;
+    foreach ($aFonte as $fonte) {  
+        $sqlerro = false;
+        db_inicio_transacao();
 
-    foreach ($aFonte as $fonte) {
         $clquadrosuperavitdeficit = new cl_quadrosuperavitdeficit();
 
         $clquadrosuperavitdeficit->c241_fonte = $fonte['fonte'];
@@ -30,12 +30,12 @@ if ($incluir) {
         } else {
             $clquadrosuperavitdeficit->alterar(null);
         }
+
         if ($clquadrosuperavitdeficit->erro_status == 0) {
             $sqlerro = true;
         }
+        db_fim_transacao($sqlerro);
     }
-
-    db_fim_transacao($sqlerro);
 }
 ?>
 <html>

@@ -98,10 +98,13 @@ function imprimirLinha (&$oPdf, $iAlturaLinha, $oStdLinha) {
   $sVigenciaContrato .= " a ";
   $sVigenciaContrato .= db_formatar($oStdLinha->dt_contrato_fim, "d");
 
+  $oAcordo = new Acordo($oStdLinha->i_contrato);
+  $dataVigencia = $oAcordo->getVigenciaIndeterminada() == "t" ? "-" : $sVigenciaContrato;
+
   $oPdf->cell(11, $iAlturaLinha, $oStdLinha->i_contrato,                             "TB",  0, "C", 0);
   $oPdf->cell(18, $iAlturaLinha, db_formatar($oStdLinha->n_contrato_valor,"f"),      "LTB", 0, "C", 0);
   $oPdf->cell(18, $iAlturaLinha, db_formatar($oStdLinha->n_contrato_executado,"f"),  "LTB", 0, "C", 0);
-  $oPdf->cell(25, $iAlturaLinha, $sVigenciaContrato,                                 "LTB", 0, "C", 0);
+  $oPdf->cell(25, $iAlturaLinha, $dataVigencia,                                 "LTB", 0, "C", 0);
   $oPdf->cell(18, $iAlturaLinha, db_formatar($oStdLinha->n_contrato_empenhado, "f"), "LTB", 0, "C", 0);
   $oPdf->cell(18, $iAlturaLinha, db_formatar($oStdLinha->n_contrato_empenhar, "f"),  "LTBR", 0, "C", 0);
 

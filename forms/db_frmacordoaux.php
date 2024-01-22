@@ -205,7 +205,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                         8 => '8 - Licitação realizada por consorcio público',
                                                         9 => '9 - Licitação realizada por outro ente da federação',
                                                     );
-                                                    db_select('ac16_tipoorigem', $aValores, true, $db_opcao, "onchange='js_verificatipoorigem()'", "style='width:100%;'");
+                                                    db_select('ac16_tipoorigem', $aValores, true, $db_opcao, "onchange='js_verificatipoorigem();'", "style='width:100%;'");
 
                                                     ?>
                                                 </td>
@@ -507,6 +507,16 @@ db_app::load("dbtextFieldData.widget.js");
                                             <b>Vigência</b>
                                         </legend>
                                         <table cellpadding="0" border="0" width="100%" class="table-vigencia">
+                                            <tr id="tr_vigenciaindeterminada" style="display:none;">
+                                                <td colspan="2">
+                                                    <b>Vigência Indeterminada:</b>
+
+                                                    <?
+                                                    $aVigencias = array("f" => "Não","t" => "Sim");
+                                                    db_select('ac16_vigenciaindeterminada', $aVigencias, true, $db_opcao, "onchange='js_alteracaoVigencia(this.value)';", "");
+                                                    ?>
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <td width="1%">
                                                     <b>Inicio:</b>
@@ -540,10 +550,10 @@ db_app::load("dbtextFieldData.widget.js");
                                                     );
                                                     ?>
                                                 </td>
-                                                <td>
+                                                <td class="vigencia_final">
                                                     <b>Fim:</b>
                                                 </td>
-                                                <td>
+                                                <td class="vigencia_final">
                                                     <?
 
                                                     db_inputdata(
@@ -614,6 +624,9 @@ db_app::load("dbtextFieldData.widget.js");
                                     </fieldset>
                                 </td>
                             </tr>
+                            <?
+                            db_input('leidalicitacao', 50, 3, true, 'text', $db_opcao,"style='display:none'");
+                            ?>
                         </table>
                     </fieldset>
                 </td>
@@ -1723,4 +1736,5 @@ db_app::load("dbtextFieldData.widget.js");
             document.form1.si06_objetoadesao.focus();
         }
     }
+    
 </script>

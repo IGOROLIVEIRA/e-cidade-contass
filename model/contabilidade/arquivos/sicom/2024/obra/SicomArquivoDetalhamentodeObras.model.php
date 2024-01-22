@@ -152,7 +152,11 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
     /**
      * Registro 10
      */
-    $sql = "SELECT *
+    $sql = "SELECT *,
+            CASE
+                WHEN LENGTH(cgm.z01_cgccpf) = 11 THEN 1
+                ELSE 2
+            END AS si198_tipodocumento
             FROM licobras
             INNER JOIN licobrasresponsaveis ON obr05_seqobra = obr01_sequencial
             INNER JOIN liclicita ON l20_codigo = obr01_licitacao
@@ -172,6 +176,7 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
       $clcadobras102024->si198_codorgaoresp = $oDados10->si09_codorgaotce;
       $clcadobras102024->si198_codobra = $oDados10->obr01_numeroobra;
       $clcadobras102024->si198_tiporesponsavel = $oDados10->obr05_tiporesponsavel;
+      $clcadobras102024->si198_tipodocumento = $oDados10->si198_tipodocumento;
       $clcadobras102024->si198_nrodocumento = $oDados10->z01_cgccpf;
       $clcadobras102024->si198_tiporegistroconselho = $oDados10->obr05_tiporegistro;
       if($oDados10->obr05_tiporegistro == "3"){

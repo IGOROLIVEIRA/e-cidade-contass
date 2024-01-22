@@ -159,8 +159,8 @@ function ajustaGrupoPlanoOrc($anoOrigem, $anoDestino): ?string
                         UPDATE grupos SET c21_anousu = {$anoDestino};
                         
                         DELETE FROM grupos
-                        WHERE c21_codcon IN
-                                (SELECT c21_codcon FROM conplanoorcamentogrupo
+                        WHERE (c21_codcon, c21_instit) IN
+                                (SELECT c21_codcon, c21_instit FROM conplanoorcamentogrupo
                                  WHERE c21_anousu = {$anoDestino});
                         
                         
