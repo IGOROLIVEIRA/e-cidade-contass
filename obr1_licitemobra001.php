@@ -9,6 +9,9 @@ include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $cllicitemobra = new cl_licitemobra;
 $clcondataconf = new cl_condataconf;
+$clliclicita = new cl_liclicita;
+$clproccop = new cl_pcproc;
+
 $db_opcao = 1;
 $db_botao = true;
 //if(isset($incluir)){

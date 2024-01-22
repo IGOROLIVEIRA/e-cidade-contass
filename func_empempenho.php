@@ -264,7 +264,7 @@ $rotulo->label("z01_cgccpf");
             $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "$dbwhere and z01_nome like '$chave_z01_nome%'", $filtroempelemento);
           } elseif (isset($chave_z01_cgccpf) && !empty($chave_z01_cgccpf)) {
             $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "$dbwhere and z01_cgccpf like '$chave_z01_cgccpf%'", $filtroempelemento);
-          } elseif($pesquisa_geral == 1){  
+          } elseif (count($_POST) > 0){  
             $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "{$dbwhere}", $filtroempelemento);
           }
 

@@ -29,14 +29,13 @@ class cl_contratos102024
   var $si83_dataassinatura_ano = null;
   var $si83_dataassinatura = null;
   var $si83_contdeclicitacao = 0;
-  var $si83_codorgaoresp = null;
+  var $si83_cnpjorgaoentresp = null;
   var $si83_codunidadesubresp = null;
   var $si83_nroprocesso = null;
   var $si83_exercicioprocesso = 0;
   var $si83_tipoprocesso = 0;
   var $si83_naturezaobjeto = 0;
   var $si83_objetocontrato = null;
-  var $si83_tipoinstrumento = 0;
   var $si83_datainiciovigencia_dia = null;
   var $si83_datainiciovigencia_mes = null;
   var $si83_datainiciovigencia_ano = null;
@@ -67,6 +66,7 @@ class cl_contratos102024
   var $si83_periodicidadereajuste = null;
   var $si83_dscreajuste = null;
   var $si83_dscindice = null;
+  var $si83_vigenciaindeterminada = null;
   var $campos = "
                  si83_sequencial = int8 = sequencial
                  si83_tiporegistro = int8 = Tipo do registro
@@ -78,14 +78,13 @@ class cl_contratos102024
                  si83_exerciciocontrato = int8 = Exercício do  Contrato
                  si83_dataassinatura = date = Data da assinatura  do Contrato
                  si83_contdeclicitacao = int8 = Contrato decorrente de Licitação
-                 si83_codorgaoresp = varchar(2) = Código do órgão responsável
+                 si83_cnpjorgaoentresp = varchar(14) = CNPJ do órgão/entidade
                  si83_codunidadesubresp = varchar(8) = Código da unidade
                  si83_nroprocesso = varchar(12) = Número do  processo
                  si83_exercicioprocesso = int8 = Exercício do  processo
                  si83_tipoprocesso = int8 = Tipo de processo
                  si83_naturezaobjeto = int8 = Natureza do objeto
                  si83_objetocontrato = varchar(500) = Objeto do contrato
-                 si83_tipoinstrumento = int8 = Tipo de  Instrumento
                  si83_datainiciovigencia = date = Data inicial da  vigência
                  si83_datafinalvigencia = date = Data final da  vigência
                  si83_vlcontrato = float8 = Valor do contrato
@@ -108,6 +107,7 @@ class cl_contratos102024
                  si83_periodicidadereajuste = Periodo reajuste;
                  si83_dscreajuste = Descricao reajuste;
                  si83_dscindice = Descricao indice;
+                 si83_vigenciaindeterminada = int = Prazo de Vigência Indeterminada.
                  ";
   var $si83_datapublicacao = null;
   var $si83_veiculodivulgacao = null;
@@ -166,14 +166,13 @@ class cl_contratos102024
       $this->si83_dscreajuste = ($this->si83_dscreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_dscreajuste"] : $this->si83_dscreajuste);
       $this->si83_dscindice = ($this->si83_dscindice == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_dscindice"] : $this->si83_dscindice);
       $this->si83_contdeclicitacao = ($this->si83_contdeclicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_contdeclicitacao"] : $this->si83_contdeclicitacao);
-      $this->si83_codorgaoresp = ($this->si83_codorgaoresp == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_codorgaoresp"] : $this->si83_codorgaoresp);
+      $this->si83_cnpjorgaoentresp = ($this->si83_cnpjorgaoentresp == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_cnpjorgaoentresp"] : $this->si83_cnpjorgaoentresp);
       $this->si83_codunidadesubresp = ($this->si83_codunidadesubresp == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_codunidadesubresp"] : $this->si83_codunidadesubresp);
       $this->si83_nroprocesso = ($this->si83_nroprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_nroprocesso"] : $this->si83_nroprocesso);
       $this->si83_exercicioprocesso = ($this->si83_exercicioprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_exercicioprocesso"] : $this->si83_exercicioprocesso);
       $this->si83_tipoprocesso = ($this->si83_tipoprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_tipoprocesso"] : $this->si83_tipoprocesso);
       $this->si83_naturezaobjeto = ($this->si83_naturezaobjeto == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_naturezaobjeto"] : $this->si83_naturezaobjeto);
       $this->si83_objetocontrato = ($this->si83_objetocontrato == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_objetocontrato"] : $this->si83_objetocontrato);
-      $this->si83_tipoinstrumento = ($this->si83_tipoinstrumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_tipoinstrumento"] : $this->si83_tipoinstrumento);
       if ($this->si83_datainiciovigencia == "") {
         $this->si83_datainiciovigencia_dia = ($this->si83_datainiciovigencia_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_datainiciovigencia_dia"] : $this->si83_datainiciovigencia_dia);
         $this->si83_datainiciovigencia_mes = ($this->si83_datainiciovigencia_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_datainiciovigencia_mes"] : $this->si83_datainiciovigencia_mes);
@@ -211,6 +210,7 @@ class cl_contratos102024
       $this->si83_instit = ($this->si83_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_instit"] : $this->si83_instit);
       $this->si83_tipocadastro = ($this->si83_tipocadastro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_tipocadastro"] : $this->si83_tipocadastro);
       $this->si83_unidadedemedidaprazoexec = ($this->si83_unidadedemedidaprazoexec == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_unidadedemedidaprazoexec"] : $this->si83_unidadedemedidaprazoexec);
+      $this->si83_vigenciaindeterminada = ($this->si83_vigenciaindeterminada == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_vigenciaindeterminada"] : $this->si83_vigenciaindeterminada);
     } else {
       $this->si83_sequencial = ($this->si83_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_sequencial"] : $this->si83_sequencial);
     }
@@ -252,9 +252,6 @@ class cl_contratos102024
     if ($this->si83_naturezaobjeto == null) {
       $this->si83_naturezaobjeto = "0";
     }
-    if ($this->si83_tipoinstrumento == null) {
-      $this->si83_tipoinstrumento = "0";
-    }
     if ($this->si83_tipocadastro == null) {
       $this->si83_tipocadastro = "0";
     }
@@ -288,6 +285,15 @@ class cl_contratos102024
     if ($this->si83_instit == null) {
       $this->erro_sql = " Campo Instituição nao Informado.";
       $this->erro_campo = "si83_instit";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->si83_vigenciaindeterminada == null) {
+      $this->erro_sql = " Campo Vigencia Indeterminada nao Informado.";
+      $this->erro_campo = "si83_vigenciaindeterminada";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -337,14 +343,13 @@ class cl_contratos102024
                                       ,si83_exerciciocontrato
                                       ,si83_dataassinatura
                                       ,si83_contdeclicitacao
-                                      ,si83_codorgaoresp
+                                      ,si83_cnpjorgaoentresp
                                       ,si83_codunidadesubresp
                                       ,si83_nroprocesso
                                       ,si83_exercicioprocesso
                                       ,si83_tipoprocesso
                                       ,si83_naturezaobjeto
                                       ,si83_objetocontrato
-                                      ,si83_tipoinstrumento
                                       ,si83_datainiciovigencia
                                       ,si83_datafinalvigencia
                                       ,si83_vlcontrato
@@ -367,6 +372,7 @@ class cl_contratos102024
                                       ,si83_periodicidadereajuste
                                       ,si83_dscreajuste
                                       ,si83_dscindice
+                                      ,si83_vigenciaindeterminada
                        )
                 values (
                                 $this->si83_sequencial
@@ -379,14 +385,13 @@ class cl_contratos102024
                                ,$this->si83_exerciciocontrato
                                ," . ($this->si83_dataassinatura == "null" || $this->si83_dataassinatura == "" ? "null" : "'" . $this->si83_dataassinatura . "'") . "
                                ,$this->si83_contdeclicitacao
-                               ,'$this->si83_codorgaoresp'
+                               ,'$this->si83_cnpjorgaoentresp'
                                ,'$this->si83_codunidadesubresp'
                                ,'$this->si83_nroprocesso'
                                ,$this->si83_exercicioprocesso
                                ,$this->si83_tipoprocesso
                                ,$this->si83_naturezaobjeto
                                ,'$this->si83_objetocontrato'
-                               ,$this->si83_tipoinstrumento
                                ," . ($this->si83_datainiciovigencia == "null" || $this->si83_datainiciovigencia == "" ? "null" : "'" . $this->si83_datainiciovigencia . "'") . "
                                ," . ($this->si83_datafinalvigencia == "null" || $this->si83_datafinalvigencia == "" ? "null" : "'" . $this->si83_datafinalvigencia . "'") . "
                                ,$this->si83_vlcontrato
@@ -409,6 +414,7 @@ class cl_contratos102024
                                ," . ($this->si83_periodicidadereajuste == "" ? "''" :  $this->si83_periodicidadereajuste) . "
                                ," . ($this->si83_dscreajuste == "" ? "''" : "'" . $this->si83_dscreajuste . "'") . "
                                ," . ($this->si83_dscindice == "" ? "''" : "'" . $this->si83_dscindice . "'") . "
+                               ,$this->si83_vigenciaindeterminada
                       )";
 
     $result = db_query($sql);
@@ -450,14 +456,13 @@ class cl_contratos102024
       $resac = db_query("insert into db_acount values($acount,2010312,2011317,'','" . AddSlashes(pg_result($resaco, 0, 'si83_exerciciocontrato')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010405,'','" . AddSlashes(pg_result($resaco, 0, 'si83_dataassinatura')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010406,'','" . AddSlashes(pg_result($resaco, 0, 'si83_contdeclicitacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010312,2010407,'','" . AddSlashes(pg_result($resaco, 0, 'si83_codorgaoresp')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010312,2010407,'','" . AddSlashes(pg_result($resaco, 0, 'si83_cnpjorgaoentresp')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010408,'','" . AddSlashes(pg_result($resaco, 0, 'si83_codunidadesubresp')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010409,'','" . AddSlashes(pg_result($resaco, 0, 'si83_nroprocesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010410,'','" . AddSlashes(pg_result($resaco, 0, 'si83_exercicioprocesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2011318,'','" . AddSlashes(pg_result($resaco, 0, 'si83_tipoprocesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010411,'','" . AddSlashes(pg_result($resaco, 0, 'si83_naturezaobjeto')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010412,'','" . AddSlashes(pg_result($resaco, 0, 'si83_objetocontrato')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010312,2010413,'','" . AddSlashes(pg_result($resaco, 0, 'si83_tipoinstrumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010414,'','" . AddSlashes(pg_result($resaco, 0, 'si83_datainiciovigencia')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010415,'','" . AddSlashes(pg_result($resaco, 0, 'si83_datafinalvigencia')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010416,'','" . AddSlashes(pg_result($resaco, 0, 'si83_vlcontrato')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -553,8 +558,8 @@ class cl_contratos102024
       $sql  .= $virgula . " si83_contdeclicitacao = $this->si83_contdeclicitacao ";
       $virgula = ",";
     }
-    if (trim($this->si83_codorgaoresp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_codorgaoresp"])) {
-      $sql  .= $virgula . " si83_codorgaoresp = '$this->si83_codorgaoresp' ";
+    if (trim($this->si83_cnpjorgaoentresp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_cnpjorgaoentresp"])) {
+      $sql  .= $virgula . " si83_cnpjorgaoentresp = '$this->si83_cnpjorgaoentresp' ";
       $virgula = ",";
     }
     if (trim($this->si83_codunidadesubresp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_codunidadesubresp"])) {
@@ -621,13 +626,6 @@ class cl_contratos102024
     }
     if (trim($this->si83_objetocontrato) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_objetocontrato"])) {
       $sql  .= $virgula . " si83_objetocontrato = '$this->si83_objetocontrato' ";
-      $virgula = ",";
-    }
-    if (trim($this->si83_tipoinstrumento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_tipoinstrumento"])) {
-      if (trim($this->si83_tipoinstrumento) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si83_tipoinstrumento"])) {
-        $this->si83_tipoinstrumento = "0";
-      }
-      $sql  .= $virgula . " si83_tipoinstrumento = $this->si83_tipoinstrumento ";
       $virgula = ",";
     }
     if (trim($this->si83_datainiciovigencia) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_datainiciovigencia_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si83_datainiciovigencia_dia"] != "")) {
@@ -725,6 +723,10 @@ class cl_contratos102024
         return false;
       }
     }
+    if (trim($this->si83_vigenciaindeterminada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_vigenciaindeterminada"])) {
+      $sql  .= $virgula . " si83_vigenciaindeterminada = '$this->si83_vigenciaindeterminada' ";
+      $virgula = ",";
+    }
     $sql .= " where ";
     if ($si83_sequencial != null) {
       $sql .= " si83_sequencial = $this->si83_sequencial";
@@ -754,8 +756,8 @@ class cl_contratos102024
           $resac = db_query("insert into db_acount values($acount,2010312,2010405,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_dataassinatura')) . "','$this->si83_dataassinatura'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si83_contdeclicitacao"]) || $this->si83_contdeclicitacao != "")
           $resac = db_query("insert into db_acount values($acount,2010312,2010406,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_contdeclicitacao')) . "','$this->si83_contdeclicitacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si83_codorgaoresp"]) || $this->si83_codorgaoresp != "")
-          $resac = db_query("insert into db_acount values($acount,2010312,2010407,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_codorgaoresp')) . "','$this->si83_codorgaoresp'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si83_cnpjorgaoentresp"]) || $this->si83_cnpjorgaoentresp != "")
+          $resac = db_query("insert into db_acount values($acount,2010312,2010407,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_cnpjorgaoentresp')) . "','$this->si83_cnpjorgaoentresp'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si83_codunidadesubresp"]) || $this->si83_codunidadesubresp != "")
           $resac = db_query("insert into db_acount values($acount,2010312,2010408,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_codunidadesubresp')) . "','$this->si83_codunidadesubresp'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si83_nroprocesso"]) || $this->si83_nroprocesso != "")
@@ -768,8 +770,6 @@ class cl_contratos102024
           $resac = db_query("insert into db_acount values($acount,2010312,2010411,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_naturezaobjeto')) . "','$this->si83_naturezaobjeto'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si83_objetocontrato"]) || $this->si83_objetocontrato != "")
           $resac = db_query("insert into db_acount values($acount,2010312,2010412,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_objetocontrato')) . "','$this->si83_objetocontrato'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si83_tipoinstrumento"]) || $this->si83_tipoinstrumento != "")
-          $resac = db_query("insert into db_acount values($acount,2010312,2010413,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_tipoinstrumento')) . "','$this->si83_tipoinstrumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si83_datainiciovigencia"]) || $this->si83_datainiciovigencia != "")
           $resac = db_query("insert into db_acount values($acount,2010312,2010414,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_datainiciovigencia')) . "','$this->si83_datainiciovigencia'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si83_datafinalvigencia"]) || $this->si83_datafinalvigencia != "")
@@ -869,14 +869,13 @@ class cl_contratos102024
         $resac = db_query("insert into db_acount values($acount,2010312,2011317,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_exerciciocontrato')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010405,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_dataassinatura')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010406,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_contdeclicitacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010312,2010407,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_codorgaoresp')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,2010312,2010407,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_cnpjorgaoentresp')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010408,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_codunidadesubresp')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010409,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_nroprocesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010410,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_exercicioprocesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2011318,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_tipoprocesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010411,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_naturezaobjeto')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010412,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_objetocontrato')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010312,2010413,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_tipoinstrumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010414,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_datainiciovigencia')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010415,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_datafinalvigencia')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010416,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_vlcontrato')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");

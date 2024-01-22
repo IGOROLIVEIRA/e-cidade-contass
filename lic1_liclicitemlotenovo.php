@@ -390,14 +390,30 @@ if (isset($incluir) && trim($incluir) != "") {
             $natureza_objeto = db_utils::fieldsMemory($rsSql, 0)->l20_naturezaobjeto;
             //db_criatabela($rsSql);exit;
 
-            $rsCodtribunal = db_query("select l03_pctipocompratribunal from liclicita
-            inner join cflicita on l20_codtipocom =  l03_codigo
-            where l20_codigo = $licitacao;");
-            $codtribunal = db_utils::fieldsMemory($rsCodtribunal, 0);
-            $codtribunal = $codtribunal->l03_pctipocompratribunal;
+            $sqlEditalRedireciona = "
+                select 
+                    l03_pctipocompratribunal, 
+                    l20_tipojulg
+                from 
+                        liclicita
+                    inner join cflicita 
+                        on l20_codtipocom = l03_codigo
+                where l20_codigo = $licitacao";
+
+            $rsEditalRedireciona = db_query($sqlEditalRedireciona);
+            $editalRedireciona = db_utils::fieldsMemory($rsEditalRedireciona, 0);
+                        
+            $tipojulgamento = $editalRedireciona->l20_tipojulg;
+            $codtribunal = $editalRedireciona->l03_pctipocompratribunal;
 
             if (!$sqlerro && $incluir && pg_numrows($rsLotes) == pg_numrows($rsCodigos)) {
-                if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+
+                // Regras para redirecionamento
+                // Se (l20_tipojulg == 3) AND
+                // Modalidade in (1 => "Dispensa", 2 => "Dispensa por Chamada Pública", 3 => "Inexigibilidade por credenciamento" ou 4 =>"Inexigibilidade") AND
+                // Codigo do Tribunal in (100,101,102 e 103)
+                $codigosTribunal = [100,101,102,103];
+                if ($tipojulgamento == 3 && in_array($codtribunal, $codigosTribunal)) {
                     echo "<script> parent.parent.window.location.href='lic4_editalabas.php?licitacao=$licitacao';</script>";
                 }
             }
