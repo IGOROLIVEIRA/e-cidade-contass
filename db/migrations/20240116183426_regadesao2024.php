@@ -11,31 +11,31 @@ class Regadesao2024 extends AbstractMigration
                 DROP TABLE public.regadesao102024 CASCADE;
 
                 CREATE TABLE public.regadesao102024 (
-                    si67_sequencial int8 NOT NULL DEFAULT 0,
-                    si67_tiporegistro int8 NOT NULL DEFAULT 0,
-                    si67_tipocadastro int4 NOT NULL,
-                    si67_codorgao varchar(2) NOT NULL,
-                    si67_codunidadesub varchar(8) NOT NULL,
-                    si67_nroprocadesao varchar(12) NOT NULL,
-                    si63_exercicioadesao int8 NOT NULL DEFAULT 0,
-                    si67_dtabertura date NOT NULL,
-                    si67_cnpjorgaogerenciador varchar(14) NOT NULL,
-                    si67_exerciciolicitacao int8 NOT NULL DEFAULT 0,
-                    si67_nroprocessolicitatorio varchar(20) NOT NULL,
-                    si67_codmodalidadelicitacao int8 NOT NULL DEFAULT 0,
-                    si67_regimecontratacao int8 NOT NULL,
-                    si67_tipocriterio int8 not null,
+                    si67_sequencial int8,
+                    si67_tiporegistro int8 ,
+                    si67_tipocadastro int4 ,
+                    si67_codorgao varchar(2) ,
+                    si67_codunidadesub varchar(8) ,
+                    si67_nroprocadesao varchar(12) ,
+                    si63_exercicioadesao int8  ,
+                    si67_dtabertura date ,
+                    si67_cnpjorgaogerenciador varchar(14) ,
+                    si67_exerciciolicitacao int8  ,
+                    si67_nroprocessolicitatorio varchar(20) ,
+                    si67_codmodalidadelicitacao int8  ,
+                    si67_regimecontratacao int8 ,
+                    si67_tipocriterio int8,
                     si67_nroedital int4,
                     si67_exercicioedital int4,
-                    si67_dtataregpreco date NOT NULL,
-                    si67_dtvalidade date NOT NULL,
-                    si67_naturezaprocedimento int8 NOT NULL DEFAULT 0,
+                    si67_dtataregpreco date ,
+                    si67_dtvalidade date ,
+                    si67_naturezaprocedimento int8  ,
                     si67_dtpublicacaoavisointencao date NULL,
-                    si67_objetoadesao varchar(500) NOT NULL,
-                    si67_cpfresponsavel varchar(11) NOT NULL,
-                    si67_processoporlote int8 NOT NULL DEFAULT 0,
-                    si67_mes int8 NOT NULL DEFAULT 0,
-                    si67_instit int8 NULL DEFAULT 0,
+                    si67_objetoadesao varchar(500) ,
+                    si67_cpfresponsavel varchar(11) ,
+                    si67_processoporlote int8  ,
+                    si67_mes int8  ,
+                    si67_instit int8 NULL ,
                     si67_leidalicitacao int4 NULL,
                     CONSTRAINT regadesao102024_sequ_pk PRIMARY KEY (si67_sequencial)
                 );
@@ -44,7 +44,7 @@ class Regadesao2024 extends AbstractMigration
                 DROP TABLE public.regadesao202024;
 
                 CREATE TABLE public.regadesao202024 (
-                    si72_sequencial int8 NOT NULL DEFAULT 0,
+                    si72_sequencial int8  DEFAULT 0,
                     si72_tiporegistro int8 NOT NULL DEFAULT 0,
                     si72_codorgao varchar(2) NOT NULL,
                     si72_codunidadesub varchar(8) NOT NULL,
@@ -92,6 +92,30 @@ class Regadesao2024 extends AbstractMigration
                 DROP SEQUENCE regadesao202024_si73_sequencial_seq;
 
                 CREATE SEQUENCE regadesao402024_si72_sequencial_seq
+                INCREMENT 1
+                MINVALUE 1
+                MAXVALUE 9223372036854775807
+                START 1
+                CACHE 1;
+
+                CREATE TABLE public.regadesao302024 (
+                    si74_sequencial int8 NOT NULL DEFAULT 0,
+                    si74_tiporegistro int8 NOT NULL DEFAULT 0,
+                    si74_codorgao varchar(2) NOT NULL,
+                    si74_codunidadesub varchar(8) NOT NULL,
+                    si74_nroprocadesao varchar(12) NOT NULL,
+                    si74_exercicioadesao int8 NOT NULL DEFAULT 0,
+                    si74_nrolote int8 NULL DEFAULT 0,
+                    si74_coditem int8 NULL DEFAULT 0,
+                    si74_percdesconto float8 NOT NULL DEFAULT 0,
+                    si74_tipodocumento int8 NOT NULL DEFAULT 0,
+                    si74_nrodocumento varchar(14) NOT NULL,
+                    si74_mes int8 NOT NULL DEFAULT 0,
+                    si74_instit int8 NULL DEFAULT 0,
+                    CONSTRAINT regadesao302024_sequ_pk PRIMARY KEY (si74_sequencial)
+                );
+
+                CREATE SEQUENCE regadesao302024_si74_sequencial_seq
                 INCREMENT 1
                 MINVALUE 1
                 MAXVALUE 9223372036854775807

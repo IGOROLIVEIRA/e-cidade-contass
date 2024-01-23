@@ -190,7 +190,7 @@ class cl_regadesao102024
       $this->si67_exerciciolicitacao = "0";
     }
     if ($this->si67_codmodalidadelicitacao == null) {
-      $this->si67_codmodalidadelicitacao = "0";
+      $this->si67_codmodalidadelicitacao = "null";
     }
     if ($this->si67_dtataregpreco == null) {
       $this->si67_dtataregpreco = "null";
@@ -206,6 +206,9 @@ class cl_regadesao102024
     }
     if ($this->si67_processoporlote == null) {
       $this->si67_processoporlote = "0";
+    }
+    if ($this->si67_nroedital == null) {
+      $this->si67_nroedital = "null";
     }
     if ($this->si67_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
@@ -425,7 +428,7 @@ class cl_regadesao102024
     }
     if (trim($this->si67_codmodalidadelicitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si67_codmodalidadelicitacao"])) {
       if (trim($this->si67_codmodalidadelicitacao) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si67_codmodalidadelicitacao"])) {
-        $this->si67_codmodalidadelicitacao = "0";
+        $this->si67_codmodalidadelicitacao = "null";
       }
       $sql .= $virgula . " si67_codmodalidadelicitacao = $this->si67_codmodalidadelicitacao ";
       $virgula = ",";

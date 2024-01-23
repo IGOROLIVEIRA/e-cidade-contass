@@ -7,7 +7,8 @@ require_once("classes/db_regadesao122024_classe.php");
 require_once("classes/db_regadesao132024_classe.php");
 require_once("classes/db_regadesao142024_classe.php");
 require_once("classes/db_regadesao202024_classe.php");
-require_once("classes/db_regadesao202024_classe.php");
+require_once("classes/db_regadesao302024_classe.php");
+require_once("classes/db_regadesao402024_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarREGADESAO.model.php");
 
 /**
@@ -145,6 +146,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
     $regadesao13 = new cl_regadesao132024();
     $regadesao14 = new cl_regadesao142024();
     $regadesao20 = new cl_regadesao202024();
+    $regadesao30 = new cl_regadesao302024();
     $regadesao40 = new cl_regadesao402024();
 
     db_inicio_transacao();
@@ -155,6 +157,14 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       if ($regadesao40->erro_status == 0) {
         throw new Exception($regadesao40->erro_msg);
       }
+    }
+
+    $result = db_query($regadesao30->sql_query(NULL, "*", NULL, "si74_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si74_instit=" . db_getsession("DB_instit")));
+    if (pg_num_rows($result) > 0) {
+        $regadesao30->excluir(NULL, "si74_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si74_instit=" . db_getsession("DB_instit"));
+        if ($regadesao30->erro_status == 0) {
+            throw new Exception($regadesao30->erro_msg);
+        }
     }
 
     $result = db_query($regadesao20->sql_query(NULL, "*", NULL, "si72_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si72_instit=" . db_getsession("DB_instit")));
@@ -254,12 +264,15 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       $regadesao10->si67_cnpjorgaogerenciador = $oDados10->cnpjorgaogerenciador;//8
       $regadesao10->si67_exerciciolicitacao = $oDados10->exerciciolicitacao;//9
       $regadesao10->si67_nroprocessolicitatorio = $oDados10->si06_numeroprc;//10
-      $regadesao10->si67_codmodalidadelicitacao = $oDados10->si06_modalidade;//11
-      $regadesao10->si67_regimecontratacao = $oDados10->si06_regimecontratacao;//12
+      $regadesao10->si67_regimecontratacao = $oDados10->si06_regimecontratacao;//11
       $regadesao10->si67_tipocriterio = $oDados10->si06_criterioadjudicacao;//13
-      if($oDados10->si06_regimecontratacao == "1"){
-         $regadesao10->si67_nroedital = $oDados10->si06_edital;//14
-         $regadesao10->si67_exercicioedital = $oDados10->exerciciolicitacao;//15
+      $regadesao10->si67_codmodalidadelicitacao = $oDados10->si06_modalidade;//12
+      $regadesao10->si67_nroedital = $oDados10->si06_edital;//14
+      $regadesao10->si67_exercicioedital = $oDados10->exerciciolicitacao;//15
+      if($oDados10->si06_regimecontratacao == "2" || $oDados10->si06_regimecontratacao == "3"){
+         $regadesao10->si67_codmodalidadelicitacao = '';//12
+         $regadesao10->si67_nroedital = '';//14
+         $regadesao10->si67_exercicioedital = '';//15
       }
       $regadesao10->si67_dtataregpreco = $oDados10->si06_dataata;//16
       $regadesao10->si67_dtvalidade = $oDados10->si06_datavalidade;//17
@@ -513,6 +526,49 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
               }
           }
 
+        //REGISTRO 30
+
+        $sSql = "select si07_numerolote,si07_precounitario,si07_quantidadelicitada,si07_quantidadeaderida,si07_percentual,
+                case when length(z01_cgccpf) = 11 then 1 when length(z01_cgccpf) = 14 then 2 else 0 end as tipodocumento,
+                z01_cgccpf,
+                CASE
+                      WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
+                    ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) END AS coditem
+                from itensregpreco
+                INNER JOIN adesaoregprecos on  si07_sequencialadesao = si06_sequencial
+                INNER join cgm on si07_fornecedor = z01_numcgm
+                inner join pcmater on
+                                        pcmater.pc01_codmater = si07_item
+                where si07_sequencialadesao = {$oDados10->si06_sequencial} and si06_criterioadjudicacao = 1";
+        $rsResult30 = db_query($sSql);
+
+        for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
+
+            $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
+            $regadesao30 = new cl_regadesao302024();
+            $regadesao30->si74_tiporegistro = 30;
+            $regadesao30->si74_codorgao = $oDados10->codorgao;
+            if ($oDados10->si06_codunidadesubant != "") {
+                $regadesao30->si74_codunidadesub = $oDados10->si06_codunidadesubant;
+            } else {
+                $regadesao30->si74_codunidadesub = $oDados10->codunidadesub;
+            }
+            $regadesao30->si74_nroprocadesao = $oDados10->si06_numeroadm;
+            $regadesao30->si74_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
+            $regadesao30->si74_nrolote = $oDados30->si07_numerolote;
+            $regadesao30->si74_coditem = $oDados30->coditem;
+            $regadesao30->si74_percdesconto = $oDados30->si07_percentual;
+            $regadesao30->si74_tipodocumento = $oDados30->tipodocumento;
+            $regadesao30->si74_nrodocumento = $oDados30->z01_cgccpf;
+            $regadesao30->si74_instit = db_getsession("DB_instit");
+            $regadesao30->si74_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+
+            $regadesao30->incluir(null);
+            if ($regadesao30->erro_status == 0) {
+                throw new Exception($regadesao30->erro_msg);
+            }
+        }
+
         //REGISTRO 40
 
           $sSql = "select si07_numerolote,si07_precounitario,si07_quantidadelicitada,si07_quantidadeaderida,si07_percentual,
@@ -526,7 +582,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
                 INNER join cgm on si07_fornecedor = z01_numcgm
                 inner join pcmater on
                                         pcmater.pc01_codmater = si07_item
-                where si07_sequencialadesao = {$oDados10->si06_sequencial} and si06_criterioadjudicacao in (1,2)";
+                where si07_sequencialadesao = {$oDados10->si06_sequencial} and si06_criterioadjudicacao = 2";
           $rsResult40 = db_query($sSql);
 
           for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
