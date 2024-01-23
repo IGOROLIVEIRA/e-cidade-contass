@@ -90,7 +90,7 @@ $ano = db_getsession("DB_anousu");
 
 if (isset($q60_modalvara) && $q60_modalvara == "3") {
 
-  $tamanho = array (290,95);
+  $tamanho = [290, 95];
   $spdf1 = new scpdf("P", "mm", $tamanho);
   $spdf1->Open();
   $pdf2 = new db_impcarne($spdf1, '26');
