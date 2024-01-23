@@ -15,7 +15,7 @@ if(isset($incluir)){
 
   $db_opcao = 2;
   //echo $mtfis_anoinicialldo;
-  $clmtfis_ldo->sql_record($clmtfis_ldo->sql_query(null,'*','',"mtfis_anoinicialldo = $mtfis_anoinicialldo "));
+  $clmtfis_ldo->sql_record($clmtfis_ldo->sql_query(null,'*','',"mtfis_anoinicialldo = $mtfis_anoinicialldo and mtfis_mfrpps = $mtfis_mfrpps"));
   if($clmtfis_ldo->numrows > 0){
       echo "<script> alert('Já existe registro para este ano'); </script>";
       $db_opcao = 1;

@@ -486,6 +486,13 @@ class Acordo
     private $lProvidencia;
 
     /**
+     * Vigência Indeterminada;
+     *
+     * @var bool
+     */
+    protected $iVigenciaIndeterminada;
+
+    /**
      * @return mixed
      */
     public function getiLicoutroorgao()
@@ -723,6 +730,23 @@ class Acordo
     }
 
     /**
+     * @return mixed
+     */
+    public function getVigenciaIndeterminada()
+    {
+        return $this->iVigenciaIndeterminada;
+    }
+
+    /**
+     * @param mixed $iLicoutroorgao
+     */
+    public function setVigenciaIndeterminada($iVigenciaIndeterminada)
+    {
+        $this->iVigenciaIndeterminada = $iVigenciaIndeterminada;
+        return $this;
+    }
+
+    /**
      * Construtor
      * @param integer $iCodigoAcordo
      */
@@ -783,7 +807,7 @@ class Acordo
                 $this->setIndiceReajuste($oDadosAcordo->ac16_indicereajuste);
                 $this->setDescricaoReajuste($oDadosAcordo->ac16_descricaoreajuste);
                 $this->setDescricaoIndice($oDadosAcordo->ac16_descricaoindice);
-
+                $this->setVigenciaIndeterminada($oDadosAcordo->ac16_vigenciaindeterminada);
 
                 if (!empty($oDadosAcordo->ac16_licitacao)) {
                     $this->setLicitacao($oDadosAcordo->ac16_licitacao);
@@ -1871,6 +1895,7 @@ class Acordo
         $oDaoAcordo->ac16_indicereajuste           = $this->getIndiceReajuste();
         $oDaoAcordo->ac16_descricaoreajuste        = $this->getDescricaoReajuste();
         $oDaoAcordo->ac16_descricaoindice          = $this->getDescricaoIndice();
+        $oDaoAcordo->ac16_vigenciaindeterminada    = $this->getVigenciaIndeterminada();
         $iCodigoAcordo                             = $this->getCodigoAcordo();
 
         /**
@@ -3417,7 +3442,7 @@ class Acordo
      * @return $this
      * @throws Exception
      */
-    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $sJustificativa, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada, $lProvidencia, $datareferencia, $sPercentualReajuste, $iIndiceReajusteacordo, $sDescricaoIndiceacordo)
+    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $sJustificativa, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada, $lProvidencia, $datareferencia, $sPercentualReajuste, $iIndiceReajusteacordo, $sDescricaoIndiceacordo,$sDescricaoReajuste,$iCriterioReajuste)
     {
         $nValorItens = 0;
         $nValorLancamentoContabil = 0;
@@ -3453,6 +3478,8 @@ class Acordo
         $oNovaPosicao->setPercentualReajuste($sPercentualReajuste);
         $oNovaPosicao->setIndiceReajusteacordo($iIndiceReajusteacordo);
         $oNovaPosicao->setDescricaoIndiceacordo(db_stdClass::normalizeStringJsonEscapeString($sDescricaoIndiceacordo));
+        $oNovaPosicao->setCriterioReajuste($iCriterioReajuste);
+        $oNovaPosicao->setDescricaoReajuste(db_stdClass::normalizeStringJsonEscapeString($sDescricaoReajuste));
 
         $oNovaPosicao->save();
 
@@ -4532,6 +4559,8 @@ class Acordo
         $oNovaPosicao->setPercentualReajuste($oApostila->percentualreajuste);
         $oNovaPosicao->setIndiceReajusteacordo($oApostila->indicereajuste);
         $oNovaPosicao->setDescricaoIndiceacordo(db_stdClass::normalizeStringJsonEscapeString($oApostila->descricaoindice));
+        $oNovaPosicao->setCriterioReajuste($oApostila->criterioreajuste);
+        $oNovaPosicao->setDescricaoReajuste(db_stdClass::normalizeStringJsonEscapeString($oApostila->descricaoreajuste));
         $oNovaPosicao->save();
 
         /**

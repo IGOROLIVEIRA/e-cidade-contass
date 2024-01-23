@@ -9,6 +9,9 @@ include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $cllicitemobra = new cl_licitemobra;
 $clcondataconf = new cl_condataconf;
+$clliclicita = new cl_liclicita;
+$clproccop = new cl_pcproc;
+
 $db_opcao = 1;
 $db_botao = true;
 //if(isset($incluir)){
@@ -107,7 +110,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 </style>
 </html>
 <script>
-  js_tabulacaoforms("form1","obr06_pcmater",true,1,"obr06_pcmater",true);
+  js_tabulacaoforms("form1","l20_codigo",true,1,"l20_codigo",true);
 </script>
 <?
 if(isset($incluir)){

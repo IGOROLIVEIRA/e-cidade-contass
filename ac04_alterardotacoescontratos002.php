@@ -45,7 +45,7 @@ $acordosDotacoesAnoOrigem = $acordos
     ->get();
 
 $orcamentosDotacoesAnoDestino = $orcamentosDotacoes
-    ->getOrcamentosDotacoesAnoDestino($anoOrigem, $anoDestino, $codigoInstituicao)
+    ->getOrcamentosDotacoesAnoDestino($anoDestino, $codigoInstituicao)
     ->get();
 
 $dotacoesAcordosOrcamentosNaoInseridas = $acordosDotacoesAnoOrigem

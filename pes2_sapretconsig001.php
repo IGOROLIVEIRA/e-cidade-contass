@@ -138,6 +138,11 @@ $db_botao = true;
                  ";
           }
         }
+        ?>
+        <tr>
+        <td nowrap align="center">
+        <table>
+            <?
         include("dbforms/db_classesgenericas.php");
         $geraform = new cl_formulario_rel_pes;
         if(!isset($anofolha) || (isset($anofolha) && trim($anofolha) == "")){
@@ -148,12 +153,15 @@ $db_botao = true;
         }
         $geraform->gera_form($anofolha,$mesfolha);
         ?>
+        </table>
+        </td>
+        </tr>
         <tr>
-          <td nowrap align="left">
+          <td nowrap align="center">
             <table>
               <?
               $aux = new cl_arquivo_auxiliar;
-              $aux->cabecalho = "<strong>RUBRICAS SELECIONADOS</strong>";
+              $aux->cabecalho = "<strong>RUBRICAS SELECIONADAS</strong>";
               $aux->codigo = "rh27_rubric";
               $aux->descr  = "rh27_descr";
               $aux->nomeobjeto = "selrubri";
@@ -171,38 +179,20 @@ $db_botao = true;
               $aux->linhas = 10;
               $aux->vwidth = "400";
               $aux->tamanho_campo_descricao = 38;
-	      $aux->completar_com_zeros_codigo = true;
-              $aux->funcao_gera_formulario();
-              ?>
-            </table>
-          </td>
-          <td nowrap align="left">
-            <table>
-              <?
-              $aux = new cl_arquivo_auxiliar;
-              $aux->cabecalho = "<strong>RECURSOS SELECIONADOS</strong>";
-              $aux->codigo = "o15_codigo";
-              $aux->descr  = "o15_descr";
-              $aux->nomeobjeto = "recursos";
-              $aux->funcao_js = 'js_geraform_mostrarec';
-              $aux->funcao_js_hide = 'js_geraform_mostrarec1';
-              $aux->func_arquivo = "func_orctiporec.php";
-              $aux->nomeiframe = "db_iframe_orctiporec";
-              $aux->executa_script_apos_incluir = "document.form1.o15_codigo.focus();";
-              $aux->executa_script_lost_focus_campo = "js_insSelectrecursos()";
-              $aux->executa_script_change_focus = "document.form1.o15_codigo.focus();";
-              $aux->mostrar_botao_lancar = false;
-              $aux->db_opcao = 2;
-              $aux->tipo = 2;
-              $aux->top = 20;
-              $aux->linhas = 10;
-              $aux->vwidth = "400";
-              $aux->tamanho_campo_descricao = 38;
+              $aux->completar_com_zeros_codigo = true;
               $aux->funcao_gera_formulario();
               ?>
             </table>
           </td>
         </tr>
+        <tr>
+      <td colspan="2" align="center"><strong>Com Quebra :</strong>
+                <?
+                    $x = array("f"=>"NÃO", "t"=>"SIM");
+                    db_select('quebra', $x, true, 4);
+                ?>
+      </td>
+      </tr>
       </table>
       </center>
       <input name="incluir" type="button" id="db_opcao" onclick="js_enviardados();" value="Gerar">
@@ -258,17 +248,12 @@ function js_enviardados(){
       virstrretorno = ",";
     }
 
-    stringretorno+= "&recrs=";
-    virstrretorno = "";
-    for(i=0;i<document.form1.recursos.length;i++){
-      stringretorno+= virstrretorno+document.form1.recursos.options[i].value;
-      virstrretorno = ",";
-    }
-
     if(document.form1.r48_semest && document.form1.r48_semest.value != ""){
       stringretorno+= "&semest="+document.form1.r48_semest.value;
       virstrretorno = ",";
     }
+    
+    stringretorno+= "&quebra="+document.form1.quebra.value;
 
     jan = window.open('pes2_sapretconsig002.php' + stringretorno,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
     jan.moveTo(0,0);

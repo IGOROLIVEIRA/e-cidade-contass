@@ -32,6 +32,7 @@ class cl_contratos402024 {
    var $si91_valorcancelamentocontrato = 0;
    var $si91_mes = 0;
    var $si91_instit = 0;
+   var $si91_codunidadesubatual = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si91_sequencial = int8 = sequencial
@@ -44,6 +45,7 @@ class cl_contratos402024 {
                  si91_valorcancelamentocontrato = float8 = Valor do  Cancelamento do Contrato
                  si91_mes = int8 = Mês
                  si91_instit = int8 = Instituição
+                 si91_codunidadesubatual = varchar(8) = Código da unidade atual;
                  ";
    //funcao construtor da classe
    function cl_contratos402024() {
@@ -177,6 +179,7 @@ class cl_contratos402024 {
                                       ,si91_valorcancelamentocontrato
                                       ,si91_mes
                                       ,si91_instit
+                                      ,si91_codunidadesubatual
                        )
                 values (
                                 $this->si91_sequencial
@@ -189,6 +192,7 @@ class cl_contratos402024 {
                                ,$this->si91_valorcancelamentocontrato
                                ,$this->si91_mes
                                ,$this->si91_instit
+                               ,'$this->si91_codunidadesubatual'
                       )";
      $result = db_query($sql);
      if($result==false){

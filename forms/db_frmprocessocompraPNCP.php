@@ -203,6 +203,24 @@ $clrotulo->label("descrdepto");
                             ?>
                         </td>
                     </tr>
+
+                    <tr id="dispensaporvalor5">
+                        <td>
+                            <label class="bold">Modalidade de Contratação:</label>
+                        </td>
+                        <td>
+                            <?php
+                            $aModalidade = array(
+                                '0' => 'Selecione',
+                                '8' => 'Dispensa sem Disputa',
+                                '9' => 'Inexigibilidade',
+                            );
+
+                            db_select('pc80_modalidadecontratacao', $aModalidade, true, 1,"onchange='js_consultaamparolegal(this.value);'");
+                            ?>
+                        </td>
+                    </tr>
+
                     <tr id="dispensaporvalor4">
                         <td>
                             <label class="bold">Amparo Legal:</label>
@@ -232,19 +250,21 @@ $clrotulo->label("descrdepto");
                             ?>
                         </td>
                     </tr>
-                    <tr id="dispensaporvalor5">
+
+                    <tr id="dispensaporvalor6" style="display:none">
                         <td>
-                            <label class="bold">Modalidade de Contratação:</label>
+                            <label class="bold">Critério de Julgamento:</label>
                         </td>
                         <td>
                             <?php
-                            $aModalidades = array(
-                                "" => 'Selecione',
-                                "8" => 'Dispensa sem Disputa',
-                                "9" => 'Inexigibilidade'
+                            $aCriteriojulgamento = array(
+                                '0' => 'Selecione',
+                                '1' => 'Menor preço',
+                                '2' => 'Maior desconto',
+                                '5' => 'Maior lance',
+                                '7' => 'Não se aplica'
                             );
-
-                            db_select('pc80_modalidadecontratacao', $aModalidades, true, '','style="width:219px"');
+                            db_select('pc80_criteriojulgamento', $aCriteriojulgamento, true, '', 'style="width:50%"');
                             ?>
                         </td>
                     </tr>
@@ -339,6 +359,7 @@ $clrotulo->label("descrdepto");
             document.getElementById('dispensaporvalor3').style.display = 'none';
             document.getElementById('dispensaporvalor4').style.display = 'none';
             document.getElementById('dispensaporvalor5').style.display = 'none';
+            document.getElementById('dispensaporvalor6').style.display = 'none';
             document.getElementById('categoriaprocesso').style.display = 'none';
         } else {
             document.getElementById('dispensaporvalor1').style.display = '';
@@ -346,6 +367,7 @@ $clrotulo->label("descrdepto");
             document.getElementById('dispensaporvalor3').style.display = '';
             document.getElementById('dispensaporvalor4').style.display = '';
             document.getElementById('dispensaporvalor5').style.display = '';
+            document.getElementById('dispensaporvalor6').style.display = '';
             document.getElementById('categoriaprocesso').style.display = '';
         }
     }
@@ -384,7 +406,8 @@ $clrotulo->label("descrdepto");
                 pc80_dadoscomplementares: $('pc80_dadoscomplementares'),
                 pc80_amparolegal: $('pc80_amparolegal'),
                 pc80_categoriaprocesso: $('pc80_categoriaprocesso'),
-                pc80_modalidadecontratacao: $('pc80_modalidadecontratacao')
+                pc80_modalidadecontratacao: $('pc80_modalidadecontratacao'),
+                pc80_criteriojulgamento: $('pc80_criteriojulgamento')
             },
             lRedirecionaLote = false;
 
@@ -507,7 +530,7 @@ $clrotulo->label("descrdepto");
                     js_pesquisa();
                     return false;
                 }
-
+                js_consultaamparolegal(oRetorno.pc80_modalidadecontratacao);
                 iCodigoProcesso = oRetorno.pc80_codproc;
 
                 oCampos.codigo_processo.value = oRetorno.pc80_codproc;
@@ -549,6 +572,7 @@ $clrotulo->label("descrdepto");
                 document.getElementById('pc80_amparolegal').value = oRetorno.pc80_amparolegal;
                 document.getElementById('pc80_categoriaprocesso').selectedIndex = oRetorno.pc80_categoriaprocesso;
                 document.getElementById('pc80_modalidadecontratacao').value = oRetorno.pc80_modalidadecontratacao;
+                document.getElementById('pc80_criteriojulgamento').value = oRetorno.pc80_criteriojulgamento;
 
                 aLotes = (Object.isArray(oRetorno.aLotes) ? {} : oRetorno.aLotes);
 
@@ -837,6 +861,7 @@ $clrotulo->label("descrdepto");
                 pc80_amparolegal: oCampos.pc80_amparolegal.value,
                 pc80_categoriaprocesso: oCampos.pc80_categoriaprocesso.value,
                 pc80_modalidadecontratacao: oCampos.pc80_modalidadecontratacao.value,
+                pc80_criteriojulgamento: oCampos.pc80_criteriojulgamento.value,
                 iSolicitacao: document.getElementById('oGridItensrow0cell0').innerText,
                 data: oCampos.data.value,
                 aItens: aItensLote
@@ -972,6 +997,48 @@ $clrotulo->label("descrdepto");
             var input = document.querySelector('#txt_lotedescricao');
             input.addEventListener('keypress', log);
         });
+
+
+        function js_consultaamparolegal(param){
+
+            let modalidade = 0;
+
+            if(param === '8'){
+                $('pc80_criteriojulgamento').value = 0;
+                modalidade = 101;
+            }else{
+                $('pc80_criteriojulgamento').value = 7;
+                modalidade = 100;
+            }
+
+            const oParam = {};
+            oParam.exec       = 'buscarAparolegal';
+            oParam.modalidade = modalidade;
+
+            const oAjax = new Ajax.Request(
+                'com1_processocomprasutils.RPC.php',
+                {
+                    parameters: 'json=' + Object.toJSON(oParam),
+                    asynchronous: false,
+                    method: 'post',
+                    onComplete: js_retornoAmparolegal
+                });
+        }
+
+        function js_retornoAmparolegal(oAjax){
+            const oRetorno = eval('(' + oAjax.responseText + ")");
+
+            let listaamparolegal = document.getElementById('pc80_amparolegal').options;
+
+            for (let x = listaamparolegal.length; x > 0; x --) {
+
+                listaamparolegal.remove(x);
+            }
+
+            oRetorno.amparolegal.forEach(function (amparo, iseq){
+                listaamparolegal.add(new Option(amparo.l212_lei.urlDecode(), amparo.l212_codigo));
+            });
+        }
 
 
         function log(e) {

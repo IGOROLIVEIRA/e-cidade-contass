@@ -202,24 +202,6 @@ class cl_efdreinfr4010
             $this->erro_status = "0";
             return false;
         }
-        if ($this->efd03_protocolo == null) {
-            $this->erro_sql = " Campo efd03_protocolo não informado.";
-            $this->erro_campo = "efd03_protocolo";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if ($this->efd03_dataenvio == null) {
-            $this->erro_sql = " Campo efd03_dataenvio não informado.";
-            $this->erro_campo = "efd03_dataenvio";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
         if ($this->efd03_numcgm == null) {
             $this->erro_sql = " Campo efd03_numcgm não informado.";
             $this->erro_campo = "efd03_numcgm";
@@ -230,32 +212,8 @@ class cl_efdreinfr4010
             return false;
         }
         if ($this->efd03_status == null) {
-            $this->erro_sql = " Campo efd03_status não informado.";
-            $this->erro_campo = "efd03_status";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
+            $this->efd03_status = 'null';
         }
-        if ($this->efd03_descResposta == null) {
-            $this->erro_sql = " Campo efd03_descResposta não informado.";
-            $this->erro_campo = "efd03_descResposta";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        // if ($this->efd03_dscResp == null) {
-        //     $this->erro_sql = " Campo efd03_dscResp não informado.";
-        //     $this->erro_campo = "efd03_dscResp";
-        //     $this->erro_banco = "";
-        //     $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        //     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        //     $this->erro_status = "0";
-        //     return false;
-        // }
         if ($this->efd03_sequencial == "" || $this->efd03_sequencial == null) {
             $result = db_query("select nextval('efdreinfr4010_efd03_sequencial_seq')");
             if ($result == false) {
@@ -573,19 +531,6 @@ class cl_efdreinfr4010
                 return false;
             }
         }
-        // if (trim($this->efd03_dscResp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["efd03_dscResp"])) {
-        //     $sql  .= $virgula . " efd03_dscResp = $this->efd03_dscResp ";
-        //     $virgula = ",";
-        //     if (trim($this->efd03_dscResp) == null) {
-        //         $this->erro_sql = " Campo efd03_dscResp não informado.";
-        //         $this->erro_campo = "efd03_dscResp";
-        //         $this->erro_banco = "";
-        //         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        //         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        //         $this->erro_status = "0";
-        //         return false;
-        //     }
-        // }       
         $sql .= " where ";
         $sql .= "efd03_sequencial = '$efd03_sequencial'";
         $result = db_query($sql);

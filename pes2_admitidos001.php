@@ -304,6 +304,9 @@ function js_relatorio2(){
     if(F.documentos.checked == true){
       qry+= "&documentos=1";
     }
+    if(F.listarescis.checked == true){
+      qry+= "&listarescis=1";
+    }
     
     if(F.listapens.checked == true){
       qry+= "&listapens=s";

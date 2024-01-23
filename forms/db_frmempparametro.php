@@ -321,6 +321,16 @@ $clempparametro->rotulo->label();
                     ?>
                 </td>
             </tr>
+            <tr>
+                <td nowrap title="<?= @$Te30_modeloop ?>">
+                    <?= @$Le30_modeloop ?>
+                </td>
+                <td><?
+                    $matriz = array("1" => "Layout 1", "2" => "Layout 2");
+                    db_select("e30_modeloop", $matriz, true, 1);
+                    ?>
+                </td>
+            </tr>
         </table>
     </fieldset>
     <center>

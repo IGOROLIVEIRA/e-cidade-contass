@@ -103,10 +103,8 @@ try {
             $oRetorno->pc80_modalidadecontratacao = $oProcessoCompra->getModalidadeContratacao();
             $oRetorno->pc80_orcsigiloso = $oProcessoCompra->getOrcSigiloso();
             $oRetorno->pc80_subcontratacao = $oProcessoCompra->getSubContratacao();
-
-            /*OC3770*/
             $oRetorno->pc80_criterioadjudicacao = $oProcessoCompra->getCriterioAdjudicacao();
-
+            $oRetorno->pc80_criteriojulgamento = $oProcessoCompra->getCriterioJulgamento();
 
             $aLotes = array();
             foreach ($oProcessoCompra->getLotes() as $oLotesProcessoCompra) {
@@ -166,6 +164,7 @@ try {
             $iAmparolegal              = $oParam->pc80_amparolegal;
             $iCategoriaprocesso        = $oParam->pc80_categoriaprocesso;
             $iModalidadeContratacao    = $oParam->pc80_modalidadecontratacao;
+            $iCriterioJulgamento       = $oParam->pc80_criteriojulgamento;
             $data = implode("-", array_reverse(explode("/", $oParam->data)));
             $iSolicitacao = $oParam->iSolicitacao;
 
@@ -192,6 +191,7 @@ try {
             $oProcessoCompra->setAmparoLegal($iAmparolegal);
             $oProcessoCompra->setCategoriaProcesso($iCategoriaprocesso);
             $oProcessoCompra->setModalidadeContratacao($iModalidadeContratacao);
+            $oProcessoCompra->setCriterioJulgamento($iCriterioJulgamento);
 
             foreach ($aLotes as $oStdLote) {
 

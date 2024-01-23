@@ -48,12 +48,19 @@ unset($_GET['viewAlterar']);
                 </td>
                 <td>
                     <?
-                    $x = array("00" => "Selecione...", "01" => "Reajuste de preço previsto no contrato", "02" => "Atualizações, compensações ou penalizações", "03" => "Empenho de dotações orçamentárias suplementares");
+                    $x = array(
+                        "00" => "Selecione...",
+                        "01" => "Variação do valor contratual ou Repactuação de preços previstos no contrato",
+                        "02" => "Atualizações, compensações ou penalizações",
+                        "03" => "Empenho de dotações orçamentárias",
+                        "04" => "Alterações na razão social do contratado",
+                        "05" => "Prorrogação do cronograma de execução (impedimento, paralisação ou suspensão)",
+                        "99" => "Outros"
+                        );
                     db_select('si03_tipoapostila', $x, true, $db_opcao, "onchange='js_changeTipoApostila(this.value)'");
                     ?>
                 </td>
             </tr>
-
             <tr>
                 <td nowrap nowrap title="<?= @$Tsi03_tipoalteracaoapostila ?>">
                     <b>Tipo da Alteração:</b>
@@ -65,18 +72,26 @@ unset($_GET['viewAlterar']);
                     ?>
                 </td>
             </tr>
+            <tr id="tr_criterioreajuste" style="display:none;">
+                <td>
+                    <b>Critério de Reajuste </b>
+                </td>
+                <td>
+                    <?
+                    $aCriteriosReajuste = array("1" => "Índice Único", "2" => "Cesta de Índices", "3" => "Índice Específico");
+                    db_select('ac26_criterioreajuste', $aCriteriosReajuste, true, $db_opcao, "onchange='js_changeCriterioReajuste(this.value)'");
+                    ?>
+                </td>
+            </tr>
             <tr id="trreajuste" style="display: none;">
                 <td>
                     <b>Percentual de Reajuste:</b>
-
-
-
                 </td>
                 <td>
                     <?
                     db_input('si03_percentualreajuste', 10, 4, true, 'text', $db_opcao, "")
                     ?>
-                    <b>Índice Reajuste:</b>
+                    <b id="indicereajuste">Índice Reajuste:</b>
 
                     <?
                     $x = array("0" => "Selecione", "1" => "IPCA", "2" => "INPC", "3" => "INCC", "4" => "IGP-M", "5" => "IGP-DI", "6" => "Outro");
@@ -84,7 +99,17 @@ unset($_GET['viewAlterar']);
                     ?>
                 </td>
             </tr>
-            <tr id="trdescricaoreajuste" style="display: none;">
+            <tr id="tr_descricaoreajuste" style="display: none;">
+                <td>
+                    <b>Descrição Reajuste:</b>
+                </td>
+                <td>
+                    <?
+                    db_textarea('ac26_descricaoreajuste', 3, 58, $Isi03_descricaoindice, true, 'text', $db_opcao, "style='resize: none'", "", "", "300");
+                    ?>
+                </td>
+            </tr>
+            <tr id="tr_descricaoindice" style="display: none;">
 
 
                 <td>
@@ -431,7 +456,7 @@ unset($_GET['viewAlterar']);
      * Retorno da pesquisa acordos
      */
     function js_mostraacordo1(chave1, chave2, chave3) {
-        var oParam = {
+        let oParam = {
             exec: 'getleilicitacao',
             licitacao: chave1
         }
@@ -445,6 +470,34 @@ unset($_GET['viewAlterar']);
             }).setMessage("Aguarde, pesquisando acordos.")
             .execute();
 
+        oParam = {
+            exec: 'getLeiAndOrigem',
+            licitacao: chave1
+        }
+
+        new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
+            
+                let aOrigensValidas = ["2","3"];
+                let leiLicitacao = oRetorno.lei;
+                let tipoOrigem = oRetorno.tipoorigem;
+                let si03_tipoapostila = document.getElementById('si03_tipoapostila');
+
+                if (leiLicitacao == 1 && aOrigensValidas.includes(tipoOrigem)) {
+
+                    si03_tipoapostila.options[4].disabled = false;
+                    si03_tipoapostila.options[5].disabled = false;
+                    si03_tipoapostila.options[6].disabled = false;
+                    return;
+                } 
+
+                si03_tipoapostila.options[4].disabled = true;
+                si03_tipoapostila.options[5].disabled = true;
+                si03_tipoapostila.options[6].disabled = true;
+                                
+        }).setMessage("Aguarde, pesquisando acordos.")
+            .execute();
+        
+            
         $('ac16_sequencial').value = chave1;
         $('ac16_resumoobjeto').value = chave2;
 
@@ -1210,7 +1263,7 @@ unset($_GET['viewAlterar']);
         }
 
         if ($("si03_descrapostila").value == "") {
-            return alert("Obrigatório informar o  Numero Seq. Apostila.");
+            return alert("Obrigatório informar a descrição da Apostila.");
         }
 
         if ($("si03_dataapostila").value == "") {
@@ -1231,13 +1284,19 @@ unset($_GET['viewAlterar']);
             if ($("si03_percentualreajuste").value == "") {
                 return alert("Obrigatório informar o Percentual de Reajuste.");
             }
-            if ($("si03_indicereajuste").value == "0") {
+            if ($("si03_indicereajuste").value == "0" && $("ac26_criterioreajuste").value == "1") {
                 return alert("Obrigatório informar o Indice Reajuste.");
             }
             if ($("si03_indicereajuste").value == "6") {
-                if ($("si03_descricaoindice").value == "") {
-                    return alert("Obrigatório informar a Descrição do Indice.");
+                if ($("ac26_descricaoreajuste").value == "") {
+                    return alert("Obrigatório informar a Descrição do Critério de Reajuste.");
                 }
+            }
+        }
+
+        if($("ac26_criterioreajuste").value != "1"){
+            if ($("si03_descricaoindice").value == "") {
+                return alert("Obrigatório informar a Descrição do Índice.");
             }
         }
 
@@ -1262,9 +1321,9 @@ unset($_GET['viewAlterar']);
         oApostila.justificativa = $("si03_justificativa").value;
         oApostila.percentualreajuste = $("si03_percentualreajuste").value;
         oApostila.indicereajuste = $("si03_indicereajuste").value;
-        oApostila.descricaoindice = decodeURIComponent(encodeURIComponent($("si03_descricaoindice").value));
-
-
+        oApostila.descricaoindice = decodeURIComponent(encodeURIComponent($("si03_descricaoindice").value.replaceAll('"',"")));
+        oApostila.descricaoreajuste = decodeURIComponent(encodeURIComponent($("ac26_descricaoreajuste").value.replaceAll('"',"")));
+        oApostila.criterioreajuste = $("ac26_criterioreajuste").value;
 
         var oParam = {
             exec: "processarApostilamento",
@@ -1381,14 +1440,15 @@ unset($_GET['viewAlterar']);
     }
 
     function js_indicereajuste() {
-        indice = $("si03_indicereajuste").value;
-        if (indice == 6) {
-            document.getElementById("trdescricaoreajuste").style.display = '';
-        } else {
-            document.getElementById("trdescricaoreajuste").style.display = 'none';
-            $("si03_descricaoindice").value = "";
-        }
 
+        if ($("si03_indicereajuste").value == 6) {
+            document.getElementById("tr_descricaoreajuste").style.display = '';
+            return;
+        } 
+
+        document.getElementById("tr_descricaoreajuste").style.display = 'none';
+        $("tr_descricaoreajuste").value = "";
+        
     }
 
     function js_changeTipoApostila(iTipo) {
@@ -1414,6 +1474,17 @@ unset($_GET['viewAlterar']);
             oGridItens.aHeaders[5].lDisplayed = false;
         }
 
+        if (iTipo == "01") {
+            document.getElementById('trreajuste').style.display = "";
+            document.getElementById('tr_criterioreajuste').style.display = "";
+        } else {
+            document.getElementById('trreajuste').style.display = "none";
+            document.getElementById('tr_criterioreajuste').style.display = "none";
+            $("si03_percentualreajuste").value = "";
+            $("si03_indicereajuste").options[0].selected = true;
+        }
+
+
         aItensPosicao.forEach(function(oItem, iIndice) {
             if (iTipo == "03") {
 
@@ -1428,7 +1499,18 @@ unset($_GET['viewAlterar']);
                 document.getElementById('oGridItensrow' + iIndice + 'cell9').style.display = "";
                 document.getElementById('col11').style.display = "";
 
-            } else {
+            }  else if(iTipo == "04" || iTipo == "05" || iTipo == "99"){
+                document.getElementById("si03_tipoalteracaoapostila").options[0].disabled = true;
+                document.getElementById("si03_tipoalteracaoapostila").options[1].disabled = true;
+                document.getElementById("si03_tipoalteracaoapostila").options[2].disabled = false;
+                $("si03_tipoalteracaoapostila").value = 3;
+                document.getElementById("si03_tipoalteracaoapostila").disabled = true;
+                document.getElementById('valorunitario' + iIndice).addClassName('readonly');
+                document.getElementById('valorunitario' + iIndice).readOnly = true;
+                document.getElementById('oGridItensrow' + iIndice + 'cell9').style.display = "";
+                document.getElementById('col11').style.display = "";
+            }
+            else {
                 $("si03_tipoalteracaoapostila").value = 1;
                 document.getElementById("si03_tipoalteracaoapostila").options[0].disabled = false;
                 document.getElementById("si03_tipoalteracaoapostila").options[1].disabled = false;
@@ -1444,13 +1526,6 @@ unset($_GET['viewAlterar']);
                 document.getElementById('oGridItensrow' + iIndice + 'cell9').style.display = "none";
                 document.getElementById('col11').style.display = "none";
 
-            }
-            if (iTipo == "01") {
-                document.getElementById('trreajuste').style.display = "";
-            } else {
-                document.getElementById('trreajuste').style.display = "none";
-                $("si03_percentualreajuste").value = "";
-                $("si03_indicereajuste").options[0].selected = true;
             }
 
         });
@@ -1552,7 +1627,13 @@ unset($_GET['viewAlterar']);
                 $('si03_descrapostila').value = oRetorno.dadosAcordo.si03_descrapostila;
                 $('si03_datareferencia').value = oRetorno.dadosAcordo.si03_datareferencia;
                 $('si03_justificativa').value = oRetorno.dadosAcordo.si03_justificativa;
+                $('ac26_descricaoreajuste').value = oRetorno.dadosAcordo.ac26_descricaoreajuste;
+                $('ac26_criterioreajuste').value = oRetorno.dadosAcordo.ac26_criterioreajuste;
+                $("si03_indicereajuste").value = oRetorno.dadosAcordo.si03_indicereajuste;
                 si03_sequencial = oRetorno.dadosAcordo.si03_sequencial;
+                js_changeTipoApostila(tipoApostilaInicial);
+                js_indicereajuste($("si03_indicereajuste").value);
+                js_changeCriterioReajuste($("ac26_criterioreajuste").value);
 
                 validaDadosAcordo(oRetorno);
 
@@ -1606,6 +1687,9 @@ unset($_GET['viewAlterar']);
             si03_indicereajuste: oApostila.indicereajuste,
             si03_datareferencia: $('si03_datareferencia').value,
             si03_justificativa: $('si03_justificativa').value,
+            si03_descricaoreajuste: oApostila.descricaoreajuste,
+            si03_descricaoindice: oApostila.descricaoindice,
+            si03_criterioreajuste: oApostila.criterioreajuste,
             updateNumApostilamento
         }
 
@@ -1646,5 +1730,21 @@ unset($_GET['viewAlterar']);
         });
 
         return itensSelecionados;
+    }
+
+    function js_changeCriterioReajuste(criterioReajuste){
+        if(criterioReajuste == "1"){
+            document.getElementById('si03_indicereajuste').style.display = "";
+            document.getElementById('indicereajuste').style.display = "";
+            document.getElementById('tr_descricaoindice').style.display = "none";
+            document.getElementById('si03_descricaoindice').value = "";
+            return;
+        }
+        document.getElementById('si03_indicereajuste').style.display = "none";
+        document.getElementById('indicereajuste').style.display = "none";
+        document.getElementById('tr_descricaoindice').style.display = "";
+        document.getElementById('si03_indicereajuste').value = "0";
+        document.getElementById('ac26_descricaoreajuste').value = "";
+        document.getElementById("tr_descricaoreajuste").style.display = 'none';
     }
 </script>
