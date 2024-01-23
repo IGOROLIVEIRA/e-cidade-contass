@@ -41,15 +41,7 @@ class Termoreparc extends LegacyModel
         return $this->belongsTo(Termo::class, 'v08_parcel', 'v07_parcel');
     }
 
-    /**
-     * @TODO refazer query para buscar direto da tabela termo uma vez que a origem se torna inrrastreavel apos o replacelamento ser revogado
-     * @param int $instalmentNumber
-     * @param int $instit
-     * @param int $year
-     * @param DateTime $dueDate
-     * @return string
-     */
-    public static function getQueryMonetaryAdjustmentFromFcCalcula(int $instalmentNumber, int $instit, int $year, DateTime $dueDate): string
+    public static function getQueryOriginReInstalmentFromParentInstallment(int $instalmentNumber, int $instit): string
     {
         return "
                   SELECT 4 as SELECT,
