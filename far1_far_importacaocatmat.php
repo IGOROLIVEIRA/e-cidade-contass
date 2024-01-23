@@ -114,7 +114,11 @@ db_menu( db_getsession ( "DB_id_usuario" ), db_getsession ( "DB_modulo" ), db_ge
     }
 
     function retornoProcessar( oRetorno, lErro ) {
-        console.log(oRetorno);
+        if (oRetorno.iStatus == 1){
+            alert("Importação Ralizada com sucesso !");
+        }else{
+            alert(oRetorno.sMensagem);
+        }
     }
 
 </script>

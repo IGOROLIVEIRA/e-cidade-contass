@@ -15,6 +15,8 @@ class MaterCatMat extends LegacyModel
 
     protected $primaryKey = 'faxx_i_codigo';
 
+    protected string $sequenceName = 'far_matercatmat_faxx_i_codigo_seq';
+
     protected $fillable = [
         'faxx_i_codigo',
         'faxx_i_catmat',

@@ -7,7 +7,7 @@ class Sigaf2 extends AbstractMigration
     public function up()
     {
         $sql  = "
-            CREATE TABLE far_matercatmat (
+            CREATE TABLE farmacia.far_matercatmat (
             faxx_i_codigo INT PRIMARY KEY,
             faxx_i_catmat int8,
             faxx_i_desc varchar(250),
@@ -16,7 +16,7 @@ class Sigaf2 extends AbstractMigration
             );
 
 
-            CREATE SEQUENCE far_matercatmat_faxx_i_codigo_seq
+            CREATE SEQUENCE farmacia.far_matercatmat_faxx_i_codigo_seq
             INCREMENT 1
             MINVALUE 1
             MAXVALUE 9223372036854775807

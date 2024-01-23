@@ -1,5 +1,7 @@
 <?php
 use App\Services\ExcelService;
+use App\Models\MaterCatMat;
+use Illuminate\Database\Capsule\Manager as DB;
 
 define( 'MENSAGENS_SAU4_IMPORTACAOCATMAT_RPC', 'saude.farmacia.far1_importacaoxls_RPC.' );
 
@@ -21,6 +23,7 @@ $oRetorno->sMensagem = '';
 $oRetorno->erro      = false;
 
 $iInstituicao = db_getsession( 'DB_instit' );
+$materCatMat = new MaterCatMat();
 
 try {
 
@@ -35,27 +38,36 @@ try {
             $excelService = new ExcelService();
             $nome_arquivo = $oParam->sCaminhoArquivo;
 
-            $aDadosPlanilha = $excelService->importFile($nome_arquivo);
+            $aDadosImportar = [];
+            $aDadosPlanilha = array_slice($excelService->importFile($nome_arquivo),1);
 
-            foreach ($aDadosPlanilha as $key => $iCadMat){
-              echo "<pre>";
-              print_r($iCadMat);
-              exit;
+            foreach ($aDadosPlanilha as $key => $dados){
+                $aDadosImportar [] = [
+                    'faxx_i_codigo' => $materCatMat->getNextval(),
+                    'faxx_i_catmat' => $dados['A'],
+                    'faxx_i_desc' => $dados['B'],
+                    'faxx_i_ativo' => $dados['C'],
+                    'faxx_i_susten' => $dados['D'],
+                ];
             }
 
-            //db_inicio_transacao();
+            $resultadoChunks = array_chunk($aDadosImportar, 500);
 
-            //db_fim_transacao();
+            foreach ($resultadoChunks as $iCadMat){
+                DB::beginTransaction();
+
+                    MaterCatMat::insert($iCadMat);
+
+                DB::commit();
+            }
 
             break;
-
     }
  } catch ( Exception $oErro ) {
+    DB::rollBack();
 
-    db_fim_transacao(true);
     $oRetorno->iStatus   = 2;
-    $oRetorno->sMensagem = urlencode( $oErro->getMessage() );
-    $oRetorno->erro      = true;
+    $oRetorno->sMensagem =  $oErro->getMessage() ;
 }
 
 echo $oJson->encode($oRetorno);
