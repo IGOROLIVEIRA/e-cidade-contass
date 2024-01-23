@@ -36,21 +36,33 @@ class Termoreparc extends LegacyModel
         'v08_parcelorigem',
     ];
 
+    public function termo()
+    {
+        return $this->belongsTo(Termo::class, 'v08_parcel', 'v07_parcel');
+    }
+
+    /**
+     * @TODO refazer query para buscar direto da tabela termo uma vez que a origem se torna inrrastreavel apos o replacelamento ser revogado
+     * @param int $instalmentNumber
+     * @param int $instit
+     * @param int $year
+     * @param DateTime $dueDate
+     * @return string
+     */
     public static function getQueryMonetaryAdjustmentFromFcCalcula(int $instalmentNumber, int $instit, int $year, DateTime $dueDate): string
     {
-        $formatedDueDate = $dueDate->format('Y-m-d');
         return "
                   SELECT 4 as SELECT,
                         y.v08_parcelorigem,
                         y.k00_numpar  as v01_exerc,
-                        y.k03_tipo,
-                        y.k00_tipo    as tipo,
+                        (select k03_tipo from arretipo where k00_tipo = y.tipo) as k03_tipo,
+                        y.tipo,
                         y.k00_descr,
                         y.k00_valor   as valor,
-                        substr(fc_calcula, 15, 13)::float8 AS vlrcor,
-                        substr(fc_calcula, 28, 13)::float8 AS juros,
-                        substr(fc_calcula, 41, 13)::float8 AS multa,
-                        substr(fc_calcula, 54, 13)::float8 AS desconto,
+                        y.vlrcor,
+                        y.juros,
+                        y.multa,
+                        y.desconto,
                         y.k00_dtvenc  as v01_dtvenc,
                         y.v07_numpre,
                         y.k00_numpre,
@@ -70,29 +82,36 @@ class Termoreparc extends LegacyModel
                         '' as nomeinscr,
                         '' as nomecontr,
                         '' as v03_descr
-                FROM
+                FROM (
+                select xx.*,
+                    (select k00_descr from arretipo where k00_tipo = coalesce(xx.k00_tipo, 5) limit 1) as k00_descr,
+                    coalesce(xx.k00_tipo, 5) as tipo
+                    from
                   (SELECT DISTINCT termoreparc.*,
-                                   arretipo.*,
                                    coalesce(tipoparc.descjur, 0) AS descjur,
                                    coalesce(tipoparc.descmul, 0) AS descmul,
                                    coalesce(tipoparc.descvlr, 0) AS desccor,
                                    termoori.v07_numpre,
-                                   arrecad.k00_numcgm,
-                                   arrecad.k00_receit,
-                                   arrecad.k00_tipojm,
-                                   arrecad.k00_numpre,
-                                   arrecad.k00_numpar,
-                                   arrecad.k00_numtot,
-                                   arrecad.k00_numdig,
-                                   arrecad.k00_valor,
-                                   arrecad.k00_dtvenc,
-                                   fc_calcula(arrecad.k00_numpre, arrecad.k00_numpar, arrecad.k00_receit, '{$formatedDueDate}', '{$formatedDueDate}', {$year})
+                                   termoori.v07_numcgm,
+                                   0 as k00_receit,
+                                   0 as k00_tipojm,
+                                   termoori.v07_numpre k00_numpre,
+                                   extract('Y' from termoori.v07_dtlanc) k00_numpar,
+                                   termoori.v07_totpar k00_numtot,
+                                   0 as k00_numdig,
+                                   termoori.v07_valor as k00_valor,
+                                   termoori.v07_dtvenc as k00_dtvenc,
+                                   termoori.v07_vlrcor AS vlrcor,
+                                   termoori.v07_vlrjur AS juros,
+                                   termoori.v07_vlrmul AS multa,
+                                   termoori.v07_vlrdes AS desconto,
+                                   case when termoori.v07_situacao = 1 then (select k00_tipo from arrecad where k00_numpre = termoori.v07_numpre limit 1)
+                                        when termoori.v07_situacao in (2,3) then (select k00_tipo from arrecant where k00_numpre = termoori.v07_numpre limit 1)
+                                   end as k00_tipo
+
                    FROM termoreparc
                    INNER JOIN termo termoori ON v08_parcelorigem = termoori.v07_parcel
                    AND termoori.v07_instit = {$instit}
-                   INNER JOIN arrecad ON termoori.v07_numpre = arrecad.k00_numpre
-                   INNER JOIN arretipo ON arrecad.k00_tipo = arretipo.k00_tipo
-                   INNER JOIN cadtipo ON arretipo.k03_tipo = cadtipo.k03_tipo
                    INNER JOIN termo termoatual ON termoatual.v07_parcel = termoreparc.v08_parcel
                    LEFT JOIN cadtipoparc ON cadtipoparc.k40_codigo = termoatual.v07_desconto
                    LEFT JOIN
@@ -108,10 +127,7 @@ class Termoreparc extends LegacyModel
                         AND termo.v07_totpar BETWEEN 1 AND tipoparc.maxparc
                       ORDER BY maxparc
                       LIMIT 1) AS tipoparc ON tipoparc.cadtipoparc = cadtipoparc.k40_codigo
-                   LEFT JOIN cadtipoparcdeb ON cadtipoparc.k40_codigo = cadtipoparcdeb.k41_cadtipoparc
-                   AND cadtipoparcdeb.k41_arretipo = arrecad.k00_tipo
-                   AND arrecad.k00_dtvenc BETWEEN k41_vencini AND k41_vencfim
-                   WHERE v08_parcel = {$instalmentNumber}) AS y
+                   WHERE v08_parcel = {$instalmentNumber}) AS xx ) as y
     ";
     }
 }

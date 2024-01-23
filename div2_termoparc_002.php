@@ -364,8 +364,12 @@ if (pg_numrows($result_reparc) > 0) {
 
   $dueDate = DateTime::createFromFormat('Y-m-d', date('Y-m-d',db_getsession("DB_datausu")));
 
-  // select que tras os reparcelamentos corrigindo os valores com fc_calcula
-  $sql = Termoreparc::getQueryMonetaryAdjustmentFromFcCalcula((int) $parcel, (int) db_getsession('DB_instit'), (int) db_getsession('DB_anousu'), $dueDate);
+  $sql .= Termoreparc::getQueryMonetaryAdjustmentFromFcCalcula(
+      (int)$parcel,
+      (int)db_getsession('DB_instit'),
+      (int)db_getsession('DB_anousu'),
+      $dueDate
+  );
 
   $sql2  = "  select v08_parcelorigem,          \n";
   $sql2 .= "         v01_exerc,                 \n";
