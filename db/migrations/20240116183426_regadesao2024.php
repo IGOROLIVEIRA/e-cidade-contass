@@ -91,7 +91,7 @@ class Regadesao2024 extends AbstractMigration
 
                 DROP SEQUENCE regadesao202024_si73_sequencial_seq;
 
-                CREATE SEQUENCE regadesao402024_si72_sequencial_seq
+                CREATE SEQUENCE regadesao402024_si73_sequencial_seq
                 INCREMENT 1
                 MINVALUE 1
                 MAXVALUE 9223372036854775807
