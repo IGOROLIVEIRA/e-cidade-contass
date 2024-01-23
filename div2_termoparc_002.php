@@ -171,6 +171,9 @@ $vlrpar  = $v07_vlrpar;
 $vencpar = $v07_dtvenc;
 $pdf->SetFont('Arial','B',11);
 
+/**
+ * @todo verificar se essa tabela é usada
+ */
 $sqlrepar = " select retermo.*,
 k00_matric as matric,
 k00_inscr as inscr
@@ -360,16 +363,17 @@ if (pg_numrows($result_reparc) > 0) {
   $sql .= "        left  join	iptubase b	   on b.j01_matric            = contrib.d07_matric                        \n";
   $sql .= " where parcel = {$parcel}                                                                                \n";
 
-  $sql .= " union all \n";
+    $preResult = db_query($sql);
+    if (pg_num_rows($preResult) === 0) {
+        $dueDate = DateTime::createFromFormat('Y-m-d', date('Y-m-d',db_getsession("DB_datausu")));
 
-  $dueDate = DateTime::createFromFormat('Y-m-d', date('Y-m-d',db_getsession("DB_datausu")));
-
-  $sql .= Termoreparc::getQueryMonetaryAdjustmentFromFcCalcula(
-      (int)$parcel,
-      (int)db_getsession('DB_instit'),
-      (int)db_getsession('DB_anousu'),
-      $dueDate
-  );
+        $sql = Termoreparc::getQueryMonetaryAdjustmentFromFcCalcula(
+            (int)$parcel,
+            (int)db_getsession('DB_instit'),
+            (int)db_getsession('DB_anousu'),
+            $dueDate
+        );
+    }
 
   $sql2  = "  select v08_parcelorigem,          \n";
   $sql2 .= "         v01_exerc,                 \n";
@@ -1331,4 +1335,3 @@ foreach ($parag as $chave ) {
 if(!defined('DB_BIBLIOT'))
 
 $pdf->Output();
-?>
