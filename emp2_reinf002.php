@@ -755,7 +755,7 @@ HTML;
 $html = ob_get_contents();
 ob_end_clean();
 $mPDF->WriteHTML(utf8_encode($html));
-$mPDF->Output();
+$mPDF->Output('Rel. Retenções PJ.pdf', 'I');
 
 db_fim_transacao();
 

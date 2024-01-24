@@ -20,8 +20,10 @@ db_app::load("time.js");
     <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <style>
+     input {
+            border-radius: 5px;
+        }
 </style>
-
 <body bgcolor=#CCCCCC>
     <form action="">
         <fieldset style="margin-top:50px;">
@@ -55,6 +57,18 @@ db_app::load("time.js");
                         </select>
                         <strong>Ano competência: </strong>
                             <input type="number" name="anocompetencia" id="anocompetencia" onkeydown="limparBox()" min="1111" max="9999" />
+                        <strong>Status: </strong>
+                        <select name="status" id="status" onchange="limparBox()">
+                            <option value="1">ENVIADOS</option>
+                            <option value="2" selected>PENDENTES DE ENVIO</option>
+                            <option value="3">TODOS</option>
+                        </select>
+                        <strong>Listar: </strong>
+                        <select name="listar" id="listar" onchange="limparBox()">
+                            <option value="50">50</option>
+                            <option value="100" selected>100</option>
+                            <option value="0">TODOS</option>
+                        </select>
                             <input style="margin-left: 3%" type="button" value="Pesquisar" onclick="js_getEventos();">
                         </td>
                 </tr>
@@ -87,10 +101,9 @@ db_app::load("time.js");
         oGridEvento.setCheckbox(0);
         oGridEvento.setCellAlign(new Array("Center", "Center","Center", "Center", "Center", "Center", "Center"));
         oGridEvento.setCellWidth(new Array("40%", "10%","10%", "10%", "10%", "10%", "10%"));
-        oGridEvento.setHeader(new Array("CNPJ Beneficiário","Identificador (OP)","Natureza do Rendimento","Data FG","Valor Bruto","Valor Base", " Valor IRRF"))
+        oGridEvento.setHeader(new Array("CNPJ Beneficiário","Identificador (OP)","Natureza do Rendimento","Data FG","Valor Bruto","Valor Base", " Valor IRRF","Destacar Campos"))
         oGridEvento.hasTotalValue = false;
         oGridEvento.setHeight(300);
-        // oGridEvento.aHeaders[1].lDisplayed = false;
         oGridEvento.show($('cntgrideventos'));
         
         var width = $('cntgrideventos').scrollWidth - 30;
@@ -117,12 +130,13 @@ db_app::load("time.js");
         }
 
         let ambiente = $F('ambiente');
-
+        let status = $F('status');
         var oParam      = new Object();
         oParam.exec     = "getEventos4020";
         oParam.sMescompetencia = mescompetencia;
         oParam.sAnocompetencia = anocompetencia;
         oParam.sAmbiente       = ambiente
+        oParam.sStatus         = status;
         js_divCarregando('Aguarde, buscando dados do evento', 'msgBox');
         var oAjax = new Ajax.Request(
             'efd1_reinf.RPC.php', {
@@ -133,9 +147,7 @@ db_app::load("time.js");
         );
     }
 
-    function js_retornogetEventos(oAjax) 
-    {
-
+    function js_retornogetEventos(oAjax) {
         js_removeObj('msgBox');
         oGridEvento.clearAll(true);
         var aEventsIn = ["onmouseover"];
@@ -147,8 +159,9 @@ db_app::load("time.js");
         if (oRetornoEventos.iStatus == 1) {
 
             var seq = 0;
-            oRetornoEventos.efdreinfr4020.each(function(oLinha, iLinha) {
+            var selectedRecords = 0; 
 
+            oRetornoEventos.efdreinfr4020.each(function (oLinha, iLinha) {
                 seq++;
                 var aLinha = new Array();
                 aLinha[0] = oLinha.CNPJBeneficiario;
@@ -158,7 +171,15 @@ db_app::load("time.js");
                 aLinha[4] = oLinha.ValorBruto;
                 aLinha[5] = oLinha.ValorBase;
                 aLinha[6] = oLinha.ValorIRRF;
-                oGridEvento.addRow(aLinha);
+                aLinha[7] = oLinha.DestacarCampos;
+                var status = $F('status');
+
+                let listar = $F('listar');
+
+                if (oLinha.DestacarCampos == status && (selectedRecords < listar || listar == 0)) {
+                    oGridEvento.addRow(aLinha);
+                    selectedRecords++;
+                }
 
                 var sTextEvent = " ";
                 if (aLinha[1] !== '') {
@@ -206,6 +227,11 @@ db_app::load("time.js");
 
         if (aEventos.length == 0) {
             alert('Nenhuma OP Selecionada');
+            return false;
+        }
+
+        if (aEventos.length > 100) {
+            alert('Não é possivel selecionar mais de 100 registros para envio.');
             return false;
         }
 
@@ -259,6 +285,7 @@ db_app::load("time.js");
                 alert(oRetornoEventos.sMessage.urlDecode());
             } else {
                 alert(oRetornoEventos.sMessage.urlDecode());
+                js_getEventos();
             }
         }
 
@@ -280,7 +307,7 @@ db_app::load("time.js");
         oGridEvento.setCheckbox(0);
         oGridEvento.setCellAlign(new Array("Center", "Center", "Center", "Center", "Center", "Center", "Center"));
         oGridEvento.setCellWidth(new Array("40%", "10%","10%", "10%", "10%", "10%", "10%"));
-        oGridEvento.setHeader(new Array("CNPJ Beneficiário","Identificador (OP)","Natureza do Rendimento","Data FG","Valor Bruto","Valor Base", " Valor IRRF"))
+        oGridEvento.setHeader(new Array("CNPJ Beneficiário","Identificador (OP)","Natureza do Rendimento","Data FG","Valor Bruto","Valor Base", " Valor IRRF","Destacar Campos"))
         oGridEvento.hasTotalValue = false;
         oGridEvento.setHeight(300);
         oGridEvento.show(gridContainer);

@@ -108,6 +108,12 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
         $clempparametro->e30_obrigadiarias="false";
     }
 
+    if ($e30_modeloop != "" && $e30_modeloop == '2'){
+        $clempparametro->e30_modeloop = 2;
+    } else {
+        $clempparametro->e30_modeloop = 1;
+    }
+
     $clempparametro->e30_tipoanulacaopadrao = !is_null($e30_tipoanulacaopadrao) ? (int) $e30_tipoanulacaopadrao : 2;
 
     if (!$lSqlErro) {

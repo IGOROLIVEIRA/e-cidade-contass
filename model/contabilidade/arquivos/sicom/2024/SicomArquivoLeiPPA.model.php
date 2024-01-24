@@ -46,7 +46,13 @@ class SicomArquivoLeiPPA extends SicomArquivoBase implements iPadArquivoBaseCSV
     $oPPAVersao = new ppaVersao($this->getCodigoPespectiva());
     
     $oDadosPPA = new stdClass();
-    
+
+    $anoInicio = $oPPAVersao->getAnoinicio();
+
+    $anoSessao =  db_getsession('DB_anousu');
+
+    $anoReferencia = $anoSessao - intval($anoInicio);
+
     $sSqlPPA = "SELECT * ";
     $sSqlPPA .= "FROM ppaleidadocomplementar ";
     $sSqlPPA .= "	WHERE o142_ppalei = {$oPPAVersao->getCodigolei()}";
@@ -60,9 +66,9 @@ class SicomArquivoLeiPPA extends SicomArquivoBase implements iPadArquivoBaseCSV
     $oDadosPPA->nroLeiPPA         = substr($oPPAlei->o142_numeroleippa, 0, 6);
     $oDadosPPA->dataLeiPPA        = implode(array_reverse(explode("-", $oPPAlei->o142_dataleippa)));
     $oDadosPPA->dataPubLeiPPA     = implode(array_reverse(explode("-", $oPPAlei->o142_datapublicacaoppa)));
-    $oDadosPPA->nroLeiAlteracao   = substr($oPPAlei->o142_leialteracaoppa, 0, 6);
-    $oDadosPPA->dataLeiAlteracao  = implode(array_reverse(explode("-", $oPPAlei->o142_dataalteracaoppa)));
-    $oDadosPPA->dataPubLeiAlt     = implode(array_reverse(explode("-", $oPPAlei->o142_datapubalteracao)));
+    $oDadosPPA->nroLeiAlteracao   = returnFieldNameNroLeiAlteracao($anoReferencia,$oPPAlei);
+    $oDadosPPA->dataLeiAlteracao  = returnFieldNameDataLeiAlteracao($anoReferencia,$oPPAlei);
+    $oDadosPPA->dataPubLeiAlt     = returnFieldNameDataPubLeiAlt($anoReferencia,$oPPAlei);
     $this->aDados[] = $oDadosPPA;
     
   }
@@ -75,5 +81,44 @@ class SicomArquivoLeiPPA extends SicomArquivoBase implements iPadArquivoBaseCSV
   public function getCodigoPespectiva()
   {
     return $this->iCodigoPespectiva;
+  }
+}
+function returnFieldNameNroLeiAlteracao($anoReferencia,$oPPAlei) 
+{
+  switch($anoReferencia){
+    case 0:
+      return substr($oPPAlei->o142_leialteracaoppa, 0, 6);
+    case 1:
+      return substr($oPPAlei->o142_leialteracaoppaano2, 0, 6);
+    case 2:
+      return substr($oPPAlei->o142_leialteracaoppaano3, 0, 6); 
+    case 3:
+      return substr($oPPAlei->o142_leialteracaoppaano3, 0, 6);             
+  }
+}
+function returnFieldNameDataLeiAlteracao($anoReferencia,$oPPAlei) 
+{
+  switch($anoReferencia){
+    case 0:
+      return implode(array_reverse(explode("-", $oPPAlei->o142_dataalteracaoppa)));
+    case 1:
+      return implode(array_reverse(explode("-", $oPPAlei->o142_dataalteracaoppaano2)));
+    case 2:
+      return implode(array_reverse(explode("-", $oPPAlei->o142_dataalteracaoppaano3)));
+    case 3:
+      return implode(array_reverse(explode("-", $oPPAlei->o142_dataalteracaoppaano4)));           
+  }
+}
+function returnFieldNameDataPubLeiAlt($anoReferencia,$oPPAlei) 
+{
+  switch($anoReferencia){
+    case 0:
+      return implode(array_reverse(explode("-", $oPPAlei->o142_datapubalteracao)));
+    case 1:
+      return implode(array_reverse(explode("-", $oPPAlei->o142_datapubalteracaoano2)));
+    case 2:
+      return implode(array_reverse(explode("-", $oPPAlei->o142_datapubalteracaoano3)));
+    case 3:
+      return implode(array_reverse(explode("-", $oPPAlei->o142_datapubalteracaoano4)));           
   }
 }

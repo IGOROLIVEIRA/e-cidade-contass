@@ -37,8 +37,8 @@ $oGet                = db_utils::postMemory($_GET);
 
 $sSqlAcordo  = " select distinct
                         ac16_numero,
-                        ac16_datainicio,
-                        ac16_datafim,
+                        CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datainicio END ac16_datainicio,
+                        CASE WHEN ac16_vigenciaindeterminada='t' THEN null WHEN ac16_semvigencia='t' THEN null ELSE ac16_datafim END ac16_datafim, 
                         ac16_objeto
                    from  liclicitem
                    inner join  acordoliclicitem  on liclicitem.l21_codigo = acordoliclicitem.ac24_liclicitem

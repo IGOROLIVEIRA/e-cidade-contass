@@ -482,6 +482,13 @@ class Acordoaux
     private $nValorRescisao;
 
     /**
+     * Vigência Indeterminada;
+     *
+     * @var bool
+     */
+    protected $iVigenciaIndeterminada;
+
+    /**
      * @return mixed
      */
     public function getiLicoutroorgao()
@@ -687,6 +694,22 @@ class Acordoaux
         return $this;
     }
     
+    /**
+     * @return mixed
+     */
+    public function getVigenciaIndeterminada()
+    {
+        return $this->iVigenciaIndeterminada;
+    }
+
+    /**
+     * @param mixed $iLicoutroorgao
+     */
+    public function setVigenciaIndeterminada($iVigenciaIndeterminada)
+    {
+        $this->iVigenciaIndeterminada = $iVigenciaIndeterminada;
+        return $this;
+    }
 
     /**
      * Construtor
@@ -1687,9 +1710,9 @@ class Acordoaux
         $dtDataInicial = $this->getDataInicial();
         $dtDataFinal = $this->getDataFinal();
         $oPosicao = $this->getUltimaPosicao();
-
         $oDataInicial = new DBDate($dtDataInicial);
-        $oDataFinal = new DBDate($dtDataFinal);
+        $oDataFinal   = new DBDate($dtDataFinal);
+
         $this->salvarVigencia($oPosicao, $oDataInicial, $oDataFinal);
     }
 
@@ -1770,6 +1793,7 @@ class Acordoaux
         $oDaoAcordo->ac16_indicereajuste           = $this->getIndiceReajuste();
         $oDaoAcordo->ac16_descricaoreajuste        = $this->getDescricaoReajuste();
         $oDaoAcordo->ac16_descricaoindice          = $this->getDescricaoIndice();
+        $oDaoAcordo->ac16_vigenciaindeterminada    = $this->getVigenciaIndeterminada();
 
         /**
          * Alteracao

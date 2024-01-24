@@ -170,11 +170,17 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
                 WHEN l20_tipojulg = 1 THEN '1'
                 ELSE obr08_liclicitemlote
             END AS si197_nrolote,
-            ac16_tipoorigem
+            ac16_tipoorigem,
+            CASE
+                WHEN LENGTH(cgm.z01_cgccpf) = 11 THEN 2
+                ELSE 3
+             END AS si197_tipodocumento,
+             cgm.z01_cgccpf as si197_numerodocumento
       FROM acordo
+      INNER JOIN cgm on z01_numcgm = ac16_contratado
       INNER JOIN liclicita ON l20_codigo = ac16_licitacao
-      inner join liclicitem on l21_codliclicita = l20_codigo
-      inner join liclicitemlote on l04_liclicitem = l21_codigo
+      INNER JOIN liclicitem on l21_codliclicita = l20_codigo
+      INNER JOIN liclicitemlote on l04_liclicitem = l21_codigo
       INNER JOIN licobras ON obr01_licitacao = l20_codigo
       INNER JOIN cflicita ON l20_codtipocom = l03_codigo
       INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
@@ -200,6 +206,8 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
       $clexeobras102024->si197_codorgao = $oDados10->si197_codorgao;
       $clexeobras102024->si197_codunidadesub = $oDados10->si197_codunidadesub;
       $clexeobras102024->si197_nrocontrato = $oDados10->si197_nrocontrato;
+      $clexeobras102024->si197_tipodocumento = $oDados10->si197_tipodocumento;
+      $clexeobras102024->si197_numerodocumento = $oDados10->si197_numerodocumento;
       $clexeobras102024->si197_exerciciocontrato = $oDados10->si197_exerciciocontrato;
       if($oDados10->ac16_tipoorigem){
         $clexeobras102024->si197_contdeclicitacao = $oDados10->ac16_tipoorigem;

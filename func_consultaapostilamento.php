@@ -11,9 +11,12 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 if ($apostilamento = true) {
     $sql = "SELECT si03_numapostilamento,
        si03_tipoapostila||'-'|| CASE si03_tipoapostila
-                                    WHEN 01 THEN 'Reajuste de preço previsto no contrato'
+                                    WHEN 01 THEN 'Variação do valor contratual ou Repactuação de preços previstos no contrato'
                                     WHEN 02 THEN 'Atualizações, compensações ou penalizações'
-                                    WHEN 03 THEN 'Empenho de dotações orçamentárias suplementares'
+                                    WHEN 03 THEN 'Empenho de dotações orçamentárias'
+                                    WHEN 04 THEN 'Alterações na Razão social do contratado'
+                                    WHEN 05 THEN 'Prorrogação do cronograma de execução (impedimento, paralisação ou suspensão)'
+                                    When 99 THEN 'Outros'
                                 END AS si03_tipoapostila,
                                 si03_tipoalteracaoapostila||'-'||CASE si03_tipoalteracaoapostila
                                                                      WHEN 15 THEN 'Acréscimo de valor'

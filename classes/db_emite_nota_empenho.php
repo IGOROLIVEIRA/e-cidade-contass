@@ -175,6 +175,7 @@ class cl_emite_nota_empenho {
         $sqlitem .= "        e55_marca, ";
         $sqlitem .= "        case when pc10_solicitacaotipo = 5 then coalesce(trim(pcitemvalrp.pc23_obs), '') ";
         $sqlitem .= "             else  coalesce(trim(pcorcamval.pc23_obs), '') end as pc23_obs ";
+        $sqlitem .= "	     ,e60_codco";
         $sqlitem .= "   from empempitem ";
         $sqlitem .= "       inner join empempenho           on empempenho.e60_numemp           = empempitem.e62_numemp ";
         $sqlitem .= "       left join db_usuarios ON db_usuarios.id_usuario = empempenho.e60_id_usuario";

@@ -40,6 +40,8 @@ class cl_contratos302024
   var $si89_percentualreajuste = null;
   var $si89_indiceunicoreajuste = null;
   var $si89_dscreajuste = null;
+  var $si89_codunidadesubatual = null;
+  var $si89_criterioreajuste = null;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  si89_sequencial = int8 = sequencial
@@ -59,6 +61,8 @@ class cl_contratos302024
                  si89_percentualreajuste = float8 = Percentual de Reajuste
                  si89_indiceunicoreajuste = int8 = Indice do Reajuste
                  si89_dscreajuste = varchar(300) = Descrição do Reajuste
+                 si89_codunidadesub = varchar(8) = Codigo Unidade Atual;
+                 si89_criterioreajuste = int = Criterio Reajuste;
                  ";
   //funcao construtor da classe
   function cl_contratos302024()
@@ -112,6 +116,8 @@ class cl_contratos302024
       $this->si89_percentualreajuste = ($this->si89_percentualreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["si89_percentualreajuste"] : $this->si89_percentualreajuste);
       $this->si89_indiceunicoreajuste = ($this->si89_indiceunicoreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["si89_indiceunicoreajuste"] : $this->si89_indiceunicoreajuste);
       $this->si89_dscreajuste = ($this->si89_dscreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["si89_dscreajuste"] : $this->si89_dscreajuste);
+      $this->si89_codunidadesubatual = ($this->si89_codunidadesubatual == "" ? @$GLOBALS["HTTP_POST_VARS"]["si89_codunidadesubatual"] : $this->si89_codunidadesubatual);
+      $this->si89_criterioreajuste = ($this->si89_criterioreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["si89_criterioreajuste"] : $this->si89_criterioreajuste);
     } else {
       $this->si89_sequencial = ($this->si89_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si89_sequencial"] : $this->si89_sequencial);
     }
@@ -216,6 +222,9 @@ class cl_contratos302024
                                       ,si89_percentualreajuste
                                       ,si89_indiceunicoreajuste
                                       ,si89_dscreajuste
+                                      ,si89_codunidadesubatual
+                                      ,si89_criterioreajuste
+                                      ,si89_descricaoindice
                        )
                 values (
                                 $this->si89_sequencial
@@ -235,6 +244,9 @@ class cl_contratos302024
                                ," . ($this->si89_percentualreajuste == "" ? "0" :  $this->si89_percentualreajuste) . "
                                ," . ($this->si89_indiceunicoreajuste == "" ? "0" :  $this->si89_indiceunicoreajuste) . "
                                ," . ($this->si89_dscreajuste == "" ? "''" : "'" . $this->si89_dscreajuste . "'") . "
+                               ,'$this->si89_codunidadesubatual'
+                               ,".($this->si89_criterioreajuste == "null" || $this->si89_criterioreajuste == ""? "null" : $this->si89_criterioreajuste)."
+                               ,". ($this->si89_descricaoindice == "" ? "''" : "'" . $this->si89_descricaoindice . "'") . "
                       )";
     $result = db_query($sql);
     if ($result == false) {

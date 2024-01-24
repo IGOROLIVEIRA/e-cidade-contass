@@ -89,7 +89,19 @@ $clmtfis_ldo->rotulo->label();
                     ?>
                 </td>
             </tr>
-
+            <tr>
+                <td nowrap title="mtfis_rclano3">
+                    <strong>Metas Fiscais RPPS:</strong>
+                </td>
+                <td>
+                    <?
+                      $aMFRPPS = array(
+                          2 => 'Não', 1 => 'Sim'
+                      );
+                    db_select("mtfis_mfrpps", $aMFRPPS, true, 2, " ", "", "", "0", "");
+                    ?>
+                </td>
+            </tr>
             <?
             //db_input('mtfis_instit',10,$Imtfis_instit,true,'text',$db_opcao,"")
             ?>
@@ -112,4 +124,5 @@ $clmtfis_ldo->rotulo->label();
         echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
         ?>
     }
+    document.getElementById("mtfis_mfrpps").style.width = '100%';
 </script>

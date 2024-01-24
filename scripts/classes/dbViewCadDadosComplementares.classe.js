@@ -175,7 +175,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     sContent += "         </td>";
     sContent += "         <td id='ctnCodigoEstado" + sId + "' colspan='5'></td>";
     sContent += "       </tr>";
-    sContent += "       <tr style='display:none'>";
+    sContent += "       <tr>";
     sContent += "         <td id='ctnLabelMunicipio" + sId + "' >";
     sContent += "           <b>Município:</b>";
     sContent += "         </td>";

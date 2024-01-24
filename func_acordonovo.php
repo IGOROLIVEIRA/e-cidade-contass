@@ -230,7 +230,6 @@ $iInstituicaoSessao = db_getsession('DB_instit');
             if (isset($chave_ac16_sequencial)) {
               $repassa = array("chave_ac16_sequencial" => $chave_ac16_sequencial, "chave_ac16_sequencial" => $chave_ac16_sequencial);
             }
-
             db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
           } else {
 
