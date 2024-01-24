@@ -85,7 +85,7 @@ o apache
     $cp .env-exemplo .env
 ```
 
-Depois execute o comando para subir o docker do apache
+### Depois execute o comando para subir o docker do apache
 ```bash
     docker-compose up -d --build
     docker exec -it <NOME-ou-ID-CONTAINER> /bin/bash
@@ -102,15 +102,18 @@ Depois execute o comando para subir o docker do apache
     cp dbportal-v3-desktop.data.dist dbportal-v3-desktop.data
     bin/v3/extension/install Desktop <NOME-DO-SEU-USUARIO>
 ```
-
-Depois execute o comando para parar o docker do apache
+## Todos comandos php devem ser executando dentro do conteiner web
+```
+    docker exec -it <NOMEDOCONTAINER> /bin/bash
+```
+### Depois execute o comando para parar o docker do apache
 ```bash
     $docker-compose down
 ```
-
+### Para Acessar
 Acesse no navegador com o portal informada no .env: http://localhost:8888
 
-Obs.: Nesse momento não temos um docker do banco de dados;
+Para acessar o banco de dados no navegador http://localhost:8484
 
 ### Para debugar no PHPSTORM
 
