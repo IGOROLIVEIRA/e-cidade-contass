@@ -17,13 +17,13 @@ class VerificaAnulacaoAutorizacaoCommand
         $repository = new AcordoItemExecutadoRepository();
         $itens =  $acordoPosicao->itens;
 
-        $itens->each(function($item, $key) use($repository, $validador) {
-            $collection = $repository->buscaItensExecutado((int)$item->ac20_sequencial);
+        $itens->each(function($item, $key) use($repository, &$validador) {
+            $collection = $repository->buscaItensExecutado($item->ac20_sequencial);
 
             if (empty($collection)) return false;
 
             $result = $collection->filter(function ($value, $key) {
-                return (int)$value->ac29_quantidade < 0;
+                return $value->ac29_valor < 0;
             });
 
             if ($result->count() > 0) {

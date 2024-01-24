@@ -2527,7 +2527,9 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
         const oRetorno = eval("(" + response.responseText + ")");
 
         if (oRetorno.erro == true) {
-          return alert(oRetorno.message.urlDecode());
+           alert(oRetorno.message.urlDecode());
+           me.pesquisaAcordoAlteracao(true);
+           return;
         }
         me.lidaDadosAlteracao(oRetorno.aditamento);
       }
