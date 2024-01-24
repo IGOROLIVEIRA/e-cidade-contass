@@ -102,6 +102,23 @@ o apache
     cp dbportal-v3-desktop.data.dist dbportal-v3-desktop.data
     bin/v3/extension/install Desktop <NOME-DO-SEU-USUARIO>
 ```
+
+### Configuração do banco de dados local
+
+Alterar o arquivo db_conn.php que esta na pasta libs. Caso não exista copio db_conn.php.dist 
+```
+    cd libs
+    cp db_conn.php.dist db_conn.php
+```
+Alterar as seguintes variáveis deixando igual ao exemplo.
+
+    $DB_USUARIO   = "ecidade"; // Usuário do PostgreSQL 
+    $DB_SENHA     = "ecidade"; // Senha do usuário do PostgreSQL 
+    $DB_SERVIDOR = "bd"; // 
+    $DB_PORTA = "5432"; //
+    $DB_PORTA_ALT = "5432"; //
+    $DB_BASE      = "ecidade"; // Nome da base de dados
+
 ## Todos comandos php devem ser executando dentro do conteiner web
 ```
     docker exec -it <NOMEDOCONTAINER> /bin/bash
