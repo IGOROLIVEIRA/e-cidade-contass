@@ -164,9 +164,6 @@ try {
 
         case "processarAditamento":
             $clcondataconf = new cl_condataconf;
-            echo "<pre>";
-            var_dump($oParam);
-            die();
             if ($sqlerro == false) {
                 $anousu = db_getsession('DB_anousu');
 
