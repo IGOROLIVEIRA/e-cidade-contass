@@ -127,6 +127,11 @@ Alterar as seguintes variáveis deixando igual ao exemplo.
 ```bash
     $docker-compose down
 ```
+
+### Recuperando backup 
+
+    psql -U ecidade ecidade -h localhost -f NOMEDOARQUIVO.SQL
+
 ### Para Acessar
 Acesse no navegador com o portal informada no .env: http://localhost:8888
 
