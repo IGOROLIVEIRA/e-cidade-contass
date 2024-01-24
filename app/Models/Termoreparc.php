@@ -91,7 +91,7 @@ class Termoreparc extends LegacyModel
                                    extract('Y' from termoori.v07_dtlanc) k00_numpar,
                                    termoori.v07_totpar k00_numtot,
                                    0 as k00_numdig,
-                                   termoori.v07_valor as k00_valor,
+                                   termoori.v07_vlrhis as k00_valor,
                                    termoori.v07_dtvenc as k00_dtvenc,
                                    termoori.v07_vlrcor AS vlrcor,
                                    termoori.v07_vlrjur AS juros,
