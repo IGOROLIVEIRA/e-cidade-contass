@@ -57,3 +57,4 @@ node_modules
 .env
 phinx.yml
 docker/db-data
+extension/data/extension/Desktop.data

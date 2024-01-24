@@ -87,14 +87,20 @@ o apache
 
 Depois execute o comando para subir o docker do apache
 ```bash
-    $docker-compose up -d 
-    $docker exec -it <NOME-ou-ID-CONTAINER> /bin/bash
-    $chmod -R 775 /var/www/html/*
-    $chmod -R 777 /var/www/html/tmp/
-    $cd /var/www/html/
-    $composer install
-    $bin/v3/extension/unpack desktop-package.tar.gz true
-    $bin/v3/extension/install Desktop <NOME-DO-SEU-USUARIO>
+    docker-compose up -d --build
+    docker exec -it <NOME-ou-ID-CONTAINER> /bin/bash
+    chmod -R 775 /var/www/html/*
+    chmod -R 777 /var/www/html/tmp/
+    cd /var/www/html/
+    composer install
+    cd /var/www/html/config/
+    cp preferencias.json.dist preferencias.json
+    cd ..
+    cd /var/www/html/extension/data/extension/
+    cp Desktop.data.dist Desktop.data  
+    cd /var/www/html/extension/modification/data/modification/
+    cp dbportal-v3-desktop.data.dist dbportal-v3-desktop.data
+    bin/v3/extension/install Desktop <NOME-DO-SEU-USUARIO>
 ```
 
 Depois execute o comando para parar o docker do apache
