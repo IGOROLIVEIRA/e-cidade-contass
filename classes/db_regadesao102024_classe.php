@@ -210,6 +210,11 @@ class cl_regadesao102024
     if ($this->si67_nroedital == null) {
       $this->si67_nroedital = "null";
     }
+
+    if ($this->si67_exercicioedital == null) {
+        $this->si67_exercicioedital = "null";
+    }
+
     if ($this->si67_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
       $this->erro_campo = "si67_mes";
@@ -265,11 +270,7 @@ class cl_regadesao102024
     }else if(!$this->si67_tipocadastro && db_getsession('DB_anousu') < 2020){
       $this->si67_tipocadastro = '0';
     }
-    if(!$this->si67_exercicioedital && db_getsession('DB_anousu') >= 2020){
-      $this->si67_exercicioedital = db_getsession('DB_anousu');
-    }else if(!$this->si67_exercicioedital && db_getsession('DB_anousu') < 2020){
-      $this->si67_exercicioedital = '0';
-    }
+
     if(!$this->si67_nroedital && db_getsession('DB_anousu') < 2020){
       $this->si67_nroedital = '0';
     }
