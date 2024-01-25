@@ -1,29 +1,4 @@
 <?php
-/*
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2014  DBseller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
 
 require_once("fpdf151/scpdf.php");
 require_once("fpdf151/impcarne.php");
@@ -46,9 +21,9 @@ db_postmemory($HTTP_SERVER_VARS);
 
 /**
  * Get tem as variáveis
- * inscricao  (código)
+ * inscricao (código)
  */
-$oGet  = db_utils::postMemory($_GET);
+$oGet = db_utils::postMemory($_GET);
 
 /* VERIFICA SE É DOCUMENTO ALVARÁ */
 /* SE FOR, IMPRIME UTILIZANDO O ARQUIVO AGT */
@@ -99,9 +74,7 @@ $cldb_config     = new cl_db_config();
 $clissprocesso   = new cl_issprocesso();
 $pdf = new scpdf();
 $pdf->Open();
-//$pdf1 = new db_impcarne($pdf);
 $rsResultpar = db_query("select * from parissqn");
-//db_criatabela($rsResult);exit;
 if (pg_numrows($rsResultpar) > 0) {
   db_fieldsmemory($rsResultpar, 0);
 }
@@ -117,18 +90,12 @@ $ano = db_getsession("DB_anousu");
 
 if (isset($q60_modalvara) && $q60_modalvara == "3") {
 
-  $tamanho = array (
-
-                        290,
-                        95
-  );
+  $tamanho = [290, 95];
   $spdf1 = new scpdf("P", "mm", $tamanho);
   $spdf1->Open();
   $pdf2 = new db_impcarne($spdf1, '26');
   $pdf2->objpdf->AddPage();
   $pdf2->objpdf->SetTextColor(0, 0, 0);
-  //                             die($cltabativ->sql_queryinf($oGet->inscricao,"","*",""," q88_inscr is not null and tabativ.q07_inscr = $oGet->inscricao "));
-  //	die($cltabativ->sql_queryinf($oGet->inscricao,"","*",""," q88_inscr is not null and tabativ.q07_inscr = $oGet->inscricao "));
   $rsResult = $cltabativ->sql_record($cltabativ->sql_queryinf($oGet->inscricao, "", "*", "", " q88_inscr is not null and tabativ.q07_inscr = $oGet->inscricao "));
   $numrows = $cltabativ->numrows;
   if ($numrows != 0) {
@@ -185,15 +152,12 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
 
   $pdf1->objpdf->AddPage();
   $pdf1->objpdf->SetTextColor(0, 0, 0);
-  // die($cldb_config->sql_query(db_getsession("DB_instit"),"nomeinst as prefeitura, munic"));
   $resul = $cldb_config->sql_record($cldb_config->sql_query(db_getsession("DB_instit"), "nomeinst as prefeitura, munic"));
   db_fieldsmemory($resul, 0); //pega o dados da prefa
   $munic = strtoupper($munic);
 
   $oUsuario = new UsuarioSistema(db_getsession('DB_id_usuario'));
   $nome_usuario = $oUsuario->getNome();
-  //global $db02_texto;
-  //	                             die($cltabativ->sql_queryinf("$oGet->inscricao","","*","","(q07_databx < '".date("Y-m-d", db_getsession("DB_datausu"))."' or  q07_databx is null) and tabativ.q07_inscr = $oGet->inscricao "));
   $result = $cltabativ->sql_record($cltabativ->sql_queryinf($oGet->inscricao, "", "*", "", "q88_inscr is not null and (q07_databx < '" . date("Y-m-d", db_getsession("DB_datausu")) . "' or  q07_databx is null) and tabativ.q07_inscr = $oGet->inscricao "));
   $numrows = $cltabativ->numrows;
   if ($numrows > 0) {
@@ -213,7 +177,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
       from db_documento
       inner join db_docparag on db03_docum = db04_docum
       inner join db_paragrafo on db04_idparag = db02_idparag
-      where db03_tipodoc = 1034 and db03_instit  = " . db_getsession('DB_instit') . "
+      where db03_tipodoc = 1034 and db03_instit = " . db_getsession('DB_instit') . "
       order by db02_descr";
     $res_tipoalvara = db_query($sql_tipoalvara);
     if (pg_numrows($res_tipoalvara) > 0) {
@@ -229,9 +193,9 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   //DADOS DO CABEÇALHO DO ALVARÁ
   $sqlparag = "select db_paragrafo.*
       from db_documento
-      inner join db_docparag on db03_docum = db04_docum      
+      inner join db_docparag on db03_docum = db04_docum
       inner join db_paragrafo on db04_idparag = db02_idparag
-      where db03_tipodoc = 1045 and db03_instit = " . db_getsession("DB_instit") . "      
+      where db03_tipodoc = 1045 and db03_instit = " . db_getsession("DB_instit") . "
       order by db02_descr";
   $res_cabecalho = db_query($sqlparag);
   if (pg_numrows($res_cabecalho) > 0) {
@@ -242,7 +206,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   $sqlparag = "select *
       from db_documento
       inner join db_docparag on db03_docum = db04_docum
-      inner join db_tipodoc on db08_codigo  = db03_tipodoc
+      inner join db_tipodoc on db08_codigo = db03_tipodoc
       inner join db_paragrafo on db04_idparag = db02_idparag
       where db03_tipodoc = 1010 and db03_instit = " . db_getsession("DB_instit") . "
       and not db02_descr ilike 'assinatura%'
@@ -267,9 +231,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
     }
   }
   // PEGA A ATIVIDADE PRINCIPAL
-  //die($cltabativ->sql_queryinf($oGet->inscricao,"","*",""," q88_inscr is not null and q11_inscr is null and tabativ.q07_inscr = $oGet->inscricao "));
   $result = $cltabativ->sql_record($cltabativ->sql_queryinf($oGet->inscricao, "", "*", "", " q88_inscr is not null and q11_inscr is null and tabativ.q07_inscr = $oGet->inscricao "));
-  //die($cltabativ->sql_queryinf($oGet->inscricao,"","*",""," q88_inscr is not null and q11_inscr is null and tabativ.q07_inscr = $oGet->inscricao "));
   $numrows = $cltabativ->numrows;
   if ($numrows != 0) {
     db_fieldsmemory($result, 0);
@@ -301,7 +263,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   $pdf1->nrinscr = empty($q02_inscmu) ? $q02_inscr : $q02_inscmu;
   $pdf1->nome = $z01_nome;
   $pdf1->nomecompl = $z01_nomecomple;
-  $pdf1->processo    = @$q14_proces;
+  $pdf1->processo = @$q14_proces;
   $pdf1->areaterreno = @$q30_area;
   $pdf1->cgm = $z01_numcgm;
   $pdf1->fantasia = $z01_nomefanta;
@@ -310,7 +272,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   $pdf1->bairropri = $j13_descr;
   $pdf1->compl = $q02_compl;
   $pdf1->numero = $q02_numero;
-  $pdf1->descrativ = empty($q71_estrutural)  ? $q03_descr : "{$q71_estrutural} - {$q03_descr}";
+  $pdf1->descrativ = empty($q71_estrutural) ? $q03_descr : "{$q71_estrutural} - {$q03_descr}";
   $pdf1->datainc = $q02_dtinic;
   $pdf1->cnpjcpf = $z01_cgccpf;
   $pdf1->dtiniativ = $q07_datain;
@@ -360,11 +322,12 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
       if (!empty($oAlvara->q123_sequencial)) {
 
         if ($pdf1->permanente == 't') {
-          $pdf1->validadealvara = "31/12/" . db_getsession('DB_anousu');
+          $iAnoValidade = date('Y', strtotime($oAlvara->q120_dtmov));
+          $pdf1->validadealvara = "31/12/" . $iAnoValidade;
           
           $codInstituicao = array(Instituicao::COD_CLI_SERRANOPOLIS_DE_MINAS);
-          $iAnoValidade = db_getsession('DB_anousu') + 1;
           if (in_array($oInstit->getCodigoCliente(), $codInstituicao)) {
+            $iAnoValidade++;
             $pdf1->validadealvara = "31/01/" . $iAnoValidade;
           }          
 
@@ -381,21 +344,18 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
     }
 
   // PEGA AS ATIVIDADES SECUNDARIAS
-  //die($cltabativ->sql_queryinf($q02_inscr,"","*",""," q88_inscr is null "));
   $arr = array ();
   $arr02 = array ();
   $descr = "";
 
-  //   die($cltabativ->sql_queryinf($oGet->inscricao, "", "*", "", " q88_inscr is null and q11_inscr is null and (q07_databx < '".date("Y-m-d", db_getsession("DB_datausu"))."' or  q07_databx is null) and tabativ.q07_inscr = $oGet->inscricao "));
-  $result = $cltabativ->sql_record($cltabativ->sql_queryinf($oGet->inscricao, "", "*", "", " q88_inscr is null and q11_inscr is null and (q07_databx < '" . date("Y-m-d", db_getsession("DB_datausu")) . "' or  q07_databx is null) and tabativ.q07_inscr = $oGet->inscricao "));
+  $result = $cltabativ->sql_record($cltabativ->sql_queryinf($oGet->inscricao, "", "*", "", " q88_inscr is null and q11_inscr is null and (q07_databx < '" . date("Y-m-d", db_getsession("DB_datausu")) . "' or q07_databx is null) and tabativ.q07_inscr = $oGet->inscricao "));
   $numrows = $cltabativ->numrows;
-  //	die($numrows);
   if ($numrows != 0) {
     for($i = 0; $i < $numrows; $i ++) {
       db_fieldsmemory($result, $i);
       if ($descr != $q03_descr) {
         $arr [$i] ["codativ"] = $q07_ativ;
-        $arr [$i] ["descr"] = empty($q71_estrutural)  ? $q03_descr : "{$q71_estrutural} - {$q03_descr}";
+        $arr [$i] ["descr"] = empty($q71_estrutural) ? $q03_descr : "{$q71_estrutural} - {$q03_descr}";
         $arr [$i] ["datain"] = $q07_datain;
         $arr [$i] ["datafi"] = $q07_datafi;
         $arr [$i] ["atv_perman"] = $q07_perman;
@@ -409,8 +369,6 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   $pdf1->outrasativs = $arr;
 
   if (isset($q02_memo)) {
-    //    $q02_memo = str_replace("\n", "", $q02_memo);
-    //    $q02_memo = str_replace("\r", "", $q02_memo);
     $pdf1->q02_memo = substr($q02_memo, 0, 3500);
     $pdf1->q02_memo .= " ...";
   }

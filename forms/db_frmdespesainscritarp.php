@@ -218,11 +218,13 @@
                 </td>
 
                 <td class="linhagrid">
-                    <input type="text" style="<?echo ($anousu >= 2023 ? "width: 100px; background: #DEB887;" : "width: 100px;")?>" readonly="<?echo ($anousu >= 2023 ? "true" : "false")?>" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPP][<?= $iFonte ?>]" onKeyUp="return sem_virgula(this);" value="0" onchange="adicionarEdicaoRPP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>">
+                    <input type="text" style="width: 100px " name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPP][<?= $iFonte ?>]" onKeyUp="return sem_virgula(this);" value="0" onchange="adicionarEdicaoRPP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>">
+                    <!-- <input type="text" style="<?echo ($anousu >= 2023 ? "width: 100px; background: #DEB887;" : "width: 100px;")?>" readonly="<?echo ($anousu >= 2023 ? "true" : "false")?>" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPP][<?= $iFonte ?>]" onKeyUp="return sem_virgula(this);" value="0" onchange="adicionarEdicaoRPP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>"> -->
                 </td>
 
                 <td class="linhagrid">
-                    <input type="text" style="<?echo ($anousu >= 2023 ? "width: 100px; background: #DEB887;" : "width: 100px;")?>" readonly="<?echo ($anousu >= 2023 ? "true" : "false")?>" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPNP][<?= $iFonte ?>]" value="0" onKeyUp="return sem_virgula(this);" onchange="adicionarEdicaoRPNP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>">
+                    <input type="text" style="width: 100px" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPNP][<?= $iFonte ?>]" value="0" onKeyUp="return sem_virgula(this);" onchange="adicionarEdicaoRPNP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>">    
+                    <!-- <input type="text" style="<?echo ($anousu >= 2023 ? "width: 100px; background: #DEB887;" : "width: 100px;")?>" readonly="<?echo ($anousu >= 2023 ? "true" : "false")?>" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPNP][<?= $iFonte ?>]" value="0" onKeyUp="return sem_virgula(this);" onchange="adicionarEdicaoRPNP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>"> -->
                 </td>
 
                 <td class="linhagrid" style="width: 100px">
@@ -269,7 +271,7 @@
 
      js_carregafonte();
      js_buscarDisponibilidade(document.getElementById('o15_codtri').value);
-    //  js_buscarVlrDisp(document.getElementById('o15_codtri').value);
+     js_buscarVlrDisp(document.getElementById('o15_codtri').value);
      carregaritens(document.getElementById('o15_codtri').value);
 
 
@@ -539,7 +541,7 @@
         if (response.status != 1) {
             alert(response.erro);
         } else if (!!response.sucesso) {
-            alert('Salvo com Sucesso !');
+            alert('Salvo com sucesso!');
             window.location.reload();
         }
     }
@@ -558,6 +560,7 @@
     async function js_carregaritens(oRetorno){
 
         var itens = JSON.parse(oRetorno.responseText.urlDecode());
+        let VlrUtilizado = 0;
         if(typeof itens.itens !== 'undefined') {
           itens.itens.forEach(function (item, b) {
             if (document.form1['aEmpenho[' + item.c223_codemp + '][vlr_dispRPNP][' + item.c223_fonte + ']'] != undefined) {
@@ -566,12 +569,11 @@
               document.form1['aEmpenho[' + item.c223_codemp + '][vlr_semRPP][' + item.c223_fonte + ']'].value = item.c223_vlrsemdisrpp;
               document.form1['aEmpenho[' + item.c223_codemp + '][vlr_semRPNP][' + item.c223_fonte + ']'].value = item.c223_vlrsemdisrpnp;
               if (document.form1['aFonte  [' + item.c223_fonte + '][vlr_disponivel]'] != undefined) {
-                document.form1['aFonte  [' + item.c223_fonte + '][vlr_disponivel]'].value = item.c223_vlrdisponivel;
-              }
+                  document.form1['aFonte  [' + item.c223_fonte + '][vlr_disponivel]'].value = item.c223_vlrdisponivel;
+                }
             }
           });
         }
-        js_buscarVlrDisp();
     }
 
     async function buscaritens(params, onComplete) {
@@ -594,7 +596,7 @@
 
 
     function js_buscarVlrDisp(fonte) {
-        js_divCarregando('', 'div_aguarde_disptotal');
+        js_divCarregando('', 'div_aguarde_saldo');
         buscaritens({
             exec: 'getUtilizado',
             fonte: fonte
@@ -613,7 +615,7 @@
                 }
             });
         }
-        js_removeObj('div_aguarde_disptotal')
+        js_removeObj('div_aguarde_saldo')
     }
 
     function js_calcularVlrDis(params, onComplete) {
@@ -633,6 +635,7 @@
      * */
 
     function js_buscarDisponibilidade(fonte) {
+        js_divCarregando('', 'div_aguarde_dispTotal');
         buscaritens({
             exec: 'getDisponibilidadetotal',
             fonte: fonte
@@ -642,6 +645,7 @@
    async function js_carregarDisponibilidade(oRetorno){
         const result = await resolverDepoisDe2Segundos();
         var oDisponiblidade = JSON.parse(oRetorno.responseText.urlDecode());
+        if(typeof oDisponiblidade.dispobilidade != 'undefined'){        
         oDisponiblidade.dispobilidade.forEach(function (dispfonte, key) {
 
             if(document.form1['aFonte[' + dispfonte.c224_fonte + '][disp_total]'] != undefined){
@@ -654,8 +658,8 @@
                 document.form1['aFonte[' + dispfonte.c224_fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(js_roundDecimal(dispfonte.c224_vlrdisponibilidadecaixa,2)) - Number(js_roundDecimal(VlrUtilizado,2)),2);
             }
         });
-
-
+    }
+        js_removeObj('div_aguarde_dispTotal')
     }
 
     function js_Disponibilidadetotal(params, onComplete) {
@@ -674,6 +678,7 @@
 
         let VlrDispTotal = document.form1['aFonte[' + fonte + '][disp_total]'].value;
         let VlrTotalRP   = document.form1['aFonte[' + fonte + '][vlr_totalrp]'].value;
+        let saldoDisponivel = document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value;
 
         if(Number(VlrTotalRP) > Number(VlrDispTotal)){
             alert("Erro! Valor Total RP maior que Valor Disp. Total");
@@ -682,15 +687,20 @@
             });
         }else {
             let VlrUtilizadoFonte = 0;
+            let vlrAplicado = 0;
             getItensMarcadosFonte(fonte).forEach(function (itens, key) {
                 itens.checked = true;
-                let vlr_lqd        = document.form1['aEmpenho[' + itens.value + '][vlr_lqd]['+ fonte +']'].value;
-                let vlr_n_lqd      = document.form1['aEmpenho[' + itens.value + '][vlr_n_lqd]['+ fonte +']'].value;
-                VlrUtilizadoFonte += Number(vlr_lqd) + Number(vlr_n_lqd);
-
+                let vlr_lqd        = Number(document.form1['aEmpenho[' + itens.value + '][vlr_lqd]['+ fonte +']'].value);
+                let vlr_n_lqd      = Number(document.form1['aEmpenho[' + itens.value + '][vlr_n_lqd]['+ fonte +']'].value);
+                VlrUtilizadoFonte += vlr_lqd + vlr_n_lqd;
+                if(document.form1['aEmpenho['+ itens.value +'][vlr_dispRPNP]['+ fonte +']'].value != vlr_n_lqd){
+                    vlrAplicado += vlr_n_lqd;
+                }
                 document.form1['aEmpenho['+ itens.value +'][vlr_dispRPNP]['+ fonte +']'].value = vlr_n_lqd;
+                if(document.form1['aEmpenho['+ itens.value +'][vlr_dispRPP]['+ fonte +']'].value != vlr_lqd){
+                    vlrAplicado += vlr_lqd;
+                }
                 document.form1['aEmpenho['+ itens.value +'][vlr_dispRPP]['+ fonte +']'].value = vlr_lqd;
-
             });
             if(VlrUtilizadoFonte > VlrDispTotal){
                 alert("Erro! Valor utilizado maior que valor Disponivel");
@@ -700,8 +710,14 @@
                     document.form1['aEmpenho['+ itens.value +'][vlr_dispRPP]['+ fonte +']'].value = 0;
                 });
             }
-            document.form1['aFonte[' + fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizadoFonte,2);
-            document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(VlrDispTotal) - Number(VlrUtilizadoFonte),2);
+            let VlrUtilizado = 0;
+            aItensFonte(fonte).forEach(function (itens, key) {
+                let vlr_dispRPNP = document.form1['aEmpenho[' + itens.value + '][vlr_dispRPNP][' + fonte + ']'].value;
+                let vlr_dispRPP = document.form1['aEmpenho[' + itens.value + '][vlr_dispRPP][' + fonte + ']'].value;
+                VlrUtilizado += Number(vlr_dispRPNP) + Number(vlr_dispRPP);
+            })
+            document.form1['aFonte[' + fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizado,2);
+            document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(saldoDisponivel) - Number(vlrAplicado),2);
         }
     }
 
@@ -709,6 +725,7 @@
 
         let VlrDispTotal = document.form1['aFonte[' + fonte + '][disp_total]'].value;
         let VlrTotalRP   = document.form1['aFonte[' + fonte + '][vlr_totalrp]'].value;
+        let saldoDisponivel = document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value;
 
         if(Number(VlrTotalRP) > Number(VlrDispTotal)){
             alert("Erro! Valor Total RP maior que Valor Disp. Total");
@@ -717,10 +734,14 @@
             });
         }else {
             let VlrUtilizadoFonte = 0;
+            let vlrAplicado = 0;
             getItensMarcadosFonte(fonte).forEach(function (itens, key) {
                 itens.checked = true;
-                let vlr_n_lqd      = document.form1['aEmpenho[' + itens.value + '][vlr_n_lqd]['+ fonte +']'].value;
-                VlrUtilizadoFonte += Number(vlr_n_lqd);
+                let vlr_n_lqd      = Number(document.form1['aEmpenho[' + itens.value + '][vlr_n_lqd]['+ fonte +']'].value);
+                VlrUtilizadoFonte += vlr_n_lqd;
+                if(document.form1['aEmpenho['+ itens.value +'][vlr_dispRPNP]['+ fonte +']'].value == '0'){
+                    vlrAplicado += vlr_n_lqd;
+                }
                 document.form1['aEmpenho['+ itens.value +'][vlr_dispRPNP]['+ fonte +']'].value = vlr_n_lqd;
             });
             if(VlrUtilizadoFonte > VlrDispTotal){
@@ -730,8 +751,14 @@
                     document.form1['aEmpenho['+ itens.value +'][vlr_dispRPNP]['+ fonte +']'].value = 0;
                 });
             }
-            document.form1['aFonte[' + fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizadoFonte,2);
-            document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(VlrDispTotal) - Number(VlrUtilizadoFonte),2);
+            let VlrUtilizado = 0;
+            aItensFonte(fonte).forEach(function (itens, key) {
+                let vlr_dispRPNP = document.form1['aEmpenho[' + itens.value + '][vlr_dispRPNP][' + fonte + ']'].value;
+                let vlr_dispRPP = document.form1['aEmpenho[' + itens.value + '][vlr_dispRPP][' + fonte + ']'].value;
+                VlrUtilizado += Number(vlr_dispRPNP) + Number(vlr_dispRPP);
+            })
+            document.form1['aFonte[' + fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizado,2);
+            document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(saldoDisponivel) - Number(vlrAplicado),2);
         }
     }
 
@@ -739,6 +766,7 @@
 
         let VlrDispTotal = document.form1['aFonte[' + fonte + '][disp_total]'].value;
         let VlrTotalRP   = document.form1['aFonte[' + fonte + '][vlr_totalrp]'].value;
+        let saldoDisponivel = document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value;
 
         if(Number(VlrTotalRP) > Number(VlrDispTotal)){
             alert("Erro! Valor Total RP maior que Valor Disp. Total");
@@ -747,10 +775,14 @@
             });
         }else {
             let VlrUtilizadoFonte = 0;
+            let vlrAplicado = 0;
             getItensMarcadosFonte(fonte).forEach(function (itens, key) {
                 itens.checked = true;
-                let vlr_lqd        = document.form1['aEmpenho[' + itens.value + '][vlr_lqd]['+ fonte +']'].value;
-                VlrUtilizadoFonte += Number(vlr_lqd);
+                let vlr_lqd        = Number(document.form1['aEmpenho[' + itens.value + '][vlr_lqd]['+ fonte +']'].value);
+                VlrUtilizadoFonte += vlr_lqd;
+                if(document.form1['aEmpenho['+ itens.value +'][vlr_dispRPP]['+ fonte +']'].value != vlr_lqd){
+                    vlrAplicado += vlr_lqd;
+                }
                 document.form1['aEmpenho['+ itens.value +'][vlr_dispRPP]['+ fonte +']'].value = vlr_lqd;
             });
             if(VlrUtilizadoFonte > VlrDispTotal){
@@ -760,8 +792,14 @@
                     document.form1['aEmpenho['+ itens.value +'][vlr_dispRPP]['+ fonte +']'].value = 0;
                 });
             }
-            document.form1['aFonte[' + fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizadoFonte,2);
-            document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(VlrDispTotal) - Number(VlrUtilizadoFonte),2);
+            let VlrUtilizado = 0;
+            aItensFonte(fonte).forEach(function (itens, key) {
+                let vlr_dispRPNP = document.form1['aEmpenho[' + itens.value + '][vlr_dispRPNP][' + fonte + ']'].value;
+                let vlr_dispRPP = document.form1['aEmpenho[' + itens.value + '][vlr_dispRPP][' + fonte + ']'].value;
+                VlrUtilizado += Number(vlr_dispRPNP) + Number(vlr_dispRPP);
+            })
+            document.form1['aFonte[' + fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizado,2);
+            document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(saldoDisponivel) - Number(vlrAplicado),2);
         }
     }
 
