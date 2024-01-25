@@ -138,14 +138,12 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
 
         $clitem10->si43_tiporegistro = 10;
         $clitem10->si43_coditem = $oDados10->coditem;
-        $clitem10->si43_dscItem = preg_replace('/\s+/', ' ', (preg_replace("/[^a-zA-Z0-9 ]/", "",$this->tirarAcentos(strtoupper($oDados10->dscitem)))));
+        $clitem10->si43_dscItem = strtoupper($this->tirarAcentos($oDados10->dscitem)." ".$oDados10->coditem);
         $clitem10->si43_unidademedida = $this->tirarAcentos($oDados10->unidademedida);
         $clitem10->si43_tipocadastro = $oDados10->tipocadastro;
         $clitem10->si43_justificativaalteracao = $oDados10->justificativaalteracao;
         $clitem10->si43_instit = db_getsession("DB_instit");
         $clitem10->si43_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-
-        // echo pg_last_error();
         $clitem10->incluir(null);
         if ($clitem10->erro_status == 0) {
           throw new Exception($clitem10->erro_msg);

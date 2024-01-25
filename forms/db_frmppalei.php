@@ -299,7 +299,7 @@ db_input('o01_anofinal',10,$Io01_anofinal,true,'text',$db_opcao,"")
 <tr>
 <td>
 <fieldset id="LegendfieldsetLegendFirstYear"><legend onclick="toggleFieldset('fieldsetLegendFirstYear')" class="legend-arrow"><b><div id="firstYear"></div> </b></legend>
-<table border="0" id="fieldsetLegendFirstYear">
+<table border="0" id="fieldsetLegendFirstYear" style="display: none;">
   <tr>
     <td nowrap title="<?=@$To01_numerolei?>">
       <b>Número da LDO:</b>
@@ -990,7 +990,6 @@ function loadScreen(db_opcao)
 {
   updateFirstYear(document.getElementById('o01_anoinicio').value);
   updateFirstYearPpa(document.getElementById('o01_anoinicio').value);
-  openFieldset("fieldsetLegendFirstYear");
   if (db_opcao == 1) {
     document.getElementById("o142_orcmodalidadeaplic").value = "f";
     document.getElementById("o142_orcmodalidadeaplicano2").value = "f";
