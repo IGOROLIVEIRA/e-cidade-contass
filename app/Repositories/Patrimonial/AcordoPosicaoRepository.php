@@ -40,12 +40,10 @@ class AcordoPosicaoRepository implements AcordoPosicaoRepositoryInterface
      */
     public function getAditamentoUltimaPosicao(int $ac26Acordo): AcordoPosicao
     {
-
         $acordoPosicao = $this->model
             ->with(['itens', 'posicaoAditamento', 'acordo'])
             ->where('ac26_acordo', $ac26Acordo)
             ->where('ac26_numeroaditamento','<>', '')
-            //->whereNull('ac26_numeroapostilamento')
             ->orderBy('ac26_numero', 'desc')
             ->first();
 

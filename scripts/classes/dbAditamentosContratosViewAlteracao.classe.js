@@ -135,6 +135,12 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
   sContent += "             <td id=\"ctnTxtNumeroAditamento\"></td>";
   sContent += "           </tr> ";
 
+  sContent += "           <tr id='trcriterioreajuste' style='display:none;'> ";
+  sContent += "             <td nowrap> ";
+  sContent += "               <label class=\"bold\" for=\"oCboCriterioReajuste\">Critério de Reajuste:</label>";
+  sContent += "             </td>";
+  sContent += "             <td id=\"ctnCriterioReajuste\"></td>";
+  sContent += "           </tr> ";
 
   sContent += "           <tr id='trdopercentual' style='display:none;'> ";
 
@@ -143,12 +149,11 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
   sContent += "           </tr> ";
 
-  sContent += "           <tr id='trdoindice' style='display:none;'> ";
-
-
-  sContent += "                      <td ><label class=\"bold\" for=\"oIndiceReajuste\"> Índice de Reajuste:<label></td> ";
-  sContent += "                      <td id=\"ctnIndiceReajuste\"></td> ";
-
+  sContent += "           <tr id='trdescricaoindice' style='display:none;'> ";
+  sContent += "             <td nowrap> ";
+  sContent += "               <label class=\"bold\" for=\"oTxtDescricaoIndice\">Descrição do Índice:</label>";
+  sContent += "             </td>";
+  sContent += "             <td id=\"ctnDescricaoIndice\"></td>";
   sContent += "           </tr> ";
 
   sContent += "           <tr id='trdescricaoreajuste' style='display:none;'> ";
@@ -214,8 +219,8 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
   sContent += "                    <tr> ";
   sContent += "                      <td><label class=\"bold\" for=\"oTxtDataInicial\">Inicial:</td> ";
   sContent += "                      <td id=\"ctnVigenciaInicial\"></td> ";
-  sContent += "                      <td><label class=\"bold\" for=\"oTxtDataFinal\">Final:<label></td> ";
-  sContent += "                      <td id=\"ctnVigenciaFinal\"></td> ";
+  sContent += "                      <td class='datafinal'><label class='bold datafinal' for=\"oTxtDataFinal\">Final:<label></td> ";
+  sContent += "                      <td class='datafinal' id=\"ctnVigenciaFinal\"></td> ";
   sContent += "                    </tr> ";
   sContent += "                  </table> ";
   sContent += "               </fieldset> ";
@@ -384,8 +389,36 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     me.oTxtDescricaoAcordo.setValue(chave2);
     db_iframe_acordo.hide();
     me.pesquisarDadosAcordo();
+  }
 
 
+  function validaAcordoDotacoesAnoOrigem(codigoAcordo) {
+    let oParametros = {};
+    oParametros.anoOrigem = anoOrigem;
+    oParametros.anoDestino = anoDestino;
+    oParametros.codigoAcordo = codigoAcordo;
+    oParametros.somenteConsulta = true;
+
+    new Ajax.Request('ac04_alteradotacoescontratos.RPC.php', {
+      method: 'post',
+      parameters: 'json=' + Object.toJSON(oParametros),
+      start_time: new Date().getTime(),
+      onComplete: function (oResponse) {
+        const oRetorno = eval("(" + oResponse.responseText + ")");
+        let timeout = new Date().getTime() - this.start_time;
+        if (oRetorno.materiaisSemDotacoes === true) {
+          if (oRetorno.todosItensSemDotacoes === true) {
+            setTimeout(function () {
+              alert(`Todos os itens deste contrato estão sem dotações para o ano ${anoOrigem}. Acessar a rotina Módulo Contratos > Procedimentos - Acordo - Alteração de Dotação e realizar a alteração para prosseguir com o procedimento.`);
+            }, timeout);
+          } else {
+            setTimeout(function () {
+              alert(`Os itens ${oRetorno.itens} estão sem dotações para o ano ${anoOrigem}. Acessar a rotina Módulo Contratos > Procedimentos - Acordo - Alteração de Dotação e realizar a alteração para prosseguir com o procedimento.`);
+            }, timeout);
+          }
+        }
+      }
+    });
   }
 
   function js_retornoGetLeilicitacao(oAjax) {
@@ -455,18 +488,18 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
   }
 
-  this.mostracampos = function () {
-
+  this.exibicaocamposreajuste = function () {
     if (me.oCboTipoAditivo.getValue() == 5) {
       $('trdopercentual').style.display = '';
       $('trdoindice').style.display = '';
-    } else {
-      me.oPercentualReajuste.setValue('');
-      $('oIndiceReajuste').options[0].selected = true;
-      $('trdopercentual').style.display = 'none';
-      $('trdoindice').style.display = 'none';
+      $('trcriterioreajuste').style.display = '';
+      return;
     }
 
+    me.oPercentualReajuste.setValue('');
+    $('oIndiceReajuste').options[0].selected = true;
+    $('trdopercentual').style.display = 'none';
+    $('trdoindice').style.display = 'none';
   }
 
   this.pesquisarDadosAcordo = function () {
@@ -493,7 +526,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
    * monta a tela principal do aditamento
    */
   this.main = function () {
-
+    
     me.oTxtCodigoAcordo = new DBTextField('oTxtCodigoAcordo', me.sInstance + '.oTxtCodigoAcordo', '', 10);
     me.oTxtCodigoAcordo.addEvent("onChange", ";" + me.sInstance + ".pesquisaAcordo(false);");
     me.oTxtCodigoAcordo.show($('ctnCodigoAcordo'));
@@ -568,7 +601,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       me.oCboTipoAditivo.addItem('12', 'Alteração de Projeto/Especificação');
       me.oCboTipoAditivo.addItem('13', 'Vigência/Execução');
       me.oCboTipoAditivo.addItem('14', 'Acréscimo/Decréscimo de item(ns) conjugado com outros tipos de termos aditivos');
-      me.oCboTipoAditivo.addEvent("onChange", me.sInstance + ".pesquisarDadosAcordo();" + me.sInstance + ".js_changeTipoAditivo();" + me.sInstance + ".ocultaDescricaoAlteracao();" + me.sInstance + ".mostracampos();");
+      me.oCboTipoAditivo.addEvent("onChange", me.sInstance + ".pesquisarDadosAcordo();" + me.sInstance + ".js_changeTipoAditivo();" + me.sInstance + ".ocultaDescricaoAlteracao();" + me.sInstance + ".exibicaocamposreajuste();");
       me.oCboTipoAditivo.show($('ctnTipoAditivo'));
     }
 
@@ -603,6 +636,22 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     me.oTxtDescricaoIndice.show($('ctnDescricaoIndice'));
 
     /**
+      * Descricao do Reajuste
+      */
+    me.oTxtDescricaoReajuste = new DBTextField('oTxtDescricaoReajuste', me.sInstance + '.oTxtDescricaoReajuste', '', 63);
+    me.oTxtDescricaoReajuste.show($('ctnDescricaoReajuste'));
+
+    /**
+     * Critério de Reajuste
+     */
+    me.oCboCriterioReajuste = new DBComboBox('oCboCriterioReajuste', me.sInstance + '.oCboCriterioReajuste', null, '100px');
+    me.oCboCriterioReajuste.addItem('1', 'Índice Único');
+    me.oCboCriterioReajuste.addItem('2', 'Cesta de Índices');
+    me.oCboCriterioReajuste.addItem('3', 'Índice Específico');
+    me.oCboCriterioReajuste.addEvent("onChange", me.sInstance + ".js_changeCriterioReajuste();");
+    me.oCboCriterioReajuste.show($('ctnCriterioReajuste'));
+
+    /**
      * Justificativa
 
      me.oTxtJustificativa = new DBTextField('oTxtJustificativa', me.sInstance + '.oTxtJustificativa', '', 81);
@@ -635,6 +684,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     me.oTextAreaDescricaoAlteracao.setMaxLength(250);
     me.oTxtVeiculoDivulgacao.setMaxLength(50);
     me.oTxtDescricaoIndice.setMaxLength(300);
+    me.oTxtDescricaoReajuste.setMaxLength(300);
 
     /**
      * Valores
@@ -1012,8 +1062,10 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     }
   }
 
-  me.showViewAlterar = (acordo) => {
+  me.showViewAlterar = () => {
+    console.log('showViewAlterar');
     me.main();
+    console.log('showViewAlterar passou main');
     me.pesquisaAcordoAlteracao(true);
   }
 
@@ -1064,14 +1116,23 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       if (me.oPercentualReajuste.getValue() == "" || me.oPercentualReajuste.getValue() == null) {
         return alert("obrigatório informar o Percentual de Reajuste.");
       }
-      if (me.oIndiceReajuste.getValue() == 0) {
+      if (me.oIndiceReajuste.getValue() == 0 && me.oCboCriterioReajuste.getValue() == 1) {
         return alert("obrigatório informar o Indice de Reajuste.");
       }
       if (me.oIndiceReajuste.getValue() == 6) {
-        if (me.oTxtDescricaoIndice.getValue() == "") {
-          return alert("obrigatório informar a Descrição do Indice.");
+        if (me.oTxtDescricaoReajuste.getValue() == "") {
+          return alert("obrigatório informar a Descrição do Reajuste.");
         }
       }
+
+      let criterios = ["2", "3"];
+      let criterioreajuste = me.oCboCriterioReajuste.getValue();
+      let descricaoindice = me.oTxtDescricaoIndice.getValue().trim();
+
+      if (criterios.includes(criterioreajuste) && descricaoindice == "") {
+        return alert("obrigatório informar a Descrição do Índice.");
+      }
+
     }
 
 
@@ -1129,6 +1190,8 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       percentualreajuste: me.oPercentualReajuste.getValue(),
       indicereajuste: me.oIndiceReajuste.getValue(),
       descricaoindice: me.oTxtDescricaoIndice.getValue(),
+      descricaoreajuste: me.oTxtDescricaoReajuste.getValue().replace('"', ""),
+      criterioreajuste: me.oCboCriterioReajuste.getValue(),
       justificativa: $('oTxtJustificativa').getValue(),
       tipoaditamento: me.iTipoAditamento,
       sNumeroAditamento: me.oTxtNumeroAditamento.getValue(),
@@ -2210,6 +2273,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     } else {
       $('trdescricaoreajuste').style.display = 'none';
       me.oTxtDescricaoIndice.setValue('');
+      me.oTxtDescricaoReajuste.setValue('');
     }
   }
 
@@ -2487,9 +2551,10 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
   }
 
   this.pesquisaAcordoAlteracao = function (lMostrar) {
+    console.log("pesquisaAcordoAlteracao")
     const sUrl = 'func_aditamentoalteracao.php?funcao_js=parent.' + me.sInstance + '.js_mostraacordoalteracao|ac16_sequencial';
     if (lMostrar == true) {
-
+      console.log('chegou aqui');
       js_OpenJanelaIframe('top.corpo',
         'db_iframe_acordo',
         sUrl,
@@ -2527,9 +2592,9 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
         const oRetorno = eval("(" + response.responseText + ")");
 
         if (oRetorno.erro == true) {
-           alert(oRetorno.message.urlDecode());
-           me.pesquisaAcordoAlteracao(true);
-           return;
+          alert(oRetorno.message.urlDecode());
+          me.pesquisaAcordoAlteracao(true);
+          return;
         }
         me.lidaDadosAlteracao(oRetorno.aditamento);
       }
@@ -2567,6 +2632,12 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     $('oTxtDescricaoIndice').value = aditamento.descricaoIndice;
     me.oTxtDataFinalCompara.setData(aditamento.vigenciaFim);
 
+    if (oRetorno.vigenciaindeterminada == "t") {
+      document.getElementsByClassName('datafinal')[0].style.display = 'none';
+      document.getElementsByClassName('datafinal')[1].style.display = 'none';
+      document.getElementsByClassName('datafinal')[2].style.display = 'none';
+    }
+
 
     me.ajusteInicialGrid();
 
@@ -2582,7 +2653,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     me.lidaLeiLicitacao(aditamento.acordoSequencial);
     me.ocultaDescricaoAlteracao();
     me.js_exibedescricao();
-    me.mostracampos();
+    me.exibicaocamposreajuste();
 
   }
 
@@ -2682,5 +2753,22 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       && (item.eExecutado === true || item.servico)) return true;
 
     return false;
+  }
+
+  this.js_changeCriterioReajuste = function () {
+
+    let criterioReajuste = $('oCboCriterioReajuste').value;
+
+    if (criterioReajuste == "1") {
+      document.getElementById('trdoindice').style.display = "";
+      document.getElementById('trdescricaoindice').style.display = "none";
+      document.getElementById('oTxtDescricaoIndice').value = "";
+      return;
+    }
+    document.getElementById('trdoindice').style.display = "none";
+    document.getElementById('trdescricaoreajuste').style.display = "none";
+    document.getElementById('trdescricaoindice').style.display = "";
+    document.getElementById('oIndiceReajuste').value = "0";
+    document.getElementById('oTxtDescricaoReajuste').value = "";
   }
 }

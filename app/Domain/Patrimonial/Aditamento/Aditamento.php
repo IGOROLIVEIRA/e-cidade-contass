@@ -110,6 +110,11 @@ class Aditamento
     private ?DateTime $dataReferencia = null;
 
     /**
+     * @var boolean
+     */
+    private bool $vigenciaIndeterminanda = false;
+
+    /**
      * @var Item[]
      */
     private array $itens = [];
@@ -522,6 +527,24 @@ class Aditamento
     public function setDataReferencia(?DateTime $dataReferencia): self
     {
         $this->dataReferencia = $dataReferencia;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of vigenciaIndeterminanda
+     */
+    public function isVigenciaIndeterminanda(): bool
+    {
+        return $this->vigenciaIndeterminanda;
+    }
+
+    /**
+     * Set the value of vigenciaIndeterminanda
+     */
+    public function setVigenciaIndeterminanda(bool $vigenciaIndeterminanda): self
+    {
+        $this->vigenciaIndeterminanda = $vigenciaIndeterminanda;
 
         return $this;
     }

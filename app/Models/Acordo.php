@@ -70,6 +70,7 @@ class Acordo extends LegacyModel
         'ac16_descricaoreajuste',
         'ac16_descricaoindice',
         'ac16_vigenciaindeterminada',
+        'ac16_vigenciaindeterminada'
     ];
 
     public function getAcordosDotacoesComPosicoes() {

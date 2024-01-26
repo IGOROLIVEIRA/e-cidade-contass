@@ -34,7 +34,6 @@ class AditamentoFactory
             ->setDescricaoAlteracao($acordoPosicao->posicaoAditamento->ac35_descricaoalteracao)
             ->setDataReferencia(new DateTime($acordoPosicao->posicaoAditamento->ac35_datareferencia ?? $dataAssinatura));
 
-
         if ($aditamento->isReajuste()) {
             $aditamento->setIndiceReajuste((float) $acordoPosicao->ac26_indicereajuste)
                 ->setPercentualReajuste((float) $acordoPosicao->ac26_percentualreajuste)
@@ -49,8 +48,10 @@ class AditamentoFactory
         }
 
         $itens = $itemFactory->createListByCollection($acordoPosicao->itens, $itensPosicaoAnterior);
-
         $aditamento->setItens($itens);
+
+        $vigenciaIndeterminada = $acordoPosicao->acordo->ac16_vigenciaindeterminada === 't';
+        $aditamento->setVigenciaIndeterminanda($vigenciaIndeterminada);
 
         return $aditamento;
     }

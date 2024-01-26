@@ -82,8 +82,7 @@ if ($result != false && $clparametroscontratos->numrows > 0) {
         ?>
 
         let acordo = "<?= $oGet->acordo ?>";
-
-        oAditamento.showViewAlterar(acordo);
+        oAditamento.showViewAlterar();
     </script>
 
     <?php db_menu(); ?>
