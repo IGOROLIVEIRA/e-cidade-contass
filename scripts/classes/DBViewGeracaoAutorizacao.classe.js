@@ -41,6 +41,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
     me.oCaractPeculiarCod  = '';
     me.oAdesaoRegPrecoCod  = '';
     me.oLicoutrosorgaosCod  = '';
+    me.oLicitacaoCodigo = '';
     me.oCaractPeculiarDesc = '';
     me.sArquivoOrigem      = '';
     me.iOrigemDados        = '';
@@ -117,6 +118,9 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
     me.oLicoutrosorgaosCod  = new DBTextField('oTxtLicoutrosorgaosCod' , me.sInstancia + '.oLicoutrosorgaosCod' , '', 5);
     me.oLicoutrosorgaosResp = new DBTextField('oTxtLicoutrosorgaosResp', me.sInstancia + '.oLicoutrosorgaosResp', '', 41);
 
+    me.oLicitacaoCodigo  = new DBTextField('oTxtLicitacaoCodigo' , me.sInstancia + '.oLicitacaoCodigo' , '', 5);
+    me.oLicitacaoObjeto = new DBTextField('oTxtLicitacaoObjeto', me.sInstancia + '.oLicitacaoObjeto', '', 41);
+
     me.oTipoCompra.onChange     = "; " + me.sInstancia + ".buscarTipoLicitacao(this.value);"+me.sInstancia+".js_verificatipotribunal(this.value);";
     me.oNumeroLicitacao.addEvent("onKeyPress", "return js_mask(event,\"0-9\")");
 
@@ -160,10 +164,13 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
         sContentForm += "            <td id='td_licoutrosorgaos_"+me.sInstancia+"'>"+me.oLicoutrosorgaosCod.toInnerHtml()+"";
         sContentForm += "            "+me.oLicoutrosorgaosResp.toInnerHtml()+"</td>";
         sContentForm += "          </tr>";
-        // sContentForm += "          <tr>";
-        // sContentForm += "            <td nowrap='nowrap'><b>Tipo de Licitação:</b></td>";
-        // sContentForm += "            <td id='td_tipolicitacao_" + me.sInstancia + "'>" + me.oTipoLicitacao.toInnerHtml() + "</td>";
-        // sContentForm += "          </tr>";
+        sContentForm += "          <tr id ='trlicitacao' style='display:none'>";
+        sContentForm += "            <td nowrap='nowrap'>";
+        sContentForm += "              <b><a href='#' id='ancoralicitacao'>Licitação:</a></b>";
+        sContentForm += "            </td>";
+        sContentForm += "            <td id='td_licitacao_"+me.sInstancia+"'>"+me.oLicitacaoCodigo.toInnerHtml()+"";
+        sContentForm += "            "+me.oLicitacaoObjeto.toInnerHtml()+"</td>";
+        sContentForm += "          </tr>";
         sContentForm += "          <tr>";
         sContentForm += "            <td nowrap='nowrap'><b>Número da Licitação:</b></td>";
         sContentForm += "            <td id='td_numerolicitacao_" + me.sInstancia + "'>" + me.oNumeroLicitacao.toInnerHtml() + "</td>";
@@ -305,6 +312,28 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
         });
 
         /**
+         *  Buscar dados da Licitação
+         */
+
+
+
+        $('ancoralicitacao').observe('click', function() {
+
+            js_OpenJanelaIframe('', 'db_iframe_liclicita', 'func_liclicita.php?funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_numero|l20_edital|l20_objeto|l20_anousu',
+            'Pesquisa Licitações', true);
+            $('db_iframe_liclicita').style.zIndex = '10000';
+
+        });
+        
+        $('oTxtLicitacaoCodigo').observe('change', function() {
+        
+            var sOpenWindow = "func_liclicitaoutrosorgaos.php?poo=true&pesquisa_chave="+$F('oTxtLicoutrosorgaosCod')+"&funcao_js=parent.js_mostrarlicoutroorgao";
+            js_OpenJanelaIframe('','db_iframe_liclicitaoutrosorgaos', sOpenWindow, 'Licitação de Outros Órgãos',false);
+            $('db_iframe_liclicitaoutrosorgaos').style.zIndex = '10000';
+
+        });
+
+        /**
          * Executa o RPC para buscar os Tipos de Compra e Empenho
          * para montar o select na janela de Dados das Autorizações
          */
@@ -334,27 +363,16 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
     this.preencheCampos = function(oAjax) {
         var oRetorno = eval("("+oAjax.responseText+")");
 
-        if(oRetorno.licitacao == 't'){
-            $('oTxtNumeroLicitacao').value  = oRetorno.numerolicitacao;
-            $('oTxtModalidade').value       = oRetorno.l20_numero;
-        }
+        $('oTxtTipoCompra').value = oRetorno.tipocompra;
+        $('oTxtNumeroLicitacao').value = oRetorno.numerolicitacao;
+        $('oTxtModalidade').value = oRetorno.numeromodalidade;
 
-        if(oRetorno.aDados[0].numerolicitacao != undefined){
-            $('oTxtNumeroLicitacao').value=oRetorno.aDados[0].numerolicitacao;
-            $('oTxtModalidade').value=oRetorno.aDados[0].l20_numero;
-        }
-        if(oRetorno.aDados[0].sequenciallicitacao != undefined){
-            $('oTxtTipoCompra').value=oRetorno.aDados[0].tipocompra;
-            me.buscarTipoLicitacao(oRetorno.aDados[0].tipocompra);
-        }
-        if(oRetorno.aDados[0].l20_usaregistropreco == 't'){
-
-            $('oTxtNumeroLicitacao').setAttribute('readonly',true);
+        if(oRetorno.vinculo == ""){
+            $('oTxtTipoCompra').value = "0";
+            $('oTxtNumeroLicitacao').disabled = true;
+            $('oTxtModalidade').disabled = true;
             $('oTxtNumeroLicitacao').style.backgroundColor = 'DEB887';
-
-            $('oCboTipoLicitacao').disabled = true;
-            $('oCboTipoEmpenho').disabled   = true;
-            //$('oTxtTipoCompra').disabled    = true;
+            $('oTxtModalidade').style.backgroundColor = 'DEB887';
         }
 
     }
@@ -445,6 +463,8 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
             var aTipoCompra = oRetorno.aPcTipoCompra;
 
             me.oObservacao = oRetorno.sResumo;
+
+            me.oTipoCompra.addItem("0","Selecione...");
 
             aTipoCompra.each(function (oRetTipoCompra) {
 
@@ -920,7 +940,30 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
         var oRetorno = eval("("+oAjax.responseText+")");
 
-        if(oRetorno.tipocompratribunal == 105){
+        let aCodTribunalLicOutrosOrgaos = ["105","106","107","108","109"];
+        let aCodTribunalLicitacao = ["51","48","50","101","54","102","103","49","53","52","110","100"];
+        let aCodTribunalAdesao = "104";
+        let codigoTipoCompraTribunal = oRetorno.tipocompratribunal;
+
+        if(aCodTribunalLicOutrosOrgaos.includes(codigoTipoCompraTribunal)){
+            document.getElementById('trlicoutrosorgaos').style.display = '';
+            document.getElementById('tradesao').style.display = 'none';
+            document.getElementById('trlicitacao').style.display = 'none';
+        }
+
+        if(codigoTipoCompraTribunal == aCodTribunalAdesao){
+            document.getElementById('tradesao').style.display = '';
+            document.getElementById('trlicoutrosorgaos').style.display = 'none';
+            document.getElementById('trlicitacao').style.display = 'none';
+        }
+
+        if(aCodTribunalLicitacao.includes(codigoTipoCompraTribunal)){
+            document.getElementById('trlicitacao').style.display = '';
+            document.getElementById('trlicoutrosorgaos').style.display = 'none';
+            document.getElementById('tradesao').style.display = 'none';
+        }
+
+        /*if(oRetorno.tipocompratribunal == 105){
             document.getElementById('trlicoutrosorgaos').style.display = '';
             document.getElementById('tradesao').style.display = 'none';
         }else if(oRetorno.tipocompratribunal == 106){
@@ -941,7 +984,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
         }else{
             document.getElementById('trlicoutrosorgaos').style.display = 'none';
             document.getElementById('tradesao').style.display = 'none';
-        }
+        }*/
 
     }
     /**
@@ -1520,6 +1563,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
                 oAutorizacao.resumo            = encodeURIComponent(tagString($F('oTxtObservacoes')));
                 oAutorizacao.oLicoutrosorgaosCod = $F('oTxtLicoutrosorgaosCod');
                 oAutorizacao.oAdesaoRegPrecoCod = $F('oTxtAdesaoRegPrecoCod');
+                oAutorizacao.oLicitacaoCodigo = $F('oTxtLicitacaoCodigo');
                 oAutorizacao.sTelefone         = me.oTelefone.getValue();
                 oAutorizacao.sTipoLicitacao    = encodeURIComponent(tagString(me.oTipoLicitacao.getValue()));
                 oAutorizacao.iNumeroLicitacao  = $F('oTxtNumeroLicitacao');
