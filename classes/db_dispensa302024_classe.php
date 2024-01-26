@@ -232,8 +232,8 @@ class cl_dispensa302024 {
                                ,$this->si203_tipoprocesso
                                ,$this->si203_tipodocumento
                                ,'$this->si203_nrodocumento'
-                               ,$this->si203_nrolote
-                               ,$this->si203_coditem
+                               ," . ($this->si203_nrolote == "null" || $this->si203_nrolote == "" ? "null" : "'" . $this->si203_nrolote . "'") . "
+                               ," . ($this->si203_coditem == "null" || $this->si203_coditem == "" ? "null" : "'" . $this->si203_coditem . "'") . "
                                ,$this->si203_percdesconto
                                ,$this->si203_mes
                                ,$this->si203_instit

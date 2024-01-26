@@ -232,8 +232,8 @@ class cl_dispensa402024 {
                                ,$this->si204_tipoprocesso
                                ,$this->si204_tipodocumento
                                ,'$this->si204_nrodocumento'
-                               ,$this->si204_nrolote
-                               ,$this->si204_coditem
+                               ," . ($this->si204_nrolote == "null" || $this->si204_nrolote == "" ? "null" : "'" . $this->si204_nrolote . "'") . "
+                               ," . ($this->si204_coditem == "null" || $this->si204_coditem == "" ? "null" : "'" . $this->si204_coditem . "'") . "
                                ,$this->si204_perctaxaadm
                                ,$this->si204_mes
                                ,$this->si204_instit

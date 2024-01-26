@@ -77,13 +77,13 @@ class GerarDISPENSA extends GerarAM
         $aCSVDISPENSA10['si74_leidalicitacao'] = $this->padLeftZero($aDISPENSA10['si74_leidalicitacao'], 1);
         $aCSVDISPENSA10['si74_codorgaoresp'] = $this->padLeftZero($aDISPENSA10['si74_codorgaoresp'], 2);
         $aCSVDISPENSA10['si74_codunidadesubresp'] = $this->padLeftZero($aDISPENSA10['si74_codunidadesubresp'], 5);
-        $aCSVDISPENSA10['si74_codunidadesubedital'] = $this->padLeftZero($aDISPENSA10['si74_codunidadesubedital'], 8);
+        $aCSVDISPENSA10['si74_codunidadesubedital'] = $this->padLeftZero($aDISPENSA10['si74_codunidadesubedital'], 5);
         $aCSVDISPENSA10['si74_exercicioprocesso'] = $this->padLeftZero($aDISPENSA10['si74_exercicioprocesso'], 4);
         $aCSVDISPENSA10['si74_nroprocesso'] = substr($aDISPENSA10['si74_nroprocesso'], 0, 12);
         $aCSVDISPENSA10['si74_tipoprocesso'] = $this->padLeftZero($aDISPENSA10['si74_tipoprocesso'], 1);
         $aCSVDISPENSA10['si74_dtabertura'] = $this->sicomDate($aDISPENSA10['si74_dtabertura']);
         $aCSVDISPENSA10['si74_naturezaobjeto'] = $this->padLeftZero($aDISPENSA10['si74_naturezaobjeto'], 1);
-        $aCSVDISPENSA10['si74_tipocriterio'] = $this->padLeftZero($aDISPENSA10['si74_tipocriterio'], 1);
+        $aCSVDISPENSA10['si74_tipocriterio'] = $aDISPENSA10['si74_tipocriterio'] == 0 ? '' : $aDISPENSA10['si74_tipocriterio'];
         $aCSVDISPENSA10['si74_objeto'] = substr($aDISPENSA10['si74_objeto'], 0, 1000);
         $aCSVDISPENSA10['si74_justificativa'] = substr($aDISPENSA10['si74_justificativa'], 0, 250);
         $aCSVDISPENSA10['si74_razao'] = substr($aDISPENSA10['si74_razao'], 0, 250);
@@ -330,7 +330,7 @@ class GerarDISPENSA extends GerarAM
 
           $aCSVDISPENSA40['si204_tiporegistro']       = $this->padLeftZero($aDISPENSA40['si204_tiporegistro'], 2);
           $aCSVDISPENSA40['si204_codorgaoresp']       = $this->padLeftZero($aDISPENSA40['si204_codorgaoresp'], 2);
-          $aCSVDISPENSA40['si204_codunidadesubresp']  = $this->padLeftZero($aDISPENSA40['si204_codunidadesubresp'], 8);
+          $aCSVDISPENSA40['si204_codunidadesubresp']  = $this->padLeftZero($aDISPENSA40['si204_codunidadesubresp'], 5);
           $aCSVDISPENSA40['si204_exercicioprocesso']  = $this->padLeftZero($aDISPENSA40['si204_exercicioprocesso'], 4);
           $aCSVDISPENSA40['si204_nroprocesso']        = substr($aDISPENSA40['si204_nroprocesso'], 0, 16);
           $aCSVDISPENSA40['si204_tipoprocesso']       = $this->padLeftZero($aDISPENSA40['si204_tipoprocesso'], 1);

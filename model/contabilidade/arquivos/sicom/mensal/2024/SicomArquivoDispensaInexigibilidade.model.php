@@ -1407,8 +1407,11 @@ ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1
     }
     
     
-    $sSql = "select distinct on (l20_codigo)l20_codigo, infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
+    $sSql = "select l20_codigo, infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
     l20_tipojulg,
+    (CASE liclicita.l20_tipojulg WHEN 3 THEN 1
+		ELSE 2
+	  END) as processoPorLote,
     (SELECT CASE
     WHEN o41_subunidade != 0
          OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
@@ -1490,8 +1493,8 @@ ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1
       $dispensa30->si203_tipoprocesso = $oDados30->tipoprocesso;
       $dispensa30->si203_tipodocumento = $oDados30->tipodocumento;
       $dispensa30->si203_nrodocumento = $oDados30->nrodocumento;
-      $dispensa30->si203_nrolote = $oDados30->nrolote;
-      $dispensa30->si203_coditem = $oDados30->l20_tipojulg == 2 ? '' : $oDados30->coditem;
+      $dispensa40->si203_nrolote = $oDados30->processoporlote == 1 ? $oDados30->nrolote : '';
+      $dispensa40->si203_coditem = $oDados30->processoporlote == 1 ? '' : $oDados30->coditem;
       $dispensa30->si203_percdesconto = $oDados30->percdesconto;
       $dispensa30->si203_instit = db_getsession("DB_instit");
       $dispensa30->si203_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -1504,8 +1507,11 @@ ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1
 
     }
 
-    $sSql = "select distinct on (l20_codigo)l20_codigo, infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
+    $sSql = "select l20_codigo, infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
     l20_tipojulg,
+    (CASE liclicita.l20_tipojulg WHEN 3 THEN 1
+		ELSE 2
+	  END) as processoPorLote,
     (SELECT CASE
     WHEN o41_subunidade != 0
          OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
@@ -1587,8 +1593,8 @@ ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1
       $dispensa40->si204_tipoprocesso = $oDados40->tipoprocesso;
       $dispensa40->si204_tipodocumento = $oDados40->tipodocumento;
       $dispensa40->si204_nrodocumento = $oDados40->nrodocumento;
-      $dispensa40->si204_nrolote = $oDados40->nrolote;
-      $dispensa40->si204_coditem = $oDados40->l20_tipojulg == 2 ? '' : $oDados40->coditem;
+      $dispensa40->si204_nrolote = $oDados40->processoporlote == 1 ? $oDados40->nrolote : '';
+      $dispensa40->si204_coditem = $oDados40->processoporlote == 1 ? '' : $oDados40->coditem;
       $dispensa40->si204_perctaxaadm = $oDados40->perctaxaadm;
       $dispensa40->si204_instit = db_getsession("DB_instit");
       $dispensa40->si204_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
