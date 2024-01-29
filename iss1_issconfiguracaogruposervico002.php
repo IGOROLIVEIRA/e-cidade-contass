@@ -24,6 +24,8 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
+use App\Models\Db_Usuarios;
+use App\Models\IssConfiguracaoGrupoServicoUsuario;
 
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
@@ -36,7 +38,13 @@ require_once("dbforms/db_funcoes.php");
 $oPost = db_utils::postMemory($_POST);
 $oGet  = db_utils::postMemory($_GET);
 
-$oDaoConfiguracaoGrupo = new cl_issconfiguracaogruposervico();
+$oDaoConfiguracaoGrupo	= new cl_issconfiguracaogruposervico();
+$oDaoEstruturaValor		= new cl_db_estruturavalor();
+$dbUsuariosContass = Db_Usuarios::query()
+	->where('id_usuario', db_getsession('DB_id_usuario'))
+	->where('login', 'like', '%.contass')
+	->first();
+$IssConfiguracaoGrupoServicoUsuario	= IssConfiguracaoGrupoServicoUsuario::query()->where('id_usuario', db_getsession('DB_id_usuario'))->first();
 
 $db_opcao = 22;
 $db_botao = false;
@@ -52,12 +60,18 @@ if ( isset($oPost->salvar) ) {
 	$oDaoConfiguracaoGrupo->q136_exercicio       = $oPost->q136_exercicio;
 	$oDaoConfiguracaoGrupo->q136_tipotributacao  = $oPost->q136_tipotributacao;
 	$oDaoConfiguracaoGrupo->q136_valor           = $oPost->q136_valor;
-	$oDaoConfiguracaoGrupo->q136_valor_reduzido           = $oPost->q136_valor_reduzido;
+	$oDaoConfiguracaoGrupo->q136_valor_reduzido  = $oPost->q136_valor_reduzido;	
 
 	if ( !empty($oPost->q136_sequencial) ) {
 		$oDaoConfiguracaoGrupo->alterar($q136_sequencial);
 	} else {
 		$oDaoConfiguracaoGrupo->incluir(null);
+	}
+
+	if ( (!empty($oPost->iSequencialEstrutural)) && ($dbUsuariosContass || $IssConfiguracaoGrupoServicoUsuario) ) {
+		$oDaoEstruturaValor->db121_sequencial	= $oPost->iSequencialEstrutural;
+		$oDaoEstruturaValor->db121_descricao	= $oPost->sDescricaoGrupoServico;
+		$oDaoEstruturaValor->alterar($iSequencialEstrutural);
 	}
 
   db_fim_transacao();
@@ -66,7 +80,8 @@ if ( isset($oPost->salvar) ) {
 
 	$db_opcao = 2;
 
-	$sCampos  = "db_estruturavalor.db121_estrutural as codigo_grupo,";
+	$sCampos  = "db_estruturavalor.db121_sequencial as id_estrutural,";
+	$sCampos .= "db_estruturavalor.db121_estrutural as codigo_grupo,";
 	$sCampos .= "db_estruturavalor.db121_descricao  as descricao_grupo,";
 	$sCampos .= "issconfiguracaogruposervico.*";
 	$sWhere   = "issgruposervico.q126_sequencial = {$oGet->iCodigoGrupoServico} and q136_exercicio = " . db_getsession('DB_anousu');
@@ -80,6 +95,7 @@ if ( isset($oPost->salvar) ) {
 
 		$iCodigoGrupoServico    = $oConfiguracaoGrupo->codigo_grupo;
 		$sDescricaoGrupoServico = $oConfiguracaoGrupo->descricao_grupo;
+		$iSequencialEstrutural	= $oConfiguracaoGrupo->id_estrutural;
 
 		$q136_issgruposervico = $oGet->iCodigoGrupoServico;
 		$q136_sequencial      = $oConfiguracaoGrupo->q136_sequencial;
