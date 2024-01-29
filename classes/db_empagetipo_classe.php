@@ -1137,9 +1137,10 @@ class cl_empagetipo {
         $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('15000000')) and"; 
           
         }
-      else
-      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('$iFonteEmpenho')) and"; 
-      
+      else {
+        $fonteempenho = substr($iFonteEmpenho,1,6);
+        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where (SUBSTRING(o15_codigo::text, 2,2) in ('$fonteempenho') or SUBSTRING(o15_codigo::text, 2,6) in ('$fonteempenho'))) and"; 
+      }  
   }else{
     if(in_array($iFonteEmpenho,$aFontes) and db_getsession("DB_anousu") > 2017){
       $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('148','149','150','151','152', '159', '248','249','250','251','252', '259')) and";
