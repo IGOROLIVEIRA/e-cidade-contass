@@ -362,10 +362,11 @@ ORDER BY nroprocessolicitatorio
 
       $clralic10->si180_tiporegistro = 10; //1
       $clralic10->si180_codorgaoresp = $oDados10->codorgaoresp; //2
-      $clralic10->si180_codunidadesubresp = $oDados10->codunidadesubresp; //3
       if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
+          $clralic10->si180_codunidadesubresp = ''; //3
           $clralic10->si180_codunidadesubrespestadual = $oDados10->codunidadesubrespestadual; //4
       }else {
+          $clralic10->si180_codunidadesubresp = $oDados10->codunidadesubresp; //3
           $clralic10->si180_codunidadesubrespestadual = ''; //4
       }
       $clralic10->si180_exerciciolicitacao = $oDados10->exerciciolicitacao; //5
@@ -521,10 +522,11 @@ ORDER BY nroprocessolicitatorio
 
               $clralic11->si181_tiporegistro = 11; //1
               $clralic11->si181_codorgaoresp = $oResult11->codorgaoresp;//2
-              $clralic11->si181_codunidadesubresp = $oResult11->codunidadesubresp;//3
               if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
+                $clralic11->si181_codunidadesubresp = '';//3
                 $clralic11->si181_codunidadesubrespestadual = $oResult11->codunidadesubrespestadual;//4
               }else {
+                $clralic11->si181_codunidadesubresp = $oResult11->codunidadesubresp;//3
                 $clralic11->si181_codunidadesubrespestadual = ''; //4
               }
               $clralic11->si181_exerciciolicitacao = $oResult11->exerciciolicitacao;//5
@@ -637,10 +639,11 @@ ORDER BY nroprocessolicitatorio
 
             $clralic12->si182_tiporegistro = 12;//1
             $clralic12->si182_codorgaoresp = $oResult12->codorgaoresp;//2
-            $clralic12->si182_codunidadesubresp = $oResult12->codunidadesubresp;//3
             if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
+                $clralic12->si182_codunidadesubresp = '';//3
                 $clralic12->si182_codunidadesubrespestadual = $oResult12->codunidadesubrespestadual != '' ? $oResult12->codunidadesubrespestadual : '0';//4
             }else {
+                $clralic12->si182_codunidadesubresp = $oResult12->codunidadesubresp;//3
                 $clralic12->si182_codunidadesubrespestadual = ''; //4
             }
             $clralic12->si182_exercicioprocesso = $oResult12->exercicioprocesso;//5

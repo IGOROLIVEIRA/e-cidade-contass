@@ -144,7 +144,8 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
                    CASE
                         WHEN LENGTH(z01_cgccpf) = 11 THEN 1
                         ELSE 2
-                   END AS si195_tipodocumento
+                   END AS si195_tipodocumento,
+                   si09_codunidadesubunidade as si195_codunidadesubsicom
             FROM licobras
             INNER JOIN liclicita ON l20_codigo = obr01_licitacao
             INNER  JOIN acordo on ac16_licitacao = l20_codigo
@@ -172,11 +173,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
 
         $cllicobras102024->si195_tiporegistro = 10;
         $cllicobras102024->si195_codorgaoresp = $oDados10->si195_codorgaoresp;
-        if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
-            $cllicobras102024->si195_codunidadesubrespestadual = substr($oDados10->si195_codunidadesubrespestadual, 0, 4);//4
-        }else {
-            $cllicobras102024->si195_codunidadesubrespestadual = "";
-        }
+        $cllicobras102024->si195_codunidadesubrespestadual = "";
         $cllicobras102024->si195_exerciciolicitacao = $oDados10->si195_exerciciolicitacao;
         $cllicobras102024->si195_nroprocessolicitatorio = $oDados10->si195_nroprocessolicitatorio;
         $cllicobras102024->si195_nrolote = $oDados10->si195_nrolote;
@@ -189,7 +186,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
         $cllicobras102024->si195_objeto = $this->removeCaracteres($oDados10->si195_objeto);
         $cllicobras102024->si195_linkobra = $oDados10->si195_linkobra;
         $cllicobras102024->si195_codorgaorespsicom = 3;
-        $cllicobras102024->si195_codunidadesubsicom = 4;
+        $cllicobras102024->si195_codunidadesubsicom = $oDados10->si195_codunidadesubsicom;
         $cllicobras102024->si195_nrocontrato = $oDados10->si195_nrocontrato;
         $cllicobras102024->si195_exerciciocontrato = $oDados10->si195_exerciciocontrato;
         $cllicobras102024->si195_dataassinatura = $oDados10->si195_dataassinatura;
@@ -234,7 +231,8 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
                    ac16_valor as si196_vlcontrato,
                    ac16_tipounidtempoperiodo as si196_undmedidaprazoexecucao,
                    ac16_qtdperiodo as si196_prazoexecucao,
-                   ac16_tipoorigem
+                   ac16_tipoorigem,
+                   si09_codunidadesubunidade as si196_codunidadesubsicom
             FROM licobras
             INNER JOIN liclicita ON l20_codigo = obr01_licitacao
             LEFT  JOIN acordo on ac16_licitacao = l20_codigo
@@ -255,11 +253,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
 
         $cllicobras202024->si196_tiporegistro = 20;
         $cllicobras202024->si196_codorgaoresp = $oDados20->si195_codorgaoresp;
-        if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
-            $cllicobras202024->si196_codunidadesubrespestadual = substr($oDados20->si195_codunidadesubrespestadual, 0, 4);
-        }else {
-            $cllicobras202024->si196_codunidadesubrespestadual = "";
-        }
+        $cllicobras202024->si196_codunidadesubrespestadual = "";
         $cllicobras202024->si196_exerciciolicitacao = $oDados20->si195_exerciciolicitacao;
         $cllicobras202024->si196_nroprocessolicitatorio = $oDados20->si195_nroprocessolicitatorio;
         $cllicobras202024->si196_tipoprocesso = $oDados20->si196_tipoprocesso;
@@ -272,7 +266,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
         $cllicobras202024->si196_objeto = $this->removeCaracteres($oDados20->si195_objeto);
         $cllicobras202024->si196_linkobra = $oDados20->si195_linkobra;
         $cllicobras202024->si196_codorgaorespsicom = 3;
-        $cllicobras202024->si196_codunidadesubsicom = 4;
+        $cllicobras202024->si196_codunidadesubsicom = $oDados20->si196_codunidadesubsicom;
         $cllicobras202024->si196_nrocontrato = $oDados20->si196_nrocontrato;
         $cllicobras202024->si196_exerciciocontrato = $oDados20->si196_exerciciocontrato;
         $cllicobras202024->si196_dataassinatura = $oDados20->si196_dataassinatura;
@@ -306,7 +300,8 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
                        WHEN l03_pctipocompratribunal IN (100,101,102,103 ) THEN '2'
                        ELSE '1'
                    END as si203_tipodetalhamento,
-                   ac20_valoraditado as si203_valoraditivo
+                   ac20_valoraditado as si203_valoraditivo,
+                   si09_codunidadesubunidade as si203_codunidadesubrespestadual
             FROM licobras
             INNER JOIN liclicita ON l20_codigo = obr01_licitacao
             INNER JOIN acordo on ac16_licitacao = l20_codigo
@@ -331,7 +326,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
         $cllicobras302024->si203_tiporegistro = 30;
         $cllicobras302024->si203_codorgaoresp = $oDados30->si203_codorgaoresp;
         $cllicobras302024->si203_codobra = $oDados30->si203_codobra;
-        $cllicobras302024->si203_codunidadesubrespestadual = substr($oDados30->si203_codunidadesubrespestadual, 0, 4);
+        $cllicobras302024->si203_codunidadesubrespestadual = $oDados30->si203_codunidadesubrespestadual;
         $cllicobras302024->si203_nroseqtermoaditivo = $oDados30->si203_nroseqtermoaditivo;
         $cllicobras302024->si203_dataassinaturatermoaditivo = $oDados30->si203_dataassinaturatermoaditivo;
         if ($oDados30->si203_valoraditivo > 0) {
