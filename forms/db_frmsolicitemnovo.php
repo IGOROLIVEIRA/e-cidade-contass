@@ -906,6 +906,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
         document.getElementById('pc17_unid').style.display = "";
         document.getElementById('ctnServicoQuantidade').style.display = "none";
         document.getElementById('pc11_servicoquantidade').style.display = "none";
+        document.getElementById('pc11_servicoquantidade').value = "true";
         document.getElementById('pc17_unid2').style.display = "none";
         document.getElementById('titleUnidade2').style.display = "none";
         document.getElementById('pc11_seq').style.marginLeft = "";
@@ -951,15 +952,12 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('tdunidade').style.display = "none";
       document.getElementById('tdunidade2').style.display = "none";
 
-
-
-
-
     } else {
       document.getElementById('titleUnidade').style.display = "";
       document.getElementById('pc17_unid').style.display = "";
       document.getElementById('ctnServicoQuantidade').style.display = "none";
       document.getElementById('pc11_servicoquantidade').style.display = "none";
+      document.getElementById('pc11_servicoquantidade').value = "true";
       document.getElementById('pc17_unid2').style.display = "none";
       document.getElementById('titleUnidade2').style.display = "none";
       document.getElementById('pc11_seq').style.marginLeft = "";
