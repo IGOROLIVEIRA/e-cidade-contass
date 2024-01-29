@@ -316,7 +316,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
       $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
-      $sHash = $oDados20->nroempenho . $oDados20->exercicioempenho . $oDados20->dtmovimentacao;
+      $sHash = $oDados20->nroempenho . $oDados20->exercicioempenho . $oDados20->dtmovimentacao . $oDados20->tiporestospagar;
       if (!$aDadosAgrupados[$sHash]) {
 
         $clrsp20 = new stdClass();
