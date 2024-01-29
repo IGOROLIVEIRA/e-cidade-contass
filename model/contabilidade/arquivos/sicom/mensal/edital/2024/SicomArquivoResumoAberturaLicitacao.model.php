@@ -47,6 +47,10 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
     return $this->iCodigoLayout;
   }
 
+  public function getTipoInstit(){
+
+  }
+
   /**
    * metodo para passar os dados das Acoes e Metas pada o $this->aDados
    */
@@ -359,7 +363,11 @@ ORDER BY nroprocessolicitatorio
       $clralic10->si180_tiporegistro = 10; //1
       $clralic10->si180_codorgaoresp = $oDados10->codorgaoresp; //2
       $clralic10->si180_codunidadesubresp = $oDados10->codunidadesubresp; //3
-      $clralic10->si180_codunidadesubrespestadual = $oDados10->codunidadesubrespestadual; //4
+      if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
+          $clralic10->si180_codunidadesubrespestadual = $oDados10->codunidadesubrespestadual; //4
+      }else {
+          $clralic10->si180_codunidadesubrespestadual = ''; //4
+      }
       $clralic10->si180_exerciciolicitacao = $oDados10->exerciciolicitacao; //5
       $clralic10->si180_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio; //6
       $clralic10->si180_tipocadastradolicitacao = $oDados10->tipocadastradolicitacao; //7
@@ -514,7 +522,11 @@ ORDER BY nroprocessolicitatorio
               $clralic11->si181_tiporegistro = 11; //1
               $clralic11->si181_codorgaoresp = $oResult11->codorgaoresp;//2
               $clralic11->si181_codunidadesubresp = $oResult11->codunidadesubresp;//3
-              $clralic11->si181_codunidadesubrespestadual = $oResult11->codunidadesubrespestadual;//4
+              if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
+                $clralic11->si181_codunidadesubrespestadual = $oResult11->codunidadesubrespestadual;//4
+              }else {
+                $clralic11->si181_codunidadesubrespestadual = ''; //4
+              }
               $clralic11->si181_exerciciolicitacao = $oResult11->exerciciolicitacao;//5
               $clralic11->si181_nroprocessolicitatorio = $oResult11->nroprocessolicitatorio;//6
               $clralic11->si181_codobralocal = $oResult11->codobralocal;//7
@@ -545,9 +557,9 @@ ORDER BY nroprocessolicitatorio
 
 
             /*
-                   * Seleção dos registros 12 do RALIC
-                   *
-                   * */
+            * Seleção dos registros 12 do RALIC
+            *
+            * */
           }
         }
 
@@ -626,7 +638,11 @@ ORDER BY nroprocessolicitatorio
             $clralic12->si182_tiporegistro = 12;//1
             $clralic12->si182_codorgaoresp = $oResult12->codorgaoresp;//2
             $clralic12->si182_codunidadesubresp = $oResult12->codunidadesubresp;//3
-            $clralic12->si182_codunidadesubrespestadual = $oResult12->codunidadesubrespestadual != '' ? $oResult12->codunidadesubrespestadual : '0';//4
+            if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
+                $clralic12->si182_codunidadesubrespestadual = $oResult12->codunidadesubrespestadual != '' ? $oResult12->codunidadesubrespestadual : '0';//4
+            }else {
+                $clralic12->si182_codunidadesubrespestadual = ''; //4
+            }
             $clralic12->si182_exercicioprocesso = $oResult12->exercicioprocesso;//5
             $clralic12->si182_nroprocessolicitatorio = $oResult12->nroprocessolicitatorio;//6
             $clralic12->si182_codobralocal = $oResult12->codobralocal;//7

@@ -172,7 +172,11 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
 
         $cllicobras102024->si195_tiporegistro = 10;
         $cllicobras102024->si195_codorgaoresp = $oDados10->si195_codorgaoresp;
-        $cllicobras102024->si195_codunidadesubrespestadual = substr($oDados10->si195_codunidadesubrespestadual, 0, 4);
+        if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
+            $cllicobras102024->si195_codunidadesubrespestadual = substr($oDados10->si195_codunidadesubrespestadual, 0, 4);//4
+        }else {
+            $cllicobras102024->si195_codunidadesubrespestadual = "";
+        }
         $cllicobras102024->si195_exerciciolicitacao = $oDados10->si195_exerciciolicitacao;
         $cllicobras102024->si195_nroprocessolicitatorio = $oDados10->si195_nroprocessolicitatorio;
         $cllicobras102024->si195_nrolote = $oDados10->si195_nrolote;
@@ -251,7 +255,11 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
 
         $cllicobras202024->si196_tiporegistro = 20;
         $cllicobras202024->si196_codorgaoresp = $oDados20->si195_codorgaoresp;
-        $cllicobras202024->si196_codunidadesubrespestadual = substr($oDados20->si195_codunidadesubrespestadual, 0, 4);
+        if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
+            $cllicobras202024->si196_codunidadesubrespestadual = substr($oDados20->si195_codunidadesubrespestadual, 0, 4);
+        }else {
+            $cllicobras202024->si196_codunidadesubrespestadual = "";
+        }
         $cllicobras202024->si196_exerciciolicitacao = $oDados20->si195_exerciciolicitacao;
         $cllicobras202024->si196_nroprocessolicitatorio = $oDados20->si195_nroprocessolicitatorio;
         $cllicobras202024->si196_tipoprocesso = $oDados20->si196_tipoprocesso;

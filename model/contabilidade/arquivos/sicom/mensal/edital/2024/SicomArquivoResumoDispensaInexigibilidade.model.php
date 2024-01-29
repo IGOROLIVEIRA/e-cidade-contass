@@ -292,7 +292,11 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
         $clredispi10->si183_tiporegistro = 10;//1
         $clredispi10->si183_codorgaoresp         = $oDados10->codorgaoresp;//2
         $clredispi10->si183_codunidadesubresp = $oDados10->codunidadesubresp;//3
-        $clredispi10->si183_codunidadesubrespestadual = $oDados10->codunidadesubrespestadual;//4
+        if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
+            $clredispi10->si183_codunidadesubrespestadual = $oDados10->codunidadesubrespestadual;//4
+        }else {
+            $clredispi10->si183_codunidadesubrespestadual = ''; //4
+        }
         $clredispi10->si183_exercicioprocesso = $oDados10->exercicioprocesso;//5
         $clredispi10->si183_nroprocesso = $oDados10->nroprocesso;//6
         $clredispi10->si183_tipoprocesso = $oDados10->tipoprocesso;//7
@@ -420,7 +424,11 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
               $clredispi11->si184_tiporegistro = 11;//1
               $clredispi11->si184_codorgaoresp = $oResult11->codorgaoresp;//2
               $clredispi11->si184_codunidadesubresp = $oResult11->codunidadesubresp;//3
-              $clredispi11->si184_codunidadesubrespestadual = $oResult11->codunidadesubrespestadual;//4
+              if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
+                  $clredispi11->si184_codunidadesubrespestadual = $oResult11->codunidadesubrespestadual;//4
+              }else {
+                  $clredispi11->si184_codunidadesubrespestadual = ""; //4
+              }
               $clredispi11->si184_exercicioprocesso = $oResult11->exercicioprocesso;//5
               $clredispi11->si184_nroprocesso = $oResult11->nroprocesso;//6
               $clredispi11->si184_codobralocal = $oResult11->codobralocal;//7
@@ -525,7 +533,11 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
             $clredispi12->si185_tiporegistro = 12;
             $clredispi12->si185_codorgaoresp = $oResult12->codorgaoresp;
             $clredispi12->si185_codunidadesubresp = $oResult12->codunidadesubresp;
-            $clredispi12->si185_codunidadesubrespestadual = $oResult12->codunidadesubrespestadual;
+            if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
+              $clredispi12->si185_codunidadesubrespestadual = $oResult12->codunidadesubrespestadual;
+            }else {
+              $clredispi12->si185_codunidadesubrespestadual = "";
+            }
             $clredispi12->si185_exercicioprocesso = $oResult12->exercicioprocesso;
             $clredispi12->si185_nroprocesso = $oResult12->nroprocesso;
             $clredispi12->si185_codobralocal = $oResult12->codobralocal;
