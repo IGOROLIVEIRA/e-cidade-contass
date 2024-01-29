@@ -83,7 +83,9 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     $sSql = "SELECT    db150_tiporegistro AS tipoRegistro,
                        db150_coditem AS coditem,
-                       regexp_replace(pcmater.pc01_descrmater||' '||substring(pc01_complmater,1,900), ' +', ' ', 'g') AS dscItem,
+                       CASE
+           WHEN pc01_complmater IS NOT NULL THEN regexp_replace(pcmater.pc01_descrmater||' '||substring(pc01_complmater,1,900), ' +', ' ', 'g')
+               else regexp_replace(pcmater.pc01_descrmater , ' +', ' ', 'g') end AS dscItem,
                        db150_unidademedida AS unidadeMedida,
                        db150_tipocadastro AS tipoCadastro,
                        '' AS justificativaAlteracao
@@ -95,7 +97,9 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
                 UNION
                 SELECT db150_tiporegistro AS tipoRegistro,
                        db150_coditem AS coditem,
-                       regexp_replace(pcmater.pc01_descrmater||' '||substring(pc01_complmater,1,900), ' +', ' ', 'g') AS dscItem,
+                                              CASE
+           WHEN pc01_complmater IS NOT NULL THEN regexp_replace(pcmater.pc01_descrmater||' '||substring(pc01_complmater,1,900), ' +', ' ', 'g')
+               else regexp_replace(pcmater.pc01_descrmater , ' +', ' ', 'g') end AS dscItem,
                        db150_unidademedida AS unidadeMedida,
                        db150_tipocadastro AS tipoCadastro,
                        '' AS justificativaAlteracao
