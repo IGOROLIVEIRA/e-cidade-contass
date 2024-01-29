@@ -1,23 +1,23 @@
 <?php
-use App\Models\Db_Usuarios;
-use App\Models\IssConfiguracaoGrupoServicoUsuario;
+	use App\Models\Db_Usuarios;
+	use App\Models\IssConfiguracaoGrupoServicoUsuario;
 
-$oDaoConfiguracaoGrupo->rotulo->label();
-$dbUsuariosContass = Db_Usuarios::query()
-	->where('id_usuario', db_getsession('DB_id_usuario'))
-	->where('login', 'like', '%.contass')
-	->first();
-$IssConfiguracaoGrupoServicoUsuario	= IssConfiguracaoGrupoServicoUsuario::query()->where('id_usuario', db_getsession('DB_id_usuario'))->first();
+	$oDaoConfiguracaoGrupo->rotulo->label();
+	$dbUsuariosContass = Db_Usuarios::query()
+		->where('id_usuario', db_getsession('DB_id_usuario'))
+		->where('login', 'like', '%.contass')
+		->first();
+	$IssConfiguracaoGrupoServicoUsuario	= IssConfiguracaoGrupoServicoUsuario::query()->where('id_usuario', db_getsession('DB_id_usuario'))->first();
 
-$oRotulo = new rotulocampo();
-$oRotulo->label("q126_sequencial");
+	$oRotulo = new rotulocampo();
+	$oRotulo->label("q126_sequencial");
 
-$aLocalPagamento = array(1 => 'Local de prestação', 2 => 'Sede Prestador', 3 => 'Sede Tomador');
-$aTipoTributacao = array(1 => 'Fixo', 2 => 'Variável', 3 => 'Não Incide');
+	$aLocalPagamento = array(1 => 'Local de prestação', 2 => 'Sede Prestador', 3 => 'Sede Tomador');
+	$aTipoTributacao = array(1 => 'Fixo', 2 => 'Variável', 3 => 'Não Incide');
 
-$sDesabilitaBotao = $db_opcao ? null : 'disabled="true"';
-
+	$sDesabilitaBotao = $db_opcao ? null : 'disabled="true"';
 ?>
+
 <form name="form1" method="post" action="">
 
 	<fieldset style="width:600px;">
@@ -98,71 +98,72 @@ $sDesabilitaBotao = $db_opcao ? null : 'disabled="true"';
 
 <script type="text/javascript">
 
-js_tipoTributacao( $('q136_tipotributacao') );
-$('salvar').disabled = true;
-
-if( !empty($F('iCodigoGrupoServico')) ){
-  $('salvar').disabled = false;
-}
-/**
- * Funcao chamada ao alterar tipo de tributacao
- */
-function js_tipoTributacao(oElemento) {
-
-	var sValor = '';
-
+	js_tipoTributacao( $('q136_tipotributacao') );
+	$('salvar').disabled = true;
+	
+	if( !empty($F('iCodigoGrupoServico')) ){
+		$('salvar').disabled = false;
+	}
+	
 	/**
-	 * Fixo
-	 */
-	if ( oElemento.value == '1' ) {
-		sValor += 'Valor do índice';
-		$('porcentagem').style.display = 'none';
-		$('q136_valor').readOnly = false;
-
-		$('porcentagem_reduzido').style.display = 'none';
-		$('q136_valor_reduzido').readOnly = false;
+	* Funcao chamada ao alterar tipo de tributacao
+	*/
+	function js_tipoTributacao(oElemento) {
+		
+		var sValor = '';
+		
+		/**
+		* Fixo
+		*/
+		if ( oElemento.value == '1' ) {
+			sValor += 'Valor do índice';
+			$('porcentagem').style.display = 'none';
+			$('q136_valor').readOnly = false;
+			
+			$('porcentagem_reduzido').style.display = 'none';
+			$('q136_valor_reduzido').readOnly = false;
+		}
+		
+		/**
+		* Variavel
+		*/
+		else if (oElemento.value == '2') {
+			
+			sValor += 'Alíquota:';
+			$('porcentagem').style.display = '';
+			$('q136_valor').readOnly = false;
+			
+			$('porcentagem_reduzido').style.display = '';
+			$('q136_valor_reduzido').readOnly = false;
+		}
+		
+		/**
+		* Não incide
+		*/
+		else if (oElemento.value == '3') {
+			
+			sValor += 'Não Incide';
+			$('porcentagem').style.display = 'none';
+			$('q136_valor').value = '0';
+			$('q136_valor').readOnly = true;
+			
+			$('porcentagem_reduzido').style.display = 'none';
+			$('q136_valor_reduzido').value = '0';
+			$('q136_valor_reduzido').readOnly = true;
+		}
+		
+		$('valor').innerHTML = '<strong>' + sValor + '</strong>';
 	}
 
-	/**
-	 * Variavel
-	 */
-	else if (oElemento.value == '2') {
-
-		sValor += 'Alíquota:';
-		$('porcentagem').style.display = '';
-		$('q136_valor').readOnly = false;
-
-		$('porcentagem_reduzido').style.display = '';
-		$('q136_valor_reduzido').readOnly = false;
+	function js_pesquisa() {
+		js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_issgruposervico', 'func_issgruposervico.php?funcao_js=parent.js_preenchePesquisa|q126_sequencial|db121_descricao|db121_estrutural', 'Pesquisa', true);
 	}
 
-	/**
-	 * Não incide
-	 */
-  else if (oElemento.value == '3') {
-
-  	sValor += 'Não Incide';
-  	$('porcentagem').style.display = 'none';
-  	$('q136_valor').value = '0';
-  	$('q136_valor').readOnly = true;
-
-  	$('porcentagem_reduzido').style.display = 'none';
-  	$('q136_valor_reduzido').value = '0';
-  	$('q136_valor_reduzido').readOnly = true;
+	function js_preenchePesquisa(iCodigoGrupoServico, sDescricao, sEstrutural) {
+		$('sDescricaoGrupoServico').value = sDescricao;
+		js_divCarregando('Buscando dados do grupo de serviço', 'msgBox');
+		db_iframe_issgruposervico.hide(true);
+		location.href = 'iss1_issconfiguracaogruposervico002.php?iCodigoGrupoServico=' + iCodigoGrupoServico;
+		js_removeObj('msgBox');
 	}
-
-	$('valor').innerHTML = '<strong>' + sValor + '</strong>';
-}
-
-function js_pesquisa() {
-	js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_issgruposervico', 'func_issgruposervico.php?funcao_js=parent.js_preenchePesquisa|q126_sequencial|db121_descricao|db121_estrutural', 'Pesquisa', true);
-}
-
-function js_preenchePesquisa(iCodigoGrupoServico, sDescricao, sEstrutural) {
-  $('sDescricaoGrupoServico').value = sDescricao;
-  js_divCarregando('Buscando dados do grupo de serviço', 'msgBox');
-  db_iframe_issgruposervico.hide(true);
-  location.href = 'iss1_issconfiguracaogruposervico002.php?iCodigoGrupoServico=' + iCodigoGrupoServico;
-  js_removeObj('msgBox');
-}
 </script>
