@@ -1124,7 +1124,8 @@ class cl_acordoaux {
         }
 
         if (trim($this->ac16_vigenciaindeterminada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_vigenciaindeterminada"])) {
-          $sql .= $virgula . " ac16_vigenciaindeterminada = '$this->ac16_vigenciaindeterminada' ";
+          $this->ac16_vigenciaindeterminada = $this->ac16_vigenciaindeterminada == "null" ? 'false' : $this->ac16_vigenciaindeterminada;
+          $sql .= $virgula . " ac16_vigenciaindeterminada = $this->ac16_vigenciaindeterminada ";
         }
 
      $sql .= " where ";
