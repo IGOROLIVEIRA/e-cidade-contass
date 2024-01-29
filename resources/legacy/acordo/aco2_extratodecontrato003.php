@@ -14,7 +14,7 @@ $clacordo            = new cl_acordo;
 $clacordoposicao     = new cl_acordoposicao;
 $clacordoitem        = new cl_acordoitem;
 
-$sSql = db_query("select distinct ac16_sequencial, ac16_numero||'/'||ac16_anousu numcontrato,descrdepto,ac16_dataassinatura,z01_nome,ac16_valor,ac16_datainicio,ac16_datafim,ac16_objeto from acordo inner join db_depart on coddepto = ac16_coddepto inner join cgm on z01_numcgm = ac16_contratado inner join acordoposicao on ac26_acordo = ac16_sequencial and ac26_acordoposicaotipo = 1 where ac16_sequencial = " . $sequencial);
+$sSql = db_query("select distinct ac16_sequencial, ac16_numero||'/'||ac16_anousu numcontrato,descrdepto,ac16_dataassinatura,z01_nome,ac16_valor,ac16_datainicio,ac16_datafim,ac16_objeto,ac16_vigenciaindeterminada from acordo inner join db_depart on coddepto = ac16_coddepto inner join cgm on z01_numcgm = ac16_contratado inner join acordoposicao on ac26_acordo = ac16_sequencial and ac26_acordoposicaotipo = 1 where ac16_sequencial = " . $sequencial);
 $sSqlItens = db_query("select ac20_ordem,ac20_pcmater,pc01_descrmater,m61_descr,ac20_quantidade,ac20_valorunitario,ac20_valortotal from acordoitem inner join  acordoposicao on ac26_sequencial = ac20_acordoposicao and ac26_acordoposicaotipo = 1 inner join acordo on ac16_sequencial = ac26_acordo inner join pcmater on pc01_codmater = ac20_pcmater inner join matunid ON m61_codmatunid = ac20_matunid where ac16_sequencial = " . $sequencial . " order by ac20_ordem");
 
 if (pg_num_rows($sSql) == 0) {
@@ -24,7 +24,8 @@ header("Content-type: application/vnd.ms-word; charset=UTF-8");
 header("Content-Disposition: attachment; Filename=extratodecontrato.doc");
 
 $oDados = db_utils::fieldsMemory($sSql, 0, true);
-
+$tituloVigencia = $oDados->ac16_vigenciaindeterminada == "t" ? "Vigência Inicial: " : "Período de Vigência: ";
+$dataVigencia = $oDados->ac16_vigenciaindeterminada == "t" ? $oDados->ac16_datainicio : $oDados->ac16_datainicio . ' até ' . $oDados->ac16_datafim;
 echo <<<HTML
     <!DOCTYPE html>
     <html xmlns="http://www.w3.org/1999/html">
@@ -62,7 +63,8 @@ echo <<<HTML
             <strong>Contratado: </strong>{$oDados->z01_nome}
         </div>
         <div>
-            <strong>Vigência: </strong>{$oDados->ac16_datainicio} até {$oDados->ac16_datafim}
+
+            <strong>{$tituloVigencia} </strong>{$dataVigencia}
         </div>
         <div>
             <strong>Valor do Contrato: </strong>R$ {$oDados->ac16_valor}

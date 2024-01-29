@@ -179,7 +179,7 @@ $result2 = db_query("select * from empparametro where e39_anousu = ".db_getsessi
 
 if(pg_numrows($result2)>0){
   $oParametros = db_utils::fieldsMemory($result2,0);
-  
+
   $modelo = $oParametros->e30_modeloop == 2 ? '7_alt' : '7';
 }
 
@@ -208,6 +208,7 @@ if(isset($oParametros)){
 for($i = 0;$i < $clpagordem->numrows;$i++){
 
   db_fieldsmemory($result,$i);
+  // var_dump($e50_codord);
   $oRetencaoNota = new retencaoNota($e71_codnota);
   $oRetencaoNota->setINotaLiquidacao($e50_codord);
 
@@ -250,11 +251,9 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $resultDiaria   = db_query($sqlDiaria);
    if(pg_num_rows($resultDiaria) > 0){
     $diaria = db_utils::fieldsMemory($resultDiaria,0);
-    
-    $sqlMatricula = $clRhpessoal->verificaMatriculaECargo($z01_numcgm);
-    $matricula = db_utils::fieldsMemory(db_query($sqlMatricula),0);
-    $diaria->matricula = $matricula->rh01_regist;
-    $diaria->cargo = $matricula->rh37_descr;
+
+    $diaria->matricula = $diaria->e140_matricula;
+    $diaria->cargo = $diaria->e140_cargo;
 
     $separador = '/ *-/';
     $diaria->origem = preg_split($separador, $diaria->e140_origem);
@@ -264,8 +263,10 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
     $diaria->e140_dtinicial = $diaria->e140_dtinicial == null ? '' : date('d/m/Y', strtotime($diaria->e140_dtinicial));
     $diaria->e140_dtfinal = $diaria->e140_dtfinal == null ? '' : date('d/m/Y', strtotime($diaria->e140_dtfinal));
 
-    $pdf1->diaria           = $diaria;
-   }
+    $pdf1->diaria = $diaria;
+  } else {
+    $pdf1->diaria = null;
+  }
 
    $sSqlFuncaoOrdenaPagamento = $clemite_nota_liq->get_sql_funcao_ordena_pagamento($cgmpaga);
    $pdf1->cargoordenapagamento = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenaPagamento),0)->cargoordenapagamento;
@@ -334,6 +335,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $pdf1->saldo_ant        = $e60_salant;
    $pdf1->empenhado        = $e60_vlremp;
    $pdf1->empenho_anulado  = $e60_vlranu;
+   $pdf1->codemp           = $e60_codemp;
    $pdf1->numemp           = $e60_codemp.'/'.$e60_anousu;
    $pdf1->orgao            = $o58_orgao;
    $pdf1->descr_orgao      = $o40_descr;
@@ -362,7 +364,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $clControleOrc = new ControleOrcamentario;
    $e60_codco = $e60_codco == null ? '0000' : $e60_codco;
    $clControleOrc->setCodCO($e60_codco);
-   
+
    $pdf1->codco  = $e60_codco.' - '.$clControleOrc->getDescricaoResumoCO();
 
 

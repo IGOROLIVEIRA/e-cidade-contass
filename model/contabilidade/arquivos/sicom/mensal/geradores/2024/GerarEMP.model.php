@@ -90,7 +90,7 @@ class GerarEMP extends GerarAM
         $aCSVEMP10['si106_dataassinaturaconvenioconge']   = $aEMP10['si106_dataassinaturaconvenioconge'] == 0 ? ' ' : substr($aEMP10['si106_dataassinaturaconvenioconge'], 0, 30); // campo 28
 
         $aCSVEMP10['si106_despdeclicitacao']              = $this->padLeftZero($aEMP10['si106_despdeclicitacao'], 1);
-        $aCSVEMP10['si106_codorgaoresplicit']             = $aEMP10['si106_codorgaoresplicit'] == '' ? ' ' : $this->padLeftZero($aEMP10['si106_codorgaoresplicit'], 2);
+        $aCSVEMP10['si106_numdocumentoorgao']             = $aEMP10['si106_numdocumentoorgao'];
 
         if (strlen($aEMP10['si106_codunidadesubresplicit']) > 5) {
           $aCSVEMP10['si106_codunidadesubresplicit']        = $aEMP10['si106_codunidadesubresplicit'] == '' ? ' ' : $this->padLeftZero($aEMP10['si106_codunidadesubresplicit'], 8);

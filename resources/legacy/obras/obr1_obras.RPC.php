@@ -239,36 +239,35 @@ switch ($oParam->exec) {
         break;
     case 'buscarLotes':
         $clliclicita = new cl_liclicita();
-        
-        if($oParam->iLicitacao!="" || $oParam->iLicitacao!=null){
+
+        if ($oParam->iLicitacao != "" || $oParam->iLicitacao != null) {
             $oRetorno->status = 3;
-            $resultLotes = $clliclicita->sql_record('select DISTINCT l04_numerolote,l04_descricao from liclicitemlote where l04_liclicitem in (select l21_codigo from liclicitem where l21_codliclicita = '.$oParam->iLicitacao.' and l04_numerolote > 0 )');
+            $resultLotes = $clliclicita->sql_record('select DISTINCT l04_numerolote,l04_descricao from liclicitemlote where l04_liclicitem in (select l21_codigo from liclicitem where l21_codliclicita = ' . $oParam->iLicitacao . ' and l04_numerolote > 0 )');
             if (pg_num_rows($resultLotes) == 0) {
                 $oRetorno->status = 2;
-            }else{
-                $resultLicobras = $clliclicita->sql_record('select DISTINCT obr01_licitacaolote from licobras where obr01_licitacao = '.$oParam->iLicitacao);
+            } else {
+                $resultLicobras = $clliclicita->sql_record('select DISTINCT obr01_licitacaolote from licobras where obr01_licitacao = ' . $oParam->iLicitacao);
                 for ($iCont = 0; $iCont < pg_num_rows($resultLotes); $iCont++) {
                     $oDadosLotes = db_utils::fieldsMemory($resultLotes, $iCont);
                     $contrele = 0;
-                    if($oParam->iObra == 0){
+                    if ($oParam->iObra == 0) {
                         for ($iContLicobras = 0; $iContLicobras < pg_num_rows($resultLicobras); $iContLicobras++) {
                             $oDadosLicobras = db_utils::fieldsMemory($resultLicobras, $iContLicobras);
-                            if($oDadosLicobras->obr01_licitacaolote == $oDadosLotes->l04_numerolote){
-                                $contrele=1;
+                            if ($oDadosLicobras->obr01_licitacaolote == $oDadosLotes->l04_numerolote) {
+                                $contrele = 1;
                             }
                         }
                     }
-                    if($contrele == 0){
-                        
+                    if ($contrele == 0) {
+
                         $oRetorno->status = 1;
                         $lotes                        = new stdClass();
                         $lotes->descricao = urlencode($oDadosLotes->l04_descricao);
                         $lotes->numlote = $oDadosLotes->l04_numerolote;
                         $lotes->total = pg_num_rows($resultLotes);
                         $oRetorno->itens[] = $lotes;
-                    }    
+                    }
                 }
-                
             }
         }
         break;
@@ -364,19 +363,25 @@ switch ($oParam->exec) {
     case 'getItensObra':
 
         $cllicitemobra = new cl_licitemobra();
-        if ($oParam->l20_codigo != "") {
-            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_licitacao(null, "licitemobra.*,pc01_codmater,pc01_descrmater", null, "l21_codliclicita = {$oParam->l20_codigo} and pc01_obras = 't' and obr06_instit = " . db_getsession('DB_instit')));
-        } elseif ($oParam->pc80_codproc != "") {
-            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_processodecompras(null, "licitemobra.*,pc01_codmater,pc01_descrmater", null, "pc80_codproc = {$oParam->pc80_codproc} and pc01_obras = 't' and obr06_instit = " . db_getsession('DB_instit')));
+
+        $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,obr06_versaotabela,l21_ordem";
+
+        if (isset($oParam->l20_codigo) && !empty($oParam->l20_codigo)) {
+            $sOrdem   = "l21_ordem";
+            $sWhere   = "l21_codliclicita = {$oParam->l20_codigo} and pc01_obras = 't' and pc10_instit = " . db_getsession('DB_instit');
+            $sSqlItemLicitacao = $cllicitemobra->sql_query_itens_obras_licitacao(null, $sCampos, $sOrdem, $sWhere);
+            $sResultitens = $cllicitemobra->sql_record($sSqlItemLicitacao);
+            $oRetorno->itens = db_utils::getCollectionByRecord($sResultitens);
+        } else if (isset($oParam->pc80_codproc) && !empty($oParam->pc80_codproc)) {
+            $sOrdem   = "pc11_seq";
+            $sWhere   = "pc80_codproc = {$oParam->pc80_codproc} and pc01_obras = 't' and pc10_instit = " . db_getsession('DB_instit');
+            $sSqlItemProcessodeCompras = $cllicitemobra->sql_query_itens_obras_processodecompras(null, $sCampos, $sOrdem, $sWhere);
+            $sResultitens = $cllicitemobra->sql_record($sSqlItemProcessodeCompras);
+            $oRetorno->itens = db_utils::getCollectionByRecord($sResultitens);
         } else {
             $oRetorno->message = "selecione um processo de compras ou uma licitacao";
         }
 
-        for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
-            $oItensObra = db_utils::fieldsMemory($result, $iCont);
-
-            $oRetorno->itens[] = $oItensObra;
-        }
         break;
 
     case 'SalvarItemObra':
@@ -384,13 +389,16 @@ switch ($oParam->exec) {
         $clcondataconf = new cl_condataconf;
 
         try {
-
             foreach ($oParam->itens as $item) {
 
                 /**
-                //     * validação com sicom
-                //     */
-                $dtcadastro = DateTime::createFromFormat('d/m/Y', $item->obr06_dtcadastro);
+                 * Validação com sicom
+                 */
+                if (strpos($item->obr06_dtcadastro, '/') !== false) {
+                    $dtcadastro = DateTime::createFromFormat('d/m/Y', $item->obr06_dtcadastro);
+                } else if (strpos($item->obr06_dtcadastro, '-') !== false) {
+                    $dtcadastro = DateTime::createFromFormat('Y-m-d',  $item->obr06_dtcadastro);
+                }
 
                 if (!empty($dtcadastro)) {
                     $anousu = db_getsession('DB_anousu');
@@ -399,14 +407,21 @@ switch ($oParam->exec) {
                     db_fieldsmemory($result);
                     $data = (implode("/", (array_reverse(explode("-", $c99_datapat)))));
                     $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
-
                     if ($dtcadastro <= $dtencerramento) {
                         throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
                     }
                 }
 
                 $pcmater = substr($item->obr06_pcmater, 0, -1);
-                $verificaItem = $cllicitemobra->sql_record($cllicitemobra->sql_query_file(null, "obr06_sequencial", null, "obr06_pcmater = $pcmater"));
+
+                // Hotfix OC21089: Compatibilidade com anos anteriores à adição da ordem
+                if ((int) $oParam->ano < 2024) {
+                    $where = " obr06_pcmater = $pcmater ";
+                } else {
+                    $where = " obr06_pcmater = $pcmater AND obr06_ordem = $item->obr06_ordem ";
+                }
+
+                $verificaItem = $cllicitemobra->sql_record($cllicitemobra->sql_query_file(null, "obr06_sequencial", null, $where));
                 if (pg_num_rows($verificaItem) <= 0) {
                     db_inicio_transacao();
 
@@ -419,6 +434,7 @@ switch ($oParam->exec) {
                     $cllicitemobra->obr06_dtregistro        = $item->obr06_dtregistro;
                     $cllicitemobra->obr06_dtcadastro        = $item->obr06_dtcadastro;
                     $cllicitemobra->obr06_instit            = db_getsession("DB_instit");
+                    $cllicitemobra->obr06_ordem             = $item->obr06_ordem;
                     $cllicitemobra->incluir();
 
                     if ($cllicitemobra->erro_status == 0) {
@@ -443,6 +459,7 @@ switch ($oParam->exec) {
                     $cllicitemobra->obr06_dtregistro        = $item->obr06_dtregistro;
                     $cllicitemobra->obr06_dtcadastro        = $item->obr06_dtcadastro;
                     $cllicitemobra->obr06_instit            = db_getsession("DB_instit");
+                    $cllicitemobra->obr06_ordem             = $item->obr06_ordem;
 
                     $cllicitemobra->alterar($obr06_sequencial);
 
@@ -468,8 +485,16 @@ switch ($oParam->exec) {
             $cllicitemobra = new cl_licitemobra();
 
             $pcmater = substr($item->obr06_pcmater, 0, -1);
-            $verificaItem = $cllicitemobra->sql_record($cllicitemobra->sql_query_file(null, "obr06_sequencial", null, "obr06_pcmater = $pcmater and obr06_tabela = $item->obr06_tabela"));
+            
+            // Hotfix OC21089: Compatibilidade com anos anteriores à adição da ordem
+            if ((int) $oParam->ano < 2024) {
+                $where = " obr06_pcmater = $pcmater ";
+            } else {
+                $where = " obr06_pcmater = $pcmater AND obr06_ordem = $item->obr06_ordem ";
+            }
 
+            $sql = $cllicitemobra->sql_query_file(null, "obr06_sequencial", null, $where);
+            $verificaItem = $cllicitemobra->sql_record($sql);
             if (pg_num_rows($verificaItem) > 0) {
                 db_fieldsmemory($verificaItem, 0);
                 /*
@@ -482,7 +507,7 @@ switch ($oParam->exec) {
                     $oRetorno->message = urlencode($erro);
                     $oRetorno->status = 2;
                 } else {
-                    $oRetorno->itens[] = $item->obr06_pcmater;
+                    $oRetorno->itens[] = ((int) $oParam->ano < 2024) ? $item->obr06_pcmater : $item->obr06_pcmater."-".$item->obr06_ordem;
                     $oRetorno->status = 1;
                     $oRetorno->message = urlencode("Itens Excluido com Sucesso!.");
                 }
@@ -490,4 +515,5 @@ switch ($oParam->exec) {
         }
         break;
 }
-echo json_encode($oRetorno);
+
+echo $oJson->encode($oRetorno);

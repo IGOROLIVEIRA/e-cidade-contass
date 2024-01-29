@@ -28,9 +28,10 @@ switch ($oParam->exec) {
     try {
       $iAnoReferencia = db_getsession('DB_anousu');
       $ano = substr($iAnoReferencia, -2);
-
-      if (file_exists("PPA{$ano}.pdf")) {
-        array_map("unlink", glob("PPA{$ano}.pdf"));
+      $anoppa = substr($oParam->anoinicioppa, -2);
+      
+      if (file_exists("PPA{$anoppa}.pdf")) {
+        array_map("unlink", glob("PPA{$anoppa}.pdf"));
       }
       if (file_exists("LDO{$ano}.pdf")) {
         array_map("unlink", glob("LDO{$ano}.pdf"));
@@ -232,6 +233,7 @@ switch ($oParam->exec) {
 
     $iAnoReferencia = db_getsession('DB_anousu');
     $ano = substr($iAnoReferencia, -2);
+    $anoppa = substr($oParam->anoinicioppa, -2);
 
     $oEscritorCSV = new padArquivoEscritorCSV();
     /**
@@ -246,8 +248,8 @@ switch ($oParam->exec) {
     // }
 
     $iVerifica = 0;
-    if (file_exists("PPA{$ano}.pdf")) {
-      $oEscritorCSV->adicionarArquivo("PPA{$ano}.pdf", "PPA{$ano}.pdf");
+    if (file_exists("PPA{$anoppa}.pdf")) {
+      $oEscritorCSV->adicionarArquivo("PPA{$anoppa}.pdf", "PPA{$anoppa}.pdf");
       $iVerifica = 1;
     }
     if (file_exists("LDO{$ano}.pdf")) {

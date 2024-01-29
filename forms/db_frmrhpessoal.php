@@ -42,6 +42,7 @@ $clrotulo->label("rh50_oid");
 $clrotulo->label("rh116_descricao");
 $clrotulo->label("rh164_datafim");
 $clrotulo->label("rh01_cnpjrespmatricula");
+$clrotulo->label("rh01_dtingressocargoefetivo");
 $rh01_instit = db_getsession("DB_instit");
 
 $mostra = 1;
@@ -146,7 +147,7 @@ if (($db_opcao == 2 || $db_opcao == 22) && isset($rh01_regist) && $rh01_regist !
                 <?php echo "<strong>Matricula e-Social</strong>"; ?>
               </td>
               <td nowrap>
-              <?php db_input('rh01_esocial', 30, $Irh01_esocial, true, 'text', $mostra, ""); ?>
+                <?php db_input('rh01_esocial', 30, $Irh01_esocial, true, 'text', $mostra, ""); ?>
                 <input type="checkbox" id="check_esocial" name="check_esocial">
               </td>
             </tr>
@@ -308,8 +309,16 @@ if (($db_opcao == 2 || $db_opcao == 22) && isset($rh01_regist) && $rh01_regist !
                 <td>
                   <strong>CNPJ Órgão Responsável Pela Matrícula:</strong>
                 </td>
-                <td>
+                <td colspan="2">
                   <?php db_input('rh01_cnpjrespmatricula', 14, 1, true, 'text', 4); ?>
+                </td>
+                <td nowrap title="<?= @$Trh01_dtingressocargoefetivo ?>">
+                  <?= @$Lrh01_dtingressocargoefetivo ?>
+                </td>
+                <td colspan="2" nowrap>
+                  <?
+                  db_inputdata('rh01_dtingressocargoefetivo', @$rh01_dtingressocargoefetivo_dia, @$rh01_dtingressocargoefetivo_mes, @$rh01_dtingressocargoefetivo_ano, true, 'text', $optionDatasContratosEmergenciais, "")
+                  ?>
                 </td>
               </tr>
               <tr id="martOrg" style="display: none;">
@@ -914,5 +923,4 @@ if (($db_opcao == 2 || $db_opcao == 22) && isset($rh01_regist) && $rh01_regist !
     document.getElementById('rh01_esocial').removeAttribute('readonly');
     document.getElementById('rh01_esocial').style.backgroundColor = "";
   };
-
 </script>

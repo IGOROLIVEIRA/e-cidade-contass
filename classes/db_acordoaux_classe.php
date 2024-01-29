@@ -110,6 +110,7 @@ class cl_acordoaux {
     var $ac16_indicereajuste = null;
     var $ac16_descricaoreajuste = null;
     var $ac16_descricaoindice = null;
+    var $ac16_vigenciaindeterminada = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  ac16_sequencial = int4 = Acordo
@@ -160,6 +161,7 @@ class cl_acordoaux {
                  ac16_indicereajuste = ;
                  ac16_descricaoreajuste = ;
                  ac16_descricaoindice = ;
+                 ac16_vigenciaindeterminada = bool = Vigência Indeterminada;
                  ";
    //funcao construtor da classe
    function cl_acordoaux() {
@@ -267,6 +269,7 @@ class cl_acordoaux {
          $this->ac16_licoutroorgao = ($this->ac16_licoutroorgao === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_licoutroorgao"]:$this->ac16_licoutroorgao);
          $this->ac16_adesaoregpreco = ($this->ac16_adesaoregpreco === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_adesaoregpreco"]:$this->ac16_adesaoregpreco);
          $this->ac16_tipocadastro = ($this->ac16_tipocadastro === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_tipocadastro"]:$this->ac16_tipocadastro);
+         $this->ac16_vigenciaindeterminada = ($this->ac16_vigenciaindeterminada === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_vigenciaindeterminada"] : $this->ac16_vigenciaindeterminada);
      }else{
        $this->ac16_sequencial = ($this->ac16_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_sequencial"]:$this->ac16_sequencial);
      }
@@ -526,6 +529,7 @@ class cl_acordoaux {
                                       ,ac16_licoutroorgao
                                       ,ac16_adesaoregpreco
                                       ,ac16_tipocadastro
+                                      ,ac16_vigenciaindeterminada
                        )
                 values (
                                 $this->ac16_sequencial
@@ -565,6 +569,7 @@ class cl_acordoaux {
                                ,".($this->ac16_licoutroorgao == "" ? 'null' : $this->ac16_licoutroorgao)."
                                ,".($this->ac16_adesaoregpreco == "" ? 'null' : $this->ac16_adesaoregpreco)."
                                ,$this->ac16_tipocadastro
+                               ,".($this->ac16_vigenciaindeterminada == "null" || $this->ac16_vigenciaindeterminada == ""?"'false'":"'".$this->ac16_vigenciaindeterminada."'")."
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -575,7 +580,7 @@ class cl_acordoaux {
          $this->erro_banco = "Acordo já Cadastrado";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }else{
-         $this->erro_sql   = "Acordo ($this->ac16_sequencial) nao Incluído. Inclusao Abortada.";
+         $this->erro_sql   = "$sql Acordo ($this->ac16_sequencial) nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }
@@ -1117,6 +1122,11 @@ class cl_acordoaux {
        if(trim($this->ac16_licitacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_licitacao"])){
        $sql  .= $virgula." ac16_licitacao = $this->ac16_licitacao ";
         }
+
+        if (trim($this->ac16_vigenciaindeterminada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_vigenciaindeterminada"])) {
+          $sql .= $virgula . " ac16_vigenciaindeterminada = '$this->ac16_vigenciaindeterminada' ";
+        }
+
      $sql .= " where ";
      if($ac16_sequencial!=null){
        $sql .= " ac16_sequencial = $this->ac16_sequencial";

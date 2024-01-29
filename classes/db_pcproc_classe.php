@@ -229,6 +229,11 @@ class cl_pcproc
         $this->pc80_modalidadecontratacao = "null";
     }
 
+    if ($this->pc80_criteriojulgamento == null) {
+        $this->pc80_criteriojulgamento = "null";
+    }
+
+
     if ($pc80_codproc == "" || $pc80_codproc == null) {
       $result = db_query("select nextval('pcproc_pc80_codproc_seq')");
       if ($result == false) {

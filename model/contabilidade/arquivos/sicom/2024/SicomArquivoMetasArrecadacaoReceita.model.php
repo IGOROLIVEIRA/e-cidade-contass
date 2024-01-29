@@ -1,6 +1,7 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
+require_once("classes/db_metasarrecadacaoreceita_classe.php");
 
 class SicomArquivoMetasArrecadacaoReceita extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
@@ -158,15 +159,20 @@ class SicomArquivoMetasArrecadacaoReceita extends SicomArquivoBase implements iP
       $aBimestralProjecao[5] = $anualOrcado - ($aBimestralProjecao[0] + $aBimestralProjecao[1] + $aBimestralProjecao[2] + $aBimestralProjecao[3] + $aBimestralProjecao[4]);
     }
     
-    
+    $anousu = db_getsession("DB_anousu");
+    $clorcmetasarrecadacaoreceita = new cl_metasarrecadacaoreceita;
+    $dbwhere = " o203_exercicio = '{$anousu}' ";
+    $rsResult = $clorcmetasarrecadacaoreceita->sql_record($clorcmetasarrecadacaoreceita->sql_query(null,'*','', $dbwhere));
+    $aBimestres = db_utils::fieldsMemory($rsResult, 0);
+
     $oDadosMTBIARREC = new stdClass();
     
-    $oDadosMTBIARREC->metaArrec1Bim = number_format($aBimestralProjecao[0], 2, ",", "");
-    $oDadosMTBIARREC->metaArrec2Bim = number_format($aBimestralProjecao[1], 2, ",", "");
-    $oDadosMTBIARREC->metaArrec3Bim = number_format($aBimestralProjecao[2], 2, ",", "");
-    $oDadosMTBIARREC->metaArrec4Bim = number_format($aBimestralProjecao[3], 2, ",", "");
-    $oDadosMTBIARREC->metaArrec5Bim = number_format($aBimestralProjecao[4], 2, ",", "");
-    $oDadosMTBIARREC->metaArrec6Bim = number_format($aBimestralProjecao[5], 2, ",", "");
+    $oDadosMTBIARREC->metaArrec1Bim = number_format($aBimestres->o203_bimestre01, 2, ",", "");
+    $oDadosMTBIARREC->metaArrec2Bim = number_format($aBimestres->o203_bimestre02, 2, ",", "");
+    $oDadosMTBIARREC->metaArrec3Bim = number_format($aBimestres->o203_bimestre03, 2, ",", "");
+    $oDadosMTBIARREC->metaArrec4Bim = number_format($aBimestres->o203_bimestre04, 2, ",", "");
+    $oDadosMTBIARREC->metaArrec5Bim = number_format($aBimestres->o203_bimestre05, 2, ",", "");
+    $oDadosMTBIARREC->metaArrec6Bim = number_format($aBimestres->o203_bimestre06, 2, ",", "");
     
     $this->aDados[] = $oDadosMTBIARREC;
     

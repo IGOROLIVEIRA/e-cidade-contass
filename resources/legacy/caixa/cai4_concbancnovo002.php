@@ -121,7 +121,6 @@ while ($row = pg_fetch_object($query)) {
 }
 
 $sql = query_lancamentos($oConta->k13_reduz, $data_inicial, $data_final);
-
 $query = pg_query($sql);
 
 while ($row = pg_fetch_object($query)) {
@@ -135,7 +134,6 @@ while ($row = pg_fetch_object($query)) {
         $valor = $row->valor_debito  < 0 ? abs($row->valor_debito) : 0;
         $valor += $row->valor_credito > 0 ? abs($row->valor_credito) : 0;
     }
-
 
     $data = new StdClass();
     $data->k173_data = $row->data;
@@ -504,6 +502,7 @@ function query_transferencias_credito($conta, $data_inicial, $data_final, $condi
     $sql .= "         {$condicao_implantacao} ";
     $sql .= "         OR (k172_dataconciliacao > '{$data_final}' AND corrente.k12_data <= '{$data_final}')) ";
     $sql .= "     {$condicao_lancamento} ";
+    $sql .= " AND e81_cancelado IS NULL ";
     $sql .= " ORDER BY ";
     $sql .= "     data, ";
     $sql .= "     codigo ";
@@ -691,6 +690,7 @@ function query_transferencias_credito_total($conta, $inicio, $fim, $implantacao)
 
     $sql  = query_padrao_slip_credito();
     $sql .= " WHERE corrente.k12_conta = {$conta} ";
+    $sql .= " AND e81_cancelado IS NULL ";
     $sql .= "     AND ((corrente.k12_data between '{$inicio}' AND '{$fim}' AND k172_dataconciliacao IS NULL) ";
     $sql .= "     {$condicao_implantacao} ";
     $sql .= "     OR (k172_dataconciliacao > '{$fim}' AND corrente.k12_data <= '{$fim}')) ";

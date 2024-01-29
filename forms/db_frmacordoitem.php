@@ -1416,6 +1416,13 @@ db_app::load("estilos.css, grid.style.css");
             oGridItensOrigem.aHeaders[9].lDisplayed = false;
             oGridItensOrigem.aHeaders[12].lDisplayed = false;
             oGridItensOrigem.aHeaders[13].lDisplayed = false;
+
+            vigenciaindeterminada = parent.iframe_acordo.document.form1.ac16_vigenciaindeterminada.value;
+
+            if(vigenciaindeterminada == "t"){
+                oGridItensOrigem.aHeaders[10].lDisplayed = false;
+                oGridItensOrigem.aHeaders[11].lDisplayed = false;
+            }
             oGridItensOrigem.show($('ctngridItensOrigem'));
         }
 

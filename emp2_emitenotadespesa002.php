@@ -105,7 +105,7 @@ if (isset($e60_codemp_ini) && $e60_codemp_ini != "") {
     } else {
       $str = " e60_codemp = '" . $e60_codemp_ini . "' and e60_anousu = {$iAnoUso} ";
     }
-    
+
     if (isset($e50_numliquidacao) && $e50_numliquidacao != '') {
       $str .= " and e50_numliquidacao = $e50_numliquidacao ";
     }
@@ -147,17 +147,26 @@ if (isset($dtini) && $dtini != "") {
   if (strlen($dbwhere) > 0) {
     $dbwhere .= " and ";
   }
+
   $dtini = str_replace("X", "-", $dtini);
-  $dbwhere .= " e50_data >= '$dtini'";
+  $dbwhere .= " k12_data between '$dtini'";
+
+  if (isset($dtfim) && $dtfim != "") {
+    $dtfim = str_replace("X", "-", $dtfim);
+    $dbwhere .= " and '$dtfim'";
+  }else {
+    $dbwhere .= " and '".date('Y-m-d',db_getsession('DB_datausu'))."'";
+  }
 }
 
-if (isset($dtfim) && $dtfim != "") {
+if (isset($dtfim) && $dtfim != "" && !(isset($dtini) && $dtini != "")) {
   if (strlen($dbwhere) > 0) {
     $dbwhere .= " and ";
   }
   $dtfim = str_replace("X", "-", $dtfim);
-  $dbwhere .= " e50_data <= '$dtfim'";
+  $dbwhere .= " k12_data between '$iAnoUso-01-01' and '$dtfim'";
 }
+
 if (isset($e60_numemp) && $e60_numemp != '') {
 
   if (strlen($dbwhere) > 0) {
@@ -186,12 +195,14 @@ if(isset($sOrdens) && $sOrdens != '') {
   $dbwhere .= " and e60_instit = " . db_getsession("DB_instit") . " and e60_anousu = " . $iAnoUso;
 }
 
+$dbwhere .= "and e60_instit = " . db_getsession("DB_instit");
+
 $pdf = new scpdf();
 $pdf->Open();
 $pdf1 = new db_impcarne($pdf, '85');
 $pdf1->objpdf->SetTextColor(0, 0, 0);
 
-$sSqlPagordem = $clpagordem->sql_query_notaliquidacao('', 'e50_codord,e60_numemp,e71_codnota,e60_numerol,pc50_descr,e50_numliquidacao', ' e60_numemp, e50_numliquidacao ', $dbwhere);
+$sSqlPagordem = $clpagordem->consultaNotaDespesa('', 'distinct e50_codord,e60_numemp,e71_codnota,e60_numerol,pc50_descr,e50_numliquidacao', ' e60_numemp, e50_numliquidacao ', $dbwhere);
 $result = $clpagordem->sql_record($sSqlPagordem);
 
 if ($clpagordem->numrows < 1) {
@@ -208,16 +219,23 @@ if (pg_numrows($result2) > 0) {
 for ($i = 0; $i < $clpagordem->numrows; $i++) {
   db_fieldsmemory($result, $i);
 
-  $dbWhere = " e50_codord = " . $e50_codord;
+  $dbWhere = "e60_instit = ".db_getsession('DB_instit')." and e50_codord = " . $e50_codord;
   if(isset($sMovimentos) && $sMovimentos != ''){
     $dbWhere .= " and e81_codmov in (".$sMovimentos.")";
   }
 
-  $sqlMovimentos = $clempagemov->sql_query_txt(null, '*', null, $dbWhere);
+  $camposMovimentos = " case when k12_sequencial is not null then false
+  when k12_sequencial is null and e81_cancelado is not null then true
+  when k12_sequencial is null and e81_cancelado is null then false
+  end as estornado, * ";
+  $sqlMovimentos = $clempagemov->consultaMovimentosDaOp(null, $camposMovimentos, null, $dbWhere);
   $rsMovimentos = $clempagemov->sql_record($sqlMovimentos);
-  
+
   for ($j = 0; $j < $clempagemov->numrows; $j++) {
+
     db_fieldsmemory($rsMovimentos, $j);
+
+    if($k12_sequencial != null || $estornado == 't'){
 
     $rsBanco = db_utils::fieldsMemory(db_query("SELECT db90_descr FROM db_bancos WHERE db90_codban = '{$c63_banco}'"), 0)->db90_descr;
     $rsForma = db_utils::fieldsMemory(db_query("SELECT e96_descr FROM empageforma WHERE e96_codigo = " . $e97_codforma), 0)->e96_descr;
@@ -270,7 +288,12 @@ for ($i = 0; $i < $clpagordem->numrows; $i++) {
     $pdf1->contaPagamento   = $conta;
     $pdf1->movimento        = $e81_codmov;
     $pdf1->tipoDocumento    = $rsForma . ($e81_numdoc == null ? '' : ' / ' . $e81_numdoc);
-    $pdf1->dataPagamento    = $e80_data == null ? '' : date('d/m/Y', strtotime($e80_data));
+
+    if($k12_sequencial != null){
+      $pdf1->dataPagamento = $k12_data == null ? '' : date('d/m/Y', strtotime($k12_data));
+    }else{
+      $pdf1->dataPagamento = $e86_data == null ? '' : date('d/m/Y', strtotime($e86_data));
+    }
 
     $sqlTesoureiro = $clReponsaveis->sql_query(null,'z01_nome',null, " si166_tiporesponsavel = 5 and ('$e80_data' between si166_dataini and si166_datafim) and si166_instit = ".db_getsession("DB_instit"));
     $tesoureiro = db_utils::fieldsMemory(db_query($sqlTesoureiro), 0)->z01_nome;
@@ -359,6 +382,7 @@ for ($i = 0; $i < $clpagordem->numrows; $i++) {
     }
 
     $pdf1->imprime();
+  }
   }
 }
 

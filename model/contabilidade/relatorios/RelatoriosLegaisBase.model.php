@@ -349,7 +349,7 @@ class RelatoriosLegaisBase {
 
     $evaluate = "\$aLinhas[{$iLinha}]->{$aLinhas[$iLinha]->colunas[$iColuna]->o115_nomecoluna} = {$sFormula};";
     ob_start();
-    eval($evaluate);
+    eval( str_replace("#", "$", $evaluate ) );
     $sRetorno = ob_get_contents();
     ob_clean();
 

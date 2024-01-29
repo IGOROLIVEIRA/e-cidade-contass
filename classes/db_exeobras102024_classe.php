@@ -32,6 +32,9 @@ class cl_exeobras102024 {
   public $si197_linkobra = null;
   public $si197_mes = 0;
   public $si197_instit = 0;
+  public $si197_tipodocumento = 0;
+
+  public $si197_numerodocumento = null;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
                  si197_sequencial = int8 = Sequencial
@@ -39,6 +42,8 @@ class cl_exeobras102024 {
                  si197_codorgao = text = codorgaoresp
                  si197_codunidadesub = text = codUnidadeSubRespEstadual
                  si197_nrocontrato = int8 = nroContrato
+                 si197_tipodocumento = int8 = tipo documento
+                 si197_numerodocumento = varchar(14) = numedo documento
                  si197_exerciciocontrato = int4 = si197_exerciciocontrato
                  si197_contdeclicitacao = int4 = si197_contdeclicitacao
                  si197_nroprocessolicitatorio = int4 = si197_nroprocessolicitatorio
@@ -87,6 +92,8 @@ class cl_exeobras102024 {
       $this->si197_objeto = ($this->si197_objeto == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_objeto"]:$this->si197_objeto);
       $this->si197_linkobra = ($this->si197_linkobra == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_linkobra"]:$this->si197_linkobra);
       $this->si197_mes = ($this->si197_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_mes"]:$this->si197_mes);
+      $this->si197_tipodocumento = ($this->si197_tipodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_tipodocumento"]:$this->si197_tipodocumento);
+      $this->si197_numerodocumento = ($this->si197_numerodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_numerodocumento"]:$this->si197_numerodocumento);
       $this->si197_instit = ($this->si197_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_instit"]:$this->si197_instit);
     } else {
     }
@@ -239,6 +246,8 @@ class cl_exeobras102024 {
                                 ,si197_codorgao
                                 ,si197_codunidadesub
                                 ,si197_nrocontrato
+                                ,si197_tipodocumento
+                                ,si197_numerodocumento
                                 ,si197_exerciciocontrato
                                 ,si197_contdeclicitacao
                                 ,si197_exerciciolicitacao
@@ -257,6 +266,8 @@ class cl_exeobras102024 {
                                ,'$this->si197_codorgao'
                                ,'$this->si197_codunidadesub'
                                ,$this->si197_nrocontrato
+                               ,$this->si197_tipodocumento
+                               ,'$this->si197_numerodocumento'
                                ,$this->si197_exerciciocontrato
                                ,$this->si197_contdeclicitacao
                                ,$this->si197_exerciciolicitacao

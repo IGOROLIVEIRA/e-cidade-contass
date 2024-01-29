@@ -32,7 +32,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   $this->objpdf->text(40, $xlin - 8, $this->municpref);
   $this->objpdf->text(40, $xlin - 5, $this->telefpref);
   $this->objpdf->text(40, $xlin - 2, $this->emailpref);
-  $this->objpdf->text(40, $xlin - 2, db_formatar($this->cgcpref, 'cnpj'));
+  $this->objpdf->text(40, $xlin + 1, db_formatar($this->cgcpref, 'cnpj'));
 
   // retangulo dos dados da dotação
   $this->objpdf->rect($xcol, $xlin + 2, $xcol + 90, 41, 2, 'DF', '1234');
@@ -149,10 +149,6 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   $this->objpdf->setxy($xcol + 145, $xlin + 51.5);
   $this->objpdf->Setfont('Arial', '', 7);
 
-  $this->objpdf->Setfont('Arial', '', 7);
-  $this->objpdf->text($xcol + 148, $xlin + 54, db_formatar($this->vlrPago, 'f'));
-  $this->objpdf->text($xcol + 172.3, $xlin + 54, db_formatar($this->vlrEstorno, 'f'));
-
   $this->objpdf->Setfont('Arial', 'B', 7);
   $this->objpdf->text($xcol + 2, $xlin + 58, 'BANCO:');
   $this->objpdf->text($xcol + 2, $xlin + 62, 'AGENCIA: ');
@@ -241,6 +237,22 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     }
   }
 
+  $this->objpdf->Setfont('Arial', '', 7);
+  if($this->vlrPago == 0){
+    if($this->vlrEstorno > 0){
+      $valorPago = $this->vlrEstorno;
+    }else if ($total_ret > 0){
+      $valorPago = $total_ret;
+    }else{
+      $valorPago = $this->vlrPago;
+    }
+  }else{
+    $valorPago = $this->vlrPago;
+  }
+
+  $this->objpdf->text($xcol + 148, $xlin + 54, db_formatar($valorPago, 'f'));
+  $this->objpdf->text($xcol + 172.3, $xlin + 54, db_formatar($this->vlrEstorno, 'f'));
+
   $this->objpdf->Setfont('Arial', 'B', 7);
   // define propriedades para os totais
   $this->objpdf->setxy($xcol + 100, $xlin + 55);
@@ -255,7 +267,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   $this->objpdf->setxy($xcol, $xlin + 85);
   $this->objpdf->Setfont('Arial', '', 7);
   $this->objpdf->multicell(190, 4, substr($this->obs, 0, 456));
-  
+
   // total das retenções
   $this->objpdf->setxy($xcol + 127, $xlin + 172);
   $this->objpdf->Setfont('Arial', 'B', 7);
@@ -272,9 +284,13 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   $this->objpdf->cell(43, 1, 'VALOR LÍQUIDO DA DESPESA: ', 0, 0, "R");
   $this->objpdf->Setfont('Arial', 'B', 9);
 
-  $nValorSaldo = $this->vlrPago - ($total_ret + $this->vlrEstorno);
+  if($this->vlrPago == 0){
+    $nValorSaldo = 0;
+  }else{
+    $nValorSaldo = $this->vlrPago - ($total_ret + $this->vlrEstorno);
+  }
 
-  $this->objpdf->cell(23, 1, db_formatar($nValorSaldo, 'f'), 0, 1, "R"); //total renteções
+  $this->objpdf->cell(23, 1, db_formatar($nValorSaldo, 'f'), 0, 1, "R");
   $this->objpdf->Setfont('Arial', 'B', 7);
 
   // Assinaturas e Canhoto

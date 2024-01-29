@@ -37,6 +37,7 @@ class GerarCONTRATOS extends GerarAM
         $rsCONTRATOS13    = db_query($sSql4);
 
         $sSql5 = "select * from contratos202024 where si87_mes = " . $this->iMes . " and si87_instit = " . db_getsession("DB_instit");
+        //echo $sSql5;
         $rsCONTRATOS20    = db_query($sSql5);
 
         $sSql6 = "select * from contratos212024 where si88_mes = " . $this->iMes . " and si88_instit = " . db_getsession("DB_instit");
@@ -73,7 +74,7 @@ class GerarCONTRATOS extends GerarAM
                 $aCSVCONTRATOS10['si83_exerciciocontrato']            =   str_pad($aCONTRATOS10['si83_exerciciocontrato'], 4, "0", STR_PAD_LEFT);
                 $aCSVCONTRATOS10['si83_dataassinatura']               =   implode("", array_reverse(explode("-", $aCONTRATOS10['si83_dataassinatura'])));
                 $aCSVCONTRATOS10['si83_contdeclicitacao']             =   str_pad($aCONTRATOS10['si83_contdeclicitacao'], 1, "0", STR_PAD_LEFT);
-                $aCSVCONTRATOS10['si83_codorgaoresp']                 =   $aCONTRATOS10['si83_codorgaoresp'] == 0 ? ' ' : str_pad($aCONTRATOS10['si83_codorgaoresp'], 2, '0', STR_PAD_LEFT);
+                $aCSVCONTRATOS10['si83_cnpjorgaoentresp']             =   $aCONTRATOS10['si83_cnpjorgaoentresp'];
                 $aCSVCONTRATOS10['si83_codunidadesubresp']            =   in_array($aCONTRATOS10['si83_contdeclicitacao'], array(1, 8, 9)) ? '' : str_pad($aCONTRATOS10['si83_codunidadesubresp'], 5, '0', STR_PAD_LEFT);
                 $aCSVCONTRATOS10['si83_nroprocesso']                  =   substr($aCONTRATOS10['si83_nroprocesso'], 0, 12);
                 $aCSVCONTRATOS10['si83_exercicioprocesso']            =   $aCONTRATOS10['si83_exercicioprocesso'] == 0 ? ' ' : $aCONTRATOS10['si83_exercicioprocesso'];
@@ -81,6 +82,7 @@ class GerarCONTRATOS extends GerarAM
                 $aCSVCONTRATOS10['si83_naturezaobjeto']               =   str_pad($aCONTRATOS10['si83_naturezaobjeto'], 1, "0", STR_PAD_LEFT);
                 $aCSVCONTRATOS10['si83_objetocontrato']               =   substr($aCONTRATOS10['si83_objetocontrato'], 0, 1000);
                 $aCSVCONTRATOS10['si83_datainiciovigencia']           =   implode("", array_reverse(explode("-", $aCONTRATOS10['si83_datainiciovigencia'])));
+                $aCSVCONTRATOS10['si83_vigenciaindeterminada']        =   $aCONTRATOS10['si83_vigenciaindeterminada'];
                 $aCSVCONTRATOS10['si83_datafinalvigencia']            =   implode("", array_reverse(explode("-", $aCONTRATOS10['si83_datafinalvigencia'])));
                 $aCSVCONTRATOS10['si83_vlcontrato']                   =   number_format($aCONTRATOS10['si83_vlcontrato'], 2, ",", "");
                 $aCSVCONTRATOS10['si83_formafornecimento']            =   substr($aCONTRATOS10['si83_formafornecimento'], 0, 50);
@@ -204,7 +206,7 @@ class GerarCONTRATOS extends GerarAM
                     }
                 }
             }
-
+            //db_criatabela($rsCONTRATOS20);
             /**
              *
              * Registros 20, 21
@@ -223,7 +225,12 @@ class GerarCONTRATOS extends GerarAM
                     $aCSVCONTRATOS20['si87_codunidadesub']     = $aCONTRATOS20['si87_codunidadesub'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS20['si87_codunidadesub'], 5); // campo 19
                 }
 
-                //$aCSVCONTRATOS20['si87_codunidadesub']                 =  str_pad($aCONTRATOS20['si87_codunidadesub'], 5, "0", STR_PAD_LEFT);
+                if (strlen($aCONTRATOS20['si87_codunidadesubatual']) > 5) {
+                    $aCSVCONTRATOS20['si87_codunidadesubatual']     = $aCONTRATOS20['si87_codunidadesubatual'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS20['si87_codunidadesubatual'], 8);
+                } else {
+                    $aCSVCONTRATOS20['si87_codunidadesubatual']     = $aCONTRATOS20['si87_codunidadesubatual'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS20['si87_codunidadesubatual'], 5);
+                }
+
                 $aCSVCONTRATOS20['si87_nrocontrato']                   =  substr($aCONTRATOS20['si87_nrocontrato'], 0, 14);
                 $aCSVCONTRATOS20['si87_dtassinaturacontoriginal']      =  implode("", array_reverse(explode("-", $aCONTRATOS20['si87_dtassinaturacontoriginal'])));
                 $aCSVCONTRATOS20['si87_nroseqtermoaditivo']            =  str_pad($aCONTRATOS20['si87_nroseqtermoaditivo'], 2, "0", STR_PAD_LEFT);
@@ -233,8 +240,10 @@ class GerarCONTRATOS extends GerarAM
                 $aCSVCONTRATOS20['si87_dscalteracao']                  =  substr($aCONTRATOS20['si87_dscalteracao'], 0, 250);
                 $aCSVCONTRATOS20['si87_novadatatermino']               =  implode("", array_reverse(explode("-", $aCONTRATOS20['si87_novadatatermino'])));
                 $aCSVCONTRATOS20['si87_percentualreajuste']            =  $aCONTRATOS20['si87_percentualreajuste'] == 0 ? ' ' : number_format($aCONTRATOS20['si87_percentualreajuste'], 2, ",", "");
+                $aCSVCONTRATOS20['si87_criterioreajuste']              =  $aCONTRATOS20['si87_criterioreajuste'];
+                $aCSVCONTRATOS20['si87_descricaoindice']               =  substr($aCONTRATOS20['si87_descricaoindice'], 0, 300);
                 $aCSVCONTRATOS20['si87_indiceunicoreajuste']           =  $aCONTRATOS20['si87_indiceunicoreajuste'] == 0 ? ' ' : $aCONTRATOS20['si87_indiceunicoreajuste'];
-                $aCSVCONTRATOS20['si87_dscreajuste']                   =  substr($aCONTRATOS20['si87_dscreajuste'], 0, 300);
+                $aCSVCONTRATOS20['si87_descricaoreajuste']             =  substr($aCONTRATOS20['si87_descricaoreajuste'], 0, 300);
                 $aCSVCONTRATOS20['si87_valoraditivo']                  =  number_format($aCONTRATOS20['si87_valoraditivo'], 2, ",", "");
                 $aCSVCONTRATOS20['si87_datapublicacao']                =  implode("", array_reverse(explode("-", $aCONTRATOS20['si87_datapublicacao'])));
                 $aCSVCONTRATOS20['si87_veiculodivulgacao']             =  substr($aCONTRATOS20['si87_veiculodivulgacao'], 0, 50);
@@ -302,6 +311,11 @@ class GerarCONTRATOS extends GerarAM
                 } else {
                     $aCSVCONTRATOS30['si89_codunidadesub']        = $aCONTRATOS30['si89_codunidadesub'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS30['si89_codunidadesub'], 5);
                 }
+                if (strlen($aCONTRATOS30['si89_codunidadesubatual']) > 5) {
+                    $aCSVCONTRATOS30['si89_codunidadesubatual']        = $aCONTRATOS30['si89_codunidadesubatual'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS30['si89_codunidadesubatual'], 8);
+                } else {
+                    $aCSVCONTRATOS30['si89_codunidadesubatual']        = $aCONTRATOS30['si89_codunidadesubatual'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS30['si89_codunidadesubatual'], 5);
+                }
                 $aCSVCONTRATOS30['si89_nrocontrato']                   =  substr($aCONTRATOS30['si89_nrocontrato'], 0, 14);
                 $aCSVCONTRATOS30['si89_dtassinaturacontoriginal']      =  implode("", array_reverse(explode("-", $aCONTRATOS30['si89_dtassinaturacontoriginal'])));
                 $aCSVCONTRATOS30['si89_tipoapostila']                  =  str_pad($aCONTRATOS30['si89_tipoapostila'], 2, "0", STR_PAD_LEFT);
@@ -310,6 +324,8 @@ class GerarCONTRATOS extends GerarAM
                 $aCSVCONTRATOS30['si89_tipoalteracaoapostila']         =  str_pad($aCONTRATOS30['si89_tipoalteracaoapostila'], 1, "0", STR_PAD_LEFT);
                 $aCSVCONTRATOS30['si89_dscalteracao']                  =  substr($aCONTRATOS30['si89_dscalteracao'], 0, 250);
                 $aCSVCONTRATOS30['si89_percentualreajuste']            =  $aCONTRATOS30['si89_percentualreajuste'] == 0 ? ' ' : number_format($aCONTRATOS30['si89_percentualreajuste'], 2, ",", "");
+                $aCSVCONTRATOS30['si89_criterioreajuste']              =  $aCONTRATOS30['si89_criterioreajuste'];
+                $aCSVCONTRATOS30['si89_descricaoindice']               =  substr($aCONTRATOS30['si89_descricaoindice'],0,300);
                 $aCSVCONTRATOS30['si89_indiceunicoreajuste']           =  $aCONTRATOS30['si89_indiceunicoreajuste'] == 0 ? ' ' : $aCONTRATOS30['si89_indiceunicoreajuste'];
                 $aCSVCONTRATOS30['si89_dscreajuste']                   =  substr($aCONTRATOS30['si89_dscreajuste'], 0, 300);
                 $aCSVCONTRATOS30['si89_valorapostila']                 =  number_format($aCONTRATOS30['si89_valorapostila'], 2, ",", "");
@@ -329,6 +345,7 @@ class GerarCONTRATOS extends GerarAM
                 $aCSVCONTRATOS40['si91_tiporegistro']                  =  str_pad($aCONTRATOS40['si91_tiporegistro'], 2, "0", STR_PAD_LEFT);
                 $aCSVCONTRATOS40['si91_codorgao']                      =  str_pad($aCONTRATOS40['si91_codorgao'], 2, "0", STR_PAD_LEFT);
                 $aCSVCONTRATOS40['si91_codunidadesub']                 =  $aCONTRATOS40['si91_codunidadesub'] == ' ' ? ' ' : str_pad($aCONTRATOS40['si91_codunidadesub'], (strlen($aCONTRATOS40['si91_codunidadesub']) <= 5 ? 5 : 8), "0", STR_PAD_LEFT);
+                $aCSVCONTRATOS40['si91_codunidadesubatual']            =  $aCONTRATOS40['si91_codunidadesubatual'] == ' ' ? ' ' : str_pad($aCONTRATOS40['si91_codunidadesubatual'], (strlen($aCONTRATOS40['si91_codunidadesubatual']) <= 5 ? 5 : 8), "0", STR_PAD_LEFT);
                 $aCSVCONTRATOS40['si91_nrocontrato']                   =  substr($aCONTRATOS40['si91_nrocontrato'], 0, 14);
                 $aCSVCONTRATOS40['si91_dtassinaturacontoriginal']      =  implode("", array_reverse(explode("-", $aCONTRATOS40['si91_dtassinaturacontoriginal'])));
                 $aCSVCONTRATOS40['si91_datarescisao']                  =  implode("", array_reverse(explode("-", $aCONTRATOS40['si91_datarescisao'])));
