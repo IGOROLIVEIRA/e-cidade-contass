@@ -68,16 +68,21 @@ class Aditamento
      */
     private ?float $percentualReajuste = null;
 
-    /**
-     * @var string|null
-     */
-    private ?string $resumoObjeto = null;
-
-    /**
+     /**
      *
      * @var string|null
      */
     private ?string $descricaoIndice = null;
+
+    /**
+     * @var integer|null
+     */
+    private ?int $criterioReajuste = null;
+
+    /**
+     * @var string|null
+     */
+    private ?string $resumoObjeto = null;
 
     /**
      * @var boolean
@@ -545,6 +550,24 @@ class Aditamento
     public function setVigenciaIndeterminanda(bool $vigenciaIndeterminanda): self
     {
         $this->vigenciaIndeterminanda = $vigenciaIndeterminanda;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of criterioReajuste
+     */
+    public function getCriterioReajuste(): ?int
+    {
+        return $this->criterioReajuste;
+    }
+
+    /**
+     * Set the value of criterioReajuste
+     */
+    public function setCriterioReajuste(?int $criterioReajuste): self
+    {
+        $this->criterioReajuste = $criterioReajuste;
 
         return $this;
     }

@@ -8,12 +8,6 @@ class AcordoItemDotacao extends LegacyModel
 {
     use LegacyAccount;
 
-     /**
-     *
-     * @var string
-     */
-    protected string $sequenceName = 'acordoitemdotacao_ac22_sequencial_seq';
-
     /**
      *
      * @var boolean

@@ -37,7 +37,8 @@ class AditamentoFactory
         if ($aditamento->isReajuste()) {
             $aditamento->setIndiceReajuste((float) $acordoPosicao->ac26_indicereajuste)
                 ->setPercentualReajuste((float) $acordoPosicao->ac26_percentualreajuste)
-                ->setDescricaoIndice($acordoPosicao->ac26_descricaoindice);
+                ->setDescricaoIndice($acordoPosicao->ac26_descricaoindice)
+                ->setCriterioReajuste($acordoPosicao->ac26_criterioreajuste);
         }
 
         $itemFactory = new ItemFactory();
@@ -78,7 +79,8 @@ class AditamentoFactory
         if ($aditamento->isReajuste()) {
             $aditamento->setIndiceReajuste((float) $aditamentoRaw->indicereajuste)
                 ->setPercentualReajuste((float) $aditamentoRaw->percentualreajuste)
-                ->setDescricaoIndice($aditamentoRaw->descricaoindice);
+                ->setDescricaoIndice($aditamentoRaw->descricaoindice)
+                ->setCriterioReajuste((int)$aditamentoRaw->criterioreajuste);
         }
 
         if (!empty($aditamentoRaw->datareferencia)) {

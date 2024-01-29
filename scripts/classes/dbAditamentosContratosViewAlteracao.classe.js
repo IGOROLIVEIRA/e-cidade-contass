@@ -149,6 +149,11 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
   sContent += "           </tr> ";
 
+  sContent += "           <tr id='trdoindice' style='display:none;'> ";
+  sContent += "                      <td ><label class=\"bold\" for=\"oIndiceReajuste\"> Índice de Reajuste:<label></td> ";
+  sContent += "                      <td id=\"ctnIndiceReajuste\"></td> ";
+  sContent += "           </tr> ";
+
   sContent += "           <tr id='trdescricaoindice' style='display:none;'> ";
   sContent += "             <td nowrap> ";
   sContent += "               <label class=\"bold\" for=\"oTxtDescricaoIndice\">Descrição do Índice:</label>";
@@ -158,9 +163,9 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
   sContent += "           <tr id='trdescricaoreajuste' style='display:none;'> ";
   sContent += "             <td nowrap> ";
-  sContent += "               <label class=\"bold\" for=\"oTxtDescricaoIndice\">Descrição do Índice:</label>";
+  sContent += "               <label class=\"bold\" for=\"oTxtDescricaoReajuste\">Descrição do Reajuste:</label>";
   sContent += "             </td>";
-  sContent += "             <td id=\"ctnDescricaoIndice\"></td>";
+  sContent += "             <td id=\"ctnDescricaoReajuste\"></td>";
   sContent += "           </tr> ";
 
 
@@ -526,7 +531,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
    * monta a tela principal do aditamento
    */
   this.main = function () {
-    
+
     me.oTxtCodigoAcordo = new DBTextField('oTxtCodigoAcordo', me.sInstance + '.oTxtCodigoAcordo', '', 10);
     me.oTxtCodigoAcordo.addEvent("onChange", ";" + me.sInstance + ".pesquisaAcordo(false);");
     me.oTxtCodigoAcordo.show($('ctnCodigoAcordo'));
@@ -608,7 +613,6 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     /**
     * Tipo de Reajuste
     */
-
     if (me.lReajuste) {
       me.oIndiceReajuste = new DBComboBox('oIndiceReajuste', me.sInstance + '.oIndiceReajuste', null, '100px');
       me.oIndiceReajuste.addItem('0', 'Selecione');
@@ -621,6 +625,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       me.oIndiceReajuste.addEvent("onChange", me.sInstance + ".js_exibedescricao();");
       me.oIndiceReajuste.show($('ctnIndiceReajuste'));
     }
+
 
     /**
      * Veiculo de Divulgao
@@ -650,6 +655,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     me.oCboCriterioReajuste.addItem('3', 'Índice Específico');
     me.oCboCriterioReajuste.addEvent("onChange", me.sInstance + ".js_changeCriterioReajuste();");
     me.oCboCriterioReajuste.show($('ctnCriterioReajuste'));
+
 
     /**
      * Justificativa
@@ -699,6 +705,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     me.oTxtValorAtual.show($('ctnValorAtual'));
     me.oTxtValorAtual.setReadOnly(true);
 
+
     /**
      * Itens
      */
@@ -720,7 +727,6 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       me.oGridItens.aHeaders[13].lDisplayed = false;
     }
 
-
     $('btnAditar').observe('click', me.aditar);
     $('btnPesquisarAcordo').observe('click', function () {
 
@@ -728,6 +734,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       return;
 
     });
+
   }
 
   /**
@@ -1063,9 +1070,8 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
   }
 
   me.showViewAlterar = () => {
-    console.log('showViewAlterar');
+
     me.main();
-    console.log('showViewAlterar passou main');
     me.pesquisaAcordoAlteracao(true);
   }
 
@@ -1313,7 +1319,6 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
           var data_1 = new Date(datafimE);
           var data_2 = new Date(datafimV);
-          console.log(data_1, data_2);
           if (data_1 > data_2) {
             lAditar = false;
             return alert("Data final da execução de um item não pode ser maior que a data final da vigência do contrato!");
@@ -1381,7 +1386,6 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
         oItemAdicionar.valorunitario = 0;
         oItemAdicionar.valor = 0;
       }
-      console.log(oItemAdicionar);
       oParam.aItens.push(oItemAdicionar);
     });
 
@@ -1752,6 +1756,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
   }
 
   this.preencheItens = function (aItens) {
+
     var sizeLabelItens = 0;
     if (aItens.length < 12) {
       sizeLabelItens = (aItens.length / 2) * 50;
@@ -2000,10 +2005,6 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
         }
       }
 
-      console.log(oItem.servico);
-      console.log(oItem.controlaquantidade);
-      console.log(oItem.servico == true && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == ""));
-
       /**
        * Caso seja servico e nao controlar quantidade, a quantidade padrao sera 1
        */
@@ -2176,12 +2177,6 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     valorTotal = nQuantidadeA * nUnitarioA;
 
     aLinha.aCells[8].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
-
-    console.log(nQuantidade)
-    console.log(nQuantidadeA)
-    console.log(nValorTotal)
-    console.log(valorTotal)
-
 
     if (aItensPosicao[iLinha].servico == false && (aItensPosicao[iLinha].controlaquantidade == "t" || aItensPosicao[iLinha].controlaquantidade != "")) {
       aLinha.aCells[9].setContent(js_formatar((nQuantidade - nQuantidadeA), 'f', casas));//Quantidade Aditada OC5304
@@ -2551,10 +2546,10 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
   }
 
   this.pesquisaAcordoAlteracao = function (lMostrar) {
-    console.log("pesquisaAcordoAlteracao")
+
     const sUrl = 'func_aditamentoalteracao.php?funcao_js=parent.' + me.sInstance + '.js_mostraacordoalteracao|ac16_sequencial';
     if (lMostrar == true) {
-      console.log('chegou aqui');
+
       js_OpenJanelaIframe('top.corpo',
         'db_iframe_acordo',
         sUrl,
@@ -2596,6 +2591,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
           me.pesquisaAcordoAlteracao(true);
           return;
         }
+
         me.lidaDadosAlteracao(oRetorno.aditamento);
       }
     });
@@ -2629,15 +2625,16 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     $('oTextAreaDescricaoAlteracao').value = aditamento.descricaoAlteracao;
     $('oPercentualReajuste').value = aditamento.percentualReajuste;
     $('oIndiceReajuste').value = aditamento.indiceReajuste;
-    $('oTxtDescricaoIndice').value = aditamento.descricaoIndice;
+
+    $('oCboCriterioReajuste').value = aditamento.criterioReajuste;
     me.oTxtDataFinalCompara.setData(aditamento.vigenciaFim);
 
-    if (oRetorno.vigenciaindeterminada == "t") {
+
+    if (aditamento.vigenciaIndeterminada == true) {
       document.getElementsByClassName('datafinal')[0].style.display = 'none';
       document.getElementsByClassName('datafinal')[1].style.display = 'none';
       document.getElementsByClassName('datafinal')[2].style.display = 'none';
     }
-
 
     me.ajusteInicialGrid();
 
@@ -2654,7 +2651,9 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     me.ocultaDescricaoAlteracao();
     me.js_exibedescricao();
     me.exibicaocamposreajuste();
+    me.js_changeCriterioReajuste();
 
+    $('oTxtDescricaoIndice').value = aditamento.descricaoIndice;
   }
 
   this.ajusteInicialGrid = () => {
@@ -2679,7 +2678,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
   this.alterarAdiamento = (aditamento) => {
     aditamento.acordoPosicaoSequencial = me.estadoTela.acordoPosicaoSeq;
     aditamento.posicaoAditamentoSequencial = me.estadoTela.posicaoAditamentoSequencial;
-    console.log(aditamento)
+
     const oParam = {
       exec: 'processarAlteracaoAditivo',
       aditamento
@@ -2746,7 +2745,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
     const cboTipoInalteraQtd = [2, 5];
     const cboDependeExecucao = [9, 10, 11];
-    console.log('item executado ', item.eExecutado, item.servico);
+
     if (cboTipoInalteraQtd.includes(cboTipo)) return true;
 
     if (cboDependeExecucao.includes(cboTipo)
