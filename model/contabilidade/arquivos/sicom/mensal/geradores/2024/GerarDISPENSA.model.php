@@ -309,7 +309,7 @@ class GerarDISPENSA extends GerarAM
 
           $aCSVDISPENSA30['si203_tiporegistro']       = $this->padLeftZero($aDISPENSA30['si203_tiporegistro'], 2);
           $aCSVDISPENSA30['si203_codorgaoresp']       = $this->padLeftZero($aDISPENSA30['si203_codorgaoresp'], 2);
-          $aCSVDISPENSA30['si203_codunidadesubresp']  = $this->padLeftZero($aDISPENSA30['si203_codunidadesubresp'], 8);
+          $aCSVDISPENSA30['si203_codunidadesubresp']  = $this->padLeftZero($aDISPENSA30['si203_codunidadesubresp'], 5);
           $aCSVDISPENSA30['si203_exercicioprocesso']  = $this->padLeftZero($aDISPENSA30['si203_exercicioprocesso'], 4);
           $aCSVDISPENSA30['si203_nroprocesso']        = substr($aDISPENSA30['si203_nroprocesso'], 0, 16);
           $aCSVDISPENSA30['si203_tipoprocesso']       = $this->padLeftZero($aDISPENSA30['si203_tipoprocesso'], 1);

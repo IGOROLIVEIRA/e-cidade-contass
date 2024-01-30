@@ -1493,8 +1493,8 @@ ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1
       $dispensa30->si203_tipoprocesso = $oDados30->tipoprocesso;
       $dispensa30->si203_tipodocumento = $oDados30->tipodocumento;
       $dispensa30->si203_nrodocumento = $oDados30->nrodocumento;
-      $dispensa40->si203_nrolote = $oDados30->processoporlote == 1 ? $oDados30->nrolote : '';
-      $dispensa40->si203_coditem = $oDados30->processoporlote == 1 ? '' : $oDados30->coditem;
+      $dispensa30->si203_nrolote = $oDados30->processoporlote == 1 ? $oDados30->nrolote : '';
+      $dispensa30->si203_coditem = $oDados30->processoporlote == 1 ? '' : $oDados30->coditem;
       $dispensa30->si203_percdesconto = $oDados30->percdesconto;
       $dispensa30->si203_instit = db_getsession("DB_instit");
       $dispensa30->si203_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -1547,7 +1547,7 @@ ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1
           pof.pc21_numcgm = cgm.z01_numcgm
         where
           pof.pc21_orcamforne = pcorcamforne.pc21_orcamforne) as nroDocumento,
-          pcorcamval.pc23_percentualdesconto as perctaxaadm,
+          pcorcamval.pc23_perctaxadesctabela as perctaxaadm,
     * from liclicita
     INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
     INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
