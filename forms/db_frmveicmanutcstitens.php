@@ -217,7 +217,7 @@ db_app::load("estilos.css, grid.style.css");
             ?>
             <tr>
                 <td nowrap title="<?= @$Tve62_tipogasto ?>">
-                    <? //= @$Lve62_tipogasto 
+                    <? //= @$Lve62_tipogasto
                     ?>
                     <strong>Tipo de gasto:</strong>
                 </td>
@@ -231,7 +231,7 @@ db_app::load("estilos.css, grid.style.css");
             </tr>
             <tr>
                 <td nowrap title="<?= @$Tve62_origemgasto ?>">
-                    <? //= @$Lve62_origemgasto 
+                    <? //= @$Lve62_origemgasto
                     ?>
                     <strong>Origem de gasto:</strong>
                 </td>
@@ -257,14 +257,11 @@ db_app::load("estilos.css, grid.style.css");
 
             <tr>
                 <td align="left" id="emp1" nowrap title="<?= $Te60_codemp ?>">
-                    <?
+                    <?php
                     db_ancora("N�mero do Empenho:", "js_pesquisae60_codemp(true,1);", 1);
                     ?>
                 </td>
                 <td id="emp2">
-                    <? //db_ancora("Seq. Empenho", "js_pesquisae60_codemp(true);", 1); 
-                    ?>
-
                     <?php db_input('si05_numemp', 10, $Isi05_numemp, true, 'hidden', 1); ?>
                     <?php db_input('e60_codemp', 10, $Ie60_codemp, true, 'text', 1); ?>
                     <input type="hidden" id="numcgm_oficina" name="numcgm_oficina">
@@ -368,7 +365,7 @@ db_app::load("estilos.css, grid.style.css");
 
             <tr>
                 <td nowrap title="<?= @$Tve62_atestado ?>">
-                    <? //= @$Lve62_atestado 
+                    <? //= @$Lve62_atestado
                     ?>
                     <strong>Atestado de controle interno:</strong>
                 </td>
@@ -415,7 +412,7 @@ db_app::load("estilos.css, grid.style.css");
                                                     ?>
                                 </td>
                             </tr>
-                            <!--         
+                            <!--
                             <tr>
                                 <td nowrap title="<?= @$Tve63_vlruni ?>">
                                     <?= @$Lve63_vlruni ?>
@@ -547,6 +544,7 @@ db_app::load("estilos.css, grid.style.css");
 
 <script type="text/javascript">
     var el = document.getElementById("e60_codemp");
+
     el.onblur = function() {
 
         console.log("blur", "saiu do input", this);
@@ -572,38 +570,31 @@ db_app::load("estilos.css, grid.style.css");
     var num_row = 0;
     var itens = [];
     var cell7 = 0;
-    <?php
-    foreach ($rSqlItens as $item) {
-        if ($item->ve62_veiculos != "") {
-            echo "incluir_item_php('" . $item->ve62_veiculos . "',";
-            echo "'" . $item->ve63_descr . "',";
-            echo "'" . $item->ve63_quant . "',";
-            echo "'" . $item->ve63_vlruni . "',";
-            echo "'" . $item->ve64_pcmater . "',";
-            echo "'" . $item->pc01_descrmater . "'); ";
-        }
-    }
-    ?>
-    <?php
-    if (isset($itens)) {
 
-        foreach (json_decode(str_replace("\\", "", utf8_encode($itens))) as $item) {
 
-            $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Ý', 'Ã', 'É', 'Ý', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
-            $by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
-            $valor = str_replace($what, $by, $item->ve63_descr);
-            $valorDescr = $valor;
-            if ($item->ve62_veiculos != "") {
-                echo "incluir_item_php('" . $item->ve62_veiculos . "',";
-                echo "'" . $valorDescr . "',";
-                echo "'" . $item->ve63_quant . "',";
-                echo "'" . $item->ve63_vlruni . "',";
-                echo "'" . $item->ve64_pcmater . "',";
-                echo "'" . $item->pc01_descrmater . "'); ";
-            }
-        }
-    }
-    ?>
+
+    // <?php
+    // if (isset($itens)) {
+
+    //     foreach (json_decode(str_replace("\\", "", utf8_encode($itens))) as $item) {
+
+    //         $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Ý', 'Ã', 'É', 'Ý', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
+    //         $by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+    //         $valor = str_replace($what, $by, $item->ve63_descr);
+    //         $valorDescr = $valor;
+    //         if ($item->ve62_veiculos != "") {
+    //             echo "incluir_item_php('" . $item->ve62_veiculos . "',";
+    //             echo "'" . $valorDescr . "',";
+    //             echo "'" . $item->ve63_quant . "',";
+    //             echo "'" . $item->ve63_vlruni . "',";
+    //             echo "'" . $item->ve64_pcmater . "',";
+    //             echo "'" . $item->pc01_descrmater . "'); ";
+    //         }
+    //     }
+    // }
+    // ?>
+
+
 
     function mostrarCadastro() {
         var valItem = document.getElementById("ve62_itensempenho").value;
@@ -647,7 +638,7 @@ db_app::load("estilos.css, grid.style.css");
             }
         }
         itens = item;
-        //console.log(itens);
+
         document.form1.itens.value = JSON.stringify(itens);
 
 
@@ -668,10 +659,6 @@ db_app::load("estilos.css, grid.style.css");
                 document.getElementById("itensLancados").style.display = "none";
             }
         }
-
-
-
-
     }
     var valorLExcluido = 0;
 
@@ -693,7 +680,7 @@ db_app::load("estilos.css, grid.style.css");
                 }
             }
             itens = item;
-            //console.log(itens);
+
             document.form1.itens.value = JSON.stringify(itens);
 
 
@@ -763,10 +750,6 @@ db_app::load("estilos.css, grid.style.css");
         document.form1.itens.value = JSON.stringify(itens);
         document.form1.ve62_valor.value = cell7.toFixed(2);
         document.getElementById('itens_lancados').innerHTML += content;
-
-
-        //console.log(itens);
-
     }
     var linhasLancadas;
 
@@ -935,40 +918,44 @@ db_app::load("estilos.css, grid.style.css");
         var itememp = $F("ve62_itensempenho");
 
         if (itememp == 1) {
-
+            console.log("Passou aqui");
             var ve62_dtmanut = $F("ve62_dtmanut");
             var e60_codemp = $F("e60_codemp");
             if (mostra == true) {
+                console.log("Mostra treu");
                 //js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss&filtromanut=1&ve62_dtmanut='+ve62_dtmanut+'', 'Pesquisa', true);
 
                 if (e60_codemp != "") {
-                    js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho.php?filtromanut=1&ve62_dtmanut=' + ve62_dtmanut + '&chave_e60_codemp=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|e60_numcgm|', 'Pesquisa', true);
+                    js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho003.php?filtromanut=1&ve62_dtmanut=' + ve62_dtmanut + '&chave_e60_codemp=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|e60_numcgm|', 'Pesquisa', true);
                 } else {
                     if (ve62_dtmanut != "") {
-                        js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|e60_numcgm&filtromanut=1&ve62_dtmanut=' + ve62_dtmanut + '', 'Pesquisa', true);
+
+                        js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho003.php?funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|e60_numcgm&filtromanut=1&todos=1&ve62_dtmanut=' + ve62_dtmanut + '', 'Pesquisa', true);
                     } else {
                         alert("Data n�o informada");
                     }
 
                 }
             } else {
-                js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho.php?pesquisa_chave=' + document.form1.ve62_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1&filtromanut=1&ve62_dtmanut=' + ve62_dtmanut + '', 'Pesquisa', false);
+
+                js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho003.php?pesquisa_chave=' + document.form1.ve62_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1&filtromanut=1&ve62_dtmanut=' + ve62_dtmanut + '', 'Pesquisa', false);
             }
         } else if (itememp == 2) {
-
+            console.log('item dois');
             document.getElementById("controle1").value = 1;
             var ve62_dtmanut = $F("ve62_dtmanut");
             var e60_codemp = $F("e60_codemp");
 
             if (e60_codemp != "") {
-                js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho.php?filtromanut=1&ve62_dtmanut=' + ve62_dtmanut + '&chave_e60_codemp=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|e60_numcgm|', 'Pesquisa', true);
+                console.log('l 950');
+                js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho003.php?filtromanut=1&todos=1&ve62_dtmanut=' + ve62_dtmanut + '&chave_e60_codemp=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|e60_numcgm|', 'Pesquisa', true);
             } else {
                 if (ve62_dtmanut != "") {
-                    js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|e60_numcgm&filtromanut=1&ve62_dtmanut=' + ve62_dtmanut + '', 'Pesquisa', true);
+                    console.log('l 954');
+                    js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho003.php?funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|e60_numcgm&filtromanut=1&todos=1&ve62_dtmanut=' + ve62_dtmanut + '', 'Pesquisa', true);
                 } else {
                     alert("Data n�o informada");
                 }
-
             }
 
             //alert("Selecione uma op��o Itens do Empenho");
@@ -1004,6 +991,7 @@ db_app::load("estilos.css, grid.style.css");
     function js_mostraempempenho2(chave1, chave2, chave3, chave4) {
         var contro = $F("controle1");
         var contro2 = $F("controle2");
+        console.log(chave1, chave2);
         document.form1.ve62_numemp.value = chave1;
         document.form1.e60_codemp.value = chave2 + '/' + chave3;
         document.getElementById("e60_codemp").value = chave2 + '/' + chave3;
