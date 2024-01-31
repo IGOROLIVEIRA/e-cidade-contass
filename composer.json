@@ -17,7 +17,6 @@
         "ext-simplexml": "*",
         "ext-soap": "*",
         "aferrandini/phpqrcode": "^1.0",
-        "dbseller/legacy": "^1.0",
         "dbseller/sdk-api-pix-bb": "^2.0",
         "dex/composer-plug-and-play": "^0.13.0",
         "fruitcake/laravel-cors": "^2.0",
@@ -30,8 +29,6 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "lcobucci/jwt": "3.4.6",
-        "league/fractal": "0.11.0",
-        "michelf/php-markdown": "^1.6",
         "mormat/php-formula-interpreter": "1.0.0",
         "mpdf/mpdf": "v8.0.4",
         "ncjoes/office-converter": "^1.0",
@@ -42,15 +39,26 @@
         "proner/phppimaco": "v1.4.5",
         "psr/log": "^1.1.0",
         "pusher/pusher-php-server": "~2.6",
-        "robmorgan/phinx": "*",
         "symfony/console": "^5.4",
         "symfony/filesystem": "^5.4",
+        "symfony/process": "^5.4",
+        "symfony/yaml": "^5.4",
+        "vlucas/valitron": "^1.4",
+
+        "dbseller/legacy": "^1.0",
+        "symfony/polyfill-php54": "^1.1",
+        "symfony/polyfill-php55": "^1.1",
         "symfony/polyfill-php56": "^1.1",
         "symfony/polyfill-php70": "^1.1",
-        "symfony/process": "^5.4",
-        "symfony/validator": "^5.4",
-        "symfony/yaml": "^5.4",
-        "vlucas/valitron": "^1.4"
+        "michelf/php-markdown": "^1.6",
+        "silex/silex": "~1.3",
+        "symfony/validator": "^2.8",
+        "league/fractal": "0.11.0",
+        "zendframework/zend-eventmanager": "2.2.10",
+        "dbseller/phinx_postgres": "^1.0",
+        "robmorgan/phinx": "^0.4.6",
+        "illuminate/database": "^5.8",
+        "endroid/qr-code": "^4.6.1"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.4",
@@ -103,7 +111,8 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "dex/composer-plug-and-play": true
+            "dex/composer-plug-and-play": true,
+            "kylekatarnls/update-helper": true
         }
     },
     "minimum-stability": "dev",
