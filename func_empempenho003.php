@@ -59,7 +59,7 @@ $todos = !empty($todos) && (int)$todos === 1;
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <script>
         function js_mascara(evt) {
-            var evt;
+            let evt;
 
             if (!evt) {
                 if (window.event) {
@@ -139,7 +139,7 @@ $todos = !empty($todos) && (int)$todos === 1;
     <table class="container">
         <tr>
             <td align="center" valign="top">
-            <?php
+                <?php
                 $campos = "e60_numemp, e60_codemp, z01_nome,si172_nrocontrato,
                 si172_datafinalvigencia,
                 si174_novadatatermino
@@ -241,16 +241,13 @@ $todos = !empty($todos) && (int)$todos === 1;
                      * @see ocorrência contass 3414
                      *
                      */
-
-
                     if (isset($emperro) && $emperro == true) {
-                        //// var_dump('linha 245');
                         $dbwhere .= " AND e60_vlremp = e60_vlranu
-                  AND e60_vlrliq = 0
-                  AND e60_numemp NOT IN
-                  (SELECT m52_numemp FROM matordemitem
-                  UNION
-                  SELECT e69_numemp FROM empnota)";
+                        AND e60_vlrliq = 0
+                        AND e60_numemp NOT IN
+                        (SELECT m52_numemp FROM matordemitem
+                        UNION
+                        SELECT e69_numemp FROM empnota)";
                     }
 
                     if (isset($chave_e60_numemp) && !empty($chave_e60_numemp)) {
@@ -266,18 +263,18 @@ $todos = !empty($todos) && (int)$todos === 1;
                         }
 
                         $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "$dbwhere and e60_codemp='" . $arr[0] . "'$dbwhere_ano", $filtroempelemento);
-                         var_dump("passou aqui 268");
+
                     } elseif (isset($chave_z01_nome) && !empty($chave_z01_nome)) {
-                         var_dump("passou aqui 269");
+
                         $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "$dbwhere and z01_nome like '$chave_z01_nome%'", $filtroempelemento);
                     } elseif (isset($chave_z01_cgccpf) && !empty($chave_z01_cgccpf)) {
-                         var_dump("passou aqui 272");
+
                         $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "$dbwhere and z01_cgccpf like '$chave_z01_cgccpf%'", $filtroempelemento);
                     } elseif (count($_POST) > 0 || $todos) {
-                         var_dump("passou aqui 272");
+
                         $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "{$dbwhere}", $filtroempelemento);
                     }
-                    // var_dump('linha278', $sql);
+
                     $repassa = array(
                         "chave_z01_nome" => @$chave_z01_nome
                     );
@@ -310,7 +307,7 @@ $todos = !empty($todos) && (int)$todos === 1;
                             $whereRelCompra .= " AND z01_nome LIKE '%$chave_z01_nome%'";
                         }
 
-                         var_dump("linha 305");
+
                         $sql = $clempempenho->sql_query(null, $campos, null, $whereRelCompra);
                     }
 
@@ -374,14 +371,8 @@ $todos = !empty($todos) && (int)$todos === 1;
                         $dbwhere .= " and e60_instit = " . db_getsession("DB_instit") . " order by e60_numemp desc";
 
                         $sql = $clempempenho->sql_query_inclusaoempenho(null, $campos, null, $dbwhere);
-                        // var_dump("passou aqui");
                     }
-                    //  var_dump($sql);
-                    //  echo "chegou aqui";
-                    //  echo "<pre>";
-                    //  print_r($HTTP_SERVER_VARS["QUERY_STRING"]);
 
-                    // die();
                     $result = $clempempenho->sql_record($sql);
 
                     if ($clempempenho->numrows == 0) {
@@ -411,7 +402,7 @@ $todos = !empty($todos) && (int)$todos === 1;
                             $e60_codemp = $aEmpenho[0];
                             $e60_anousu = $aEmpenho[1];
                             $e60_anousu = $e60_anousu == null ? db_getsession("DB_anousu") : $e60_anousu;
-                            // var_dump($e60_anousu);
+
                             $dbwhere = "e60_codemp = '$e60_codemp' and e60_anousu = $e60_anousu";
 
                             /**

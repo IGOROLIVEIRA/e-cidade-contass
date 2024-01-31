@@ -202,7 +202,7 @@ db_app::load("estilos.css, grid.style.css");
                     <?= @$Lve62_medida ?>
                 </td>
                 <td>
-                    <?
+                    <?php
                     db_input('ve62_medida', 20, $Ive62_medida, true, 'text', $db_opcao, "");
                     db_input("ve07_sigla", 3, 0, true, "text", 3);
                     ?>
@@ -217,12 +217,11 @@ db_app::load("estilos.css, grid.style.css");
             ?>
             <tr>
                 <td nowrap title="<?= @$Tve62_tipogasto ?>">
-                    <? //= @$Lve62_tipogasto
-                    ?>
+
                     <strong>Tipo de gasto:</strong>
                 </td>
                 <td>
-                    <?
+                    <?php
                     $x = array("0" => "Selecione", "6" => "Óleo lubrificante", "7" => "Graxa (Quilograma)", "8" => "Peças", "9" => "Serviços");
                     db_select('ve62_tipogasto', $x, true, $db_opcao, "");
                     ?>
@@ -231,12 +230,10 @@ db_app::load("estilos.css, grid.style.css");
             </tr>
             <tr>
                 <td nowrap title="<?= @$Tve62_origemgasto ?>">
-                    <? //= @$Lve62_origemgasto
-                    ?>
                     <strong>Origem de gasto:</strong>
                 </td>
                 <td>
-                    <?
+                    <?php
                     $x = array("2" => "Consumo imediato", "1" => "Estoque");
                     db_select('ve62_origemgasto', $x, true, $db_opcao, "onchange='js_mostraEmpenho()'");
                     ?>
@@ -248,7 +245,7 @@ db_app::load("estilos.css, grid.style.css");
                     <strong>Itens do empenho:</strong>
                 </td>
                 <td>
-                    <?
+                    <?php
                     $x = array("0" => "Selecione", "1" => "Sim", "2" => "Não");
                     db_select('ve62_itensempenho', $x, true, $db_opcao, "onClick='mostrarCadastro();'");
                     ?>
@@ -276,7 +273,7 @@ db_app::load("estilos.css, grid.style.css");
             <tr id='tr_proximamedida' style="display:none">
                 <td nowrap title="Próxima Medida"><b>Próxima Medida:</b></td>
                 <td>
-                    <?
+                    <?php
                     $Queryproximamedida = $clveiculos->sql_record($clveiculos->sql_query_proximamedida(@$ve62_veiculos, @$dData, $sHora));
                     if ($clveiculos->numrows > 0) {
                         db_fieldsmemory($Queryproximamedida, 0);
@@ -326,7 +323,7 @@ db_app::load("estilos.css, grid.style.css");
                     </div>
                 </td>
                 <td>
-                    <?
+                    <?php
                     db_input(
                         've66_veiccadoficinas',
                         10,
@@ -343,12 +340,12 @@ db_app::load("estilos.css, grid.style.css");
             </tr>
             <tr>
                 <td nowrap title="<?= @$Tve62_veiccadtiposervico ?>">
-                    <?
+                    <?php
                     db_ancora(@$Lve62_veiccadtiposervico, "js_pesquisave62_veiccadtiposervico(true);", $db_opcao);
                     ?>
                 </td>
                 <td>
-                    <?
+                    <?php
                     db_input(
                         've62_veiccadtiposervico',
                         10,
@@ -365,12 +362,10 @@ db_app::load("estilos.css, grid.style.css");
 
             <tr>
                 <td nowrap title="<?= @$Tve62_atestado ?>">
-                    <? //= @$Lve62_atestado
-                    ?>
                     <strong>Atestado de controle interno:</strong>
                 </td>
                 <td>
-                    <?
+                    <?php
                     $x = array("1" => "Sim", "2" => "Não");
                     db_select('ve62_atestado', $x, true, $db_opcao, "");
                     ?>
@@ -389,7 +384,7 @@ db_app::load("estilos.css, grid.style.css");
                                     <?= @$Lve63_descr ?>
                                 </td>
                                 <td>
-                                    <?
+                                    <?php
                                     db_input('ve63_descr', 51, $Ive63_descr, true, 'text', $db_opcao, "")
                                     ?>
                                 </td>
@@ -399,7 +394,7 @@ db_app::load("estilos.css, grid.style.css");
                                     <?= @$Lve63_quant ?>
                                 </td>
                                 <td>
-                                    <?
+                                    <?php
                                     db_input('ve63_quant', 8, $Ive63_quant, true, 'text', $db_opcao, "onBlur='calcularValor();'")
                                     ?>
                                     <strong>Valor Unitário:<strong>
@@ -412,28 +407,18 @@ db_app::load("estilos.css, grid.style.css");
                                                     ?>
                                 </td>
                             </tr>
-                            <!--
-                            <tr>
-                                <td nowrap title="<?= @$Tve63_vlruni ?>">
-                                    <?= @$Lve63_vlruni ?>
-                                </td>
-                                <td>
-                                    <?
-                                    db_input('ve63_vlruni', 15, $Ive63_vlruni, true, 'text', $db_opcao, "")
-                                    ?>
-                                </td>
-                            </tr> -->
+
                             <tr style="display:none;">
                                 <td nowrap title="<?= @$Tve64_pcmater ?>">
-                                    <?
+                                    <?php
                                     db_ancora(@$Lve64_pcmater, "js_pesquisave64_pcmater(true);", $db_opcao);
                                     ?>
                                 </td>
                                 <td>
-                                    <?
+                                    <?php
                                     db_input('ve64_pcmater', 10, $Ive64_pcmater, true, 'text', $db_opcao, " onchange='js_pesquisave64_pcmater(false);'")
                                     ?>
-                                    <?
+                                    <?php
                                     db_input('pc01_descrmater', 40, $Ipc01_descrmater, true, 'text', 3, '')
                                     ?>
                                 </td>
@@ -546,9 +531,6 @@ db_app::load("estilos.css, grid.style.css");
     var el = document.getElementById("e60_codemp");
 
     el.onblur = function() {
-
-        console.log("blur", "saiu do input", this);
-
         var valor_e60Codemp = $F("e60_codemp");
         var valor_ve70Dtabast = $F("ve62_dtmanut");
         if (valor_e60Codemp != "" && valor_ve70Dtabast != "") {
@@ -820,24 +802,6 @@ db_app::load("estilos.css, grid.style.css");
             num_row = numGlobal;
         }
 
-        /*
-        for(i=0;i < itens.length; i++){
-            if(itens[i]!=undefined && itens[i].ve64_pcmater == cell5){
-                alert("Ítem já inserido");
-                document.form1.itens.value = JSON.stringify( itens );
-
-
-                document.form1.ve63_descr.value = "";
-                document.form1.ve63_quant.value = "";
-                document.form1.ve63_vlruni.value = "";
-                document.form1.ve64_pcmater.value = "";
-                document.form1.pc01_descrmater.value = "";
-                //console.log(itens);
-                return false;
-            }
-
-        }*/
-        //alert(cell7);
         cell7 += parseFloat(document.form1.ve63_vlruni.value) * parseFloat(document.form1.ve63_quant.value);
 
         var it = $F("ve62_itensempenho");
@@ -858,8 +822,6 @@ db_app::load("estilos.css, grid.style.css");
             "ve63_descr": cell2,
             "ve63_quant": cell3,
             "ve63_vlruni": cell4,
-            //"ve64_pcmater" : cell5,
-            //"pc01_descrmater" : cell6,
         }
         itens[num_row] = valores;
         if (numGlobal == -1) {
@@ -882,7 +844,7 @@ db_app::load("estilos.css, grid.style.css");
         document.form1.ve62_valor.value = cell7.toFixed(2);
         document.getElementById('itens_lancados').innerHTML += content;
 
-        //console.log(itens);
+
         numGlobal = -1;
         op = 0;
 
@@ -918,50 +880,36 @@ db_app::load("estilos.css, grid.style.css");
         var itememp = $F("ve62_itensempenho");
 
         if (itememp == 1) {
-            console.log("Passou aqui");
             var ve62_dtmanut = $F("ve62_dtmanut");
             var e60_codemp = $F("e60_codemp");
             if (mostra == true) {
-                console.log("Mostra treu");
-                //js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss&filtromanut=1&ve62_dtmanut='+ve62_dtmanut+'', 'Pesquisa', true);
-
                 if (e60_codemp != "") {
-
                     js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho003.php?filtromanut=1&ve62_dtmanut=' + ve62_dtmanut + '&chave_e60_codemp=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|e60_numcgm|', 'Pesquisa', true);
                 } else {
                     if (ve62_dtmanut != "") {
-
                         js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho003.php?funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|e60_numcgm&filtromanut=1&todos=1&ve62_dtmanut=' + ve62_dtmanut + '', 'Pesquisa', true);
                     } else {
                         alert("Data não informada");
                     }
-
                 }
             } else {
                 js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho003.php?pesquisa_chave=' + document.form1.ve62_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1&filtromanut=1&ve62_dtmanut=' + ve62_dtmanut + '', 'Pesquisa', false);
             }
         } else if (itememp == 2) {
-            console.log('item dois');
             document.getElementById("controle1").value = 1;
             var ve62_dtmanut = $F("ve62_dtmanut");
             var e60_codemp = $F("e60_codemp");
 
             if (e60_codemp != "") {
-                console.log('l 950');
-                console.log(e60_codemp);
                 js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho003.php?filtromanut=1&todos=1&ve62_dtmanut=' + ve62_dtmanut + '&chave_e60_codemp=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|e60_numcgm|', 'Pesquisa', true);
             } else {
                 if (ve62_dtmanut != "") {
-                    console.log('l 954');
                     js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho003.php?funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|e60_numcgm&filtromanut=1&todos=1&ve62_dtmanut=' + ve62_dtmanut + '', 'Pesquisa', true);
                 } else {
                     alert("Data não informada");
                 }
             }
-
-            //alert("Selecione uma opção Itens do Empenho");
         }
-
     }
 
 
@@ -992,7 +940,7 @@ db_app::load("estilos.css, grid.style.css");
     function js_mostraempempenho2(chave1, chave2, chave3, chave4) {
         var contro = $F("controle1");
         var contro2 = $F("controle2");
-        console.log(chave1, chave2);
+
         document.form1.ve62_numemp.value = chave1;
         document.form1.e60_codemp.value = chave2 + '/' + chave3;
         document.getElementById("e60_codemp").value = chave2 + '/' + chave3;
