@@ -10,7 +10,7 @@ class Sigaf2 extends AbstractMigration
             CREATE TABLE farmacia.far_matercatmat (
             faxx_i_codigo INT PRIMARY KEY,
             faxx_i_catmat int8,
-            faxx_i_desc varchar(250),
+            faxx_i_desc varchar(1000),
             faxx_i_ativo bool,
             faxx_i_susten bool
             );
