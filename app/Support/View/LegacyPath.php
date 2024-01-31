@@ -33,6 +33,7 @@ trait LegacyPath
             'dv' => 'diversos',
             'dvr' => 'diversos',
             'edu' => 'educacao',
+            'efd' => 'efdreinf',
             'esc' => 'educacao',
             'eso' => 'educacao',
             'emp' => 'empenho',
