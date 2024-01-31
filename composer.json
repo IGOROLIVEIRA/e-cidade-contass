@@ -44,7 +44,6 @@
         "symfony/process": "^5.4",
         "symfony/yaml": "^5.4",
         "vlucas/valitron": "^1.4",
-
         "dbseller/legacy": "^1.0",
         "symfony/polyfill-php54": "^1.1",
         "symfony/polyfill-php55": "^1.1",
@@ -55,10 +54,7 @@
         "symfony/validator": "^2.8",
         "league/fractal": "0.11.0",
         "zendframework/zend-eventmanager": "2.2.10",
-        "dbseller/phinx_postgres": "^1.0",
-        "robmorgan/phinx": "^0.4.6",
-        "illuminate/database": "^5.8",
-        "endroid/qr-code": "^4.6.1"
+        "robmorgan/phinx": "^0.14.0"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.4",
