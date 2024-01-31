@@ -258,7 +258,7 @@ db_app::load("estilos.css, grid.style.css");
             <tr>
                 <td align="left" id="emp1" nowrap title="<?= $Te60_codemp ?>">
                     <?php
-                    db_ancora("Número do Empenho:", "js_pesquisae60_codemp(true,1);", 1);
+                    db_ancora("Número do Empenho:", "js_pesquisae60_codemp(true);", 1);
                     ?>
                 </td>
                 <td id="emp2">
@@ -552,7 +552,7 @@ db_app::load("estilos.css, grid.style.css");
         var valor_e60Codemp = $F("e60_codemp");
         var valor_ve70Dtabast = $F("ve62_dtmanut");
         if (valor_e60Codemp != "" && valor_ve70Dtabast != "") {
-            js_pesquisae60_codemp(true, 0);
+            js_pesquisae60_codemp(true);
         }
         if (valor_ve70Dtabast == "") {
             alert("Preencher Data da Manutenção");
@@ -926,6 +926,7 @@ db_app::load("estilos.css, grid.style.css");
                 //js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss&filtromanut=1&ve62_dtmanut='+ve62_dtmanut+'', 'Pesquisa', true);
 
                 if (e60_codemp != "") {
+
                     js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho003.php?filtromanut=1&ve62_dtmanut=' + ve62_dtmanut + '&chave_e60_codemp=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|e60_numcgm|', 'Pesquisa', true);
                 } else {
                     if (ve62_dtmanut != "") {
@@ -937,7 +938,6 @@ db_app::load("estilos.css, grid.style.css");
 
                 }
             } else {
-
                 js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho003.php?pesquisa_chave=' + document.form1.ve62_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1&filtromanut=1&ve62_dtmanut=' + ve62_dtmanut + '', 'Pesquisa', false);
             }
         } else if (itememp == 2) {
@@ -948,6 +948,7 @@ db_app::load("estilos.css, grid.style.css");
 
             if (e60_codemp != "") {
                 console.log('l 950');
+                console.log(e60_codemp);
                 js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho003.php?filtromanut=1&todos=1&ve62_dtmanut=' + ve62_dtmanut + '&chave_e60_codemp=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|e60_numcgm|', 'Pesquisa', true);
             } else {
                 if (ve62_dtmanut != "") {

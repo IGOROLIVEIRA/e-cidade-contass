@@ -266,15 +266,15 @@ $todos = !empty($todos) && (int)$todos === 1;
                         }
 
                         $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "$dbwhere and e60_codemp='" . $arr[0] . "'$dbwhere_ano", $filtroempelemento);
-                        //// var_dump("passou aqui 268");
+                         var_dump("passou aqui 268");
                     } elseif (isset($chave_z01_nome) && !empty($chave_z01_nome)) {
-                        //// var_dump("passou aqui 269");
+                         var_dump("passou aqui 269");
                         $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "$dbwhere and z01_nome like '$chave_z01_nome%'", $filtroempelemento);
                     } elseif (isset($chave_z01_cgccpf) && !empty($chave_z01_cgccpf)) {
-                        // var_dump("passou aqui 272");
+                         var_dump("passou aqui 272");
                         $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "$dbwhere and z01_cgccpf like '$chave_z01_cgccpf%'", $filtroempelemento);
                     } elseif (count($_POST) > 0 || $todos) {
-                        // var_dump("passou aqui 272");
+                         var_dump("passou aqui 272");
                         $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "{$dbwhere}", $filtroempelemento);
                     }
                     // var_dump('linha278', $sql);
@@ -310,7 +310,7 @@ $todos = !empty($todos) && (int)$todos === 1;
                             $whereRelCompra .= " AND z01_nome LIKE '%$chave_z01_nome%'";
                         }
 
-                        // var_dump("linha 305");
+                         var_dump("linha 305");
                         $sql = $clempempenho->sql_query(null, $campos, null, $whereRelCompra);
                     }
 
@@ -376,10 +376,10 @@ $todos = !empty($todos) && (int)$todos === 1;
                         $sql = $clempempenho->sql_query_inclusaoempenho(null, $campos, null, $dbwhere);
                         // var_dump("passou aqui");
                     }
-                    // var_dump($sql);
-                    // echo "chegou aqui";
-                    //     echo "<pre>";
-                    //     print_r($HTTP_SERVER_VARS["QUERY_STRING"]);
+                    //  var_dump($sql);
+                    //  echo "chegou aqui";
+                    //  echo "<pre>";
+                    //  print_r($HTTP_SERVER_VARS["QUERY_STRING"]);
 
                     // die();
                     $result = $clempempenho->sql_record($sql);

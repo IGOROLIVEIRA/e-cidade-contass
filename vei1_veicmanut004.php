@@ -285,7 +285,7 @@ if (isset($incluir)) {
      */
 
     if(db_getsession('DB_anousu') > 2015) {
-        var_dump("passou 288");
+
         include("forms/db_frmveicmanutcstitens.php");
     } else {
         include("forms/db_frmveicmanut.php");
