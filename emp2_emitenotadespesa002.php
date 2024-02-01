@@ -195,6 +195,8 @@ if(isset($sOrdens) && $sOrdens != '') {
   $dbwhere .= " and e60_instit = " . db_getsession("DB_instit") . " and e60_anousu = " . $iAnoUso;
 }
 
+$dbwhere .= "and e60_instit = " . db_getsession("DB_instit");
+
 $pdf = new scpdf();
 $pdf->Open();
 $pdf1 = new db_impcarne($pdf, '85');
@@ -217,7 +219,7 @@ if (pg_numrows($result2) > 0) {
 for ($i = 0; $i < $clpagordem->numrows; $i++) {
   db_fieldsmemory($result, $i);
 
-  $dbWhere = " e50_codord = " . $e50_codord;
+  $dbWhere = "e60_instit = ".db_getsession('DB_instit')." and e50_codord = " . $e50_codord;
   if(isset($sMovimentos) && $sMovimentos != ''){
     $dbWhere .= " and e81_codmov in (".$sMovimentos.")";
   }

@@ -85,26 +85,57 @@ o apache
     $cp .env-exemplo .env
 ```
 
-Depois execute o comando para subir o docker do apache
+### Depois execute o comando para subir o docker do apache
 ```bash
-    $docker-compose up -d 
-    $docker exec -it <NOME-ou-ID-CONTAINER> /bin/bash
-    $chmod -R 775 /var/www/html/*
-    $chmod -R 777 /var/www/html/tmp/
-    $cd /var/www/html/
-    $composer install
-    $bin/v3/extension/unpack desktop-package.tar.gz true
-    $bin/v3/extension/install Desktop <NOME-DO-SEU-USUARIO>
+    docker-compose up -d --build
+    docker exec -it <NOME-ou-ID-CONTAINER> /bin/bash
+    chmod -R 775 /var/www/html/*
+    chmod -R 777 /var/www/html/tmp/
+    cd /var/www/html/
+    composer install
+    cd /var/www/html/config/
+    cp preferencias.json.dist preferencias.json
+    cd ..
+    cd /var/www/html/extension/data/extension/
+    cp Desktop.data.dist Desktop.data  
+    cd /var/www/html/extension/modification/data/modification/
+    cp dbportal-v3-desktop.data.dist dbportal-v3-desktop.data
+    bin/v3/extension/install Desktop <NOME-DO-SEU-USUARIO>
 ```
 
-Depois execute o comando para parar o docker do apache
+### Configuração do banco de dados local
+
+Alterar o arquivo db_conn.php que esta na pasta libs. Caso não exista copio db_conn.php.dist 
+```
+    cd libs
+    cp db_conn.php.dist db_conn.php
+```
+Alterar as seguintes variáveis deixando igual ao exemplo.
+
+    $DB_USUARIO   = "ecidade"; // Usuário do PostgreSQL 
+    $DB_SENHA     = "ecidade"; // Senha do usuário do PostgreSQL 
+    $DB_SERVIDOR = "bd"; // 
+    $DB_PORTA = "5432"; //
+    $DB_PORTA_ALT = "5432"; //
+    $DB_BASE      = "ecidade"; // Nome da base de dados
+
+## Todos comandos php devem ser executando dentro do conteiner web
+```
+    docker exec -it <NOMEDOCONTAINER> /bin/bash
+```
+### Depois execute o comando para parar o docker do apache
 ```bash
     $docker-compose down
 ```
 
+### Recuperando backup 
+
+    psql -U ecidade ecidade -h localhost -f NOMEDOARQUIVO.SQL
+
+### Para Acessar
 Acesse no navegador com o portal informada no .env: http://localhost:8888
 
-Obs.: Nesse momento não temos um docker do banco de dados;
+Para acessar o banco de dados no navegador http://localhost:8484
 
 ### Para debugar no PHPSTORM
 

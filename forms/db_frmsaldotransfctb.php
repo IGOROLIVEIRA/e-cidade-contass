@@ -14,7 +14,7 @@ $clsaldotransfctb->rotulo->label();
 			</td>
 			<td>
 		<?
-		db_input('si202_codctb',11,$Isi202_codctb,true,'text',$db_opcao,"")
+		db_input('si202_codctb',14,$Isi202_codctb,true,'text',$db_opcao,"")
 		?>
 			</td>
 		</tr>
@@ -24,7 +24,7 @@ $clsaldotransfctb->rotulo->label();
 			</td>
 			<td>
 		<?
-		db_input('si202_codfontrecursos',3,$Isi202_codfontrecursos,true,'text',$db_opcao,"")
+		db_input('si202_codfontrecursos',14,$Isi202_codfontrecursos,true,'text',$db_opcao,"","","","",7)
 		?>
 			</td>
 		</tr>
