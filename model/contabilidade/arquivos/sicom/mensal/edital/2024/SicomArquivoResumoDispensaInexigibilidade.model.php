@@ -200,7 +200,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                      AND o40_anousu = o41_anousu
                      WHERE db01_coddepto=l20_codepartamento AND db01_anousu=" . db_getsession('DB_anousu') . "
                      LIMIT 1) AS codUnidadeSubResp,
-                                '0' AS codUnidadeSubRespEstadual,
+                                si09_codunidadesubunidade AS codUnidadeSubRespEstadual,
                                 liclicita.l20_anousu AS exercicioProcesso,
                                 liclicita.l20_edital AS nroProcesso,
                                 liclicita.l20_tipoprocesso AS tipoProcesso,

@@ -145,7 +145,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
                         WHEN LENGTH(z01_cgccpf) = 11 THEN 1
                         ELSE 2
                    END AS si195_tipodocumento,
-                   si09_codunidadesubunidade as si195_codunidadesubsicom
+                   infocomplementaresinstit.si09_codunidadesubunidade as si195_codunidadesubsicom
             FROM licobras
             INNER JOIN liclicita ON l20_codigo = obr01_licitacao
             INNER  JOIN acordo on ac16_licitacao = l20_codigo
@@ -158,7 +158,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
                 AND si09_tipoinstit in (50,51,52,53,54,55,56,57,58)
                 AND DATE_PART('YEAR',acordo.ac16_dataassinatura)  = " . db_getsession("DB_anousu") . "
                 AND DATE_PART('MONTH',acordo.ac16_dataassinatura) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-    $rsResult10 = db_query($sql);
+    $rsResult10 = db_query($sql);//echo $sql; db_criatabela($rsResult10);
 
     $aObrasSemContratos = array();
 
@@ -173,7 +173,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
 
         $cllicobras102024->si195_tiporegistro = 10;
         $cllicobras102024->si195_codorgaoresp = $oDados10->si195_codorgaoresp;
-        $cllicobras102024->si195_codunidadesubrespestadual = "";
+        $cllicobras102024->si195_codunidadesubrespestadual = $oDados10->si195_codunidadesubsicom;
         $cllicobras102024->si195_exerciciolicitacao = $oDados10->si195_exerciciolicitacao;
         $cllicobras102024->si195_nroprocessolicitatorio = $oDados10->si195_nroprocessolicitatorio;
         $cllicobras102024->si195_nrolote = $oDados10->si195_nrolote;
@@ -232,7 +232,8 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
                    ac16_tipounidtempoperiodo as si196_undmedidaprazoexecucao,
                    ac16_qtdperiodo as si196_prazoexecucao,
                    ac16_tipoorigem,
-                   si09_codunidadesubunidade as si196_codunidadesubsicom
+                   si09_codunidadesubunidade as si196_codunidadesubsicom,
+                   si09_codunidadesubunidade as si196_codunidadesubrespestadual
             FROM licobras
             INNER JOIN liclicita ON l20_codigo = obr01_licitacao
             LEFT  JOIN acordo on ac16_licitacao = l20_codigo
@@ -253,7 +254,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
 
         $cllicobras202024->si196_tiporegistro = 20;
         $cllicobras202024->si196_codorgaoresp = $oDados20->si195_codorgaoresp;
-        $cllicobras202024->si196_codunidadesubrespestadual = "";
+        $cllicobras202024->si196_codunidadesubrespestadual = $oDados20->si196_codunidadesubrespestadual;
         $cllicobras202024->si196_exerciciolicitacao = $oDados20->si195_exerciciolicitacao;
         $cllicobras202024->si196_nroprocessolicitatorio = $oDados20->si195_nroprocessolicitatorio;
         $cllicobras202024->si196_tipoprocesso = $oDados20->si196_tipoprocesso;
@@ -312,10 +313,10 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
             INNER JOIN cflicita on l20_codtipocom = l03_codigo
             LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
             WHERE l20_naturezaobjeto = 1
-	              AND l03_pctipocompratribunal not in (100,101)
+                  AND ac16_instit = " . db_getsession('DB_instit') . "
 	              AND si09_tipoinstit in (50,51,52,53,54,55,56,57,58)
-                AND DATE_PART('YEAR',licobras.obr01_dtlancamento)= " . db_getsession("DB_anousu") . "
-                AND DATE_PART('MONTH',licobras.obr01_dtlancamento)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                AND DATE_PART('YEAR',acordoposicaoaditamento.ac35_dataassinaturatermoaditivo)= " . db_getsession("DB_anousu") . "
+                AND DATE_PART('MONTH',acordoposicaoaditamento.ac35_dataassinaturatermoaditivo)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $rsResult30 = db_query($sql);
 
     if (pg_num_rows($rsResult30) > 0) {

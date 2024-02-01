@@ -29,7 +29,7 @@ switch ($oParam->exec) {
       $iAnoReferencia = db_getsession('DB_anousu');
       $ano = substr($iAnoReferencia, -2);
       $anoppa = substr($oParam->anoinicioppa, -2);
-      
+
       if (file_exists("PPA{$anoppa}.pdf")) {
         array_map("unlink", glob("PPA{$anoppa}.pdf"));
       }
@@ -1182,12 +1182,15 @@ switch ($oParam->exec) {
 						 AND o40_anousu = o41_anousu
 						 WHERE db01_coddepto=l20_codepartamento
 							 AND db01_anousu = " . db_getsession('DB_anousu') . "
-						 LIMIT 1) AS unidade
+						 LIMIT 1) AS unidade,
+						 si09_tipoinstit,
+						 si09_codunidadesubunidade
 					FROM liclancedital
 					INNER JOIN editaldocumentos ON editaldocumentos.l48_liclicita = liclancedital.l47_liclicita
 					INNER JOIN liclicita ON liclicita.l20_codigo = l47_liclicita
 					INNER JOIN cflicita ON l03_codigo = liclicita.l20_codtipocom
 					INNER JOIN db_config ON db_config.codigo = cflicita.l03_instit
+					INNER JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
 					INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
 					INNER JOIN pctipocompratribunal ON pctipocompratribunal.l44_sequencial = cflicita.l03_pctipocompratribunal
 					WHERE liclancedital.l47_dataenvio = '$dia'
@@ -1232,8 +1235,11 @@ switch ($oParam->exec) {
           }
 
           $aNomeArquivo = explode('.', $oAnexo->nomearquivo);
-
-          $unidade = $oAnexo->unidade != '' ? $oAnexo->unidade : '0';
+          if($oAnexo->si09_tipoinstit == "51"){
+              $unidade = $oAnexo->si09_codunidadesubunidade;
+          }else{
+            $unidade = $oAnexo->unidade != '' ? $oAnexo->unidade : '0';
+          }
           $ext_position = count($aNomeArquivo) - 1;
 
           $novoNome .= "{$iMunicipio}_{$sOrgao}_{$unidade}_{$oAnexo->exercicio}_{$oAnexo->nroprocesso}{$tipoProcesso}.$aNomeArquivo[$ext_position]";

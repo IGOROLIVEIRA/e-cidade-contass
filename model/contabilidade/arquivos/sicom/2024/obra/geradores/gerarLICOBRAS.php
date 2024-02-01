@@ -100,7 +100,7 @@ class gerarLICOBRAS extends GerarAM
                 $aCSVLICOBRAS20['si196_codunidadesubsicom'] = $aLICOBRAS20['si196_codunidadesubsicom'];
                 $aCSVLICOBRAS20['si196_nrocontrato'] = $aLICOBRAS20['si196_nrocontrato'];
                 $aCSVLICOBRAS20['si196_exerciciocontrato'] = $aLICOBRAS20['si196_exerciciocontrato'];
-                $aCSVLICOBRAS20['si196_dataassinatura'] = $aLICOBRAS20['si196_dataassinatura'];
+                $aCSVLICOBRAS20['si196_dataassinatura'] = $this->sicomDate($aLICOBRAS20['si196_dataassinatura']);
                 $aCSVLICOBRAS20['si196_vlcontrato'] = $aLICOBRAS20['si196_vlcontrato'];
                 $aCSVLICOBRAS20['si196_undmedidaprazoexecucao'] = $aLICOBRAS20['si196_undmedidaprazoexecucao'];
                 $aCSVLICOBRAS20['si196_prazoexecucao'] = $aLICOBRAS20['si196_prazoexecucao'];
