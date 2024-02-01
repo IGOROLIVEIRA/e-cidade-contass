@@ -319,17 +319,16 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
         $('ancoralicitacao').observe('click', function() {
 
-            js_OpenJanelaIframe('', 'db_iframe_liclicita', 'func_liclicita.php?funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_numero|l20_edital|l20_objeto|l20_anousu',
+            js_OpenJanelaIframe('', 'db_iframe_liclicita', 'func_liclicita.php?funcao_js=parent.js_buscaLicitacao|l20_codigo|l20_numero|l20_edital|l20_objeto|l20_anousu',
             'Pesquisa Licitações', true);
             $('db_iframe_liclicita').style.zIndex = '10000';
 
         });
         
         $('oTxtLicitacaoCodigo').observe('change', function() {
-        
-            var sOpenWindow = "func_liclicitaoutrosorgaos.php?poo=true&pesquisa_chave="+$F('oTxtLicoutrosorgaosCod')+"&funcao_js=parent.js_mostrarlicoutroorgao";
-            js_OpenJanelaIframe('','db_iframe_liclicitaoutrosorgaos', sOpenWindow, 'Licitação de Outros Órgãos',false);
-            $('db_iframe_liclicitaoutrosorgaos').style.zIndex = '10000';
+                    
+            js_OpenJanelaIframe('', 'db_iframe_liclicita', 'func_liclicita.php?&autoriza=true&pesquisa_chave=' +
+            $F('oTxtLicitacaoCodigo') + '&funcao_js=parent.js_mostraLicitacao','Pesquisa', false);
 
         });
 

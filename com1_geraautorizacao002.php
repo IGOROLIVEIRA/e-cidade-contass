@@ -97,15 +97,18 @@ td.linhagrid {padding: 1px}
   }
 
   function js_mostrarlicoutroorgao(responsavel,tipo,processo,modalidade,ano,erro) {
+
+      if(erro === undefined){
+        $('oTxtLicoutrosorgaosResp').value = "";
+        $('oTxtNumeroLicitacao').value = "";
+        $('oTxtModalidade').value = "";
+        return false;
+      }
+
       $('oTxtLicoutrosorgaosResp').value = responsavel;
       $('oTxtNumeroLicitacao').value = processo+'/'+ano;
       $('oTxtModalidade').value = modalidade;
-
-      if(erro==true){
-          if(erro==true){
-              $('oTxtLicoutrosorgaosResp').focus();
-          }
-      }
+      
   }
 
   function js_buscaadesaoregpreco(codigo,objeto,processo,modalidade,ano) {
@@ -118,15 +121,44 @@ td.linhagrid {padding: 1px}
   }
 
   function js_mostraradesao(objeto,processo,modalidade,ano,erro) {
-      $('oTxtAdesaoRegPrecoObj').value = objeto;
-      $('oTxtNumeroLicitacao').value = processo+'/'+ano;
-      $('oTxtModalidade').value = modalidade;
 
-      if(erro==true){
-          if(erro==true){
-              $('oTxtAdesaoRegPrecoObj').focus();
-          }
-      }
+    if(erro === undefined){
+      $('oTxtAdesaoRegPrecoObj').value = "";
+      $('oTxtNumeroLicitacao').value = "";
+      $('oTxtModalidade').value = "";
+      return false;
+    }
+
+    $('oTxtAdesaoRegPrecoObj').value = objeto;
+    $('oTxtNumeroLicitacao').value = processo+'/'+ano;
+    $('oTxtModalidade').value = modalidade;
+
+  }
+
+  function js_buscaLicitacao(codigolicitacao,numeracao,processolicitatorio,objeto,ano) {
+
+    $('oTxtLicitacaoCodigo').value = codigolicitacao;
+    $('oTxtLicitacaoObjeto').value = objeto;
+    $('oTxtNumeroLicitacao').value = processolicitatorio+'/'+ano;
+    $('oTxtModalidade').value = numeracao;
+
+    db_iframe_liclicita.hide();
+
+  }
+
+  function js_mostraLicitacao(l20_objeto, modalidade, processo, ano, tipcom, tipocomtribunal, erro) {
+
+    if(erro === undefined){
+      $('oTxtLicitacaoObjeto').value = "";
+      $('oTxtModalidade').value = "";
+      $('oTxtNumeroLicitacao').value = "";
+      return false;
+    }
+    
+    $('oTxtLicitacaoObjeto').value = l20_objeto;
+    $('oTxtModalidade').value = modalidade;
+    $('oTxtNumeroLicitacao').value = processo + '/' + ano;
+
   }
 
 </script>
