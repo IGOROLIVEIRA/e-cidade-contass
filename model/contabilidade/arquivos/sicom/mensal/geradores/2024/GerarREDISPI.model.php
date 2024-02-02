@@ -51,7 +51,7 @@ class GerarREDISPI extends GerarAM
                 $aCSVREDISPI10['si183_tiporegistro']                          = $this->padLeftZero($aREDISPI10['si183_tiporegistro'], 2);
                 $aCSVREDISPI10['si183_codorgaoresp']                          = $this->padLeftZero($aREDISPI10['si183_codorgaoresp'], 3);
                 $aCSVREDISPI10['si183_codunidadesubresp']                     = $aREDISPI10['si183_codunidadesubresp'] == "" ? "" : $this->padLeftZero($aREDISPI10['si183_codunidadesubresp'], 5);
-                $aCSVREDISPI10['si183_codunidadesubrespestadual']             = $aREDISPI10['si183_codunidadesubrespestadual'] == "" ? '' : $this->padLeftZero($aREDISPI10['si183_codunidadesubrespestadual'], 4);
+                $aCSVREDISPI10['si183_codunidadesubrespestadual']             = trim($aREDISPI10['si183_codunidadesubrespestadual'] == "" ? '' : $this->padLeftZero($aREDISPI10['si183_codunidadesubrespestadual'], 4));
                 $aCSVREDISPI10['si183_exercicioprocesso']                     = $this->padLeftZero($aREDISPI10['si183_exercicioprocesso'], 4);
                 $aCSVREDISPI10['si183_nroprocesso']                           = $aREDISPI10['si183_nroprocesso'];
                 $aCSVREDISPI10['si183_tipoprocesso']                          = substr($aREDISPI10['si183_tipoprocesso'], 0, 12);

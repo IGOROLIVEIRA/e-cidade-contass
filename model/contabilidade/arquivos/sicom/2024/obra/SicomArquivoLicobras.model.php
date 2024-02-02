@@ -299,7 +299,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
                          when ac26_acordoposicaotipo = 2 then 5
                          when ac26_acordoposicaotipo = 7 then 6
                          when ac26_acordoposicaotipo = 6 then 7
-                         else ac26_acordoposicaotipo end as si203_tipotermoaditivo
+                         else ac26_acordoposicaotipo end as si203_tipotermoaditivo,
                    ac35_descricaoalteracao as si203_dscalteracao,
                    ac26_data as si203_novadatatermino,
                    CASE
@@ -345,7 +345,12 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
         $cllicobras302024->si203_tipoalteracaovalor = $iTipoAlteracaoValor;
         $cllicobras302024->si203_tipotermoaditivo = $oDados30->si203_tipotermoaditivo;
         $cllicobras302024->si203_dscalteracao = $this->removeCaracteres($oDados30->si203_dscalteracao);
-        $cllicobras302024->si203_novadatatermino = $oDados30->si203_novadatatermino;
+        $tiposTermos = array("4","5","6","8","9","10","11","12");
+        if(in_array($oDados30->si203_tipotermoaditivo,$tiposTermos)){
+            $cllicobras302024->si203_novadatatermino = '';
+        }else{
+            $cllicobras302024->si203_novadatatermino = $oDados30->si203_novadatatermino;
+        }
         $cllicobras302024->si203_tipodetalhamento = $oDados30->si203_tipodetalhamento;
         $cllicobras302024->si203_valoraditivo = abs($oDados30->si203_valoraditivo);
         $cllicobras302024->si203_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
