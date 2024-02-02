@@ -253,7 +253,7 @@ class ContratoPNCP extends ModeloBasePNCP
             'Tipo-Documento-Id: 12'
         );
 
-        $optionspncp = $this->getParancurl('POST',$arquivo,$headers,false,false);
+        $optionspncp = $this->getParancurl('POST',$arquivo,$headers,false,true);
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
