@@ -286,6 +286,19 @@ class cl_regraencerramentonaturezaorcamentaria {
          return false;
        }
      }
+     if(trim($this->c117_contareferencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c117_contareferencia"])){
+      $sql  .= $virgula." c117_contareferencia = '$this->c117_contareferencia' ";
+      $virgula = ",";
+      if(trim($this->c117_contareferencia) == null ){
+        $this->erro_sql = " Campo Conta Referencia não informado.";
+        $this->erro_campo = "c117_contareferencia";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      $sql .= " where ";
      if($c117_sequencial!=null){
        $sql .= " c117_sequencial = $this->c117_sequencial";
