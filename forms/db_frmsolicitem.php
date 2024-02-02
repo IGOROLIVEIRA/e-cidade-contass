@@ -1424,7 +1424,8 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
                 background-color: #6699CC;
                 width:50%;
                 height: 80px;
-                position: fixed;
+                position: absolute;
+                bottom: 5%;
                 text-align: start;
                 padding-left: 15px;
                 display: content;
