@@ -179,6 +179,11 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
 }
 ?>
 
+<div id="hoverBox">
+  <p><strong>Descricao Material: </strong></p>
+  <p id="hoverText" class="descricao"></p>
+</div>
+<div style="clear: both;"></div>
 <form name="form1" method="post" action="" onsubmit=" return js_validarFormulario(); ">
   <center>
     <table border="0" height="100%">
@@ -823,7 +828,13 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
   echo "<script>document.form1.pc16_codmater_ant.value = document.form1.pc16_codmater.value;</script>";
   ?>
 </form>
+<!-- <div style="clear: both;"></div> -->
 <script>
+  const hoverBox = document.getElementById('hoverBox');
+  hoverBox.style.cssText = `
+       display: none;
+    `;
+
   /**
    * Codigo do material informado, pesquisa quantidade restante do item da estimativa
    */
@@ -1401,6 +1412,34 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
 
     return true;
   }
+
+  function js_toggleBoxDescrMaterial() {
+    const inputDescrMaterial = document.getElementById('pc01_descrmater');
+    console.log('chegou aqui')
+
+    inputDescrMaterial.addEventListener("mouseover", (event) => {
+        if (event.target.value != "") {
+            const hoverText = document.getElementById('hoverText');
+            hoverText.textContent = document.getElementById('pc01_descrmater').value;
+            hoverBox.style.cssText = `
+                background-color: #6699CC;
+                width:50%;
+                height: 80px;
+                position: fixed;
+                text-align: start;
+                padding-left: 15px;
+                display: content;
+            `;
+        }
+        
+        setTimeout(()=>{
+          hoverBox.style.cssText = `display: none;`;
+            console.log('executou');
+          }, 3000);
+    });
+  }
+
+  js_toggleBoxDescrMaterial();
 
   js_verificaServico();
 </script>
