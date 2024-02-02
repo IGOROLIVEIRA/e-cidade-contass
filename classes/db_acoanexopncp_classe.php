@@ -3,7 +3,7 @@
 //CLASSE DA ENTIDADE acoanexopncp
 class cl_acoanexopncp
 {
-  // cria variaveis de erro 
+  // cria variaveis de erro
   var $rotulo     = null;
   var $query_sql  = null;
   var $numrows    = 0;
@@ -13,7 +13,7 @@ class cl_acoanexopncp
   var $erro_msg   = null;
   var $erro_campo = null;
   var $pagina_retorno = null;
-  // cria variaveis do arquivo 
+  // cria variaveis do arquivo
   var $ac214_sequencial = 0;
   var $ac214_acordo = 0;
   var $ac214_usuario = 0;
@@ -27,27 +27,27 @@ class cl_acoanexopncp
   var $ac214_ano = 0;
   var $ac214_sequencialpncp = 0;
   var $ac214_sequencialarquivo = 0;
-  // cria propriedade com as variaveis do arquivo 
+  // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 ac214_sequencial = int8 = Sequencial Anexos 
-                 ac214_acordo = int8 = Código do Acordo 
-                 ac214_usuario = int8 = Código do Usuário 
-                 ac214_dtlancamento = date = Data Lançamento 
-                 ac214_numerocontrolepncp = varchar(250) = Número de Controle Anexo PNCP 
-                 ac214_tipoanexo = varchar(30) = Tipo de Anexo 
-                 ac214_instit = int8 = Tipo de Instituição 
-                 ac214_ano = int8 = Ano Empenho PNCP 
-                 ac214_sequencialpncp = int8 = Sequencial PNCP 
-                 ac214_sequencialarquivo = int8 = Sequencial Anexos PNCP 
+                 ac214_sequencial = int8 = Sequencial Anexos
+                 ac214_acordo = int8 = Código do Acordo
+                 ac214_usuario = int8 = Código do Usuário
+                 ac214_dtlancamento = date = Data Lançamento
+                 ac214_numerocontrolepncp = varchar(250) = Número de Controle Anexo PNCP
+                 ac214_tipoanexo = varchar(30) = Tipo de Anexo
+                 ac214_instit = int8 = Tipo de Instituição
+                 ac214_ano = int8 = Ano Empenho PNCP
+                 ac214_sequencialpncp = int8 = Sequencial PNCP
+                 ac214_sequencialarquivo = int8 = Sequencial Anexos PNCP
                  ";
-  //funcao construtor da classe 
+  //funcao construtor da classe
   function cl_acoanexopncp()
   {
     //classes dos rotulos dos campos
     $this->rotulo = new rotulo("acoanexopncp");
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  //funcao erro 
+  //funcao erro
   function erro($mostra, $retorna)
   {
     if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
@@ -179,29 +179,29 @@ class cl_acoanexopncp
       $this->ac214_sequencial = pg_result($result, 0, 0);
     }
     $sql = "insert into acoanexopncp(
-                                       ac214_sequencial 
-                                      ,ac214_acordo 
-                                      ,ac214_usuario 
-                                      ,ac214_dtlancamento 
-                                      ,ac214_numerocontrolepncp 
-                                      ,ac214_tipoanexo 
-                                      ,ac214_instit 
-                                      ,ac214_ano 
-                                      ,ac214_sequencialpncp 
-                                      ,ac214_sequencialarquivo 
+                                       ac214_sequencial
+                                      ,ac214_acordo
+                                      ,ac214_usuario
+                                      ,ac214_dtlancamento
+                                      ,ac214_numerocontrolepncp
+                                      ,ac214_tipoanexo
+                                      ,ac214_instit
+                                      ,ac214_ano
+                                      ,ac214_sequencialpncp
+                                      ,ac214_sequencialarquivo
                        )
                 values (
-                                $this->ac214_sequencial 
-                               ,$this->ac214_acordo 
-                               ,$this->ac214_usuario 
-                               ," . ($this->ac214_dtlancamento == "null" || $this->ac214_dtlancamento == "" ? "null" : "'" . $this->ac214_dtlancamento . "'") . " 
-                               ,'$this->ac214_numerocontrolepncp' 
-                               ,'$this->ac214_tipoanexo' 
-                               ,$this->ac214_instit 
-                               ,$this->ac214_ano 
-                               ,$this->ac214_sequencialpncp 
-                               ,$this->ac214_sequencialarquivo 
-                     
+                                $this->ac214_sequencial
+                               ,$this->ac214_acordo
+                               ,$this->ac214_usuario
+                               ," . ($this->ac214_dtlancamento == "null" || $this->ac214_dtlancamento == "" ? "null" : "'" . $this->ac214_dtlancamento . "'") . "
+                               ,'$this->ac214_numerocontrolepncp'
+                               ,'$this->ac214_tipoanexo'
+                               ,$this->ac214_instit
+                               ,$this->ac214_ano
+                               ,$this->ac214_sequencialpncp
+                               ,$this->ac214_sequencialarquivo
+
                                )";
 
     $result = db_query($sql);
@@ -425,7 +425,7 @@ class cl_acoanexopncp
       }
     }
   }
-  // funcao para exclusao 
+  // funcao para exclusao
   function excluir($oid = null)
   {
     $this->atualizacampos(true);
@@ -460,7 +460,7 @@ class cl_acoanexopncp
       }
     }
   }
-  // funcao do recordset 
+  // funcao do recordset
   function sql_record($sql)
   {
     $result = @pg_query($sql);
@@ -484,7 +484,7 @@ class cl_acoanexopncp
     }
     return $result;
   }
-  // funcao do sql 
+  // funcao do sql
   function sql_query($oid = null, $campos = "acoanexopncp.oid,*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
@@ -519,7 +519,7 @@ class cl_acoanexopncp
     }
     return $sql;
   }
-  // funcao do sql 
+  // funcao do sql
   function sql_query_file($oid = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";

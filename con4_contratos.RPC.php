@@ -726,7 +726,7 @@ switch ($oParam->exec) {
                     $dataFinal = $dataFinal->createFromTimestamp($timestampDatafinal);
                     $oParam->contrato->dtTermino = $dataFinal;
                 }
-                
+
                 $oContrato->setDataPublicacao($oParam->contrato->dtPublicacao);
                 $oContrato->setDataInicial($oParam->contrato->dtInicio);
                 $oContrato->setDataFinal($oParam->contrato->dtTermino);
@@ -1838,7 +1838,7 @@ switch ($oParam->exec) {
                 $nomearquivo = $oRetorno->nomearquivo;
                 $rsApiPNCP = $clContratoPNCP->enviarArquivoContrato($dadospncp, $sNomeArquivo, $Documentos);
 
-                if ($rsApiPNCP[1] == 201) {
+                if ($rsApiPNCP[1] == "201") {
 
                     $codigocontrato = explode('x-content-type-options', $rsApiPNCP[0]);
                     $codigocontrato = preg_replace('#\s+#', '', $codigocontrato);
@@ -1857,6 +1857,11 @@ switch ($oParam->exec) {
                     $clacoanexopncp->ac214_sequencialpncp = $codigocontrato[9];
                     $clacoanexopncp->ac214_sequencialarquivo = $codigocontrato[11];
                     $clacoanexopncp->incluir();
+
+                    if($clacoanexopncp->erro_status == 0){
+                        $erro = $clacoanexopncp->erro_msg;
+                        $sqlerro = true;
+                    }
 
                     $oRetorno->status  = 1;
                 } else {
