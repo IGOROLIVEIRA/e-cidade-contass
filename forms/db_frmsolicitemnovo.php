@@ -48,6 +48,11 @@ if ((isset($opcao) && $opcao == "alterar")) {
     color: black;
   }
 </style>
+<div id="hoverBox">
+  <p><strong>Descricao Material: </strong></p>
+  <p id="hoverText" class="descricao"></p>
+</div>
+<div style="clear: both;"></div>
 <div>
   <form style="margin-top: 20px;" name="form1" method="post" action="" enctype="multipart/form-data">
 
@@ -1219,4 +1224,32 @@ if ((isset($opcao) && $opcao == "alterar")) {
   document.getElementById('pc17_unid').value = "1";
   document.getElementById('pc17_unid2').value = "1";
   document.getElementById('eleSub').value = "0";
+
+  function js_toggleBoxDescrMaterial() {
+    const inputDescrMaterial = document.getElementById('pc01_descrmater');
+    console.log('chegou aqui')
+
+    inputDescrMaterial.addEventListener("mouseover", (event) => {
+        if (event.target.value != "") {
+            const hoverText = document.getElementById('hoverText');
+            hoverText.textContent = document.getElementById('pc01_descrmater').value;
+            hoverBox.style.cssText = `
+                background-color: #6699CC;
+                width:50%;
+                height: 80px;
+                position: fixed;
+                text-align: start;
+                padding-left: 15px;
+                display: content;
+            `;
+        }
+
+        setTimeout(()=>{
+          hoverBox.style.cssText = `display: none;`;
+            console.log('executou');
+          }, 3000);
+    });
+  }
+
+  js_toggleBoxDescrMaterial();
 </script>
