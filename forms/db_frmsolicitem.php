@@ -1071,9 +1071,10 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
   }
 
   function js_preencheqtd(valor) {
-    console.log('js_prenencheqtd : ' + valor);
+
     document.form1.quant_rest.value = valor;
   }
+
   if (document.form1.pc11_vlrun.value != "") {
     x = document.form1.pc11_vlrun.value;
     if (x.indexOf(".") == -1 && x.indexOf(",") == -1) {
@@ -1286,8 +1287,6 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
         document.form1.pc11_quant.style.backgroundColor = "#FFFFFF";
       }
       if ($F('pc11_servicoquantidade') == "false") {
-        //document.form1.pc11_quant.value="1";
-        console.log('[1] quant_rest');
         document.form1.quant_rest.value = "1";
       }
 
@@ -1415,7 +1414,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
 
   function js_toggleBoxDescrMaterial() {
     const inputDescrMaterial = document.getElementById('pc01_descrmater');
-    console.log('chegou aqui')
+
 
     inputDescrMaterial.addEventListener("mouseover", (event) => {
         if (event.target.value != "") {
@@ -1431,10 +1430,9 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
                 display: content;
             `;
         }
-        
+
         setTimeout(()=>{
           hoverBox.style.cssText = `display: none;`;
-            console.log('executou');
           }, 3000);
     });
   }

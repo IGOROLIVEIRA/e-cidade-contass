@@ -461,6 +461,10 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
 
 <script>
+  const hoverBox = document.getElementById('hoverBox');
+  hoverBox.style.cssText = `
+       display: none;
+  `;
   function importar() {
     if (document.getElementById('importaritens').value == "2") {
       document.getElementById('inputimportacao').style.display = '';
@@ -1227,7 +1231,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   function js_toggleBoxDescrMaterial() {
     const inputDescrMaterial = document.getElementById('pc01_descrmater');
-    console.log('chegou aqui')
 
     inputDescrMaterial.addEventListener("mouseover", (event) => {
         if (event.target.value != "") {
@@ -1246,7 +1249,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
         setTimeout(()=>{
           hoverBox.style.cssText = `display: none;`;
-            console.log('executou');
           }, 3000);
     });
   }
