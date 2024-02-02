@@ -377,7 +377,8 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 						   orcdotacao.o58_funcao AS codFuncao,
 						   orcdotacao.o58_subfuncao AS codSubFuncao,
 						   CASE WHEN db150_grupobempublico <> 99 THEN db150_subgrupobempublico ELSE '9900' END AS codBemPublico,
-						   obrasdadoscomplementareslote.db150_planilhatce
+						   obrasdadoscomplementareslote.db150_planilhatce,
+						   si09_codunidadesubunidade AS codUnidadeSubRespEstadual
                         FROM liclicita
                         INNER JOIN liclicitem ON (liclicita.l20_codigo=liclicitem.l21_codliclicita)
                         INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
@@ -495,7 +496,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 						 WHERE db01_coddepto=l20_codepartamento
 							 AND db01_anousu = " . db_getsession('DB_anousu') . "
 						 LIMIT 1) AS codUnidadeSubResp,
-						   '' AS codUnidadeSubRespEstadual,
+						   si09_codunidadesubunidade AS codUnidadeSubRespEstadual,
 						   liclicita.l20_anousu AS exercicioProcesso,
 						   liclicita.l20_edital AS nroProcesso,
 						   obrasdadoscomplementareslote.db150_codobra AS codObraLocal,

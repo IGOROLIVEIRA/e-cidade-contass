@@ -1193,11 +1193,9 @@ switch ($oParam->exec) {
 					INNER JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
 					INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
 					INNER JOIN pctipocompratribunal ON pctipocompratribunal.l44_sequencial = cflicita.l03_pctipocompratribunal
-					WHERE liclancedital.l47_dataenvio = '$dia'
-				";
+					WHERE liclancedital.l47_dataenvio = '$dia' and liclicita.l20_instit = ".db_getsession("DB_instit");
 
         $rsAnexos = db_query($sql);
-
         $aListaAnexos = " ";
 
         if (!pg_num_rows($rsAnexos)) {

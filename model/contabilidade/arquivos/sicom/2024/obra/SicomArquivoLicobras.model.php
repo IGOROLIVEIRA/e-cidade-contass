@@ -154,6 +154,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
             INNER JOIN cflicita on l20_codtipocom = l03_codigo
             LEFT  JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
             WHERE l20_naturezaobjeto = 1
+                AND l20_instit = " . db_getsession('DB_instit') . "
 	            AND l03_pctipocompratribunal not in (100,101,102,103)
                 AND si09_tipoinstit in (50,51,52,53,54,55,56,57,58)
                 AND DATE_PART('YEAR',acordo.ac16_dataassinatura)  = " . db_getsession("DB_anousu") . "
@@ -241,6 +242,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
             INNER JOIN cflicita on l20_codtipocom = l03_codigo
             LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
             WHERE l20_naturezaobjeto = 1
+                  AND l20_instit = " . db_getsession('DB_instit') . "
 	              AND l03_pctipocompratribunal in (100,101,102,103)
 	              AND si09_tipoinstit in (50,51,52,53,54,55,56,57,58)
                 AND DATE_PART('YEAR',licobras.obr01_dtlancamento)= " . db_getsession("DB_anousu") . "
@@ -290,11 +292,14 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
     $sql = "SELECT 30 AS si203_sequencial,
                    infocomplementaresinstit.si09_codorgaotce AS si203_codorgaoresp,
                    obr01_numeroobra AS si203_codobra,
-                   db_config.db21_codigomunicipoestado as si203_codunidadesubrespestadual,
                    ac26_numeroaditamento as si203_nroseqtermoaditivo,
                    ac35_dataassinaturatermoaditivo as si203_dataassinaturatermoaditivo,
                    ac26_acordoposicaotipo as si203_tipoalteracaovalor,
-                   ac26_acordoposicaotipo as si203_tipotermoaditivo,
+                   case when ac26_acordoposicaotipo = 5 then 4
+                         when ac26_acordoposicaotipo = 2 then 5
+                         when ac26_acordoposicaotipo = 7 then 6
+                         when ac26_acordoposicaotipo = 6 then 7
+                         else ac26_acordoposicaotipo end as si203_tipotermoaditivo
                    ac35_descricaoalteracao as si203_dscalteracao,
                    ac26_data as si203_novadatatermino,
                    CASE
