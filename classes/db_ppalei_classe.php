@@ -549,5 +549,12 @@ class cl_ppalei {
      }
      return $sql;
   }
+
+    public function sql_ppaleiIP($codigoPespectiva): string
+    {
+        return "SELECT ppalei.* FROM ppalei
+                 JOIN ppaversao ON o119_ppalei = o01_sequencial
+                 WHERE o119_sequencial = {$codigoPespectiva}";
+    }
 }
 ?>
