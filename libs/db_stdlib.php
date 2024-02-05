@@ -1491,6 +1491,12 @@ function db_redireciona($url = "0")
     exit;
 }
 
+
+function db_gettipoinstit($instit){
+    $sqltipo = db_query("select si09_tipoinstit from infocomplementaresinstit where si09_instit = " . $instit);
+    return db_utils::fieldsMemory($sqltipo, 0)->si09_tipoinstit;
+}
+
 //retorna uma variável de sessðo
 /*
  function db_getsession($var) {
@@ -1653,7 +1659,7 @@ function db_indexOf($str, $proc)
  *                                    </pre>
  * @return mixed                      HTML com a estrutura do datagrid
  */
-function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_self", $campos_layer = "", $NomeForm = "NoMe", $variaveis_repassa = array (), $automatico = true, $totalizacao = array(), $marcar = false) 
+function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_self", $campos_layer = "", $NomeForm = "NoMe", $variaveis_repassa = array (), $automatico = true, $totalizacao = array(), $marcar = false)
 {
     global $BrowSe;
     //cor do cabecalho
