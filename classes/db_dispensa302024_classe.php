@@ -35,7 +35,7 @@ class cl_dispensa302024 {
                 var si203_sequencial = int = Sequencial;
                 var si203_tiporegistro = int = Tipo Registro;
                 var si203_codorgaoresp = int = Cod Orgao Resp;
-                var si203_codunidadesubresp = int = Cod Unidade Sub Resp;
+                var si203_codunidadesubresp = varchar (8) = Cod Unidade Sub Resp;
                 var si203_exercicioprocesso = int = Exercicio Processo;
                 var si203_nroprocesso = varchar(16) = Nro Processo;
                 var si203_tipoprocesso = int = Tipo Processo;
@@ -226,7 +226,7 @@ class cl_dispensa302024 {
                                 $this->si203_sequencial
                                ,$this->si203_tiporegistro
                                ,$this->si203_codorgaoresp
-                               ,$this->si203_codunidadesubresp
+                               ,'$this->si203_codunidadesubresp'
                                ,$this->si203_exercicioprocesso
                                ,'$this->si203_nroprocesso'
                                ,$this->si203_tipoprocesso

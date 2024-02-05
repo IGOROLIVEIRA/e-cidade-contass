@@ -9,14 +9,14 @@ class Oc21725 extends AbstractMigration
     {
         $sSql = "BEGIN;
 
-        ALTER TABLE dispensa102024 ADD COLUMN si74_codunidadesubedital int;
+        ALTER TABLE dispensa102024 ADD COLUMN si74_codunidadesubedital varchar(8);
         ALTER TABLE dispensa102024 ADD COLUMN si74_tipocriterio int;
 
         CREATE TABLE public.dispensa302024 (
             si203_sequencial int8 NOT NULL,
             si203_tiporegistro int4 NOT NULL,
             si203_codorgaoresp int4 NOT NULL,
-            si203_codunidadesubresp int4 NOT NULL,
+            si203_codunidadesubresp varchar(8) NOT NULL,
             si203_exercicioprocesso int4 NOT NULL,
             si203_nroprocesso varchar(16) NOT NULL,
             si203_tipoprocesso int4 NOT NULL,
@@ -34,7 +34,7 @@ class Oc21725 extends AbstractMigration
             si204_sequencial int8 NOT NULL,
             si204_tiporegistro int4 NOT NULL,
             si204_codorgaoresp int4 NOT NULL,
-            si204_codunidadesubresp int4 NOT NULL,
+            si204_codunidadesubresp varchar(8) NOT NULL,
             si204_exercicioprocesso int4 NOT NULL,
             si204_nroprocesso varchar(16) NOT NULL,
             si204_tipoprocesso int4 NOT NULL,

@@ -269,7 +269,7 @@ class cl_dispensa102024
                                ,$this->si74_mes
                                ,$this->si74_instit
                                ,$this->si74_leidalicitacao
-                               ,$this->si74_codunidadesubedital
+                               ,'$this->si74_codunidadesubedital'
                                ," . ($this->si74_tipocriterio == "null" || $this->si74_tipocriterio == "" ? "null" : "'" . $this->si74_tipocriterio . "'") . "
                       )";
 
