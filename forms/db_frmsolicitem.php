@@ -52,6 +52,7 @@ if (isset($pc16_codmater)) {
   $pcmateranterior = $pc16_codmater;
 }
 
+
 if ((isset($opcao) && $opcao == "alterar")) {
   echo "<script>var operador = 1;</script>";
 } else {
@@ -178,12 +179,27 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
   }
 }
 ?>
+<style type="text/css">
+    .hoverBox {
+        background-color: #6699CC;
+        width:50%;
+        height: 130px;
+        position: absolute;
+        bottom: 50%;
+        text-align: start;
+        padding-left: 15px;
+        display: content;
+    }
+    .hoverBoxDisabled {
+        display: none;
+    }
+</style>
 
-<div id="hoverBox">
+<div id="hoverBox" class="hoverBox hoverBoxDisabled">
   <p><strong>Descricao Material: </strong></p>
-  <p id="hoverText" class="descricao"></p>
+  <p id="hoverText" class="descricao" style="max-width: 100%;"></p>
 </div>
-<div style="clear: both;"></div>
+
 <form name="form1" method="post" action="" onsubmit=" return js_validarFormulario(); ">
   <center>
     <table border="0" height="100%">
@@ -316,12 +332,12 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           ?>
         </td>
         <td colspan="7">
+           <input type="hidden" id="complmater" name="complmater" value="teste">
           <?
-
           if (!isset($pc11_quant) || (isset($pc11_quant) && $pc11_quant == "")) {
             $pc11_quant = 1;
           }
-          db_input('pc01_descrmater', 65, $Ipc01_descrmater, true, 'text', 3, '');
+          db_input('pc01_descrmater', 65, $Ipc01_descrmater, true, 'text', 3, 'onmouseover = js_inlineMouseHover()');
           $result_unidade = array();
           $desabilita_qtd = array();
           if (isset($verificado)) {
@@ -548,6 +564,11 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
         ?>
 
       </tr>
+      <tr style="display: none;">
+        <td>
+            <?php db_input("pc01_complmater", 10, "", false, "", 3); ?>
+        </td>
+      </tr>
       <tr style="display:none;" id="subEl">
         <td nowrap title="<?= @$To56_descr ?>">
           <strong>Sub. ele:</strong>
@@ -651,6 +672,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
       </tr>
       <tr>
         <td valign="top" align="center" width="100%">
+
           <?
           $codigos = "";
           if ($pc30_ultdotac == "t") {
@@ -828,12 +850,8 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
   echo "<script>document.form1.pc16_codmater_ant.value = document.form1.pc16_codmater.value;</script>";
   ?>
 </form>
-<!-- <div style="clear: both;"></div> -->
 <script>
-  const hoverBox = document.getElementById('hoverBox');
-  hoverBox.style.cssText = `
-       display: none;
-    `;
+
 
   /**
    * Codigo do material informado, pesquisa quantidade restante do item da estimativa
@@ -891,10 +909,13 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
       js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicitem',
         'db_iframe_pcmater',
         '<?= $sUrlLookup ?>?funcao_js=CurrentWindow.corpo.iframe_solicitem.js_mostrapcmater1' +
-        '|pc01_codmater|pc01_descrmater|o56_codele|pc01_veiculo<?= $sFiltro ?><?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>' +
+        '|pc01_codmater|pc01_descrmater|o56_codele|pc01_veiculo|pc01_complmater<?= $sFiltro ?><?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>' +
         '&iRegistroPreco=<?= $iRegistroPreco; ?>',
         'Pesquisa de Materiais',
         true, '0');
+        console.log('<?= $sUrlLookup ?>?funcao_js=CurrentWindow.corpo.iframe_solicitem.js_mostrapcmater1' +
+        '|pc01_codmater|pc01_descrmater|o56_codele|pc01_veiculo<?= $sFiltro ?><?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>' +
+        '&iRegistroPreco=<?= $iRegistroPreco; ?>');
     } else {
       if (document.form1.pc16_codmater.value != '') {
         js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicitem',
@@ -982,17 +1003,22 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     }
   }
 
-  function js_mostrapcmater1(chave1, chave2, codele, lVeic, iRegistro) {
+  function js_mostrapcmater1(chave1, chave2, codele, lVeic, pc01_complmater, iRegistro) {
 
     js_esconteVeic(lVeic);
+
+    document.form1.pc01_complmater.value = pc01_complmater;
+
 
     if (iRegistro != null) {
       document.getElementById('codigoitemregistropreco').value = iRegistro;
     }
+
     document.form1.iCodigoRegistro.value = iRegistro;
     document.form1.pc16_codmater.value = chave1;
     document.form1.pc01_descrmater.value = chave2;
     document.form1.o56_codelefunc.value = codele;
+
     db_iframe_pcmater.hide();
     obj = document.createElement('input');
     obj.setAttribute('name', 'codigomaterial');
@@ -1019,7 +1045,6 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     } else {
       js_materanterior();
     }
-
 
   }
 
@@ -1412,35 +1437,23 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     return true;
   }
 
-  function js_toggleBoxDescrMaterial() {
-    const inputDescrMaterial = document.getElementById('pc01_descrmater');
+  function js_inlineMouseHover() {
+    let descricao = document.getElementById('pc01_descrmater').value;
+    let complemento = document.getElementById('pc01_complmater').value;
 
+    if (value != "") {
+        document.getElementById('hoverBox').classList.remove('hoverBoxDisabled');
+        document.getElementById('hoverText').textContent = descricao + " " + complemento;
+    }
 
-    inputDescrMaterial.addEventListener("mouseover", (event) => {
-        if (event.target.value != "") {
-            const hoverText = document.getElementById('hoverText');
-            hoverText.textContent = document.getElementById('pc01_descrmater').value;
-            hoverBox.style.cssText = `
-                background-color: #6699CC;
-                width:50%;
-                height: 80px;
-                position: absolute;
-                bottom: 5%;
-                text-align: start;
-                padding-left: 15px;
-                display: content;
-            `;
-        }
+    setTimeout(()=>{
+        document.getElementById('hoverBox').classList.add('hoverBoxDisabled');
+    }, 3000);
 
-        setTimeout(()=>{
-          hoverBox.style.cssText = `display: none;`;
-          }, 3000);
-    });
   }
 
-  js_toggleBoxDescrMaterial();
-
   js_verificaServico();
+
 </script>
 
 <?php

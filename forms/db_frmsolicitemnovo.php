@@ -47,12 +47,25 @@ if ((isset($opcao) && $opcao == "alterar")) {
   input::placeholder {
     color: black;
   }
+
+  .hoverBox {
+        background-color: #6699CC;
+        width:50%;
+        height: 130px;
+        position: absolute;
+        bottom: 50%;
+        text-align: start;
+        padding-left: 15px;
+        display: content;
+    }
+    .hoverBoxDisabled {
+        display: none;
+    }
 </style>
-<div id="hoverBox">
+<div id="hoverBox" class="hoverBox hoverBoxDisabled">
   <p><strong>Descricao Material: </strong></p>
-  <p id="hoverText" class="descricao"></p>
+  <p id="hoverText" class="descricao" style="max-width: 100%;"></p>
 </div>
-<div style="clear: both;"></div>
 <div>
   <form style="margin-top: 20px;" name="form1" method="post" action="" enctype="multipart/form-data">
 
@@ -92,6 +105,11 @@ if ((isset($opcao) && $opcao == "alterar")) {
     <fieldset style="width: 1000px;">
       <legend><strong>Adicionar Item</strong></legend>
       <table border="0">
+      <tr style="display: none;">
+        <td>
+            <?php db_input("pc01_complmater", 10, "", false, "", 3); ?>
+        </td>
+      </tr>
         <tr>
           <td nowrap title="<?= @$Tpc16_codmater ?>">
             <?
@@ -196,7 +214,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
           <td>
             <?
-            db_input('pc01_descrmater', 45, $Ipc01_descrmater, true, 'text', $db_opcao, "style='width: 100%;' onchange='js_pesquisa_desdobramento();'");
+            db_input('pc01_descrmater', 45, $Ipc01_descrmater, true, 'text', $db_opcao, "style='width: 100%;'onchange='js_pesquisa_desdobramento(); onmouseover = js_inlineMouseHover()'");
             ?>
           </td>
 
@@ -456,6 +474,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
     db_input('db_botao', 5, 0, true, 'hidden', 3);
 
     ?>
+
   </form>
 </div>
 
@@ -1229,30 +1248,18 @@ if ((isset($opcao) && $opcao == "alterar")) {
   document.getElementById('pc17_unid2').value = "1";
   document.getElementById('eleSub').value = "0";
 
-  function js_toggleBoxDescrMaterial() {
-    const inputDescrMaterial = document.getElementById('pc01_descrmater');
+  function js_inlineMouseHover() {
+    let descricao = document.getElementById('pc01_descrmater').value;
+    let complemento = document.getElementById('pc01_complmater').value;
 
-    inputDescrMaterial.addEventListener("mouseover", (event) => {
-        if (event.target.value != "") {
-            const hoverText = document.getElementById('hoverText');
-            hoverText.textContent = document.getElementById('pc01_descrmater').value;
-            hoverBox.style.cssText = `
-                background-color: #6699CC;
-                width:50%;
-                height: 80px;
-                position: absolute;
-                bottom: 5%;
-                text-align: start;
-                padding-left: 15px;
-                display: content;
-            `;
-        }
+    if (value != "") {
+        document.getElementById('hoverBox').classList.remove('hoverBoxDisabled');
+        document.getElementById('hoverText').textContent = descricao + " " + complemento;
+    }
 
-        setTimeout(()=>{
-          hoverBox.style.cssText = `display: none;`;
-          }, 3000);
-    });
+    setTimeout(()=>{
+        document.getElementById('hoverBox').classList.add('hoverBoxDisabled');
+    }, 3000);
+
   }
-
-  js_toggleBoxDescrMaterial();
 </script>
