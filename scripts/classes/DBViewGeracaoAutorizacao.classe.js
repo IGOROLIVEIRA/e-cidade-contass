@@ -132,6 +132,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
     me.oCaractPeculiarDesc.setReadOnly(true);
     me.oAdesaoRegPrecoObj.setReadOnly(true);
+    me.oLicitacaoObjeto.setReadOnly(true);
     me.oLicoutrosorgaosResp.setReadOnly(true);
 
     this.show = function() {
@@ -238,6 +239,23 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
          */
         $('btnItens').observe('click', function() {
 
+            if($('oTxtTipoCompra').value == 0){
+                alert("Informe o tipo de compra.");
+                return false;
+            }
+
+            if($('tradesao').style.display == "" && $('oTxtAdesaoRegPrecoCod').value == ""){
+                return alert("Informe a Adesão");
+            }
+
+            if($('trlicitacao').style.display == "" && $('oTxtLicitacaoCodigo').value == ""){
+                return alert("Informe a Licitação");
+            }
+
+            if($('trlicoutrosorgaos').style.display == "" && $('oTxtLicoutrosorgaosCod').value == ""){
+                return alert("Informe a Licitação de Outros Órgãos");
+            }
+
             if ($F('oTxtCaractPeculiarCod') == "") {
 
                 alert("Informe a característica peculiar.");
@@ -281,14 +299,58 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
         $('ancoralicoutrosorgaos').observe('click', function() {
 
-            var sOpenWindow = "func_liclicitaoutrosorgaos.php?funcao_js=parent.js_buscalicoutrosorgaos|lic211_sequencial|z01_nome|lic211_processo|lic211_numero|lic211_anousu";
+            let codigoTipoCompraTribunal = $('oTxtTipoCompra').value;
+            let tipolicitacaooutrosorgaos;
+
+            /* Verificando o tipo da licitação com base no código do tribunal*/
+            switch(codigoTipoCompraTribunal) {
+                case "19":
+                    tipolicitacaooutrosorgaos = 5;
+                    break;
+                case "20":
+                    tipolicitacaooutrosorgaos = 6;
+                    break;
+                case "21":
+                    tipolicitacaooutrosorgaos = 7;
+                    break;
+                case "22":
+                    tipolicitacaooutrosorgaos = 8;
+                    break;                
+                case "18":
+                    tipolicitacaooutrosorgaos = 9;
+                    break;
+            }
+
+            var sOpenWindow = "func_liclicitaoutrosorgaos.php?tipolicitacaooutrosorgaos=" + tipolicitacaooutrosorgaos + "&funcao_js=parent.js_buscalicoutrosorgaos|lic211_sequencial|z01_nome|lic211_processo|lic211_numero|lic211_anousu";
             js_OpenJanelaIframe('','db_iframe_liclicitaoutrosorgaos', sOpenWindow,'Licitação de Outros Órgãos',true);
             $('db_iframe_liclicitaoutrosorgaos').style.zIndex = '10000';
         });
 
         $('oTxtLicoutrosorgaosCod').observe('change', function() {
 
-            var sOpenWindow = "func_liclicitaoutrosorgaos.php?poo=true&pesquisa_chave="+$F('oTxtLicoutrosorgaosCod')+"&funcao_js=parent.js_mostrarlicoutroorgao";
+            let codigoTipoCompraTribunal = $('oTxtTipoCompra').value;
+            let tipolicitacaooutrosorgaos;
+
+            /* Verificando o tipo da licitação com base no código do tribunal*/
+            switch(codigoTipoCompraTribunal) {
+                case "19":
+                    tipolicitacaooutrosorgaos = 5;
+                    break;
+                case "20":
+                    tipolicitacaooutrosorgaos = 6;
+                    break;
+                case "21":
+                    tipolicitacaooutrosorgaos = 7;
+                    break;
+                case "22":
+                    tipolicitacaooutrosorgaos = 8;
+                    break;                
+                case "18":
+                    tipolicitacaooutrosorgaos = 9;
+                    break;
+            }
+
+            var sOpenWindow = "func_liclicitaoutrosorgaos.php?tipolicitacaooutrosorgaos=" + tipolicitacaooutrosorgaos + "&poo=true&pesquisa_chave="+$F('oTxtLicoutrosorgaosCod')+"&funcao_js=parent.js_mostrarlicoutroorgao";
             js_OpenJanelaIframe('','db_iframe_liclicitaoutrosorgaos', sOpenWindow, 'Licitação de Outros Órgãos',false);
             $('db_iframe_liclicitaoutrosorgaos').style.zIndex = '10000';
         });
@@ -299,7 +361,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
         $('ancoraadesao').observe('click', function() {
 
-            var sOpenWindow = "func_adesaoregprecos.php?funcao_js=parent.js_buscaadesaoregpreco|si06_sequencial|si06_objetoadesao|si06_numeroprc|si06_numlicitacao|si06_anoproc";
+            var sOpenWindow = "func_adesaoregprecos.php?funcao_js=parent.js_buscaadesaoregpreco|si06_sequencial|si06_objetoadesao|si06_numeroprc|si06_numeroadm|si06_anomodadm";
             js_OpenJanelaIframe('','db_iframe_adesaoregpreco', sOpenWindow,'Adesão de Registro de Preço',true);
             $('db_iframe_adesaoregpreco').style.zIndex = '10000';
         });
@@ -318,16 +380,16 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
 
         $('ancoralicitacao').observe('click', function() {
-
-            js_OpenJanelaIframe('', 'db_iframe_liclicita', 'func_liclicita.php?funcao_js=parent.js_buscaLicitacao|l20_codigo|l20_numero|l20_edital|l20_objeto|l20_anousu',
+            let codigoTipoCompraTribunal = $('oTxtTipoCompra').value;
+            js_OpenJanelaIframe('', 'db_iframe_liclicita', 'func_liclicita.php?codigotipocompratribunal=' + codigoTipoCompraTribunal + '&funcao_js=parent.js_buscaLicitacao|l20_codigo|l20_numero|l20_edital|l20_objeto|l20_anousu',
             'Pesquisa Licitações', true);
             $('db_iframe_liclicita').style.zIndex = '10000';
 
         });
         
         $('oTxtLicitacaoCodigo').observe('change', function() {
-                    
-            js_OpenJanelaIframe('', 'db_iframe_liclicita', 'func_liclicita.php?&autoriza=true&pesquisa_chave=' +
+            let codigoTipoCompraTribunal = $('oTxtTipoCompra').value;        
+            js_OpenJanelaIframe('', 'db_iframe_liclicita', 'func_liclicita.php?codigotipocompratribunal=' + codigoTipoCompraTribunal + '&autoriza=true&pesquisa_chave=' +
             $F('oTxtLicitacaoCodigo') + '&funcao_js=parent.js_mostraLicitacao','Pesquisa', false);
 
         });
@@ -362,17 +424,24 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
     this.preencheCampos = function(oAjax) {
         var oRetorno = eval("("+oAjax.responseText+")");
 
-        $('oTxtTipoCompra').value = oRetorno.tipocompra;
-        $('oTxtNumeroLicitacao').value = oRetorno.numerolicitacao;
-        $('oTxtModalidade').value = oRetorno.numeromodalidade;
-
         if(oRetorno.vinculo == ""){
             $('oTxtTipoCompra').value = "0";
             $('oTxtNumeroLicitacao').disabled = true;
             $('oTxtModalidade').disabled = true;
             $('oTxtNumeroLicitacao').style.backgroundColor = 'DEB887';
             $('oTxtModalidade').style.backgroundColor = 'DEB887';
+            return;
         }
+
+        $('oTxtTipoCompra').value = oRetorno.tipocompra;
+        $('oTxtNumeroLicitacao').value = oRetorno.numerolicitacao;
+        $('oTxtModalidade').value = oRetorno.numeromodalidade;
+        $('oTxtNumeroLicitacao').disabled = true;
+        $('oTxtModalidade').disabled = true;
+        $('oTxtTipoCompra').disabled = true;
+        $('oTxtNumeroLicitacao').style.backgroundColor = 'DEB887';
+        $('oTxtModalidade').style.backgroundColor = 'DEB887';
+        $('oTxtTipoCompra').style.backgroundColor = 'DEB887';
 
     }
 
@@ -941,7 +1010,8 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
         let aCodTribunalLicOutrosOrgaos = ["105","106","107","108","109"];
         let aCodTribunalLicitacao = ["51","48","50","101","54","102","103","49","53","52","110","100"];
-        let aCodTribunalAdesao = "104";
+        let codTribunalAdesao = "104";
+        let codTribunalDireta = "13";
         let codigoTipoCompraTribunal = oRetorno.tipocompratribunal;
 
         if(aCodTribunalLicOutrosOrgaos.includes(codigoTipoCompraTribunal)){
@@ -950,7 +1020,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
             document.getElementById('trlicitacao').style.display = 'none';
         }
 
-        if(codigoTipoCompraTribunal == aCodTribunalAdesao){
+        if(codigoTipoCompraTribunal == codTribunalAdesao){
             document.getElementById('tradesao').style.display = '';
             document.getElementById('trlicoutrosorgaos').style.display = 'none';
             document.getElementById('trlicitacao').style.display = 'none';
@@ -962,28 +1032,20 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
             document.getElementById('tradesao').style.display = 'none';
         }
 
-        /*if(oRetorno.tipocompratribunal == 105){
-            document.getElementById('trlicoutrosorgaos').style.display = '';
-            document.getElementById('tradesao').style.display = 'none';
-        }else if(oRetorno.tipocompratribunal == 106){
-            document.getElementById('trlicoutrosorgaos').style.display = '';
-            document.getElementById('tradesao').style.display = 'none';
-        }else if(oRetorno.tipocompratribunal == 107){
-            document.getElementById('trlicoutrosorgaos').style.display = '';
-            document.getElementById('tradesao').style.display = 'none';
-        }else if(oRetorno.tipocompratribunal == 108){
-            document.getElementById('trlicoutrosorgaos').style.display = '';
-            document.getElementById('tradesao').style.display = 'none';
-        }else if(oRetorno.tipocompratribunal == 109){
-            document.getElementById('trlicoutrosorgaos').style.display = '';
-            document.getElementById('tradesao').style.display = 'none';
-        }else if(oRetorno.tipocompratribunal == 104){
-            document.getElementById('tradesao').style.display = '';
-            document.getElementById('trlicoutrosorgaos').style.display = 'none';
-        }else{
+        if(codigoTipoCompraTribunal == codTribunalDireta){
+            document.getElementById('trlicitacao').style.display = 'none';
             document.getElementById('trlicoutrosorgaos').style.display = 'none';
             document.getElementById('tradesao').style.display = 'none';
-        }*/
+        }
+
+        $('oTxtNumeroLicitacao').value = "";
+        $('oTxtModalidade').value = "";
+        $('oTxtAdesaoRegPrecoObj').value = "";
+        $('oTxtAdesaoRegPrecoCod').value = "";
+        $('oTxtLicitacaoCodigo').value = "";
+        $('oTxtLicitacaoObjeto').value = "";
+        $('oTxtLicoutrosorgaosCod').value = "";
+        $('oTxtLicoutrosorgaosResp').value = "";
 
     }
     /**

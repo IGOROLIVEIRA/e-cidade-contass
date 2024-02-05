@@ -36,7 +36,7 @@ require_once("dbforms/db_funcoes.php");
             ?>
           </td>
         </tr>
-        <tr>
+        <tr style="display:none;">
           <td>
             <?php
               db_ancora("<b>Solicitação:</b>", "js_pesquisaSolicitacao(true);", 1);

@@ -1112,34 +1112,9 @@ class ProcessoCompras
             $oAutorizacao->setModalidade($oDados->iModalidade);
             $oAutorizacao->setOutrasCondicoes($oDados->sOutrasCondicoes);
             $oAutorizacao->setCondicaoPagamento($oDados->condicaopagamento);
-            $oAutorizacao->setSTipoautorizacao($this->getTipoAutorizacao());
-            /*if ($oDadosRegistroPreco[0]->l20_usaregistropreco == 't') {
-                --$oAutorizacao->setNumeroLicitacao($oDadosRegistroPreco[0]->l20_edital . '/' . $oDadosRegistroPreco[0]->l20_anousu);
-                --$oAutorizacao->setModalidade($oDadosRegistroPreco[0]->l20_numero);
-                --$oAutorizacao->setTipoCompra($oDadosRegistroPreco[0]->tipocompra);
-                --$oAutorizacao->setCodigoLicitacao($oDadosRegistroPreco[0]->sequenciallicitacao);
-                $oAutorizacao->setSTipoorigem(2);
-                --$oAutorizacao->setSTipoautorizacao(3);
-            } else if ($oDados->oAdesaoRegPrecoCod != null || $oDados->oAdesaoRegPrecoCod != "") {
-                --$oAutorizacao->setNumeroLicitacao($oDadosAdesao[0]->si06_numeroprc . '/' . $oDadosAdesao[0]->si06_anoproc);
-                --$oAutorizacao->setModalidade($oDadosAdesao[0]->si06_numlicitacao);
-                --$oAutorizacao->setTipoCompra($oDados->tipocompra);
-                $oAutorizacao->setSTipoorigem(2);
-                --$oAutorizacao->setSTipoautorizacao(4);
-            } else if ($oDados->oLicoutrosorgaosCod != null || $oDados->oLicoutrosorgaosCod != "") {
-                --$oAutorizacao->setNumeroLicitacao($oDadosLicOutrosOrgaos[0]->lic211_processo . '/' . $oDadosLicOutrosOrgaos[0]->lic211_anousu);
-                --$oAutorizacao->setModalidade($oDadosLicOutrosOrgaos[0]->lic211_numero);
-                --$oAutorizacao->setTipoCompra($oDados->tipocompra);
-                $oAutorizacao->setSTipoorigem(2);
-                --$oAutorizacao->setSTipoautorizacao(2);
-            } else {
-                --$oAutorizacao->setNumeroLicitacao($oDados->iNumeroLicitacao);
-                --$oAutorizacao->setModalidade($oDados->iModalidade);
-                --$oAutorizacao->setOutrasCondicoes($oDados->sOutrasCondicoes);
-                --$oAutorizacao->setCondicaoPagamento($oDados->condicaopagamento);
-                $oAutorizacao->setSTipoorigem(1);
-                --$oAutorizacao->setSTipoautorizacao(1);
-            }*/
+            $oAutorizacao->setSTipoautorizacao($this->getTipoAutorizacao($oDados->tipocompra));
+            $oAutorizacao->setSTipoorigem($this->getTipoOrigemAutorizacao($oDados->tipocompra));
+
             $oAutorizacao->salvar();
 
             $sProcessoAdministrativo = null;
@@ -1487,9 +1462,9 @@ class ProcessoCompras
     /**
     * @return int retorna o tipo da autorização
     */
-    public function getTipoAutorizacao(){
+    public function getTipoAutorizacao($tipoCompra){
 
-        $rsTipoCompraTribunal = db_query("select pc50_pctipocompratribunal from pctipocompra where pc50_codcom = " . $this->getCodigo());
+        $rsTipoCompraTribunal = db_query("select pc50_pctipocompratribunal from pctipocompra where pc50_codcom = " . $tipoCompra);
         $tipoCompraTribunal = db_utils::fieldsMemory($rsTipoCompraTribunal, 0)->pc50_pctipocompratribunal;
         
         $aCodTribunalLicOutrosOrgaos = ["105","106","107","108","109"];
@@ -1518,13 +1493,14 @@ class ProcessoCompras
     /**
     * @return int retorna o tipo de origem
     */
-    public function getTipoOrigem(){
+    public function getTipoOrigemAutorizacao($tipoCompra){
 
-        $rsTipoCompraTribunal = db_query("select pc50_pctipocompratribunal from pctipocompra where pc50_codcom = " . $this->getCodigo());
+        $rsTipoCompraTribunal = db_query("select pc50_pctipocompratribunal from pctipocompra where pc50_codcom = " . $tipoCompra);
         $tipoCompraTribunal = db_utils::fieldsMemory($rsTipoCompraTribunal, 0)->pc50_pctipocompratribunal;
         
         $aCodTribunalLicOutrosOrgaos = ["105","106","107","108","109"];
-        $aCodTribunalLicitacao = ["51","48","50","101","54","102","103","49","53","52","110","100"];
+        $aCodTribunalLicitacao = ["51","48","50","54","49","53","52","110"];
+        $aCodTribunalDispensaInexibilidade = ["103","102","101","100"];
         $codTribunalAdesao = "104";
         $codTribunalDireta = "13";
                      
@@ -1536,12 +1512,20 @@ class ProcessoCompras
             return 2;
         } 
                
-        if (in_array($tipoCompraTribunal, $aCodTribunalLicOutrosOrgaos)){
+        if (in_array($tipoCompraTribunal, $aCodTribunalDispensaInexibilidade)){
             return 3;
         } 
                 
         if ($tipoCompraTribunal == $codTribunalAdesao){
             return 4;
+        } 
+
+        if (in_array($tipoCompraTribunal, $aCodTribunalLicOutrosOrgaos)){
+            if($tipoCompraTribunal == "105") return 5;
+            if($tipoCompraTribunal == "106") return 6;
+            if($tipoCompraTribunal == "107") return 7;
+            if($tipoCompraTribunal == "108") return 8;
+            if($tipoCompraTribunal == "109") return 9;
         } 
         
     }

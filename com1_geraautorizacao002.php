@@ -100,6 +100,7 @@ td.linhagrid {padding: 1px}
 
       if(erro === undefined){
         $('oTxtLicoutrosorgaosResp').value = "";
+        $('oTxtLicoutrosorgaosCod').value = "";
         $('oTxtNumeroLicitacao').value = "";
         $('oTxtModalidade').value = "";
         return false;
@@ -124,6 +125,7 @@ td.linhagrid {padding: 1px}
 
     if(erro === undefined){
       $('oTxtAdesaoRegPrecoObj').value = "";
+      $('oTxtAdesaoRegPrecoCod').value = "";
       $('oTxtNumeroLicitacao').value = "";
       $('oTxtModalidade').value = "";
       return false;
@@ -150,6 +152,7 @@ td.linhagrid {padding: 1px}
 
     if(erro === undefined){
       $('oTxtLicitacaoObjeto').value = "";
+      $('oTxtLicitacaoCodigo').value = "";
       $('oTxtModalidade').value = "";
       $('oTxtNumeroLicitacao').value = "";
       return false;
