@@ -10,7 +10,10 @@
   "tx_cancelado_sucesso" : "Cancelamento transferência dos créditos efetuado com sucesso.",
   "confirma_exclui_regra" : "Confirma exclusão da regra?",
   "excluido_sucesso" : "Exclusão efetuada com sucesso.",
+  "alterado_sucesso" : "Alteração efetuada com sucesso.",
   "salvo_sucesso" : "Regra salva com sucesso.",
   "confirmar_processamento" : "Confirmar [sEncerramento]?",
-  "confirmar_cancelamento" : "Confirmar cancelamento de [sEncerramento]?"
+  "confirmar_cancelamento" : "Confirmar cancelamento de [sEncerramento]?",
+  "confirma_excluir_regras_selecionadas" : "Confirma exclusão das regras selecionadas?",
+  "confirma_alterar_regra" : "Confirma alteração da regra?"
 }

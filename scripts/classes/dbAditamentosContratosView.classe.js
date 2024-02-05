@@ -502,7 +502,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         $('trdopercentual').style.display = 'none';
         $('trdoindice').style.display = 'none';
         $('trcriterioreajuste').style.display = 'none';
-        
+
     }
 
     this.pesquisarDadosAcordo = function () {
@@ -700,7 +700,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
          */
          me.oTxtDescricaoReajuste = new DBTextField('oTxtDescricaoReajuste', me.sInstance + '.oTxtDescricaoReajuste', '', 63);
          me.oTxtDescricaoReajuste.show($('ctnDescricaoReajuste'));
-        
+
         /**
          * Critério de Reajuste
          */
@@ -1238,7 +1238,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             indicereajuste: me.oIndiceReajuste.getValue(),
             descricaoindice:  me.oTxtDescricaoIndice.getValue().replace('"',""),
             descricaoreajuste:  me.oTxtDescricaoReajuste.getValue().replace('"',""),
-            criterioreajuste:  me.oCboCriterioReajuste.getValue(),  
+            criterioreajuste:  me.oCboCriterioReajuste.getValue(),
             justificativa: $('oTxtJustificativa').getValue(),
             tipoaditamento: me.iTipoAditamento,
             sNumeroAditamento: me.oTxtNumeroAditamento.getValue(),

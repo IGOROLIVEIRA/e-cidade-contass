@@ -112,9 +112,6 @@ db_app::load("scripts.js,
 <body bgcolor=#CCCCCC bgcolor="#CCCCCC"  >
 
 <center>
-<form name="form1" method="post" action="con2_razaocontas002.php" >
-
-
 <fieldset style="margin-top: 50px; width: 580px; text-align: left;">
 <legend>Relatório de Razão por Contas</legend>
 <table style="text-align: left" border='0'>
@@ -220,8 +217,6 @@ db_app::load("scripts.js,
   <input type="button" id="emite" value="Emitir" onClick="js_imprimir()">
 </div>
 
-</form>
-
 </center>
 
 
@@ -284,8 +279,11 @@ js_criarLancadorContas();
 
 function js_imprimir() {
 
-  var data1 = document.form1.data1_ano.value+"-"+document.form1.data1_mes.value+"-"+document.form1.data1_dia.value;
-  var data2 = document.form1.data2_ano.value+"-"+document.form1.data2_mes.value+"-"+document.form1.data2_dia.value;
+  var partesData1 = $F("data1").split("/");
+  var partesData2 = $F("data2").split("/");
+ 
+  var data1 = partesData1[2]+"-"+partesData1[1]+"-"+partesData1[0];
+  var data2 = partesData2[2]+"-"+partesData2[1]+"-"+partesData2[0];
 
   var aContas     = oLancadorContas.getRegistros();
   var aDocumentos = oLancadorDocumentos.getRegistros();
