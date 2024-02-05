@@ -183,7 +183,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     .hoverBox {
         background-color: #6699CC;
         width:50%;
-        height: 130px;
+        height: 150px;
         position: absolute;
         bottom: 50%;
         text-align: start;
@@ -337,7 +337,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           if (!isset($pc11_quant) || (isset($pc11_quant) && $pc11_quant == "")) {
             $pc11_quant = 1;
           }
-          db_input('pc01_descrmater', 65, $Ipc01_descrmater, true, 'text', 3, 'onmouseover = js_inlineMouseHover()');
+          db_input('pc01_descrmater', 65, $Ipc01_descrmater, true, 'text', 3, 'onmouseover = js_inlineMouseHover(this.value)');
           $result_unidade = array();
           $desabilita_qtd = array();
           if (isset($verificado)) {
@@ -913,9 +913,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
         '&iRegistroPreco=<?= $iRegistroPreco; ?>',
         'Pesquisa de Materiais',
         true, '0');
-        console.log('<?= $sUrlLookup ?>?funcao_js=CurrentWindow.corpo.iframe_solicitem.js_mostrapcmater1' +
-        '|pc01_codmater|pc01_descrmater|o56_codele|pc01_veiculo<?= $sFiltro ?><?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>' +
-        '&iRegistroPreco=<?= $iRegistroPreco; ?>');
+
     } else {
       if (document.form1.pc16_codmater.value != '') {
         js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicitem',
@@ -1437,7 +1435,8 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     return true;
   }
 
-  function js_inlineMouseHover() {
+  function js_inlineMouseHover(value) {
+
     let descricao = document.getElementById('pc01_descrmater').value;
     let complemento = document.getElementById('pc01_complmater').value;
 

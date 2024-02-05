@@ -51,7 +51,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
   .hoverBox {
         background-color: #6699CC;
         width:50%;
-        height: 130px;
+        height: 150px;
         position: absolute;
         bottom: 50%;
         text-align: start;
@@ -214,7 +214,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
           <td>
             <?
-            db_input('pc01_descrmater', 45, $Ipc01_descrmater, true, 'text', $db_opcao, "style='width: 100%;'onchange='js_pesquisa_desdobramento(); onmouseover = js_inlineMouseHover()'");
+            db_input('pc01_descrmater', 45, $Ipc01_descrmater, true, 'text', $db_opcao, "style='width: 100%;'onchange='js_pesquisa_desdobramento();' onmouseover = 'js_inlineMouseHover(this.value);'");
             ?>
           </td>
 
@@ -480,10 +480,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
 
 <script>
-  const hoverBox = document.getElementById('hoverBox');
-  hoverBox.style.cssText = `
-       display: none;
-  `;
+
   function importar() {
     if (document.getElementById('importaritens').value == "2") {
       document.getElementById('inputimportacao').style.display = '';
@@ -836,7 +833,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
       js_OpenJanelaIframe('',
         'db_iframe_pcmater',
         '<?= $sUrlLookup ?>?funcao_js=parent.js_mostrapcmater1' +
-        '|pc01_codmater|pc01_descrmater|o56_codele|pc01_servico<?= $sFiltro ?><?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>' +
+        '|pc01_codmater|pc01_descrmater|o56_codele|pc01_servico|pc01_complmater<?= $sFiltro ?><?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>' +
         '&iRegistroPreco=<?= $iRegistroPreco; ?>',
         'Pesquisa de Materiais',
         true);
@@ -953,11 +950,12 @@ if ((isset($opcao) && $opcao == "alterar")) {
     }
   }
 
-  function js_mostrapcmater1(chave1, chave2, codele, servico, iRegistro) {
+  function js_mostrapcmater1(chave1, chave2, codele, servico, pc01_complmater, iRegistro) {
 
 
     document.form1.pc16_codmater.value = chave1;
     document.form1.pc01_descrmater.value = chave2;
+    document.form1.pc01_complmater.value = pc01_complmater;
 
     db_iframe_pcmater.hide();
 
@@ -1248,7 +1246,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
   document.getElementById('pc17_unid2').value = "1";
   document.getElementById('eleSub').value = "0";
 
-  function js_inlineMouseHover() {
+  function js_inlineMouseHover(value) {
+
     let descricao = document.getElementById('pc01_descrmater').value;
     let complemento = document.getElementById('pc01_complmater').value;
 
