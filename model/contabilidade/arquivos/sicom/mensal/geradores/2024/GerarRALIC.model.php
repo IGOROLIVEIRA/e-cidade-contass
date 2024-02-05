@@ -115,7 +115,7 @@ class GerarRALIC extends GerarAM
               $aCSVRALIC12['si182_tiporegistro']                = $this->padLeftZero($aRALIC12['si182_tiporegistro'], 2);
               $aCSVRALIC12['si182_codorgaoresp']                = $this->padLeftZero($aRALIC12['si182_codorgaoresp'], 3);
               $aCSVRALIC12['si182_codunidadesubresp']           = $aRALIC12['si182_codunidadesubresp'] == "" ? "" : $this->padLeftZero($aRALIC12['si182_codunidadesubresp'], 5);
-              $aCSVRALIC12['si182_codunidadesubrespestadual']   = $aRALIC12['si182_codunidadesubrespestadual'] == "" ? "" : $this->padLeftZero(intval($aRALIC12['si182_codunidadesubrespestadual']), 4);
+              $aCSVRALIC12['si182_codunidadesubrespestadual']   = $aRALIC12['si182_codunidadesubrespestadual'] == "" ? "" : trim($aRALIC12['si182_codunidadesubrespestadual']);
               $aCSVRALIC12['si182_exercicioprocesso']           = $this->padLeftZero($aRALIC12['si182_exercicioprocesso'], 4);
               $aCSVRALIC12['si182_nroprocessolicitatorio']      = $aRALIC12['si182_nroprocessolicitatorio'];
               $aCSVRALIC12['si182_codobralocal']                = $aRALIC12['si182_codobralocal'];
