@@ -3573,7 +3573,7 @@ class cl_liclicita
     public function sql_query_pncp($l20_codigo = null)
     {
         $sql  = "
-       CASE
+       SELECT DISTINCT CASE
             WHEN l03_pctipocompratribunal IN (110,51,53,52,50,102) THEN 1
             WHEN l03_pctipocompratribunal = 101 THEN 2
             WHEN l03_pctipocompratribunal = 100 THEN 3
