@@ -1209,22 +1209,15 @@ class cl_liclicita
         if (trim($this->l20_tipoprocesso != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_tipoprocesso"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
             $sql .= $virgula . " l20_tipoprocesso = '$this->l20_tipoprocesso' ";
             $virgula = ",";
-        }
-
-        if ($this->l20_tipoprocesso == null) {
-            $this->l20_tipoprocesso = 'null';
-            $sql .= $virgula . " l20_tipoprocesso = $this->l20_tipoprocesso ";
-            $virgula = ",";
-        }
-
-        if ($this->l20_tipoprocesso == "0") {
-            $this->erro_sql = " Campo Tipo de processo não foi informado.";
-            $this->erro_campo = "l20_tipoprocesso";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
+            if ($this->l20_tipoprocesso == "0") {
+                $this->erro_sql = " Campo Tipo de processo não foi informado.";
+                $this->erro_campo = "l20_tipoprocesso";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
         }
 
         if (trim($this->l20_veicdivulgacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_veicdivulgacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
@@ -1456,10 +1449,7 @@ class cl_liclicita
             }
         }
 
-        if (trim($this->l20_dataencproposta) == null || trim($this->l20_dataencproposta) == "") {
-            $sql .= $virgula . " l20_dataencproposta =null ";
-            $virgula = ",";
-        } else {
+        if (trim($this->l20_dataencproposta) != null || trim($this->l20_dataencproposta) != "") {
             $sql .= $virgula . " l20_dataencproposta = '$this->l20_dataencproposta' ";
             $virgula = ",";
         }
