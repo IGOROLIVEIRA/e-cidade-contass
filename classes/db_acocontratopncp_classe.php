@@ -3,7 +3,7 @@
 //CLASSE DA ENTIDADE acocontratopncp
 class cl_acocontratopncp
 {
-    // cria variaveis de erro 
+    // cria variaveis de erro
     public $rotulo     = null;
     public $query_sql  = null;
     public $numrows    = 0;
@@ -16,7 +16,7 @@ class cl_acocontratopncp
     public $erro_msg   = null;
     public $erro_campo = null;
     public $pagina_retorno = null;
-    // cria variaveis do arquivo 
+    // cria variaveis do arquivo
     public $ac213_sequencial = 0;
     public $ac213_contrato = 0;
     public $ac213_dtlancamento_dia = null;
@@ -29,20 +29,20 @@ class cl_acocontratopncp
     public $ac213_instit = 0;
     public $ac213_ano = 0;
     public $ac213_sequencialpncp = 0;
-    // cria propriedade com as variaveis do arquivo 
+    // cria propriedade com as variaveis do arquivo
     public $campos = "
-                 ac213_sequencial = int8 = ac213_sequencial 
+                 ac213_sequencial = int8 = ac213_sequencial
                  ac213_contrato= int8 = ac213_contrato
                  ac213_usuario = int8 = ac213_usuario
-                 ac213_dtlancamento = date = ac213_dtlancamento 
-                 ac213_numerocontrolepncp = text = numero de controle do portal pncp 
+                 ac213_dtlancamento = date = ac213_dtlancamento
+                 ac213_numerocontrolepncp = text = numero de controle do portal pncp
                  ac213_situacao = int8 = situacao da licitacao pncp
-                 ac213_instit = int8 = ac213_instit 
-                 ac213_ano =  int8 = ac213_ano 
-                 ac213_sequencialpncp = int8 = ac213_sequencialpncp 
+                 ac213_instit = int8 = ac213_instit
+                 ac213_ano =  int8 = ac213_ano
+                 ac213_sequencialpncp = int8 = ac213_sequencialpncp
                  ";
 
-    //funcao construtor da classe 
+    //funcao construtor da classe
     function __construct()
     {
         //classes dos rotulos dos campos
@@ -50,7 +50,7 @@ class cl_acocontratopncp
         $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
     }
 
-    //funcao erro 
+    //funcao erro
     function erro($mostra, $retorna)
     {
         if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
@@ -197,28 +197,28 @@ class cl_acocontratopncp
         }
 
         $sql = "insert into acocontratopncp(
-                                       ac213_sequencial 
+                                       ac213_sequencial
                                       ,ac213_contrato
-                                      ,ac213_usuario 
-                                      ,ac213_dtlancamento 
+                                      ,ac213_usuario
+                                      ,ac213_dtlancamento
                                       ,ac213_numerocontrolepncp
-                                      ,ac213_situacao 
-                                      ,ac213_instit 
+                                      ,ac213_situacao
+                                      ,ac213_instit
                                       ,ac213_ano
                                       ,ac213_sequencialpncp
-     
+
                        )
                 values (
-                                $this->ac213_sequencial 
+                                $this->ac213_sequencial
                                ,$this->ac213_contrato
-                               ,$this->ac213_usuario 
-                               ," . ($this->ac213_dtlancamento == "null" || $this->ac213_dtlancamento == "" ? "null" : "'" . $this->ac213_dtlancamento . "'") . " 
+                               ,$this->ac213_usuario
+                               ," . ($this->ac213_dtlancamento == "null" || $this->ac213_dtlancamento == "" ? "null" : "'" . $this->ac213_dtlancamento . "'") . "
                                ,'$this->ac213_numerocontrolepncp'
                                ,$this->ac213_situacao
                                ,$this->ac213_instit
-                               ,$this->ac213_ano 
-                               ,$this->ac213_sequencialpncp 
-      
+                               ,$this->ac213_ano
+                               ,$this->ac213_sequencialpncp
+
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -407,7 +407,7 @@ class cl_acocontratopncp
         }
     }
 
-    // funcao para exclusao 
+    // funcao para exclusao
     function excluir($ac213_sequencial = null, $dbwhere = null)
     {
 
@@ -449,7 +449,7 @@ class cl_acocontratopncp
         }
     }
 
-    // funcao do recordset 
+    // funcao do recordset
     function sql_record($sql)
     {
         $result = db_query($sql);
@@ -474,7 +474,7 @@ class cl_acocontratopncp
         return $result;
     }
 
-    // funcao do sql 
+    // funcao do sql
     function sql_query($ac213_sequencial = null, $campos = "acocontratopncp.ac213_sequencial,*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
@@ -511,7 +511,7 @@ class cl_acocontratopncp
         return $sql;
     }
 
-    // funcao do sql 
+    // funcao do sql
     function sql_query_file($ac213_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";

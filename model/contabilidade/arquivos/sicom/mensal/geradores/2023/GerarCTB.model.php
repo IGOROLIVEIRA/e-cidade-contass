@@ -17,7 +17,7 @@ class GerarCTB extends GerarAM
      */
     public $iMes;
 
-    public function gerarDados()
+    public function gerarDados($bEncerramento)
     {
 
         $this->sArquivo = "CTB";
@@ -25,11 +25,33 @@ class GerarCTB extends GerarAM
 
         $sSql = "select * from ctb102023 where si95_mes = " . $this->iMes . " and si95_instit = " . db_getsession("DB_instit");
         $rsCTB10 = db_query($sSql);
-
         $sSql2 = "select * from ctb202023 where si96_mes = " . $this->iMes . " and si96_instit = " . db_getsession("DB_instit");
+        if ($bEncerramento) {
+            $sSql2 = "  select distinct si96_sequencial,si96_tiporegistro,
+                            case when si96_codorgao is null then si96_codorgao
+                                    else ( select si96_codorgao from ctb202023
+                                            where si96_mes = " . $this->iMes . " and si96_instit = " . db_getsession("DB_instit") . "
+                                            and si96_codorgao is not null limit 1
+                                        ) 
+                                    end as si96_codorgao,
+                                    si96_codctb, si96_codfontrecursos,
+                            case when si96_saldocec is null then si96_saldocec
+                                    else ( select si96_saldocec from ctb202023
+                                            where si96_mes = " . $this->iMes . " and si96_instit = " . db_getsession("DB_instit") . "
+                                            and si96_saldocec is not null limit 1
+                                        ) 
+                                    end as si96_saldocec,       
+                                si96_vlsaldoinicialfonte,
+                                si96_vlsaldofinalfonte
+                                from ctb202023 where si96_mes = " . $this->iMes . " and si96_instit = " . db_getsession("DB_instit") ." 
+                                order by 4,5,2,1";
+        }                    
         $rsCTB20 = db_query($sSql2);
 
         $sSql3 = "select * from ctb212023 where si97_mes = " . $this->iMes . " and si97_instit = " . db_getsession("DB_instit");
+        if ($bEncerramento) {
+            $sSql3 = "select * from ctb212023 where si97_mes = " . $this->iMes . " and si97_instit = " . db_getsession("DB_instit")." order by 3,4,5,6,7";
+        }
         $rsCTB21 = db_query($sSql3);
 
         $sSql4 = "select * from ctb222023 where si98_mes = " . $this->iMes . " and si98_instit = " . db_getsession("DB_instit");
@@ -87,84 +109,119 @@ class GerarCTB extends GerarAM
              *
              * Registros 20
              */
+            $sHashReg20 = 0;
+            $sHashReg20prox = 0;
+            $si96_vlsaldoinicialfonte = 0;
+            $si96_vlsaldofinalfonte = 0;
+            $dados = array();
             for ($iCont2 = 0; $iCont2 < pg_num_rows($rsCTB20); $iCont2++) {
 
                 $aCTB20 = pg_fetch_array($rsCTB20, $iCont2);
+                $aCTB20prox = pg_fetch_array($rsCTB20, $iCont2+1);
+                $sHashReg20 = $aCTB20['si96_tiporegistro'].$aCTB20['si96_codctb'].$aCTB20['si96_codfontrecursos'];
+                $sHashReg20prox = $aCTB20prox['si96_tiporegistro'].$aCTB20prox['si96_codctb'].$aCTB20prox['si96_codfontrecursos'];
+                $mostrar = 0;
+                if ($sHashReg20 == $sHashReg20prox && $bEncerramento) {
+                    $si96_vlsaldoinicialfonte  += $aCTB20['si96_vlsaldoinicialfonte'];
+                    $si96_vlsaldofinalfonte    += $aCTB20['si96_vlsaldofinalfonte'];
+                    $dados[] = $aCTB20['si96_sequencial'];
+                    $mostrar = 2;
+                } else {
+                    $dados[] = $aCTB20['si96_sequencial'];
+                    $mostrar = 1;
+                    $si96_vlsaldoinicialfonte  += $aCTB20['si96_vlsaldoinicialfonte'];
+                    $si96_vlsaldofinalfonte    += $aCTB20['si96_vlsaldofinalfonte'];
 
-                $aCSVCTB20['si96_tiporegistro']         = $this->padLeftZero($aCTB20['si96_tiporegistro'], 2);
-                $aCSVCTB20['si96_codorgao']             = $this->padLeftZero($aCTB20['si96_codorgao'], 2);
-                $aCSVCTB20['si96_codctb']               = substr($aCTB20['si96_codctb'], 0, 20);
-                $aCSVCTB20['si96_codfontrecursos']      = $this->padLeftZero($aCTB20['si96_codfontrecursos'], 3);
-                $aCSVCTB20['si96_saldocec']             = $this->padLeftZero($aCTB20['si96_saldocec'], 1);
-                $aCSVCTB20['si96_vlsaldoinicialfonte']  = $this->sicomNumberReal($aCTB20['si96_vlsaldoinicialfonte'], 2);
-                $aCSVCTB20['si96_vlsaldofinalfonte']    = $this->sicomNumberReal($aCTB20['si96_vlsaldofinalfonte'], 2);
+                    $aCSVCTB20['si96_tiporegistro']         = $this->padLeftZero($aCTB20['si96_tiporegistro'], 2);
+                    $aCSVCTB20['si96_codorgao']             = $this->padLeftZero($aCTB20['si96_codorgao'], 2);
+                    $aCSVCTB20['si96_codctb']               = substr($aCTB20['si96_codctb'], 0, 20);
+                    $aCSVCTB20['si96_codfontrecursos']      = $this->padLeftZero($aCTB20['si96_codfontrecursos'], 3);
+                    $aCSVCTB20['si96_saldocec']             = $this->padLeftZero($aCTB20['si96_saldocec'], 1);
+                    $aCSVCTB20['si96_vlsaldoinicialfonte']  = $this->sicomNumberReal($si96_vlsaldoinicialfonte, 2);
+                    $aCSVCTB20['si96_vlsaldofinalfonte']    = $this->sicomNumberReal($si96_vlsaldofinalfonte, 2);
 
-                $this->sLinha = $aCSVCTB20;
-                $this->adicionaLinha();
+                    $this->sLinha = $aCSVCTB20;
+                    $this->adicionaLinha();
+                    $si96_vlsaldoinicialfonte = 0;
+                    $si96_vlsaldofinalfonte = 0;
+                }    
 
                 /**
                  *
                  * Registros 21 , 22
                  */
+                $si97_valorentrsaida  = 0;
                 for ($iCont3 = 0; $iCont3 < pg_num_rows($rsCTB21); $iCont3++) {
 
                     $aCTB21 = pg_fetch_array($rsCTB21, $iCont3);
+                    $aCTB21prox = pg_fetch_array($rsCTB21, $iCont3+1);
+                    $sHashReg21 = $aCTB21['si97_tiporegistro'].$aCTB21['si97_codctb'].$aCTB21['si97_codfontrecursos'].$aCTB21['si97_codreduzidomov'].$aCTB21['si97_tipoentrsaida'];
+                    $sHashReg21prox = $aCTB21prox['si97_tiporegistro'].$aCTB21prox['si97_codctb'].$aCTB21prox['si97_codfontrecursos'].$aCTB21prox['si97_codreduzidomov'].$aCTB21prox['si97_tipoentrsaida'];
+                   
+                    if ($sHashReg21 == $sHashReg21prox && $bEncerramento) {
+                        $si97_valorentrsaida  += $aCTB21['si97_valorentrsaida'];
+                    } else {
+                        $si97_valorentrsaida  += $aCTB21['si97_valorentrsaida'];
 
-                    if ($aCTB20['si96_sequencial'] == $aCTB21['si97_reg20']) {
+                        if (in_array($aCTB21['si97_reg20'],$dados) && $mostrar == 1) {
 
-                        $aCSVCTB21['si97_tiporegistro']       = $this->padLeftZero($aCTB21['si97_tiporegistro'], 2);
-                        $aCSVCTB21['si97_codctb']             = substr($aCTB21['si97_codctb'], 0, 20);
-                        $aCSVCTB21['si97_codfontrecursos']    = $this->padLeftZero($aCTB21['si97_codfontrecursos'], 3);
-                        $aCSVCTB21['si97_codreduzidomov']     = substr($aCTB21['si97_codreduzidomov'],-15);
-                        $aCSVCTB21['si97_tipomovimentacao']   = $this->padLeftZero($aCTB21['si97_tipomovimentacao'], 1);
-                        $aCSVCTB21['si97_tipoentrsaida']      = $this->padLeftZero($aCTB21['si97_tipoentrsaida'], 2);
+                            $aCSVCTB21['si97_tiporegistro']       = $this->padLeftZero($aCTB21['si97_tiporegistro'], 2);
+                            $aCSVCTB21['si97_codctb']             = substr($aCTB21['si97_codctb'], 0, 20);
+                            $aCSVCTB21['si97_codfontrecursos']    = $this->padLeftZero($aCTB21['si97_codfontrecursos'], 3);
+                            $aCSVCTB21['si97_codreduzidomov']     = substr($aCTB21['si97_codreduzidomov'],-15);
+                            $aCSVCTB21['si97_tipomovimentacao']   = $this->padLeftZero($aCTB21['si97_tipomovimentacao'], 1);
+                            $aCSVCTB21['si97_tipoentrsaida']      = $this->padLeftZero($aCTB21['si97_tipoentrsaida'], 2);
 
-                        if ($aCTB21['si97_tipomovimentacao'] == 2 && $aCTB21['si97_tipoentrsaida'] == 99){
+                            if ($aCTB21['si97_tipomovimentacao'] == 2 && $aCTB21['si97_tipoentrsaida'] == 99){
 
-                            $aCSVCTB21['si97_dscoutrasmov']   = "Pagamento Extra Orcamentario";
+                                $aCSVCTB21['si97_dscoutrasmov']   = "Pagamento Extra Orcamentario";
 
-                        } else {
+                            } else {
 
-                            $aCSVCTB21['si97_dscoutrasmov']   = $aCTB21['si97_dscoutrasmov'] != ' ' ? substr($aCTB21['si97_dscoutrasmov'], 0, 50) : ' ';
-
-                        }
-
-                        $aCSVCTB21['si97_saldocec']           = $this->padLeftZero($aCTB21['si97_saldocec'], 1);
-                        $aCSVCTB21['si97_valorentrsaida']     = $this->sicomNumberReal($aCTB21['si97_valorentrsaida'], 2);
-                        $aCSVCTB21['si97_codctbtransf']       = $aCTB21['si97_codctbtransf'] != 0 ? substr($aCTB21['si97_codctbtransf'], 0, 20) : ' ';
-                        $aCSVCTB21['si97_codfontectbtransf']  = $this->padLeftZero($aCTB21['si97_codfontectbtransf'], 3) != 0 ? $this->padLeftZero($aCTB21['si97_codfontectbtransf'], 3) : ' ';
-                        $aCSVCTB21['si97_saldocectransf']     = $this->padLeftZero($aCTB21['si97_saldocectransf'], 1) != 0 ? $this->padLeftZero($aCTB21['si97_saldocectransf'], 1) : ' ';
-                        $aCSVCTB21['si97_codidentificafr']    = $aCTB21['si97_codidentificafr'];
-
-                        $this->sLinha = $aCSVCTB21;
-                        $this->adicionaLinha();
-
-                        for ($iCont4 = 0; $iCont4 < pg_num_rows($rsCTB22); $iCont4++) {
-
-                            $aCTB22 = pg_fetch_array($rsCTB22, $iCont4);
-
-
-                            if ($aCTB21['si97_sequencial'] == $aCTB22['si98_reg21']) {
-
-                                $aCSVCTB22['si98_tiporegistro']         = $this->padLeftZero($aCTB22['si98_tiporegistro'], 2);
-                                $aCSVCTB22['si98_codreduzidomov']       = substr($aCTB22['si98_codreduzidomov'],-15);
-                                $aCSVCTB22['si98_ededucaodereceita']    = $this->padLeftZero($aCTB22['si98_ededucaodereceita'], 1);
-                                $aCSVCTB22['si98_identificadordeducao'] = $aCTB22['si98_identificadordeducao'] == '0' ? ' ' : $this->padLeftZero($aCTB22['si98_identificadordeducao'], 2);
-                                $aCSVCTB22['si98_naturezareceita']      = $this->padLeftZero($aCTB22['si98_naturezareceita'], 8);
-                                $aCSVCTB22['si98_codfontrecursos']      = ($aCTB22['si98_codfontrecursos'] == 0 ? ' ' : $aCTB22['si98_codfontrecursos']);
-                                $aCSVCTB22['si98_codco']                = ($aCTB22['si98_codco'] == '' ? '0000' : $aCTB22['si98_codco']);
-                                $aCSVCTB22['si98_saldocec']             = $this->padLeftZero($aCTB22['si98_saldocec'], 1);
-                                $aCSVCTB22['si98_vlrreceitacont']       = $this->sicomNumberReal($aCTB22['si98_vlrreceitacont'], 2);
-
-                                $this->sLinha = $aCSVCTB22;
-                                $this->adicionaLinha();
+                                $aCSVCTB21['si97_dscoutrasmov']   = $aCTB21['si97_dscoutrasmov'] != ' ' ? substr($aCTB21['si97_dscoutrasmov'], 0, 50) : ' ';
 
                             }
 
+                            $aCSVCTB21['si97_saldocec']           = $this->padLeftZero($aCTB21['si97_saldocec'], 1);
+                            $aCSVCTB21['si97_valorentrsaida']     = $this->sicomNumberReal($si97_valorentrsaida, 2);
+                            $aCSVCTB21['si97_codctbtransf']       = $aCTB21['si97_codctbtransf'] != 0 ? substr($aCTB21['si97_codctbtransf'], 0, 20) : ' ';
+                            $aCSVCTB21['si97_codfontectbtransf']  = $this->padLeftZero($aCTB21['si97_codfontectbtransf'], 3) != 0 ? $this->padLeftZero($aCTB21['si97_codfontectbtransf'], 3) : ' ';
+                            $aCSVCTB21['si97_saldocectransf']     = $this->padLeftZero($aCTB21['si97_saldocectransf'], 1) != 0 ? $this->padLeftZero($aCTB21['si97_saldocectransf'], 1) : ' ';
+                            $aCSVCTB21['si97_codidentificafr']    = $aCTB21['si97_codidentificafr'];
+
+                            $this->sLinha = $aCSVCTB21;
+                            $this->adicionaLinha();
+
+                            for ($iCont4 = 0; $iCont4 < pg_num_rows($rsCTB22); $iCont4++) {
+
+                                $aCTB22 = pg_fetch_array($rsCTB22, $iCont4);
+
+
+                                if ($aCTB21['si97_sequencial'] == $aCTB22['si98_reg21']) {
+
+                                    $aCSVCTB22['si98_tiporegistro']         = $this->padLeftZero($aCTB22['si98_tiporegistro'], 2);
+                                    $aCSVCTB22['si98_codreduzidomov']       = substr($aCTB22['si98_codreduzidomov'],-15);
+                                    $aCSVCTB22['si98_ededucaodereceita']    = $this->padLeftZero($aCTB22['si98_ededucaodereceita'], 1);
+                                    $aCSVCTB22['si98_identificadordeducao'] = $aCTB22['si98_identificadordeducao'] == '0' ? ' ' : $this->padLeftZero($aCTB22['si98_identificadordeducao'], 2);
+                                    $aCSVCTB22['si98_naturezareceita']      = $this->padLeftZero($aCTB22['si98_naturezareceita'], 8);
+                                    $aCSVCTB22['si98_codfontrecursos']      = ($aCTB22['si98_codfontrecursos'] == 0 ? ' ' : $aCTB22['si98_codfontrecursos']);
+                                    $aCSVCTB22['si98_codco']                = ($aCTB22['si98_codco'] == '' ? '0000' : $aCTB22['si98_codco']);
+                                    $aCSVCTB22['si98_saldocec']             = $this->padLeftZero($aCTB22['si98_saldocec'], 1);
+                                    $aCSVCTB22['si98_vlrreceitacont']       = $this->sicomNumberReal($aCTB22['si98_vlrreceitacont'], 2);
+
+                                    $this->sLinha = $aCSVCTB22;
+                                    $this->adicionaLinha();
+
+                                }
+
+                            }
                         }
+                        $si97_valorentrsaida = 0;
                     }
                 }
-
+                if ($mostrar == 1) {
+                    $dados = array();
+                } 
             }
 
             /**

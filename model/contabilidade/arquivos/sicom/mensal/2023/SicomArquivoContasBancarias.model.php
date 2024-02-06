@@ -1040,7 +1040,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
     $oGerarCTB = new GerarCTB();
     $oGerarCTB->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-    $oGerarCTB->gerarDados();
+    $oGerarCTB->gerarDados($this->bEncerramento);
   }
 
 }

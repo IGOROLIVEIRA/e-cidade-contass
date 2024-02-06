@@ -75,7 +75,8 @@ $clrotulo->label("o15_codigo");
                         <td><?
                         db_input('o119_sequencial',10,$Io124_sequencial,true,'text',
                         1," onchange='js_pesquisa_ppa(false);'");
-                        db_input('o119_descricao',40,$Io124_descricao,true,'text',3,'')
+                        db_input('o119_descricao',40,$Io124_descricao,true,'text',3,'');
+                        db_input('o119_anoinicio',40,$Io119_anoinicio,true,'hidden',3,'')
                         ?>
                         </td>
                       </tr>
@@ -103,7 +104,7 @@ $clrotulo->label("o15_codigo");
                                     <div id="recebe_up_ppa" class="recebe">&nbsp;</div>
                                 </td>
                                 <td>
-                                <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=PPA&ano_usu=<?=substr(db_getsession("DB_anousu"),-2) ?>','recebe_up_ppa','Carregando...','Erro ao carregar')" />
+                                <input type="button" value="Enviar" onclick="alterarAnoInicio(this.form)" />
                                 <div>&nbsp;</div>
                                 </td>
                               </tr>
@@ -305,6 +306,7 @@ function js_processar() {
   oParam.exec          = "processarSicomAnual";
   oParam.arquivos      = aArquivosSelecionados;
   oParam.pespectivappa = $F('o119_sequencial');
+  oParam.anoinicioppa  = $F('o119_anoinicio');
   var oAjax = new Ajax.Request("con4_processarpad.RPC.php",
 		                            {
                                   method:'post',
@@ -392,7 +394,7 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
       js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_ppa',
                           'func_ppaversaosigap.php?funcao_js='+
-                          'parent.js_mostrappa1|o119_sequencial|o01_descricao',
+                          'parent.js_mostrappa1|o119_sequencial|o01_descricao|o01_anoinicio',
                           'Perspectivas do Cronograma',true);
     }else{
        if( $F('o119_sequencial') != ''){
@@ -412,8 +414,9 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
     }
   }
 
-  function js_mostrappa(chave,erro, ano) {
+  function js_mostrappa(chave,chave2,erro, ano) {
     $('o119_descricao').value = chave;
+    $('o119_anoinicio').value = chave2;
     if(erro==true) {
 
       $('o119_sequencial').focus();
@@ -426,6 +429,7 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
 
     $('o119_sequencial').value = chave1;
     $('o119_descricao').value  = chave2;
+    $('o119_anoinicio').value  = chave3;
     db_iframe_ppa.hide();
   }
 
@@ -450,6 +454,7 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
     js_divCarregando('Aguarde, exclusão de documentos','msgBox');
     var oParam           = new Object();
     oParam.exec          = "excluirArquivosIP";
+    oParam.anoinicioppa  = $F('o119_anoinicio');
     var oAjax = new Ajax.Request("con4_processarpad.RPC.php",
                                   {
                                     method:'post',
@@ -459,6 +464,18 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
           );
 
   }
+  function alterarAnoInicio(form) 
+  {
+    var anoInicio = form.o119_anoinicio.value;
+    micoxUpload(
+        form,
+        'upload_leis.php?nome_campo=PPA&ano_usu=' + anoInicio.substr(-2),
+        'recebe_up_ppa',
+        'Carregando...',
+        'Erro ao carregar'
+    );
+  }
+
 
 
 </script>

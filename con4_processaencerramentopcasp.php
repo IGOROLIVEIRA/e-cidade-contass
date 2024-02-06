@@ -155,6 +155,7 @@ require_once ("dbforms/db_funcoes.php");
           <td class="text-center">
             <input name="incluir_regra" type="button" id="incluir_regra" value="Incluir"/>
             <input name="importar_regra" type="button" id="importar_regra" value="Importar"/>
+            <input name="excluir_regra_selecionada" type="button" id="excluir_regra_selecionada" value="Excluir"/>
           </td>
         </tr>
 
@@ -207,7 +208,8 @@ require_once ("dbforms/db_funcoes.php");
           contacredora : $('contacredora'),
           contadevedora : $('contadevedora'),
           contareferencia : $('c117_contareferencia'),
-          importar: $('importar_regra')
+          importar: $('importar_regra'),
+          excluir: $('excluir_regra_selecionada')
         },
         oData = $('data'),
         oEncerramentos = {
@@ -219,9 +221,11 @@ require_once ("dbforms/db_funcoes.php");
 
     var oGridRegras = new DBGrid("gridRegras");
     oGridRegras.nameInstance = "oGridRegras";
-    oGridRegras.setCellWidth(["40%", "40%", "20%","20%"]);
-    oGridRegras.setCellAlign(["left", "left", "center","center"]);
-    oGridRegras.setHeader(["Devedora", "Credora", "Referência", "Ação"]);
+    oGridRegras.setCheckbox(0);
+    oGridRegras.setSelectAll(true);
+    oGridRegras.setCellWidth(["hidden","40%", "40%", "20%","20%"]);
+    oGridRegras.setCellAlign(["center","left", "left", "center","center"]);
+    oGridRegras.setHeader(["Sequencial","Devedora", "Credora", "Referência", "Ação"]);
     oGridRegras.show($('gridRegras'));
 
     var oWindowRegras = new windowAux('windowRegras', 'Regras para o Encerramento de Natureza Orçamentária e Controle', 700, 420);
@@ -408,6 +412,46 @@ require_once ("dbforms/db_funcoes.php");
           .execute();
     }
 
+    function alterarRegra(iSequencial) {
+      $("regra_"+iSequencial+"_ctdevedora").hidden = false;
+      $("regra_"+iSequencial+"_ctdevedora_leitura").hidden = true;
+      $("regra_"+iSequencial+"_ctcredora").hidden = false;
+      $("regra_"+iSequencial+"_ctcredora_leitura").hidden = true;
+      $("regra_"+iSequencial+"_ctreferencia").hidden = false;
+      $("regra_"+iSequencial+"_ctreferencia_leitura").hidden = true;
+      $("confirma_alterar_"+iSequencial).hidden = false;
+      $("alterar_"+iSequencial).hidden = true;
+    }
+
+
+    function confirmaAlterarRegra(iSequencial) {
+     
+      if (!confirm( _M(MENSAGEM + "confirma_alterar_regra") )) {
+        return false;
+      }
+
+      var oParametros = {
+        sExecucao : "alterarRegra",
+        iSequencial : iSequencial,
+        sCtCredora : $("regra_"+iSequencial+"_ctdevedora").value,
+        sCtDevedora : $("regra_"+iSequencial+"_ctcredora").value,
+        sCtReferencia : $("regra_"+iSequencial+"_ctreferencia").value,
+      }
+
+      new AjaxRequest(RPC, oParametros, function(oRetorno, lErro) {
+
+        if (lErro) {
+          alert(oRetorno.sMessage.urlDecode());
+          return false;
+        }
+
+        alert( _M(MENSAGEM + "alterado_sucesso") );
+        carregarRegras();
+
+      }).setMessage("Aguarde, alterando regra...")
+          .execute();
+    }
+
     /**
      * Carrega a grid das regras
      */
@@ -427,10 +471,22 @@ require_once ("dbforms/db_funcoes.php");
         }
 
         oRetorno.aRegras.each(function(oItem) {
-          oGridRegras.addRow([ oItem.c117_contadevedora,
-            oItem.c117_contacredora,oItem.c117_contareferencia,
+          oGridRegras.addRow([ 
+            oItem.c117_sequencial,
+            '<span name="regra_'+oItem.c117_sequencial+'_ctdevedora_leitura" id="regra_'+oItem.c117_sequencial+'_ctdevedora_leitura">'+oItem.c117_contadevedora
+            +'</span><input hidden type="text" name="regra_'+oItem.c117_sequencial+'_ctdevedora" id="regra_'+oItem.c117_sequencial+'_ctdevedora" value="'+oItem.c117_contadevedora+'" />',
+            '<span name="regra_'+oItem.c117_sequencial+'_ctcredora_leitura" id="regra_'+oItem.c117_sequencial+'_ctcredora_leitura">'+oItem.c117_contacredora
+            +'</span><input hidden type="text" name="regra_'+oItem.c117_sequencial+'_ctcredora" id="regra_'+oItem.c117_sequencial+'_ctcredora" value="'+oItem.c117_contacredora+'" />',
+            '<span name="regra_'+oItem.c117_sequencial+'_ctreferencia_leitura" id="regra_'+oItem.c117_sequencial+'_ctreferencia_leitura">'+oItem.c117_contareferencia+'</span>'
+            +'<select hidden name="regra_'+oItem.c117_sequencial+'_ctreferencia" id="regra_'+oItem.c117_sequencial+'_ctreferencia">'
+            +'<option value="D" '+(oItem.c117_contareferencia == "D" ? "selected" : "" )+'>D</option>'
+            +'<option value="C" '+(oItem.c117_contareferencia == "C" ? "selected" : "" )+'>C</option></select>',
             '<input type="button" name="remover' + oItem.c117_sequencial + '" id="remover' + oItem.c117_sequencial
-            + '" onclick="removerRegra(' + oItem.c117_sequencial + ')" value="E" title="Excluir"/>' ]);
+            + '" onclick="removerRegra(' + oItem.c117_sequencial + ')" value="E" title="Excluir"/>&nbsp' 
+            + '<input type="button" name="alterar_' + oItem.c117_sequencial + '" id="alterar_' + oItem.c117_sequencial 
+            + '" onclick="alterarRegra('+ oItem.c117_sequencial +')" value="A" title="Alterar"/>'
+            +'<input hidden type="button" name="confirma_alterar_' + oItem.c117_sequencial + '" id="confirma_alterar_' + oItem.c117_sequencial 
+            + '" onclick="confirmaAlterarRegra('+ oItem.c117_sequencial +')" value="A" title="Alterar"/>']);
         });
 
         oGridRegras.renderRows();
@@ -512,9 +568,38 @@ require_once ("dbforms/db_funcoes.php");
       }
     });
 
+    oRegra.excluir.observe('click', function () {
+      const aRegras = oGridRegras.getSelection('array');
+
+      if (!confirm( _M(MENSAGEM + "confirma_excluir_regras_selecionadas") )) {
+        return false;
+      }
+
+      var oParametros = {
+        sExecucao : "removerRegrasSelecionadas",
+        aCodigoRegra : aRegras
+      }
+
+      new AjaxRequest(RPC, oParametros, function(oRetorno, lErro) {
+
+        if (lErro) {
+          alert(oRetorno.sMessage.urlDecode());
+          return false;
+        }
+
+        alert( _M(MENSAGEM + "excluido_sucesso") );
+        carregarRegras();
+
+      }).setMessage("Aguarde, excluindo regras...")
+          .execute();
+    });
+
+
     verificarEncerramentos();
 
     exports.oGridRegras = oGridRegras;
+    exports.alterarRegra = alterarRegra;
+    exports.confirmaAlterarRegra = confirmaAlterarRegra;
     exports.removerRegra = removerRegra;
   })(this);
 
