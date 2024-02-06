@@ -50,8 +50,15 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
   public function getCampos()
   {
   }
-  function tirarAcentos($string){
-    return preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/","/(ç)/","/(Ç)/"),explode(" ","a A e E i I o O u U n N c C"),$string);
+  function StringReplace($string){
+    $string = preg_replace(array("/(á|à|ã|â|ä|å|æ)/","/(Á|À|Ã|Â|Ä|Å|Æ)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö|Ø)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/","/(ç)/","/(Ç)/","/(ý|ÿ)/","/(Ý)/"),explode(" ","a A e E i I o O u U n N c C y Y"),$string);
+    $string = preg_replace("/[?|?_??]/u", "-", $string);
+    $string = preg_replace("/[^[\{.:;0-9a-zA-Z\s]]/u", "", $string);
+    $string = preg_replace("/[\[<{|]/u", "(", $string);
+    $string = preg_replace("/[\]>}]/u", ")", $string);
+    $string = preg_replace("/[+]/u", "", $string);
+
+    return $string;
   }
   /**
    * selecionar os dados de indentificacao da remessa pra gerar o arquivo
@@ -63,7 +70,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-        $clitem10 = new cl_item102023();
+        $clitem10 = new cl_item102024();
 
         /**
          * excluir informacoes do mes selecioado
@@ -106,6 +113,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
                 WHERE db150_instit in ($instit,0)
                 AND db150_tipocadastro = 2
                 AND DATE_PART('YEAR',db150_data)= " . db_getsession("DB_anousu") . "
+
                 AND db150_mes = $mes";
         $rsResult10 = db_query($sSql);
 
@@ -113,7 +121,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
 
             $clitem10 = new cl_item102024();
             $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-            $sSqlitem = "select si43_coditem,si43_unidademedida from item102023  where si43_instit = " . db_getsession('DB_instit') . " and si43_coditem=" . $oDados10->coditem . " and si43_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+            $sSqlitem = "select si43_coditem,si43_unidademedida from item102024  where si43_instit = " . db_getsession('DB_instit') . " and si43_coditem=" . $oDados10->coditem . " and si43_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $sSqlitem .= " union
         select si43_coditem,si43_unidademedida from item102023 where si43_instit = " . db_getsession('DB_instit') . " and si43_coditem=" . $oDados10->coditem;
             $sSqlitem .= " union
@@ -142,8 +150,8 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
 
                 $clitem10->si43_tiporegistro = 10;
                 $clitem10->si43_coditem = $oDados10->coditem;
-                $clitem10->si43_dscItem = strtoupper($this->tirarAcentos($oDados10->dscitem)." ".$oDados10->coditem);
-                $clitem10->si43_unidademedida = $this->tirarAcentos($oDados10->unidademedida);
+                $clitem10->si43_dscItem = strtoupper($this->StringReplace($oDados10->dscitem)." ".$oDados10->coditem);
+                $clitem10->si43_unidademedida = $this->StringReplace($oDados10->unidademedida);
                 $clitem10->si43_tipocadastro = $oDados10->tipocadastro;
                 $clitem10->si43_justificativaalteracao = $oDados10->justificativaalteracao;
                 $clitem10->si43_instit = db_getsession("DB_instit");
