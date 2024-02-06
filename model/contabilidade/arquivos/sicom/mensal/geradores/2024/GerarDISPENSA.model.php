@@ -50,12 +50,6 @@ class GerarDISPENSA extends GerarAM
     $sSql9 = "select * from dispensa182024 where si82_mes = " . $this->iMes . " and si82_instit=" . db_getsession("DB_instit");
     $rsDISPENSA18 = db_query($sSql9);
 
-    $sSqlDispensa30 = "select * from dispensa302024 where si203_mes = " . $this->iMes . " and si203_instit=" . db_getsession("DB_instit");
-    $rsDISPENSA30 = db_query($sSqlDispensa30);
-
-    $sSqlDispensa40 = "select * from dispensa402024 where si204_mes = " . $this->iMes . " and si204_instit=" . db_getsession("DB_instit");
-    $rsDISPENSA40 = db_query($sSqlDispensa40); 
-
     if (pg_num_rows($rsDISPENSA10) == 0 && pg_num_rows($rsDISPENSA18) == 0) {
 
       $aCSV['tiporegistro'] = '99';
