@@ -328,7 +328,7 @@ class CalculoBem {
     if ($oDaoBenshistoricoCalculoBem->erro_status == '0') {
 
       $oStdMsgErro = new stdClass();
-      $oStdMsgErro->sDescricao = $this->getBem()->getDescricao();
+      $oStdMsgErro->sDescricao = $this->getBem()->getCodigoBem().' - '.$this->getBem()->getDescricao();
       $oStdMsgErro->sErro = $oDaoBenshistoricoCalculoBem->erro_msg;
       throw new Exception(_M('patrimonial.patrimonio.CalculoBem_model.erro_salvar_calculo', $oStdMsgErro));
     }
