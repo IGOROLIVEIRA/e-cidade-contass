@@ -45,8 +45,10 @@ abstract class ModeloBaseEFDREINF
         $this->dados    = $dados;
         $this->dadosCGM = $dadosCGM;
         $this->cgc      = $cgc;
-        $this->envs     = parse_ini_file('config/EfdReinf/.env', true);
-        $this->url      = $this->envs['URL'];
+        // $this->envs     = parse_ini_file('config/EfdReinf/.env', true);
+        // $this->url      = $this->envs['URL'];
+        $this->url     = "http://34.95.213.240/sped-efdreinf/";
+        
     }
 
      /**
