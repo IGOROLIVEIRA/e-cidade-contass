@@ -791,6 +791,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
     oRetorno.dados.forEach(function(oItem) {
       valor = oItem.codigo + " - " + oItem.elemento + " - " + oItem.nome.urlDecode();
       valorElem = oItem.elemento;
+      document.getElementById('pc01_complmater').value = oItem.complemento.urlDecode().toUpperCase();
       $('eleSub').options[i] = new Option(valor, oItem.codigo);
       i++;
     });
@@ -895,7 +896,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   function js_mostrapcmater(chave, erro, lVeic, servico) {
 
-
     if (erro == true) {
       document.form1.pc16_codmater.focus();
       document.form1.pc16_codmater.value = '';
@@ -923,9 +923,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
         document.getElementById('tdunidade2').style.display = "none";
 
 
-
-
-
       } else {
         document.getElementById('titleUnidade').style.display = "";
         document.getElementById('pc17_unid').style.display = "";
@@ -951,7 +948,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
   }
 
   function js_mostrapcmater1(chave1, chave2, codele, servico, pc01_complmater, iRegistro) {
-
 
     document.form1.pc16_codmater.value = chave1;
     document.form1.pc01_descrmater.value = chave2;

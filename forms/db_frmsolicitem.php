@@ -1265,6 +1265,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     oRetorno.dados.forEach(function(oItem) {
       valor = oItem.codigo + " - " + oItem.elemento + " - " + oItem.nome.urlDecode();
       valorElem = oItem.elemento;
+      document.getElementById('pc01_complmater').value = oItem.complemento.urlDecode().toUpperCase();
       $('eleSub').options[0] = new Option(valor, oItem.codigo);
     });
 
@@ -1445,7 +1446,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
         document.getElementById('hoverText').textContent = descricao + " " + complemento;
     }
 
-    setTimeout(()=>{
+    setTimeout(() => {
         document.getElementById('hoverBox').classList.add('hoverBoxDisabled');
     }, 3000);
 
