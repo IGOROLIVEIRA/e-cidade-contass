@@ -1084,11 +1084,7 @@ l20_criterioadjudicacao
 
         $dispensa16->si80_exercicioprocesso = $oDados16->exerciciolicitacao;
         $dispensa16->si80_nroprocesso = $oDados16->nroprocessolicitatorio;
-        if($oDados16->tipoprocesso == "5" || $oDados16->tipoprocesso == "6"){
-          $dispensa16->si80_tipoprocesso = '';
-        } else {
-          $dispensa16->si80_tipoprocesso = $oDados16->tipoprocesso;
-        }
+        $dispensa16->si80_tipoprocesso = $oDados16->tipoprocesso == "5" || $oDados16->tipoprocesso == "6" ? '' : $oDados16->tipoprocesso;
         $dispensa16->si80_codorgao = $oDados16->codorgaotce;
         $dispensa16->si80_codunidadesub = $oDados16->codunidadesub;
         $dispensa16->si80_codfuncao = $oDados16->codfuncao;
