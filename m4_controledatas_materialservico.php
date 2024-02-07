@@ -134,6 +134,9 @@ $clsolicita->rotulo->label();
                             <input name="btnAplicar" id="btnAplicar" type="button" value="Aplicar"  onclick='atualizarDataPara();' >
                             <input name="btnProcessar" id="btnProcessar" type="button" value="Processar"  onclick='consultaCodigoMaterial();' >
                         </td>
+                        <td>
+                            <input name="btnAplicarSicom" id="btnAplicarSicom" type="button" value="Aplicar Sicom"  onclick='atualizarDataParaSicom();' >
+                        </td>
                     </tr>
                 </table>
                 <fieldset style='width:1000px;'>
@@ -150,10 +153,11 @@ $clsolicita->rotulo->label();
     let oGridMaterialServico = new DBGrid('gridMaterialServico');
     oGridMaterialServico.nameInstance = 'oGridMaterialServico';
     oGridMaterialServico.setCheckbox(0);
-    oGridMaterialServico.setCellWidth( [ '0%', '10%', '10%','10%','10%', '50%', '15%', '15%' ] );
-    oGridMaterialServico.setHeader( [ 'codigo', 'Código','Código Sicom','Tipo Registro','Unidade', 'Descrição', 'Data', 'Data Alteração'] );
-    oGridMaterialServico.setCellAlign( [ 'left', 'left', 'left', 'left','left','left', 'center', 'center' ] );
-    oGridMaterialServico.setHeight(130);
+    oGridMaterialServico.setCellWidth( [ '0%', '10%', '10%','10%','10%', '50%', '15%', '15%','10%' ] );
+    oGridMaterialServico.setHeader( [ 'codigo', 'Código','Código Sicom','Tipo Registro','Unidade', 'Descrição', 'Data', 'Data Sicom', 'Cód. Anterior'] );
+    oGridMaterialServico.setCellAlign( [ 'left', 'left', 'left', 'left','left','left', 'center', 'center', 'center' ] );
+    oGridMaterialServico.setHeight(260);
+    oGridMaterialServico.setW(260);
     oGridMaterialServico.aHeaders[1].lDisplayed = false;
     oGridMaterialServico.show($('ctnGridMaterialServico'));
     let aMateriaisCadastrados = [];
@@ -288,6 +292,7 @@ $clsolicita->rotulo->label();
                 10
             ).toInnerHtml();
             aLinha.push(iDataAlteracao);
+            aLinha.push(oMaterial.pc01_codmaterant);
             oGridMaterialServico.addRow(aLinha);
         });
         oGridMaterialServico.renderRows();
@@ -321,6 +326,36 @@ $clsolicita->rotulo->label();
             if (oGridMaterialServico.aRows[i].isSelected) {
                 let oCheckGrid = document.getElementById(
                     oGridMaterialServico.aRows[i].aCells[7].getId()
+                ).firstChild;
+                oCheckGrid.value = iAtualizarDataPara;
+            }
+        }
+    }
+
+    function atualizarDataParaSicom (){
+        if (Array.isArray(aMateriaisCadastrados) && !aMateriaisCadastrados.length) {
+            alert('Nenhum material/serviço listado para atualizar data!');
+            return;
+        }
+
+        const iAtualizarDataPara = $F('iAtualizarDataPara');
+
+        if (iAtualizarDataPara.length === 0) {
+            alert('Insira uma data para atualizar o(s) material(iais)/serviço(s) listado(s)!');
+            return;
+        }
+
+        if (!oGridMaterialServico.getSelection('array').length) {
+            alert('Nenhum material/serviço selecionado para atualizar data!');
+            return;
+        }
+
+        const iLinhas = oGridMaterialServico.aRows.length;
+
+        for (let i = 0; i < iLinhas; i++) {
+            if (oGridMaterialServico.aRows[i].isSelected) {
+                let oCheckGrid = document.getElementById(
+                    oGridMaterialServico.aRows[i].aCells[8].getId()
                 ).firstChild;
                 oCheckGrid.value = iAtualizarDataPara;
             }

@@ -85,6 +85,7 @@ require_once("model/itempacto.model.php");
 require_once("classes/solicitacaocompras.model.php");
 require_once("model/ItemEstimativa.model.php");
 require_once("classes/db_itemprecoreferencia_classe.php");
+require_once("classes/db_historicomaterial_classe.php");
 include("libs/PHPExcel/Classes/PHPExcel.php");
 
 $clsolicitem         = new cl_solicitem;
@@ -134,6 +135,7 @@ $clsolicitalog       = new cl_solicitalog;
 $clliclicita         = new cl_liclicita;
 $clliclicitemlote    = new cl_liclicitemlote;
 $clitemprecoreferencia   = new cl_itemprecoreferencia;
+$clhistoricomaterial = new cl_historicomaterial;
 $cod_proc = null;
 $iPactoPlano = null;
 db_postmemory($HTTP_GET_VARS);
@@ -280,7 +282,7 @@ if (isset($processar)) {
 			if (is_numeric($cell_codmaterial)) {
 				$sSQL = "select * from pcmater where pc01_codmater = $cell_codmaterial ;";
 				$rsPcmater       = db_query($sSQL);
-				if (pg_numrows($rsPcmater) == 0) {
+				if (pg_num_rows($rsPcmater) == 0) {
 					$abrirPopupErro = true;
 				}
 			} else {
@@ -290,7 +292,7 @@ if (isset($processar)) {
 			if (is_numeric($cell_reduzido)) {
 				$sSQL = "select * from orcelemento where o56_codele = $cell_reduzido and o56_anousu = $anousu ;";
 				$rsOrcelemento       = db_query($sSQL);
-				if (pg_numrows($rsOrcelemento) == 0) {
+				if (pg_num_rows($rsOrcelemento) == 0) {
 					$abrirPopupErro = true;
 				}
 			} else {
@@ -305,7 +307,7 @@ if (isset($processar)) {
 			} else if (mb_strtolower($cell_controladoquantidade) == "não" || mb_strtolower($cell_controladoquantidade) == "nao") {
 				$sSQL = "select * from pcmater where pc01_codmater = $cell_codmaterial and pc01_servico = true;";
 				$rsPcmater       = db_query($sSQL);
-				if (pg_numrows($rsPcmater) == 0) $abrirPopupErro = true;
+				if (pg_num_rows($rsPcmater) == 0) $abrirPopupErro = true;
 			}
 
 			if (!is_numeric($cell_quantidade)) {
@@ -320,7 +322,7 @@ if (isset($processar)) {
 			if (is_numeric($cell_codunidade)) {
 				$sSQL = "select * from matunid where m61_codmatunid = $cell_codunidade ;";
 				$rsMatunid       = db_query($sSQL);
-				if (pg_numrows($rsMatunid) == 0) {
+				if (pg_num_rows($rsMatunid) == 0) {
 					$abrirPopupErro = true;
 				}
 			} else {
@@ -399,12 +401,12 @@ if (isset($processar)) {
 			var y = window.outerHeight / 2 + window.screenY - ( h / 2)
 			var x = window.outerWidth / 2 + window.screenX - ( w / 2)
 			return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + y + ', left=' + x);
-		} 
+		}
 
 	alert('Corrija os itens grifados em vermelho e reprocesse a planilha.');
 
 	popupwindow('com1_solicitemerroimportacao.php','',832,424);
-	
+
 		  </script>";
 	}
 
@@ -443,6 +445,39 @@ if (isset($processar)) {
 				db_fim_transacao($sqlerro);
 				db_redireciona("com1_solicitemnovo001.php?pc11_numero=$pc11_numero");
 			}
+
+            $db150_coditem = $arrayItensPlanilha[$i]->codmaterial.$arrayItensPlanilha[$i]->codunidade;
+
+            $rsHistoricoMaterial = $clhistoricomaterial->sql_record($clhistoricomaterial->sql_query(null,"*",null,"db150_coditem =$db150_coditem"));
+
+            if(pg_num_rows($rsHistoricoMaterial) == 0 ){
+                $rsMaterial = $clpcmater->sql_record($clpcmater->sql_query(null,"pc01_descrmater,pc01_complmater",null,"pc01_codmater = {$arrayItensPlanilha[$i]->codmaterial}"));
+                $oMaterial = db_utils::fieldsmemory($rsMaterial, 0);
+
+                $rsMatunid = $clmatunid->sql_record($clmatunid->sql_query_file($arrayItensPlanilha[$i]->codunidade));
+                $oMatunid = db_utils::fieldsmemory($rsMatunid, 0);
+
+                //inserir na tabela historico material
+                $clhistoricomaterial->db150_tiporegistro              = 10;
+                $clhistoricomaterial->db150_coditem                   = $db150_coditem;
+                $clhistoricomaterial->db150_pcmater                   = $arrayItensPlanilha[$i]->codmaterial;
+                $clhistoricomaterial->db150_dscitem                   = substr($oMaterial->pc01_descrmater.'-'.$oMaterial->pc01_complmater,0,999);
+                $clhistoricomaterial->db150_unidademedida             = $oMatunid->m61_descr;
+                $clhistoricomaterial->db150_tipocadastro              = 1;
+                $clhistoricomaterial->db150_justificativaalteracao    = '';
+                $clhistoricomaterial->db150_mes                       = date("m", db_getsession("DB_datausu"));
+                $clhistoricomaterial->db150_data                      = date("Y-m-d", db_getsession("DB_datausu"));
+                $clhistoricomaterial->db150_instit                    = db_getsession('DB_instit');
+                $clhistoricomaterial->incluir(null);
+
+                if ($clhistoricomaterial->erro_status == 0) {
+                    $sqlerro = true;
+                    $msg_alert = $clhistoricomaterial->erro_msg;
+                    db_msgbox("Erro na inclusão na historicomaterial código do material: " . $arrayItensPlanilha[$i]->codmaterial . "\\n" . $msg_alert);
+                    db_fim_transacao($sqlerro);
+                    db_redireciona("com1_solicitemnovo001.php?pc11_numero=$pc11_numero");
+                }
+            }
 
 			if ($sqlerro == false) {
 				$result_msgcodmater = $clsolicitempcmater->sql_record($clsolicitempcmater->sql_query_file(null, null, "pc16_codmater", "", " pc16_codmater={$arrayItensPlanilha[$i]->codmaterial} and pc16_solicitem in (select pc11_codigo from solicitem where pc11_numero in ($pc11_numero))"));
@@ -1021,7 +1056,7 @@ db_fieldsmemory($result_pcparam1, 0);
 } else if (isset($alterar) && $sqlerro == false) {
 
 	$item_cadastrado =  db_query("select * from solicitem where pc11_numero = $pc11_numero");
-	if (pg_numrows($item_cadastrado) == 0) {
+	if (pg_num_rows($item_cadastrado) == 0) {
 		$item_cadastrado = false;
 	} else {
 		$item_cadastrado = true;
@@ -1478,7 +1513,7 @@ db_fieldsmemory($result_pcparam1, 0);
 	db_inicio_transacao();
 
 	$item_cadastrado =  db_query("select * from solicitem where pc11_numero = $pc11_numero");
-	if (pg_numrows($item_cadastrado) == 0) {
+	if (pg_num_rows($item_cadastrado) == 0) {
 		$item_cadastrado = false;
 	} else {
 		$item_cadastrado = true;
@@ -1616,7 +1651,7 @@ from pcorcam
 inner join pcorcamitem on pcorcamitem.pc22_codorc = pcorcam.pc20_codorc
 where pc20_codorc = $codorc";
 							$result_pcorcam = @db_query($sql_pcorcam);
-							if (@pg_numrows($result_pcorcam) == 0) {
+							if (@pg_num_rows($result_pcorcam) == 0) {
 								$clpcorcam->excluir($codorc);
 								if ($clpcorcam->erro_status == 0) {
 									$sqlerro  = true;
@@ -1779,7 +1814,7 @@ from pcorcam
 inner join pcorcamitem on pcorcamitem.pc22_codorc = pcorcam.pc20_codorc
 where pc20_codorc = $codorc";
 								$result_pcorcam = @db_query($sql_pcorcam);
-								if (@pg_numrows($result_pcorcam) == 0) {
+								if (@pg_num_rows($result_pcorcam) == 0) {
 									$clpcorcam->excluir($codorc);
 									if ($clpcorcam->erro_status == 0) {
 										$sqlerro  = true;
@@ -1829,7 +1864,7 @@ where pc20_codorc = $codorc";
 				if ($sqlerro == false) {
 					$sql_pcproc    = "select * from pcprocitem where pc81_codproc = $codproc";
 					$result_pcproc = @db_query($sql_pcproc);
-					if (@pg_numrows($result_pcproc) == 0) {
+					if (@pg_num_rows($result_pcproc) == 0) {
 						$clpcproc->excluir($codproc);
 						if ($clpcproc->erro_status == 0) {
 							$sqlerro  = true;
@@ -2350,7 +2385,7 @@ if (isset($alterar) || isset($excluir) || isset($incluir)) {
 				for (var i = 0; i < parent.iframe_dotacoesnovo.document.getElementsByName('reduzido[]').length; i++) {
 					reduzido.push(parent.iframe_dotacoesnovo.document.getElementsByName('reduzido[]')[i].value);
 				}
-		
+
 				for (var i = 0; i < parent.iframe_dotacoesnovo.document.getElementsByName('estrutural[]').length; i++) {
 					estrutural.push(parent.iframe_dotacoesnovo.document.getElementsByName('estrutural[]')[i].value);
 				}
@@ -2371,12 +2406,12 @@ if (isset($alterar) || isset($excluir) || isset($incluir)) {
 					onComplete: js_retornodistribuicaoDotacoes
 				  }
 				);
-			
+
 			  }
-			  
+
 			  function js_retornodistribuicaoDotacoes(oAjax) {
 				var oRetorno = eval('(' + oAjax.responseText + ')');
-			
+
 			  }
 			  js_distribuicaoDotacoes(); </script>";
 		} else if (isset($alterar)) {

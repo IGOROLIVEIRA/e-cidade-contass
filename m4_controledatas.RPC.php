@@ -34,6 +34,7 @@ require_once("libs/db_sessoes.php");
 require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
 require_once("libs/db_stdlibwebseller.php");
+require_once("classes/db_pcmater_classe.php");
 db_app::import("exceptions.*");
 
 $oRetorno = new stdClass();
@@ -87,7 +88,8 @@ switch ($oParam->exec) {
                      db150_coditem,
                    db150_unidademedida,
                    db150_tipocadastro,
-                   db150_sequencial
+                   db150_sequencial,
+                   pc01_codmaterant
                 FROM
                     pcmater
                 LEFT JOIN historicomaterial ON db150_pcmater = pc01_codmater
@@ -139,7 +141,8 @@ switch ($oParam->exec) {
                    db150_coditem,
                    db150_unidademedida,
                    db150_tipocadastro,
-                   db150_sequencial
+                   db150_sequencial,
+                   pc01_codmaterant
             FROM solicitem
             INNER JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
             INNER JOIN pcmater ON pc16_codmater = pc01_codmater
@@ -193,7 +196,8 @@ switch ($oParam->exec) {
                    db150_coditem,
                    db150_unidademedida,
                    db150_tipocadastro,
-                   db150_sequencial
+                   db150_sequencial,
+                   pc01_codmaterant
             FROM liclicitem
             INNER JOIN pcprocitem ON pc81_codprocitem = l21_codpcprocitem
             INNER JOIN solicitem ON pc81_solicitem = pc11_codigo
@@ -249,7 +253,8 @@ switch ($oParam->exec) {
                    db150_coditem,
                    db150_unidademedida,
                    db150_tipocadastro,
-                   db150_sequencial
+                   db150_sequencial,
+                   pc01_codmaterant
             FROM acordoposicao
             INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
             INNER JOIN pcmater ON pc01_codmater = ac20_pcmater
@@ -287,7 +292,8 @@ switch ($oParam->exec) {
                    db150_coditem,
                    db150_unidademedida,
                    db150_tipocadastro,
-                   db150_sequencial
+                   db150_sequencial,
+                   pc01_codmaterant
             FROM historicomaterial
             INNER JOIN pcmater ON pc01_codmater = db150_pcmater
             WHERE db150_coditem = $oParam->codigoMaterialSicom
@@ -345,8 +351,7 @@ switch ($oParam->exec) {
             UPDATE
                 pcmater
                 SET
-                    pc01_data = (SELECT NULLIF('$dataFormatada', '')::DATE),
-                    pc01_dataalteracao = (SELECT NULLIF('$dataAlteracaoFormatada', '')::DATE)
+                    pc01_data = (SELECT NULLIF('$dataFormatada', '')::DATE)
             WHERE pc01_codmater = {$oMaterial->codigo} ";
           $rsCodigosMateriaisAtualizados = (bool)db_query($sql);
 
@@ -371,7 +376,6 @@ switch ($oParam->exec) {
                   false,
                   true
               );
-
               if(pg_num_rows($rsHistMat)) {
 
                   $clhistoricomaterial->db150_data = $dataAlteracao;
@@ -379,33 +383,20 @@ switch ($oParam->exec) {
                   $clhistoricomaterial->db150_sequencial = $oMat[0]->db150_sequencial;
                   $clhistoricomaterial->alterar($oMat[0]->db150_sequencial);
 
-              }else{
-                  $rsHistMat = $clhistoricomaterial->sql_record($clhistoricomaterial->sql_query(null,"*",null,"db150_pcmater = $oMaterial->codigo and db150_tipocadastro = 1"));
-
-                  $aData = explode('/', $oMaterial->data_alteracao);
-
-                  $oMat = db_utils::getCollectionByRecord(
-                      $rsHistMat,
-                      false,
-                      false,
-                      true
-                  );
-
-                  //inserir na tabela historico material
-                  $clhistoricomaterial->db150_tiporegistro              = 10;
-                  $clhistoricomaterial->db150_coditem                   = $oMat[0]->db150_coditem;
-                  $clhistoricomaterial->db150_pcmater                   = $oMat[0]->db150_pcmater;
-                  $clhistoricomaterial->db150_dscitem                   = substr($oMat[0]->pc01_descrmater.'-'.$oMat[0]->pc01_complmater,0,999);
-                  $clhistoricomaterial->db150_unidademedida             = $oMat[0]->db150_unidademedida;
-                  $clhistoricomaterial->db150_tipocadastro              = 2;
-                  $clhistoricomaterial->db150_mes                       = $aData[1];
-                  $clhistoricomaterial->db150_data                      = $oMaterial->data_alteracao;
-                  $clhistoricomaterial->db150_instit                    = db_getsession('DB_instit');
-                  $clhistoricomaterial->incluir(null);
-
-                  if ($clhistoricomaterial->erro_status == 0) {
-                      $oRetorno->status  = 2;
-                      $oRetorno->message = urlencode($clhistoricomaterial->erro_msg);
+                  if($oMat[0]->db150_tipocadastro == "2"){
+                      $clpcmater = new cl_pcmater();
+                      $clpcmater->pc01_dataalteracao = $oMaterial->data;
+                      $clpcmater->pc01_codmater = $oMaterial->codigo;
+                      $clpcmater->pc01_tabela  = $oMat[0]->pc01_tabela;
+                      $clpcmater->pc01_taxa  = $oMat[0]->pc01_taxa;
+                      $clpcmater->alterar($oMaterial->codigo);
+                  }else{
+                      $clpcmater = new cl_pcmater();
+                      $clpcmater->pc01_data = $oMaterial->data;
+                      $clpcmater->pc01_codmater = $oMaterial->codigo;
+                      $clpcmater->pc01_tabela  = $oMat[0]->pc01_tabela;
+                      $clpcmater->pc01_taxa  = $oMat[0]->pc01_taxa;
+                      $clpcmater->alterar($oMaterial->codigo);
                   }
               }
           }
