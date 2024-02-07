@@ -515,7 +515,7 @@ if($numrows <> 0){
 }else{
   $pdf->cell(190,4,"NÃO POSSUI ATIVIDADE",0,1,"C",0);
 }
-
+$pdf->addpage();
 $sql="select cgmsocio.z01_numcgm,
       cgmsocio.z01_nome,
 	    cgmsocio.z01_ender,
@@ -524,7 +524,7 @@ $sql="select cgmsocio.z01_numcgm,
       from issbase
 	    inner join socios on q95_cgmpri = q02_numcgm
 	    inner join cgm cgmsocio on cgmsocio.z01_numcgm = q95_numcgm
-	    inner join cgm cgmempresa on cgmempresa.z01_numcgm = q02_numcgm where q95_tipo = 1 and q02_inscr =$inscr";
+	    inner join cgm cgmempresa on cgmempresa.z01_numcgm = q02_numcgm where q02_inscr =$inscr";
 $result = pg_exec($sql);
 $numrows = pg_num_rows($result);
 $pdf->Cell(200,4,"","",1,"C",0);
