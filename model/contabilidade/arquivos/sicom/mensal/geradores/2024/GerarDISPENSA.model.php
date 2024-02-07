@@ -71,11 +71,13 @@ class GerarDISPENSA extends GerarAM
         $aCSVDISPENSA10['si74_leidalicitacao'] = $this->padLeftZero($aDISPENSA10['si74_leidalicitacao'], 1);
         $aCSVDISPENSA10['si74_codorgaoresp'] = $this->padLeftZero($aDISPENSA10['si74_codorgaoresp'], 2);
         $aCSVDISPENSA10['si74_codunidadesubresp'] = $this->padLeftZero($aDISPENSA10['si74_codunidadesubresp'], 5);
+        $aCSVDISPENSA10['si74_codunidadesubedital'] = $this->padLeftZero($aDISPENSA10['si74_codunidadesubedital'], 5);
         $aCSVDISPENSA10['si74_exercicioprocesso'] = $this->padLeftZero($aDISPENSA10['si74_exercicioprocesso'], 4);
         $aCSVDISPENSA10['si74_nroprocesso'] = substr($aDISPENSA10['si74_nroprocesso'], 0, 12);
         $aCSVDISPENSA10['si74_tipoprocesso'] = $this->padLeftZero($aDISPENSA10['si74_tipoprocesso'], 1);
         $aCSVDISPENSA10['si74_dtabertura'] = $this->sicomDate($aDISPENSA10['si74_dtabertura']);
         $aCSVDISPENSA10['si74_naturezaobjeto'] = $this->padLeftZero($aDISPENSA10['si74_naturezaobjeto'], 1);
+        $aCSVDISPENSA10['si74_tipocriterio'] = $aDISPENSA10['si74_tipocriterio'] == 0 ? '' : $aDISPENSA10['si74_tipocriterio'];
         $aCSVDISPENSA10['si74_objeto'] = substr($aDISPENSA10['si74_objeto'], 0, 1000);
         $aCSVDISPENSA10['si74_justificativa'] = substr($aDISPENSA10['si74_justificativa'], 0, 250);
         $aCSVDISPENSA10['si74_razao'] = substr($aDISPENSA10['si74_razao'], 0, 250);
@@ -205,7 +207,7 @@ class GerarDISPENSA extends GerarAM
             $aCSVDISPENSA16['si80_codunidadesubresp'] = $this->padLeftZero($aDISPENSA16['si80_codunidadesubresp'], 5);
             $aCSVDISPENSA16['si80_exercicioprocesso'] = $this->padLeftZero($aDISPENSA16['si80_exercicioprocesso'], 4);
             $aCSVDISPENSA16['si80_nroprocesso'] = substr($aDISPENSA16['si80_nroprocesso'], 0, 12);
-            $aCSVDISPENSA16['si80_tipoprocesso'] = $this->padLeftZero($aDISPENSA16['si80_tipoprocesso'], 1);
+            $aCSVDISPENSA16['si80_tipoprocesso'] = $this->padLeftZero($aDISPENSA16['si80_tipoprocesso'], 1) == 0 ? '' : $this->padLeftZero($aDISPENSA16['si80_tipoprocesso'], 1);
             $aCSVDISPENSA16['si80_codorgao'] = $this->padLeftZero($aDISPENSA16['si80_codorgao'], 2);
             $aCSVDISPENSA16['si80_codunidadesub'] = $this->padLeftZero($aDISPENSA16['si80_codunidadesub'], 5);
             $aCSVDISPENSA16['si80_codfuncao'] = $this->padLeftZero($aDISPENSA16['si80_codfuncao'], 2);
@@ -258,6 +260,55 @@ class GerarDISPENSA extends GerarAM
           }
 
         }
+
+        $sSqlDispensa30 = "select * from dispensa302024 where si203_nroprocesso = '". $aDISPENSA10['si74_nroprocesso'] . "' and si203_mes = " . $this->iMes . " and si203_instit=" . db_getsession("DB_instit");
+        $rsDISPENSA30 = db_query($sSqlDispensa30);
+
+        for ($i = 0; $i < pg_num_rows($rsDISPENSA30); $i++) {
+
+          $aDISPENSA30 = pg_fetch_array($rsDISPENSA30, $i);
+  
+            $aCSVDISPENSA30['si203_tiporegistro']       = $this->padLeftZero($aDISPENSA30['si203_tiporegistro'], 2);
+            $aCSVDISPENSA30['si203_codorgaoresp']       = $this->padLeftZero($aDISPENSA30['si203_codorgaoresp'], 2);
+            $aCSVDISPENSA30['si203_codunidadesubresp']  = $this->padLeftZero($aDISPENSA30['si203_codunidadesubresp'], 5);
+            $aCSVDISPENSA30['si203_exercicioprocesso']  = $this->padLeftZero($aDISPENSA30['si203_exercicioprocesso'], 4);
+            $aCSVDISPENSA30['si203_nroprocesso']        = substr($aDISPENSA30['si203_nroprocesso'], 0, 16);
+            $aCSVDISPENSA30['si203_tipoprocesso']       = $this->padLeftZero($aDISPENSA30['si203_tipoprocesso'], 1);
+            $aCSVDISPENSA30['si203_tipodocumento']      = $this->padLeftZero($aDISPENSA30['si203_tipodocumento'], 1);
+            $aCSVDISPENSA30['si203_nrodocumento']       = substr($aDISPENSA30['si203_nrodocumento'], 0, 14);
+            $aCSVDISPENSA30['si203_nrolote']            = $aDISPENSA30['si203_nrolote'] == '0' ? ' ' : substr($aDISPENSA30['si203_nrolote'], 0, 4);
+            $aCSVDISPENSA30['si203_coditem']            = substr($aDISPENSA30['si203_coditem'], 0, 15);
+            $aCSVDISPENSA30['si203_percdesconto']       = $this->sicomNumberReal($aDISPENSA30['si203_percdesconto'], 2);
+  
+            $this->sLinha = $aCSVDISPENSA30;
+            $this->adicionaLinha();
+  
+        }
+
+        $sSqlDispensa40 = "select * from dispensa402024 where si204_nroprocesso = '". $aDISPENSA10['si74_nroprocesso'] . "' and si204_mes = " . $this->iMes . " and si204_instit=" . db_getsession("DB_instit");
+        $rsDISPENSA40 = db_query($sSqlDispensa40);
+
+        for ($i = 0; $i < pg_num_rows($rsDISPENSA40); $i++) {
+
+          $aDISPENSA40 = pg_fetch_array($rsDISPENSA40, $i);
+  
+            $aCSVDISPENSA40['si204_tiporegistro']       = $this->padLeftZero($aDISPENSA40['si204_tiporegistro'], 2);
+            $aCSVDISPENSA40['si204_codorgaoresp']       = $this->padLeftZero($aDISPENSA40['si204_codorgaoresp'], 2);
+            $aCSVDISPENSA40['si204_codunidadesubresp']  = $this->padLeftZero($aDISPENSA40['si204_codunidadesubresp'], 5);
+            $aCSVDISPENSA40['si204_exercicioprocesso']  = $this->padLeftZero($aDISPENSA40['si204_exercicioprocesso'], 4);
+            $aCSVDISPENSA40['si204_nroprocesso']        = substr($aDISPENSA40['si204_nroprocesso'], 0, 16);
+            $aCSVDISPENSA40['si204_tipoprocesso']       = $this->padLeftZero($aDISPENSA40['si204_tipoprocesso'], 1);
+            $aCSVDISPENSA40['si204_tipodocumento']      = $this->padLeftZero($aDISPENSA40['si204_tipodocumento'], 1);
+            $aCSVDISPENSA40['si204_nrodocumento']       = substr($aDISPENSA40['si204_nrodocumento'], 0, 14);
+            $aCSVDISPENSA40['si204_nrolote']            = $aDISPENSA40['si204_nrolote'] == '0' ? ' ' : substr($aDISPENSA40['si204_nrolote'], 0, 4);
+            $aCSVDISPENSA40['si204_coditem']            = substr($aDISPENSA40['si204_coditem'], 0, 15);
+            $aCSVDISPENSA40['si204_perctaxaadm']        = $this->sicomNumberReal($aDISPENSA40['si204_perctaxaadm'], 2);
+  
+            $this->sLinha = $aCSVDISPENSA40;
+            $this->adicionaLinha();
+  
+        }
+
       }
 
       for ($iCont8 = 0; $iCont8 < pg_num_rows($rsDISPENSA18); $iCont8++) {
@@ -291,7 +342,6 @@ class GerarDISPENSA extends GerarAM
 
           $this->sLinha = $aCSVDISPENSA18;
           $this->adicionaLinha();
-
 
       }
 
