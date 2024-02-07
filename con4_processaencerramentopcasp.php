@@ -154,8 +154,9 @@ require_once ("dbforms/db_funcoes.php");
         <tr>
           <td class="text-center">
             <input name="incluir_regra" type="button" id="incluir_regra" value="Incluir"/>
-            <input name="importar_regra" type="button" id="importar_regra" value="Importar"/>
             <input name="excluir_regra_selecionada" type="button" id="excluir_regra_selecionada" value="Excluir"/>
+            <input name="importar_regra" type="button" id="importar_regra" value="Importar"/>
+            <input name="importar_regra_csv" type="button" id="importar_regra_csv" value="Importar Csv"/>
           </td>
         </tr>
 
@@ -209,7 +210,8 @@ require_once ("dbforms/db_funcoes.php");
           contadevedora : $('contadevedora'),
           contareferencia : $('c117_contareferencia'),
           importar: $('importar_regra'),
-          excluir: $('excluir_regra_selecionada')
+          excluir: $('excluir_regra_selecionada'),
+          importarCsv: $('importar_regra_csv')
         },
         oData = $('data'),
         oEncerramentos = {
@@ -592,6 +594,44 @@ require_once ("dbforms/db_funcoes.php");
 
       }).setMessage("Aguarde, excluindo regras...")
           .execute();
+    });
+
+    oRegra.importarCsv.observe('click', function () {
+
+      const inputArquivo = document.createElement('input');
+      inputArquivo.type = 'file';
+      inputArquivo.accept = '.csv';
+      inputArquivo.style.display = 'none';
+
+      document.body.appendChild(inputArquivo);
+
+      inputArquivo.click();
+
+      inputArquivo.addEventListener('change', function(e) {
+        let arquivo = e.target;
+
+        if (arquivo) {
+          let formData = new FormData();
+          var oParametros = {
+            sExecucao : "importaRegrasCsv",
+          }
+          
+          formData.append('json', Object.toJSON(oParametros));
+          formData.append('regrasCSV', arquivo.files[0]);
+
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', RPC, true);
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                alert(eval("("+xhr.responseText+")").sMessage);
+                carregarRegras();
+            }
+          };
+          xhr.send(formData);
+        }
+
+        document.body.removeChild(inputArquivo);
+      });
     });
 
 
