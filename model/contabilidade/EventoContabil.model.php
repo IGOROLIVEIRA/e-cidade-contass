@@ -414,7 +414,7 @@ class EventoContabil {
    * @return null
    * @throws BusinessException
    */
-  public function executaLancamento(ILancamentoAuxiliar $oLancamentoAuxiliar, $sDataLancamento = null) {
+  public function executaLancamento(ILancamentoAuxiliar $oLancamentoAuxiliar, $sDataLancamento = null, $ctCredora = null, $ctDevedora = null) {
 
  	  $dtDataUsu = date("Y-m-d", db_getsession('DB_datausu'));
 		if (!empty($sDataLancamento)) {
@@ -454,7 +454,9 @@ class EventoContabil {
 	    $oLancamentoContabil->executa($oDaoLancamento->c70_codlan,
 	                                  $this->iCodigoDocumento,
 	                                  $oLancamentoAuxiliar,
-	                                  $dtDataUsu
+	                                  $dtDataUsu,
+									  $ctCredora,
+									  $ctDevedora
 	                                 );
 	  }
 

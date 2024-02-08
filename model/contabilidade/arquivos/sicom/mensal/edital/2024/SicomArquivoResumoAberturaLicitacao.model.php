@@ -15,165 +15,169 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarRALI
 class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
 
-  /**
-   *
-   * Codigo do layout. (db_layouttxt.db50_codigo)
-   * @var Integer
-   */
-  protected $iCodigoLayout = 0;
-
-  /**
-   *
-   * Nome do arquivo a ser criado
-   * @var String
-   */
-  protected $sNomeArquivo = 'RALIC';
-
-  /**
-   *
-   * Construtor da classe
-   */
-  public function __construct()
-  {
-  }
-
-  /**
-   * Retorna o codigo do layout
-   *
-   * @return Integer
-   */
-  public function getCodigoLayout()
-  {
-    return $this->iCodigoLayout;
-  }
-
-  /**
-   * metodo para passar os dados das Acoes e Metas pada o $this->aDados
-   */
-  public function getCampos()
-  {
-
-    $aElementos[10] = array(
-      "tipoRegistro",
-      "codOrgaoResp",
-      "codUnidadeSubResp",
-      "codUnidadeSubRespEstadual",
-      "exercicioLicitacao",
-      "nroProcessoLicitatorio",
-      "tipoCadastradoLicitacao",
-      "dscCadastroLicitatorio",
-      "codModalidadeLicitacao",
-      "naturezaProcedimento",
-      "nroEdital",
-      "exercicioEdital",
-      "dtPublicacaoEditalDO",
-      "link",
-      "tipoLicitacao",
-      "naturezaObjeto",
-      "objeto",
-      "regimeExecucaoObras",
-      "vlContratacao",
-      "bdi",
-      "mesExercicioRefOrc",
-      "origemRecurso",
-      "dscOrigemRecurso",
-      "qtdLotes"
-    );
-    $aElementos[11] = array(
-      "tipoRegistro",
-      "codOrgaoResp",
-      "codUnidadeSubResp",
-      "codUnidadeSubRespEstadual",
-      "exercicioLicitacao",
-      "nroProcessoLicitatorio",
-      "codObraLocal",
-      "classeObjeto",
-      "tipoAtividadeObra",
-      "tipoAtividadeServico",
-      "dscAtividadeServico",
-      "tipoAtividadeServEspecializado",
-      "dscAtividadeServEspecializado",
-      "codFuncao",
-      "codSubFuncao",
-      "codBemPublico",
-      "nrolote"
-    );
-    $aElementos[12] = array(
-      "tipoRegistro",
-      "codOrgaoResp",
-      "codUnidadeSubResp",
-      "codUnidadeSubRespEstadual",
-      "exercicioProcesso",
-      "nroProcessoLicitatorio",
-      "codObraLocal",
-      "logradouro",
-      "numero",
-      "bairro",
-      "distrito",
-      "municipio",
-      "cep",
-      "latitude",
-      "longitude"
-    );
-
-    return $aElementos;
-  }
-
-  /**
-   * selecionar os dados dos pagamentos de despesa do mes para gerar o arquivo
-   * @see iPadArquivoBase::gerarDados()
-   */
-  public function gerarDados()
-  {
+    /**
+     *
+     * Codigo do layout. (db_layouttxt.db50_codigo)
+     * @var Integer
+     */
+    protected $iCodigoLayout = 0;
 
     /**
-     * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
+     *
+     * Nome do arquivo a ser criado
+     * @var String
      */
-    $clralic10 = new cl_ralic102024();
-    $clralic11 = new cl_ralic112024();
-    $clralic12 = new cl_ralic122024();
+    protected $sNomeArquivo = 'RALIC';
 
     /**
-     * excluir informacoes do mes selecioado para evitar duplicacao de registros
+     *
+     * Construtor da classe
      */
-    db_inicio_transacao();
-
-    /**
-     * registro 12
-     */
-    $result = db_query($clralic12->sql_query(null, "*", null, "si182_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si182_instit=" . db_getsession("DB_instit")));
-    if (pg_num_rows($result) > 0) {
-      $clralic12->excluir(null, "si182_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si182_instit=" . db_getsession("DB_instit"));
-      if ($clralic12->erro_status == 0) {
-        throw new Exception($clralic12->erro_msg);
-      }
+    public function __construct()
+    {
     }
 
     /**
-     * registro 11
+     * Retorna o codigo do layout
+     *
+     * @return Integer
      */
-    $result = db_query($clralic11->sql_query(null, "*", null, "si181_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si181_instit=" . db_getsession("DB_instit")));
-    if (pg_num_rows($result) > 0) {
-      $clralic11->excluir(null, "si181_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si181_instit=" . db_getsession("DB_instit"));
-      if ($clralic11->erro_status == 0) {
-        throw new Exception($clralic11->erro_msg);
-      }
+    public function getCodigoLayout()
+    {
+        return $this->iCodigoLayout;
+    }
+
+    public function getTipoInstit(){
+
     }
 
     /**
-     * registro 10
+     * metodo para passar os dados das Acoes e Metas pada o $this->aDados
      */
-    $result = db_query($clralic10->sql_query(null, "*", null, "si180_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si180_instit=" . db_getsession("DB_instit")));
+    public function getCampos()
+    {
 
-    if (pg_num_rows($result) > 0) {
-      $clralic10->excluir(null, "si180_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si180_instit=" . db_getsession("DB_instit"));
-      if ($clralic10->erro_status == 0) {
-        throw new Exception($clralic10->erro_msg);
-      }
+        $aElementos[10] = array(
+            "tipoRegistro",
+            "codOrgaoResp",
+            "codUnidadeSubResp",
+            "codUnidadeSubRespEstadual",
+            "exercicioLicitacao",
+            "nroProcessoLicitatorio",
+            "tipoCadastradoLicitacao",
+            "dscCadastroLicitatorio",
+            "codModalidadeLicitacao",
+            "naturezaProcedimento",
+            "nroEdital",
+            "exercicioEdital",
+            "dtPublicacaoEditalDO",
+            "link",
+            "tipoLicitacao",
+            "naturezaObjeto",
+            "objeto",
+            "regimeExecucaoObras",
+            "vlContratacao",
+            "bdi",
+            "mesExercicioRefOrc",
+            "origemRecurso",
+            "dscOrigemRecurso",
+            "qtdLotes"
+        );
+        $aElementos[11] = array(
+            "tipoRegistro",
+            "codOrgaoResp",
+            "codUnidadeSubResp",
+            "codUnidadeSubRespEstadual",
+            "exercicioLicitacao",
+            "nroProcessoLicitatorio",
+            "codObraLocal",
+            "classeObjeto",
+            "tipoAtividadeObra",
+            "tipoAtividadeServico",
+            "dscAtividadeServico",
+            "tipoAtividadeServEspecializado",
+            "dscAtividadeServEspecializado",
+            "codFuncao",
+            "codSubFuncao",
+            "codBemPublico",
+            "nrolote"
+        );
+        $aElementos[12] = array(
+            "tipoRegistro",
+            "codOrgaoResp",
+            "codUnidadeSubResp",
+            "codUnidadeSubRespEstadual",
+            "exercicioProcesso",
+            "nroProcessoLicitatorio",
+            "codObraLocal",
+            "logradouro",
+            "numero",
+            "bairro",
+            "distrito",
+            "municipio",
+            "cep",
+            "latitude",
+            "longitude"
+        );
+
+        return $aElementos;
     }
 
+    /**
+     * selecionar os dados dos pagamentos de despesa do mes para gerar o arquivo
+     * @see iPadArquivoBase::gerarDados()
+     */
+    public function gerarDados()
+    {
 
-    $sSql = "SELECT DISTINCT '10' AS tipoRegistro,
+        /**
+         * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
+         */
+        $clralic10 = new cl_ralic102024();
+        $clralic11 = new cl_ralic112024();
+        $clralic12 = new cl_ralic122024();
+
+        /**
+         * excluir informacoes do mes selecioado para evitar duplicacao de registros
+         */
+        db_inicio_transacao();
+
+        /**
+         * registro 12
+         */
+        $result = db_query($clralic12->sql_query(null, "*", null, "si182_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si182_instit=" . db_getsession("DB_instit")));
+        if (pg_num_rows($result) > 0) {
+            $clralic12->excluir(null, "si182_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si182_instit=" . db_getsession("DB_instit"));
+            if ($clralic12->erro_status == 0) {
+                throw new Exception($clralic12->erro_msg);
+            }
+        }
+
+        /**
+         * registro 11
+         */
+        $result = db_query($clralic11->sql_query(null, "*", null, "si181_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si181_instit=" . db_getsession("DB_instit")));
+        if (pg_num_rows($result) > 0) {
+            $clralic11->excluir(null, "si181_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si181_instit=" . db_getsession("DB_instit"));
+            if ($clralic11->erro_status == 0) {
+                throw new Exception($clralic11->erro_msg);
+            }
+        }
+
+        /**
+         * registro 10
+         */
+        $result = db_query($clralic10->sql_query(null, "*", null, "si180_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si180_instit=" . db_getsession("DB_instit")));
+
+        if (pg_num_rows($result) > 0) {
+            $clralic10->excluir(null, "si180_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si180_instit=" . db_getsession("DB_instit"));
+            if ($clralic10->erro_status == 0) {
+                throw new Exception($clralic10->erro_msg);
+            }
+        }
+
+
+        $sSql = "SELECT DISTINCT '10' AS tipoRegistro,
                 substr(si01_datacotacao, 6, 2)||substr(si01_datacotacao, 1, 4) as dataCotacao,
                 codorgaoresp,
                 codunidadesubresp,
@@ -202,7 +206,8 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                 l20_recdocumentacao,
                 l20_dataaberproposta,
                 l20_orcsigiloso,
-                emailContato
+                emailContato,
+                codUnidadeSubRespEstadual
 FROM
     (SELECT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
                      (CASE
@@ -275,7 +280,8 @@ FROM
                      obrasdadoscomplementareslote.db150_bdi AS bdi,
                      liclancedital.l47_origemrecurso AS origemRecurso,
                      liclancedital.l47_descrecurso AS dscOrigemRecurso,
-                     liclancedital.l47_email as emailContato
+                     liclancedital.l47_email as emailContato,
+                     si09_codunidadesubunidade AS codUnidadeSubRespEstadual
      FROM liclicita
      INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
      INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
@@ -334,76 +340,82 @@ FROM
               l47_descrecurso,
               si01_datacotacao,
               pc23_quant,
-              l47_email) AS query
+              l47_email,
+              si09_codunidadesubunidade) AS query
 GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exerciciolicitacao, nroProcessoLicitatorio,
          tipoCadastradoLicitacao, codmodalidadelicitacao, naturezaprocedimento, nroedital,
          exercicioedital, dtpublicacaoeditaldo, LINK, tipolicitacao, naturezaobjeto, objeto, bdi, regimeexecucaoobras,
          origemrecurso, dscorigemrecurso, qtdLotes, tipoJulgamento, l20_usaregistropreco,l20_leidalicitacao,
-         l20_mododisputa,l20_recdocumentacao,l20_dataaberproposta,l20_orcsigiloso,emailContato
+         l20_mododisputa,l20_recdocumentacao,l20_dataaberproposta,l20_orcsigiloso,emailContato,codUnidadeSubRespEstadual
 
 ORDER BY nroprocessolicitatorio
 
                   ";
-    $rsResult10 = db_query($sSql);
+        $rsResult10 = db_query($sSql);
 
 
-    /**
-     * registro 10
-     */
-    for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-
-      $clralic10 = new cl_ralic102024();
-
-      $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-
-      $clralic10->si180_tiporegistro = 10; //1
-      $clralic10->si180_codorgaoresp = $oDados10->codorgaoresp; //2
-      $clralic10->si180_codunidadesubresp = $oDados10->codunidadesubresp; //3
-      $clralic10->si180_codunidadesubrespestadual = $oDados10->codunidadesubrespestadual; //4
-      $clralic10->si180_exerciciolicitacao = $oDados10->exerciciolicitacao; //5
-      $clralic10->si180_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio; //6
-      $clralic10->si180_tipocadastradolicitacao = $oDados10->tipocadastradolicitacao; //7
-      $clralic10->si180_dsccadastrolicitatorio = ''; //8
-      $clralic10->si180_leidalicitacao = $oDados10->l20_leidalicitacao; //9
-      $clralic10->si180_codmodalidadelicitacao = $oDados10->codmodalidadelicitacao; //10
-      $clralic10->si180_naturezaprocedimento = $oDados10->naturezaprocedimento; //11
-      $clralic10->si180_nroedital = $oDados10->nroedital; //12
-      $clralic10->si180_exercicioedital = $oDados10->exercicioedital ? $oDados10->exercicioedital : intval($oDados10->exerciciolicitacao); //13
-      $clralic10->si180_dtpublicacaoeditaldo = $oDados10->dtpublicacaoeditaldo; //14
-      $clralic10->si180_dtaberturaenvelopes = $oDados10->l20_dataaberproposta; //15
-      $clralic10->si180_link = preg_replace("/\r|\n/", "", $oDados10->link); //16
-      $clralic10->si180_tipolicitacao = $oDados10->codmodalidadelicitacao == '4' ? '' : $oDados10->tipolicitacao; //17
-      $clralic10->si180_mododisputa = $oDados10->l20_mododisputa; //18
-      $clralic10->si180_naturezaobjeto = $oDados10->naturezaobjeto; //19
-      $clralic10->si180_objeto = substr($this->removeCaracteres($oDados10->objeto), 0, 500); //20
-      $clralic10->si180_regimeexecucaoobras = $oDados10->regimeexecucaoobras; //21
-      if($oDados10->l20_orcsigiloso == '' || $oDados10->l20_orcsigiloso == 'f'){
-        $clralic10->si180_tipoorcamento = 1; //22
-      }else{
-        $clralic10->si180_tipoorcamento = 2; //22
-      }
-      $clralic10->si180_vlcontratacao = $oDados10->vlcontratacao; //23
-      $clralic10->si180_bdi = $oDados10->bdi; //24
-      $clralic10->si180_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];//25
-      $clralic10->si180_origemrecurso = $oDados10->origemrecurso; //26
-      $clralic10->si180_dscorigemrecurso = $oDados10->dscorigemrecurso; //27
-      $clralic10->si180_qtdlotes = $oDados10->qtdlotes; //28
-      $clralic10->si180_emailcontato = $oDados10->emailcontato; //29
-      $clralic10->si180_mesexercicioreforc = $oDados10->datacotacao; //23
-      $clralic10->si180_instit = db_getsession("DB_instit");
-
-      $clralic10->incluir(null);
-
-      if ($clralic10->erro_status == 0) {
-        throw new Exception($clralic10->erro_msg);
-      }
-
-      if ($oDados10->naturezaobjeto == "1") {
         /**
-         *  Selecionar informações do registro 11
-         * @todo checar a obrigatoriedade do pcdotac
+         * registro 10
          */
-        $sSql11 = "
+        for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
+
+            $clralic10 = new cl_ralic102024();
+
+            $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
+
+            $clralic10->si180_tiporegistro = 10; //1
+            $clralic10->si180_codorgaoresp = $oDados10->codorgaoresp; //2
+            if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
+                $clralic10->si180_codunidadesubresp = ''; //3
+                $clralic10->si180_codunidadesubrespestadual = $oDados10->codunidadesubrespestadual; //4
+            }else {
+                $clralic10->si180_codunidadesubresp = $oDados10->codunidadesubresp; //3
+                $clralic10->si180_codunidadesubrespestadual = ''; //4
+            }
+            $clralic10->si180_exerciciolicitacao = $oDados10->exerciciolicitacao; //5
+            $clralic10->si180_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio; //6
+            $clralic10->si180_tipocadastradolicitacao = $oDados10->tipocadastradolicitacao; //7
+            $clralic10->si180_dsccadastrolicitatorio = ''; //8
+            $clralic10->si180_leidalicitacao = $oDados10->l20_leidalicitacao; //9
+            $clralic10->si180_codmodalidadelicitacao = $oDados10->codmodalidadelicitacao; //10
+            $clralic10->si180_naturezaprocedimento = $oDados10->naturezaprocedimento; //11
+            $clralic10->si180_nroedital = $oDados10->nroedital; //12
+            $clralic10->si180_exercicioedital = $oDados10->exercicioedital ? $oDados10->exercicioedital : intval($oDados10->exerciciolicitacao); //13
+            $clralic10->si180_dtpublicacaoeditaldo = $oDados10->dtpublicacaoeditaldo; //14
+            $clralic10->si180_dtaberturaenvelopes = $oDados10->l20_dataaberproposta; //15
+            $clralic10->si180_link = preg_replace("/\r|\n/", "", $oDados10->link); //16
+            $clralic10->si180_tipolicitacao = $oDados10->codmodalidadelicitacao == '4' ? '' : $oDados10->tipolicitacao; //17
+            $clralic10->si180_mododisputa = $oDados10->l20_mododisputa; //18
+            $clralic10->si180_naturezaobjeto = $oDados10->naturezaobjeto; //19
+            $clralic10->si180_objeto = substr($this->removeCaracteres($oDados10->objeto), 0, 500); //20
+            $clralic10->si180_regimeexecucaoobras = $oDados10->regimeexecucaoobras; //21
+            if($oDados10->l20_orcsigiloso == '' || $oDados10->l20_orcsigiloso == 'f'){
+                $clralic10->si180_tipoorcamento = 1; //22
+            }else{
+                $clralic10->si180_tipoorcamento = 2; //22
+            }
+            $clralic10->si180_vlcontratacao = $oDados10->vlcontratacao; //23
+            $clralic10->si180_bdi = $oDados10->bdi; //24
+            $clralic10->si180_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];//25
+            $clralic10->si180_origemrecurso = $oDados10->origemrecurso; //26
+            $clralic10->si180_dscorigemrecurso = $oDados10->dscorigemrecurso; //27
+            $clralic10->si180_qtdlotes = $oDados10->qtdlotes; //28
+            $clralic10->si180_emailcontato = $oDados10->emailcontato; //29
+            $clralic10->si180_mesexercicioreforc = $oDados10->datacotacao; //23
+            $clralic10->si180_instit = db_getsession("DB_instit");
+
+            $clralic10->incluir(null);
+
+            if ($clralic10->erro_status == 0) {
+                throw new Exception($clralic10->erro_msg);
+            }
+
+            if ($oDados10->naturezaobjeto == "1") {
+                /**
+                 *  Selecionar informações do registro 11
+                 * @todo checar a obrigatoriedade do pcdotac
+                 */
+                $sSql11 = "
               SELECT DISTINCT '11' AS tipoRegistro,
                       infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
                       (SELECT CASE
@@ -456,7 +468,8 @@ ORDER BY nroprocessolicitatorio
                     CASE WHEN db150_grupobempublico <> 99 THEN db150_subgrupobempublico ELSE '9900' END AS codBemPublico,
                     l04_descricao as lote,
                     l20_tipojulg as julg,
-                    obrasdadoscomplementareslote.db150_planilhatce AS planilhamodelo
+                    obrasdadoscomplementareslote.db150_planilhatce AS planilhamodelo,
+                    infocomplementaresinstit.si09_codunidadesubunidade AS codUnidadeSubRespEstadual
                 FROM liclicita
                 INNER JOIN liclicitem ON (liclicita.l20_codigo=liclicitem.l21_codliclicita)
                 INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
@@ -485,73 +498,78 @@ ORDER BY nroprocessolicitatorio
               AND liclicita.l20_anousu = " . db_getsession('DB_anousu') . "
 				    ORDER BY obrasdadoscomplementareslote.db150_codobra";
 
-        $rsResult11 = db_query($sSql11);
+                $rsResult11 = db_query($sSql11);
 
-        $aDadosAgrupados11 = array();
+                $aDadosAgrupados11 = array();
 
-        /**
-         * @todo Ajustar o si181_nrolote para receber o contador de lote
-         *
-         */
+                /**
+                 * @todo Ajustar o si181_nrolote para receber o contador de lote
+                 *
+                 */
 
-        if (pg_numrows($rsResult11)) {
+                if (pg_numrows($rsResult11)) {
 
-          for ($iCont11 = 0; $iCont11 < pg_numrows($rsResult11); $iCont11++) {
-            $oResult11 = db_utils::fieldsMemory($rsResult11, $iCont11);
+                    for ($iCont11 = 0; $iCont11 < pg_numrows($rsResult11); $iCont11++) {
+                        $oResult11 = db_utils::fieldsMemory($rsResult11, $iCont11);
 
-            $sHash11 = '11' . $oResult11->codorgaoresp . $oResult11->codunidadesubresp . $oResult11->codunidadesubrespestadual .
-              $oResult11->exerciciolicitacao . $oResult11->nroprocessolicitatorio;
+                        $sHash11 = '11' . $oResult11->codorgaoresp . $oResult11->codunidadesubresp . $oResult11->codunidadesubrespestadual .
+                            $oResult11->exerciciolicitacao . $oResult11->nroprocessolicitatorio;
 
-            if ($oResult11->julg == 3) {
-              $sHash11 .= $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
-                $oResult11->tipoatividadeservespecializado . $oResult11->codobralocal . $oResult11->dscatividadeservespecializado . $oResult11->codbempublico;
-            }
+                        if ($oResult11->julg == 3) {
+                            $sHash11 .= $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
+                                $oResult11->tipoatividadeservespecializado . $oResult11->codobralocal . $oResult11->dscatividadeservespecializado . $oResult11->codbempublico;
+                        }
 
-            if (!isset($aDadosAgrupados11[$sHash11])) {
+                        if (!isset($aDadosAgrupados11[$sHash11])) {
 
-              $clralic11 = new cl_ralic112024();
+                            $clralic11 = new cl_ralic112024();
 
-              $clralic11->si181_tiporegistro = 11; //1
-              $clralic11->si181_codorgaoresp = $oResult11->codorgaoresp;//2
-              $clralic11->si181_codunidadesubresp = $oResult11->codunidadesubresp;//3
-              $clralic11->si181_codunidadesubrespestadual = $oResult11->codunidadesubrespestadual;//4
-              $clralic11->si181_exerciciolicitacao = $oResult11->exerciciolicitacao;//5
-              $clralic11->si181_nroprocessolicitatorio = $oResult11->nroprocessolicitatorio;//6
-              $clralic11->si181_codobralocal = $oResult11->codobralocal;//7
-              $clralic11->si181_classeobjeto = $oResult11->classeobjeto;//8
-              $clralic11->si181_tipoatividadeobra = $oResult11->tipoatividadeobra;//9
-              $clralic11->si181_tipoatividadeservico = $oResult11->tipoatividadeservico == 0 ? '' : $oResult11->tipoatividadeservico;//10
-              $clralic11->si181_dscatividadeservico = $oResult11->dscatividadeservico;//11
-              $clralic11->si181_tipoatividadeservespecializado = $oResult11->tipoatividadeservespecializado;//12
-              $clralic11->si181_dscatividadeservespecializado = $oResult11->dscatividadeservespecializado;//13
-              $clralic11->si181_codfuncao = $oResult11->codfuncao;//14
-              $clralic11->si181_codsubfuncao = $oResult11->codsubfuncao;//15
-              $clralic11->si181_codbempublico = $oResult11->codbempublico ? $oResult11->codbempublico : 9900;//16
-              $clralic11->si181_nrolote = count($aDadosAgrupados11) + 1;//17
-              $clralic11->si181_utilizacaoplanilhamodelo = $oResult11->planilhamodelo; //18
+                            $clralic11->si181_tiporegistro = 11; //1
+                            $clralic11->si181_codorgaoresp = $oResult11->codorgaoresp;//2
+                            if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
+                                $clralic11->si181_codunidadesubresp = '';//3
+                                $clralic11->si181_codunidadesubrespestadual = $oResult11->codunidadesubrespestadual;//4
+                            }else {
+                                $clralic11->si181_codunidadesubresp = $oResult11->codunidadesubresp;//3
+                                $clralic11->si181_codunidadesubrespestadual = ''; //4
+                            }
+                            $clralic11->si181_exerciciolicitacao = $oResult11->exerciciolicitacao;//5
+                            $clralic11->si181_nroprocessolicitatorio = $oResult11->nroprocessolicitatorio;//6
+                            $clralic11->si181_codobralocal = $oResult11->codobralocal;//7
+                            $clralic11->si181_classeobjeto = $oResult11->classeobjeto;//8
+                            $clralic11->si181_tipoatividadeobra = $oResult11->tipoatividadeobra;//9
+                            $clralic11->si181_tipoatividadeservico = $oResult11->tipoatividadeservico == 0 ? '' : $oResult11->tipoatividadeservico;//10
+                            $clralic11->si181_dscatividadeservico = $oResult11->dscatividadeservico;//11
+                            $clralic11->si181_tipoatividadeservespecializado = $oResult11->tipoatividadeservespecializado;//12
+                            $clralic11->si181_dscatividadeservespecializado = $oResult11->dscatividadeservespecializado;//13
+                            $clralic11->si181_codfuncao = $oResult11->codfuncao;//14
+                            $clralic11->si181_codsubfuncao = $oResult11->codsubfuncao;//15
+                            $clralic11->si181_codbempublico = $oResult11->codbempublico ? $oResult11->codbempublico : 9900;//16
+                            $clralic11->si181_nrolote = count($aDadosAgrupados11) + 1;//17
+                            $clralic11->si181_utilizacaoplanilhamodelo = $oResult11->planilhamodelo; //18
 
-              $clralic11->si181_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-              $clralic11->si181_reg10 = $clralic10->si180_sequencial;
-              $clralic11->si181_instit = db_getsession("DB_instit");
+                            $clralic11->si181_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                            $clralic11->si181_reg10 = $clralic10->si180_sequencial;
+                            $clralic11->si181_instit = db_getsession("DB_instit");
 
-              $clralic11->incluir(null);
+                            $clralic11->incluir(null);
 
-              if ($clralic11->erro_status == 0) {
-                throw new Exception($clralic11->erro_msg);
-              }
+                            if ($clralic11->erro_status == 0) {
+                                throw new Exception($clralic11->erro_msg);
+                            }
 
-              $aDadosAgrupados11[$sHash11] = $clralic11;
-            }
+                            $aDadosAgrupados11[$sHash11] = $clralic11;
+                        }
 
 
-            /*
-                   * Seleção dos registros 12 do RALIC
-                   *
-                   * */
-          }
-        }
+                        /*
+                        * Seleção dos registros 12 do RALIC
+                        *
+                        * */
+                    }
+                }
 
-        $sSql12 = "
+                $sSql12 = "
                       SELECT DISTINCT '12' AS tipoRegistro,
                              infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
                           (SELECT CASE
@@ -597,7 +615,8 @@ ORDER BY nroprocessolicitatorio
                              obrasdadoscomplementareslote.db150_cep as cep,
                              obrasdadoscomplementareslote.db150_latitude as latitude,
                              obrasdadoscomplementareslote.db150_longitude as longitude,
-                             CASE WHEN db150_grupobempublico <> 99 THEN db150_subgrupobempublico ELSE '9900' END AS codBemPublico
+                             CASE WHEN db150_grupobempublico <> 99 THEN db150_subgrupobempublico ELSE '9900' END AS codBemPublico,
+                             infocomplementaresinstit.si09_codunidadesubunidade AS codUnidadeSubRespEstadual
                       FROM liclicita
                       INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
                       INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
@@ -611,55 +630,59 @@ ORDER BY nroprocessolicitatorio
                           AND pctipocompratribunal.l44_sequencial NOT IN ('100','101','102', '103', '106') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio
                       ORDER BY obrasdadoscomplementareslote.db150_codobra";
 
-        $rsResult12 = db_query($sSql12);
+                $rsResult12 = db_query($sSql12);
+                $aDadosAgrupados12 = array();
+                for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
 
-        $aDadosAgrupados12 = array();
-        for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
+                    $oResult12 = db_utils::fieldsMemory($rsResult12, $iCont12);
+                    $sHash12 = '12' . $oResult12->codorgaoresp . $oResult12->codunidadesubresp . $oResult12->exercicioprocesso . $oResult12->nroprocessolicitatorio . $oResult12->codobralocal  . $oResult12->cep . $oResult12->latitude . $oResult12->longitude . $oResult12->codbempublico . $oResult12->nrolote;
 
-          $oResult12 = db_utils::fieldsMemory($rsResult12, $iCont12);
-          $sHash12 = '12' . $oResult12->codorgaoresp . $oResult12->codunidadesubresp . $oResult12->exercicioprocesso . $oResult12->nroprocessolicitatorio . $oResult12->codobralocal  . $oResult12->cep . $oResult12->latitude . $oResult12->longitude . $oResult12->codbempublico . $oResult12->nrolote;
+                    if (!isset($aDadosAgrupados12[$sHash12])) {
 
-          if (!isset($aDadosAgrupados12[$sHash12])) {
+                        $clralic12 = new cl_ralic122024();
 
-            $clralic12 = new cl_ralic122024();
+                        $clralic12->si182_tiporegistro = 12;//1
+                        $clralic12->si182_codorgaoresp = $oResult12->codorgaoresp;//2
+                        if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
+                            $clralic12->si182_codunidadesubresp = '';//3
+                            $clralic12->si182_codunidadesubrespestadual = $oResult12->codunidadesubrespestadual;//4
+                        }else {
+                            $clralic12->si182_codunidadesubresp = $oResult12->codunidadesubresp;//3
+                            $clralic12->si182_codunidadesubrespestadual = ''; //4
+                        }
+                        $clralic12->si182_exercicioprocesso = $oResult12->exercicioprocesso;//5
+                        $clralic12->si182_nroprocessolicitatorio = $oResult12->nroprocessolicitatorio;//6
+                        $clralic12->si182_codobralocal = $oResult12->codobralocal;//7
+                        $clralic12->si182_logradouro = $this->removeCaracteres(utf8_decode($oResult12->logradouro));//8
+                        $clralic12->si182_numero = $oResult12->numero;//9
+                        $clralic12->si182_bairro = $oResult12->bairro;//10
+                        $clralic12->si182_distrito = $oResult12->distrito;//11
+                        $clralic12->si182_municipio = $this->removeCaracteres($oResult12->municipio);//12
+                        $clralic12->si182_cep = $oResult12->cep;//13
+                        $clralic12->si182_latitude = $oResult12->latitude;//14
+                        $clralic12->si182_longitude = $oResult12->longitude;//15
+                        $clralic12->si182_codbempublico = $oResult12->codbempublico;//16
+                        $clralic12->si182_nrolote = count($aDadosAgrupados12) + 1;//17
+                        $clralic12->si182_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                        $clralic12->si182_reg10 = $clralic10->si180_sequencial; // chave estrangeira
+                        $clralic12->si182_instit = db_getsession("DB_instit");
 
-            $clralic12->si182_tiporegistro = 12;//1
-            $clralic12->si182_codorgaoresp = $oResult12->codorgaoresp;//2
-            $clralic12->si182_codunidadesubresp = $oResult12->codunidadesubresp;//3
-            $clralic12->si182_codunidadesubrespestadual = $oResult12->codunidadesubrespestadual != '' ? $oResult12->codunidadesubrespestadual : '0';//4
-            $clralic12->si182_exercicioprocesso = $oResult12->exercicioprocesso;//5
-            $clralic12->si182_nroprocessolicitatorio = $oResult12->nroprocessolicitatorio;//6
-            $clralic12->si182_codobralocal = $oResult12->codobralocal;//7
-            $clralic12->si182_logradouro = $this->removeCaracteres(utf8_decode($oResult12->logradouro));//8
-            $clralic12->si182_numero = $oResult12->numero;//9
-            $clralic12->si182_bairro = $oResult12->bairro;//10
-            $clralic12->si182_distrito = $oResult12->distrito;//11
-            $clralic12->si182_municipio = $this->removeCaracteres($oResult12->municipio);//12
-            $clralic12->si182_cep = $oResult12->cep;//13
-            $clralic12->si182_latitude = $oResult12->latitude;//14
-            $clralic12->si182_longitude = $oResult12->longitude;//15
-            $clralic12->si182_codbempublico = $oResult12->codbempublico;//16
-            $clralic12->si182_nrolote = count($aDadosAgrupados12) + 1;//17
-            $clralic12->si182_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-            $clralic12->si182_reg10 = $clralic10->si180_sequencial; // chave estrangeira
-            $clralic12->si182_instit = db_getsession("DB_instit");
+                        $clralic12->incluir(null);
 
-            $clralic12->incluir(null);
+                        if ($clralic12->erro_status == 0) {
+                            throw new Exception($clralic12->erro_msg);
+                        }
 
-            if ($clralic12->erro_status == 0) {
-              throw new Exception($clralic12->erro_msg);
+                        $aDadosAgrupados12[$sHash12] = $clralic12;
+                    }
+                }
             }
-
-            $aDadosAgrupados12[$sHash12] = $clralic12;
-          }
         }
-      }
+
+        db_fim_transacao();
+
+        $oGerarRALIC = new GerarRALIC();
+        $oGerarRALIC->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+        $oGerarRALIC->gerarDados();
     }
-
-    db_fim_transacao();
-
-    $oGerarRALIC = new GerarRALIC();
-    $oGerarRALIC->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-    $oGerarRALIC->gerarDados();
-  }
 }
