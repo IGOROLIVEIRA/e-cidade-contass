@@ -295,6 +295,14 @@ class cl_historicomaterial
                 return false;
             }
         }
+
+        if (trim($this->db150_data) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_data"])) {
+            $sql .= $virgula . " db150_data = '$this->db150_data' ";
+            $virgula = ",";
+        }else{
+            $sql .= $virgula . " db150_data = 'null' ";
+        }
+
         if (trim($this->db150_instit) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_instit"])) {
             $sql .= $virgula . " db150_instit = $this->db150_instit ";
             $virgula = ",";

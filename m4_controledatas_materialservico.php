@@ -130,11 +130,9 @@ $clsolicita->rotulo->label();
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td colspan="2">
                             <input name="btnAplicar" id="btnAplicar" type="button" value="Aplicar"  onclick='atualizarDataPara();' >
                             <input name="btnProcessar" id="btnProcessar" type="button" value="Processar"  onclick='consultaCodigoMaterial();' >
-                        </td>
-                        <td>
                             <input name="btnAplicarSicom" id="btnAplicarSicom" type="button" value="Aplicar Sicom"  onclick='atualizarDataParaSicom();' >
                         </td>
                     </tr>
@@ -153,11 +151,10 @@ $clsolicita->rotulo->label();
     let oGridMaterialServico = new DBGrid('gridMaterialServico');
     oGridMaterialServico.nameInstance = 'oGridMaterialServico';
     oGridMaterialServico.setCheckbox(0);
-    oGridMaterialServico.setCellWidth( [ '0%', '10%', '10%','10%','10%', '50%', '15%', '15%','10%' ] );
-    oGridMaterialServico.setHeader( [ 'codigo', 'Código','Código Sicom','Tipo Registro','Unidade', 'Descrição', 'Data', 'Data Sicom', 'Cód. Anterior'] );
-    oGridMaterialServico.setCellAlign( [ 'left', 'left', 'left', 'left','left','left', 'center', 'center', 'center' ] );
+    oGridMaterialServico.setCellWidth( [ '0%', '10%', '15%','5%','10%', '45%', '15%', '15%','10%' ] );
+    oGridMaterialServico.setHeader( [ 'codigo', 'Código','Código Sicom','Tipo','Unidade', 'Descrição', 'Data', 'Data Sicom', 'Cód. Anterior'] );
+    oGridMaterialServico.setCellAlign( [ 'center', 'center', 'center', 'left','left','left', 'center', 'center', 'center' ] );
     oGridMaterialServico.setHeight(260);
-    oGridMaterialServico.setW(260);
     oGridMaterialServico.aHeaders[1].lDisplayed = false;
     oGridMaterialServico.show($('ctnGridMaterialServico'));
     let aMateriaisCadastrados = [];
@@ -386,6 +383,10 @@ $clsolicita->rotulo->label();
                     oMaterialSelecionado[7];
                 aMateriaisParaAtualizacao[iMaterialSeleciona].data_alteracao =
                     oMaterialSelecionado[8];
+                aMateriaisParaAtualizacao[iMaterialSeleciona].codigo_sicom =
+                    oMaterialSelecionado[3];
+                aMateriaisParaAtualizacao[iMaterialSeleciona].tipo =
+                    oMaterialSelecionado[4];
             }
         );
 

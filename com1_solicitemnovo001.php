@@ -690,6 +690,42 @@ if (isset($incluir) && $sqlerro == false) {
 		if ($clsolicitem->erro_status == 0) {
 			$sqlerro = true;
 		}
+
+
+        $db150_coditem = $pc16_codmater.$pc17_unid;
+
+        $rsHistoricoMaterial = $clhistoricomaterial->sql_record($clhistoricomaterial->sql_query(null,"*",null,"db150_coditem =$db150_coditem"));
+
+        if(pg_num_rows($rsHistoricoMaterial) == 0 ){
+            $rsMaterial = $clpcmater->sql_record($clpcmater->sql_query(null,"pc01_descrmater,pc01_complmater",null,"pc01_codmater = {$pc16_codmater}"));
+            $oMaterial = db_utils::fieldsmemory($rsMaterial, 0);
+
+            $rsMatunid = $clmatunid->sql_record($clmatunid->sql_query_file($pc17_unid));
+            $oMatunid = db_utils::fieldsmemory($rsMatunid, 0);
+
+            //inserir na tabela historico material
+            $clhistoricomaterial->db150_tiporegistro              = 10;
+            $clhistoricomaterial->db150_coditem                   = $db150_coditem;
+            $clhistoricomaterial->db150_pcmater                   = $pc16_codmater;
+            $clhistoricomaterial->db150_dscitem                   = substr($oMaterial->pc01_descrmater.'-'.$oMaterial->pc01_complmater,0,999);
+            $clhistoricomaterial->db150_unidademedida             = $oMatunid->m61_descr;
+            $clhistoricomaterial->db150_tipocadastro              = 1;
+            $clhistoricomaterial->db150_justificativaalteracao    = '';
+            $clhistoricomaterial->db150_mes                       = date("m", db_getsession("DB_datausu"));
+            $clhistoricomaterial->db150_data                      = date("Y-m-d", db_getsession("DB_datausu"));
+            $clhistoricomaterial->db150_instit                    = db_getsession('DB_instit');
+            $clhistoricomaterial->incluir(null);
+
+            if ($clhistoricomaterial->erro_status == 0) {
+                $sqlerro = true;
+                $msg_alert = $clhistoricomaterial->erro_msg;
+                db_msgbox("Erro na inclusão na historicomaterial código do material: " . $arrayItensPlanilha[$i]->codmaterial . "\\n" . $msg_alert);
+                db_fim_transacao($sqlerro);
+                db_redireciona("com1_solicitemnovo001.php?pc11_numero=$pc11_numero");
+            }
+        }
+
+
 		if ($sqlerro == false) {
 			if (isset($param) && trim($param) != "") {
 				if (isset($codproc) && trim($codproc) != "") {

@@ -84,7 +84,7 @@ switch ($oParam->exec) {
                         ELSE pc01_descrmater
                     END AS descricao,
                     pc01_data AS data,
-                     pc01_dataalteracao AS dataalteracao,
+                     db150_data AS dataalteracao,
                      db150_coditem,
                    db150_unidademedida,
                    db150_tipocadastro,
@@ -137,7 +137,7 @@ switch ($oParam->exec) {
                        ELSE pc01_descrmater
                    END AS descricao,
                    pc01_data AS DATA,
-                   pc01_dataalteracao AS dataalteracao,
+                   db150_data AS dataalteracao,
                    db150_coditem,
                    db150_unidademedida,
                    db150_tipocadastro,
@@ -192,7 +192,7 @@ switch ($oParam->exec) {
                        ELSE pc01_descrmater
                    END AS descricao,
                    pc01_data AS DATA,
-                   pc01_dataalteracao AS dataalteracao,
+                   db150_data AS dataalteracao,
                    db150_coditem,
                    db150_unidademedida,
                    db150_tipocadastro,
@@ -249,7 +249,7 @@ switch ($oParam->exec) {
                        ELSE pc01_descrmater
                    END AS descricao,
                    pc01_data AS DATA,
-                   pc01_dataalteracao AS dataalteracao,
+                   db150_data AS dataalteracao,
                    db150_coditem,
                    db150_unidademedida,
                    db150_tipocadastro,
@@ -288,7 +288,7 @@ switch ($oParam->exec) {
                        ELSE pc01_descrmater
                    END AS descricao,
                    pc01_data AS DATA,
-                   pc01_dataalteracao AS dataalteracao,
+                   db150_data AS dataalteracao,
                    db150_coditem,
                    db150_unidademedida,
                    db150_tipocadastro,
@@ -366,7 +366,7 @@ switch ($oParam->exec) {
 
           if($oMaterial->data_alteracao){
 
-              $rsHistMat = $clhistoricomaterial->sql_record($clhistoricomaterial->sql_query(null,"*",null,"db150_pcmater = $oMaterial->codigo and db150_tipocadastro = 2"));
+              $rsHistMat = $clhistoricomaterial->sql_record($clhistoricomaterial->sql_query(null,"*",null,"db150_coditem = $oMaterial->codigo_sicom and db150_tipocadastro = $oMaterial->tipo"));
 
               $aData = explode('/', $oMaterial->data_alteracao);
 
@@ -378,7 +378,7 @@ switch ($oParam->exec) {
               );
               if(pg_num_rows($rsHistMat)) {
 
-                  $clhistoricomaterial->db150_data = $dataAlteracao;
+                  $clhistoricomaterial->db150_data = $oMaterial->data_alteracao;
                   $clhistoricomaterial->db150_mes = $aData[1];
                   $clhistoricomaterial->db150_sequencial = $oMat[0]->db150_sequencial;
                   $clhistoricomaterial->alterar($oMat[0]->db150_sequencial);
