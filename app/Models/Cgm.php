@@ -10,7 +10,7 @@ class Cgm extends LegacyModel
     /**
      * @var string
      */
-    protected $table = 'cgm';
+    protected $table = 'protocolo.cgm';
 
     /**
      * @var string

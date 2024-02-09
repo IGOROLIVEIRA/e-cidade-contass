@@ -10,7 +10,7 @@ class PcForne extends LegacyModel
     /**
      * @var string
      */
-    protected $table = 'pcforne';
+    protected $table = 'compras.pcforne';
 
     /**
      * @var string

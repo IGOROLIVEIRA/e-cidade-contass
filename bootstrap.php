@@ -24,7 +24,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'definitions.php';
 require_once(ECIDADE_PATH . 'libs/db_autoload.php');
 
 // eloquent
-// require_once (ECIDADE_PATH . 'ecidade_legacy_config/ORM/Eloquent/bootstrap.php');
+require_once (ECIDADE_PATH . 'legacy_config/ORM/Eloquent/bootstrap.php');
 
 
 //
