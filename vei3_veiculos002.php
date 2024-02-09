@@ -151,7 +151,6 @@ $oVeiculo         = db_utils::fieldsMemory($rsBuscaVeiculo, false);
             <td class="valores">
                 <?=$oVeiculo->ve23_descr ? $oVeiculo->ve23_descr : ' - '?>
             </td>
-
         </tr>
         <tr>
 
@@ -170,6 +169,13 @@ $oVeiculo         = db_utils::fieldsMemory($rsBuscaVeiculo, false);
             </td>
             <td class="valores">
                 <?=$oVeiculo->ve01_ranavam ? $oVeiculo->ve01_ranavam : ' - '?>
+            </td>
+
+            <td>
+                <strong>Status</strong>
+            </td>
+            <td class="valores">
+                <?=$oVeiculo->ve01_ativo ? 'ATIVO' : '<span style="color: red;">BAIXADO</span>'?>
             </td>
 
         </tr>
@@ -278,59 +284,6 @@ $oVeiculo         = db_utils::fieldsMemory($rsBuscaVeiculo, false);
 </fieldset>
 
 <fieldset>
-
-    <legend>
-        <strong>Dados da Baixa:</strong>
-    </legend>
-
-    <table>
-
-        <? if ($oVeiculo->ve04_codigo) { ?>
-            <tr>
-
-                <td>
-                    <b>Data da Baixa:</b>
-                </td>
-                <td class="valores">
-                    <?=db_formatar($oVeiculo->ve04_data, 'd')?>
-                </td>
-
-                <td>
-                    <b>Horário da Baixa:</b>
-                </td>
-                <td class="valores">
-                    <?=$oVeiculo->ve04_hora?>
-                </td>
-
-            </tr>
-
-            <tr>
-
-                <td>
-                    <b>Usuário Responsável:</b>
-                </td>
-                <td class="valores">
-                    <?=$oVeiculo->nome ? $oVeiculo->nome : ' - '?>
-                </td>
-
-                <td>
-                    <b>Motivo:</b>
-                </td>
-                <td class="valores">
-                    <?=$oVeiculo->ve04_motivo?>
-                </td>
-
-            </tr>
-        <? } else { ?>
-            <tr>
-                <td>
-                    <b>VEICULO NÃO BAIXADO</b>
-                </td>
-            </tr>
-        <? } ?>
-    </table>
-</fieldset>
-<fieldset>
     <legend>
         <strong>Detalhamento do veículo:</strong>
     </legend>
@@ -339,13 +292,13 @@ $oVeiculo         = db_utils::fieldsMemory($rsBuscaVeiculo, false);
     $oTabDetalhes = new verticalTab('detalhesVeiculo', 300);
 
     $sGetUrl = "?veiculo={$oVeiculo->ve01_codigo}";
-    $oTabDetalhes->add('retiradas'             , 'Retiradas'            , "func_detalhamentoretiradasveiculos.php{$sGetUrl}");
-    $oTabDetalhes->add('abastecimento'         , 'Abastecimentos'       , "func_detalhamentoabastecimentosveiculos.php{$sGetUrl}");
-    $oTabDetalhes->add('manutencao'            , 'Manutenções'          , "func_detalhamentomanutencaoveiculos.php{$sGetUrl}");
-    $oTabDetalhes->add('manutenção de medidas' , 'Manutenções de Medida', "func_detalhamentomanutencaomedida.php{$sGetUrl}");
-    $oTabDetalhes->add('Impressão'             , 'Impressão'            , "func_impressaofichaveiculo.php{$sGetUrl}");
-    $oTabDetalhes->add('Transferências'        , 'Transferencia'        , "func_transferenciasveiculo.php{$sGetUrl}");
-    $oTabDetalhes->add('Placa'                 , 'Placa'                , "func_detalhamentoalteracoesplaca.php{$sGetUrl}");
+    $oTabDetalhes->add('retiradas'                  , 'Retiradas'            , "func_detalhamentoretiradasveiculos.php{$sGetUrl}");
+    $oTabDetalhes->add('abastecimento'              , 'Abastecimentos'       , "func_detalhamentoabastecimentosveiculos.php{$sGetUrl}");
+    $oTabDetalhes->add('manutencao'                 , 'Manutenções'          , "func_detalhamentomanutencaoveiculos.php{$sGetUrl}");
+    $oTabDetalhes->add('manutenção de medidas'      , 'Manutenções de Medida', "func_detalhamentomanutencaomedida.php{$sGetUrl}");
+    $oTabDetalhes->add('Impressão'                  , 'Impressão'            , "func_impressaofichaveiculo.php{$sGetUrl}");
+    $oTabDetalhes->add('Histórico de Movimentações' , 'Transferencia'        , "func_historicodemovimentacoes.php{$sGetUrl}");
+    $oTabDetalhes->add('Placa'                      , 'Placa'                , "func_detalhamentoalteracoesplaca.php{$sGetUrl}");
     $oTabDetalhes->show();
     ?>
 </fieldset>
