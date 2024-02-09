@@ -215,10 +215,7 @@ if (isset($o56_codele) and trim($o56_codele) != '') {
           }
           db_lovrot(@$sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
         } else {
-            // var_dump($clpcmater->sql_query_desdobra(null, "regexp_replace(pcmater.pc01_descrmater,'\r|\n','','g') as pc01_descrmater,pc01_veiculo,pc01_servico, pc01_complmater", "", "pc01_codmater=$pesquisa_chave and $where_ativo"));
-            // var_dump($funcao_js);
-            // die();
-
+           
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
             $result = $clpcmater->sql_record($clpcmater->sql_query_desdobra(null, "regexp_replace(pcmater.pc01_descrmater,'\r|\n','','g') as pc01_descrmater,pc01_veiculo,pc01_servico, pc01_complmater", "", "pc01_codmater=$pesquisa_chave and $where_ativo"));
             if ($clpcmater->numrows != 0) {
