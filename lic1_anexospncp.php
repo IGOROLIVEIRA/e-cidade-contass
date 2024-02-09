@@ -121,7 +121,7 @@ $oRotulo->label("l20_objeto");
 
                 $oTipo = db_utils::fieldsMemory($result_tipo, $iIndiceTipo);
 
-                $tipo[$oTipo->l213_sequencial] = $oTipo->l213_descricao;
+                $tipo[$oTipo->l213_sequencial] = utf8_decode($oTipo->l213_descricao);
               }
 
               if ($cltipoanexo->numrows == 0) {
@@ -920,7 +920,7 @@ $oRotulo->label("l20_objeto");
         asynchronous: false,
 
         /**
-         * 
+         *
          * Retorno do RPC
          */
         onComplete: function(oAjax) {
@@ -985,7 +985,7 @@ $oRotulo->label("l20_objeto");
         asynchronous: false,
 
         /**
-         * 
+         *
          * Retorno do RPC
          */
         onComplete: function(oAjax) {
