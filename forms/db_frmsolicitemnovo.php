@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBselller Servicos de Informatica
@@ -44,18 +44,14 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
 ?>
 <style type="text/css">
-  input::placeholder {
-    color: black;
-  }
-
-  .hoverBox {
+    .hoverBox {
         background-color: #6699CC;
-        width:50%;
-        height: 150px;
+        max-width: 100%;
+        max-height: 150px;
         position: absolute;
         bottom: 50%;
         text-align: start;
-        padding-left: 15px;
+        padding: 15px;
         display: content;
     }
     .hoverBoxDisabled {
@@ -64,7 +60,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 </style>
 <div id="hoverBox" class="hoverBox hoverBoxDisabled">
   <p><strong>Descricao Material: </strong></p>
-  <p id="hoverText" class="descricao" style="max-width: 100%;"></p>
+  <p id="hoverText"></p>
 </div>
 <div>
   <form style="margin-top: 20px;" name="form1" method="post" action="" enctype="multipart/form-data">
@@ -1066,11 +1062,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
     document.getElementById('pc17_unid').disabled = false;
     document.getElementById('eleSub').disabled = false;
     document.getElementById('pc11_servicoquantidade').disabled = false;
-
-
-
-
-
   }
 
   function js_adicionarItem() {

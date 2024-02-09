@@ -182,12 +182,12 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
 <style type="text/css">
     .hoverBox {
         background-color: #6699CC;
-        width:50%;
-        height: 150px;
+        max-width: 100%;
+        max-height: 150px;
         position: absolute;
         bottom: 50%;
         text-align: start;
-        padding-left: 15px;
+        padding: 15px;
         display: content;
     }
     .hoverBoxDisabled {
@@ -197,7 +197,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
 
 <div id="hoverBox" class="hoverBox hoverBoxDisabled">
   <p><strong>Descricao Material: </strong></p>
-  <p id="hoverText" class="descricao" style="max-width: 100%;"></p>
+  <p id="hoverText" class="descricao" ></p>
 </div>
 
 <form name="form1" method="post" action="" onsubmit=" return js_validarFormulario(); ">
@@ -969,9 +969,13 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
   }
 
 
-  function js_mostrapcmater(chave, erro, lVeic) {
+  function js_mostrapcmater(chave, erro, lVeic, pc01Complmater) {
     document.form1.pc01_descrmater.value = chave;
     document.form1.o56_codelefunc.value = '';
+
+    document.form1.pc01_complmater.value = pc01Complmater;
+    console.log(pc01Complmater);
+
     if (erro == true) {
       document.form1.pc16_codmater.focus();
       document.form1.pc16_codmater.value = '';
@@ -1001,11 +1005,11 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     }
   }
 
-  function js_mostrapcmater1(chave1, chave2, codele, lVeic, pc01_complmater, iRegistro) {
+  function js_mostrapcmater1(chave1, chave2, codele, lVeic, pc01Complmater, iRegistro) {
 
     js_esconteVeic(lVeic);
 
-    document.form1.pc01_complmater.value = pc01_complmater;
+    document.form1.pc01_complmater.value = pc01Complmater;
 
 
     if (iRegistro != null) {
