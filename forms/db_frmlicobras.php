@@ -324,7 +324,7 @@ $cllicobras->rotulo->label();
             document.getElementById('licitacaolote').value = '';
             document.getElementById('trdescricaolote').style.display = 'none';
         }
-        
+
         db_iframe_licobras.hide();
     }
 
@@ -332,9 +332,9 @@ $cllicobras->rotulo->label();
         document.form1.l03_descr.value = descrcompra;
         document.form1.l20_numero.value = numero;
         document.form1.l20_objeto.value = objeto;
-        
+
         if(julgamento==3){
-        js_preenchedescricaolote(codigo);  
+        js_preenchedescricaolote(codigo);
         }else{
             document.getElementById('licitacaolote').value = '';
             document.getElementById('trdescricaolote').style.display = 'none';
@@ -346,7 +346,7 @@ $cllicobras->rotulo->label();
             document.form1.l20_numero.value = "";
             document.form1.l20_objeto.value = "";
             document.getElementById('trdescricaolote').style.display = 'none';
-        }       
+        }
     }
 
     function js_preencheLicitacaoanterior(codigo, objeto, descrcompra) {
@@ -378,7 +378,7 @@ $cllicobras->rotulo->label();
 
             js_OpenJanelaIframe('CurrentWindow.corpo',
                 'db_iframe_cgm',
-                'func_nome.php?funcao_js=parent.js_preencheResponsavel|z01_numcgm|z01_nome&filtro=1',
+                'func_nome.php?funcao_js=parent.js_preencheResponsavel|z01_numcgm|z01_nome&filtro=1&obras=true',
                 'Pesquisa Responsáveis', true);
         } else {
 
@@ -387,7 +387,7 @@ $cllicobras->rotulo->label();
                 js_OpenJanelaIframe('CurrentWindow.corpo',
                     'db_iframe_cgm',
                     'func_nome.php?pesquisa_chave=' +
-                    document.form1.obr05_responsavel.value + '&funcao_js=parent.js_preencheResponsavel2&filtro=1',
+                    document.form1.obr05_responsavel.value + '&funcao_js=parent.js_preencheResponsavel2&filtro=1obras=true',
                     'Pesquisa', false);
             } else {
                 document.form1.obr05_responsavel.value = '';
@@ -420,7 +420,7 @@ $cllicobras->rotulo->label();
     }
 
     function js_carregalote(){
-        
+
         if($F('obr01_licitacao')=="" || $F('obr01_licitacao')==null){
             document.getElementById('trdescricaolote').style.display = 'none';
         }
@@ -642,7 +642,7 @@ $cllicobras->rotulo->label();
                             $("obr01_licitacaolote").options.remove(0);
                             $("obr01_licitacaolote").options[iSeq+1] = new Option(lotes.descricao.urlDecode(),lotes.numlote);
                         }else{
-                            
+
                             $("obr01_licitacaolote").options[iSeq+1] = new Option(lotes.descricao.urlDecode(),lotes.numlote);
                         }
                         if($F('licitacaolote')==lotes.numlote && $F('obr01_sequencial')!=""){
@@ -655,13 +655,13 @@ $cllicobras->rotulo->label();
                         }
                     }
                 });
-                
+
                 document.getElementById('licitacaolote').value = oRetorno.itens.length;
                 document.getElementById('trdescricaolote').style.display = '';
             }else{
                 document.getElementById('licitacaolote').value = '';
                 document.getElementById('trdescricaolote').style.display = 'none';
-            }       
+            }
         }else if(oRetorno.status == 2){
             document.getElementById('trdescricaolote').style.display = 'none';
             document.getElementById('trdescricaolote').value = '';
@@ -669,11 +669,11 @@ $cllicobras->rotulo->label();
             document.getElementById('licitacaolote').value = 1;
             document.getElementById('trdescricaolote').style.display = '';
         }
-        
+
 
         js_removeObj("msgbox");
 
-        
+
     }
 
     function js_verificatipo(){

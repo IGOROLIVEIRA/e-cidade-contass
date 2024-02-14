@@ -65,6 +65,7 @@ try {
             $oRetorno->datafinal         = $oContrato->getDataFinal();
             $oRetorno->valores           = $oContrato->getValoresItens();
             $oRetorno->seqaditivo        = $oContrato->getProximoNumeroAditivo($oParam->iAcordo);
+            $oRetorno->vigenciaindeterminada = $oContrato->getVigenciaIndeterminada();
             $oAditivo = db_utils::getDao('acordoposicaoaditamento');
             $oResult = $oAditivo->sql_query(null, "*", null, "ac16_sequencial={$oParam->iAcordo}");
             //echo $oResult;
@@ -163,7 +164,6 @@ try {
 
         case "processarAditamento":
             $clcondataconf = new cl_condataconf;
-
             if ($sqlerro == false) {
                 $anousu = db_getsession('DB_anousu');
 
@@ -219,7 +219,7 @@ try {
             }
 
             $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo); //var_dump($oParam->sVigenciaalterada);
-            $oContrato->aditar($oParam->aItens, $oParam->tipoaditamento, $oParam->datainicial, $oParam->datafinal, $oParam->sNumeroAditamento, $oParam->dataassinatura, $oParam->datapublicacao, $oParam->descricaoalteracao, $oParam->veiculodivulgacao, $oParam->justificativa, $oParam->tipoalteracaoaditivo, $oParam->aSelecionados, $oParam->sVigenciaalterada, $oParam->lProvidencia, $oParam->datareferencia, $oParam->percentualreajuste, $oParam->indicereajuste, $oParam->descricaoindice);
+            $oContrato->aditar($oParam->aItens, $oParam->tipoaditamento, $oParam->datainicial, $oParam->datafinal, $oParam->sNumeroAditamento, $oParam->dataassinatura, $oParam->datapublicacao, $oParam->descricaoalteracao, $oParam->veiculodivulgacao, $oParam->justificativa, $oParam->tipoalteracaoaditivo, $oParam->aSelecionados, $oParam->sVigenciaalterada, $oParam->lProvidencia, $oParam->datareferencia, $oParam->percentualreajuste, $oParam->indicereajuste, $oParam->descricaoindice,$oParam->descricaoreajuste,$oParam->criterioreajuste);
 
             break;
 
@@ -241,14 +241,14 @@ try {
             $oRetorno->itens = $aUnidades;
             break;
         case "getleilicitacao":
-            $sSQL = "select l20_leidalicitacao  from liclicita 
+            $sSQL = "select l20_leidalicitacao  from liclicita
             inner join acordo on
                 acordo.ac16_licitacao = liclicita.l20_codigo
             where
             acordo.ac16_origem = 2
             and acordo.ac16_sequencial = $oParam->licitacao";
-            
-            
+
+
             $rsResult       = db_query($sSQL);
             $leilicitacao = db_utils::fieldsMemory($rsResult, 0);
 

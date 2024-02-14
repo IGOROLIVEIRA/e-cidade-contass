@@ -414,7 +414,7 @@ class EventoContabil {
    * @return null
    * @throws BusinessException
    */
-  public function executaLancamento(ILancamentoAuxiliar $oLancamentoAuxiliar, $sDataLancamento = null) {
+  public function executaLancamento(ILancamentoAuxiliar $oLancamentoAuxiliar, $sDataLancamento = null, $ctCredora = null, $ctDevedora = null) {
 
  	  $dtDataUsu = date("Y-m-d", db_getsession('DB_datausu'));
 		if (!empty($sDataLancamento)) {
@@ -432,9 +432,14 @@ class EventoContabil {
 	  $oDaoLancamento->c70_valor  = $nValorTotal;
 	  $oDaoLancamento->c70_codlan = null;
 	  $oDaoLancamento->incluir(null);
-	  if ($oDaoLancamento->erro_status == 0) {
-
-	    $sErroMsg = "Não foi Possível incluir lancamento\nErro Técnico:{$oDaoLancamento->erro_msg}";
+	  if ($oDaoLancamento->erro_status == 0) {	
+		if (substr($oDaoLancamento->erro_banco,8,13)  == 'DATA INVALIDA' ) {
+			$mensagemErro = substr($oDaoLancamento->erro_banco,8,65);
+			$sErroMsg =" $mensagemErro ";
+		} 
+		else {
+			$sErroMsg = "Não foi Possível incluir lancamento\nErro Técnico:{$oDaoLancamento->erro_msg}";
+		}
 	    throw new BusinessException($sErroMsg);
 	  }
 
@@ -449,7 +454,9 @@ class EventoContabil {
 	    $oLancamentoContabil->executa($oDaoLancamento->c70_codlan,
 	                                  $this->iCodigoDocumento,
 	                                  $oLancamentoAuxiliar,
-	                                  $dtDataUsu
+	                                  $dtDataUsu,
+									  $ctCredora,
+									  $ctDevedora
 	                                 );
 	  }
 

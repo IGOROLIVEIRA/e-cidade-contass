@@ -42,6 +42,7 @@ if(isset($alterar)){
   $clrhfuncao->rh37_reqcargo = $rh37_reqcargo;
   $clrhfuncao->rh37_instit = db_getsession("DB_instit");
   $clrhfuncao->rh37_atividadedocargo = $rh37_atividadedocargo;
+  $clrhfuncao->rh37_dedicacaoexc = $rh37_dedicacaoexc;
   $clrhfuncao->alterar($rh37_funcao,db_getsession("DB_instit"));
   db_fim_transacao();
 }else if(isset($chavepesquisa)){

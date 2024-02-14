@@ -206,6 +206,19 @@ class AcordoPosicao
 
     protected  $sJustificativa;
 
+     /**
+     * critério de reajuste
+     *
+     * @var integer
+     */
+
+    protected $iCriterioReajuste;
+
+    /**
+     *   Descrição do Reajuste
+     */
+    protected $sDescricaoreajuste;
+
     /**
      * Constante do caminho da mensagem do model
      * @var string
@@ -696,6 +709,44 @@ class AcordoPosicao
         return $this->sVigenciaalterada;
     }
 
+     /**
+     * retorna o critério de reajuste
+     * @return integer
+     */
+    public function getCriterioReajuste()
+    {
+        return $this->iCriterioReajuste;
+    }
+
+    /**
+     * define o critério de reajuste
+     * @param integer $iCriterioReajuste
+     */
+    public function setCriterioReajuste($iCriterioReajuste)
+    {
+        $this->iCriterioReajuste = $iCriterioReajuste;
+        return $this;
+    }
+
+    /**
+     * retorna a descrição de reajuste
+     * @return integer
+     */
+    public function getDescricaoReajuste()
+    {
+        return $this->sDescricaoReajuste;
+    }
+
+    /**
+     * define o critério de reajuste
+     * @param string $sDescricaoReajuste
+     */
+    public function setDescricaoReajuste($sDescricaoReajuste)
+    {
+        $this->sDescricaoReajuste = $sDescricaoReajuste;
+        return $this;
+    }
+
     /**
      * @return AcordoItem[]
      */
@@ -1071,6 +1122,8 @@ class AcordoPosicao
         $oDaoPosicao->ac26_indicereajuste = $this->getIndiceReajusteacordo();
         $oDaoPosicao->ac26_percentualreajuste = $this->getPercentualReajuste();
         $oDaoPosicao->ac26_descricaoindice = $this->getDescricaoIndiceacordo();
+        $oDaoPosicao->ac26_criterioreajuste = $this->getCriterioReajuste();
+        $oDaoPosicao->ac26_descricaoreajuste = $this->getDescricaoReajuste();
         $iCodigo                             = $this->getCodigo();
 
         if (empty($iCodigo)) {

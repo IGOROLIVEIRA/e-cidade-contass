@@ -155,6 +155,7 @@ for ($iInd = 0; $iInd < $clacordo->numrows; $iInd++) {
   $oDadosAcordo->getVigencia      = $oAcordo->getDataFinal();
   $oDadosAcordo->getValorTotal    = $oAcordo->getValoresItens()->valoratual;
   $oDadosAcordo->getObjeto        = substr($oAcordo->getObjeto(), "0", "249");
+  $oDadosAcordo->vigenciaindeterminada = $oAcordo->getVigenciaIndeterminada();
   $aDadosAcordo[] = $oDadosAcordo;
 }
 $head2 = "Acordo: {$sAcordo}";
@@ -204,7 +205,8 @@ foreach ($aDadosAcordo as $oDadoAcordo) {
   $oPdf->Cell(78, $iAlt, substr($oDadoAcordo->getContratado, 0, 46), 1, 0, 'C', $iCorFundo);
   $oPdf->Cell(78, $iAlt, $oDadoAcordo->getDepartamento, 1, 0, 'C', $iCorFundo);
   $oPdf->Cell(40, $iAlt, $oDadoAcordo->getAssinatura, 1, 0, 'C', $iCorFundo);
-  $oPdf->Cell(40, $iAlt, $oDadoAcordo->getVigencia, 'TBL', 1, 'C', $iCorFundo);
+  $dataVigencia = $oDadoAcordo->vigenciaindeterminada == "t" ? "-" : $oDadoAcordo->getVigencia;
+  $oPdf->Cell(40, $iAlt, $dataVigencia, 'TBL', 1, 'C', $iCorFundo);
   $oPdf->MultiCell(278, $iAlt, urldecode($oDadoAcordo->getObjeto), 'TB', 'L', $iCorFundo);
 }
 

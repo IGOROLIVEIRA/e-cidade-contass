@@ -101,6 +101,15 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
     }
   }
 
+  public function getLicitacaoOutrosOrgaos($processo,$anouso){
+      $rsCgmLicitacao = db_query("SELECT z01_cgccpf
+                                FROM liclicitaoutrosorgaos
+                                INNER JOIN cgm ON z01_numcgm = lic211_orgao
+                                WHERE lic211_anousu=$anouso
+                                    AND lic211_processo=$processo");
+      return db_utils::fieldsMemory($rsCgmLicitacao, 0)->z01_cgccpf;
+  }
+
   /**
    * selecionar os dados dos empenhos do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
@@ -427,9 +436,9 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
     $rsEmpenho10 = db_query($sSql);
 
-    // echo $sSql;
-    //  db_criatabela($rsEmpenho10);
-    // exit;
+//     echo $sSql;
+//     db_criatabela($rsEmpenho10);
+//     exit;
 
     $aCaracteres = array("°", chr(13), chr(10), "'", ";");
     // matriz de entrada
@@ -587,14 +596,12 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         // PARA CONTRATOS MIGRADOS
         $empModel = new EmpenhoFinanceiro();
         $oAcordoMigrado = $empModel->getContratoSICOM($oEmpenho10->numemp);
-        //echo "<pre>";print_r($oAcordoMigrado);exit;
         if ($oAcordoMigrado) {
           $oDadosEmpenho10->si106_despdeccontrato = 1;
           $oDadosEmpenho10->si106_nrocontrato = $oEmpenho10->manutac_numeroant == '' ? $oAcordoMigrado->ac16_numero : substr($oEmpenho10->manutac_numeroant,0,14); // campo 20
           $oDadosEmpenho10->si106_dtassinaturacontrato = $oAcordoMigrado->ac16_dataassinatura; // campo 21
           $sUnidadeSub = str_pad($oAcordoMigrado->db01_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oAcordoMigrado->db01_unidade, 3, "0", STR_PAD_LEFT);
           $oDadosEmpenho10->si106_codunidadesubrespcontrato = $sUnidadeSub == "00000" ? "" : $sUnidadeSub;
-          //$oDadosEmpenho10->si106_nrosequencialtermoaditivo = $oAcordoMigrado->nrosequencialtermoaditivo; // campo 22
         }
       } elseif (((date('Y', strtotime($oEmpenho10->dtempenho)) <= date('Y', strtotime($oEmpenho10->dataassinaturatermoaditivo))
         &&  date('m', strtotime($oEmpenho10->dtempenho)) < date('m', strtotime($oEmpenho10->dataassinaturatermoaditivo)))
@@ -681,33 +688,13 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
       }
       if ($oEmpenho10->lic211_sequencial != '') {
-        if ($oEmpenho10->despdeclicitacao != 9) {
-          $oDadosEmpenho10->si106_codorgaoresplicit = $oEmpenho10->lic211_codorgaoresplicit;
+          $oDadosEmpenho10->si106_numdocumentoorgao = $this->getLicitacaoOutrosOrgaos($oEmpenho10->lic211_processo,$oEmpenho10->lic211_anousu);
           $oDadosEmpenho10->si106_codunidadesubresplicit = $oEmpenho10->lic211_codunisubres; // campo 30
           $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->lic211_processo; // campo 31
           $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->lic211_anousu; // campo 32
-
-        } else {
-          $oDadosEmpenho10->si106_despdeclicitacao = $oEmpenho10->despdeclicitacao; // campo 29
-          $oDadosEmpenho10->si106_codorgaoresplicit = '';
-          $oDadosEmpenho10->si106_codunidadesubresplicit = ''; // campo 30
-          $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->lic211_processo; // campo 31
-          $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->lic211_anousu; // campo 32
-        }
       }
 
       $oDadosEmpenho10->si106_cpfordenador = substr($oEmpenho10->ordenador, 0, 11); // campo 34
-
-      /*
-             * verificar se o tipo de despesa se enquadra nos elementos necessários para informar esse campo para RPPS
-             */
-            /*
-      if (($sCodorgao->si09_tipoinstit == 5 || $sCodorgao->si09_tipoinstit == 6) && (in_array(substr($sElemento, 0, 6), $aTipoDespEmpRPPS))) {
-        $oDadosEmpenho10->si106_tipodespesaemprpps = $oEmpenho10->e60_tipodespesa; // campo 35
-      } else {
-        $oDadosEmpenho10->si106_tipodespesaemprpps = null; // campo 35
-      }
-      */
       $oDadosEmpenho10->si106_mes = $this->sDataFinal['5'] . $this->sDataFinal['6']; // campo 36
       $oDadosEmpenho10->si106_instit = db_getsession("DB_instit"); // campo 37
 
@@ -721,17 +708,17 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
        */
       $oDadosEmpenhoFonte = new cl_emp112024();
 
-        $oCodigoAcompanhamento = new ControleOrcamentario();
-        $oCodigoAcompanhamento->setTipoDespesa($oEmpenho10->e60_tipodespesa);
-        $oCodigoAcompanhamento->setFonte($oEmpenho10->o15_codigo);
-        $oCodigoAcompanhamento->setEmendaParlamentar($oEmpenho10->e60_emendaparlamentar);
-        $oCodigoAcompanhamento->setEsferaEmendaParlamentar($oEmpenho10->e60_esferaemendaparlamentar);
-        $oCodigoAcompanhamento->setDeParaFonteCompleta();
+      $oCodigoAcompanhamento = new ControleOrcamentario();
+      $oCodigoAcompanhamento->setTipoDespesa($oEmpenho10->e60_tipodespesa);
+      $oCodigoAcompanhamento->setFonte($oEmpenho10->o15_codigo);
+      $oCodigoAcompanhamento->setEmendaParlamentar($oEmpenho10->e60_emendaparlamentar);
+      $oCodigoAcompanhamento->setEsferaEmendaParlamentar($oEmpenho10->e60_esferaemendaparlamentar);
+      $oCodigoAcompanhamento->setDeParaFonteCompleta();
       $oDadosEmpenhoFonte->si107_tiporegistro = 11;
       $oDadosEmpenhoFonte->si107_codunidadesub = $sCodUnidade;
       $oDadosEmpenhoFonte->si107_nroempenho = $oEmpenho10->nroempenho;
       $oDadosEmpenhoFonte->si107_codfontrecursos = $oEmpenho10->o15_codtri;
-        $oDadosEmpenhoFonte->si107_codco = $oCodigoAcompanhamento->getCodigoParaEmpenho();
+      $oDadosEmpenhoFonte->si107_codco = $oCodigoAcompanhamento->getCodigoParaEmpenho();
       $oDadosEmpenhoFonte->si107_valorfonte = $oEmpenho10->vlbruto;
       $oDadosEmpenhoFonte->si107_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $oDadosEmpenhoFonte->si107_reg10 = $oDadosEmpenho10->si106_sequencial;

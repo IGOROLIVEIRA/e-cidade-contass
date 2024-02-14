@@ -42,6 +42,8 @@ class cl_dispensa102024
   var $si74_mes = 0;
   var $si74_instit = 0;
   var $si74_leidalicitacao = 0;
+  var $si74_codunidadesubedital = null;
+  var $si74_tipocriterio = null;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  si74_sequencial = int8 = sequencial
@@ -63,6 +65,8 @@ class cl_dispensa102024
                  si74_mes = int8 = Mês
                  si74_instit = int8 = Instituição
                  si74_leidalicitacao = int8 = Lei da Licitação
+                 si74_codunidadesubedital = int = Cod Unidade Sub Edital
+                 si74_tipocriterio = int = Tipo Criterio;
                  ";
 
   //funcao construtor da classe
@@ -121,6 +125,8 @@ class cl_dispensa102024
       $this->si74_mes = ($this->si74_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_mes"] : $this->si74_mes);
       $this->si74_instit = ($this->si74_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_instit"] : $this->si74_instit);
       $this->si74_leidalicitacao = ($this->si74_leidalicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_leidalicitacao"] : $this->si74_leidalicitacao);
+      $this->si74_codunidadesubedital = ($this->si74_codunidadesubedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_codunidadesubedital"] : $this->si74_codunidadesubedital);
+      $this->si74_tipocriterio = ($this->si74_tipocriterio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_tipocriterio"] : $this->si74_tipocriterio);
     } else {
       $this->si74_sequencial = ($this->si74_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_sequencial"] : $this->si74_sequencial);
     }
@@ -169,6 +175,15 @@ class cl_dispensa102024
     if ($this->si74_instit == null) {
       $this->erro_sql = " Campo Instituição nao Informado.";
       $this->erro_campo = "si74_instit";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->si74_codunidadesubedital == null) {
+      $this->erro_sql = " Campo Cod Unidade SUb Edital nao Informado.";
+      $this->erro_campo = "si74_codunidadesubedital";
       $this->erro_banco = "";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -231,6 +246,8 @@ class cl_dispensa102024
                                       ,si74_mes
                                       ,si74_instit
                                       ,si74_leidalicitacao
+                                      ,si74_codunidadesubedital
+                                      ,si74_tipocriterio
                        )
                 values (
                                 $this->si74_sequencial
@@ -252,6 +269,8 @@ class cl_dispensa102024
                                ,$this->si74_mes
                                ,$this->si74_instit
                                ,$this->si74_leidalicitacao
+                               ,'$this->si74_codunidadesubedital'
+                               ," . ($this->si74_tipocriterio == "null" || $this->si74_tipocriterio == "" ? "null" : "'" . $this->si74_tipocriterio . "'") . "
                       )";
 
     $result = db_query($sql);

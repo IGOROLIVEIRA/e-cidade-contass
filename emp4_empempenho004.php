@@ -933,15 +933,18 @@ if(isset($incluir)) {
 
 
       /*rotina que inclui na tabela empefdreinf*/
-      if ($sqlerro == false && $efd60_cessaomaoobra == 2) {
-        $clempefdreinf->efd60_cessaomaoobra = $efd60_cessaomaoobra;
+      if ($sqlerro == false) {
         $clempefdreinf->efd60_aquisicaoprodrural = $efd60_aquisicaoprodrural;
-        $clempefdreinf->efd60_possuicno = $efd60_possuicno;
-        $clempefdreinf->efd60_numcno = $efd60_numcno;
-        $clempefdreinf->efd60_indprestservico = $efd60_indprestservico;
-        $clempefdreinf->efd60_prescontricprb = $efd60_prescontricprb;
-        $clempefdreinf->efd60_tiposervico = $efd60_tiposervico;
         $clempefdreinf->efd60_prodoptacp = $efd60_prodoptacp;
+        
+        if ($efd60_cessaomaoobra == 2) {
+            $clempefdreinf->efd60_cessaomaoobra = $efd60_cessaomaoobra;
+            $clempefdreinf->efd60_possuicno = $efd60_possuicno;
+            $clempefdreinf->efd60_numcno = $efd60_numcno;
+            $clempefdreinf->efd60_indprestservico = $efd60_indprestservico;
+            $clempefdreinf->efd60_prescontricprb = $efd60_prescontricprb;
+            $clempefdreinf->efd60_tiposervico = $efd60_tiposervico;
+        }
         
         if($clempefdreinf->numrows>0){
             $clempefdreinf->alterar($e60_numemp);

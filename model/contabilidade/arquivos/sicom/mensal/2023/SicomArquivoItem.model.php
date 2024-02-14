@@ -83,7 +83,9 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     $sSql = "SELECT    db150_tiporegistro AS tipoRegistro,
                        db150_coditem AS coditem,
-                       regexp_replace(pcmater.pc01_descrmater||' '||substring(pc01_complmater,1,900), ' +', ' ', 'g') AS dscItem,
+                       CASE
+           WHEN pc01_complmater IS NOT NULL THEN regexp_replace(pcmater.pc01_descrmater||' '||substring(pc01_complmater,1,900), ' +', ' ', 'g')
+               else regexp_replace(pcmater.pc01_descrmater , ' +', ' ', 'g') end AS dscItem,
                        db150_unidademedida AS unidadeMedida,
                        db150_tipocadastro AS tipoCadastro,
                        '' AS justificativaAlteracao
@@ -91,10 +93,13 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
                 INNER JOIN pcmater ON pc01_codmater = db150_pcmater
                 WHERE db150_instit in ($instit,0)
                     AND db150_mes = $mes
+                    AND DATE_PART('YEAR',db150_data)= " . db_getsession("DB_anousu") . "
                 UNION
                 SELECT db150_tiporegistro AS tipoRegistro,
                        db150_coditem AS coditem,
-                       regexp_replace(pcmater.pc01_descrmater||' '||substring(pc01_complmater,1,900), ' +', ' ', 'g') AS dscItem,
+                                              CASE
+           WHEN pc01_complmater IS NOT NULL THEN regexp_replace(pcmater.pc01_descrmater||' '||substring(pc01_complmater,1,900), ' +', ' ', 'g')
+               else regexp_replace(pcmater.pc01_descrmater , ' +', ' ', 'g') end AS dscItem,
                        db150_unidademedida AS unidadeMedida,
                        db150_tipocadastro AS tipoCadastro,
                        '' AS justificativaAlteracao
@@ -102,9 +107,10 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
                 INNER JOIN pcmater ON pc01_codmater = db150_pcmater
                 WHERE db150_instit in ($instit,0)
                     AND db150_tipocadastro = 2
+                    AND DATE_PART('YEAR',db150_data)= " . db_getsession("DB_anousu") . "
                     AND db150_mes = $mes";
     $rsResult10 = db_query($sSql);
-    //db_criatabela($rsResult10);exit;
+
        for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $clitem10 = new cl_item102023();
@@ -136,14 +142,12 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
 
         $clitem10->si43_tiporegistro = 10;
         $clitem10->si43_coditem = $oDados10->coditem;
-        $clitem10->si43_dscItem = preg_replace('/\s+/', ' ', (preg_replace("/[^a-zA-Z0-9 ]/", "",$this->tirarAcentos(strtoupper($oDados10->dscitem)))));
+        $clitem10->si43_dscItem = strtoupper($this->tirarAcentos($oDados10->dscitem)." ".$oDados10->coditem);
         $clitem10->si43_unidademedida = $this->tirarAcentos($oDados10->unidademedida);
         $clitem10->si43_tipocadastro = $oDados10->tipocadastro;
         $clitem10->si43_justificativaalteracao = $oDados10->justificativaalteracao;
         $clitem10->si43_instit = db_getsession("DB_instit");
         $clitem10->si43_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-
-        // echo pg_last_error();
         $clitem10->incluir(null);
         if ($clitem10->erro_status == 0) {
           throw new Exception($clitem10->erro_msg);

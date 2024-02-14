@@ -123,6 +123,7 @@ switch ($listagem) {
 
 $campos = " ac16_numero::integer,
             ac16_sequencial,
+            ac16_vigenciaindeterminada,
             ac26_numero,
             (CASE
                   WHEN ac26_numeroapostilamento <> '' THEN ac26_numeroapostilamento
@@ -248,7 +249,8 @@ for ($contador=0; $contador < $numrows; $contador++) {
     $oPdf->setx(151);
 
     $oPdf->Cell(28, $nova_altura, ($data_assinatura == '' ? '-' : $data_assinatura), 'TB', 0, 'C', 0);
-    $oPdf->Cell(20, $nova_altura, formataData($oAcordo->vigencia_final, false), 1, 1, 'C', 0);
+    $dataVigencia = $oAcordo->ac16_vigenciaindeterminada == "t" ? "-" : formataData($oAcordo->vigencia_final,false);
+    $oPdf->Cell(20, $nova_altura, $dataVigencia, 1, 1, 'C', 0);
     $old_y = $oPdf->gety();
     $nova_altura = $iAlt;
     $troca=0;

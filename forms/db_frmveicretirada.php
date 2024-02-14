@@ -313,21 +313,21 @@ db_app::load("prototype.js");
     }
   }
 
-  function js_mostraveiculos(codigoveiculo, placa, descr, qtdcapacidade,erro,baixa) {
+  function js_mostraveiculos(codigoveiculo, placa, descr, qtdcapacidade, erro, baixa) {
 
     document.form1.ve01_placa.value = placa;
 
-    
+
     if (erro == true) {
 
       document.form1.ve60_veiculo.focus();
       document.form1.ve60_veiculo.value = '';
     } else {
-            
+
       <?
       echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?veiculo='+codigoveiculo";
       ?>
-      
+
 
     }
   }

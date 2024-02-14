@@ -200,10 +200,10 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                      AND o40_anousu = o41_anousu
                      WHERE db01_coddepto=l20_codepartamento AND db01_anousu=" . db_getsession('DB_anousu') . "
                      LIMIT 1) AS codUnidadeSubResp,
-                                '0' AS codUnidadeSubRespEstadual,
+                                si09_codunidadesubunidade AS codUnidadeSubRespEstadual,
                                 liclicita.l20_anousu AS exercicioProcesso,
                                 liclicita.l20_edital AS nroProcesso,
-                                pctipocompratribunal.l44_codigotribunal AS tipoProcesso,
+                                liclicita.l20_tipoprocesso AS tipoProcesso,
                                 '1' AS tipocadastradodispensainexigibilidade,
                                 '' AS dscCadastroLicitatorio,
                                 CASE
@@ -218,7 +218,8 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                                 liclicita.l20_usaregistropreco,
                                 case when liclicita.l20_naturezaobjeto = '1' or liclicita.l20_naturezaobjeto = '7' then liclicita.l20_regimexecucao else 0 end AS regimeExecucaoObras,
                                 obrasdadoscomplementareslote.db150_bdi AS bdi,
-                                liclancedital.l47_linkpub as linkpub,
+                                liclancedital.l47_linkpub AS linkpub,
+                                liclancedital.l47_email AS emailContato,
                                 (SELECT SUM(si02_vlprecoreferencia * pc11_quant)
                                  FROM
                                      (SELECT DISTINCT pc11_seq,
@@ -274,7 +275,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                 WHERE db_config.codigo = " . db_getsession('DB_instit') . " AND liclancedital.l47_dataenvio = '" . $this->sDataFinal . "'
                     AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106)
 ";
-    $rsResult10 = db_query($sSql); //db_criatabela($rsResult10);die($sSql);
+    $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);die($sSql);
 
     /**
      * registro 10
@@ -288,26 +289,32 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
       $chave = $oDados10->nroprocesso;
       if (!in_array($chave, $aDadosAgrupados10)) {
         $aDadosAgrupados10[] = $chave;
-        $clredispi10->si183_tiporegistro = 10;
-        $clredispi10->si183_codorgaoresp          = $oDados10->codorgaoresp;
-        $clredispi10->si183_codunidadesubresp = $oDados10->codunidadesubresp;
-        $clredispi10->si183_codunidadesubrespestadual = $oDados10->codunidadesubrespestadual;
-        $clredispi10->si183_exercicioprocesso = $oDados10->exercicioprocesso;
-        $clredispi10->si183_nroprocesso = $oDados10->nroprocesso;
-        $clredispi10->si183_tipoprocesso = $oDados10->tipoprocesso;
-        $clredispi10->si183_tipocadastradodispensainexigibilidade = $oDados10->tipocadastradodispensainexigibilidade;
-        $clredispi10->si183_dsccadastrolicitatorio = $oDados10->dsccadastrolicitatorio;
-        $clredispi10->si183_dtabertura = $oDados10->dtabertura;
-        $clredispi10->si183_naturezaobjeto = $oDados10->naturezaobjeto;
-        $clredispi10->si183_objeto = $oDados10->objeto;
-        $clredispi10->si183_justificativa = $oDados10->justificativa;
-        $clredispi10->si183_razao = $oDados10->razao;
-        $clredispi10->si183_vlrecurso = $oDados10->vlrecurso == null ? 0 : $oDados10->vlrecurso;
-        $clredispi10->si183_bdi = $oDados10->bdi;
-        $clredispi10->si183_link = $oDados10->linkpub;
-        $clredispi10->si183_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-        $clredispi10->si183_leidalicitacao = $oDados10->l20_leidalicitacao;
-        $clredispi10->si183_regimeexecucaoobras = $oDados10->regimeexecucaoobras;
+        $clredispi10->si183_tiporegistro = 10;//1
+        $clredispi10->si183_codorgaoresp         = $oDados10->codorgaoresp;//2
+        if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
+            $clredispi10->si183_codunidadesubresp = '';//3
+            $clredispi10->si183_codunidadesubrespestadual = $oDados10->codunidadesubrespestadual;//4
+        }else {
+            $clredispi10->si183_codunidadesubresp = $oDados10->codunidadesubresp;//3
+            $clredispi10->si183_codunidadesubrespestadual = ''; //4
+        }
+        $clredispi10->si183_exercicioprocesso = $oDados10->exercicioprocesso;//5
+        $clredispi10->si183_nroprocesso = $oDados10->nroprocesso;//6
+        $clredispi10->si183_tipoprocesso = $oDados10->tipoprocesso;//7
+        $clredispi10->si183_tipocadastradodispensainexigibilidade = $oDados10->tipocadastradodispensainexigibilidade;//8
+        $clredispi10->si183_dsccadastrolicitatorio = $oDados10->dsccadastrolicitatorio;//9
+        $clredispi10->si183_dtabertura = $oDados10->dtabertura;//10
+        $clredispi10->si183_naturezaobjeto = $oDados10->naturezaobjeto;//11
+        $clredispi10->si183_objeto = $oDados10->objeto;//12
+        $clredispi10->si183_justificativa = $oDados10->justificativa;//13
+        $clredispi10->si183_razao = $oDados10->razao;//14
+        $clredispi10->si183_vlrecurso = $oDados10->vlrecurso == null ? 0 : $oDados10->vlrecurso;//15
+        $clredispi10->si183_bdi = $oDados10->bdi;//16
+        $clredispi10->si183_link = $oDados10->linkpub;//17
+        $clredispi10->si183_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];//18
+        $clredispi10->si183_leidalicitacao = $oDados10->l20_leidalicitacao;//19
+        $clredispi10->si183_regimeexecucaoobras = $oDados10->regimeexecucaoobras;//20
+        $clredispi10->si183_emailcontato = $oDados10->emailcontato; //21
         $clredispi10->si183_instit = db_getsession("DB_instit");
 
         $clredispi10->incluir(null);
@@ -369,7 +376,9 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 						   obrasdadoscomplementareslote.db150_descratividadeservicoesp as dscAtividadeServEspecializado,
 						   orcdotacao.o58_funcao AS codFuncao,
 						   orcdotacao.o58_subfuncao AS codSubFuncao,
-						   CASE WHEN db150_grupobempublico <> 99 THEN db150_subgrupobempublico ELSE '9900' END AS codBemPublico
+						   CASE WHEN db150_grupobempublico <> 99 THEN db150_subgrupobempublico ELSE '9900' END AS codBemPublico,
+						   obrasdadoscomplementareslote.db150_planilhatce,
+						   si09_codunidadesubunidade AS codUnidadeSubRespEstadual
                         FROM liclicita
                         INNER JOIN liclicitem ON (liclicita.l20_codigo=liclicitem.l21_codliclicita)
                         INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
@@ -414,26 +423,32 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
             if (!isset($aDadosAgrupados11[$sHash11])) {
 
               $clredispi11 = new cl_redispi112024();
-              $clredispi11->si184_tiporegistro = 11;
-              $clredispi11->si184_codorgaoresp = $oResult11->codorgaoresp;
-              $clredispi11->si184_codunidadesubresp = $oResult11->codunidadesubresp;
-              $clredispi11->si184_codunidadesubrespestadual = $oResult11->codunidadesubrespestadual;
-              $clredispi11->si184_exercicioprocesso = $oResult11->exercicioprocesso;
-              $clredispi11->si184_nroprocesso = $oResult11->nroprocesso;
-              $clredispi11->si184_codobralocal = $oResult11->codobralocal;
-              $clredispi11->si184_tipoprocesso = $oResult11->tipoprocesso;
-              $clredispi11->si184_classeobjeto = intval($oResult11->classeobjeto);
-              $clredispi11->si184_tipoatividadeobra = $oResult11->tipoatividadeobra;
-              $clredispi11->si184_tipoatividadeservico = $oResult11->tipoatividadeservico;
-              $clredispi11->si184_dscatividadeservico = $oResult11->dscatividadeservico;
-              $clredispi11->si184_tipoatividadeservespecializado = $oResult11->tipoatividadeservespecializado;
-              $clredispi11->si184_dscatividadeservespecializado = $oResult11->dscatividadeservespecializado;
-              $clredispi11->si184_codfuncao = $oResult11->codfuncao;
-              $clredispi11->si184_codsubfuncao = $oResult11->codsubfuncao;
-              $clredispi11->si184_codbempublico = $oResult11->codbempublico;
-              $clredispi11->si184_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+              $clredispi11->si184_tiporegistro = 11;//1
+              $clredispi11->si184_codorgaoresp = $oResult11->codorgaoresp;//2
+              if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
+                  $clredispi11->si184_codunidadesubresp = '';//3
+                  $clredispi11->si184_codunidadesubrespestadual = $oResult11->codunidadesubrespestadual;//4
+              }else {
+                  $clredispi11->si184_codunidadesubresp = $oResult11->codunidadesubresp;//3
+                  $clredispi11->si184_codunidadesubrespestadual = ""; //4
+              }
+              $clredispi11->si184_exercicioprocesso = $oResult11->exercicioprocesso;//5
+              $clredispi11->si184_nroprocesso = $oResult11->nroprocesso;//6
+              $clredispi11->si184_codobralocal = $oResult11->codobralocal;//7
+              $clredispi11->si184_tipoprocesso = $oResult11->tipoprocesso;//8
+              $clredispi11->si184_classeobjeto = intval($oResult11->classeobjeto);//9
+              $clredispi11->si184_tipoatividadeobra = $oResult11->tipoatividadeobra;//10
+              $clredispi11->si184_tipoatividadeservico = $oResult11->tipoatividadeservico;//11
+              $clredispi11->si184_dscatividadeservico = $oResult11->dscatividadeservico;//12
+              $clredispi11->si184_tipoatividadeservespecializado = $oResult11->tipoatividadeservespecializado;//13
+              $clredispi11->si184_dscatividadeservespecializado = $oResult11->dscatividadeservespecializado;//14
+              $clredispi11->si184_codfuncao = $oResult11->codfuncao;//15
+              $clredispi11->si184_codsubfuncao = $oResult11->codsubfuncao;//16
+              $clredispi11->si184_codbempublico = $oResult11->codbempublico;//17
+              $clredispi11->si184_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];//18
               $clredispi11->si184_reg10 = $clredispi10->si183_sequencial; // chave estrangeira
               $clredispi11->si184_instit = db_getsession("DB_instit");
+              $clredispi11->si184_utilizacaoplanilhamodelo = $oResult11->db150_planilhatce;
               $clredispi11->incluir(null);
               if ($clredispi11->erro_status == 0) {
                 throw new Exception($clredispi11->erro_msg);
@@ -481,7 +496,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 						 WHERE db01_coddepto=l20_codepartamento
 							 AND db01_anousu = " . db_getsession('DB_anousu') . "
 						 LIMIT 1) AS codUnidadeSubResp,
-						   '' AS codUnidadeSubRespEstadual,
+						   si09_codunidadesubunidade AS codUnidadeSubRespEstadual,
 						   liclicita.l20_anousu AS exercicioProcesso,
 						   liclicita.l20_edital AS nroProcesso,
 						   obrasdadoscomplementareslote.db150_codobra AS codObraLocal,
@@ -520,8 +535,13 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
             $clredispi12 = new cl_redispi122024();
             $clredispi12->si185_tiporegistro = 12;
             $clredispi12->si185_codorgaoresp = $oResult12->codorgaoresp;
-            $clredispi12->si185_codunidadesubresp = $oResult12->codunidadesubresp;
-            $clredispi12->si185_codunidadesubrespestadual = $oResult12->codunidadesubrespestadual;
+            if (db_gettipoinstit(db_getsession('DB_instit')) == "51") {
+              $clredispi12->si185_codunidadesubresp = '';
+              $clredispi12->si185_codunidadesubrespestadual = $oResult12->codunidadesubrespestadual;
+            }else {
+              $clredispi12->si185_codunidadesubresp = $oResult12->codunidadesubresp;
+              $clredispi12->si185_codunidadesubrespestadual = "";
+            }
             $clredispi12->si185_exercicioprocesso = $oResult12->exercicioprocesso;
             $clredispi12->si185_nroprocesso = $oResult12->nroprocesso;
             $clredispi12->si185_codobralocal = $oResult12->codobralocal;

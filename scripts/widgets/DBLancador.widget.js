@@ -301,6 +301,7 @@ DBLancador.prototype.criarElementosBasicos = function () {
   oElementos.oDivPrincipal       = document.createElement('div');
 
   oElementos.oFieldSet           = document.createElement('fieldset');
+  oElementos.oFieldSet.id        = this.sName;
   oElementos.oLegend             = document.createElement('legend');
   oElementos.oTexto              = document.createTextNode(this.sTextoFieldset);
 

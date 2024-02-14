@@ -294,10 +294,10 @@ $iOpcao = 3;
                                    @$ac16_datainicio_ano, true, 'text', $iOpcao);
                     ?>
                   </td>
-                  <td style="text-indent: 30px;">
+                  <td class="vigencia_final" style="text-indent: 30px;">
                     <label>Fim:</label>
                   </td>
-                  <td style="text-align: right;">
+                  <td class="vigencia_final" style="text-align: right;">
                     <?
                       db_inputdata('ac16_datafim', @$ac16_datafim_dia, @$ac16_datafim_mes, @$ac16_datafim_ano, true, 'text', $iOpcao);
                     ?>
@@ -513,6 +513,8 @@ function retornoBuscaDadosAcordo( oResponse ) {
   $("ac16_objeto").value               = oRetorno.contrato.sObjeto.urlDecode();
   $("ac16_resumoobjeto").value         = oRetorno.contrato.sResumoObjeto.urlDecode();
 
+  js_alteracaoVigencia(oRetorno.contrato.iVigenciaIndeterminada);
+
   setTimeout( function() {
                             pesquisaAcordoGrupo( oRetorno.contrato.iGrupo );
                             pesquisaCategoria( oRetorno.contrato.iCategoriaAcordo );
@@ -654,6 +656,18 @@ function retornoPesquisaCategoria() {
   if ( arguments[1] == false ) {
     $("ac50_descricao").value = arguments[0];
   }
+}
+
+function js_alteracaoVigencia(vigenciaIndeterminada){
+
+  if(vigenciaIndeterminada == "t"){
+      document.getElementsByClassName('vigencia_final')[0].style.display = 'none';
+      document.getElementsByClassName('vigencia_final')[1].style.display = 'none';
+      return;
+  }
+  document.getElementsByClassName('vigencia_final')[0].style.display = '';
+  document.getElementsByClassName('vigencia_final')[1].style.display = '';
+
 }
 
 pesquisaAcordos();

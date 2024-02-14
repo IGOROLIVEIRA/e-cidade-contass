@@ -56,3 +56,6 @@ config/apipcp/.env
 node_modules
 .env
 phinx.yml
+docker/db-data
+extension/data/extension/Desktop.data
+extension/modification/data/modification/dbportal-v3-desktop.data

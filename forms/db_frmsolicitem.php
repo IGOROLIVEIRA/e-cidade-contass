@@ -1415,7 +1415,6 @@ $sSqlServicoQuantidade   = $oDaoSolicitem->sql_query_file(null, "pc11_servicoqua
 $rsServicoQuantidade     = $oDaoSolicitem->sql_record($sSqlServicoQuantidade);
 
 //if ($oDaoSolicitem->numrows > 0) {
-
 $pc11_servicoquantidade = db_utils::fieldsMemory($rsServicoQuantidade, 0)->pc11_servicoquantidade;
 
 if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '34490') {
@@ -1465,7 +1464,7 @@ if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '34490') {
   //echo "  $('pc17_unid').style.visibility           = 'visible';                  ";
   echo "  $('pc17_quant').style.visibility           = 'hidden';                  ";
   echo "  document.form1.pc11_servicoquantidade.style.visibility  = 'hidden'; ";
-  echo "  document.form1.pc11_servicoquantidade.value = 'false';  ";
+  echo "  document.form1.pc11_servicoquantidade.value = 'true';  ";
   echo "</script>                                                                  ";
 }
 

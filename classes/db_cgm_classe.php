@@ -1372,6 +1372,39 @@ class cl_cgm {
         }
         return $sql;
     }
+    function sql_query_cgccpf ( $z01_cgccpf=null,$campos="*",$ordem=null,$dbwhere=""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = explode("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from cgm left join issbase on z01_numcgm = q02_numcgm ";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($z01_cgccpf!=null ){
+                $sql2 .= " where cgm.z01_cgccpf = $z01_cgccpf ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = explode("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        } echo $sql;exit;
+        return $sql;
+    }
     // funcao do sql
     function sql_query_file ( $z01_numcgm=null,$campos="*",$ordem=null,$dbwhere=""){
         $sql = "select ";
