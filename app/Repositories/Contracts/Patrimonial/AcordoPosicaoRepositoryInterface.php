@@ -35,4 +35,10 @@ interface AcordoPosicaoRepositoryInterface
      */
     public function getAditamentoByNumero(int $ac26Acordo, int $numeroAditamento): AcordoPosicao;
 
+    /**
+     *
+     * @param integer $acordo
+     * @return integer|null
+     */
+    public function getUltimoIdApostilmentoByAcordo(int $acordo): ?int;
 }

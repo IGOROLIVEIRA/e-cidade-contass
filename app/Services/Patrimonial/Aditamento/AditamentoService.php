@@ -33,6 +33,14 @@ class AditamentoService implements AditamentoServiceInterface
     {
         $acordoPosicao = $this->acordoPosicaoRepository->getAditamentoUltimaPosicao($ac16Sequencial);
 
+        $lastIdApostila = $this->acordoPosicaoRepository->getUltimoIdApostilmentoByAcordo($ac16Sequencial);
+        if (!empty($lastIdApostila) && $lastIdApostila > $acordoPosicao->ac26_sequencial) {
+            return [
+                'status' => false,
+                'message' => 'Existe um apostilamento na posição posterior.Será necessário criar novo aditivo.'
+            ];
+        }
+
         $acordoPosicaoAnterior = GetUltimaPosicaoCommand::execute(
             $this->acordoPosicaoRepository,
             $acordoPosicao,
@@ -40,7 +48,6 @@ class AditamentoService implements AditamentoServiceInterface
         );
 
         $temAnulacao = ( new VerificaAnulacaoAutorizacaoCommand())->execute($acordoPosicaoAnterior);
-
         if ($temAnulacao) {
             return [
                 'status' => false,

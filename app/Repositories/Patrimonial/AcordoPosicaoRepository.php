@@ -131,4 +131,13 @@ class AcordoPosicaoRepository implements AcordoPosicaoRepositoryInterface
 
         return $acordoPosicao->update($dados);
     }
+
+    public function getUltimoIdApostilmentoByAcordo(int $acordo): ?int
+    {
+        $acordoPosicao = $this->model->where('ac26_acordo', $acordo)
+            ->where('ac26_numeroapostilamento','<>', '')
+            ->orderBy('ac26_numero', 'desc')
+            ->first(['ac26_sequencial']);
+        return $acordoPosicao->ac26_sequencial;
+    }
 }
