@@ -94,16 +94,26 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
                            END AS dscItem,
                            db150_unidademedida AS unidadeMedida,
                            db150_tipocadastro AS tipoCadastro,
-                           '' AS justificativaAlteracao
+                           pc01_justificativa AS justificativaAlteracao
                     FROM historicomaterial
                     INNER JOIN pcmater ON pc01_codmater = db150_pcmater
-                    WHERE db150_instit IN ($instit,0)
+                    WHERE db150_instit IN ($instit, 0)
                         AND DATE_PART('YEAR', db150_data) = " . db_getsession("DB_anousu") . "
-                        AND ((db150_mes = $mes
-                              AND db150_tipocadastro = 1)
-                             OR (db150_mes <> $mes
-                                 AND db150_tipocadastro = 2))";
-        $rsResult10 = db_query($sSql);//echo $sSql;db_criatabela($rsResult10);
+                        AND db150_mes = $mes
+                        AND (
+                            db150_tipocadastro = 1
+                            OR (
+                                db150_tipocadastro = 2
+                                AND NOT EXISTS (
+                            SELECT 1
+                                    FROM historicomaterial h2
+                                    WHERE h2.db150_coditem = historicomaterial.db150_coditem
+                        AND h2.db150_mes = historicomaterial.db150_mes
+                        AND h2.db150_tipocadastro = 1
+                                )
+                            )
+                        )";
+        $rsResult10 = db_query($sSql);//echo $sSql;db_criatabela($rsResult10);exit;
 
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 

@@ -367,15 +367,9 @@ switch ($oParam->exec) {
           if($oMaterial->data_alteracao){
 
               $rsHistMat = $clhistoricomaterial->sql_record($clhistoricomaterial->sql_query(null,"*",null,"db150_coditem = $oMaterial->codigo_sicom and db150_tipocadastro = $oMaterial->tipo"));
-
               $aData = explode('/', $oMaterial->data_alteracao);
+              $oMat = db_utils::getCollectionByRecord($rsHistMat,false,false,true);
 
-              $oMat = db_utils::getCollectionByRecord(
-                  $rsHistMat,
-                  false,
-                  false,
-                  true
-              );
               if(pg_num_rows($rsHistMat)) {
 
                   $clhistoricomaterial->db150_data = $oMaterial->data_alteracao;
@@ -397,26 +391,17 @@ switch ($oParam->exec) {
                       $clpcmater->pc01_tabela  = $oMat[0]->pc01_tabela;
                       $clpcmater->pc01_taxa  = $oMat[0]->pc01_taxa;
                       $clpcmater->alterar($oMaterial->codigo);
+
+                      if($oMaterial->data) {
+
+                          $aDataInclusao = explode('/', $oMaterial->data);
+
+                          $clhistoricomaterial->db150_mes = $aDataInclusao[1];
+                          $clhistoricomaterial->db150_sequencial = $oMatTipo1[0]->db150_sequencial;
+                          $clhistoricomaterial->alterar($oMat[0]->db150_sequencial);
+                      }
+
                   }
-              }
-          }
-
-          if($oMaterial->data){
-              $rsHistMatTipo1 = $clhistoricomaterial->sql_record($clhistoricomaterial->sql_query(null,"*",null,"db150_pcmater = $oMaterial->codigo and db150_tipocadastro = 1"));
-
-              $aDataInclusao = explode('/', $oMaterial->data);
-
-              if(pg_num_rows($rsHistMatTipo1)) {
-                  $oMatTipo1 = db_utils::getCollectionByRecord(
-                      $rsHistMatTipo1,
-                      false,
-                      false,
-                      true
-                  );
-
-                  $clhistoricomaterial->db150_mes = $aDataInclusao[1];
-                  $clhistoricomaterial->db150_sequencial = $oMatTipo1[0]->db150_sequencial;
-                  $clhistoricomaterial->alterar($oMatTipo1[0]->db150_sequencial);
               }
           }
       }
