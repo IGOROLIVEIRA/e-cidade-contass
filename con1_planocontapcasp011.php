@@ -123,7 +123,7 @@ $iOpcao = 1;
                             <b> Nº Registro Obrig TCE-MG:</b>
 
                             <?php
-                            db_input("c60_nregobrig", 2, true, 3, "text", $db_opcao, "", "", "", "", 2);
+                            db_input("c60_nregobrig", 2, true, 3, "text", $db_opcao, "onchange=js_alternaNaturezaReceita(this.value)", "", "", "", 2);
                             ?>
                         </td>
                     </tr>
@@ -484,13 +484,15 @@ $iOpcao = 1;
 
             return false;
         };
-
-        if (iEstrututalpermitido.contains(iEstrutValid) && iTipoConta == 1) {
-            document.getElementById('trnatureza').style.display = "";
-        } else {
-            document.getElementById('trnatureza').style.display = "none";
-            document.getElementById('c60_naturezadareceita').value = '';
-        }
+        /**
+         * OC21947
+        */
+        // if (iEstrututalpermitido.contains(iEstrutValid) && iTipoConta == 1) {
+        //     document.getElementById('trnatureza').style.display = "";
+        // } else {
+        //     document.getElementById('trnatureza').style.display = "none";
+        //     document.getElementById('c60_naturezadareceita').value = '';
+        // }
     }
 
     function jsverificatipoconta() {
@@ -911,7 +913,7 @@ $iOpcao = 1;
         };
 
         if (iTipoConta == 1) {
-            if (iNaturezaReceita == '' && iEstrututalpermitido.contains(iEstrutValid)) {
+            if (iNaturezaReceita == '' && iNRegObrig == '25') {
                 alert('Natureza da Receita não Informado !');
                 return false;
             }
@@ -1443,5 +1445,15 @@ $iOpcao = 1;
         js_liberaAbasPlano(null, lAbaReduzidos, null, null);
         window.location.reload();
     }
+
+    function js_alternaNaturezaReceita(iNRegObrig){
+        if (iNRegObrig == '25'){
+            document.getElementById('trnatureza').style.display = "";
+        } else {
+            document.getElementById('trnatureza').style.display = "none";
+            document.getElementById('c60_naturezadareceita').value = '';
+        }
+    }
+
     js_main();
 </script>

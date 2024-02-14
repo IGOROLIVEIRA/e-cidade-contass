@@ -65,10 +65,11 @@ switch ($oParam->exec) {
                 $arraybensjson = json_encode(DBString::utf8_encode_all($oDados));
 
                 $rsApiPNCP = $clContratoPNCP->enviarContrato($arraybensjson);
-
+                //array(201,'//pncp.gov.br/pncp-api/v1/orgaos/23539463000121/contratos/2024/6 x-content-type-options');
                 if ($rsApiPNCP[0] == 201) {
-                    $anocontrato = substr($rsApiPNCP[1], 65, 4);
-                    $ac213_sequencialpncp = trim(substr(str_replace('x-content-type-options', '', $rsApiPNCP[1]), 70));
+                    $anocontrato = substr($rsApiPNCP[1], 58, 4);
+
+                    $ac213_sequencialpncp = trim(substr(str_replace('x-content-type-options', '', $rsApiPNCP[1]), 63));
                     $ac213_numerocontrolepncp = db_utils::getCnpj() . '-2-' . str_pad($ac213_sequencialpncp, 6, '0', STR_PAD_LEFT) . '/' . $anocontrato;
 
                     //monto o codigo do contrato no pncp
@@ -81,6 +82,11 @@ switch ($oParam->exec) {
                     $clacocontrolepncp->ac213_ano = $anocontrato;
                     $clacocontrolepncp->ac213_sequencialpncp = $ac213_sequencialpncp;
                     $clacocontrolepncp->incluir();
+
+                    if($clacocontrolepncp->erro_status == 0){
+                        $erro = $clacocontrolepncp->erro_msg;
+                        $sqlerro = true;
+                    }
 
                     $oRetorno->status  = 1;
                 } else {
