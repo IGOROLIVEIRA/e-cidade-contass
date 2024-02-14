@@ -2167,6 +2167,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
     if (me.usarQuantidadeAtual(item)) {
       nQuantidadeA = aLinha.aCells[4].getValue().getNumber();
+      nUnitarioA = Number(aLinha.aCells[5].getValue().split('.').join("").replace(",", "."));
     }
 
     let casas = 2;
