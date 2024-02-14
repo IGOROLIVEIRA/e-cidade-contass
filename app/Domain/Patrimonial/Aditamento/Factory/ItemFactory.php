@@ -40,9 +40,6 @@ class ItemFactory
      */
     public function createByEloquentModel(AcordoItem $itemAcordo, ?AcordoItem $itemPosicaoAnterior = null): Item
     {
-        // echo "<pre>";
-        //var_dump();
-        //die();
         $item = new Item();
 
         $item->setItemSequencial((int) $itemAcordo->ac20_sequencial)

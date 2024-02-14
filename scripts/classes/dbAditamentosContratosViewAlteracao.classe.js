@@ -2751,7 +2751,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     if (cboTipoInalteraQtd.includes(cboTipo)) return true;
 
     if (cboDependeExecucao.includes(cboTipo)
-      && (item.eExecutado === true || item.servico)) return true;
+      && (item.eExecutado === true || item.controlaquantidade == 'f')) return true;
 
     return false;
   }
