@@ -1,0 +1,5 @@
+{
+"importacao_sucesso"                       : "Importação realizada com sucesso.",
+"caminho_nao_informado"                    : "Caminho do arquivo XML não informado.",
+"arquivo_invalido"                         : "Arquivo selecionado possui uma extensão inválida. A mesma deve ser XML."
+}
