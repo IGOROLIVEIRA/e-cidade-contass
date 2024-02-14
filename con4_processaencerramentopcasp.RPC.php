@@ -436,6 +436,57 @@ try {
         throw new Exception($oDaoRegrasEncerramento->erro_msg);
       }
       break;
+    case "importaRegrasCsv":
+      $oArquivos = db_utils::postMemory($_FILES);
+      if (strtolower(substr($oArquivos->regrasCSV['name'], -4)) != '.csv') {
+        throw new BusinessException("Arquivo importado com formato inválido! Arquivo deve ser do formato CSV.");
+      }
+      
+      if (trim(file_get_contents($oArquivos->regrasCSV['tmp_name'])) == "") {
+        throw new BusinessException("Não é possível importar arquivo vazio.");
+      }
+      
+      $oArquivo = new File($oArquivos->regrasCSV['tmp_name']);
+      $linhas = file($oArquivos->regrasCSV['tmp_name'], FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+      $dadosArray = array_map('str_getcsv', $linhas);
+      $iRegrasSalvas = 0;
+      
+      foreach($dadosArray as $dadosRegra){
+        $regra = explode(';', $dadosRegra[0]);
+        if (count($regra) == 3){
+          $oDaoRegrasEncerramento = new cl_regraencerramentonaturezaorcamentaria();
+          $oDaoRegrasEncerramento->c117_sequencial = null;
+          $oDaoRegrasEncerramento->c117_anousu     = db_getsession("DB_anousu");
+          $oDaoRegrasEncerramento->c117_instit     = db_getsession("DB_instit");
+
+          if ($regra[0] != '' && is_numeric($regra[0])) {
+            $oDaoRegrasEncerramento->c117_contadevedora = $regra[0];
+          } else {
+            continue;
+          }
+          if ($regra[1] != '' && is_numeric($regra[1])) {
+            $oDaoRegrasEncerramento->c117_contacredora = $regra[1];
+          } else {
+            continue;
+          }
+          if ($regra[2] == 'D' || $regra[2] == 'C') {
+            $oDaoRegrasEncerramento->c117_contareferencia = $regra[2];
+          } else {
+            continue;
+          }
+          $oDaoRegrasEncerramento->incluir(null);
+          if ($oDaoRegrasEncerramento->erro_status != 0) {
+            $iRegrasSalvas++;
+          }
+        }
+      }
+      if ($iRegrasSalvas > 0){
+        $oRetorno->sMessage = $iRegrasSalvas." regras foram importadas com sucesso!";
+      } else {
+        $oRetorno->sMessage = "Houve um erro para importar regras.";
+      }      
+
+      break;
   }
 
   db_fim_transacao(false);

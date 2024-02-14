@@ -873,7 +873,7 @@ class cl_empagetipo {
       
       }
       elseif($iFonteEmpenho == '112' || $iFonteEmpenho == '212' || substr($iFonteEmpenho, 1, 7) == '6590020') {
-      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('112','212','16590020','26590020')) and";
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('112','212','16590020','26590020') or SUBSTRING(o15_codigo::text, 1,4) in ('1500')) and";
       
       }
       elseif($iFonteEmpenho == '113' || $iFonteEmpenho == '213' || substr($iFonteEmpenho, 1, 7) == '5990030') {
@@ -998,7 +998,7 @@ class cl_empagetipo {
         
       }
       elseif($iFonteEmpenho == '160' || $iFonteEmpenho == '260' || substr($iFonteEmpenho, 1, 7) == '7040000'){ 
-      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('186','17040000','286','27040000')) and";
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('186','17040000','286','27040000') or SUBSTRING(o15_codigo::text, 1,4) in ('1720','1721')) and";
       
       }
       elseif($iFonteEmpenho == '161' || $iFonteEmpenho == '261' || substr($iFonteEmpenho, 1, 7) == '7070000' ){
@@ -1102,7 +1102,7 @@ class cl_empagetipo {
         
       }
       elseif($iFonteEmpenho == '186' || $iFonteEmpenho == '286' || substr($iFonteEmpenho, 1, 7) == '7040000'){
-      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('186','286','17040000','27040000')) and"; 
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('186','286','17040000','27040000') or SUBSTRING(o15_codigo::text, 1,4) in ('1720','1721') ) and"; 
         
       }
       elseif($iFonteEmpenho == '187' || $iFonteEmpenho == '287' || substr($iFonteEmpenho, 1, 7) == '7050000'){
@@ -1134,9 +1134,12 @@ class cl_empagetipo {
         
       }
       elseif($iFonteEmpenho == '1711' || substr($iFonteEmpenho, 1, 7) == '7110000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('15000000')) and"; 
-          
-        }
+        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('15000000')) and";   
+      }
+      elseif($iFonteEmpenho == '15430000' || $iFonteEmpenho == '25430000'){
+          $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where (SUBSTRING(o15_codigo::text, 1,4) in ('1540') ) and"; 
+            
+      } 
       else {
         $fonteempenho = substr($iFonteEmpenho,1,6);
         $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where (SUBSTRING(o15_codigo::text, 2,2) in ('$fonteempenho') or SUBSTRING(o15_codigo::text, 2,6) in ('$fonteempenho'))) and"; 
