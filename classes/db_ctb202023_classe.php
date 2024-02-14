@@ -330,7 +330,7 @@ class cl_ctb202023
     }
     $sql .= " where ";
     if ($si96_sequencial != null) {
-      $sql .= " si96_sequencial = $this->si96_sequencial";
+      $sql .= " si96_sequencial = $si96_sequencial";
     }
 //    $resaco = $this->sql_record($this->sql_query_file($this->si96_sequencial));
 //    if ($this->numrows > 0) {
