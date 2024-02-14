@@ -974,7 +974,6 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     document.form1.o56_codelefunc.value = '';
 
     document.form1.pc01_complmater.value = pc01Complmater;
-    console.log(pc01Complmater);
 
     if (erro == true) {
       document.form1.pc16_codmater.focus();

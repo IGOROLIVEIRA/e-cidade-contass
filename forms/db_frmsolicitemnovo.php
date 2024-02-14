@@ -44,6 +44,10 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
 ?>
 <style type="text/css">
+    input::placeholder {
+    color: black;
+    }
+
     .hoverBox {
         background-color: #6699CC;
         max-width: 100%;
@@ -830,7 +834,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
       js_OpenJanelaIframe('',
         'db_iframe_pcmater',
         '<?= $sUrlLookup ?>?funcao_js=parent.js_mostrapcmater1' +
-        '|pc01_codmater|pc01_descrmater|o56_codele|pc01_servico|pc01_complmater<?= $sFiltro ?><?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>' +
+        '|pc01_codmater|pc01_descrmater|o56_codele|pc01_servico|pc01Complmater<?= $sFiltro ?><?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>' +
         '&iRegistroPreco=<?= $iRegistroPreco; ?>',
         'Pesquisa de Materiais',
         true);
@@ -943,11 +947,11 @@ if ((isset($opcao) && $opcao == "alterar")) {
     }
   }
 
-  function js_mostrapcmater1(chave1, chave2, codele, servico, pc01_complmater, iRegistro) {
+  function js_mostrapcmater1(chave1, chave2, codele, servico, pc01Complmater, iRegistro) {
 
     document.form1.pc16_codmater.value = chave1;
     document.form1.pc01_descrmater.value = chave2;
-    document.form1.pc01_complmater.value = pc01_complmater;
+    document.form1.pc01_complmater.value = pc01Complmater;
 
     db_iframe_pcmater.hide();
 
