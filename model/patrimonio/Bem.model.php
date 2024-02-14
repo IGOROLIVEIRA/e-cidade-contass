@@ -949,16 +949,16 @@ class Bem {
        */
       require_once "classes/db_parametrointegracaopatrimonial_classe.php";
       $clBens = new cl_parametrointegracaopatrimonial;
-      $rsBem = $clBens->sql_record($clBens->sql_query_file(null, '*', null, " c01_modulo = 1"));     
+      $rsBem = $clBens->sql_record($clBens->sql_query_file(null, '*', null, " c01_modulo = 1"));
       $oBemIntegracao= db_utils::fieldsMemory($rsBem, 0);
       $integracao = $oBemIntegracao->c01_modulo;
-      
-      if($_SESSION['contabilizado'] == 'nao' && $integracao){ 
+
+      if($_SESSION['contabilizado'] == 'nao' && $integracao){
         if ($lIncorporacaoBem == true && !$lRealizarEscrituracao && USE_PCASP && $lIntegracaoFinanceiro) {
 
           $oLancamentoauxiliarBem = new LancamentoAuxiliarBem();
           $oEventoContabil        = new EventoContabil(700, db_getsession('DB_anousu'));
-          
+
           $oLancamentoauxiliarBem->setValorTotal($this->getValorAquisicao());
           $oLancamentoauxiliarBem->setBem($this);
           $oLancamentoauxiliarBem->setObservacaoHistorico("{$this->getObservacao()} | Código do Bem: {$this->iCodigoBem}.");
@@ -1310,7 +1310,7 @@ class Bem {
         $oDadosReavaliacao = InventarioBem::buscaDadosDaReavaliacaoBem($this);
         $oDadosUltimaDepreciacao = BemDepreciacao::getInstance($this);
         if (!empty($oDadosReavaliacao) && !empty($oDadosUltimaDepreciacao)) {
-            
+
             $nValorLancamentoAjuste = $oDadosReavaliacao->getValorDepreciavel() - $oDadosUltimaDepreciacao->getValorAtual();
 
             $sHistoricoLancamento = "LANÇAMENTO DE ESTORNO DE AJUSTE DA BAIXA DO BEM {$this->getDescricao()}, ";
@@ -1544,10 +1544,11 @@ class Bem {
       $oDaoBensDepreciacao->t44_bens = $this->iCodigoBem;
       $oDaoBensDepreciacao->incluir(null);
       $this->iCodigoBemDepreciacao = $oDaoBensDepreciacao->t44_sequencial;
+      $sErrorMsg = $this->getCodigoBem() . ' - ' . $oDaoBensDepreciacao->erro_msg;
     }
 
     if ($oDaoBensDepreciacao->erro_status == "0") {
-      $sMsg = _M('patrimonial.patrimonio.Bem.erro_salvar_calculo', (object)array("erro_msg" => $oDaoBensDepreciacao->erro_msg));
+      $sMsg = _M('patrimonial.patrimonio.Bem.erro_salvar_calculo', (object)array("erro_msg" => $sErrorMsg));
       throw new Exception($sMsg);
     }
     return true;
