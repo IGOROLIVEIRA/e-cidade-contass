@@ -498,6 +498,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
       $('trdopercentual').style.display = '';
       $('trdoindice').style.display = '';
       $('trcriterioreajuste').style.display = '';
+      me.js_changeCriterioReajuste();
       return;
     }
 
@@ -2608,6 +2609,8 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
     $('oTxtCodigoAcordo').value = aditamento.acordoSequencial;
 
+    $('trdescricaoindice').style.display = 'none';
+
     if (me.estadoTela.changeTipoAdivito === false) {
       $('oCboTipoAditivo').value = aditamento.tipoAditivo;
     }
@@ -2651,7 +2654,6 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
     me.ocultaDescricaoAlteracao();
     me.js_exibedescricao();
     me.exibicaocamposreajuste();
-    me.js_changeCriterioReajuste();
 
     $('oTxtDescricaoIndice').value = aditamento.descricaoIndice;
   }
