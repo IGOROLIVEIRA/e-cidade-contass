@@ -158,7 +158,7 @@ class GerarCTB extends GerarAM
                     $sHashReg21 = $aCTB21['si97_tiporegistro'].$aCTB21['si97_codctb'].$aCTB21['si97_codfontrecursos'].$aCTB21['si97_codreduzidomov'].$aCTB21['si97_tipoentrsaida'];
                     $sHashReg21prox = $aCTB21prox['si97_tiporegistro'].$aCTB21prox['si97_codctb'].$aCTB21prox['si97_codfontrecursos'].$aCTB21prox['si97_codreduzidomov'].$aCTB21prox['si97_tipoentrsaida'];
                    
-                    if ($sHashReg21 == $sHashReg21prox && $bEncerramento) {
+                    if (($sHashReg21 == $sHashReg21prox) && $bEncerramento == 1) {
                         $si97_valorentrsaida  += $aCTB21['si97_valorentrsaida'];
                     } else {
                         $si97_valorentrsaida  += $aCTB21['si97_valorentrsaida'];
