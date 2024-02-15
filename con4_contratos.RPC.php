@@ -997,6 +997,7 @@ switch ($oParam->exec) {
                 $clmatunid = new cl_matunid();
                 $rsMatunid = $clmatunid->sql_record($clmatunid->sql_query_file($oParam->material->iUnidade));
                 $oMatunid = db_utils::fieldsmemory($rsMatunid, 0);
+                $dataInicioPeriodo = implode('-',array_reverse(explode('/',$oParam->material->aPeriodo[0]->dtDataInicial)));
 
                 //inserir na tabela historico material
                 $clhistoricomaterial->db150_tiporegistro              = 10;
@@ -1006,8 +1007,8 @@ switch ($oParam->exec) {
                 $clhistoricomaterial->db150_unidademedida             = $oMatunid->m61_descr;
                 $clhistoricomaterial->db150_tipocadastro              = 1;
                 $clhistoricomaterial->db150_justificativaalteracao    = '';
-                $clhistoricomaterial->db150_mes                       = date("m", db_getsession("DB_datausu"));
-                $clhistoricomaterial->db150_data                      = date("Y-m-d", db_getsession("DB_datausu"));
+                $clhistoricomaterial->db150_mes                       = explode('/',$oParam->material->aPeriodo[0]->dtDataInicial)[1];
+                $clhistoricomaterial->db150_data                      = $dataInicioPeriodo;
                 $clhistoricomaterial->db150_instit                    = db_getsession('DB_instit');
                 $clhistoricomaterial->incluir(null);
 
