@@ -324,7 +324,7 @@ $iOpcao = 1;
                             ?>
                         </td>
                     </tr>
-                    <tr id="trnatureza" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
+                    <tr id="trnatureza" style="display: none">
                         <td>
                             <?php
                             db_ancora("<b>Natureza da Receita:</b>", "js_pesquisainatureza(true);", $db_opcao);
