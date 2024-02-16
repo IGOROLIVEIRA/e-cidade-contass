@@ -22,7 +22,7 @@ $sSqlHistoricoDeMovimentacoes = <<<SQL
         vt.ve81_sequencial AS codigo,
         'Transferência de Departamento' AS tipo,
         tv.ve80_dt_transferencia AS data,
-        '00:00' AS horas,
+        tv.ve80_hora AS horas,
         '(' || u.id_usuario || ') ' || u.nome AS usuario
       FROM 
         veiculostransferencia AS vt

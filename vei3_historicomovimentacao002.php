@@ -18,7 +18,7 @@ $db_opcao = 3;
 
 switch ($oGet->tipo) {
   case 'TRANSFERENCIA':
-    $campos = "ve81_sequencial,ve80_dt_transferencia,ve81_codigo,ve81_placa";
+    $campos = "ve81_sequencial,ve80_dt_transferencia,ve80_hora,ve81_codigo,ve81_placa";
     $campos .= ",ve80_coddeptoatual,a.descrdepto as descrdeptoatual,ve80_motivo";
     $campos .= ",ve80_coddeptodestino,d.descrdepto as descrdeptodestino,id_usuario,nome";
     $sql = $clveiculostransferencia->sql_buscar_detalhes($oGet->codigo, $campos);
@@ -103,7 +103,6 @@ switch ($oGet->tipo) {
           <td class="title">Hora:</td>
           <td>
             <?
-            $ve80_hora = '00:00';
             db_input('ve80_hora', 12, $ve80_hora, true, 'text', $db_opcao, "");
             ?>
           </td>
