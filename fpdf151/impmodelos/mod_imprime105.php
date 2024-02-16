@@ -432,7 +432,6 @@ if (pg_num_rows($this->rsLotes) > 0) {
         $cabecalho[$oLotes->pc68_sequencial] = $oLotes->pc68_sequencial;
     }
 } else {
-exit("AQUI");
 
     if ($this->pc80_criterioadjudicacao == 2 || $this->pc80_criterioadjudicacao == 1) {
         $this->objpdf->setfont('arial', 'B', 7);
