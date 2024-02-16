@@ -1,0 +1,298 @@
+{
+    "Incluir":[
+        {
+            "Estrutural": "331900106",
+            "Descricao": "13 SALARIO - PESSOAL CIVIL",
+            "VinculoPCASP": "321110101",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "13 Salario - Pessoal Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331900118",
+            "Descricao": "LICENCA PREMIO PARA INATIVO CIVIL",
+            "VinculoPCASP": "321110101",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Licenca Premio Para Inativo Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331900151",
+            "Descricao": "ADICIONAIS, VANTAGENS, GRAT. E OUT. COMP PROVENTOS",
+            "VinculoPCASP": "321110101",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Adicionais, Vantagens, Gratificacoes E Outros Complementos De Proventos - Pessoal Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331900199",
+            "Descricao": "OUTROS PROVENTOS - PESSOAL CIVIL",
+            "VinculoPCASP": "321110101",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Outros Proventos - Pessoal Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331900303",
+            "Descricao": "13 SALARIO - PENSOES CIVIS",
+            "VinculoPCASP": "322110100",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "13 Salario - Pensoes Civis",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331900305",
+            "Descricao": "PENSOES ESPECIAIS - PESSOAL CIVIL",
+            "VinculoPCASP": "322110100",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Pensoes Especiais - Pessoal Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331900351",
+            "Descricao": "ADICIONAIS, VANTAGENS, GRATIF. E OUT. COMP PENSOES",
+            "VinculoPCASP": "322110100",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Adicionais, Vantagens, Gratificacoes E Outros Complementos De Pensoes - Pessoal Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331900399",
+            "Descricao": "OUTRAS PENSOES - CIVIS",
+            "VinculoPCASP": "322110100",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Outras Pensoes - Civis",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331909108",
+            "Descricao": "SENTENCA JUDICIAL - ATIVO CIVIL",
+            "VinculoPCASP": "311110300",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Sentenca Judicial - Ativo Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331909109",
+            "Descricao": "SENTENCA JUDICIAL - INATIVO CIVIL",
+            "VinculoPCASP": "311110300",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Sentenca Judicial - Inativo Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331909110",
+            "Descricao": "SENTENCA JUDICIAL - PENSIONISTA CIVIL",
+            "VinculoPCASP": "311110300",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Sentenca Judicial - Pensionista Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331909114",
+            "Descricao": "SENT.JUD.NAO TRANS JULG ATIVO CIVIL",
+            "VinculoPCASP": "311110300",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Sent.Jud.Nao Trans Julg Ativo Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331909115",
+            "Descricao": "SENT.JUD.NAO TRANS JULG INATIVO CIVIL",
+            "VinculoPCASP": "311110300",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Sent.Jud.Nao Trans Julg Inativo Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331909116",
+            "Descricao": "SENT.JUD.NAO TRANS.JULG PENSIONISTA CIVIL",
+            "VinculoPCASP": "311110300",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Sent.Jud.Nao Trans.Julg Pensionista Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331909120",
+            "Descricao": "DEPOSITOS JUDICIAIS",
+            "VinculoPCASP": "311110300",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Depositos Judiciais",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331909123",
+            "Descricao": "PRECATORIOS - INATIVO CIVIL",
+            "VinculoPCASP": "311110300",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Precatorios - Inativo Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331909125",
+            "Descricao": "HONORARIOS SUCUMBENCIAIS DE PRECATORIOS",
+            "VinculoPCASP": "311110300",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Honorarios Sucumbenciais De Precatorios",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331909126",
+            "Descricao": "SENTENCA JUDICIAL DE PEQ VALOR - ATIVO CIVIL",
+            "VinculoPCASP": "311110300",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Sentenca Judicial De Peq Valor - Ativo Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331909128",
+            "Descricao": "SENTENCA JUDICIAL DE PEQ VALOR - INATIVO CIVIL",
+            "VinculoPCASP": "311110300",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Sentenca Judicial De Peq Valor - Inativo Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331909130",
+            "Descricao": "SENTENCA JUDICIAL DE PEQ VALOR - PENSIONISTA CIVIL",
+            "VinculoPCASP": "311110300",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Sentenca Judicial De Peq Valor - Pensionista Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331909136",
+            "Descricao": "PRECATORIOS - PENSIONISTA CIVIL",
+            "VinculoPCASP": "311110300",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Precatorios - Pensionista Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331909197",
+            "Descricao": "OUTROS PRECATORIOS JUDICIAIS",
+            "VinculoPCASP": "311110300",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Outros Precatorios Judiciais",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331909199",
+            "Descricao": "OUTRAS SENTENCAS JUDICIAIS",
+            "VinculoPCASP": "311110300",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Outras Sentencas Judiciais",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331919151",
+            "Descricao": "OBRIGACOES PATRONAIS DE PRECATORIOS",
+            "VinculoPCASP": "312129900",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Obrigacoes Patronais De Precatorios",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331919152",
+            "Descricao": "OBRIGACOES PATRONAIS - SENT.JUD.PEQUENO VALOR",
+            "VinculoPCASP": "312129900",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Obrigacoes Patronais - Sent.Jud.Pequeno Valor",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331919153",
+            "Descricao": "OBRIGACOES PATRONAIS SENT.JUD.-PESSOAL CIVIL",
+            "VinculoPCASP": "312129900",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Obrigacoes Patronais Sent.Jud.-Pessoal Civil",
+            "Fonte": 15000000
+        },
+        {
+            "Estrutural": "331919199",
+            "Descricao": "OUTRAS SENTENCAS JUDICIAIS",
+            "VinculoPCASP": "349920000",
+            "NaturezaSaldo": "Devedor",
+            "Tipo": "Analitica",
+            "Finalidade": "Outras Sentencas Judiciais",
+            "Fonte": 15000000
+        }
+    ],
+    "Alterar":[
+        {
+            "Estrutural": "331900101",
+            "Descricao": "Proventos - Pessoal Civil"
+        },
+        {
+            "Estrutural": "331900301",
+            "Descricao": "Pensoes Civis"
+        },
+        {
+            "Estrutural": "331909101",
+            "Descricao": "Precatorios - Ativo Civil"
+        }
+    ],
+    "Inativar":[
+        {
+            "Estrutural": "331900102",
+            "Descricao": "Aposentadorias Custeadas com Recursos Ordinarios do Tesouro ",
+            "AlterarDescr": "DESATIVADA 2024"
+        },
+        {
+            "Estrutural": "331900302",
+            "Descricao": "Pensoes Custeadas com Recursos Ordinarios do Tesouro ",
+            "AlterarDescr": "DESATIVADA 2024"
+        },
+        {
+            "Estrutural": "331909102",
+            "Descricao": "Sentencas Judiciais de Inativos e Pensionistas Custeadas com Recursos do RPPS",
+            "AlterarDescr": "DESATIVADA 2024"
+        },
+        {
+            "Estrutural": "331909103",
+            "Descricao": "Sentencas Judiciais de Inativos e Pensionistas Custeadas com Recursos Ordinarios do Tesouro",
+            "AlterarDescr": "DESATIVADA 2024"
+        },
+        {
+            "Estrutural": "331919101",
+            "Descricao": "Sentencas Judiciais de Pessoal Ativo ",
+            "AlterarDescr": "DESATIVADA 2024"
+        },
+        {
+            "Estrutural": "331919102",
+            "Descricao": "Sentencas Judiciais de Inativos e Pensionistas Custeadas com Recursos do RPPS",
+            "AlterarDescr": "DESATIVADA 2024"
+        },
+        {
+            "Estrutural": "331919103",
+            "Descricao": "Sentencas Judiciais de Inativos e Pensionistas Custeadas com Recursos Ordinarios do Tesouro",
+            "AlterarDescr": "DESATIVADA 2024"
+        }
+    ]
+}
