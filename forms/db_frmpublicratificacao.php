@@ -290,7 +290,7 @@ if (isset($l20_codigo)) {
 
         if (db_opcao === 33 || db_opcao === 3) {
             window.location.href = "lic1_publicratificacao003.php?chavepesquisa=" + chave + "&l03_pctipocompratribunal=" +
-                licitacao.l03_pctipocompratribunal;
+                licitacao.l03_pctipocompratribunal + "&l20_tipoprocesso=" + licitacao.l20_tipoprocesso;
         } else if (db_opcao === 22 || db_opcao === 2) {
             window.location.href = "lic1_publicratificacao002.php?chavepesquisa=" + chave + "&l03_pctipocompratribunal=" +
                 licitacao.l03_pctipocompratribunal + "&l20_objeto=" + licitacao.l20_objeto;
@@ -682,6 +682,7 @@ if (isset($l20_codigo)) {
     }
 
     function js_findTipos(licitacao) {
+
         let request = new Ajax.Request('lic4_licitacao.RPC.php', {
             method: 'post',
             exec: 'findTipos',
