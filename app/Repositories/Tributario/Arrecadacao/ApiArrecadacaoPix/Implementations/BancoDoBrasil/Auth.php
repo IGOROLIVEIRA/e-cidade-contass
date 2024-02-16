@@ -5,8 +5,6 @@ namespace App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Implementati
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IAuth;
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IConfiguration;
 use BusinessException;
-use DateTime;
-use ECidade\V3\Window\Session;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
@@ -17,9 +15,6 @@ use GuzzleHttp\Client;
 
 class Auth implements IAuth
 {
-    public const PIX_TOKEN_SESSION_NAME = 'pix_token';
-    public const PIX_TOKEN_EXPIRATION_DATE_SESSION_NAME = 'pix_tokenExpirationDate';
-
     /**
      * @var IConfiguration
      */
@@ -27,24 +22,18 @@ class Auth implements IAuth
 
     protected bool $debug = false;
 
-    protected Session $session;
-
-    public function __construct(IConfiguration $configuration, Session $session)
+    public function __construct(IConfiguration $configuration)
     {
         $this->configuration = $configuration;
         $this->client = new Client();
-        $this->session = $session;
     }
 
     /**
      * @return string
-     * @throws BusinessException|GuzzleException
+     * @throws \BusinessException|GuzzleException
      */
     public function auth(): string
     {
-        if (!$this->isTokenExpirated()) {
-            return $this->session->get(self::PIX_TOKEN_SESSION_NAME);
-        }
         $formParams = [];
         $headerParams = [];
         $token = "";
@@ -64,9 +53,6 @@ class Auth implements IAuth
             if ($response->getBody()) {
                 $bodyJson = json_decode($response->getBody());
                 $token = $bodyJson->{'access_token'};
-                $expriresIn = $bodyJson->{'expires_in'};
-                $tokenCreationDate = new DateTime();
-                $this->storeInSession($tokenCreationDate, $expriresIn, $token);
             }
         } catch (ClientException | RequestException $e) {
 
@@ -100,7 +86,7 @@ class Auth implements IAuth
      * Create http client option
      *
      * @return array of http client options
-     * @throws BusinessException
+     * @throws \BusinessException
      */
     protected function createHttpClientOption()
     {
@@ -109,40 +95,10 @@ class Auth implements IAuth
             $filename = 'tmp/'.date('Y-m-d').'_pixlog.log';
             $options[RequestOptions::DEBUG] = fopen($filename, 'a');
             if (!$options[RequestOptions::DEBUG]) {
-                throw new BusinessException('Failed to open the debug file: ' . $filename);
+                throw new \BusinessException('Failed to open the debug file: ' . $filename);
             }
         }
 
         return $options;
-    }
-
-    private function isTokenExpirated(): bool
-    {
-        if (!$this->session->has(self::PIX_TOKEN_SESSION_NAME)) {
-            return true;
-        }
-
-        if (!$this->session->has(self::PIX_TOKEN_EXPIRATION_DATE_SESSION_NAME)) {
-            return false;
-        }
-
-        $expirationDate = $this->session->get(self::PIX_TOKEN_EXPIRATION_DATE_SESSION_NAME);
-
-        if (!$expirationDate instanceof DateTime) {
-            return false;
-        }
-
-        $now = new DateTime();
-
-        return $now >= $expirationDate;
-    }
-
-    public function storeInSession(DateTime $tokenCreationDate, string $expriresIn, string $token): void
-    {
-        $this->session->set(
-            self::PIX_TOKEN_EXPIRATION_DATE_SESSION_NAME, $tokenCreationDate->modify("+{$expriresIn} seconds")
-        );
-        $this->session->set(self::PIX_TOKEN_SESSION_NAME, $token);
-        $this->session->close();
     }
 }
