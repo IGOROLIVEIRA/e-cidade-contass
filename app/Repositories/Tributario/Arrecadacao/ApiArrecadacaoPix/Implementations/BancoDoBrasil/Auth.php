@@ -7,6 +7,7 @@ use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IConfigu
 use BusinessException;
 use DateTime;
 use ECidade\V3\Window\Session;
+use Exception;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
@@ -27,13 +28,10 @@ class Auth implements IAuth
 
     protected bool $debug = false;
 
-    protected Session $session;
-
-    public function __construct(IConfiguration $configuration, Session $session)
+    public function __construct(IConfiguration $configuration)
     {
         $this->configuration = $configuration;
         $this->client = new Client();
-        $this->session = $session;
     }
 
     /**
@@ -43,7 +41,7 @@ class Auth implements IAuth
     public function auth(): string
     {
         if (!$this->isTokenExpirated()) {
-            return $this->session->get(self::PIX_TOKEN_SESSION_NAME);
+            return $_SESSION[self::PIX_TOKEN_SESSION_NAME];
         }
         $formParams = [];
         $headerParams = [];
@@ -68,32 +66,51 @@ class Auth implements IAuth
                 $tokenCreationDate = new DateTime();
                 $this->storeInSession($tokenCreationDate, $expriresIn, $token);
             }
-        } catch (ClientException | RequestException $e) {
+        } catch (ClientException|RequestException $e) {
 
             $message =
                 'Erro de autenticação com API pix da Instituição Financeira habilidata.';
 
             if (empty($e->getResponse())) {
-                throw new BusinessException($message. ' Detalhes: '.utf8_decode($e->getMessage()));
+                throw new BusinessException($message . ' Detalhes: ' . utf8_decode($e->getMessage()));
             }
             $error = \GuzzleHttp\json_decode($e->getResponse()->getBody()->getContents());
 
             if (in_array($e->getResponse()->getStatusCode(), [401, 403])) {
-                throw new BusinessException($message. ' Detalhes: '.utf8_decode($error->message));
+                throw new BusinessException($message . ' Detalhes: ' . utf8_decode($error->message));
             }
 
             if (!empty($error->error)) {
-                $message .= ' Detalhes: '.utf8_decode($error->mensagem);
+                $message .= ' Detalhes: ' . utf8_decode($error->mensagem);
             }
 
             if (!empty($error->erros)) {
-                $message .= ' Detalhes: '.utf8_decode($error->erros[0]->mensagem);
+                $message .= ' Detalhes: ' . utf8_decode($error->erros[0]->mensagem);
             }
 
             throw new BusinessException($message);
         }
 
         return $token;
+    }
+
+    private function isTokenExpirated(): bool
+    {
+        if (
+            empty($_SESSION[self::PIX_TOKEN_SESSION_NAME]) ||
+            empty($_SESSION[self::PIX_TOKEN_EXPIRATION_DATE_SESSION_NAME])) {
+            return true;
+        }
+
+        $expirationDate = $_SESSION[self::PIX_TOKEN_EXPIRATION_DATE_SESSION_NAME];
+
+        if (!$expirationDate instanceof DateTime) {
+            return true;
+        }
+
+        $now = new DateTime();
+
+        return $now >= $expirationDate;
     }
 
     /**
@@ -106,7 +123,7 @@ class Auth implements IAuth
     {
         $options = ['verify' => false];
         if ($this->debug) {
-            $filename = 'tmp/'.date('Y-m-d').'_pixlog.log';
+            $filename = 'tmp/' . date('Y-m-d') . '_pixlog.log';
             $options[RequestOptions::DEBUG] = fopen($filename, 'a');
             if (!$options[RequestOptions::DEBUG]) {
                 throw new BusinessException('Failed to open the debug file: ' . $filename);
@@ -116,33 +133,9 @@ class Auth implements IAuth
         return $options;
     }
 
-    private function isTokenExpirated(): bool
-    {
-        if (!$this->session->has(self::PIX_TOKEN_SESSION_NAME)) {
-            return true;
-        }
-
-        if (!$this->session->has(self::PIX_TOKEN_EXPIRATION_DATE_SESSION_NAME)) {
-            return false;
-        }
-
-        $expirationDate = $this->session->get(self::PIX_TOKEN_EXPIRATION_DATE_SESSION_NAME);
-
-        if (!$expirationDate instanceof DateTime) {
-            return false;
-        }
-
-        $now = new DateTime();
-
-        return $now >= $expirationDate;
-    }
-
     public function storeInSession(DateTime $tokenCreationDate, string $expriresIn, string $token): void
     {
-        $this->session->set(
-            self::PIX_TOKEN_EXPIRATION_DATE_SESSION_NAME, $tokenCreationDate->modify("+{$expriresIn} seconds")
-        );
-        $this->session->set(self::PIX_TOKEN_SESSION_NAME, $token);
-        $this->session->close();
+        $_SESSION[self::PIX_TOKEN_EXPIRATION_DATE_SESSION_NAME] = $tokenCreationDate->modify("+{$expriresIn} seconds");
+        $_SESSION[self::PIX_TOKEN_SESSION_NAME] = $token;
     }
 }

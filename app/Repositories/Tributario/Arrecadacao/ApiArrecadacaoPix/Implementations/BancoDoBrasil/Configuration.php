@@ -64,11 +64,7 @@ class Configuration implements IConfiguration
 
     public function __construct()
     {
-        /**
-         * @var Session $session
-         */
-        $session = Registry::get('app.request')->session()->start();
-        $this->authService = new Auth($this, $session);
+        $this->authService = new Auth($this);
     }
 
     /**
