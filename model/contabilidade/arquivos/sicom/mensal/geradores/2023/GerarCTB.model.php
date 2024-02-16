@@ -28,17 +28,17 @@ class GerarCTB extends GerarAM
         $sSql2 = "select * from ctb202023 where si96_mes = " . $this->iMes . " and si96_instit = " . db_getsession("DB_instit");
         if ($bEncerramento) {
             $sSql2 = "  select distinct si96_sequencial,si96_tiporegistro,
-                            case when si96_codorgao is null then si96_codorgao
+                            case when si96_codorgao is not null and si96_codorgao != '0' then si96_codorgao
                                     else ( select si96_codorgao from ctb202023
                                             where si96_mes = " . $this->iMes . " and si96_instit = " . db_getsession("DB_instit") . "
                                             and si96_codorgao is not null limit 1
                                         ) 
                                     end as si96_codorgao,
                                     si96_codctb, si96_codfontrecursos,
-                            case when si96_saldocec is null then si96_saldocec
+                            case when si96_saldocec is not null and si96_saldocec != 0 then si96_saldocec
                                     else ( select si96_saldocec from ctb202023
                                             where si96_mes = " . $this->iMes . " and si96_instit = " . db_getsession("DB_instit") . "
-                                            and si96_saldocec is not null limit 1
+                                            and ( si96_saldocec is not null or si96_saldocec = 1) limit 1
                                         ) 
                                     end as si96_saldocec,       
                                 si96_vlsaldoinicialfonte,

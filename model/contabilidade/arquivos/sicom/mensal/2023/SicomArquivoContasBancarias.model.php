@@ -967,7 +967,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
       $cCtb20->si96_codorgao = $oCtb20->si96_codorgao;
       $cCtb20->si96_codctb = $oCtb20->si96_codctb;
       $cCtb20->si96_codfontrecursos = $oCtb20->si96_codfontrecursos;
-      $cCtb20->si96_saldocec = $oCtb20->si96_saldocec;
+      $cCtb20->si96_saldocec = $oCtb20->si96_saldocec == 0 ? 1 : $oCtb20->si96_saldocec;
       $cCtb20->si96_vlsaldoinicialfonte = $oCtb20->si96_vlsaldoinicialfonte;
       $cCtb20->si96_vlsaldofinalfonte = $oCtb20->si96_vlsaldofinalfonte;
       $cCtb20->si96_vlsaldofinalfonte = (abs(number_format($oCtb20->si96_vlsaldofinalfonte, 2, ".", "")) == 0) ? 0 : $oCtb20->si96_vlsaldofinalfonte;
