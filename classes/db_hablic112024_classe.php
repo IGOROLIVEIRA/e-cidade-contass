@@ -1,7 +1,7 @@
 <?
 //MODULO: sicom
-//CLASSE DA ENTIDADE hablic112023
-class cl_hablic112023
+//CLASSE DA ENTIDADE hablic112024
+class cl_hablic112024
 {
   // cria variaveis de erro
   var $rotulo = null;
@@ -50,10 +50,10 @@ class cl_hablic112023
                  ";
 
   //funcao construtor da classe
-  function cl_hablic112023()
+  function cl_hablic112024()
   {
     //classes dos rotulos dos campos
-    $this->rotulo = new rotulo("hablic112023");
+    $this->rotulo = new rotulo("hablic112024");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
 
@@ -141,11 +141,11 @@ class cl_hablic112023
       return false;
     }
     if ($si58_sequencial == "" || $si58_sequencial == null) {
-      $result = db_query("select nextval('hablic112023_si58_sequencial_seq')");
+      $result = db_query("select nextval('hablic112024_si58_sequencial_seq')");
       if ($result == false) {
         $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-        $this->erro_sql = "Verifique o cadastro da sequencia: hablic112023_si58_sequencial_seq do campo: si58_sequencial";
+        $this->erro_sql = "Verifique o cadastro da sequencia: hablic112024_si58_sequencial_seq do campo: si58_sequencial";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
@@ -154,7 +154,7 @@ class cl_hablic112023
       }
       $this->si58_sequencial = pg_result($result, 0, 0);
     } else {
-      $result = db_query("select last_value from hablic112023_si58_sequencial_seq");
+      $result = db_query("select last_value from hablic112024_si58_sequencial_seq");
       if (($result != false) && (pg_result($result, 0, 0) < $si58_sequencial)) {
         $this->erro_sql = " Campo si58_sequencial maior que último número da sequencia.";
         $this->erro_banco = "Sequencia menor que este número.";
@@ -176,7 +176,7 @@ class cl_hablic112023
 
       return false;
     }
-    $sql = "insert into hablic112023(
+    $sql = "insert into hablic112024(
                                        si58_sequencial
                                       ,si58_tiporegistro
                                       ,si58_codorgao
@@ -213,12 +213,12 @@ class cl_hablic112023
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-        $this->erro_sql = "hablic112023 ($this->si58_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql = "hablic112024 ($this->si58_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-        $this->erro_banco = "hablic112023 já Cadastrado";
+        $this->erro_banco = "hablic112024 já Cadastrado";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       } else {
-        $this->erro_sql = "hablic112023 ($this->si58_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql = "hablic112024 ($this->si58_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       }
@@ -263,7 +263,7 @@ class cl_hablic112023
   function alterar($si58_sequencial = null)
   {
     $this->atualizacampos();
-    $sql = " update hablic112023 set ";
+    $sql = " update hablic112024 set ";
     $virgula = "";
     if (trim($this->si58_sequencial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si58_sequencial"])) {
       if (trim($this->si58_sequencial) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si58_sequencial"])) {
@@ -414,7 +414,7 @@ class cl_hablic112023
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-      $this->erro_sql = "hablic112023 nao Alterado. Alteracao Abortada.\n";
+      $this->erro_sql = "hablic112024 nao Alterado. Alteracao Abortada.\n";
       $this->erro_sql .= "Valores : " . $this->si58_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -425,7 +425,7 @@ class cl_hablic112023
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "hablic112023 nao foi Alterado. Alteracao Executada.\n";
+        $this->erro_sql = "hablic112024 nao foi Alterado. Alteracao Executada.\n";
         $this->erro_sql .= "Valores : " . $this->si58_sequencial;
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -477,7 +477,7 @@ class cl_hablic112023
         $resac = db_query("insert into db_acount values($acount,2010287,2011570,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si58_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       }
     }
-    $sql = " delete from hablic112023
+    $sql = " delete from hablic112024
                     where ";
     $sql2 = "";
     if ($dbwhere == null || $dbwhere == "") {
@@ -494,7 +494,7 @@ class cl_hablic112023
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-      $this->erro_sql = "hablic112023 nao Excluído. Exclusão Abortada.\n";
+      $this->erro_sql = "hablic112024 nao Excluído. Exclusão Abortada.\n";
       $this->erro_sql .= "Valores : " . $si58_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -505,7 +505,7 @@ class cl_hablic112023
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "hablic112023 nao Encontrado. Exclusão não Efetuada.\n";
+        $this->erro_sql = "hablic112024 nao Encontrado. Exclusão não Efetuada.\n";
         $this->erro_sql .= "Valores : " . $si58_sequencial;
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -545,7 +545,7 @@ class cl_hablic112023
     $this->numrows = pg_numrows($result);
     if ($this->numrows == 0) {
       $this->erro_banco = "";
-      $this->erro_sql = "Record Vazio na Tabela:hablic112023";
+      $this->erro_sql = "Record Vazio na Tabela:hablic112024";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
@@ -570,12 +570,12 @@ class cl_hablic112023
     } else {
       $sql .= $campos;
     }
-    $sql .= " from hablic112023 ";
-    $sql .= "      left  join hablic102020  on  hablic102020.si57_sequencial = hablic112023.si58_reg10";
+    $sql .= " from hablic112024 ";
+    $sql .= "      left  join hablic102020  on  hablic102020.si57_sequencial = hablic112024.si58_reg10";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($si58_sequencial != null) {
-        $sql2 .= " where hablic112023.si58_sequencial = $si58_sequencial ";
+        $sql2 .= " where hablic112024.si58_sequencial = $si58_sequencial ";
       }
     } else if ($dbwhere != "") {
       $sql2 = " where $dbwhere";
@@ -608,11 +608,11 @@ class cl_hablic112023
     } else {
       $sql .= $campos;
     }
-    $sql .= " from hablic112023 ";
+    $sql .= " from hablic112024 ";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($si58_sequencial != null) {
-        $sql2 .= " where hablic112023.si58_sequencial = $si58_sequencial ";
+        $sql2 .= " where hablic112024.si58_sequencial = $si58_sequencial ";
       }
     } else if ($dbwhere != "") {
       $sql2 = " where $dbwhere";
