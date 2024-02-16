@@ -6,8 +6,6 @@ use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IAuth;
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IConfiguration;
 use BusinessException;
 use DateTime;
-use ECidade\V3\Window\Session;
-use Exception;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
@@ -15,6 +13,7 @@ use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Client;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Auth implements IAuth
 {
@@ -28,10 +27,13 @@ class Auth implements IAuth
 
     protected bool $debug = false;
 
-    public function __construct(IConfiguration $configuration)
+    protected SessionInterface $session;
+
+    public function __construct(IConfiguration $configuration, SessionInterface $session)
     {
         $this->configuration = $configuration;
         $this->client = new Client();
+        $this->session = $session;
     }
 
     /**
@@ -41,7 +43,7 @@ class Auth implements IAuth
     public function auth(): string
     {
         if (!$this->isTokenExpirated()) {
-            return $_SESSION[self::PIX_TOKEN_SESSION_NAME];
+            return $this->session->get(self::PIX_TOKEN_SESSION_NAME);
         }
         $formParams = [];
         $headerParams = [];
@@ -96,13 +98,13 @@ class Auth implements IAuth
 
     private function isTokenExpirated(): bool
     {
-        if (
-            empty($_SESSION[self::PIX_TOKEN_SESSION_NAME]) ||
-            empty($_SESSION[self::PIX_TOKEN_EXPIRATION_DATE_SESSION_NAME])) {
+        if (!$this->session->has(self::PIX_TOKEN_SESSION_NAME) ||
+            !$this->session->has(self::PIX_TOKEN_EXPIRATION_DATE_SESSION_NAME)
+        ) {
             return true;
         }
 
-        $expirationDate = $_SESSION[self::PIX_TOKEN_EXPIRATION_DATE_SESSION_NAME];
+        $expirationDate = $this->session->get(self::PIX_TOKEN_EXPIRATION_DATE_SESSION_NAME);
 
         if (!$expirationDate instanceof DateTime) {
             return true;
@@ -135,7 +137,7 @@ class Auth implements IAuth
 
     public function storeInSession(DateTime $tokenCreationDate, string $expriresIn, string $token): void
     {
-        $_SESSION[self::PIX_TOKEN_EXPIRATION_DATE_SESSION_NAME] = $tokenCreationDate->modify("+{$expriresIn} seconds");
-        $_SESSION[self::PIX_TOKEN_SESSION_NAME] = $token;
+        $this->session->set(self::PIX_TOKEN_EXPIRATION_DATE_SESSION_NAME, $tokenCreationDate->modify("+{$expriresIn} seconds"));
+        $this->session->set(self::PIX_TOKEN_SESSION_NAME, $token);
     }
 }
