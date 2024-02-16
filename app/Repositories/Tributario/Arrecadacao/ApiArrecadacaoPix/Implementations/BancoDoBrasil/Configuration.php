@@ -4,6 +4,8 @@ namespace App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Implementati
 
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IAuth;
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IConfiguration;
+use ECidade\V3\Extension\Registry;
+use ECidade\V3\Window\Session;
 
 class Configuration implements IConfiguration
 {
@@ -62,7 +64,11 @@ class Configuration implements IConfiguration
 
     public function __construct()
     {
-        $this->authService = new Auth($this);
+        /**
+         * @var Session $session
+         */
+        $session = Registry::get('app.request')->session()->start();
+        $this->authService = new Auth($this, $session);
     }
 
     /**
