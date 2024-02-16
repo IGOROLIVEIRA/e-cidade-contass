@@ -133,7 +133,7 @@ if (isset($l20_codigo)) {
             <!--                <td>-->
             <!--                    --><? //
                                         //                    db_textarea('l20_justificativa',0,53,$Il20_justificativa,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
-                                        //                    
+                                        //
                                         ?>
             <!--                </td>-->
             <!--            </tr>-->
@@ -147,7 +147,7 @@ if (isset($l20_codigo)) {
             <!--                <td>-->
             <!--                    --><? //
                                         //                    db_textarea('l20_razao',0,53,$Il20_razao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
-                                        //                    
+                                        //
                                         ?>
             <!--                </td>-->
             <!--            </tr>-->
@@ -337,7 +337,7 @@ if (isset($l20_codigo)) {
     function js_pesquisaLicitacao(mostra) {
         if (mostra == true) {
             js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_liclicita', 'func_liclicita.php?credenciamento=true' + (db_opcao == 1 ? '&situacao=1&ratificacao=false' : '&situacao=10&ratificacao=true') +
-                '+&dispensas=true&ocultacampos=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal', 'Pesquisa', true);
+                '+&dispensas=true&ocultacampos=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal|l20_tipoprocesso', 'Pesquisa', true);
         } else {
             if (document.form1.l20_codigo.value != '') {
                 js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_liclicita', 'func_liclicita.php?credenciamento=true' +
@@ -350,7 +350,7 @@ if (isset($l20_codigo)) {
         }
     }
 
-    function js_mostraliclicita(chave, erro, chave2) {
+    function js_mostraliclicita(chave, erro, chave2, tipoProcesso) {
         document.form1.l20_objeto.value = chave;
         if (erro == true) {
             document.form1.l20_codigo.focus();
@@ -358,22 +358,22 @@ if (isset($l20_codigo)) {
         } else {
             if (db_opcao == 1) {
                 window.location.href = "lic1_publicratificacao001.php?l20_codigo=" +
-                    document.form1.l20_codigo.value + "&l20_objeto=" + chave;
+                    document.form1.l20_codigo.value + "&l20_objeto=" + chave + "&l20_tipoprocesso=" + tipoProcesso;
             } else {
                 window.location.href = "lic1_publicratificacao002.php?chavepesquisa=" +
-                    document.form1.l20_codigo.value;
+                    document.form1.l20_codigo.value + "&l20_tipoprocesso=" + tipoProcesso;
             }
         }
 
     }
 
-    function js_mostraliclicita1(chave1, chave2, chave3) {
-        // let caminho = db_opcao == 1 ? "lic1_publicratificacao001.php?" : "lic1_publicratificacao002.php?";
+    function js_mostraliclicita1(chave1, chave2, chave3, tipoProcesso) {
         if (db_opcao == 1) {
             let caminho = "lic1_publicratificacao001.php?";
-            window.location.href = caminho + "l20_codigo=" + chave1 + "&l20_objeto=" + chave2;
+            window.location.href = caminho + "l20_codigo=" + chave1
+                + "&l20_objeto=" + chave2 + "&l20_tipoprocesso=" + tipoProcesso;
         } else {
-            window.location.href = "lic1_publicratificacao002.php?chavepesquisa=" + chave1;
+            window.location.href = "lic1_publicratificacao002.php?chavepesquisa=" + chave1 +  "&l20_tipoprocesso=" + tipoProcesso;
         }
         db_iframe_liclicita.hide();
     }
@@ -729,7 +729,7 @@ if (isset($l20_codigo)) {
     function js_mostracgm(erro, chave) {
         document.getElementById(varNomeCampo).value = chave;
         if (erro == true) {
-            //  document.form1.l31_numcgm.focus(); 
+            //  document.form1.l31_numcgm.focus();
             document.getElementById(varNumCampo).value = "";
             alert("Responsável não encontrado!");
         }
