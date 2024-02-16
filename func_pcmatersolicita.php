@@ -1,4 +1,5 @@
-<?
+<?php
+
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -211,14 +212,15 @@ if (isset($o56_codele) and trim($o56_codele) != '') {
               $where_subgrupo = "";
             }
             $sql = $clpcmater->sql_query_desdobra("", $campos, "pc01_codmater", "pc03_codgrupo = $chave_pc03_codgrupo and pc04_codsubgrupo = pc01_codsubgrupo and pc04_codgrupo = pc03_codgrupo and $where_ativo $where_subgrupo");
-          } //print_r($sql);die;
+          }
           db_lovrot(@$sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
         } else {
+           
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
-            $result = $clpcmater->sql_record($clpcmater->sql_query_desdobra(null, "regexp_replace(pcmater.pc01_descrmater,'\r|\n','','g') as pc01_descrmater,pc01_veiculo,pc01_servico", "", "pc01_codmater=$pesquisa_chave and $where_ativo"));
+            $result = $clpcmater->sql_record($clpcmater->sql_query_desdobra(null, "regexp_replace(pcmater.pc01_descrmater,'\r|\n','','g') as pc01_descrmater,pc01_veiculo,pc01_servico, pc01_complmater", "", "pc01_codmater=$pesquisa_chave and $where_ativo"));
             if ($clpcmater->numrows != 0) {
               db_fieldsmemory($result, 0);
-              echo "<script>" . $funcao_js . "('" . addslashes($pc01_descrmater) . "',false,'$pc01_veiculo','$pc01_servico');</script>";
+              echo "<script>" . $funcao_js . "('" . addslashes($pc01_descrmater) . "',false,'$pc01_veiculo','$pc01_complmater');</script>";
             } else {
               echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
             }

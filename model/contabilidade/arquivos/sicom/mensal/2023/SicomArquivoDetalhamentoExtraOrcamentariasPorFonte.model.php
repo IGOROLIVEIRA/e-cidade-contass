@@ -521,8 +521,11 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
             //Percorre array dos registros 20 para fazer as transferências nas fontes que não são principal
             foreach ($aExt20 as $sHash20 => $oExt20) {
 
-                $sHashPrincipal = substr($sHash20, 0, -3) . $oExt20->iFontePrincipal;
-
+                $sHashPrincipal = substr($sHash20, 0, -7) . $oExt20->iFontePrincipal;
+                if ($oContaExtraFonte->fonte < 9999){
+                    $sHashPrincipal = substr($sHash20, 0, -3) . $oExt20->iFontePrincipal;
+                        
+                }
                 //Considera apena fonte diferente da principal
                 if ($oExt20->iFontePrincipal != $oExt20->si165_codfontrecursos) {
 

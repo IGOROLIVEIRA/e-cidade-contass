@@ -534,10 +534,10 @@ class EncerramentoExercicio {
    * @param                                         $iTipo
    * @throws BusinessException
    */
-  private function executarLancamento(LancamentoAuxiliarEncerramentoExercicio $oLancamento, $iDocumento, $iTipo) {
+  private function executarLancamento(LancamentoAuxiliarEncerramentoExercicio $oLancamento, $iDocumento, $iTipo, $ctCredora = null, $ctDevedora = null) {
 
     $oEvento           = new EventoContabil($iDocumento, $this->iAno);
-    $iCodigoLancamento = $oEvento->executaLancamento($oLancamento, $this->oDataLancamento->getDate());
+    $iCodigoLancamento = $oEvento->executaLancamento($oLancamento, $this->oDataLancamento->getDate(), $ctCredora, $ctDevedora);
     $this->vincularLancamento($iCodigoLancamento, $iTipo);
   }
 
@@ -683,7 +683,7 @@ class EncerramentoExercicio {
             $oLancamento->setMovimentacaoContabil($oMovimentacaoContabil);
             $oLancamento->setContaReferencia($iContaReferencia);
             $oLancamento->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
-            $this->executarLancamento($oLancamento, 1010, EncerramentoExercicio::ENCERRAR_SISTEMA_ORCAMENTARIO_CONTROLE);
+            $this->executarLancamento($oLancamento, 1010, EncerramentoExercicio::ENCERRAR_SISTEMA_ORCAMENTARIO_CONTROLE, $oRegra->c117_contacredora, $oRegra->c117_contadevedora);
             unset($oMovimentacaoContabil);
             unset($oLancamento);
 
@@ -702,7 +702,7 @@ class EncerramentoExercicio {
           $oLancamento->setObservacaoHistorico("Inscrição no valor de " . trim(db_formatar($oConta->saldo_final, "f")));
           $oLancamento->setMovimentacaoContabil($oMovimentacaoContabil);
           $oLancamento->setContaReferencia($iContaReferencia);
-          $this->executarLancamento($oLancamento, 1010, EncerramentoExercicio::ENCERRAR_SISTEMA_ORCAMENTARIO_CONTROLE);
+          $this->executarLancamento($oLancamento, 1010, EncerramentoExercicio::ENCERRAR_SISTEMA_ORCAMENTARIO_CONTROLE, $oRegra->c117_contacredora, $oRegra->c117_contadevedora);
           unset($oMovimentacaoContabil);
           unset($oLancamento);
 

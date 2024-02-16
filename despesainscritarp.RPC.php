@@ -110,10 +110,10 @@ try{
 
             if($oParam->fonte == 1){
                 $where = null;
-                $where .= " c223_anousu = ".db_getsession("DB_anousu");
+                $where .= " c223_anousu = ".db_getsession("DB_anousu")." c223_instit = ".db_getsession("DB_instit");
             }else{
                 $where = "c223_fonte = {$oParam->fonte}";
-                $where .= " and c223_anousu = ".db_getsession("DB_anousu");
+                $where .= " and c223_anousu = ".db_getsession("DB_anousu")." c223_instit = ".db_getsession("DB_instit");
             }
 
             $result = $cldespesainscritarp->sql_record($cldespesainscritarp->sql_query_file(null,"c223_fonte,c223_vlrdisrpnp,c223_vlrdisrpp,c223_vlrdisptotal,c223_vlrdisponivel,c223_vlrutilizado",null,$where));
@@ -144,11 +144,14 @@ try{
             if($oParam->fonte == 1){
                 $where = null;
             }else{
-                $where = " and c224_fonte = {$oParam->fonte}";
+                if ($oParam->digitos == 6){
+                    $where = " and c224_fonte::varchar like '%{$oParam->fonte}'";
+                } else {
+                    $where = " and c224_fonte = {$oParam->fonte}";                    
+                }
             }
 
-            $result = $cldisponibilidadedecaixa->sql_record($cldisponibilidadedecaixa->sql_query(null,"c224_vlrdisponibilidadecaixa,c224_fonte",null,"c224_instit = {$instit} $where and c224_anousu = {$anousu}"));
-            //die($cldisponibilidadedecaixa->sql_query(null,"c224_vlrdisponibilidadecaixa,c224_fonte",null,"c224_instit = {$instit} and c224_anousu = {$anousu} $where"));
+            $result = $cldisponibilidadedecaixa->sql_record($cldisponibilidadedecaixa->sql_query(null,"distinct c224_vlrdisponibilidadecaixa,c224_fonte",null,"c224_instit = {$instit} $where and c224_anousu = {$anousu}"));
             for($i=0; $i < pg_num_rows($result); $i++){
                 $oDisponibilidade = db_utils::fieldsMemory($result, $i);
                 $oRetorno->dispobilidade[] = $oDisponibilidade;
