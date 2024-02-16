@@ -240,6 +240,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
             $acordoPosicao['ac26_indicereajuste'] = $aditamento->getIndiceReajuste();
             $acordoPosicao['ac26_percentualreajuste'] = $aditamento->getPercentualReajuste();
             $acordoPosicao['ac26_descricaoindice'] = $aditamento->getDescricaoIndice();
+            $acordoPosicao['ac26_criterioreajuste'] = $aditamento->getCriterioReajuste();
         }
 
         return $acordoPosicao;

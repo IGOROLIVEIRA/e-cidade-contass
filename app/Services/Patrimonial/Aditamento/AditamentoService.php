@@ -37,7 +37,7 @@ class AditamentoService implements AditamentoServiceInterface
         if (!empty($lastIdApostila) && $lastIdApostila > $acordoPosicao->ac26_sequencial) {
             return [
                 'status' => false,
-                'message' => 'Existe um apostilamento na posição posterior.Será necessário criar novo aditivo.'
+                'message' => 'Existe apostilamento posterior ao último aditivo. Não é possível alterar.'
             ];
         }
 

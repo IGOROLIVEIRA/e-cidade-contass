@@ -91,12 +91,11 @@ class ItemFactory
 
             $item = new Item();
 
-
             $item->setItemSequencial((int) $itemRaw->acordoitemsequencial)
                 ->setCodigoPcMater((int) $itemRaw->codigoitem)
                 ->setQuantidade($itemRaw->quantidade)
                 ->setValorUnitario((float) $itemRaw->valorunitario)
-                ->setValorTotal((float) $itemRaw->valoraditado);
+                ->setValorTotal((float) $itemRaw->valor);
 
             $dataInicio = !empty($itemRaw->dtexecucaoinicio)
                 ? DateTime::createFromFormat($this->getFormatDate($itemRaw->dtexecucaoinicio),$itemRaw->dtexecucaoinicio)

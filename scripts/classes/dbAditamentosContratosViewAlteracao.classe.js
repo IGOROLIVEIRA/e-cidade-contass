@@ -2696,7 +2696,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
         if (oRetorno.erro == true) {
           if (oRetorno.datareferencia) {
-            return alert(`O período já foi encerrado para envio do SICOM. Altere a Data de Assinatura para uma data posterior. `)
+            return alert(`O período já foi encerrado para envio do SICOM. Não é possível realizar alterações. `);
           }
 
           return alert(oRetorno.message.urlDecode());

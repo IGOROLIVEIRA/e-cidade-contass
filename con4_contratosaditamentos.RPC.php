@@ -161,7 +161,7 @@ try {
             }
 
             $oRetorno->itens = $aItens;
-            //print_r($oRetorno);
+
             break;
 
         case "processarAditamento":
