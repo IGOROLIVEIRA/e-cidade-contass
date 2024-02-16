@@ -241,6 +241,28 @@ class cl_veicreativar
     return $sql;
   }
 
+  // Busca detalhe da reativação de veículo
+  function sql_buscar_detalhes($codigo, $campos = "*")
+  {
+    $sql = "select ";
+    if ($campos != "*") {
+      $campos_sql = explode("#", $campos);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+      $sql .= $campos;
+    }
+    $sql .= " from veicreativar as ra";
+    $sql .= " inner join veiculos as v  on  v.ve01_codigo = ra.ve82_veiculo";
+    $sql .= " inner join db_usuarios as u on u.id_usuario = ra.ve82_usuario";
+    $sql .= " where ra.ve82_sequencial = $codigo";
+
+    return $sql;
+  }
+
   // Função para gravar o erro
   function gravaErro($erroSql, $erroCampo, $erroBanco, $erroStatus = "0")
   {
@@ -256,4 +278,3 @@ class cl_veicreativar
     $this->erro_status = $erroStatus;
   }
 }
-
