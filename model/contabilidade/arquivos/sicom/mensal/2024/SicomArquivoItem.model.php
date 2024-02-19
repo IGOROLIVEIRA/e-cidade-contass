@@ -66,6 +66,12 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
    */
     public function gerarDados()
     {
+
+        /**
+         * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
+         */
+        $clitem10 = new cl_item102024();
+
         /**
          * excluir informacoes do mes selecioado
          */
@@ -73,6 +79,15 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
 
         $mes = intval($this->sDataFinal['5'] . $this->sDataFinal['6']);
         $instit = db_getsession("DB_instit");
+
+        $result = db_query($clitem10->sql_query(null, "*", null, "si43_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si43_instit=" . db_getsession("DB_instit")));
+
+        if (pg_num_rows($result) > 0) {
+            $clitem10->excluir(null, "si43_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si43_instit=" . db_getsession("DB_instit"));
+            if ($clitem10->erro_status == 0) {
+                throw new Exception($clitem10->erro_msg);
+            }
+        }
 
         $sSql = "SELECT db150_tiporegistro AS tipoRegistro,
                            db150_coditem AS coditem,
