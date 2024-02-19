@@ -790,6 +790,14 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         <?
                                         db_inputdata("l20_dataaberproposta", @$l20_dataaberproposta_dia, @$l20_dataaberproposta_mes, @$l20_dataaberproposta_ano, true, 'text', $db_opcao, "");
                                         ?>
+                                        <strong>Hora Abertura Prop:</strong>
+                                        <?php
+                                        if (empty($l20_horaaberturaprop)) {
+                                            $l20_horaaberturaprop = db_hora();
+                                        }
+                                        db_input('l20_horaaberturaprop', 5, $Il20_horaaberturaprop, true, 'text', $db_opcao, "onchange='js_verifica_hora(this.value,this.name)';onkeypress='return js_mask(event, \"0-9|:|0-9\"); '");
+                                        echo "hh:mm";
+                                        ?>
                                     </td>
                                 </tr>
 
@@ -800,6 +808,14 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     <td>
                                         <?
                                         db_inputdata("l20_dataencproposta", @$l20_dataencproposta_dia, @$l20_dataencproposta_mes, @$l20_dataencproposta_ano, true, 'text', $db_opcao, "");
+                                        ?>
+                                        <strong>Hora Encerramento:</strong>
+                                        <?php
+                                        if (empty($l20_horaencerramentoprop)) {
+                                            $l20_horaencerramentoprop = db_hora();
+                                        }
+                                        db_input('l20_horaencerramentoprop', 5, $Il20_horaencerramentoprop, true, 'text', $db_opcao, "onchange='js_verifica_hora(this.value,this.name)';onkeypress='return js_mask(event, \"0-9|:|0-9\"); '");
+                                        echo "hh:mm";
                                         ?>
                                     </td>
                                 </tr>
@@ -1175,7 +1191,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                         <label class="bold">Critério de Adjudicação:</label>
                      </td>
                      <td>
-                        <? 
+                        <?
                         $aCriterios = array("1" => "1- Desconto sobre tabela", "2" => "2 - Menor taxa ou percentual", "3" => "3 - Outros");
                         db_select("criterioadjudicao_dispensainexibilidade", $aCriterios, true, '');
                         ?>
@@ -1483,7 +1499,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("local").style.display = 'none';
             document.getElementById("respAvaliaBens").style.display = "none";
             document.getElementById("respAberProcesso").style.display = "none";
-            document.getElementById("respEmissaoEdi").style.display = "none";    
+            document.getElementById("respEmissaoEdi").style.display = "none";
         } else {
             var codigo_lei = document.form1.l20_leidalicitacao.value;
             document.getElementById("linha_nroedital").style.display = '';
