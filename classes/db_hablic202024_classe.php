@@ -1,9 +1,9 @@
 <?
 //MODULO: sicom
-//CLASSE DA ENTIDADE hablic202023
-class cl_hablic202023
+//CLASSE DA ENTIDADE hablic202024
+class cl_hablic202024
 {
-  // cria variaveis de erro 
+  // cria variaveis de erro
   var $rotulo = null;
   var $query_sql = null;
   var $numrows = 0;
@@ -16,7 +16,7 @@ class cl_hablic202023
   var $erro_msg = null;
   var $erro_campo = null;
   var $pagina_retorno = null;
-  // cria variaveis do arquivo 
+  // cria variaveis do arquivo
   var $si59_sequencial = 0;
   var $si59_tiporegistro = 0;
   var $si59_codorgao = null;
@@ -62,43 +62,43 @@ class cl_hablic202023
   var $si59_dtvalidadecndt = null;
   var $si59_mes = 0;
   var $si59_instit = 0;
-  // cria propriedade com as variaveis do arquivo 
+  // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si59_sequencial = int8 = sequencial 
-                 si59_tiporegistro = int8 = Tipo do  registro 
-                 si59_codorgao = varchar(2) = Código do órgão 
-                 si59_codunidadesub = varchar(8) = Código da unidade 
-                 si59_exerciciolicitacao = int8 = Exercício em que   foi instaurado 
-                 si59_nroprocessolicitatorio = varchar(12) = Número sequencial 
-                 si59_tipodocumento = int8 = Tipo do  documento 
-                 si59_nrodocumento = varchar(14) = Número do  documento 
-                 si59_datacredenciamento = date = Data do  credenciamento 
-                 si59_nrolote = int8 = Número do Lote 
-                 si59_coditem = int8 = Código do Item 
-                 si59_nroinscricaoestadual = varchar(30) = Número da  Inscrição estadual 
-                 si59_ufinscricaoestadual = varchar(2) = UF da inscrição  estadual 
-                 si59_nrocertidaoregularidadeinss = varchar(30) = Número da certidão de regularidade FGTS 
-                 si59_dataemissaocertidaoregularidadeinss = date = Data de emissão  da certidão 
-                 si59_dtvalidadecertidaoregularidadeinss = date = Data de validade  da certidão 
-                 si59_nrocertidaoregularidadefgts = varchar(30) = Número da certidão  de regularidade FGTS 
-                 si59_dtemissaocertidaoregularidadefgts = date = Data de emissão da certidão de regularidade 
-                 si59_dtvalidadecertidaoregularidadefgts = date = Data de validade  da certidão FGTS 
-                 si59_nrocndt = varchar(30) = Número da  Certidão Negativa  de Débitos 
-                 si59_dtemissaocndt = date = Data de emissão  da certidão  Negativa 
-                 si59_dtvalidadecndt = date = Data de validade  da certidão  Negativa 
-                 si59_mes = int8 = Mês 
-                 si59_instit = int8 = Instituição 
+                 si59_sequencial = int8 = sequencial
+                 si59_tiporegistro = int8 = Tipo do  registro
+                 si59_codorgao = varchar(2) = Código do órgão
+                 si59_codunidadesub = varchar(8) = Código da unidade
+                 si59_exerciciolicitacao = int8 = Exercício em que   foi instaurado
+                 si59_nroprocessolicitatorio = varchar(12) = Número sequencial
+                 si59_tipodocumento = int8 = Tipo do  documento
+                 si59_nrodocumento = varchar(14) = Número do  documento
+                 si59_datacredenciamento = date = Data do  credenciamento
+                 si59_nrolote = int8 = Número do Lote
+                 si59_coditem = int8 = Código do Item
+                 si59_nroinscricaoestadual = varchar(30) = Número da  Inscrição estadual
+                 si59_ufinscricaoestadual = varchar(2) = UF da inscrição  estadual
+                 si59_nrocertidaoregularidadeinss = varchar(30) = Número da certidão de regularidade FGTS
+                 si59_dataemissaocertidaoregularidadeinss = date = Data de emissão  da certidão
+                 si59_dtvalidadecertidaoregularidadeinss = date = Data de validade  da certidão
+                 si59_nrocertidaoregularidadefgts = varchar(30) = Número da certidão  de regularidade FGTS
+                 si59_dtemissaocertidaoregularidadefgts = date = Data de emissão da certidão de regularidade
+                 si59_dtvalidadecertidaoregularidadefgts = date = Data de validade  da certidão FGTS
+                 si59_nrocndt = varchar(30) = Número da  Certidão Negativa  de Débitos
+                 si59_dtemissaocndt = date = Data de emissão  da certidão  Negativa
+                 si59_dtvalidadecndt = date = Data de validade  da certidão  Negativa
+                 si59_mes = int8 = Mês
+                 si59_instit = int8 = Instituição
                  ";
-  
-  //funcao construtor da classe 
-  function cl_hablic202023()
+
+  //funcao construtor da classe
+  function cl_hablic202024()
   {
     //classes dos rotulos dos campos
-    $this->rotulo = new rotulo("hablic202023");
+    $this->rotulo = new rotulo("hablic202024");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  
-  //funcao erro 
+
+  //funcao erro
   function erro($mostra, $retorna)
   {
     if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
@@ -108,7 +108,7 @@ class cl_hablic202023
       }
     }
   }
-  
+
   // funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
@@ -190,7 +190,7 @@ class cl_hablic202023
       $this->si59_sequencial = ($this->si59_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si59_sequencial"] : $this->si59_sequencial);
     }
   }
-  
+
   // funcao para inclusao
   function incluir($si59_sequencial)
   {
@@ -202,7 +202,7 @@ class cl_hablic202023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si59_exerciciolicitacao == null) {
@@ -245,7 +245,7 @@ class cl_hablic202023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si59_instit == null) {
@@ -255,31 +255,31 @@ class cl_hablic202023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($si59_sequencial == "" || $si59_sequencial == null) {
-      $result = db_query("select nextval('hablic202023_si59_sequencial_seq')");
+      $result = db_query("select nextval('hablic202024_si59_sequencial_seq')");
       if ($result == false) {
         $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-        $this->erro_sql = "Verifique o cadastro da sequencia: hablic202023_si59_sequencial_seq do campo: si59_sequencial";
+        $this->erro_sql = "Verifique o cadastro da sequencia: hablic202024_si59_sequencial_seq do campo: si59_sequencial";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
       $this->si59_sequencial = pg_result($result, 0, 0);
     } else {
-      $result = db_query("select last_value from hablic202023_si59_sequencial_seq");
+      $result = db_query("select last_value from hablic202024_si59_sequencial_seq");
       if (($result != false) && (pg_result($result, 0, 0) < $si59_sequencial)) {
         $this->erro_sql = " Campo si59_sequencial maior que último número da sequencia.";
         $this->erro_banco = "Sequencia menor que este número.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       } else {
         $this->si59_sequencial = $si59_sequencial;
@@ -291,78 +291,78 @@ class cl_hablic202023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    $sql = "insert into hablic202023(
-                                       si59_sequencial 
-                                      ,si59_tiporegistro 
-                                      ,si59_codorgao 
-                                      ,si59_codunidadesub 
-                                      ,si59_exerciciolicitacao 
-                                      ,si59_nroprocessolicitatorio 
-                                      ,si59_tipodocumento 
-                                      ,si59_nrodocumento 
-                                      ,si59_datacredenciamento 
-                                      ,si59_nrolote 
-                                      ,si59_coditem 
-                                      ,si59_nroinscricaoestadual 
-                                      ,si59_ufinscricaoestadual 
-                                      ,si59_nrocertidaoregularidadeinss 
-                                      ,si59_dataemissaocertidaoregularidadeinss 
-                                      ,si59_dtvalidadecertidaoregularidadeinss 
-                                      ,si59_nrocertidaoregularidadefgts 
-                                      ,si59_dtemissaocertidaoregularidadefgts 
-                                      ,si59_dtvalidadecertidaoregularidadefgts 
-                                      ,si59_nrocndt 
-                                      ,si59_dtemissaocndt 
-                                      ,si59_dtvalidadecndt 
-                                      ,si59_mes 
-                                      ,si59_instit 
+    $sql = "insert into hablic202024(
+                                       si59_sequencial
+                                      ,si59_tiporegistro
+                                      ,si59_codorgao
+                                      ,si59_codunidadesub
+                                      ,si59_exerciciolicitacao
+                                      ,si59_nroprocessolicitatorio
+                                      ,si59_tipodocumento
+                                      ,si59_nrodocumento
+                                      ,si59_datacredenciamento
+                                      ,si59_nrolote
+                                      ,si59_coditem
+                                      ,si59_nroinscricaoestadual
+                                      ,si59_ufinscricaoestadual
+                                      ,si59_nrocertidaoregularidadeinss
+                                      ,si59_dataemissaocertidaoregularidadeinss
+                                      ,si59_dtvalidadecertidaoregularidadeinss
+                                      ,si59_nrocertidaoregularidadefgts
+                                      ,si59_dtemissaocertidaoregularidadefgts
+                                      ,si59_dtvalidadecertidaoregularidadefgts
+                                      ,si59_nrocndt
+                                      ,si59_dtemissaocndt
+                                      ,si59_dtvalidadecndt
+                                      ,si59_mes
+                                      ,si59_instit
                        )
                 values (
-                                $this->si59_sequencial 
-                               ,$this->si59_tiporegistro 
-                               ,'$this->si59_codorgao' 
-                               ,'$this->si59_codunidadesub' 
-                               ,$this->si59_exerciciolicitacao 
-                               ,'$this->si59_nroprocessolicitatorio' 
-                               ,$this->si59_tipodocumento 
-                               ,'$this->si59_nrodocumento' 
-                               ," . ($this->si59_datacredenciamento == "null" || $this->si59_datacredenciamento == "" ? "null" : "'" . $this->si59_datacredenciamento . "'") . " 
-                               ,$this->si59_nrolote 
-                               ,$this->si59_coditem 
-                               ,'$this->si59_nroinscricaoestadual' 
-                               ,'$this->si59_ufinscricaoestadual' 
-                               ,'$this->si59_nrocertidaoregularidadeinss' 
-                               ," . ($this->si59_dataemissaocertidaoregularidadeinss == "null" || $this->si59_dataemissaocertidaoregularidadeinss == "" ? "null" : "'" . $this->si59_dataemissaocertidaoregularidadeinss . "'") . " 
-                               ," . ($this->si59_dtvalidadecertidaoregularidadeinss == "null" || $this->si59_dtvalidadecertidaoregularidadeinss == "" ? "null" : "'" . $this->si59_dtvalidadecertidaoregularidadeinss . "'") . " 
-                               ,'$this->si59_nrocertidaoregularidadefgts' 
-                               ," . ($this->si59_dtemissaocertidaoregularidadefgts == "null" || $this->si59_dtemissaocertidaoregularidadefgts == "" ? "null" : "'" . $this->si59_dtemissaocertidaoregularidadefgts . "'") . " 
-                               ," . ($this->si59_dtvalidadecertidaoregularidadefgts == "null" || $this->si59_dtvalidadecertidaoregularidadefgts == "" ? "null" : "'" . $this->si59_dtvalidadecertidaoregularidadefgts . "'") . " 
-                               ,'$this->si59_nrocndt' 
-                               ," . ($this->si59_dtemissaocndt == "null" || $this->si59_dtemissaocndt == "" ? "null" : "'" . $this->si59_dtemissaocndt . "'") . " 
-                               ," . ($this->si59_dtvalidadecndt == "null" || $this->si59_dtvalidadecndt == "" ? "null" : "'" . $this->si59_dtvalidadecndt . "'") . " 
-                               ,$this->si59_mes 
-                               ,$this->si59_instit 
+                                $this->si59_sequencial
+                               ,$this->si59_tiporegistro
+                               ,'$this->si59_codorgao'
+                               ,'$this->si59_codunidadesub'
+                               ,$this->si59_exerciciolicitacao
+                               ,'$this->si59_nroprocessolicitatorio'
+                               ,$this->si59_tipodocumento
+                               ,'$this->si59_nrodocumento'
+                               ," . ($this->si59_datacredenciamento == "null" || $this->si59_datacredenciamento == "" ? "null" : "'" . $this->si59_datacredenciamento . "'") . "
+                               ,$this->si59_nrolote
+                               ,$this->si59_coditem
+                               ,'$this->si59_nroinscricaoestadual'
+                               ,'$this->si59_ufinscricaoestadual'
+                               ,'$this->si59_nrocertidaoregularidadeinss'
+                               ," . ($this->si59_dataemissaocertidaoregularidadeinss == "null" || $this->si59_dataemissaocertidaoregularidadeinss == "" ? "null" : "'" . $this->si59_dataemissaocertidaoregularidadeinss . "'") . "
+                               ," . ($this->si59_dtvalidadecertidaoregularidadeinss == "null" || $this->si59_dtvalidadecertidaoregularidadeinss == "" ? "null" : "'" . $this->si59_dtvalidadecertidaoregularidadeinss . "'") . "
+                               ,'$this->si59_nrocertidaoregularidadefgts'
+                               ," . ($this->si59_dtemissaocertidaoregularidadefgts == "null" || $this->si59_dtemissaocertidaoregularidadefgts == "" ? "null" : "'" . $this->si59_dtemissaocertidaoregularidadefgts . "'") . "
+                               ," . ($this->si59_dtvalidadecertidaoregularidadefgts == "null" || $this->si59_dtvalidadecertidaoregularidadefgts == "" ? "null" : "'" . $this->si59_dtvalidadecertidaoregularidadefgts . "'") . "
+                               ,'$this->si59_nrocndt'
+                               ," . ($this->si59_dtemissaocndt == "null" || $this->si59_dtemissaocndt == "" ? "null" : "'" . $this->si59_dtemissaocndt . "'") . "
+                               ," . ($this->si59_dtvalidadecndt == "null" || $this->si59_dtvalidadecndt == "" ? "null" : "'" . $this->si59_dtvalidadecndt . "'") . "
+                               ,$this->si59_mes
+                               ,$this->si59_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-        $this->erro_sql = "hablic202023 ($this->si59_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql = "hablic202024 ($this->si59_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-        $this->erro_banco = "hablic202023 já Cadastrado";
+        $this->erro_banco = "hablic202024 já Cadastrado";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       } else {
-        $this->erro_sql = "hablic202023 ($this->si59_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql = "hablic202024 ($this->si59_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       }
       $this->erro_status = "0";
       $this->numrows_incluir = 0;
-      
+
       return false;
     }
     $this->erro_banco = "";
@@ -403,15 +403,15 @@ class cl_hablic202023
       $resac = db_query("insert into db_acount values($acount,2010288,2010083,'','" . AddSlashes(pg_result($resaco, 0, 'si59_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010288,2011571,'','" . AddSlashes(pg_result($resaco, 0, 'si59_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
     }
-    
+
     return true;
   }
-  
+
   // funcao para alteracao
   function alterar($si59_sequencial = null)
   {
     $this->atualizacampos();
-    $sql = " update hablic202023 set ";
+    $sql = " update hablic202024 set ";
     $virgula = "";
     if (trim($this->si59_sequencial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si59_sequencial"])) {
       if (trim($this->si59_sequencial) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si59_sequencial"])) {
@@ -430,7 +430,7 @@ class cl_hablic202023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -571,7 +571,7 @@ class cl_hablic202023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -585,7 +585,7 @@ class cl_hablic202023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -654,24 +654,24 @@ class cl_hablic202023
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-      $this->erro_sql = "hablic202023 nao Alterado. Alteracao Abortada.\n";
+      $this->erro_sql = "hablic202024 nao Alterado. Alteracao Abortada.\n";
       $this->erro_sql .= "Valores : " . $this->si59_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "hablic202023 nao foi Alterado. Alteracao Executada.\n";
+        $this->erro_sql = "hablic202024 nao foi Alterado. Alteracao Executada.\n";
         $this->erro_sql .= "Valores : " . $this->si59_sequencial;
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -681,13 +681,13 @@ class cl_hablic202023
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
-  // funcao para exclusao 
+
+  // funcao para exclusao
   function excluir($si59_sequencial = null, $dbwhere = null)
   {
     if ($dbwhere == null || $dbwhere == "") {
@@ -727,7 +727,7 @@ class cl_hablic202023
         $resac = db_query("insert into db_acount values($acount,2010288,2011571,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si59_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       }
     }
-    $sql = " delete from hablic202023
+    $sql = " delete from hablic202024
                     where ";
     $sql2 = "";
     if ($dbwhere == null || $dbwhere == "") {
@@ -744,24 +744,24 @@ class cl_hablic202023
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-      $this->erro_sql = "hablic202023 nao Excluído. Exclusão Abortada.\n";
+      $this->erro_sql = "hablic202024 nao Excluído. Exclusão Abortada.\n";
       $this->erro_sql .= "Valores : " . $si59_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "hablic202023 nao Encontrado. Exclusão não Efetuada.\n";
+        $this->erro_sql = "hablic202024 nao Encontrado. Exclusão não Efetuada.\n";
         $this->erro_sql .= "Valores : " . $si59_sequencial;
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -771,13 +771,13 @@ class cl_hablic202023
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
-  // funcao do recordset 
+
+  // funcao do recordset
   function sql_record($sql)
   {
     $result = db_query($sql);
@@ -789,29 +789,29 @@ class cl_hablic202023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $this->numrows = pg_numrows($result);
     if ($this->numrows == 0) {
       $this->erro_banco = "";
-      $this->erro_sql = "Record Vazio na Tabela:hablic202023";
+      $this->erro_sql = "Record Vazio na Tabela:hablic202024";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    
+
     return $result;
   }
-  
-  // funcao do sql 
+
+  // funcao do sql
   function sql_query($si59_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -820,11 +820,11 @@ class cl_hablic202023
     } else {
       $sql .= $campos;
     }
-    $sql .= " from hablic202023 ";
+    $sql .= " from hablic202024 ";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($si59_sequencial != null) {
-        $sql2 .= " where hablic202023.si59_sequencial = $si59_sequencial ";
+        $sql2 .= " where hablic202024.si59_sequencial = $si59_sequencial ";
       }
     } else if ($dbwhere != "") {
       $sql2 = " where $dbwhere";
@@ -832,23 +832,23 @@ class cl_hablic202023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
-  
-  // funcao do sql 
+
+  // funcao do sql
   function sql_query_file($si59_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -857,11 +857,11 @@ class cl_hablic202023
     } else {
       $sql .= $campos;
     }
-    $sql .= " from hablic202023 ";
+    $sql .= " from hablic202024 ";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($si59_sequencial != null) {
-        $sql2 .= " where hablic202023.si59_sequencial = $si59_sequencial ";
+        $sql2 .= " where hablic202024.si59_sequencial = $si59_sequencial ";
       }
     } else if ($dbwhere != "") {
       $sql2 = " where $dbwhere";
@@ -869,14 +869,14 @@ class cl_hablic202023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
 }

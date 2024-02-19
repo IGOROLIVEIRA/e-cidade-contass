@@ -233,6 +233,17 @@ if ($oDados->total == 0) {
                   ?>
                 </td>
 			</tr>
+            <tr>
+                <td>
+                    <strong>Integração SIGAF</strong>
+                </td>
+                <td>
+                    <?
+                    $aX = array("t"=>"SIM", "f"=>"NÃO");
+                    db_select('fa02_i_integracaosigaf', $aX, true, $db_opcao, "");
+                    ?>
+                </td>
+            </tr>
 		</table>
 		</fieldset>
 		</td>

@@ -248,7 +248,9 @@ class EventoCargaS2300 implements EventoCargaInterface
             '' as dtIniAfast,
             '' as codMotAfast,
             --termino
-            '' as dtDeslig
+            '' as dtDeslig,
+            cgc as nrinsc_localtrabgeral,
+            nomeinst as desccomp_localtrabgeral
             FROM rhpessoal
             join cgm on rhpessoal.rh01_numcgm = cgm.z01_numcgm
             join rhpessoalmov on rhpessoal.rh01_regist = rh02_regist and (rh02_anousu,rh02_mesusu) = ({$this->ano},{$this->mes})
@@ -264,6 +266,8 @@ class EventoCargaS2300 implements EventoCargaInterface
         left join cgm as cgmsupervisor ON cgmsupervisor.z01_numcgm = rhpessoalsupervisor.rh01_numcgm
         left join inssirf on (r33_codtab::integer-2,r33_anousu,r33_mesusu) = (rh02_tbprev,{$anofolha},{$mesfolha})
         left join rhpesrescisao on rh05_seqpes = rh02_seqpes
+        inner join db_config on
+        db_config.codigo = rhpessoal.rh01_instit
         WHERE rhpessoal.rh01_instit = {$this->instit} 
         AND h13_categoria in (304,701,711,712,721,722,723,731,734,738,771,901,903,410)
         AND rh30_vinculo = 'A'

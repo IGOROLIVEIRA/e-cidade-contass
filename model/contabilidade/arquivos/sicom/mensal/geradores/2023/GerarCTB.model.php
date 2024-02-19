@@ -28,17 +28,17 @@ class GerarCTB extends GerarAM
         $sSql2 = "select * from ctb202023 where si96_mes = " . $this->iMes . " and si96_instit = " . db_getsession("DB_instit");
         if ($bEncerramento) {
             $sSql2 = "  select distinct si96_sequencial,si96_tiporegistro,
-                            case when si96_codorgao is null then si96_codorgao
+                            case when si96_codorgao is not null and si96_codorgao != '0' then si96_codorgao
                                     else ( select si96_codorgao from ctb202023
                                             where si96_mes = " . $this->iMes . " and si96_instit = " . db_getsession("DB_instit") . "
                                             and si96_codorgao is not null limit 1
                                         ) 
                                     end as si96_codorgao,
                                     si96_codctb, si96_codfontrecursos,
-                            case when si96_saldocec is null then si96_saldocec
+                            case when si96_saldocec is not null and si96_saldocec != 0 then si96_saldocec
                                     else ( select si96_saldocec from ctb202023
                                             where si96_mes = " . $this->iMes . " and si96_instit = " . db_getsession("DB_instit") . "
-                                            and si96_saldocec is not null limit 1
+                                            and ( si96_saldocec is not null or si96_saldocec = 1) limit 1
                                         ) 
                                     end as si96_saldocec,       
                                 si96_vlsaldoinicialfonte,
@@ -158,7 +158,7 @@ class GerarCTB extends GerarAM
                     $sHashReg21 = $aCTB21['si97_tiporegistro'].$aCTB21['si97_codctb'].$aCTB21['si97_codfontrecursos'].$aCTB21['si97_codreduzidomov'].$aCTB21['si97_tipoentrsaida'];
                     $sHashReg21prox = $aCTB21prox['si97_tiporegistro'].$aCTB21prox['si97_codctb'].$aCTB21prox['si97_codfontrecursos'].$aCTB21prox['si97_codreduzidomov'].$aCTB21prox['si97_tipoentrsaida'];
                    
-                    if ($sHashReg21 == $sHashReg21prox && $bEncerramento) {
+                    if (($sHashReg21 == $sHashReg21prox) && $bEncerramento == 1) {
                         $si97_valorentrsaida  += $aCTB21['si97_valorentrsaida'];
                     } else {
                         $si97_valorentrsaida  += $aCTB21['si97_valorentrsaida'];
