@@ -87,29 +87,27 @@ $db_botao = true;
             <fieldset style="border:0px;">
 
               <table border="0">
-                <?php
-                if (!empty($codigolicitacao)): ?>
                 <tr>
-                    <td title="Licitação">
-                      <b>Licitação:</b>
-                    </td>
-                    <td><?php db_input('codigolicitacao', 10, '', true, 'text', 3, ""); ?></td>
-                </tr>
-                <?php endif; ?>
-                <?php if (!in_array($tipo_tribunal, array(100, 101, 102, 103, 104, 106))) : ?>
-                  <tr>
-                    <td title="Edital">
-                      <b>Edital:</b>
+                    <td>
+                        <b>Licitação:</b>
+
+
                     </td>
                     <td>
-                      <?php
-                      db_input('numero_edital', 10, '', true, 'text', 3, "");
-                      db_input('codigolicitacao', 10, '', true, 'hidden', 3);
-                      db_input('naturezaobjeto', 10, '', true, 'hidden', 3);
-                      ?>
+                        <?php db_input('codigolicitacao', 10, '', true, 'text', 3, ""); ?>
+
+                        <?php if (!in_array($tipo_tribunal, array(100, 101, 102, 103, 104, 106))) : ?>
+
+                            <span style="padding-left: 49%;"><strong>Edital:</strong></span>
+                            <?php
+                            db_input('numero_edital', 10, '', true, 'text', 3, "");
+                            db_input('codigolicitacao', 10, '', true, 'hidden', 3);
+                            db_input('naturezaobjeto', 10, '', true, 'hidden', 3);
+                            ?>
+
+                        <?php endif; ?>
                     </td>
-                  </tr>
-                <?php endif; ?>
+                </tr>
                 <tr>
                   <td nowrap title="Processo">
                     <b>Processo:</b>
