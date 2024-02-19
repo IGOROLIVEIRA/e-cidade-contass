@@ -57,7 +57,7 @@ if ($licitacao) {
                                 END) >= 2020
     ";
 
-    $sqlLicita = $clliclicita->sql_query_edital('', 'DISTINCT l20_codigo, l20_edital, l20_nroedital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
+    $sqlLicita = $clliclicita->sql_query_edital('', 'DISTINCT l20_codigo, l20_edital, l20_nroedital, l20_objeto,l20_numero, pctipocompratribunal.l44_sequencial as tipo_tribunal,
         UPPER(pctipocompratribunal.l44_descricao) as descr_tribunal, l20_naturezaobjeto as natureza_objeto,
         l47_dataenvio, l20_anousu, l20_tipojulg', '', 'l20_codigo = ' . $licitacao . $sWhere, '', 1);
     $rsLicita = $clliclicita->sql_record($sqlLicita);
@@ -66,9 +66,10 @@ if ($licitacao) {
     $natureza_objeto = $oDadosLicitacao->natureza_objeto;
     $objeto = $oDadosLicitacao->l20_objeto;
     $tipo_tribunal = $oDadosLicitacao->tipo_tribunal;
+    $codigoModalidade = $oDadosLicitacao->l20_numero;
     $descr_tribunal = $oDadosLicitacao->descr_tribunal;
     $edital = $oDadosLicitacao->l20_edital;
-    $codigolicitacao = $oDadosLicitacao->l20_codigo;
+    $codigolicitacao = $oDadosLicitacao->l20_codigo ?? $licitacao;
     $numero_edital = $oDadosLicitacao->l20_nroedital;
     $anoLicitacao = $oDadosLicitacao->l20_anousu;
     $iTipoJulgamento = $oDadosLicitacao->l20_tipojulg;
@@ -142,7 +143,7 @@ if (isset($incluir) && isset($licitacao)) {
 
         if (!$sqlerro) {
             $data_formatada = str_replace('/', '-', db_formatar($data_referencia, 'd'));
-            $clliclancedital->l47_linkpub = $links;
+            $clliclancedital->l47_linkpub = preg_replace( "/\r|\n/", " ", $links);
             $clliclancedital->l47_origemrecurso = $origem_recurso;
             $clliclancedital->l47_descrecurso = $descricao_recurso;
             $clliclancedital->l47_dataenvio = $data_formatada;
