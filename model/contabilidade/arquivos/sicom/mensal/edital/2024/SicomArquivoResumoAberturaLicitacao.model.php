@@ -495,7 +495,7 @@ ORDER BY nroprocessolicitatorio
               WHERE db_config.codigo = " . db_getsession('DB_instit') . "
               AND l03_pctipocompratribunal NOT IN ('100','101','102','103','106')
               AND liclicita.l20_edital = $oDados10->nroprocessolicitatorio
-              AND liclicita.l20_anousu = " . db_getsession('DB_anousu') . "
+              AND liclicita.l20_anousu = $oDados10->exerciciolicitacao
 				    ORDER BY obrasdadoscomplementareslote.db150_codobra";
 
                 $rsResult11 = db_query($sSql11);

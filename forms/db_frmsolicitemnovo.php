@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBselller Servicos de Informatica
@@ -44,10 +44,28 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
 ?>
 <style type="text/css">
-  input::placeholder {
+    input::placeholder {
     color: black;
-  }
+    }
+
+    .hoverBox {
+        background-color: #6699CC;
+        max-width: 100%;
+        max-height: 150px;
+        position: absolute;
+        bottom: 50%;
+        text-align: start;
+        padding: 15px;
+        display: content;
+    }
+    .hoverBoxDisabled {
+        display: none;
+    }
 </style>
+<div id="hoverBox" class="hoverBox hoverBoxDisabled">
+  <p><strong>Descricao Material: </strong></p>
+  <p id="hoverText"></p>
+</div>
 <div>
   <form style="margin-top: 20px;" name="form1" method="post" action="" enctype="multipart/form-data">
 
@@ -87,6 +105,11 @@ if ((isset($opcao) && $opcao == "alterar")) {
     <fieldset style="width: 1000px;">
       <legend><strong>Adicionar Item</strong></legend>
       <table border="0">
+      <tr style="display: none;">
+        <td>
+            <?php db_input("pc01_complmater", 10, "", false, "", 3); ?>
+        </td>
+      </tr>
         <tr>
           <td nowrap title="<?= @$Tpc16_codmater ?>">
             <?
@@ -191,7 +214,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
           <td>
             <?
-            db_input('pc01_descrmater', 45, $Ipc01_descrmater, true, 'text', $db_opcao, "style='width: 100%;' onchange='js_pesquisa_desdobramento();'");
+            db_input('pc01_descrmater', 45, $Ipc01_descrmater, true, 'text', $db_opcao, "style='width: 100%;'onchange='js_pesquisa_desdobramento();' onmouseover = 'js_inlineMouseHover(this.value);'");
             ?>
           </td>
 
@@ -451,11 +474,13 @@ if ((isset($opcao) && $opcao == "alterar")) {
     db_input('db_botao', 5, 0, true, 'hidden', 3);
 
     ?>
+
   </form>
 </div>
 
 
 <script>
+
   function importar() {
     if (document.getElementById('importaritens').value == "2") {
       document.getElementById('inputimportacao').style.display = '';
@@ -766,6 +791,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
     oRetorno.dados.forEach(function(oItem) {
       valor = oItem.codigo + " - " + oItem.elemento + " - " + oItem.nome.urlDecode();
       valorElem = oItem.elemento;
+      document.getElementById('pc01_complmater').value = oItem.complemento.urlDecode().toUpperCase();
       $('eleSub').options[i] = new Option(valor, oItem.codigo);
       i++;
     });
@@ -808,7 +834,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
       js_OpenJanelaIframe('',
         'db_iframe_pcmater',
         '<?= $sUrlLookup ?>?funcao_js=parent.js_mostrapcmater1' +
-        '|pc01_codmater|pc01_descrmater|o56_codele|pc01_servico<?= $sFiltro ?><?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>' +
+        '|pc01_codmater|pc01_descrmater|o56_codele|pc01_servico|pc01Complmater<?= $sFiltro ?><?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>' +
         '&iRegistroPreco=<?= $iRegistroPreco; ?>',
         'Pesquisa de Materiais',
         true);
@@ -870,7 +896,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   function js_mostrapcmater(chave, erro, lVeic, servico) {
 
-
     if (erro == true) {
       document.form1.pc16_codmater.focus();
       document.form1.pc16_codmater.value = '';
@@ -898,9 +923,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
         document.getElementById('tdunidade2').style.display = "none";
 
 
-
-
-
       } else {
         document.getElementById('titleUnidade').style.display = "";
         document.getElementById('pc17_unid').style.display = "";
@@ -925,11 +947,11 @@ if ((isset($opcao) && $opcao == "alterar")) {
     }
   }
 
-  function js_mostrapcmater1(chave1, chave2, codele, servico, iRegistro) {
-
+  function js_mostrapcmater1(chave1, chave2, codele, servico, pc01Complmater, iRegistro) {
 
     document.form1.pc16_codmater.value = chave1;
     document.form1.pc01_descrmater.value = chave2;
+    document.form1.pc01_complmater.value = pc01Complmater;
 
     db_iframe_pcmater.hide();
 
@@ -1044,11 +1066,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
     document.getElementById('pc17_unid').disabled = false;
     document.getElementById('eleSub').disabled = false;
     document.getElementById('pc11_servicoquantidade').disabled = false;
-
-
-
-
-
   }
 
   function js_adicionarItem() {
@@ -1219,4 +1236,20 @@ if ((isset($opcao) && $opcao == "alterar")) {
   document.getElementById('pc17_unid').value = "1";
   document.getElementById('pc17_unid2').value = "1";
   document.getElementById('eleSub').value = "0";
+
+  function js_inlineMouseHover(value) {
+
+    let descricao = document.getElementById('pc01_descrmater').value;
+    let complemento = document.getElementById('pc01_complmater').value;
+
+    if (value != "") {
+        document.getElementById('hoverBox').classList.remove('hoverBoxDisabled');
+        document.getElementById('hoverText').textContent = descricao + " " + complemento;
+    }
+
+    setTimeout(()=>{
+        document.getElementById('hoverBox').classList.add('hoverBoxDisabled');
+    }, 3000);
+
+  }
 </script>
