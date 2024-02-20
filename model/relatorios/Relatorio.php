@@ -65,11 +65,7 @@ class Relatorio extends mPDF
     $margin_left = 7, $margin_right = 7, $margin_top = 40, $margin_bottom = 14,
     $margin_header = 6, $margin_footer = 0
   ) {
-    parent::__construct(
-      $mode, $format, $default_font_size, $default_font,
-      $margin_left, $margin_right, $margin_top, $margin_bottom,
-      $margin_header, $margin_footer
-    );
+    parent::__construct();
 
     /*----------- Footer -----------*/
     $this->setHTMLFooter(utf8_encode($this->rodape()), 'O');
