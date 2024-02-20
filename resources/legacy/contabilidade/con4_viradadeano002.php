@@ -237,25 +237,24 @@ function js_imprime(virada){
 	          }
 
 	          if($sqlerro == false) {
-	            $sArquivoItemVirada = "con4_viradadeano002_item".str_pad("{$aItem[$iItem]}", 3, "0", STR_PAD_LEFT).".php";
-	            //echo "<br>$sArquivoItemVirada";
-	            if(file_exists($sArquivoItemVirada)) {
-	              // Seta Variavel Para Erro, caso houver
-                $erro_msg = "Erro ao processar item {$c33_sequencial}-{$c33_descricao}!\\n";
+                  $sArquivoItemVirada = "con4_viradadeano002_item".str_pad("{$aItem[$iItem]}", 3, "0", STR_PAD_LEFT).".php";
+                  if(file_exists(dirname(__FILE__)."/".$sArquivoItemVirada)) {
+                      // Seta Variavel Para Erro, caso houver
+                      $erro_msg = "Erro ao processar item {$c33_sequencial}-{$c33_descricao}!\\n";
 
-	              $sMensagemTermometroItem = "Processando Item {$c33_sequencial}-{$c33_descricao}...";
+                      $sMensagemTermometroItem = "Processando Item {$c33_sequencial}-{$c33_descricao}...";
 
-	              // Inclui programa adequado para ser processado
-	              require_once($sArquivoItemVirada);
+                      // Inclui programa adequado para ser processado
+                      require_once($sArquivoItemVirada);
 
-	              if($sqlerro==true) {
-	                break;
-	              }
-	            } else {
-	              $sqlerro  = true;
-	              $erro_msg = "Item de Virada {$aItem[$iItem]} não disponível! Processamento Interrompido!";
-	              break;
-	            }
+                      if($sqlerro==true) {
+                          break;
+                      }
+                  } else {
+                      $sqlerro  = true;
+                      $erro_msg = "Item de Virada {$aItem[$iItem]} não disponível! Processamento Interrompido!";
+                      break;
+                  }
 	          }
 	        }
 	        db_atutermometro($iItem, $iCountItem, 'termometro', 1, "Processando Virada de Ano do Exercicio {$anoorigem} para {$anodestino}");
