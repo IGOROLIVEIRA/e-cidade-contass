@@ -580,12 +580,6 @@ $aTiposRetencoesINSS = array(
  									where q62_issnotaavulsa = " . $q62_issnotaavulsa;
                 $oTotal = db_utils::fieldsMemory(pg_query($sql), 0);
                 $totalissqn = $oTotal->totalissqn;
-                //      if (($lGeraNota and $emitenota) or ($oPar->q60_notaavulsavlrmin > $totalissqn )){
-                //
-                //           echo " <input name='notaavulsa' onclick='return js_verificaNota();' type='submit' id='nota' value='Emitir nota'>";
-                //
-                //      }
-
                 ?>
             </td>
             </tr>
