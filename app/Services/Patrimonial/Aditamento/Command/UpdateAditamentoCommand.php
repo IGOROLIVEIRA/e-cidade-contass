@@ -142,15 +142,19 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
                     }
                 }
 
+
                 $resultItem = $this->acordoItemRepository->updateByPcmaterAndPosicao(
                     $codigoItemPcMater,
                     $sequencialAcordoPosicao,
                     [
                         'ac20_quantidade' => $item->getQuantidade(),
                         'ac20_valorunitario' => $item->getValorUnitario(),
-                        'ac20_valortotal' => $item->getValorTotal()
+                        'ac20_valortotal' => $item->getValorTotal(),
+                        'ac20_valoraditado' => $item->getValorAditado(),
+                        'ac20_quantidadeaditada' => $item->getQuantidadeAditada(),
                     ]
                 );
+
 
                 if (!$resultItem) {
                     throw new Exception("Não foi possível atualizar aditamento. Erro em acordoitem, no item: " .  $codigoItem);

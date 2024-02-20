@@ -93,7 +93,8 @@ class ItemFactory
 
             $item->setItemSequencial((int) $itemRaw->acordoitemsequencial)
                 ->setCodigoPcMater((int) $itemRaw->codigoitem)
-                ->setQuantidade($itemRaw->quantidade)
+                ->setQuantidade((float)$itemRaw->quantidade)
+                ->setQuantidadeAditada((float)$itemRaw->quantiaditada)
                 ->setValorUnitario((float) $itemRaw->valorunitario)
                 ->setValorTotal((float) $itemRaw->valor);
 

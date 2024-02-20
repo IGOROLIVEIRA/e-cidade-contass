@@ -78,7 +78,9 @@ class AcordoItemRepository implements AcordoItemRepositoryInterface
             "ac20_quantidade" => $item->getQuantidade(),
             "ac20_valorunitario" => $item->getValorUnitario(),
             "ac20_valortotal" => $item->getValorTotal(),
-            "ac20_matunid" => $item->getUnidade()
+            "ac20_matunid" => $item->getUnidade(),
+            "ac20_valoraditado" => $item->getValorAditado(),
+            "ac20_quantidadeaditada" => $item->getQuantidadeAditada(),
         ];
 
         return $acordoItem->create($dados);

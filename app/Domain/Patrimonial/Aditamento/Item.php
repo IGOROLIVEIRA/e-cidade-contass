@@ -38,7 +38,7 @@ class Item
     /**
      * @var float
      */
-    private float $valorUnitario;
+    private float $valorUnitario = 0;
 
     /**
      * @var float
@@ -49,6 +49,11 @@ class Item
     * @var float
     */
     private float $valorTotal;
+
+    /**
+     * @var float
+     */
+    private float $quantidadeAditada = 0;
 
     /**
      * @var boolean
@@ -440,6 +445,32 @@ class Item
     public function setOrdem(?int $ordem): self
     {
         $this->ordem = $ordem;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of valorAditado
+     */
+    public function getValorAditado(): float
+    {
+        return $this->getQuantidadeAditada() * $this->getValorUnitario();
+    }
+
+    /**
+     * Get the value of quantidadeAditada
+     */
+    public function getQuantidadeAditada(): float
+    {
+        return $this->quantidadeAditada;
+    }
+
+    /**
+     * Set the value of quantidadeAditada
+     */
+    public function setQuantidadeAditada(float $quantidadeAditada): self
+    {
+        $this->quantidadeAditada = $quantidadeAditada;
 
         return $this;
     }

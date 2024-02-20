@@ -54,8 +54,7 @@ class InsereItemAditamentoCommand
     public function execute()
     {
          $item = $this->dto->getItem();
-        // var_dump($item);
-        // die();
+
         $acordoItem = $this->acordoItemRepository
             ->saveByItemAditamento(
                 $item,
