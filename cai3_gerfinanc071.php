@@ -111,7 +111,9 @@ MM_reloadPage(true);
     $campos    .= "          nome, ";
     $campos    .= "          v09_data, ";
     $campos    .= "          v09_hora, ";
-    $campos    .= "          v09_motivo ";
+    $campos    .= "          v09_motivo, ";
+    $campos    .= "          arrepaga.k00_numpar, ";
+    $campos    .= "          arrepaga.k00_dtpaga";
 
     //                               echo($cltermoanu->sqlQueryTermoOrigem (null,$campos,null,"termo.v07_instit = ".db_getsession('DB_instit')." ".$where));
     $rsTermoAnu = $cltermoanu->sql_record($cltermoanu->sqlQueryTermoOrigem (null,$campos,null,"termo.v07_instit = ".db_getsession('DB_instit')." ".$where));
@@ -131,9 +133,11 @@ MM_reloadPage(true);
     echo "      <th class='borda' style='font-size:12px' nowrap> Data Parcelamento    </th> ";
     echo "      <th class='borda' style='font-size:12px' nowrap> Tipo                 </th> ";
     echo "      <th class='borda' style='font-size:12px' nowrap> Valor Total          </th> ";
-    echo "      <th class='borda' style='font-size:12px' nowrap> Anulado por          </th> ";
-    echo "      <th class='borda' style='font-size:12px' nowrap> Data anulação        </th> ";
-    echo "      <th class='borda' style='font-size:12px' nowrap> Hora anulação        </th> ";
+    echo "      <th class='borda' style='font-size:12px' nowrap> Revogado por          </th> ";
+    echo "      <th class='borda' style='font-size:12px' nowrap> Data Revogação        </th> ";
+    echo "      <th class='borda' style='font-size:12px' nowrap> Hora Revogação        </th> ";
+    echo "      <th class='borda' style='font-size:12px' nowrap> Última Parc.Paga      </th> ";
+    echo "      <th class='borda' style='font-size:12px' nowrap> Data Pagamento        </th> ";
     echo "      <th class='borda' style='font-size:12px' wrap> Motivo               </th> ";
     echo "    </tr> ";
 
@@ -161,6 +165,8 @@ MM_reloadPage(true);
       echo "    <td align='left'   style='font-size:12px' nowrap bgcolor='$cor'> ".$objParcelamentos->nome."                        </td> ";
       echo "    <td align='center' style='font-size:12px' nowrap bgcolor='$cor'> ".db_formatar($objParcelamentos->v09_data,'d')."   </td> ";
       echo "    <td align='center' style='font-size:12px' nowrap bgcolor='$cor'> ".$objParcelamentos->v09_hora."                    </td> ";
+      echo "    <td align='center' style='font-size:12px' nowrap bgcolor='$cor'> ".$objParcelamentos->k00_numpar."                  </td> ";
+      echo "    <td align='center' style='font-size:12px' nowrap bgcolor='$cor'> ".db_formatar($objParcelamentos->k00_dtpaga,'d')." </td> ";
       echo "    <td align='left'   style='font-size:12px' nowrap bgcolor='$cor'> ".$objParcelamentos->v09_motivo."     </td> ";
       echo "  </tr> ";
 
