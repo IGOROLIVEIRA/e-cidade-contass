@@ -145,8 +145,13 @@ if (isset($o56_codele) and trim($o56_codele) != '') {
       <td align="center" valign="top">
         <?
         $dDataAtual = date('Y-m-d', db_getsession("DB_datausu"));
+
         //echo($clpcmaterele->sql_query_file(null,null,"pc07_codmater as pc01_codmater","pc07_codmater"," pc07_codele=$o56_codele "));exit;
         $where_ativo = " pc07_codele is not null ";
+
+        $instituicao = db_getsession('DB_instit');
+
+        $where_instituicao = " and pcmater.pc01_instit in (0, $instituicao) ";
 
         /*
        * Trecho descontinuado devido a OC3770
@@ -186,6 +191,7 @@ if (isset($o56_codele) and trim($o56_codele) != '') {
                   pcmater.pc01_instit,
                   pcmater.pc01_codmaterant
                  ";
+
           $repassa = array(
             "chave_pc01_codmater"    => @$chave_pc01_codmater,
             "chave_pc01_descrmater"  => @$chave_pc01_descrmater,
@@ -195,29 +201,32 @@ if (isset($o56_codele) and trim($o56_codele) != '') {
             "chave_pc03_codgrupo"    => @$chave_pc03_codgrupo,
             "chave_pc04_codsubgrupo" => @$chave_pc04_codsubgrupo
           );
-          if (isset($chave_pc01_codmater) && (trim($chave_pc01_codmater) != "")) {
-            $sql = $clpcmater->sql_query_desdobra(null, $campos, "pc01_codmater", "pc01_codmater=$chave_pc01_codmater and $where_ativo");
+
+          $sql = $clpcmater->sql_query_desdobra(null, $campos, "pc01_codmater", " $where_ativo $where_instituicao");
+
+            if (isset($chave_pc01_codmater) && (trim($chave_pc01_codmater) != "")) {
+            $sql = $clpcmater->sql_query_desdobra(null, $campos, "pc01_codmater", "pc01_codmater=$chave_pc01_codmater and $where_ativo $where_instituicao");
           } else if (isset($chave_pc01_descrmater) && (trim($chave_pc01_descrmater) != "")) {
-            $sql = $clpcmater->sql_query_desdobra("", $campos, "pc01_descrmater", " pc01_descrmater like '$chave_pc01_descrmater%' and $where_ativo");
+            $sql = $clpcmater->sql_query_desdobra("", $campos, "pc01_descrmater", " pc01_descrmater like '$chave_pc01_descrmater%' and $where_ativo $where_instituicao");
           } elseif (isset($chave_pc07_codele) && (trim($chave_pc07_codele) != "")) {
-            $sql = $clpcmater->sql_query_desdobra(null, $campos, "pc01_codmater", "pc07_codele=$chave_pc07_codele and $where_ativo");
+            $sql = $clpcmater->sql_query_desdobra(null, $campos, "pc01_codmater", "pc07_codele=$chave_pc07_codele and $where_ativo $where_instituicao");
           } else if (isset($chave_o56_descr) && (trim($chave_o56_descr) != "")) {
-            $sql = $clpcmater->sql_query_desdobra("", $campos, "pc01_codmater", " o56_descr like '$chave_o56_descr%' and $where_ativo");
+            $sql = $clpcmater->sql_query_desdobra("", $campos, "pc01_codmater", " o56_descr like '$chave_o56_descr%' and $where_ativo $where_instituicao");
           } else if (isset($chave_o56_elemento) && (trim($chave_o56_elemento) != "")) {
-            $sql = $clpcmater->sql_query_desdobra("", $campos, "pc01_codmater", " o56_elemento like '$chave_o56_elemento%' and $where_ativo");
+            $sql = $clpcmater->sql_query_desdobra("", $campos, "pc01_codmater", " o56_elemento like '$chave_o56_elemento%' and $where_ativo $where_instituicao");
           } else if (isset($chave_pc03_codgrupo) && trim($chave_pc03_codgrupo) != "" && $chave_pc03_codgrupo <> 0) {
             if (isset($chave_pc04_codsubgrupo) && trim($chave_pc04_codsubgrupo) != "" && $chave_pc04_codsubgrupo <> 0) {
               $where_subgrupo = " and pc04_codsubgrupo = $chave_pc04_codsubgrupo ";
             } else {
               $where_subgrupo = "";
             }
-            $sql = $clpcmater->sql_query_desdobra("", $campos, "pc01_codmater", "pc03_codgrupo = $chave_pc03_codgrupo and pc04_codsubgrupo = pc01_codsubgrupo and pc04_codgrupo = pc03_codgrupo and $where_ativo $where_subgrupo");
+            $sql = $clpcmater->sql_query_desdobra("", $campos, "pc01_codmater", "pc03_codgrupo = $chave_pc03_codgrupo and pc04_codsubgrupo = pc01_codsubgrupo and pc04_codgrupo = pc03_codgrupo and $where_ativo $where_subgrupo $where_instituicao");
           }
           db_lovrot(@$sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
         } else {
-           
+
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
-            $result = $clpcmater->sql_record($clpcmater->sql_query_desdobra(null, "regexp_replace(pcmater.pc01_descrmater,'\r|\n','','g') as pc01_descrmater,pc01_veiculo,pc01_servico, pc01_complmater", "", "pc01_codmater=$pesquisa_chave and $where_ativo"));
+            $result = $clpcmater->sql_record($clpcmater->sql_query_desdobra(null, "regexp_replace(pcmater.pc01_descrmater,'\r|\n','','g') as pc01_descrmater,pc01_veiculo,pc01_servico, pc01_complmater", "", "pc01_codmater=$pesquisa_chave and $where_ativo $where_instituicao"));
             if ($clpcmater->numrows != 0) {
               db_fieldsmemory($result, 0);
               echo "<script>" . $funcao_js . "('" . addslashes($pc01_descrmater) . "',false,'$pc01_veiculo','$pc01_complmater');</script>";
