@@ -31,7 +31,6 @@ require_once "libs/db_stdlib.php";
 require_once "libs/db_conecta.php";
 include_once "libs/db_sessoes.php";
 include_once "libs/db_usuariosonline.php";
-include("vendor/mpdf/mpdf/mpdf.php");
 include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
@@ -191,203 +190,203 @@ function getDespesasReceitas($iInstituicoes, $dtini, $dtfim, $iRpps)
     foreach ($oUltimoano as $oDados) {
         if ($oDados->o57_fonte == "410000000000000") {
             $fTotalarrecadado += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "491000000000000") {
             $fCSACRPPS += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "495000000000000") {
             $fCSICRPPS += $oDados->saldo_arrecadado;
- 
+
         }
 
-       
+
         if ($oDados->o57_fonte == "419900300000000") {
             $fRRCSICOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412180311000000") {
             $fRRCSICOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412180321000000") {
             $fRRCSICOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412102919000000") {
             $fRRCPPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "417180800000000") {
             $fCFRP += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "492000000000000") {
             $fCSACRPPS += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "493000000000000") {
             $fCSACRPPS += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "496000000000000") {
             $fCSACRPPS += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "498000000000000") {
             $fCSACRPPS += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "499000000000000") {
             $fCSACRPPS += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412180100000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412180200000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100421000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100422000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100423000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100424000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100431000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100432000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100433000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100434000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100441000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100442000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100443000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100444000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100461000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100462000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100463000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100464000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100471000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100472000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100473000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100474000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100481000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100482000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100483000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100484000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100481000000") {
             $fRRCPPSJ += $oDados->saldo_arrecadado;
- 
+
         }
     }
 
@@ -396,13 +395,13 @@ function getDespesasReceitas($iInstituicoes, $dtini, $dtfim, $iRpps)
     // DADOS DA RECEITA NO ANO ATUAL
     if (temDataImplantacao($dtini)) {
         $oAnoatual = getValorReceitaInformado($dtini, buscarDataImplantacao(), $iInstituicoes);
-        
+
         foreach ($oAnoatual as $oDados) {
             if (substr($oDados->o57_fonte, 0, 2) == "41") {
                 $fTotalarrecadado += $oDados->saldo_arrecadado;
             }
 
-            
+
             if (substr($oDados->o57_fonte, 0, 3) == "491") {
                 $fCSACRPPS += $oDados->saldo_arrecadado;
             }
@@ -431,7 +430,7 @@ function getDespesasReceitas($iInstituicoes, $dtini, $dtfim, $iRpps)
                 $fCSICRPPS += $oDados->saldo_arrecadado;
             }
 
-            
+
             if ($oDados->o57_fonte == "412180100000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
@@ -571,247 +570,247 @@ function getDespesasReceitas($iInstituicoes, $dtini, $dtfim, $iRpps)
     }
 
     foreach ($oAnoatual as $oDados) {
-       
+
         if ($oDados->o57_fonte == "410000000000000") {
             $fTotalarrecadado += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "491000000000000") {
             $fCSACRPPS += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "492000000000000") {
             $fCSACRPPS += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "493000000000000") {
             $fCSACRPPS += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "496000000000000") {
             $fCSACRPPS += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "498000000000000") {
             $fCSACRPPS += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "499000000000000") {
             $fCSACRPPS += $oDados->saldo_arrecadado;
- 
+
         }
 
         // 17051
         if ($oDados->o57_fonte == "412150100000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412150300000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
         // 17051 **Fim
-                
+
         if ($oDados->o57_fonte == "495000000000000") {
             $fCSICRPPS += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412180100000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412180200000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100421000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100422000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100423000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100424000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100431000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100432000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100433000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100434000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100441000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100442000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
-        
+
 
         if ($oDados->o57_fonte == "412100443000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100444000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100461000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100462000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100463000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100464000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100471000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100472000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100473000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100474000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100481000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
           // 17051
           if ($oDados->o57_fonte == "419990300000000") {
             $fRRCSICOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412150211000000") {
             $fRRCSICOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412155011000000") {
             $fRRCSICOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
-        // 17051 *Fim 
-        
+        // 17051 *Fim
+
         if ($oDados->o57_fonte == "412100482000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100483000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100484000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "419900300000000") {
             $fRRCSICOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412180311000000") {
             $fRRCSICOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412180321000000") {
             $fRRCSICOPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "413210400000000") {
             $fRARP += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412100481000000") {
             $fRRCPPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412180161000000") {
             $fRRCPPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "412180261000000") {
             $fRRCPPSJ += $oDados->saldo_arrecadado;
- 
+
         }
 
         if ($oDados->o57_fonte == "417180800000000") {
             $fCFRP += $oDados->saldo_arrecadado;
- 
+
         }
-       
+
     }
 
 
@@ -896,8 +895,17 @@ if ($flag_abrev == false){
      }
 }
 
-    $mPDF = new mpdf('', 'A4-L', 0, '', 15, 15, 23.5, 15, 5, 11);
-
+$mPDF = new \Mpdf\Mpdf([
+    'mode' => '',
+    'format' => 'A4',
+    'orientation' => 'L',
+    'margin_left' => 15,
+    'margin_right' => 15,
+    'margin_top' => 23.5,
+    'margin_bottom' => 15,
+    'margin_header' => 5,
+    'margin_footer' => 11,
+]);
     $header = "
     <header>
     <div style=\"font-family:Arial\">
@@ -1122,8 +1130,8 @@ ob_start();
     <div class="ritz grid-container" dir="ltr">
         <br />
         <table class="waffle" cellspacing="0" cellpadding="0" style="border-top: 1px #000">
-            <tbody>                                   
-                <?php              
+            <tbody>
+                <?php
                 /**
                  * Para cada instit do sql
                  */
@@ -1363,11 +1371,11 @@ ob_start();
                                 }
                             }
                         }
-                       
-                        ?>                  
+
+                        ?>
                         <?php
                         $fSaldoDespesasAnteriores = 0;
-    
+
                         foreach ($aInstits as $iInstit) {
                             $oInstit = new Instituicao($iInstit);
                             if (temDataImplantacao($dtini)) {
@@ -1388,7 +1396,7 @@ ob_start();
                             $fSaldoDespesasAnteriores += $aSaldoEstrut1[0]->$valoresperado + $aSaldoEstrut2[0]->$valoresperado + $aSaldoEstrut3[0]->$valoresperado;
                         }
                         ?>
-    
+
             <? if ($anousu <= 2018) { ?>
                             <?php
                             $fSaldoAposentadoriaPensoesTesouro = 0;
@@ -1444,7 +1452,7 @@ ob_start();
                                 $aSaldoEstrut5 = getSaldoDesdobramento("c60_estrut LIKE '331969401%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), buscarDataImplantacao(), $dtfim, "", "");
                                 $aSaldoEstrut6 = getSaldoDesdobramento("c60_estrut LIKE '331969403%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), buscarDataImplantacao(), $dtfim, "", "");
                                 // $fSaldoIndenizacaoDemissaoServidores += $aSaldoEstrut1[0]->$valoresperado + $aSaldoEstrut2[0]->$valoresperado + $aSaldoEstrut3[0]->$valoresperado + $aSaldoEstrut4[0]->$valoresperado + $aSaldoEstrut5[0]->$valoresperado + $aSaldoEstrut6[0]->$valoresperado;
- 
+
                             } else {
                                 if ($valoresperado == 'liquidado') {
                                     $aSaldoEstrut1 = getSaldoDesdobramento("c60_estrut LIKE '331909401%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "", "");
@@ -1494,7 +1502,7 @@ ob_start();
                             $fSaldoIncentivosDemissaoVoluntaria += $aSaldoEstrut1[0]->$valoresperado + $aSaldoEstrut2[0]->$valoresperado + $aSaldoEstrut3[0]->$valoresperado;
                         }
                         ?>
-                       
+
                         <?php
                         $fTotalDespesaPessoal = $fTotalDespesas - ($fSaldoIntaivosPensionistasProprio + $fSaldoSentencasJudAnt + $fSaldoAposentadoriaPensoesTesouro + $fSaldoDespesasAnteriores + $fSaldoIndenizacaoDemissaoServidores + $fSaldoIncentivosDemissaoVoluntaria);
                         ?>
@@ -1507,10 +1515,10 @@ ob_start();
                 <td>
             LRF, art. 48 -Anexo 6
                 </td>
-            </tr>            
+            </tr>
             <tr style='height:19px;'>
-                    <td class="s1 bdleft bdtop" colspan="1">RECEITA CORRENTE LÍQUIDA</td> 
-                    <td class="s1 bdleft bdtop" colspan="2">VALOR ATÉ O QUADRIMESTRE/SEMESTRE</td>   
+                    <td class="s1 bdleft bdtop" colspan="1">RECEITA CORRENTE LÍQUIDA</td>
+                    <td class="s1 bdleft bdtop" colspan="2">VALOR ATÉ O QUADRIMESTRE/SEMESTRE</td>
             </tr>
             <tr style='height:19px;'>
             <td class="s3 bdleft bdright">Receita Corrente Líquida</td>
@@ -1522,7 +1530,7 @@ ob_start();
                     echo db_formatar($fRCL, "f");
                     ?>
             </td>
-            </tr>            
+            </tr>
             <tr style='height:19px;'>
                 <td class="s3 bdleft bdright">Receita Corrente Líquida Ajustada para Cálculo dos Limites de Endividamento</td>
                 <td class="s5" colspan="2">
@@ -1567,11 +1575,11 @@ ob_start();
             </tr>
             <tr>
                     <td class="s8 bdleft bdtop" colspan="3">&nbsp;</td>
-            </tr>  
+            </tr>
             <tr style='height:19px;'>
-                    <td class="s1 bdleft" colspan="1">DESPESA COM PESSOAL</td> 
-                    <td class="s1 bdleft" colspan="1">VALOR</td>  
-                    <td class="s1 bdleft" colspan="1">% SOBRE A RCL AJUSTADA</td>  
+                    <td class="s1 bdleft" colspan="1">DESPESA COM PESSOAL</td>
+                    <td class="s1 bdleft" colspan="1">VALOR</td>
+                    <td class="s1 bdleft" colspan="1">% SOBRE A RCL AJUSTADA</td>
             </tr>
             <tr style='height:19px;'>
                         <td class="s3 bdleft bdright" colspan="1">Despesa Total com Pessoal - DTP</td>
@@ -1638,11 +1646,11 @@ ob_start();
             ?>
             <tr>
                     <td class="s8 bdleft bdtop" colspan="3">&nbsp;</td>
-            </tr>  
+            </tr>
             <tr style='height:19px;'>
-                    <td class="s1 bdleft" colspan="1">DÍVIDA CONSOLIDADA</td> 
-                    <td class="s1 bdleft" colspan="1">VALOR ATÉ O QUADRIMESTRE DE REFERÊNCIA</td>  
-                    <td class="s1 bdleft" colspan="1">% SOBRE A RCL AJUSTADA</td>  
+                    <td class="s1 bdleft" colspan="1">DÍVIDA CONSOLIDADA</td>
+                    <td class="s1 bdleft" colspan="1">VALOR ATÉ O QUADRIMESTRE DE REFERÊNCIA</td>
+                    <td class="s1 bdleft" colspan="1">% SOBRE A RCL AJUSTADA</td>
             </tr>
             <tr style='height:19px;'>
                         <td class="s3 bdleft bdright" colspan="1">Dívida Consolidada Líquida</td>
@@ -1661,15 +1669,15 @@ ob_start();
 
             <tr>
                     <td class="s8 bdleft bdtop" colspan="3">&nbsp;</td>
-            </tr>  
+            </tr>
             <tr style='height:19px;'>
-                    <td class="s1 bdleft" colspan="1">GARANTIAS DE VALORES</td> 
-                    <td class="s1 bdleft" colspan="1">VALOR ATÉ O QUADRIMESTRE DE REFERÊNCIA</td>  
-                    <td class="s1 bdleft" colspan="1">% SOBRE A RCL AJUSTADA</td>  
+                    <td class="s1 bdleft" colspan="1">GARANTIAS DE VALORES</td>
+                    <td class="s1 bdleft" colspan="1">VALOR ATÉ O QUADRIMESTRE DE REFERÊNCIA</td>
+                    <td class="s1 bdleft" colspan="1">% SOBRE A RCL AJUSTADA</td>
             </tr>
             <tr style='height:19px;'>
                         <td class="s3 bdleft bdright" colspan="1">Total de Garantias Concedidas</td>
-                        <? 
+                        <?
                         $fValorManualRCL = getValorManual($codigorelatorio, 5, $oInstit->getCodigo(), $o116_periodo, $iAnousu);
                         $fTGC += $fValorManualRCL == NULL ? 0 : $fValorManualRCL;
                         ?>
@@ -1684,17 +1692,17 @@ ob_start();
 
             <tr>
                     <td class="s8 bdleft bdtop" colspan="3">&nbsp;</td>
-            </tr>  
+            </tr>
             <tr style='height:19px;'>
-                    <td class="s1 bdleft" colspan="1">OPERAÇÕES DE CRÉDITO</td> 
-                    <td class="s1 bdleft" colspan="1">VALOR</td>  
-                    <td class="s1 bdleft" colspan="1">% SOBRE A RCL AJUSTADA</td>  
+                    <td class="s1 bdleft" colspan="1">OPERAÇÕES DE CRÉDITO</td>
+                    <td class="s1 bdleft" colspan="1">VALOR</td>
+                    <td class="s1 bdleft" colspan="1">% SOBRE A RCL AJUSTADA</td>
             </tr>
             <tr style='height:19px;'>
                         <td class="s3 bdleft bdright" colspan="1">Operações de Crédito Internas e Externas</td>
-                        <?php 
+                        <?php
                         $fValorManualRCL = getValorManual($codigorelatorio, 6, $oInstit->getCodigo(), $o116_periodo, $iAnousu);
-                        $fOPCIE += $fValorManualRCL == NULL ? $fOPCIE : $fValorManualRCL;    
+                        $fOPCIE += $fValorManualRCL == NULL ? $fOPCIE : $fValorManualRCL;
                         ?>
                         <td class="s5" colspan="1"><?= db_formatar($fOPCIE, "f") ?></td>
                         <td class="s5" colspan="1"><?= db_formatar(($fOPCIE/$fRCLA)*100, "f")." %" ?></td>
@@ -1706,7 +1714,7 @@ ob_start();
             </tr>
             <tr style='height:19px;'>
                         <td class="s3 bdleft bdright" colspan="1">Operações de Crédito por Antecipação de Receita</td>
-                        <? 
+                        <?
                         $fValorManualRCL = getValorManual($codigorelatorio, 7, $oInstit->getCodigo(), $o116_periodo, $iAnousu);
                         $fOPCAR += $fValorManualRCL == NULL ? 0 : $fValorManualRCL;
                         ?>
@@ -1720,63 +1728,63 @@ ob_start();
             </tr>
             <tr>
                     <td class="s8 bdleft bdtop" colspan="3">&nbsp;</td>
-            </tr> 
+            </tr>
             <tr style='height:19px;'>
-                    <td class="s1 bdleft" >RESTOS A PAGAR</td> 
-                    <td class="s1 bdleft" >RESTOS A PAGAR <br/>EMPENHADOS E NÃO LIQUIDADOS DO <br/>EXERCÍCIO</td>  
-                    <td class="s1 bdleft" >DISPONIBILIDADE DE CAIXA <br/>LÍQUIDA (APÓS A INSCRIÇÃO <br/>EM RESTOS A PAGAR NÃO <br/>PROCESSADOS DO <br/>EM RESTOS A PAGAR NÃO <br/>PROCESSADOS<br/></td>  
+                    <td class="s1 bdleft" >RESTOS A PAGAR</td>
+                    <td class="s1 bdleft" >RESTOS A PAGAR <br/>EMPENHADOS E NÃO LIQUIDADOS DO <br/>EXERCÍCIO</td>
+                    <td class="s1 bdleft" >DISPONIBILIDADE DE CAIXA <br/>LÍQUIDA (APÓS A INSCRIÇÃO <br/>EM RESTOS A PAGAR NÃO <br/>PROCESSADOS DO <br/>EM RESTOS A PAGAR NÃO <br/>PROCESSADOS<br/></td>
             </tr>
             <tr style='height:19px;'>
                         <td class="s3 bdleft bdright bdtop" colspan="1">Valor Total</td>
                         <?
                         $totalRestos = 0;
-                       
+
                         if($o116_periodo == 13 || $o116_periodo == 16) {
                             $sele_work = ' w.o58_instit in ('.str_replace('-',', ',$db_selinstit).') ';
                             $sqlprinc = db_dotacaosaldo(2,2,4,true,$sele_work,$anousu,$dtini,$dtfim, 8, 0, true,1,true, 'nao');
                             $orguniant = db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade');
                             $sqltot = db_resto_a_pagar($sqlprinc);
-                           
+
                             $resulttot = pg_exec($sqltot) or die($sqltot);
                             db_fieldsmemory($resulttot, 0);
-                            $totalRestos = $totempenhado - $totanulado - $totliquidado;           
-                            
+                            $totalRestos = $totempenhado - $totanulado - $totliquidado;
+
                             $where = " c61_instit in ({$instits})" ;
                             $agrupa_estrutural = 1;
                             $result = db_planocontassaldo_matriz($anousu,$dtini,$dtfim,false,$where,'',$agrupa_estrutural);
-                            
+
                             $saldoFinal = 0;
                             for($x = 0; $x < pg_numrows($result);$x++){
                                 db_fieldsmemory($result,$x);
-                             
+
                                 if($estrutural == 111110000000000 || $estrutural == 111210000000000 || $estrutural == 111310000000000 ||
                                    $estrutural == 111330000000000 || $estrutural == 111340000000000 || $estrutural == 111350000000000 ){
-                                    $saldoFinal += $saldo_final;  
-                                   
+                                    $saldoFinal += $saldo_final;
+
                                 }
                                 if($estrutural == 832100000000000 || $estrutural == 218800000000000 || $estrutural == 228800000000000 ||
                                    $estrutural == 853500000000000 ){
                                     $saldoFinal -= $saldo_final;
-                                       
+
                                 }
                                 if($estrutural == 821120100000000 || $estrutural == 821120200000000 || $estrutural == 821130100000000){
-                                    $saldoFinal -= $saldo_final; 
-        
+                                    $saldoFinal -= $saldo_final;
+
                                 }
                             }
                             $fValorManualRCL = getValorManual($codigorelatorio, 8, $oInstit->getCodigo(), $o116_periodo, $iAnousu);
-                            $saldoFinal = $fValorManualRCL == NULL ? $saldoFinal : $fValorManualRCL;   
-                                                              
-                        }    
+                            $saldoFinal = $fValorManualRCL == NULL ? $saldoFinal : $fValorManualRCL;
+
+                        }
                         ?>
                         <td class="s3 bdleft bdright bdtop" colspan="1"><?= db_formatar($totalRestos, "f") ?></td>
-                        <td class="s3 bdleft bdright bdtop" colspan="1"><?= db_formatar($saldoFinal, "f") ?></td>  
-                        
-            </tr>   
+                        <td class="s3 bdleft bdright bdtop" colspan="1"><?= db_formatar($saldoFinal, "f") ?></td>
+
+            </tr>
             <tr>
                     <td class="s3 bdtop" colspan="3">&nbsp;</td>
-            </tr>                 
-            </tr> 
+            </tr>
+            </tr>
         </table>
     </div>
 </body>
@@ -1988,7 +1996,7 @@ function getDespesaMensalExclusaoSaldoIntaivosPensionistasProprio($inicio, $fim,
                     GROUP BY c60_estrut, c60_descr";
     }
     $sql .= " ) as x";
-    
+
     return db_utils::getColectionByRecord(db_query($sql));
 }
 
@@ -2056,9 +2064,9 @@ function getDespesaMensalExclusaoSaldoIntaivosPensionistasProprioDeduzir($inicio
             )) as w
             GROUP BY c60_estrut, c60_descr";
     $sql .= " ) as x";
-  
+
     return db_utils::getColectionByRecord(db_query($sql));
-    
+
 }
 
 
@@ -2123,7 +2131,7 @@ FROM
                             OR c60_estrut LIKE '331919403%') ) as w
              GROUP BY c60_estrut, c60_descr";
     $sql .= " ) as x";
-                            
+
     return db_utils::getColectionByRecord(db_query($sql));
 }
 
@@ -2185,7 +2193,7 @@ function getDespesaMensalExclusaoSaldoSentencasJudAnt($inicial, $inicio, $fim, $
 
 function getDespesaMensalSaldoDespesasAnteriores($inicio, $fim, $instituicao, $anterior, $elemento = NULL)
 {
-    if (is_array($instituicao)) 
+    if (is_array($instituicao))
         $instituicao = implode(",", $instituicao);
 
     $sql = "SELECT
@@ -2210,7 +2218,7 @@ function getDespesaMensalSaldoDespesasAnteriores($inicio, $fim, $instituicao, $a
     /* Essa função é a base da getDespesaExercAnterior contida db_libcontabilidade */
     if ($elemento)
         $sql .= " WHERE o58_elemento LIKE '{$elemento}' ";
-    else 
+    else
         $sql .= " WHERE (o58_elemento LIKE '3319092%' OR o58_elemento LIKE '3319192%' OR o58_elemento LIKE '3319692%') AND e60_emiss BETWEEN '{$inicio}' AND '{$fim}' ";
 
     $sql .= " AND o58_instit IN ({$instituicao}) AND (e60_datasentenca < '{$anterior}' OR e50_compdesp < '{$anterior}')) AS x GROUP BY 1, 2";
@@ -2258,29 +2266,29 @@ function getCondicaoTipoDespesaInvertido($aInstituicoes)
 {
     $sql = " AND (( si09_tipoinstit = " . Instituicao::TIPO_INSTIT_RPPS . " ) ";
     $aCondicao = array(Instituicao::TIPO_INSTIT_CAMARA => " e60_tipodespesa = 2 ", Instituicao::TIPO_INSTIT_PREFEITURA => " e60_tipodespesa = 1 ");
-    
+
     foreach (explode(",", $aInstituicoes) as $iChave => $iInstituicao) {
         $sqlComplementar = "SELECT * FROM infocomplementaresinstit WHERE si09_instit = {$iInstituicao}";
         $qQuery = pg_query($sqlComplementar);
 
         while ($oRow = pg_fetch_object($qQuery)) {
-            
+
             if ($oRow->si09_tipoinstit == Instituicao::TIPO_INSTIT_CAMARA) {
-                
+
                 unset($aCondicao[Instituicao::TIPO_INSTIT_CAMARA]);
             }
 
             if ($oRow->si09_tipoinstit == Instituicao::TIPO_INSTIT_PREFEITURA) {
-                
+
                 unset($aCondicao[Instituicao::TIPO_INSTIT_PREFEITURA]);
             }
-           
-            
+
+
         }
-    }       
+    }
             $sql .= " AND ( " . implode(" OR ", $aCondicao) . ") ";
-    
-   
+
+
     return $sql;
 }
 ?>

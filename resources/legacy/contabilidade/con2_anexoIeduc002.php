@@ -29,7 +29,6 @@ include("libs/db_stdlib.php");
 include("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
-include("vendor/mpdf/mpdf/mpdf.php");
 include("libs/db_sql.php");
 include("dbforms/db_funcoes.php");
 include("libs/db_liborcamento.php");
@@ -255,8 +254,17 @@ if (($total_rp_proc + $total_rp_nproc) < $total_anterior || $total_mov_pagmento 
 }
 /*FIM - OC7063*/
 
-$mPDF = new mpdf('', '', 0, '', 15, 15, 20, 15, 5, 11);
-
+$mPDF = new \Mpdf\Mpdf([
+    'mode' => '',
+    'format' => 'A4',
+    'orientation' => 'L',
+    'margin_left' => 15,
+    'margin_right' => 15,
+    'margin_top' => 20,
+    'margin_bottom' => 15,
+    'margin_header' => 5,
+    'margin_footer' => 11,
+]);
 
 $header = <<<HEADER
 <header>

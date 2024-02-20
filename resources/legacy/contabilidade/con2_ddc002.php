@@ -1,6 +1,6 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
+ *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
  *                            www.dbseller.com.br
  *                         e-cidade@dbseller.com.br
@@ -29,7 +29,6 @@ require_once "libs/db_stdlib.php";
 require_once "libs/db_conecta.php";
 include_once "libs/db_sessoes.php";
 include_once "libs/db_usuariosonline.php";
-include("vendor/mpdf/mpdf/mpdf.php");
 include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
@@ -79,8 +78,17 @@ foreach($aInstits as $iInstit){
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', 'A4-L', 0, '', 10, 10, 20, 15, 5, 11);
-
+$mPDF = new \Mpdf\Mpdf([
+    'mode' => '',
+    'format' => 'A4-L',
+    'orientation' => 'L',
+    'margin_left' => 10,
+    'margin_right' => 10,
+    'margin_top' => 20,
+    'margin_bottom' => 15,
+    'margin_header' => 5,
+    'margin_footer' => 11,
+]);
 
 $header = <<<HEADER
 <header>
@@ -112,10 +120,10 @@ $mPDF->WriteHTML(file_get_contents('estilos/tab_relatorio.css'), 1);
 ob_start();
 
 ?>
-  
+
   <html>
   <head>
-    
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <style type="text/css">
       .ritz .waffle a { color : inherit; }
@@ -142,7 +150,7 @@ ob_start();
     </style>
   </head>
   <body>
-  
+
   <div class="ritz grid-container" dir="ltr">
     <table class="waffle" cellspacing="0" cellpadding="0">
       <thead>
@@ -518,7 +526,7 @@ ob_start();
       </tbody>
     </table>
   </div>
-  
+
   </body>
   </html>
 

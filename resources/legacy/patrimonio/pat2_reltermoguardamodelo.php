@@ -1,11 +1,12 @@
 <?php
 
-include("vendor/mpdf/mpdf/mpdf.php");
 require("libs/db_utils.php");
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_bensguardaitem_classe.php");
+use \Mpdf\Mpdf;
+use \Mpdf\MpdfException;
 
 $oGet = db_utils::postMemory($_GET);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
@@ -18,7 +19,18 @@ $sCampos .= "t21_data, db_depart.nomeresponsavel as responsavel, a.z01_numcgm as
 $sSqlBens = $cl_bensguardaitem->sql_query_relatorio('', $sCampos, '', 't22_bensguarda = ' . $oGet->iTermo);
 $rsBens = $cl_bensguardaitem->sql_record($sSqlBens);
 
-$mPDF = new mpdf('', 'A4', 0, '', 10, 10, 30, 10, 5, 5);
+try {
+$mPDF = new Mpdf([
+    'mode' => '',
+    'format' => 'A4',
+    'orientation' => 'L',
+    'margin_left' => 10,
+    'margin_right' => 10,
+    'margin_top' => 30,
+    'margin_bottom' => 10,
+    'margin_header' => 5,
+    'margin_footer' => 5,
+]);
 
 $header = <<<HEADER
 <header>
@@ -244,5 +256,7 @@ echo $html;
 $mPDF->WriteHTML(utf8_encode($html));
 ob_end_clean();
 $mPDF->Output();
-
+} catch (MpdfException $e) {
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$e->getMessage());
+}
 ?>

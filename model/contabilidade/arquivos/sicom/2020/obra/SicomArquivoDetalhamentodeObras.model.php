@@ -7,7 +7,6 @@ require_once("classes/db_cadobras202020_classe.php");
 require_once("classes/db_cadobras212020_classe.php");
 require_once("classes/db_cadobras302020_classe.php");
 require_once('model/relatorios/Relatorio.php');
-require_once('vendor/mpdf/mpdf/mpdf.php');
 require('fpdf151/fpdf.php');
 
 /**
@@ -159,7 +158,7 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
             INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
             LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
             INNER JOIN cgm on z01_numcgm = obr05_responsavel
-            WHERE obr01_instit = ".db_getsession("DB_instit")." 
+            WHERE obr01_instit = ".db_getsession("DB_instit")."
                 AND DATE_PART('YEAR',licobrasresponsaveis.obr05_dtcadastrores)= " . db_getsession("DB_anousu") . "
                 AND DATE_PART('MONTH',licobrasresponsaveis.obr05_dtcadastrores)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $rsResult10 = db_query($sql);

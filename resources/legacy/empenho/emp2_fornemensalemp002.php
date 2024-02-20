@@ -37,8 +37,9 @@ require_once "classes/db_fornemensalemp_classe.php";
 require_once("classes/db_cgm_classe.php");
 require_once("classes/db_infocomplementaresinstit_classe.php");
 include("libs/db_sql.php");
-require("vendor/mpdf/mpdf/mpdf.php");
 require_once("dbforms/db_funcoes.php");
+use \Mpdf\Mpdf;
+use \Mpdf\MpdfException;
 
 $clFornecedores = new cl_fornemensalemp();
 $clinfocomplementaresinstit = new cl_infocomplementaresinstit();
@@ -102,8 +103,18 @@ for ($i = 0; $i < pg_num_rows($rsTipoinstit); $i++) {
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', 'A4', 0, '', 15, 15, 20, 15, 5, 11);
-
+try {
+    $mPDF = new Mpdf([
+        'mode' => '',
+        'format' => 'A4-L',
+        'orientation' => 'L',
+        'margin_left' => 15,
+        'margin_right' => 15,
+        'margin_top' => 20,
+        'margin_bottom' => 15,
+        'margin_header' => 5,
+        'margin_footer' => 11,
+    ]);
 /*Nome do relatório.*/
 $header = " <header>
                 <div style=\" height: 120px; font-family:Arial\">
@@ -271,16 +282,16 @@ if (isset($whereDatas)) {
             $pagina = 0;
             $contador = 1;
             $control = 0;
-               
+
             for ($cont = 0; $cont < count($aFornecedoresTotais); $cont++) {
 
                 $oFornecedores = db_utils::fieldsMemory($resultFornecedores, $cont);
                 $oFornecedoresTotais = db_utils::fieldsMemory($resultFornecedoresTotais, $cont);
                 $hash = $oFornecedoresTotais->z01_nome;
                 // $hash1 = $oFornecedoresTotais->z01_nome;
-                             
+
                 foreach ($oFornecedoresTotais as $fornecedor) {
-                    
+
                     $fornecedorMensal = new stdClass();
                     // echo $oFornecedores->fm101_numcgm."-".$oFornecedoresTotais->fm101_numcgm."<br/>";
                     if ((!isset($aFornecedores[$hash]) && $oFornecedoresTotais->fm101_numcgm)) {
@@ -308,7 +319,7 @@ if (isset($whereDatas)) {
                             <td class="s1" dir="ltr">$fornecedorMensal->fm101_numcgm - $fornecedorMensal->fm101_fornecedor</td>
                             <td class="s2" dir="ltr">R$</td>
                             <td class="s3" dir="ltr">$fornecedorMensal->fm101_valor</td>
-                        </tr> </br>                    
+                        </tr> </br>
 HTML;
 
                         if ($control >= 50) {
@@ -348,7 +359,7 @@ HTML;
                         $aFornecedores[$hash] = $fornecedorMensal->fm101_fornecedor;
                     }
                 }
-              
+
             }
         //  exit;
             ?>
@@ -365,7 +376,9 @@ $html = ob_get_contents();
 ob_end_clean();
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
-
+} catch (MpdfException $e) {
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$e->getMessage());
+}
 db_fim_transacao();
 
 ?>

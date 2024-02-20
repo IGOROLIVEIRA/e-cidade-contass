@@ -1,6 +1,6 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
+ *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
  *                            www.dbseller.com.br
  *                         e-cidade@dbseller.com.br
@@ -29,10 +29,11 @@ require_once "libs/db_stdlib.php";
 require_once "libs/db_conecta.php";
 include_once "libs/db_sessoes.php";
 include_once "libs/db_usuariosonline.php";
-include("vendor/mpdf/mpdf/mpdf.php");
 include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
+use \Mpdf\Mpdf;
+use \Mpdf\MpdfException;
 db_postmemory($HTTP_POST_VARS);
 
 $dtini = implode("-", array_reverse(explode("/", $DBtxt21)));
@@ -65,8 +66,18 @@ if(count($aInstits) > 1){
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', 'A4-L', 0, '', 15, 15, 20, 15, 5, 11);
-
+try {
+    $mPDF = new Mpdf([
+        'mode' => '',
+        'format' => 'A4',
+        'orientation' => 'L',
+        'margin_left' => 15,
+        'margin_right' => 15,
+        'margin_top' => 20,
+        'margin_bottom' => 15,
+        'margin_header' => 5,
+        'margin_footer' => 11,
+    ]);
 
 $header = <<<HEADER
 <header>
@@ -98,10 +109,10 @@ $mPDF->setHTMLFooter(utf8_encode($footer), 'O', true);
 ob_start();
 
 ?>
-  
+
   <html>
   <head>
-    
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <style type="text/css">
       .ritz .waffle a { color : inherit; }
@@ -127,7 +138,7 @@ ob_start();
     </style>
   </head>
   <body>
-  
+
   <div class="ritz grid-container" dir="ltr">
     <table class="waffle" cellspacing="0" cellpadding="0">
       <thead>
@@ -286,6 +297,8 @@ ob_end_clean();
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
 //echo $html;
-
+} catch (MpdfException $e) {
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$e->getMessage());
+}
 
 ?>

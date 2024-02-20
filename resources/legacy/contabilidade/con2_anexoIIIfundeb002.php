@@ -35,7 +35,8 @@ include_once "libs/db_usuariosonline.php";
 include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
-require("vendor/mpdf/mpdf/mpdf.php");
+use \Mpdf\Mpdf;
+use \Mpdf\MpdfException;
 
 $clselorcdotacao = new cl_selorcdotacao();
 $clempresto = new cl_empresto;
@@ -224,8 +225,18 @@ else{
  */
 
 
-$mPDF = new mpdf('', '', 0, '', 15, 15, 20, 15, 5, 11);
-
+try {
+    $mPDF = new Mpdf([
+        'mode' => '',
+        'format' => 'A4',
+        'orientation' => 'L',
+        'margin_left' => 15,
+        'margin_right' => 15,
+        'margin_top' => 20,
+        'margin_bottom' => 10,
+        'margin_header' => 5,
+        'margin_footer' => 11,
+    ]);
 
 $header = <<<HEADER
 <header>
@@ -567,7 +578,9 @@ $html = ob_get_contents();
 ob_end_clean();
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
-
+} catch (MpdfException $e) {
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$e->getMessage());
+}
 
 db_query("drop table if exists work_dotacao");
 db_query("drop table if exists work_receita");

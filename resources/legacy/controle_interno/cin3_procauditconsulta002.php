@@ -28,11 +28,12 @@ require_once "libs/db_stdlib.php";
 require_once "libs/db_conecta.php";
 include_once "libs/db_sessoes.php";
 include_once "libs/db_usuariosonline.php";
-include("vendor/mpdf/mpdf/mpdf.php");
 include("libs/db_sql.php");
 include("classes/db_questaoaudit_classe.php");
 include("classes/db_processoaudit_classe.php");
 include("classes/db_processoauditdepart_classe.php");
+use \Mpdf\Mpdf;
+use \Mpdf\MpdfException;
 
 $iInstit        = db_getsession('DB_instit');
 $oInstit        = new Instituicao($iInstit);
@@ -48,8 +49,18 @@ $sSqlProcesso   = $clquestaoaudit->sql_questao_matriz(null, "*", "ci02_numquesta
 $rsProcesso     = $clquestaoaudit->sql_record($sSqlProcesso);
 
 
-$mPDF = new mpdf('', 'A4-L', 0, '', 10, 10, 30, 10, 5, 5);
-
+try {
+    $mPDF = new Mpdf([
+        'mode' => '',
+        'format' => 'A4',
+        'orientation' => 'L',
+        'margin_left' => 10,
+        'margin_right' => 10,
+        'margin_top' => 30,
+        'margin_bottom' => 10,
+        'margin_header' => 5,
+        'margin_footer' => 5,
+    ]);
 if(file_exists("imagens/files/{$oInstit->getImagemLogo()}")) {
   	$sLogo = "<img src='imagens/files/{$oInstit->getImagemLogo()}' width='70px' >";
 } else {
@@ -121,8 +132,8 @@ ob_start();
     </head>
 
     <body>
-        <? $oProcesso = db_utils::fieldsMemory($rsProcesso, 0); ?>             
-        <div class="ritz">                    
+        <? $oProcesso = db_utils::fieldsMemory($rsProcesso, 0); ?>
+        <div class="ritz">
             <table class="waffle" cellspacing="0" cellpadding="0">
                 <tr>
                     <th class="s0">DADOS DO PROCESSO DE AUDITORIA</th>
@@ -143,7 +154,7 @@ ob_start();
                     <td class="s1"><?=@$Lci03_datafim?> <?= db_formatar($oProcesso->ci03_datafim, 'd') ?> </td>
                 </tr>
                 <tr>
-                    <td class="s1">                            
+                    <td class="s1">
                         <? $aGrupo = array(1 => "Auditoria de Regularidade", 2 => "Auditoria Operacional", 3 => "Demanda Extraordinária"); ?>
                         <?=@$Lci03_grupoaudit?> <?= $aGrupo[$oProcesso->ci03_grupoaudit]; ?>
                     </td>
@@ -157,7 +168,7 @@ ob_start();
                 <tr>
                     <td class="s1"><?=@$Lci03_protprocesso?> <?= $oProcesso->ci03_protprocesso != '' ? $oProcesso->p58_numero.'/'.$oProcesso->p58_ano : '' ?> </td>
                 </tr>
-                
+
             </table>
             <hr>
         </div>
@@ -166,15 +177,15 @@ ob_start();
 
             <div class="ritz grid-container" dir="ltr">
                 <table class="waffle" cellspacing="0" cellpadding="0">
-                    
-                    <? for ($i = 0; $i < $clquestaoaudit->numrows; $i++) { ?>  
+
+                    <? for ($i = 0; $i < $clquestaoaudit->numrows; $i++) { ?>
 
                         <? db_fieldsmemory($rsProcesso,$i); ?>
 
                         <? if (isset($ci05_codlan) && $ci05_codlan != '') { ?>
-                            
+
                             <? if ($repeteProcLan != $ci03_codproc) { ?>
-                                
+
                                 <tr>
                                     <th class="s0" colspan="10">LANÇAMENTOS DE VERIFICAÇÃO</th>
                                 </tr>
@@ -190,11 +201,11 @@ ob_start();
                                     <th class="s2" style="width:120px">ATENDE À QUESTÃO DE AUDITORIA</th>
                                     <th class="s2" style="width:120px">ACHADOS</th>
                                 </tr>
-                                    
+
                             <? } ?>
 
                             <tr>
-                                <td class="s3" style="width:10px"><?= $ci02_numquestao ?></td> 
+                                <td class="s3" style="width:10px"><?= $ci02_numquestao ?></td>
                                 <td class="s3" style="width:120px"><?= $ci02_questao ?></td>
                                 <td class="s3"><?= $ci02_inforeq ?></td>
                                 <td class="s3"><?= $ci02_fonteinfo ?></td>
@@ -205,29 +216,29 @@ ob_start();
                                 <td class="s3"><?= $ci05_atendquestaudit == "t" ? "SIM" : ($ci05_atendquestaudit == "f" ? "NÃO" : '') ?></td>
                                 <td class="s3"><?= $ci05_achados != 'null' ? $ci05_achados : '' ?></td>
                             </tr>
-                                    
+
                             <? $repeteProcLan = $ci03_codproc; ?>
                         <? } ?>
                     <? } ?>
 
                 </table>
             </div>
-            
+
         <? } ?>
 
         <? if (isset($sMatriz) && $sMatriz == 1) { ?>
 
             <div class="ritz grid-container" dir="ltr">
                 <table class="waffle" cellspacing="0" cellpadding="0">
-                    
-                    <? for ($i = 0; $i < $clquestaoaudit->numrows; $i++) { ?>  
+
+                    <? for ($i = 0; $i < $clquestaoaudit->numrows; $i++) { ?>
 
                         <? db_fieldsmemory($rsProcesso,$i); ?>
 
                         <? if (isset($ci06_seq) && $ci06_seq != '') { ?>
-                            
+
                             <? if ($repeteProcMat != $ci03_codproc) { ?>
-                                
+
                                 <tr>
                                     <th class="s0" colspan="10">MATRIZ DE ACHADOS</th>
                                 </tr>
@@ -243,7 +254,7 @@ ob_start();
                                     <th class="s2" style="width:115px">EFEITO</th>
                                     <th class="s2" style="width:115px">ENCAMINHAMENTO</th>
                                 </tr>
-                                    
+
                             <? } ?>
 
                             <tr>
@@ -258,7 +269,7 @@ ob_start();
                                 <td class="s3"><?= $ci06_efeito ?></td>
                                 <td class="s3"><?= $ci06_recomendacoes ?></td>
                             </tr>
-                                    
+
                             <? $repeteProcMat = $ci03_codproc; ?>
                         <? } ?>
                     <? } ?>
@@ -278,9 +289,11 @@ echo $html;
 $mPDF->WriteHTML(utf8_encode($html));
 ob_end_clean();
 $mPDF->Output();
-            
+} catch (MpdfException $e) {
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$e->getMessage());
+}
 function buscaDepartamentos($iCodProc) {
-	
+
 	$sDeptos = '';
 
 	$clprocessoauditdepart = new cl_processoauditdepart;
@@ -298,5 +311,5 @@ function buscaDepartamentos($iCodProc) {
 	}
 
     return $sDeptos;
-    
+
 }

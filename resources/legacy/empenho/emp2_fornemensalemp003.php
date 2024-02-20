@@ -37,8 +37,9 @@ require_once "classes/db_fornemensalemp_classe.php";
 require_once("classes/db_cgm_classe.php");
 require_once("classes/db_infocomplementaresinstit_classe.php");
 include("libs/db_sql.php");
-require("vendor/mpdf/mpdf/mpdf.php");
 require_once("dbforms/db_funcoes.php");
+use \Mpdf\Mpdf;
+use \Mpdf\MpdfException;
 
 $clFornecedores = new cl_fornemensalemp();
 $clinfocomplementaresinstit = new cl_infocomplementaresinstit();
@@ -102,8 +103,18 @@ for ($i = 0; $i < pg_num_rows($rsTipoinstit); $i++) {
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', 'A4', 0, '', 15, 15, 20, 15, 5, 11);
-
+try {
+    $mPDF = new Mpdf([
+        'mode' => '',
+        'format' => 'A4-L',
+        'orientation' => 'L',
+        'margin_left' => 15,
+        'margin_right' => 15,
+        'margin_top' => 20,
+        'margin_bottom' => 15,
+        'margin_header' => 5,
+        'margin_footer' => 11,
+    ]);
 /*Nome do relatório.*/
 $header = " <header>
                 <div style=\" height: 120px; font-family:Arial\">
@@ -256,7 +267,7 @@ $aFornecedores = pg_fetch_all($resultFornecedores);
                 <th id="0C3" style="width:100px;" class="column-headers-background"></th>
             </tr>
             </thead>
-            
+
             <?php
 
             $pagina = 0;
@@ -266,9 +277,9 @@ $aFornecedores = pg_fetch_all($resultFornecedores);
             $forneceroaux = 0;
             $totalfornecedor = 0;
             $divisao = 0;
-            
+
             for ($cont = 0; $cont < count($aFornecedores); $cont++) {
-                $control ++; 
+                $control ++;
                 $oFornecedores = db_utils::fieldsMemory($resultFornecedores, $cont);
                 $fornecedorMensal = new stdClass();
 
@@ -281,10 +292,10 @@ $aFornecedores = pg_fetch_all($resultFornecedores);
                 $anoEmpenho = substr($oFornecedores->e60_emiss,0,4);
                 $numEmpenho = $oFornecedores->e60_codemp;
                 $fornecedorMensal->fm101_empenho = $numEmpenho."/".$anoEmpenho;
-             
-                 // mostrar os totais               
+
+                 // mostrar os totais
                 if($forneceroaux != $fornecedorMensal->fm101_numcgm && $forneceroaux != 0)
-                {       
+                {
                     $totalfornecedor = db_formatar($totalfornecedor, "f");
                     echo <<<HTML
                         <tr style="height: 20px">
@@ -294,39 +305,39 @@ $aFornecedores = pg_fetch_all($resultFornecedores);
                             <td class="s1" dir="ltr" colspan="3"><b><center>TOTAL</center></b></td>
                             <td class="s2" dir="ltr"><b><center>R$</center></b></td>
                             <td class="s3" dir="ltr"><b><center>$totalfornecedor</center></b></td>
-                            
-                        </tr> </br>                
+
+                        </tr> </br>
 HTML;
                     $totalfornecedor = 0;
                 }
 
                 if($forneceroaux != $fornecedorMensal->fm101_numcgm)
-                { 
-                   
+                {
+
                 echo <<<HTML
-                          <tbody>  
+                          <tbody>
                           <tr >
                                 <td colspan="4"> &nbsp; </font></td>
-                          </tr> 
+                          </tr>
                             <tr >
                                 <td colspan="4"> $fornecedorMensal->fm101_numcgm - $fornecedorMensal->fm101_fornecedor </font></td>
                             </tr>
-                            <tr>    
+                            <tr>
                                 <td></td>
                             </tr>
                             <tr style="height: 20px">
-                            
+
                                 <th id="0R0" style="height: 20px;"></th>
                                 <td class="s0" dir="ltr"><font size="-1"> EMPENHO </font></td>
                                 <td class="s0" dir="ltr"><font size="-1"> NUMERO NF </font></td>
                                 <td class="s0" dir="ltr" ><font size="-1"> DATA NF </font></td>
                                 <td class="s0" dir="ltr" colspan="2"><font size="-1"> VALOR NF </font></td>
                             </tr>
-                          
+
 HTML;
-                                
+
                 }
-      
+
                         echo <<<HTML
                         <tr style="height: 20px">
                             <th id="0R0" style="height: 20px;" class="row-headers-background">
@@ -336,16 +347,16 @@ HTML;
                             <td class="s3" dir="ltr"><center>$fornecedorMensal->fm101_numnota</center></td>
                             <td class="s3" dir="ltr"><center>$fornecedorMensal->fm101_data</center></td>
                             <td class="s2" dir="ltr">R$</td>
-                            <td class="s3" dir="ltr">$fornecedorMensal->fm101_valor</td>                          
-                            
-                        </tr> </br>                    
+                            <td class="s3" dir="ltr">$fornecedorMensal->fm101_valor</td>
+
+                        </tr> </br>
 HTML;
-            $totalfornecedor += $fornecedorMensal->fm101_valortotal; 
-                      
-        // mostrar os totais   na ultima linha 
+            $totalfornecedor += $fornecedorMensal->fm101_valortotal;
+
+        // mostrar os totais   na ultima linha
         if(count($aFornecedores) ==  $cont +1)
-                        {      
-                             $totalfornecedor = db_formatar($totalfornecedor, "f");  
+                        {
+                             $totalfornecedor = db_formatar($totalfornecedor, "f");
                             echo <<<HTML
                                 <tr style="height: 20px">
                                     <th id="0R{$or}" style="height: 20px;" class="row-headers-background">
@@ -354,15 +365,15 @@ HTML;
                                     <td class="s1" dir="ltr" colspan="3"><b><center>TOTAL</center></b></td>
                                     <td class="s2" dir="ltr"><b><center>R$</center></b></td>
                                     <td class="s3" dir="ltr"><b><center>$totalfornecedor</center></b></td>
-                                    
-                                </tr> </br>                    
+
+                                </tr> </br>
 HTML;
                             $totalfornecedor = 0;
-                        }              
-                $forneceroaux =  $fornecedorMensal->fm101_numcgm;  
+                        }
+                $forneceroaux =  $fornecedorMensal->fm101_numcgm;
                     }
-                  
-                   
+
+
             ?>
             </tbody>
         </table>
@@ -377,7 +388,9 @@ $html = ob_get_contents();
 ob_end_clean();
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
-
+} catch (MpdfException $e) {
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$e->getMessage());
+}
 db_fim_transacao();
 
 ?>

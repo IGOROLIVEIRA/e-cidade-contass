@@ -29,7 +29,6 @@ require_once "libs/db_stdlib.php";
 require_once "libs/db_conecta.php";
 include_once "libs/db_sessoes.php";
 include_once "libs/db_usuariosonline.php";
-include("vendor/mpdf/mpdf/mpdf.php");
 include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
@@ -70,8 +69,18 @@ criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', '', 0, '', 15, 15, 20, 15, 5, 11);
-
+try {
+    $mPDF = new Mpdf([
+        'mode' => '',
+        'format' => 'A4',
+        'orientation' => 'L',
+        'margin_left' => 15,
+        'margin_right' => 15,
+        'margin_top' => 20,
+        'margin_bottom' => 15,
+        'margin_header' => 5,
+        'margin_footer' => 11,
+    ]);
 
 $header = <<<HEADER
 <header>
@@ -446,5 +455,7 @@ ob_end_clean();
 //echo $html;
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
-
+} catch (MpdfException $e) {
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$e->getMessage());
+}
 ?>

@@ -30,7 +30,6 @@ require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
-require_once("vendor/mpdf/mpdf/mpdf.php");
 require_once("libs/db_liborcamento.php");
 require_once("libs/db_libcontabilidade.php");
 require_once("libs/db_sql.php");
@@ -173,7 +172,7 @@ $aReceitasTransferencias = array(
     array('1.7.2.1.50.0.1 - Cota-parte do ICMS - Principal', 'text', '417215001%'),
     array('1.7.2.1.51.0.1 - Cota-parte do IPVA - Principal', 'text', '417215101%'),
     array('1.7.2.1.52.0.1 - Cota-Parte do IPI - Municípios - Principal', 'text', '417215201%'),
-    
+
 );
 }else{
 $aReceitasImpostos = array(
@@ -264,7 +263,17 @@ $aReceitasTransferencias = array(
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', '', 0, '', 10, 10, 20, 10, 5, 11);
+$mPDF = new \Mpdf\Mpdf([
+    'mode' => '',
+    'format' => 'A4',
+    'orientation' => 'L',
+    'margin_left' => 10,
+    'margin_right' => 10,
+    'margin_top' => 20,
+    'margin_bottom' => 10,
+    'margin_header' => 5,
+    'margin_footer' => 11,
+]);
 // DEFINE O FUSO HORARIO COMO O HORARIO DE BRASILIA
 date_default_timezone_set('America/Sao_Paulo');
 // CRIA UMA VARIAVEL E ARMAZENA A HORA ATUAL DO FUSO-HORÀRIO DEFINIDO (BRASÍLIA)
@@ -605,7 +614,7 @@ ob_start();
                                 $oReceitaeDespesaEnsino->setValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
                                 $oReceitaeDespesaEnsino->setValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
                                 $oReceitaeDespesaEnsino->setValorTotalGeral($nValorTotalGeral);
-                                $dadoslinha2                  = $oReceitaeDespesaEnsino->getLinha2FuncaoeSubfuncao();                         
+                                $dadoslinha2                  = $oReceitaeDespesaEnsino->getLinha2FuncaoeSubfuncao();
                                 $nValorTotalPago             += $dadoslinha2['6'];
                         }
                     }
@@ -653,7 +662,7 @@ ob_start();
                                 $nValorTotalPago             += $dadoslinha3['5'];
                             }
                         }
-                   } 
+                   }
                    $nTotalAplicadoEntrada  = $nValorTotalPago;
                    $oReceitaeDespesaEnsino->setDataInicial($dtini);
                    $oReceitaeDespesaEnsino->setDataFinal($dtfim);
@@ -664,36 +673,36 @@ ob_start();
 
                    $nTotalReceitasRecebidasFundeb = 0;
                    $nContribuicaoFundeb = 0;
-                   
+
                    $nDevolucaoRecursoFundeb = 0;
                    $rsSlip = $clSlip->sql_record($clSlip->sql_query_fundeb($dtini, $dtfim, $aInstits));
                    $nDevolucaoRecursoFundeb = db_utils::fieldsMemory($rsSlip, 0)->k17_valor;
-                   
+
                    $nTransferenciaRecebidaFundeb = 0;
-                   
+
                    $aTransferenciasRecebidasFundeb = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '417515001%'");
-                   
+
                    $nTransferenciaRecebidaFundeb = count($aTransferenciasRecebidasFundeb) > 0 ? $aTransferenciasRecebidasFundeb[0]->saldo_arrecadado_acumulado : 0;
-                   
+
                    $aTotalContribuicaoFundeb = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '495%'");
                    $nTotalContribuicaoFundeb = count($aTotalContribuicaoFundeb) > 0 ? $aTotalContribuicaoFundeb[0]->saldo_arrecadado_acumulado : 0;
-                   
+
                    $nTotalReceitasRecebidasFundeb = abs($nDevolucaoRecursoFundeb) + abs($nTransferenciaRecebidaFundeb);
                    $nResulatadoLiquidoTransfFundeb = $nTotalReceitasRecebidasFundeb-abs($nTotalContribuicaoFundeb);
                    $nTotalAplicadoSaida = $nResulatadoLiquidoTransfFundeb;
-                  
+
                    $dadosLinha9 = $oReceitaeDespesaEnsino->getLinha9RestosaPagarInscritoSemDis();
                    $nRPIncritosSemDesponibilidade101     = $dadosLinha9['0'];
                    $nRPIncritosSemDesponibilidade136     = $dadosLinha9['1'];
                    $nRPIncritosSemDesponibilidade118_119 = $dadosLinha9['2'];
-                   $nTotalAplicadoSaida = $nTotalAplicadoSaida + $nRPIncritosSemDesponibilidade101 + $nRPIncritosSemDesponibilidade136 + $nRPIncritosSemDesponibilidade118_119;      
-                      
+                   $nTotalAplicadoSaida = $nTotalAplicadoSaida + $nRPIncritosSemDesponibilidade101 + $nRPIncritosSemDesponibilidade136 + $nRPIncritosSemDesponibilidade118_119;
+
                    $dadosLinha11 = $oReceitaeDespesaEnsino->getLinha11CancelamentodeRestoaPagar();
                    $nValorRecursoTotal101 = $dadosLinha11['0'];
                    $nValorRecursoTotal136 = $dadosLinha11['1'];
                    $nValorRecursoTotal118 = $dadosLinha11['2'];
                    $nTotalAplicadoSaida = $nTotalAplicadoSaida + $nValorRecursoTotal101 + $nValorRecursoTotal136 + $nValorRecursoTotal118;
-                   
+
                    $nValorAplicado =  $nTotalAplicadoEntrada + ($nTotalAplicadoSaida * -1);
                    $valorAplicacaoDevida = ($nTotalReceitaTransferencia + $nTotalReceitaImpostos)*0.25 ;
                    $nDiferencaAplicacao = $nValorAplicado - $valorAplicacaoDevida;

@@ -36,12 +36,13 @@
  require_once("classes/db_cgm_classe.php");
  require_once("classes/db_infocomplementaresinstit_classe.php");
  include("libs/db_sql.php");
- require("vendor/mpdf/mpdf/mpdf.php");
  require_once("libs/db_utils.php");
  require_once("libs/JSON.php");
  require_once("dbforms/db_funcoes.php");
  require_once("classes/db_empnota_classe.php");
  require_once("classes/db_empnotaitem_classe.php");
+use \Mpdf\Mpdf;
+use \Mpdf\MpdfException;
 
 $oGet            = db_utils::postMemory($_GET);
 $oDaoEmpNota     = new cl_empnota();
@@ -60,10 +61,10 @@ $clrotulo->label("e53_vlrpag");
 
 $instits = str_replace('-', ', ', db_getsession("DB_instit"));
 
-$aElementosFiltro = array('33903609','33903607','33903608','33903605','33903614','33903639','33903636','33903637','33903638','33903641','33903601','33903602','33903603','33903635','33903640');  
-     
+$aElementosFiltro = array('33903609','33903607','33903608','33903605','33903614','33903639','33903636','33903637','33903638','33903641','33903601','33903602','33903603','33903635','33903640');
+
 function sqlGeral($dtDataInicial){
-    
+
     if (isset($dtDataInicial)) {
         $sSqlNota  = "select distinct e50_codord,";
         $sSqlNota .= " e60_numcgm,";
@@ -89,16 +90,16 @@ function sqlGeral($dtDataInicial){
                           else (e70_vlrliq*0.2) end as patronal, ";
         $sSqlNota .= " case when e50_cattrabalhador in (711, 712) then ((e70_vlrliq * 0.2))
                           else e70_vlrliq	end as basepatronal, ";
-        $sSqlNota .= " e60_anousu, e69_numero, cgm.z01_cgccpf,rh70_estrutural, corrente.k12_data,e23_ativo,o58_codigo,o58_projativ,o55_descr,o15_descr,cgm.z01_nasc";                                  
+        $sSqlNota .= " e60_anousu, e69_numero, cgm.z01_cgccpf,rh70_estrutural, corrente.k12_data,e23_ativo,o58_codigo,o58_projativ,o55_descr,o15_descr,cgm.z01_nasc";
         $sSqlNota .= "       from empnota ";
         $sSqlNota .= "          inner join empempenho   on e69_numemp  = e60_numemp";
-        $sSqlNota .= "          inner join orcdotacao on  (o58_coddot,o58_anousu) = (e60_coddot,e60_anousu)";	
+        $sSqlNota .= "          inner join orcdotacao on  (o58_coddot,o58_anousu) = (e60_coddot,e60_anousu)";
         $sSqlNota .= "          inner join orcprojativ on (o55_projativ,o55_anousu) = (o58_projativ,o58_anousu)";
         $sSqlNota .= "          inner join orctiporec on o15_codigo 								= o58_codigo";
         $sSqlNota .= "          inner join cgm as cgm   on e60_numcgm  = cgm.z01_numcgm";
         $sSqlNota .= "          inner join empnotaele   on e69_codnota = e70_codnota";
         $sSqlNota .= "          inner join orcelemento  on empnotaele.e70_codele = orcelemento.o56_codele";
-        $sSqlNota .= "          left join cgmfisico on z04_numcgm = cgm.z01_numcgm"; 
+        $sSqlNota .= "          left join cgmfisico on z04_numcgm = cgm.z01_numcgm";
         $sSqlNota .= "          left join rhcbo on rh70_sequencial = z04_rhcbo";
         $sSqlNota .= "          left join conlancamemp on c75_numemp = e60_numemp ";
         $sSqlNota .= "          left join conlancamdoc on c71_codlan = c75_codlan and c71_coddoc = 904 ";
@@ -123,9 +124,9 @@ function sqlGeral($dtDataInicial){
                       corempagemov.k12_data,
                       corempagemov.k12_autent
                   )";
-                 
-        return $sSqlNota; 
-        
+
+        return $sSqlNota;
+
     }
 }
 
@@ -142,38 +143,38 @@ function filtrarDatas ($sPosicao,$dtDataInicial,$dtDataFinal){
 }
 function credoresSelecionados ($sCredoresSelecionados,$sTipoSelecao, $sSqlNota,$sPosicao,$dtDataInicial,$dtDataFinal){
     $filtroData = filtrarDatas ($sPosicao,$dtDataInicial,$dtDataFinal);
-    if($sCredoresSelecionados && $sTipoSelecao == 1){           
+    if($sCredoresSelecionados && $sTipoSelecao == 1){
         $sSqlNota .= "  $filtroData and  e60_numcgm in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 11 ";
         return $sSqlNota;
-    }    
-    if($sCredoresSelecionados && $sTipoSelecao == 2){ 
+    }
+    if($sCredoresSelecionados && $sTipoSelecao == 2){
         $sSqlNota .= " $filtroData and  e60_numcgm not in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 11 ";
         return $sSqlNota;
     }
-    $sSqlNota .= "  $filtroData and Length(cgm.z01_cgccpf) = 11 "; 
-    return $sSqlNota;   
+    $sSqlNota .= "  $filtroData and Length(cgm.z01_cgccpf) = 11 ";
+    return $sSqlNota;
 }
 
 function tipoIncidencia($sTipo,$sSqlNota,$aElementosFiltro,$instits){
     if($sTipo == '1'){
         $sSqlNota .= "  and e50_cattrabalhador is not null ";
         $sSqlNota .=  " and e60_instit = $instits";
-        $sSqlNota .= "  group by     1,3,2,4,6,7,8,9,10,e21_retencaotipocalc,c71_coddoc,e60_anousu,e69_numero,e70_vlrliq,e23_valorretencao, cgm.z01_cgccpf,rh70_estrutural,corrente.k12_data,e23_ativo,o58_codigo,o58_projativ,o55_descr,o15_descr,cgm.z01_nasc";      
+        $sSqlNota .= "  group by     1,3,2,4,6,7,8,9,10,e21_retencaotipocalc,c71_coddoc,e60_anousu,e69_numero,e70_vlrliq,e23_valorretencao, cgm.z01_cgccpf,rh70_estrutural,corrente.k12_data,e23_ativo,o58_codigo,o58_projativ,o55_descr,o15_descr,cgm.z01_nasc";
         return $sSqlNota;
     }
-    if($sTipo == '2'){   
+    if($sTipo == '2'){
         $sSqlNota .= "  and e50_cattrabalhador is null ";
-        $sSqlNota .= "  and ((substr(orcelemento.o56_elemento,2,8) like '339036%') or (substr(orcelemento.o56_elemento,2,8) like '339035%') "; 
+        $sSqlNota .= "  and ((substr(orcelemento.o56_elemento,2,8) like '339036%') or (substr(orcelemento.o56_elemento,2,8) like '339035%') ";
         $sSqlNota .= "  and (substr(orcelemento.o56_elemento,2,8) NOT IN ('".implode("','",$aElementosFiltro)."') ))  ";
         $sSqlNota .=  " and e60_instit = $instits";
-        $sSqlNota .= "  group by     1,3,2,4,6,7,8,9,10,e21_retencaotipocalc,c71_coddoc,e60_anousu,e69_numero,e70_vlrliq,e23_valorretencao, cgm.z01_cgccpf,rh70_estrutural,corrente.k12_data,e23_ativo,o58_codigo,o58_projativ,o55_descr,o15_descr,cgm.z01_nasc";      
+        $sSqlNota .= "  group by     1,3,2,4,6,7,8,9,10,e21_retencaotipocalc,c71_coddoc,e60_anousu,e69_numero,e70_vlrliq,e23_valorretencao, cgm.z01_cgccpf,rh70_estrutural,corrente.k12_data,e23_ativo,o58_codigo,o58_projativ,o55_descr,o15_descr,cgm.z01_nasc";
         return $sSqlNota;
     }
-    if($sTipo == '3'){   
-        $sSqlNota .= "  and ((substr(orcelemento.o56_elemento,2,8) like '339036%') or (substr(orcelemento.o56_elemento,2,8) like '339035%') "; 
+    if($sTipo == '3'){
+        $sSqlNota .= "  and ((substr(orcelemento.o56_elemento,2,8) like '339036%') or (substr(orcelemento.o56_elemento,2,8) like '339035%') ";
         $sSqlNota .= "  and (substr(orcelemento.o56_elemento,2,8) NOT IN ('".implode("','",$aElementosFiltro)."') ))  ";
         $sSqlNota .=  " and e60_instit = $instits";
-        $sSqlNota .= "  group by     1,3,2,4,6,7,8,9,10,e21_retencaotipocalc,c71_coddoc,e60_anousu,e69_numero,e70_vlrliq,e23_valorretencao, cgm.z01_cgccpf,rh70_estrutural,corrente.k12_data,e23_ativo,o58_codigo,o58_projativ,o55_descr,o15_descr,cgm.z01_nasc";      
+        $sSqlNota .= "  group by     1,3,2,4,6,7,8,9,10,e21_retencaotipocalc,c71_coddoc,e60_anousu,e69_numero,e70_vlrliq,e23_valorretencao, cgm.z01_cgccpf,rh70_estrutural,corrente.k12_data,e23_ativo,o58_codigo,o58_projativ,o55_descr,o15_descr,cgm.z01_nasc";
         return $sSqlNota;
     }
 
@@ -182,8 +183,8 @@ function tipoQuebra($sQuebra,$sSqlNota){
     if($sQuebra == 1){
         $sSqlNota .= "  order by cgm.z01_cgccpf  ";
         return $sSqlNota;
-    }    
-    $sSqlNota .= "  order by o58_projativ,o58_codigo"; 
+    }
+    $sSqlNota .= "  order by o58_projativ,o58_codigo";
     return $sSqlNota;
 }
 
@@ -194,12 +195,12 @@ $sSqlNota = credoresSelecionados ($sCredoresSelecionados,$sTipoSelecao, $sSqlNot
 $sSqlNota = tipoIncidencia($sTipo,$sSqlNota,$aElementosFiltro,$instits);
 
 $sSqlNota = tipoQuebra($sQuebra,$sSqlNota);
-    
+
 $rsNota    = $oDaoEmpNota->sql_record($sSqlNota);
 
 
 $aFornecedores = pg_fetch_all($rsNota);
-  
+
   if ($oDaoEmpNota->numrows > 0 ) {
     $oNotas      = db_utils::FieldsMemory($rsNota, 0);
   }
@@ -266,8 +267,18 @@ for ($i = 0; $i < pg_num_rows($rsTipoinstit); $i++) {
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', 'A4-L', 0, '', 15, 15, 20, 15, 5, 11, 'L');
-
+try {
+    $mPDF = new Mpdf([
+        'mode' => '',
+        'format' => 'A4-L',
+        'orientation' => 'L',
+        'margin_left' => 15,
+        'margin_right' => 15,
+        'margin_top' => 20,
+        'margin_bottom' => 10,
+        'margin_header' => 5,
+        'margin_footer' => 11,
+    ]);
 /*Nome do relatório.*/
 $header = " <header>
                 <div style=\" height: 120px; font-family:Arial\">
@@ -288,8 +299,8 @@ $aPosicao = "Pagamento (S-1210)";
 if($sPosicao == 1)
     $aPosicao ="Liquidação (S-1200)";
 /*Período do relatório.*/
-$header .= "<br/><b>Período:</b> {$dtDataInicial} <b>A</b> {$dtDataFinal}    
-            <b>Posição:</b> {$aPosicao} 
+$header .= "<br/><b>Período:</b> {$dtDataInicial} <b>A</b> {$dtDataFinal}
+            <b>Posição:</b> {$aPosicao}
                     </div>
                 </div>
             </header>";
@@ -402,7 +413,7 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
             <strong>
                 <font size="-1">Relatório de Autônomos</font>
             </strong><br/><br/>
-          
+
         </div>
         <table class="waffle" cellspacing="0" cellpadding="0">
             <thead>
@@ -417,7 +428,7 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
             <tr style="height: 30px">
                 <th id="0R0" style="height: 30px;"></th>
                 <? if($sQuebra == 2){?>
-                    <td class="s0" dir="ltr" ><font size="-1"> CGM - Nome </font></td>    
+                    <td class="s0" dir="ltr" ><font size="-1"> CGM - Nome </font></td>
                 <?}?>
                 <td class="s0" dir="ltr" ><font size="-1"> OP </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Data OP </font></td>
@@ -435,8 +446,8 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
                 <td class="s0" dir="ltr" ><font size="-1"> Valor Remuneração </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Valor Liquido  </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Data Pagamento  </font></td>
-                
-                
+
+
 
             </tr>
             <?php
@@ -464,16 +475,16 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
             $totalvalorliquido = 0;
             $Geraltotalvalorliquido = 0;
             for ($cont = 0; $cont < count($aFornecedores); $cont++) {
-                $oFornecedores = $oNotas      = db_utils::FieldsMemory($rsNota, $cont);  
-                $oFornecedores1 = $oNotas2      = db_utils::FieldsMemory($rsNota, $cont+1);  
+                $oFornecedores = $oNotas      = db_utils::FieldsMemory($rsNota, $cont);
+                $oFornecedores1 = $oNotas2      = db_utils::FieldsMemory($rsNota, $cont+1);
 
                 // ordenar datas
                 $oNotas->k12_data = implode("-", array_reverse(explode("-", $oNotas->k12_data)));
                 $oNotas->e50_data = implode("-", array_reverse(explode("-", $oNotas->e50_data)));
                 $oNotas->z01_nasc = implode("-", array_reverse(explode("-", $oNotas->z01_nasc)));
-                
-            if($sQuebra == 1){     
-                                    
+
+            if($sQuebra == 1){
+
                 if (!isset($aFornecedores[$hash]) && $oNotas->e60_numcgm) {
                         if ($cont >= 1) {
                             $or = "OR" . $cont;
@@ -482,16 +493,16 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
                         $oNotas->outrasretencoes = 0;
                         $oNotas->valor_inss = 0;
                         $oNotas->valor_irrf = 0;
-                    }    
-           
+                    }
+
                     if(!$auxe50_codord)
-                        $auxe50_codord = $oNotas->e50_codord;    
-                        // Lista de Fornecedores 
-                        
+                        $auxe50_codord = $oNotas->e50_codord;
+                        // Lista de Fornecedores
+
                     if($auxe60_numcgm != $oNotas->e60_numcgm){
-              
+
                         echo <<<HTML
-                       
+
                         <tr>
                             <td class="s1" colspan="20"><b>$oNotas->e60_numcgm - $oNotas->z01_cgccpf-$oNotas->z01_nome - CBO - $oNotas->rh70_estrutural - Nascimento - $oNotas->z01_nasc</b></td>
                         </tr>
@@ -501,24 +512,24 @@ HTML;
                     if($oNotas->e50_codord == $oNotas2->e50_codord){
                         if($auxRetencoes != $oNotas->outrasretencoes)
                             $auxRetencoes += $oNotas->outrasretencoes;
-                        if($auxInss != $oNotas->valor_inss)        
+                        if($auxInss != $oNotas->valor_inss)
                             $auxInss += $oNotas->valor_inss;
-                        if($auxIrrf != $oNotas->valor_irrf)     
+                        if($auxIrrf != $oNotas->valor_irrf)
                             $auxIrrf +=$oNotas->valor_irrf;
                         $auxe50_codord = $oNotas->e50_codord;
-                      
-                    }else{   
+
+                    }else{
                         if($auxRetencoes != $oNotas->outrasretencoes)
                             $auxRetencoes += $oNotas->outrasretencoes;
-                        if($auxInss != $oNotas->valor_inss)        
+                        if($auxInss != $oNotas->valor_inss)
                             $auxInss += $oNotas->valor_inss;
-                        if($auxIrrf != $oNotas->valor_irrf)     
+                        if($auxIrrf != $oNotas->valor_irrf)
                             $auxIrrf +=$oNotas->valor_irrf;
-                        
+
                         $auxe50_codord = $oNotas->e50_codord;
-                        
+
                         $valorliquido = $oNotas->e70_vlrliq - $auxInss - $auxIrrf - $auxRetencoes;
-            
+
                         $totale70_vlrliq += $oNotas->e70_vlrliq;
                         $totalvalor_inss += $auxInss;
                         $totalvalor_irrf += $auxIrrf;
@@ -527,7 +538,7 @@ HTML;
                         $totale50_valorremuneracao += $oNotas->e50_valorremuneracao;
                         $totalbasepatronal += $oNotas->basepatronal;
                         $totalvalorliquido += $valorliquido;
-                        
+
                         $oNotas->patronal = FormatTotalNumberTwoDecimal($oNotas->patronal);
 
                         $Geraltotale70_vlrliq += $oNotas->e70_vlrliq;
@@ -545,14 +556,14 @@ HTML;
                         $oNotas->e70_vlrliq = db_formatar($oNotas->e70_vlrliq, "f");
                         $oNotas->basepatronal = db_formatar($oNotas->basepatronal, "f");
                         $valorliquido    = db_formatar($valorliquido, "f");
-                        
+
 
                         if(!$oNotas->e50_valorremuneracao)
                             $oNotas->e50_valorremuneracao = db_formatar(0, "f");
-                        else 
-                            $oNotas->e50_valorremuneracao = db_formatar($oNotas->e50_valorremuneracao, "f");  
-                            
-                                                               
+                        else
+                            $oNotas->e50_valorremuneracao = db_formatar($oNotas->e50_valorremuneracao, "f");
+
+
                         echo <<<HTML
                         <tr style="height: 20px">
                             <th id="0R{$or}" style="height: 20px;" class="row-headers-background">
@@ -574,9 +585,9 @@ HTML;
                             <td class="s1" dir="ltr">R$ $oNotas->e50_valorremuneracao</td>
                             <td class="s1" dir="ltr">R$ $valorliquido</td>
                             <td class="s3" dir="ltr">$oNotas->k12_data</td>
-                        </tr> </br>                    
+                        </tr> </br>
 HTML;
-                        
+
                         if($oNotas2->e60_numcgm != $oNotas->e60_numcgm){
                             $totalpatronal        = db_formatar($totalpatronal, "f");
                             $totaloutrasretencoes = db_formatar($totaloutrasretencoes, "f");
@@ -588,7 +599,7 @@ HTML;
                             $totalvalorliquido    = db_formatar($totalvalorliquido, "f");
 
                             echo <<<HTML
-                       
+
                             <tr>
                                 <td class="s0" colspan="4"><b>Total Fornecedor: </b></td>
                                 <td class="s0" ><b>R$ $totale70_vlrliq</b></td>
@@ -606,7 +617,7 @@ HTML;
                                 <td class="s0" ><b></b></td>
                             </tr>
 HTML;
-                        
+
                         $totale70_vlrliq = 0;
                         $totalvalor_inss = 0;
                         $totalvalor_irrf = 0;
@@ -615,11 +626,11 @@ HTML;
                         $totale50_valorremuneracao = 0;
                         $totalbasepatronal = 0;
                         $totalvalorliquido = 0;
-                        
+
                         }
                         $auxRetencoes = 0;
                         $auxInss = 0;
-                        $auxIrrf = 0; 
+                        $auxIrrf = 0;
 
                         if(($cont+1) == count($aFornecedores)){
                             $Geraltotale70_vlrliq   = db_formatar($Geraltotale70_vlrliq, "f");
@@ -648,7 +659,7 @@ HTML;
                                 <td class="s0" ><b></b></td>
                             </tr>
 HTML;
-      
+
                         $Geraltotale70_vlrliq = 0;
                         $Geraltotalvalor_inss = 0;
                         $Geraltotalvalor_irrf = 0;
@@ -657,9 +668,9 @@ HTML;
                         $Geraltotale50_valorremuneracao = 0;
                         $Geraltotalbasepatronal = 0;
                         $Geraltotalvalorliquido = 0;
-                        } 
                         }
-                     
+                        }
+
                     }
                 }
                 if($sQuebra == 2){
@@ -668,59 +679,59 @@ HTML;
                         $oNotas->outrasretencoes = 0;
                         $oNotas->valor_inss = 0;
                         $oNotas->valor_irrf = 0;
-                    }    
-                            
+                    }
+
                     if($auxo58_projativ != $oNotas->o58_projativ){
-              
+
                         echo <<<HTML
-                       
+
                         <tr>
                             <td class="s2" colspan="20"><b>$oNotas->o58_projativ - $oNotas->o55_descr</b></td>
                         </tr>
-                        
-                                          
 
-                        
+
+
+
 HTML;
                     if($oNotas->o58_codigo == $auxo58_codigo){
 echo <<<HTML
-                 
+
                         <tr>
                              <td class="s1" colspan="20"><b>$oNotas->o58_codigo - $oNotas->o15_descr</b></td>
-                        </tr>                      
+                        </tr>
 
-                        
+
 HTML;
                         }
                     $auxo58_projativ = $oNotas->o58_projativ;
                     }
                     if($oNotas->o58_codigo != $auxo58_codigo){
-              
+
                         echo <<<HTML
-                       
+
                         <tr>
                             <td class="s1" colspan="20"><b>$oNotas->o58_codigo - $oNotas->o15_descr</b></td>
                         </tr>
-                       
 
-                        
+
+
 HTML;
                     $auxo58_codigo = $oNotas->o58_codigo;
-                    }    
+                    }
                     if($oNotas->e60_codemp == $oNotas2->e60_codemp && $oNotas->e60_numcgm == $oNotas2->e60_numcgm && $oNotas->e50_codord == $oNotas2->e50_codord ){
                         if($auxRetencoes != $oNotas->outrasretencoes)
                             $auxRetencoes += $oNotas->outrasretencoes;
-                        if($auxInss != $oNotas->valor_inss)        
+                        if($auxInss != $oNotas->valor_inss)
                             $auxInss += $oNotas->valor_inss;
-                        if($auxIrrf != $oNotas->valor_irrf)     
-                            $auxIrrf +=$oNotas->valor_irrf;               
-                      
-                    }else{   
+                        if($auxIrrf != $oNotas->valor_irrf)
+                            $auxIrrf +=$oNotas->valor_irrf;
+
+                    }else{
                         if($auxRetencoes != $oNotas->outrasretencoes)
                             $auxRetencoes += $oNotas->outrasretencoes;
-                        if($auxInss != $oNotas->valor_inss)        
+                        if($auxInss != $oNotas->valor_inss)
                             $auxInss += $oNotas->valor_inss;
-                        if($auxIrrf != $oNotas->valor_irrf)     
+                        if($auxIrrf != $oNotas->valor_irrf)
                             $auxIrrf +=$oNotas->valor_irrf;
                         $valorliquido = $oNotas->e70_vlrliq - $auxInss - $auxIrrf - $auxRetencoes;
 
@@ -742,7 +753,7 @@ HTML;
                         $oNotas->patronal = FormatNumberTwoDecimal($oNotas->patronal);
                         $oNotas->basepatronal = db_formatar($oNotas->basepatronal, "f");
                         $oNotas->e50_valorremuneracao = db_formatar($oNotas->e50_valorremuneracao, "f");
-                                
+
                         echo <<<HTML
                         <tr style="height: 20px">
                             <th id="0R{$or}" style="height: 20px;" class="row-headers-background">
@@ -765,7 +776,7 @@ HTML;
                             <td class="s1" dir="ltr">R$ $oNotas->e50_valorremuneracao</td>
                             <td class="s1" dir="ltr">R$ $valorliquido</td>
                             <td class="s3" dir="ltr">$oNotas->k12_data</td>
-                        </tr> </br>                    
+                        </tr> </br>
 HTML;
 
                         if($oNotas->o58_codigo != $oNotas2->o58_codigo || $oNotas->o58_projativ != $oNotas2->o58_projativ){
@@ -777,7 +788,7 @@ HTML;
                             $Geraltotale50_valorremuneracao += $totale50_valorremuneracao;
                             $Geraltotalbasepatronal += $totalbasepatronal;
                             $Geraltotalvalorliquido += $totalvalorliquido;
-                        
+
                             $totalpatronal           = db_formatar($totalpatronal,"f");
                             $totalbasepatronal       = db_formatar(floor(($totalbasepatronal*100))/100,"f");
                             $totaloutrasretencoes    = db_formatar($totaloutrasretencoes, "f");
@@ -788,7 +799,7 @@ HTML;
                             $totalvalorliquido      = db_formatar($totalvalorliquido, "f");
 
                             echo <<<HTML
-                       
+
                             <tr>
                                 <td class="s0" colspan="5"><b>Total Ação: </b></td>
                                 <td class="s0" ><b>R$ $totale70_vlrliq</b></td>
@@ -806,21 +817,21 @@ HTML;
                                 <td class="s0" ><b></b></td>
                             </tr>
 HTML;
-                        
+
                         $totale70_vlrliq = 0;
                         $totalvalor_inss = 0;
                         $totalvalor_irrf = 0;
                         $totaloutrasretencoes = 0;
                         $totalpatronal = 0;
                         $totalvalorliquido = 0;
-                        
+
                         $totale50_valorremuneracao = 0;
                         $totalbasepatronal = 0;
-                        
+
                         }
                         $auxRetencoes = 0;
                         $auxInss = 0;
-                        $auxIrrf = 0; 
+                        $auxIrrf = 0;
 
                         if(($cont+1) == count($aFornecedores)){
                             $Geraltotale70_vlrliq = db_formatar($Geraltotale70_vlrliq, "f");
@@ -849,12 +860,12 @@ HTML;
                                 <td class="s0" ><b></b></td>
                             </tr>
 HTML;
-      
-} 
+
+}
                         }
                     }
-                     
-                    }   
+
+                    }
             ?>
             </tbody>
         </table>
@@ -869,7 +880,9 @@ $html = ob_get_contents();
 ob_end_clean();
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
-
+} catch (MpdfException $e) {
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$e->getMessage());
+}
 db_fim_transacao();
 
 function FormatNumberTwoDecimal($value)
@@ -887,6 +900,6 @@ function FormatTotalNumberTwoDecimal($value)
         $number   = number_format($value, 3, ',', '.');
         $number   = explode(',',$number);
         $decimals = str_replace('.','',$number[0]).".".substr($number[1],0,2);
-        return $decimals;       
-    }   
+        return $decimals;
+    }
 ?>

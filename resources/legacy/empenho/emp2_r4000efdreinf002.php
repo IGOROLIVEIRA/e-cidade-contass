@@ -30,11 +30,12 @@ require_once "libs/db_conecta.php";
 include_once "libs/db_sessoes.php";
 include_once "libs/db_usuariosonline.php";
 include("libs/db_sql.php");
-require("vendor/mpdf/mpdf/mpdf.php");
 require_once("libs/db_utils.php");
 require_once("libs/JSON.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_contacorrentedetalhe_classe.php");
+use \Mpdf\Mpdf;
+use \Mpdf\MpdfException;
 
 $oGet = db_utils::postMemory($_GET);
 
@@ -127,8 +128,18 @@ db_inicio_transacao();
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', 'A4-L', 0, '', 15, 15, 20, 15, 5, 11, 'L');
-
+try {
+    $mPDF = new Mpdf([
+        'mode' => '',
+        'format' => 'A4-L',
+        'orientation' => 'L',
+        'margin_left' => 15,
+        'margin_right' => 15,
+        'margin_top' => 20,
+        'margin_bottom' => 15,
+        'margin_header' => 5,
+        'margin_footer' => 11,
+    ]);
 /*Nome do relatório.*/
 $header = " <header>
                 <div style=\" height: 120px; font-family:Arial,serif\">
@@ -149,7 +160,7 @@ $header .= "<b>Instituição: </b>" . trim($oInstituicao->getCodigo()) . " - " . $
 
 /*Período do relatório.*/
 $header .= "<br/><b>Período:</b> {$dtDataInicial} <b>A</b> {$dtDataFinal}
-                 <b>  | Tipo:</b> {$tipoCabecalho} 
+                 <b>  | Tipo:</b> {$tipoCabecalho}
                     </div>
                 </div>
             </header>";
@@ -435,6 +446,8 @@ $html = ob_get_contents();
 ob_end_clean();
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output('EFD-Reinf R-4000.pdf', 'I');
-
+} catch (MpdfException $e) {
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$e->getMessage());
+}
 db_fim_transacao();
 

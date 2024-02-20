@@ -30,7 +30,6 @@ require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
-require_once("vendor/mpdf/mpdf/mpdf.php");
 require_once("libs/db_liborcamento.php");
 require_once("libs/db_libcontabilidade.php");
 require_once("libs/db_sql.php");
@@ -40,7 +39,8 @@ require_once("classes/db_infocomplementaresinstit_classe.php");
 require_once("classes/db_empresto_classe.php");
 require_once("classes/db_empempenho_classe.php");
 require_once("model/contabilidade/relatorios/ensino/RelatorioReceitaeDespesaEnsino.model.php");
-
+use \Mpdf\Mpdf;
+use \Mpdf\MpdfException;
 
 $clselorcdotacao = new cl_selorcdotacao();
 $clrotulo = new rotulocampo;
@@ -149,8 +149,18 @@ $oReceitaeDespesaEnsino = new RelatorioReceitaeDespesaEnsino();
  *
  * Nenhum dos parâmetros é obrigatório
  */
-
-$mPDF = new mpdf('', '', 0, '', 10, 10, 20, 10, 5, 11);
+try {
+$mPDF = new Mpdf([
+    'mode' => '',
+    'format' => 'A4',
+    'orientation' => 'L',
+    'margin_left' => 10,
+    'margin_right' => 10,
+    'margin_top' => 20,
+    'margin_bottom' => 10,
+    'margin_header' => 5,
+    'margin_footer' => 11,
+]);
 // DEFINE O FUSO HORARIO COMO O HORARIO DE BRASILIA
 date_default_timezone_set('America/Sao_Paulo');
 // CRIA UMA VARIAVEL E ARMAZENA A HORA ATUAL DO FUSO-HORÀRIO DEFINIDO (BRASÍLIA)
@@ -353,10 +363,10 @@ ob_start();
                         </tr>
                         <tr>
                             <?if(db_getsession("DB_anousu") > 2022) {?>
-                                <td class="subtitle-2-row" colspan="5">1 - EDUCAÇÃO 12 - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS </td>   
-                            <?} else {?>  
-                                <td class="subtitle-2-row" colspan="5">1 - EDUCAÇÃO 12 - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS </td> 
-                            <? } ?>  
+                                <td class="subtitle-2-row" colspan="5">1 - EDUCAÇÃO 12 - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS </td>
+                            <?} else {?>
+                                <td class="subtitle-2-row" colspan="5">1 - EDUCAÇÃO 12 - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS </td>
+                            <? } ?>
                         </tr>
                         <?php
                         /**
@@ -374,7 +384,7 @@ ob_start();
                             $oReceitaeDespesaEnsino->setFontes($aFonte);
                             $oReceitaeDespesaEnsino->setInstits($instits);
                             $dadosLinha1 = $oReceitaeDespesaEnsino->getLinha1FuncaoeSubfuncao();
-                            $sDescrSubfuncao                       = $dadosLinha1['0']; 
+                            $sDescrSubfuncao                       = $dadosLinha1['0'];
                             $nValorPagoSubFuncao                   = $dadosLinha1['2'];
                             $nValorEmpenhadoENaoLiquidadoSubFuncao = $dadosLinha1['3'];
                             $nValorLiquidadoAPagarSubFuncao        = $dadosLinha1['4'];
@@ -392,7 +402,7 @@ ob_start();
                             /**
                              * @todo para cada subfuncao lista os programas
                              */
-                            
+
                             foreach ($dadosLinha1['1'] as $oDespesaPrograma) {
                                 $oReceitaeDespesaEnsino->setDespesaPrograma($oDespesaPrograma);
                                 $oReceitaeDespesaEnsino->setSubTotal($fSubTotal);
@@ -434,10 +444,10 @@ ob_start();
                         ?>
                          <tr>
                               <?if(db_getsession("DB_anousu") > 2022) {?>
-                                <td class="subtitle-2-row" colspan="5">2 - EDUCAÇÃO 12 - AUXÍLIO FINANCEIRO - OUTORGA CRÉDITO TRIBUTÁRIO ICMS - ART. 5º, INCISO V, EC Nº 123/2022  </td>   
-                            <?} else {?>  
-                                <td class="subtitle-2-row" colspan="5">2 - EDUCAÇÃO 12 - AUXÍLIO FINANCEIRO - OUTORGA CRÉDITO TRIBUTÁRIO ICMS - ART. 5º, INCISO V, EC Nº 123/2022  </td> 
-                            <? } ?> 
+                                <td class="subtitle-2-row" colspan="5">2 - EDUCAÇÃO 12 - AUXÍLIO FINANCEIRO - OUTORGA CRÉDITO TRIBUTÁRIO ICMS - ART. 5º, INCISO V, EC Nº 123/2022  </td>
+                            <?} else {?>
+                                <td class="subtitle-2-row" colspan="5">2 - EDUCAÇÃO 12 - AUXÍLIO FINANCEIRO - OUTORGA CRÉDITO TRIBUTÁRIO ICMS - ART. 5º, INCISO V, EC Nº 123/2022  </td>
+                            <? } ?>
                         </tr>
                         <?php
                         /**
@@ -513,11 +523,11 @@ ob_start();
                         <tr>
                              <? if(db_getsession("DB_anousu") > 2022) { ?>
                                 <td class="subtitle-2-row" colspan="5">3 - EDUCAÇÃO 12 - FUNDEB </td>
-                                
-                            <?} else { ?>  
+
+                            <?} else { ?>
                                 <td class="subtitle-2-row" colspan="5">3 - EDUCAÇÃO 12 - FUNDEB </td>
-                            <? } ?> 
-                            
+                            <? } ?>
+
                         </tr>
                         <?php
                         /**
@@ -562,7 +572,7 @@ ob_start();
                                 $nValorLiquidadoAPagar        = $dadoslinha3['3'];
                                 $nValorTotal                  = $dadoslinha3['4'];
                                 $nValorTotalPago             += $dadoslinha3['5'];
-                                $nValorTotalEmpenhadoENaoLiquidado += $dadoslinha3['6']; 
+                                $nValorTotalEmpenhadoENaoLiquidado += $dadoslinha3['6'];
                                 $nValorTotalLiquidadoAPagar  += $dadoslinha3['7'];
                                 $nValorTotalGeral            += $dadoslinha3['8'];
                                 ?>
@@ -727,7 +737,7 @@ ob_start();
                                 $nRPIncritosSemDesponibilidade101     = $dadosLinha9['0'];
                                 $nRPIncritosSemDesponibilidade136     = $dadosLinha9['1'];
                                 $nRPIncritosSemDesponibilidade118_119 = $dadosLinha9['2'];
-                                $nTotalAplicadoSaida = $nTotalAplicadoSaida + $nRPIncritosSemDesponibilidade101 + $nRPIncritosSemDesponibilidade136 + $nRPIncritosSemDesponibilidade118_119;      
+                                $nTotalAplicadoSaida = $nTotalAplicadoSaida + $nRPIncritosSemDesponibilidade101 + $nRPIncritosSemDesponibilidade136 + $nRPIncritosSemDesponibilidade118_119;
                                 echo db_formatar($nRPIncritosSemDesponibilidade101 + $nRPIncritosSemDesponibilidade136 + $nRPIncritosSemDesponibilidade118_119, "f");
                         ?>
                         </td>
@@ -746,11 +756,11 @@ ob_start();
                             $oReceitaeDespesaEnsino->setTipo('');
                             $nNaoLiqAPagar101 = $oReceitaeDespesaEnsino->getEmpenhosApagar();
                             $aTotalPago101 = $nLiqAPagar101 + $nNaoLiqAPagar101;
-                             
+
                         if($dtfim == $dtfimExercicio){
                             $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
                             $nRPSemDesponibilidade101 = $dadosLinha9['3'];
-                                  
+
                             if($nRPSemDesponibilidade101 <= 0){
                                 $nRPIncritosSemDesponibilidade101 = $aTotalPago101;
                             }
@@ -781,10 +791,10 @@ ob_start();
                             $nNaoLiqAPagar136 = $oReceitaeDespesaEnsino->getEmpenhosApagar(array("'136','17180000'"), $dtini, $dtfim, $instits, '');
                             $aTotalPago136 = $nLiqAPagar136 + $nNaoLiqAPagar136;
 
-                            
+
                         if($dtfim == $dtfimExercicio){
                             $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
-                            $nRPSemDesponibilidade136 = $dadosLinha9['4'];                             
+                            $nRPSemDesponibilidade136 = $dadosLinha9['4'];
                             if($nRPSemDesponibilidade136 <= 0){
                                 $nRPIncritosSemDesponibilidade136 = $aTotalPago136;
                             }
@@ -815,11 +825,11 @@ ob_start();
                             $nNaoLiqAPagar118_119 = $oReceitaeDespesaEnsino->getEmpenhosApagar();
                             $aTotalPago118_119= $nLiqAPagar118_119 + $nNaoLiqAPagar118_119;
 
-                            
-                        if($dtfim == $dtfimExercicio){                       
+
+                        if($dtfim == $dtfimExercicio){
                             $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
-                            $nRPSemDesponibilidade118_119 =  $dadosLinha9['5']; 
-                                                  
+                            $nRPSemDesponibilidade118_119 =  $dadosLinha9['5'];
+
                             if($nRPSemDesponibilidade118_119 <= 0){
                                 $nRPIncritosSemDesponibilidade118_119 = $aTotalPago118_119;
                             }
@@ -901,7 +911,7 @@ ob_start();
                                     $nValorRecursoTotal118 = $dadosLinha11['2'];
                                     $nTotalAplicadoSaida = $nTotalAplicadoSaida + $nValorRecursoTotal101 + $nValorRecursoTotal136 + $nValorRecursoTotal118;
                                     echo db_formatar($nValorRecursoTotal101 + $nValorRecursoTotal136 + $nValorRecursoTotal118, "f");
-                                 
+
                                 ?>
                             </td>
                         </tr>
@@ -1051,7 +1061,9 @@ ob_end_clean();
 
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
-
+} catch (MpdfException $e) {
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$e->getMessage());
+}
 /* ---- */
 
 

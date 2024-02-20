@@ -29,7 +29,6 @@ require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
-require_once("vendor/mpdf/mpdf/mpdf.php");
 require_once("libs/db_liborcamento.php");
 require_once("libs/db_libcontabilidade.php");
 require_once("classes/db_empresto_classe.php");
@@ -80,7 +79,17 @@ $nRPInscritosExercicio = 0;
  */
 
 $mPDF = new mpdf('', '', 0, '', 15, 15, 20, 15, 5, 11);
-
+$mPDF = new \Mpdf\Mpdf([
+    'mode' => '',
+    'format' => 'A4',
+    'orientation' => 'L',
+    'margin_left' => 15,
+    'margin_right' => 15,
+    'margin_top' => 20,
+    'margin_bottom' => 15,
+    'margin_header' => 5,
+    'margin_footer' => 11,
+]);
 
 $header = <<<HEADER
 <header>

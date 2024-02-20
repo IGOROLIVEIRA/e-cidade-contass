@@ -30,9 +30,10 @@ require_once "libs/db_stdlib.php";
 require_once "libs/db_conecta.php";
 include_once "libs/db_sessoes.php";
 include_once "libs/db_usuariosonline.php";
-include("vendor/mpdf/mpdf/mpdf.php");
 include("libs/db_sql.php");
 include("classes/db_questaoaudit_classe.php");
+use \Mpdf\Mpdf;
+use \Mpdf\MpdfException;
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
@@ -68,7 +69,19 @@ if ($clquestaoaudit->numrows == 0) {
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', 'A4-L', 0, '', 10, 10, 30, 10, 5, 5);
+try {
+    $mPDF = new Mpdf([
+        'mode' => '',
+        'format' => 'A4-L',
+        'orientation' => 'L',
+        'margin_left' => 10,
+        'margin_right' => 10,
+        'margin_top' => 30,
+        'margin_bottom' => 10,
+        'margin_header' => 5,
+        'margin_footer' => 5,
+    ]);
+
 
 if(file_exists("imagens/files/{$oInstit->getImagemLogo()}")) {
   $sLogo = "<img src='imagens/files/{$oInstit->getImagemLogo()}' width='70px' >";
@@ -88,12 +101,12 @@ $sTelCnpj     = trim($oInstit->getTelefone()) . "   -    CNPJ : " . db_formatar(
 $sEmail       = trim($oInstit->getEmail());
 $sSite        = $oInstit->getSite();
 
-/*<table style="width:100%; border-bottom:1px solid #000; font-family:sans-serif; border-collapse: inherit; table-layout: fixed;">    
+/*<table style="width:100%; border-bottom:1px solid #000; font-family:sans-serif; border-collapse: inherit; table-layout: fixed;">
     <tbody>
-      <tr>        
-        <td style="width: 80px; height: 80px;">      
+      <tr>
+        <td style="width: 80px; height: 80px;">
           {$sLogo}
-        </td>        
+        </td>
         <td style="font-size: 8pt; font-style: italic; padding-left: 10px" >
           <span style="font-weight: bold;">{$oInstit->getDescricao()}</span><br>
           <span>{$sEndCompleto}</span><br>
@@ -101,9 +114,9 @@ $sSite        = $oInstit->getSite();
           <span>{$sTelCnpj}</span><br>
           <span>{$sEmail}</span><br>
           <span>{$sSite}</span><br>
-        </td>        
+        </td>
         <td>&nbsp;</td>
-        <td>&nbsp;</td>        
+        <td>&nbsp;</td>
         <td style="text-align:center; font-size: 8pt; border: 1px solid #000; border-radius: 10px; border-collapse: separate; background-color: #ccc;">
           <div>Relatório das Questões Cadastradas</div>
         </td>
@@ -185,17 +198,17 @@ ob_start();
                 </thead>
 
                 <tbody>
-              
+
                 <? for ($i = 0; $i < $clquestaoaudit->numrows; $i++) {
-                
+
                     db_fieldsmemory($rsQuestoes,$i); ?>
 
                     <? if($repete != $ci01_codtipo && $i > 0) {  ?>
-                  
+
                       <tr><td>&nbsp;</td></tr>
-                      <tr><td colspan="7" class="s2"><?= $ci01_tipoaudit ?></td></tr>          
-                  
-                    <? } ?>       
+                      <tr><td colspan="7" class="s2"><?= $ci01_tipoaudit ?></td></tr>
+
+                    <? } ?>
 
                     <tr>
                         <td class="s1"><?= $ci02_numquestao ?></td>
@@ -206,13 +219,13 @@ ob_start();
                         <td class="s1"><?= $ci02_objeto ?></td>
                         <td class="s1"><?= $ci02_possivachadneg ?></td>
                     </tr>
-                  
-                    <?             
+
+                    <?
                     $repete = $ci01_codtipo;
-              
-                }         
+
+                }
                 ?>
-                  
+
                 </tbody>
 
             </table>
@@ -225,9 +238,11 @@ ob_start();
 
 $html = ob_get_contents();
 echo $html;
-// die();
+
 $mPDF->WriteHTML(utf8_encode($html));
 ob_end_clean();
 $mPDF->Output();
-
+} catch (MpdfException $e) {
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$e->getMessage());
+}
 ?>

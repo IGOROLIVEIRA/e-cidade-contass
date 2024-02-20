@@ -29,10 +29,11 @@ require_once "libs/db_stdlib.php";
 require_once "libs/db_conecta.php";
 include_once "libs/db_sessoes.php";
 include_once "libs/db_usuariosonline.php";
-include("vendor/mpdf/mpdf/mpdf.php");
 include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
+use \Mpdf\Mpdf;
+use \Mpdf\MpdfException;
 
 db_postmemory($HTTP_POST_VARS);
 $anousu = $anousu-1;
@@ -70,8 +71,18 @@ criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', '', 0, '', 15, 15, 20, 15, 5, 11);
-
+try {
+    $mPDF = new Mpdf([
+        'mode' => '',
+        'format' => 'A4',
+        'orientation' => 'L',
+        'margin_left' => 15,
+        'margin_right' => 15,
+        'margin_top' => 20,
+        'margin_bottom' => 15,
+        'margin_header' => 5,
+        'margin_footer' => 11,
+    ]);
 
 $header = <<<HEADER
 <header>
@@ -181,14 +192,14 @@ ob_start();
 
             if ($anousu >= 2022) {
                 $aGrupoReceita = array(
-                    array('Imposto sobre a Propriedade Territorial Rural - ITR', 
+                    array('Imposto sobre a Propriedade Territorial Rural - ITR',
                         '4111201%'),
-                    array('Imposto sobre a Renda - Retido na Fonte - Trabalho', 
-                        '411130311%\' 
+                    array('Imposto sobre a Renda - Retido na Fonte - Trabalho',
+                        '411130311%\'
                         OR o57_fonte like \'411130312%\'
-                        OR o57_fonte like \'411130313%\' 
+                        OR o57_fonte like \'411130313%\'
                         OR o57_fonte like \'411130314%'),
-                    array('Imposto sobre a Renda - Retido na Fonte - Outros Rendimentos', 
+                    array('Imposto sobre a Renda - Retido na Fonte - Outros Rendimentos',
                         '411130341%'),
                     array('Imposto sobre a Propriedade Predial e Territorial Urbana - IPTU', '4111250%'),
                     array('Imposto sobre Transmissão "Inter Vivos" de Bens Imóveis e de Direitos Reais s/ Imóveis - ITBI', '4111253%'),
@@ -374,5 +385,7 @@ ob_end_clean();
 //echo $html;
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
-
+} catch (MpdfException $e) {
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$e->getMessage());
+}
 ?>

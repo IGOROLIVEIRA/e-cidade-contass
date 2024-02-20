@@ -28,10 +28,11 @@ require_once "libs/db_stdlib.php";
 require_once "libs/db_conecta.php";
 include_once "libs/db_sessoes.php";
 include_once "libs/db_usuariosonline.php";
-include("vendor/mpdf/mpdf/mpdf.php");
 include("libs/db_sql.php");
 include("classes/db_questaoaudit_classe.php");
 include("classes/db_processoauditdepart_classe.php");
+use Mpdf\Mpdf;
+use Mpdf\MpdfException;
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
@@ -59,12 +60,12 @@ if (isset($iFiltroQuestoes) && $iFiltroQuestoes != null) {
         $sWhere .= " AND ci05_codlan IS NULL";
     } elseif ($iFiltroQuestoes == 4) {
 		$sWhere .= " AND ci05_atendquestaudit = 'f'";
-	} elseif ($iFiltroQuestoes == 5) { 
+	} elseif ($iFiltroQuestoes == 5) {
 		$sWhere .= " AND ci05_atendquestaudit = 't'";
 	} elseif ($iFiltroQuestoes == 2) {
         $sWhere .= " AND ci05_codlan IS NOT NULL";
 	}
-	
+
 }
 
 $sSqlLancamentos = $clquestaoaudit->sql_questao_processo(null, "*", "ci03_codproc, ci02_numquestao", $sWhere);
@@ -74,7 +75,18 @@ if ($clquestaoaudit->numrows == 0) {
   	db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum lançamento encontrado.');
 }
 
-$mPDF = new mpdf('', 'A4-L', 0, '', 10, 10, 30, 10, 5, 5);
+try {
+    $mPDF = new Mpdf([
+        'mode' => '',
+        'format' => 'A4',
+        'orientation' => 'L',
+        'margin_left' => 10,
+        'margin_right' => 10,
+        'margin_top' => 30,
+        'margin_bottom' => 10,
+        'margin_header' => 5,
+        'margin_footer' => 5,
+    ]);
 
 if(file_exists("imagens/files/{$oInstit->getImagemLogo()}")) {
   	$sLogo = "<img src='imagens/files/{$oInstit->getImagemLogo()}' width='70px' >";
@@ -151,13 +163,13 @@ ob_start();
         <div class="ritz grid-container" dir="ltr">
             <table class="waffle" cellspacing="0" cellpadding="0">
                 <tbody>
-              
+
                 <? for ($i = 0; $i < $clquestaoaudit->numrows; $i++) {
-                
+
                     db_fieldsmemory($rsLancamentos,$i); ?>
 
                     <? if($repete != $ci03_codproc) {  ?>
-                  
+
                       	<tr><td>&nbsp;</td></tr>
 						<? $oLancamento = db_utils::fieldsMemory($rsLancamentos,$i); ?>
 						<tr>
@@ -181,8 +193,8 @@ ob_start();
 							<th class="s0" style="width:120px">ATENDE À QUESTÃO DE AUDITORIA</th>
 							<th class="s0" style="width:120px">ACHADOS</th>
 						</tr>
-						
-                    <? } ?>       
+
+                    <? } ?>
 
                     <tr>
                         <td class="s1"><?= $ci02_numquestao ?></td>
@@ -196,13 +208,13 @@ ob_start();
                         <td class="s1"><?= $ci05_atendquestaudit == "t" ? "SIM" : ($ci05_atendquestaudit == "f" ? "NÃO" : '') ?></td>
                         <td class="s1"><?= $ci05_achados != 'null' ? $ci05_achados : '' ?></td>
                     </tr>
-                  
-                    <?             
+
+                    <?
                     $repete = $ci03_codproc;
-              
-                }         
+
+                }
                 ?>
-                  
+
                 </tbody>
 
             </table>
@@ -221,7 +233,7 @@ ob_end_clean();
 $mPDF->Output();
 
 function buscaDepartamentos($iCodProc) {
-	
+
 	$sDeptos = '';
 
 	$clprocessoauditdepart = new cl_processoauditdepart;
@@ -240,5 +252,7 @@ function buscaDepartamentos($iCodProc) {
 
 	return $sDeptos;
 }
-
+} catch (MpdfException $e) {
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$e->getMessage());
+}
 ?>

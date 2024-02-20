@@ -1,11 +1,12 @@
 <?php
 
-include("vendor/mpdf/mpdf/mpdf.php");
 require("libs/db_utils.php");
 require_once ("libs/db_stdlib.php");
 require_once ("libs/db_conecta.php");
 require_once ("dbforms/db_funcoes.php");
 require_once("classes/db_bensguardaitemdev_classe.php");
+use \Mpdf\Mpdf;
+use \Mpdf\MpdfException;
 
 $oGet = db_utils::postMemory($_GET);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
@@ -19,7 +20,18 @@ $sSqlBens = $cl_bensguardaitemdev->sql_query_relatorio('', $sCampos, '', 't22_be
 echo $sSqlBens;
 $rsBens = $cl_bensguardaitemdev->sql_record($sSqlBens);
 
-$mPDF = new mpdf('', 'A4', 0, '', 10, 10, 30, 10, 5, 5);
+try {
+    $mPDF = new Mpdf([
+        'mode' => '',
+        'format' => 'A4',
+        'orientation' => 'L',
+        'margin_left' => 10,
+        'margin_right' => 10,
+        'margin_top' => 30,
+        'margin_bottom' => 10,
+        'margin_header' => 5,
+        'margin_footer' => 5,
+    ]);
 
 $header = <<<HEADER
 <header>
@@ -129,7 +141,7 @@ ob_start();
                 $oItemPosicao = db_utils::fieldsMemory($rsBens, pg_numrows($rsBens) - 1);
             ?>
                 <p style="font-size: 10px"><?= trim($oItemPosicao->t23_obs) ? $oItemPosicao->t23_obs : ' - '; ?></p>
-            
+
         </div>
         <br>
         <table class="table__dados" cellspacing="0" cellpadding="0">
@@ -145,10 +157,10 @@ ob_start();
 
             <tbody>
                 <h3>Listagem dos Bens</h3>
-                <?php  
+                <?php
                 for($count = 0; $count < $cl_bensguardaitemdev->numrows; $count++) {
                     $oItem = db_utils::fieldsMemory($rsBens, $count);
-                ?> 
+                ?>
                     <tr>
                         <td class='td__conteudo' style='width: 15px'><?=$oItem->t22_bem?></td>
                         <td class='td__conteudo' style='width: 20px'><?=$oItem->t52_ident?></td>
@@ -168,8 +180,8 @@ ob_start();
 
             <?php
                 $sSqlInstit = "
-                    SELECT nomeinst, cgc, nomeresponsavel, fonedepto, emaildepto 
-                        FROM db_config 
+                    SELECT nomeinst, cgc, nomeresponsavel, fonedepto, emaildepto
+                        FROM db_config
                         INNER JOIN db_depart ON instit = codigo
                     where coddepto = " . db_getsession('DB_coddepto');
                 $rsInstit = db_query($sSqlInstit);
@@ -179,7 +191,7 @@ ob_start();
             <br/>
         </table>
         <br/>
-        
+
         <div class="div__assinaturas">
             <div class="div__detentor-guarda">
                 <p>Assinatura do responsável pelo recebimento</p>
@@ -207,6 +219,9 @@ echo $html;
 $mPDF->WriteHTML(utf8_encode($html));
 ob_end_clean();
 $mPDF->Output();
+} catch (MpdfException $e) {
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$e->getMessage());
+}
 
 ?>
 

@@ -34,7 +34,9 @@ include("libs/db_libcontabilidade.php");
 require_once("classes/db_cgm_classe.php");
 require_once("classes/db_empempenho_classe.php");
 include("libs/db_sql.php");
-require("vendor/mpdf/mpdf/mpdf.php");
+use \Mpdf\Mpdf;
+use \Mpdf\MpdfException;
+
  ini_set('display_errors', 'On');
  error_reporting(E_ERROR);
 db_postmemory($HTTP_POST_VARS);
@@ -135,7 +137,18 @@ for( $codEmpVazio = 1; $codEmpVazio <= $nUltimoEmpenhoUsado; $codEmpVazio++ ){
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', '', 0, '', 20, 15, 20, 15, 1, 5);
+try {
+$mPDF = new Mpdf([
+    'mode' => '',
+    'format' => 'A4-L',
+    'orientation' => 'L',
+    'margin_left' => 20,
+    'margin_right' => 15,
+    'margin_top' => 20,
+    'margin_bottom' => 15,
+    'margin_header' => 1,
+    'margin_footer' => 5,
+]);
 
 $header  = " <header> ";
 $header .= "   <div style=' height: 120px; font-family:Arial'>";
@@ -286,5 +299,8 @@ $html = ob_get_contents();
 ob_end_clean();
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
+} catch (MpdfException $e) {
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$e->getMessage());
+}
 
 ?>

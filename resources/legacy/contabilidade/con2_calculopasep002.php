@@ -29,7 +29,6 @@ require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
-require_once("vendor/mpdf/mpdf/mpdf.php");
 require_once("libs/db_liborcamento.php");
 require_once("libs/db_libcontabilidade.php");
 require_once("libs/db_sql.php");
@@ -167,8 +166,17 @@ criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', 'A4', 0, '', 10, 10, 20, 15, 8, 11);
-
+$mPDF = new \Mpdf\Mpdf([
+    'mode' => '',
+    'format' => 'A4',
+    'orientation' => 'L',
+    'margin_left' => 10,
+    'margin_right' => 10,
+    'margin_top' => 20,
+    'margin_bottom' => 15,
+    'margin_header' => 8,
+    'margin_footer' => 11,
+]);
 
 $header = <<<HEADER
 <header>
@@ -992,7 +1000,7 @@ ob_start();
                     </tr>
                     <?php
                         $sDescricaoICMS = "ICMS - Desoneração das Exportações - LC n.º 87/96 / Transferência  LC n.º 176/2020";
-                        if (db_getsession('DB_anousu') >= 2022) 
+                        if (db_getsession('DB_anousu') >= 2022)
                             $sDescricaoICMS .= " / EC nº 123/2022 ";
                     ?>
                     <tr style=''>

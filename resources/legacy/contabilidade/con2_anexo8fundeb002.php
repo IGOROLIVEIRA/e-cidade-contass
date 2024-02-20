@@ -40,7 +40,6 @@ require_once("classes/db_empempenho_classe.php");
 require_once("classes/db_dadosexercicioanterior_classe.php");
 require_once("classes/db_infocomplementaresinstit_classe.php");
 include("libs/db_sql.php");
-require("vendor/mpdf/mpdf/mpdf.php");
 
 $clselorcdotacao = new cl_selorcdotacao();
 $clinfocomplementaresinstit = new cl_infocomplementaresinstit();
@@ -361,8 +360,18 @@ function getDespesasCusteadosComSuperavitPosPrimeiroQuadrimestre($aFontes, $dtin
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', 'A4-L', 0, '', 15, 15, 20, 15, 5, 11);
-
+try {
+$mPDF = new Mpdf([
+    'mode' => '',
+    'format' => 'A4-L',
+    'orientation' => 'L',
+    'margin_left' => 15,
+    'margin_right' => 15,
+    'margin_top' => 20,
+    'margin_bottom' => 10,
+    'margin_header' => 5,
+    'margin_footer' => 11,
+]);
 $header = " <header>
                 <div style=\" height: 120px; font-family:Arial\">
                     <div style=\"width:33%; float:left; padding:5px; font-size:10px;\">
@@ -2194,7 +2203,9 @@ $html = ob_get_contents();
 ob_end_clean();
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
-
+} catch (MpdfException $e) {
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$e->getMessage());
+}
 
 db_query("drop table if exists work_dotacao");
 

@@ -7,7 +7,6 @@ require_once("classes/db_cadobras202024_classe.php");
 require_once("classes/db_cadobras212024_classe.php");
 require_once("classes/db_cadobras302024_classe.php");
 require_once('model/relatorios/Relatorio.php');
-require_once('vendor/mpdf/mpdf/mpdf.php');
 require('fpdf151/fpdf.php');
 
 /**
