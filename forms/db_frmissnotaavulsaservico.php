@@ -1,4 +1,30 @@
 <?php
+/*
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
+ */
+
 //MODULO: issqn
 
 include("dbforms/db_classesgenericas.php");
@@ -6,6 +32,186 @@ $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
 $clissnotaavulsaservico->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("q51_sequencial");
+
+#recupera a inscrição municipal utilizada no registro da nota
+$id_nota = $get->q51_sequencial;
+$sqlPrestador = "select q51_inscr from issnotaavulsa where q51_sequencial = $id_nota";
+$resultPrestador = db_utils::fieldsMemory(db_query($sqlPrestador), 0);
+$id_inscricao = $resultPrestador->q51_inscr;
+$arrayNotas = array();
+
+#competencia atual e o max de dias que existe no mês
+$ano = date("Y");
+$mes = date("m");
+$maxDias = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
+
+#recupera as notas já emitidas durante o periodo
+$sqlNotas = "select * from issnotaavulsa where q51_inscr = '$id_inscricao' 
+and q51_dtemiss >= '$ano-$mes-01' and q51_dtemiss <= '$ano-$mes-$maxDias' order by q51_dtemiss";
+$resultNotas = db_query($sqlNotas);
+
+$arrayNotas['soma_irrf'] = 0;
+#recupera as informações da nota e organiza em um array
+for($i = 0; $i < pg_num_rows($resultNotas); $i++) {
+    $obj = db_utils::fieldsMemory($resultNotas, $i);
+    $id_nota = $obj->q51_sequencial;
+
+    #consulta as informações da nota
+    $sqlNotasServico = "select * from issnotaavulsaservico where q62_issnotaavulsa = $id_nota";
+    $resultNotasServico = db_query($sqlNotasServico);
+
+    #verifica se a nota não esta cancelada
+    $sqlNotaCancelada = "select * from issnotaavulsacanc where q63_issnotaavulsa = $id_nota";
+    $resultNotasCancelada = db_query($sqlNotaCancelada);
+
+    if(pg_num_rows($resultNotasServico) > 0 && pg_num_rows($resultNotasCancelada) == 0){
+        $objNotas = db_utils::fieldsMemory($resultNotasServico, 0);
+        $arrayNotas['valores'][] = $objNotas->q62_vlruni;
+        $arrayNotas['valor'] += $objNotas->q62_vlruni;
+        $arrayNotas['deducao'] += $objNotas->q62_deducaoinss;
+        $arrayNotas['soma_irrf'] += $objNotas->q62_vlrirrf;
+    }
+}
+
+#base de calculo - INSS e IRFF
+$arrayNotas['soma_inss'] = 0;
+$arrayNotas['soma_retido'] = 0;
+$arrayNotas['base_irrf'] = 0;
+
+for($i = 0; $i < sizeof($arrayNotas['valores']); $i++){
+    $arrayNotas['inss'][] = calcularINSS($arrayNotas['valores'][$i]);
+    $arrayNotas['soma_inss'] += $arrayNotas['inss'][$i];
+    $calculo = ($arrayNotas['valores'][$i] * 0.20) * 0.11;
+    $arrayNotas['inss_carga_passageiro'] += $calculo;
+    $arrayNotas['base_irrf'] += $arrayNotas['valores'][$i] * 0.10;
+
+    $arrayNotas['base_irrf_passageiro'][] = ($arrayNotas['valores'][$i] * 0.60) + $arrayNotas['base_irrf_passageiro'][$i-1];
+    $arrayNotas['irrf_outros'] =  $arrayNotas['base_irrf_passageiro'][$i];
+
+    $retido = $arrayNotas['base_irrf_passageiro'][$i] - $arrayNotas['inss_carga_passageiro'];
+    $percentual = baseCalculoPercentual($retido);
+    $fixo = baseCalculoFixo($retido);
+
+    $calculoRetido = $percentual - $fixo;
+
+    $arrayNotas['retido'][] = $calculoRetido;
+    $arrayNotas['retido'][$i] = $arrayNotas['retido'][$i] - $arrayNotas['soma_retido'];
+    $arrayNotas['soma_retido'] += $arrayNotas['retido'][$i];
+}
+
+#processamento conforme regra de calculo estabelecida 
+for($i = 0; $i < sizeof($arrayNotas['valores']); $i++){
+    $soma_valores = 0;
+    $soma_inss = 0;
+    $calculo = 0;
+
+    for($z = 0; $z < $i+1; $z++){
+        $soma_valores += $arrayNotas['valores'][$z];
+        $soma_inss += $arrayNotas['inss'][$z];
+    }
+
+    if($soma_inss > 856.46){
+        $soma_inss = 856.46;
+    }
+
+    $calculo = $soma_valores - $soma_inss;
+
+    $arrayNotas['base_calculo'][] = $calculo;
+}
+
+#calculo final
+for($i = 0; $i < sizeof($arrayNotas['base_calculo']); $i++){
+    $arrayNotas['retencao_fixo'][] = baseCalculoFixo($arrayNotas['base_calculo'][$i]);
+    $arrayNotas['retencao_percentual'][] = baseCalculoPercentual($arrayNotas['base_calculo'][$i]);
+    $arrayNotas['retencao_calculada'][] = abs($arrayNotas['retencao_percentual'][$i] - $arrayNotas['retencao_fixo'][$i]);
+}
+
+#laço inicia na segunda posição do array, o valor da posição zero é deduzido
+#no segundo elemento da retenção e assim por diante
+for($i = 1; $i < sizeof($arrayNotas['retencao_calculada']); $i++){
+    $arrayNotas['retencao'][] = abs($arrayNotas['retencao_calculada'][$i] - $arrayNotas['retencao_calculada'][$i-1]);
+}
+
+for($i = 0; $i < sizeof($arrayNotas['retencao']); $i++){
+    $arrayNotas['retencao_total'] += $arrayNotas['retencao'][$i];
+}
+
+$arrayNotas['retencao_total'] = floor(($arrayNotas['retencao_total']*100))/100;
+
+#variaveis utilizadas no calculo via js
+$retencaoIRRF = $arrayNotas['retencao_total'];
+$somaInss = $arrayNotas['soma_inss'];
+$somaIrrf = $arrayNotas['soma_irrf'];
+$valorTotal = $arrayNotas['valor'];
+$baseIRRF = $arrayNotas['base_irrf'];
+$baseIRRFPassageiro = $arrayNotas['irrf_outros'];
+$inss_carga_passageiro = $arrayNotas['inss_carga_passageiro'];
+$soma_retido = $arrayNotas['soma_retido'];
+
+if($somaInss > 856.46){
+    $somaInss = 856.46;
+}
+
+if(empty($retencaoIRRF)){
+    $retencaoIRRF = $arrayNotas['retencao_calculada'][0];
+}
+
+function calcularINSS($valorNota){
+    return $valorNota * 0.11;
+}
+
+function baseCalculoFixo($valorNota){
+    $valor = 0;
+    switch($valorNota){
+        case ($valorNota <= 2112.00):
+            $valor = 0;
+            break;
+        case ($valorNota >= 2112.00) && ($valorNota <= 2826.65):
+            $valor = 158.4;
+            break;
+        case ($valorNota >= 2826.66) && ($valorNota <= 3751.05):
+            $valor = 370.4;
+            break;
+        case ($valorNota >= 3751.06) && ($valorNota <= 4664.68):
+            $valor = 651.73;
+            break;
+        case ($valorNota > 4664.68):
+            $valor = 884.96;
+            break;
+    }
+
+    return $valor;
+}
+
+function baseCalculoPercentual($valorNota){
+    $valor = 0;
+    switch($valorNota){
+        case $valorNota <= 2112.00:
+            $valor = 0;
+            break;
+        case ($valorNota >= 2112.01) && ($valorNota <= 2826.65):
+            $valor = $valorNota * 0.075;
+            break;
+        case ($valorNota >= 2826.66) && ($valorNota <= 3751.05):
+            $valor = $valorNota * 0.15;
+            break;
+        case ($valorNota >= 3751.06) && ($valorNota <= 4664.68):
+            $valor = $valorNota * 0.2250;
+            break;
+        case $valorNota > 4664.68:
+            $valor = $valorNota * 0.2750;
+            break;
+    }
+
+    return $valor;
+}
+
+//calculo da retençao das notas emitidas
+$retencao = 0;
+
+#retencao inss
+$retencao = ($arrayNotas['valor'] * 0.11); //11%
+
 if (isset($db_opcaoal)) {
     $db_opcao = 33;
     $db_botao = false;
@@ -126,11 +332,10 @@ $aTiposRetencoesIRRF = array(
 
 $aTiposRetencoesINSS = array(
     'nada' => 'Selecione um tipo',
-    'passageiros' => 'INSS Transporte de Passageiros',
-    'material' => 'INSS Transporte de Material',
-    'outros' => 'INSS Outros'
+    'passageiros' => 'Transporte de Passageiros',
+    'material' => 'Transporte de Material',
+    'outros' => 'Outros'
 );
-
 
 ?>
 
@@ -164,7 +369,7 @@ $aTiposRetencoesINSS = array(
                     <fieldset>
                         <legend><b>Serviços</b></legend>
                         <table>
-                            <?php
+                            <?
                             $q62_issnotaavulsa = $get->q51_sequencial;
                             db_input('q62_issnotaavulsa', 10, $Iq62_issnotaavulsa, true, 'hidden', $db_opcao, " onchange='js_pesquisaq62_issnotaavulsa(false);'");
                             db_input('q62_sequencial', 10, $Iq62_sequencial, true, 'hidden', $db_opcao, "");
@@ -173,7 +378,7 @@ $aTiposRetencoesINSS = array(
                             ?>
                             <tr>
                                 <td nowrap title="Códido do Serviço">
-                                    <strong><?php db_ancora("Código do Serviço:", "js_pesquisa_servico(true);", $db_opcao); ?></strong>
+                                    <strong><? db_ancora("Código do Serviço:", "js_pesquisa_servico(true);", $db_opcao); ?></strong>
                                 </td>
                                 <td colspan='3'>
                                     <?php
@@ -198,21 +403,23 @@ $aTiposRetencoesINSS = array(
                             </tr>
                             <tr>
                                 <td nowrap title="<?= @$Tq62_vlruni ?>">
-                                    <?= @$Lq62_vlruni ?>
+                                    <strong>Valor da Nota</strong>
                                 </td>
                                 <td>
-                                    <?php
+                                    <?
                                     db_input('q62_vlruni', 12, $Iq62_vlruni, true, 'text', $db_opcao, "onblur='js_calcula()'");
                                     ?>
                                 </td>
-                                <td nowrap title="<?= @$Tq62_vlrtotal ?>">
+                                
+                                <td nowrap title="<?= @$Tq62_vlrtotal ?>" style="display:none">
                                     <?= @$Lq62_vlrtotal ?>
                                 </td>
-                                <td>
-                                    <?php
+                                <td style="display:none">
+                                    <?
                                     db_input('q62_vlrtotal', 15, $Iq62_vlrtotal, true, 'text', 3, "")
                                     ?>
                                 </td>
+                                
                             </tr>
                             <tr>
                                 <td nowrap title="<?= @$Tq62_vlrdeducao ?>">
@@ -223,12 +430,14 @@ $aTiposRetencoesINSS = array(
                                     &nbsp;
                                     <?php db_input('q62_vlrdeducao', 12, $Iq62_vlrdeducao, true, 'hidden', $db_opcao, "onblur=\"js_calcula();\"") ?>
                                 </td>
-                                <td nowrap title="<?= @$Tq62_vlrbasecalc ?>">
+                                
+                                <td nowrap title="<?= @$Tq62_vlrbasecalc ?>" style="display:none">
                                     <?= @$Lq62_vlrbasecalc ?>
                                 </td>
-                                <td>
+                                <td style="display:none">
                                     <?php db_input('q62_vlrbasecalc', 15, $Iq62_vlrbasecalc, true, 'text', 3, "") ?>
                                 </td>
+                                
                             </tr>
 
                             <tr>
@@ -245,6 +454,31 @@ $aTiposRetencoesINSS = array(
                                     <?php db_input('q62_vlrissqn', 15, $Iq62_vlrissqn, true, 'text', 3, "") ?>
                                 </td>
                             </tr>
+                            
+                            <tr>
+                               <td class="td-retencao" nowrap title="Retenções outros INSS">
+                                    <strong>Retenções outros INSS: </strong>
+                               </td>
+                                <td class="td-retencao-campos">
+                                    <?php db_input('q62_deducaoinss', 15, $Iq62_deducaoinss, true, 'text', $db_opcao, '0') ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="td-retencao" nowrap title="<?= @$Tq62_qtddepend ?>">
+                                    <?= @$Lq62_qtddepend ?>
+                                </td>
+                                <td class="td-retencao-campos">
+                                   <?php db_input('q62_qtddepend', 15, $Iq62_qtddepend, true, 'text', $db_opcao, '0') ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="td-retencao">Tipo de serviço:</td>
+                                <td colspan="3">
+                                   <?php db_select('q62_tiporetinss', $aTiposRetencoesINSS, true, 2, "onchange='js_RetencaoINSS();'"); ?>
+                               </td>
+                            </tr>
 
                             <!-- INSS -->
                             <tr>
@@ -253,20 +487,6 @@ $aTiposRetencoesINSS = array(
                                         <legend>INSS</legend>
 
                                         <table>
-                                            <tr>
-                                                <td class="td-retencao" nowrap title="<?= @$Tq62_deducaoinss ?>">
-                                                    <?= @$Lq62_deducaoinss ?>
-                                                </td>
-                                                <td class="td-retencao-campos">
-                                                    <?php db_input('q62_deducaoinss', 15, $Iq62_deducaoinss, true, 'text', $db_opcao, "") ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="td-retencao">Tipo de retenção:</td>
-                                                <td colspan="3">
-                                                    <?php db_select('q62_tiporetinss', $aTiposRetencoesINSS, true, 2, "onchange='js_RetencaoINSS();'"); ?>
-                                                </td>
-                                            </tr>
                                             <tr>
                                                 <td class="td-retencao" nowrap title="<?= @$Tq62_vlrinss ?>">
                                                     <?= @$Lq62_vlrinss ?>
@@ -287,21 +507,14 @@ $aTiposRetencoesINSS = array(
                                         <legend>IRRF</legend>
 
                                         <table>
-                                            <tr>
-                                                <td class="td-retencao" nowrap title="<?= @$Tq62_qtddepend ?>">
-                                                    <?= @$Lq62_qtddepend ?>
-                                                </td>
-                                                <td class="td-retencao-campos">
-                                                    <?php db_input('q62_qtddepend', 15, $Iq62_qtddepend, true, 'text', $db_opcao, "") ?>
-                                                </td>
-                                            </tr>
-
+                                            <!--
                                             <tr>
                                                 <td class="td-retencao">Tipo de retenção:</td>
                                                 <td colspan="3">
                                                     <?php db_select('q62_tiporetirrf', $aTiposRetencoesIRRF, true, 2, "onchange='js_RetencaoIRRF();'"); ?>
                                                 </td>
                                             </tr>
+                                            -->
                                             <tr>
                                                 <td class="td-retencao" nowrap title="<?= @$Tq62_vlrirrf ?>">
                                                     <?= @$Lq62_vlrirrf ?>
@@ -320,7 +533,7 @@ $aTiposRetencoesINSS = array(
                                     <?= @$Lq62_obs ?>
                                 </td>
                                 <td colspan='3'>
-                                    <?php
+                                    <?
                                     db_textarea('q62_obs', 0, 57, $Iq62_obs, true, 'text', $db_opcao, "onkeyup='js_controlatextarea(this.name,200);'");
                                     ?>
                                 </td>
@@ -356,7 +569,7 @@ $aTiposRetencoesINSS = array(
                        id="recibo" value="Emitir Recibo">
                 <input name='notaavulsa' <?= (!$hasServico ? 'style="display:none;"' : '') ?> onclick='return js_verificaNota();' type='submit' id='nota'
                        value='Emitir nota'>
-                <?php
+                <?
                 $fTotal = 0;
                 $sql = "select sum(q62_vlrissqn) as totalissqn,";
                 $sql .= "sum(q62_vlruni) as q62_vlrini,";
@@ -367,6 +580,12 @@ $aTiposRetencoesINSS = array(
  									where q62_issnotaavulsa = " . $q62_issnotaavulsa;
                 $oTotal = db_utils::fieldsMemory(pg_query($sql), 0);
                 $totalissqn = $oTotal->totalissqn;
+                //      if (($lGeraNota and $emitenota) or ($oPar->q60_notaavulsavlrmin > $totalissqn )){
+                //
+                //           echo " <input name='notaavulsa' onclick='return js_verificaNota();' type='submit' id='nota' value='Emitir nota'>";
+                //
+                //      }
+
                 ?>
             </td>
             </tr>
@@ -374,7 +593,7 @@ $aTiposRetencoesINSS = array(
         <table>
             <tr>
                 <td valign="top" align="center">
-                    <?php
+                    <?
                     $chavepri = array("q62_sequencial" => $get->q51_sequencial);
                     $cliframe_alterar_excluir->chavepri = $chavepri;
                     $cliframe_alterar_excluir->sql = $clissnotaavulsaservico->sql_query_file(null, "*", "q62_sequencial"
@@ -433,10 +652,10 @@ $aTiposRetencoesINSS = array(
     }
     function js_pesquisaq62_issnotaavulsa(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_issnotaavulsaservico', 'db_iframe_issnotaavulsa', 'func_issnotaavulsa.php?funcao_js=parent.js_mostraissnotaavulsa1|q51_sequencial|q51_sequencial', 'Pesquisa', true, '0', '1', '775', '390');
+            js_OpenJanelaIframe('top.corpo.iframe_issnotaavulsaservico', 'db_iframe_issnotaavulsa', 'func_issnotaavulsa.php?funcao_js=parent.js_mostraissnotaavulsa1|q51_sequencial|q51_sequencial', 'Pesquisa', true, '0', '1', '775', '390');
         } else {
             if (document.form1.q62_issnotaavulsa.value != '') {
-                js_OpenJanelaIframe('CurrentWindow.corpo.iframe_issnotaavulsaservico', 'db_iframe_issnotaavulsa', 'func_issnotaavulsa.php?pesquisa_chave=' + document.form1.q62_issnotaavulsa.value + '&funcao_js=parent.js_mostraissnotaavulsa', 'Pesquisa', false);
+                js_OpenJanelaIframe('top.corpo.iframe_issnotaavulsaservico', 'db_iframe_issnotaavulsa', 'func_issnotaavulsa.php?pesquisa_chave=' + document.form1.q62_issnotaavulsa.value + '&funcao_js=parent.js_mostraissnotaavulsa', 'Pesquisa', false);
             } else {
                 document.form1.q51_sequencial.value = '';
             }
@@ -567,23 +786,20 @@ $aTiposRetencoesINSS = array(
 
 
     function calculoRetencaoINSS(info, percentual) {
-
-        var outrasRetencoes = parseFloat(info.retencoesAntigas.value) || 0;
         var novaRetencao = calculaValorDePorcentagem(info.baseCalculo, percentual);
-        var somaAntigaNova = (outrasRetencoes + novaRetencao);
+        var valorNota = parseFloat(document.getElementById('q62_vlruni').value);
 
-        if (outrasRetencoes > 0) {
-            if (somaAntigaNova >= info.limiteINSS) {
-                novaRetencao = info.limiteINSS - outrasRetencoes;
-            }
-        } else if (novaRetencao >= info.limiteINSS) {
-            novaRetencao = info.limiteINSS;
+        //A deduçao é feita apenas para a opçao INSS OUTROS
+        if(percentual == 11){
+            novaRetencao = baseCalculoOutros(valorNota, info);
+        }else if(percentual == 2.2){
+            novaRetencao = baseCalculoTransportePassageiro(valorNota, info);
+        }else{
+            novaRetencao = baseCalculoTransporteCarga(valorNota, info);
         }
 
         return novaRetencao;
-
     }
-
 
     function getValoresTabelasIRRF() {
         return {
@@ -646,7 +862,16 @@ $aTiposRetencoesINSS = array(
         var info = {
             limiteINSS: 856.46,
             baseCalculo: parseFloat(document.getElementById('q62_vlrtotal').value),
-            retencoesAntigas: document.getElementById('q62_deducaoinss')
+            retencoesAntigas: document.getElementById('q62_deducaoinss'),
+            retencaoExistente: <?= $retencao ?>,
+            baseCalculoProcessado : parseFloat(<?= $retencaoIRRF ?>),
+            somaInss :  parseFloat(<?= $somaInss ?>),
+            somaIrrf : parseFloat(<?= $somaIrrf ?>),
+            baseIrrf :  parseFloat(<?= $baseIRRF ?>),
+            baseIrrfPassageiro :  parseFloat(<?= $baseIRRFPassageiro ?>),
+            InssCargaPassageiro :  parseFloat(<?= $inss_carga_passageiro ?>),
+            somaRetido :  parseFloat(<?= $soma_retido ?>),
+            valorTotal :  parseFloat(<?= $valorTotal ?>)
         };
 
         var campos = {
@@ -664,6 +889,10 @@ $aTiposRetencoesINSS = array(
             select.value = 'nada';
             return;
         }
+        
+        //limpar campos automaticamente
+        document.getElementById('q62_vlrinss').value = 0;
+        document.getElementById('q62_vlrirrf').value = 0;
 
         var retencoes = {
             passageiros: calculoRetencaoINSS.bind(null, info, 2.2),
@@ -675,21 +904,23 @@ $aTiposRetencoesINSS = array(
         };
 
         if (retencoes[select.value]) {
-
             var calculo = retencoes[select.value]();
             campos.valorFinal.value = Number(calculo).toFixed(2);
 
         } else {
             select.value = '';
         }
-
-        js_RetencaoIRRF();
+        
+        if(select.value !== 'outros'){
+            js_RetencaoIRRF();
+        }
     }
 
 
     function js_RetencaoIRRF() {
 
-        var select = document.getElementById('q62_tiporetirrf');
+        //campo original foi removido, para normatizar utilizamos a opçao escolhida no INSS
+        var select = document.getElementById('q62_tiporetinss');
 
         var retencoes = {
             passageiros: 60,
@@ -726,7 +957,7 @@ $aTiposRetencoesINSS = array(
         }
 
         var valoresIRRF = calculoRetencaoIRRF(info);
-        campos.valorFinal.value = Number(valoresIRRF).toFixed(2);
+        //campos.valorFinal.value = Number(valoresIRRF).toFixed(2);
 
     }
 
@@ -772,4 +1003,196 @@ $aTiposRetencoesINSS = array(
         js_calcula();
         db_iframe_issgruposervico.hide();
     }
+
+
+function baseCalculoFixo(valorNota){
+    valor = 0;
+        if (valorNota <= 2112.00){
+            valor = 0;
+        }
+        if ((valorNota >= 2112.01) && (valorNota <= 2826.65)){
+            valor = 158.4;
+        }
+        if ((valorNota >= 2826.66) && (valorNota <= 3751.05)){
+            valor = 370.4;
+        }
+        if ((valorNota >= 3751.06) && (valorNota <= 4664.68)){
+            valor = 651.73;
+        }
+        if ((valorNota > 4664.68)){
+            valor = 884.96;
+        }
+    return valor;
+}
+
+function baseCalculoPercentual(valorNota){
+    valor = 0;
+        if (valorNota <= 2112.00){
+            valor = 0;
+        }
+        if ((valorNota >= 2112.01) && (valorNota <= 2826.65)){
+            valor = valorNota * 0.075;
+        }
+        if ((valorNota >= 2826.66) && (valorNota <= 3751.05)){
+            valor = valorNota * 0.15;
+        }
+        if ((valorNota >= 3751.06) && (valorNota <= 4664.68)){
+            valor = valorNota * 0.2250;
+        }
+        if (valorNota > 4664.68){
+            valor = valorNota * 0.2750;
+        }
+
+    return valor;
+}
+
+function baseCalculoOutros(valorNota, info){
+    var retencaoExistente = info.retencaoExistente;
+    var outrasRetencoes = parseFloat(info.retencoesAntigas.value) || 0;
+    var inssAtual = valorNota * 0.11;
+    var resultado = 0
+
+    if(isNaN(info.valorTotal)){
+        info.valorTotal = 0;
+    }
+
+    if(isNaN(info.baseCalculoProcessado)){
+        info.baseCalculoProcessado = 0;
+    }
+
+    var valorNotaCompleta = (valorNota + info.valorTotal);
+    var inss = inssAtual + info.somaInss;
+
+    if(inss > info.limiteINSS){
+        var diferenca = inss - info.limiteINSS;
+        inssAtual -= diferenca;
+    }
+
+    if(inss > info.limiteINSS){
+        inss = info.limiteINSS;
+    }
+
+    if(inssAtual > info.limiteINSS){
+        inssAtual = info.limiteINSS;
+    }
+
+    var calculo = valorNotaCompleta - inss;
+    var fixo = baseCalculoFixo(calculo);
+    var percentual = baseCalculoPercentual(calculo);
+
+    resultado = percentual - fixo;
+    resultado -= info.baseCalculoProcessado;
+    resultado = resultado.toFixed(2);
+
+    if(isNaN(resultado)){
+        resultado = 0;
+    }
+
+    if(outrasRetencoes > 0){
+        inssAtual = inssAtual - outrasRetencoes;
+        if(inssAtual < 0){
+            inssAtual = 0;
+        }
+    }
+
+    //evitar numero negativo
+    if(resultado < 0){
+        resultado = 0;
+    }
+
+    document.getElementById("q62_vlrirrf").value = resultado;
+    return inssAtual;
+}
+
+function baseCalculoTransportePassageiro(valorNota, info){
+    //valores base para calculo 
+   var baseInssAtual = valorNota * 0.20; //base para calculo inss
+   var baseIrrfAtual = valorNota * 0.60; //base para calculo irrf
+   var inssAtual = baseInssAtual * 0.11; //calculo do inss
+
+   if(inssAtual > info.limiteINSS){
+        inssAtual = info.limiteINSS;
+   }
+
+   if(isNaN(info.InssCargaPassageiro)){
+        info.InssCargaPassageiro = 0;
+   }
+
+   if(isNaN(info.baseIrrfPassageiro)){
+        info.baseIrrfPassageiro = 0;
+   }
+
+   if(isNaN(info.somaRetido)){
+        info.somaRetido = 0;
+   }
+
+   //valores referente as outras notas emitidas
+   var somaInssTotal = info.InssCargaPassageiro + inssAtual;
+   var baseIrrfOutras = info.baseIrrfPassageiro; 
+   if(somaInssTotal > info.limiteINSS){
+        somaInssTotal = info.limiteINSS;
+   }
+   
+   //formata os valores
+   baseIrrfAtual += baseIrrfOutras;
+   baseIrrfAtual -= somaInssTotal;
+
+   //realiza o calculo
+   var fixo = baseCalculoFixo(baseIrrfAtual);
+   var percentual = baseCalculoPercentual(baseIrrfAtual);
+   var calculo = parseFloat(percentual - fixo) - info.somaRetido;
+   calculo = (Math.round(calculo * 100) / 100).toFixed(2);
+
+   //seta o valor do calculo no input
+   document.getElementById("q62_vlrirrf").value = calculo;
+
+   return inssAtual;
+}
+
+function baseCalculoTransporteCarga(valorNota, info){
+   //valores base para calculo 
+   var baseInssAtual = valorNota * 0.20; //base para calculo inss
+   var baseIrrfAtual = valorNota * 0.10; //base para calculo irrf
+   var inssAtual = baseInssAtual * 0.11; //calculo do inss
+
+   if(inssAtual > info.limiteINSS){
+        inssAtual = info.limiteINSS;
+   }
+
+   if(isNaN(info.InssCargaPassageiro)){
+        info.InssCargaPassageiro = 0;
+   }
+
+   if(isNaN(info.baseIrrf)){
+        info.baseIrrf = 0;
+   }
+
+   //valores referente as outras notas emitidas
+   var somaInssTotal = info.InssCargaPassageiro + inssAtual;
+   var baseIrrfOutras = info.baseIrrf; 
+   if(somaInssTotal > info.limiteINSS){
+        somaInssTotal = info.limiteINSS;
+   }
+   
+   //formata os valores
+   baseIrrfAtual += baseIrrfOutras;
+   baseIrrfAtual -= somaInssTotal;
+   
+   //realiza o calculo
+   var fixo = baseCalculoFixo(baseIrrfAtual);
+   var percentual = baseCalculoPercentual(baseIrrfAtual);
+   var calculo = parseFloat(percentual - fixo);
+   calculo -= info.somaIrrf;
+   calculo = (Math.round(calculo * 100) / 100).toFixed(2);
+
+   //seta o valor do calculo no input
+   document.getElementById("q62_vlrirrf").value = calculo;
+
+   return inssAtual;
+}
+
+//inicializar com valores pre-definidos
+document.getElementById("q62_deducaoinss").value = 0;
+document.getElementById("q62_qtddepend").value = 0;
+
 </script>
