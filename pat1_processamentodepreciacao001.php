@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -42,7 +42,10 @@ if ($oGet->iProcessamento == 1) {
 } else {
   $sLegenda = "Processamento Manual";
 }
+
 $iAnoSessao = db_getsession("DB_anousu");
+$iDataServidor = date("m", db_getsession("DB_datausu"));
+$iDataLoginUsuario = date("m", db_getsession("DB_uol_hora"));
 ?>
 <html>
 <head>
@@ -93,6 +96,9 @@ $iAnoSessao = db_getsession("DB_anousu");
 	var sUrlRPC = "pat4_processamentodepreciacao.RPC.php";
 	var oGet    = js_urlToObject(window.location.search);
 
+    let dataServidor = "<?php echo $iDataServidor; ?>";
+    let dataLoginUsuario = "<?php echo $iDataLoginUsuario; ?>";
+
 	/*
 	 * Função que será executada para buscar os meses que o usuário pode depreciar
 	 */
@@ -138,7 +144,7 @@ $iAnoSessao = db_getsession("DB_anousu");
 	   * Verifica se o mes disponível é 0. Caso seja as depreciações já foram realizadas para o ano.
 	   */
 	  if (oRetorno.iMesDisponivel == 0) {
-		  
+
 			alert(_M('patrimonial.patrimonio.pat1_processamentodepreciacao001.depreciacao_ja_executada'));
 	  }
 	  if (oRetorno.message != "") {
@@ -176,14 +182,19 @@ $iAnoSessao = db_getsession("DB_anousu");
    *  Direciona o programa para a função JS responsável.
 	 */
   $("btnProcessa").observe('click', function() {
+      let dataSelecionada = "0" + $F("iMes");
 
-		if ($F("iMes") == "0") {
+      if ($F("iMes") == "0") {
+          alert(_M('patrimonial.patrimonio.pat1_processamentodepreciacao001.informe_mes'))
+          return;
+      }
 
-			alert(_M('patrimonial.patrimonio.pat1_processamentodepreciacao001.informe_mes'));
-			return false;
-		}
+      if (dataSelecionada > dataServidor || dataSelecionada > dataLoginUsuario ) {
+          alert('Processamento abortado, mês selecionado superior ao mês atual');
+          return;
+      }
 
-		js_verificaBensSemDepreciacao();
+      js_verificaBensSemDepreciacao();
   });
 
   function js_executaProcessamentoAutomatico() {
@@ -364,7 +375,7 @@ $iAnoSessao = db_getsession("DB_anousu");
 		var oParam           = new Object();
 		oParam.exec 			   = "getItensProcessamentoManual";
 		oParam.iMesProcessar = $F('iMes');
-		
+
 	  js_divCarregando(_M('patrimonial.patrimonio.pat1_processamentodepreciacao001.buscando_bens'), "msgBox");
 		var oAjax = new Ajax.Request(sUrlRPC,
                         				 {method: 'post',
