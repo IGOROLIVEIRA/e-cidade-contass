@@ -430,7 +430,7 @@ class EventoContabilLancamento {
    * @param ILancamentoAuxiliar $oLancamentoAuxiliar
    */
   public function executa ($iCodigoLancamento, $iDocumento, ILancamentoAuxiliar $oLancamentoAuxiliar,
-                           $dtLancamento = null) {
+                           $dtLancamento = null, $ctCredora = null, $ctDevedora = null) {
 
     $iAnoUsu   = db_getsession("DB_anousu");
     $dtDataUsu = $dtLancamento;
@@ -479,7 +479,12 @@ class EventoContabilLancamento {
     if ($oDaoComplanoReduz->numrows == 0) {
 
       $oStdMensagem->sTipoConta = 'crédito';
-      $oStdMensagem->iConta     = $oContaContabil->getContaCredito();
+      if ($ctCredora != null){
+        $oStdMensagem->iConta = $ctCredora;
+      }else{
+        $oStdMensagem->iConta     = $oContaContabil->getContaCredito();        
+      }
+
       throw new BusinessException(_M( EventoContabilLancamento::CAMINHO_MENSAGEM . "conta_nao_encontrada_exercicio", $oStdMensagem));
     }
 
@@ -492,7 +497,11 @@ class EventoContabilLancamento {
     if ($oDaoComplanoReduz->numrows == 0) {
       
       $oStdMensagem->sTipoConta = 'debito';
-      $oStdMensagem->iConta     = $oContaContabil->getContaDebito();
+      if ($ctCredora != null){
+        $oStdMensagem->iConta = $ctDevedora;
+      }else{
+        $oStdMensagem->iConta     = $oContaContabil->getContaDebito();
+      }
       throw new BusinessException(_M( EventoContabilLancamento::CAMINHO_MENSAGEM . "conta_nao_encontrada_exercicio", $oStdMensagem));
     }
 
@@ -519,6 +528,7 @@ class EventoContabilLancamento {
     if ($oDaoValorLancamento->erro_status == 0) {
 
       $sErroMsg  = "Não foi possível incluir os lançamentos do evento contabil.\n\n";
+      $sErroMsg .= "Conta Credito: $oDaoValorLancamento->c69_credito - Conta Débito: $oDaoValorLancamento->c69_debito.\n\n";
       $sErroMsg .= "Erro Técnico: ".str_replace("\\n", "\n", $oDaoValorLancamento->erro_msg);
       throw new BusinessException($sErroMsg);
     }

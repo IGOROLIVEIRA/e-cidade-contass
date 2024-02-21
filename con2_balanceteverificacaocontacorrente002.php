@@ -6,6 +6,7 @@ include("dbforms/db_funcoes.php");
 include("libs/db_sql.php");
 include("fpdf151/pdf.php");
 include("libs/db_libcontabilidade.php");
+include("classes/db_contacorrentedetalhe_classe.php");
 
 //ini_set('display_errors', 'On');
 //error_reporting(E_ALL);
@@ -16,6 +17,8 @@ $aMeses = array(
     "JANEIRO" => "1", "FEVEREIRO" => "2", "MARÇO" => "3", "ABRIL" => "4", "MAIO" => "5", "JUNHO" => "6",
     "JULHO" => "7", "AGOSTO" => "8", "SETEMBRO" => "9", "OUTUBRO" => "10", "NOVEMBRO" => "11", "DEZEMBRO" => "12"
 );
+
+$aContasDesc = array(3 => "CREDOR", 100 => "RECEITA", 101 => "DOTAÇÃO", 102 => "DESPESA", 103 => "FONTE", 106 => "RP");
 
 $aTipoValor = array('beginning_balance', 'period_change_deb', 'period_change_cred', 'ending_balance');
 
@@ -33,7 +36,7 @@ $sInstituicao = ($aFiltros['matriz'] == 'd')   ? " r.c61_instit = $iInstit and "
 $sTipoInstit  = !empty($sInstituicao)          ? " limit 1 " : '';
 $aRegistros   = array();
 $iConta       = "";
-
+$tipoRel      = isset($aFiltros['tipoRel']) ? $aFiltros['tipoRel'] : 1;
 
 try {
     if($sEstrut_inicial != '')
@@ -65,7 +68,13 @@ try {
             $nCC = db_utils::fieldsMemory($rsCC, 0)->c18_contacorrente;
             $oNovoResgistro->contacorrente         = getSaldoTotalContaCorrente($iAnoUsu,$oBalancete->c61_reduz,$nCC > 0 ? $nCC : null, $iMes, $oBalancete->c61_instit);
             $oNovoResgistro->cc                    = $nCC;
+            $oNovoResgistro->ccdescricao           = isset($aContasDesc[$nCC]) ? $aContasDesc[$nCC] : $nCC;
+            if ($nCC == 103 && $tipoRel == 2){
+                $clContaCorrente = new cl_contacorrentedetalhe;
+                $oNovoResgistro->contacorrentedetalhe = $clContaCorrente->detalhamentoPorFonte($iAnoUsu,$oBalancete->c61_reduz, $aInstit, $iMes);                
+            }
         }
+
         if($oBalancete->saldo_anterior == 0
             && $oBalancete->saldo_anterior_debito == 0
             && $oBalancete->saldo_anterior_credito == 0
@@ -73,9 +82,11 @@ try {
             && $oNovoResgistro->contacorrente->nSaldoInicialMes == 0
             && $oNovoResgistro->contacorrente->debito == 0
             && $oNovoResgistro->contacorrente->credito == 0
-            && $oNovoResgistro->contacorrente->saldo_final == 0) {
+            && $oNovoResgistro->contacorrente->saldo_final == 0
+            && count($oNovoResgistro->contacorrentedetalhe) == 0) {
             continue;
         }
+        
         $aRegistros[] = $oNovoResgistro;
     }
 
@@ -85,10 +96,10 @@ try {
 $pdf = new PDF();
 $pdf->Open();
 $pdf->AliasNbPages();
-$head2 = "BALANCETE MSC";
+$head2 = "BALANCETE C/C";
 $head3 = "EXERCÍCIO: {$iAnoUsu}";
 $head4 = "PERÍODO: ".array_search($iMes, $aMeses);
-$head5 = "INSTIUIÇÕES: {$sInstituicoes}";
+$head5 = "INSTIUIÇÕES: {$aInstit}";
 $alt   = 4;
 $pdf->SetAutoPageBreak('on',0);
 $pdf->line(2,148.5,208,148.5);
@@ -121,29 +132,46 @@ foreach ($aRegistros as $aRegistro) {
     $pdf->ln();
     $diferente = false;
     if($aRegistro->cc > 0
-        && ($aRegistro->saldo_anterior != $aRegistro->contacorrente->nSaldoInicialMes
-        || $aRegistro->saldo_anterior_debito != $aRegistro->contacorrente->debito
-        || $aRegistro->saldo_anterior_credito != $aRegistro->contacorrente->credito
-        || $aRegistro->saldo_final != $aRegistro->contacorrente->saldo_final)) {
+        && (trim($aRegistro->saldo_anterior) != trim($aRegistro->contacorrente->nSaldoInicialMes)
+        || trim($aRegistro->saldo_anterior_debito) != trim($aRegistro->contacorrente->debito)
+        || trim($aRegistro->saldo_anterior_credito) != trim($aRegistro->contacorrente->credito)
+        || trim($aRegistro->saldo_final) != trim($aRegistro->contacorrente->saldo_final))) {
         $diferente = true;
         //echo "<pre>"; print_r($aRegistro);die();
     }
     if($aRegistro->contacorrente->cc > 0) {
         $pdf->cell(19,$alt,"","0",0,"C",1);
         $pdf->cell(70,$alt,($diferente==true)?"S A L D O   CC ":"SALDO CC ",($diferente==true)?"B":"0",0,"R",1);
-        $pdf->cell(10, $alt, $aRegistro->contacorrente->cc, "0", 0, "C", 1);
-        $pdf->cell(24, $alt, $aRegistro->contacorrente->nSaldoInicialMes.$aRegistro->contacorrente->sinal_ant, "0", 0, "R", 1);
+        $pdf->cell(10, $alt, $aRegistro->ccdescricao, "0", 0, "C", 1);
+        $pdf->cell(24, $alt, $aRegistro->contacorrente->nSaldoInicialMes.
+        ($aRegistro->contacorrente->nSaldoInicialMes != 0 ? $aRegistro->contacorrente->sinal_ant : ''), "0", 0, "R", 1);
         $pdf->cell(22, $alt, $aRegistro->contacorrente->debito, "0", 0, "R", 1);
         $pdf->cell(22, $alt, $aRegistro->contacorrente->credito, "0", 0, "R", 1);
-        $pdf->cell(24, $alt, $aRegistro->contacorrente->saldo_final.$aRegistro->contacorrente->sinal_final, "0", 0, "R", 1);
+        $pdf->cell(24, $alt, $aRegistro->contacorrente->saldo_final.
+        ($aRegistro->contacorrente->saldo_final != 0 ? $aRegistro->contacorrente->sinal_final : ''), "0", 0, "R", 1);
         $pdf->ln();
-
+        if ($aRegistro->cc == 103 && isset($aRegistro->contacorrentedetalhe) && $tipoRel == 2){            
+                foreach($aRegistro->contacorrentedetalhe as $ccDetalhe){
+                    $pdf->cell(89,$alt,"","0",0,"R",1);
+                    $pdf->cell(10, $alt, $ccDetalhe["codtri"], "0", 0, "C", 1);
+                    $pdf->cell(24, $alt, db_formatar($ccDetalhe["saldo_anterior"], 'f').
+                    ($ccDetalhe["saldo_anterior"] != 0 ? $ccDetalhe["sinal_anterior"] : ''), "0", 0, "R", 1);
+                    $pdf->cell(22, $alt, db_formatar($ccDetalhe["valor_debito"], 'f'), "0", 0, "R", 1);
+                    $pdf->cell(22, $alt, db_formatar($ccDetalhe["valor_credito"], 'f'), "0", 0, "R", 1);
+                    $pdf->cell(24, $alt, db_formatar($ccDetalhe["saldo_final"], 'f').
+                    ($ccDetalhe["saldo_final"] != 0 ? $ccDetalhe["sinal_final"] : ''), "0", 0, "R", 1);
+                    
+                    if ($pdf->gety() > ($pdf->h - 20)) {
+                        $pdf->addpage();
+                    }
+                    $pdf->ln();
+                }
+        }
     }
 
     if ($pdf->gety() > ($pdf->h - 20)) {
         $pdf->addpage();
     }
-
 }
 
 if ($pdf->gety() > ($pdf->h - 20)) {

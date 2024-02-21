@@ -176,7 +176,7 @@ if (!isset($chave_rh218_perapurmes)) {
                         if (isset($chave_rh218_perapurmes) && (trim($chave_rh218_perapurmes) != "")) {
                             $where .= " and rh218_perapurmes = $chave_rh218_perapurmes ";
                         }
-                        if (!empty($chave_rh218_perapurano) && isset($chave_rh218_perapurmes)) {
+                        if (!empty($chave_rh218_perapurano) && empty($chave_rh218_perapurmes)) {
                             $where .= " and rh218_perapurmes is null ";
                         }
                         $sql = $clevt5001consulta->sql_query(null, $campos, "rh218_sequencial desc", $where);

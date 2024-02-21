@@ -27,7 +27,7 @@ class cl_regadesao102024
   var $si67_dtabertura_mes = null;
   var $si67_dtabertura_ano = null;
   var $si67_dtabertura = null;
-  var $si67_nomeorgaogerenciador = null;
+  var $si67_cnpjorgaogerenciador = null;
   var $si67_exerciciolicitacao = 0;
   var $si67_nroprocessolicitatorio = null;
   var $si67_codmodalidadelicitacao = 0;
@@ -46,7 +46,6 @@ class cl_regadesao102024
   var $si67_dtpublicacaoavisointencao = null;
   var $si67_objetoadesao = null;
   var $si67_cpfresponsavel = null;
-  var $si67_descontotabela = 0;
   var $si67_processoporlote = 0;
   var $si67_tipocadastro = 0;
   var $si67_exercicioedital = 0;
@@ -54,6 +53,8 @@ class cl_regadesao102024
   var $si67_mes = 0;
   var $si67_instit = 0;
   var $si67_leidalicitacao = 0;
+  var $si67_tipocriterio = 0;
+  var $si67_regimecontratacao = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  si67_sequencial = int8 = sequencial
@@ -63,7 +64,7 @@ class cl_regadesao102024
                  si67_nroprocadesao = varchar(12) = Número do  processo de  adesão
                  si63_exercicioadesao = int8 = Exercício do processo de adesão
                  si67_dtabertura = date = Data de abertura  do processo
-                 si67_nomeorgaogerenciador = varchar(100) = Nome do órgão
+                 si67_cnpjorgaogerenciador = varchar(100) = Nome do órgão
                  si67_exerciciolicitacao = int8 = Exercício em que   foi instaurado
                  si67_nroprocessolicitatorio = varchar(20) = Número sequencial  do processo
                  si67_codmodalidadelicitacao = int8 = Modalidade da Licitação
@@ -73,7 +74,6 @@ class cl_regadesao102024
                  si67_dtpublicacaoavisointencao = date = Data de publicação  do aviso
                  si67_objetoadesao = varchar(500) = Objeto da Adesão
                  si67_cpfresponsavel = varchar(11) = CPF do  responsável
-                 si67_descontotabela = int8 = Desconto Tabela
                  si67_processoporlote = int8 = Processo por Lote
                  si67_tipocadastro = int8 = Cadastro inicial
                  si67_nroedital = int8 = Número do edital
@@ -81,6 +81,8 @@ class cl_regadesao102024
                  si67_mes = int8 = Mês
                  si67_instit = int8 = Instituição
                  si67_leidalicitacao = int8 = Lei da Licitação
+                 si67_regimecontratacao int8 = regime de contratacao
+                 si67_tipocriterio int8 = tipo criterio
                  ";
 
   //funcao construtor da classe
@@ -120,7 +122,7 @@ class cl_regadesao102024
           $this->si67_dtabertura = $this->si67_dtabertura_ano . "-" . $this->si67_dtabertura_mes . "-" . $this->si67_dtabertura_dia;
         }
       }
-      $this->si67_nomeorgaogerenciador = ($this->si67_nomeorgaogerenciador == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_nomeorgaogerenciador"] : $this->si67_nomeorgaogerenciador);
+      $this->si67_cnpjorgaogerenciador = ($this->si67_cnpjorgaogerenciador == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_cnpjorgaogerenciador"] : $this->si67_cnpjorgaogerenciador);
       $this->si67_exerciciolicitacao = ($this->si67_exerciciolicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_exerciciolicitacao"] : $this->si67_exerciciolicitacao);
       $this->si67_nroprocessolicitatorio = ($this->si67_nroprocessolicitatorio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_nroprocessolicitatorio"] : $this->si67_nroprocessolicitatorio);
       $this->si67_codmodalidadelicitacao = ($this->si67_codmodalidadelicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_codmodalidadelicitacao"] : $this->si67_codmodalidadelicitacao);
@@ -151,7 +153,6 @@ class cl_regadesao102024
       }
       $this->si67_objetoadesao = ($this->si67_objetoadesao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_objetoadesao"] : $this->si67_objetoadesao);
       $this->si67_cpfresponsavel = ($this->si67_cpfresponsavel == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_cpfresponsavel"] : $this->si67_cpfresponsavel);
-      $this->si67_descontotabela = ($this->si67_descontotabela == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_descontotabela"] : $this->si67_descontotabela);
       $this->si67_processoporlote = ($this->si67_processoporlote == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_processoporlote"] : $this->si67_processoporlote);
       $this->si67_tipocadastro = ($this->si67_tipocadastro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_tipocadastro"] : $this->si67_tipocadastro);
       $this->si67_nroedital = ($this->si67_nroedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_nroedital"] : $this->si67_nroedital);
@@ -159,6 +160,8 @@ class cl_regadesao102024
       $this->si67_mes = ($this->si67_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_mes"] : $this->si67_mes);
       $this->si67_instit = ($this->si67_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_instit"] : $this->si67_instit);
       $this->si67_leidalicitacao = ($this->si67_leidalicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_leidalicitacao"] : $this->si67_leidalicitacao);
+      $this->si67_regimecontratacao = ($this->si67_regimecontratacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_regimecontratacao"] : $this->si67_regimecontratacao);
+      $this->si67_tipocriterio = ($this->si67_tipocriterio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_tipocriterio"] : $this->si67_tipocriterio);
     } else {
       $this->si67_sequencial = ($this->si67_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_sequencial"] : $this->si67_sequencial);
     }
@@ -187,7 +190,7 @@ class cl_regadesao102024
       $this->si67_exerciciolicitacao = "0";
     }
     if ($this->si67_codmodalidadelicitacao == null) {
-      $this->si67_codmodalidadelicitacao = "0";
+      $this->si67_codmodalidadelicitacao = "null";
     }
     if ($this->si67_dtataregpreco == null) {
       $this->si67_dtataregpreco = "null";
@@ -201,12 +204,17 @@ class cl_regadesao102024
     if ($this->si67_dtpublicacaoavisointencao == null) {
       $this->si67_dtpublicacaoavisointencao = "null";
     }
-    if ($this->si67_descontotabela == null) {
-      $this->si67_descontotabela = "0";
-    }
     if ($this->si67_processoporlote == null) {
       $this->si67_processoporlote = "0";
     }
+    if ($this->si67_nroedital == null) {
+      $this->si67_nroedital = "null";
+    }
+
+    if ($this->si67_exercicioedital == null) {
+        $this->si67_exercicioedital = "null";
+    }
+
     if ($this->si67_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
       $this->erro_campo = "si67_mes";
@@ -228,8 +236,7 @@ class cl_regadesao102024
     if ($si67_sequencial == "" || $si67_sequencial == null) {
       $result = db_query("select nextval('regadesao102024_si67_sequencial_seq')");
       if ($result == false) {
-        $this->erro_banco = str_replace("
-", "", @pg_last_error());
+        $this->erro_banco = str_replace("", "", @pg_last_error());
         $this->erro_sql = "Verifique o cadastro da sequencia: regadesao102024_si67_sequencial_seq do campo: si67_sequencial";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -263,11 +270,7 @@ class cl_regadesao102024
     }else if(!$this->si67_tipocadastro && db_getsession('DB_anousu') < 2020){
       $this->si67_tipocadastro = '0';
     }
-    if(!$this->si67_exercicioedital && db_getsession('DB_anousu') >= 2020){
-      $this->si67_exercicioedital = db_getsession('DB_anousu');
-    }else if(!$this->si67_exercicioedital && db_getsession('DB_anousu') < 2020){
-      $this->si67_exercicioedital = '0';
-    }
+
     if(!$this->si67_nroedital && db_getsession('DB_anousu') < 2020){
       $this->si67_nroedital = '0';
     }
@@ -279,17 +282,18 @@ class cl_regadesao102024
                                       ,si67_nroprocadesao
                                       ,si63_exercicioadesao
                                       ,si67_dtabertura
-                                      ,si67_nomeorgaogerenciador
+                                      ,si67_cnpjorgaogerenciador
                                       ,si67_exerciciolicitacao
                                       ,si67_nroprocessolicitatorio
                                       ,si67_codmodalidadelicitacao
+                                      ,si67_regimecontratacao
+                                      ,si67_tipocriterio
                                       ,si67_dtataregpreco
                                       ,si67_dtvalidade
                                       ,si67_naturezaprocedimento
                                       ,si67_dtpublicacaoavisointencao
                                       ,si67_objetoadesao
                                       ,si67_cpfresponsavel
-                                      ,si67_descontotabela
                                       ,si67_processoporlote
                                       ,si67_tipocadastro
                                       ,si67_nroedital
@@ -306,17 +310,18 @@ class cl_regadesao102024
                                ,'$this->si67_nroprocadesao'
                                ,$this->si63_exercicioadesao
                                ," . ($this->si67_dtabertura == "null" || $this->si67_dtabertura == "" ? "null" : "'" . $this->si67_dtabertura . "'") . "
-                               ,'$this->si67_nomeorgaogerenciador'
+                               ,'$this->si67_cnpjorgaogerenciador'
                                ,$this->si67_exerciciolicitacao
                                ,'$this->si67_nroprocessolicitatorio'
                                ,$this->si67_codmodalidadelicitacao
+                               ,$this->si67_regimecontratacao
+                               ,$this->si67_tipocriterio
                                ," . ($this->si67_dtataregpreco == "null" || $this->si67_dtataregpreco == "" ? "null" : "'" . $this->si67_dtataregpreco . "'") . "
                                ," . ($this->si67_dtvalidade == "null" || $this->si67_dtvalidade == "" ? "null" : "'" . $this->si67_dtvalidade . "'") . "
                                ,$this->si67_naturezaprocedimento
                                ," . ($this->si67_dtpublicacaoavisointencao == "null" || $this->si67_dtpublicacaoavisointencao == "" ? "null" : "'" . $this->si67_dtpublicacaoavisointencao . "'") . "
                                ,'$this->si67_objetoadesao'
                                ,'$this->si67_cpfresponsavel'
-                               ,$this->si67_descontotabela
                                ,$this->si67_processoporlote
                                ,$this->si67_tipocadastro
                                ,$this->si67_nroedital
@@ -327,8 +332,7 @@ class cl_regadesao102024
                       )";
     $result = db_query($sql);
     if ($result == false) {
-      $this->erro_banco = str_replace("
-", "", @pg_last_error());
+      $this->erro_banco = str_replace("", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
         $this->erro_sql = "regadesao102024 ($this->si67_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
@@ -350,34 +354,7 @@ class cl_regadesao102024
     $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
-    $resaco = $this->sql_record($this->sql_query_file($this->si67_sequencial));
-    if (($resaco != false) || ($this->numrows != 0)) {
-      $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-      $acount = pg_result($resac, 0, 0);
-      $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-      $resac = db_query("insert into db_acountkey values($acount,2010164,'$this->si67_sequencial','I')");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010164,'','" . AddSlashes(pg_result($resaco, 0, 'si67_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010165,'','" . AddSlashes(pg_result($resaco, 0, 'si67_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010166,'','" . AddSlashes(pg_result($resaco, 0, 'si67_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010167,'','" . AddSlashes(pg_result($resaco, 0, 'si67_codunidadesub')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010168,'','" . AddSlashes(pg_result($resaco, 0, 'si67_nroprocadesao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2011310,'','" . AddSlashes(pg_result($resaco, 0, 'si63_exercicioadesao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010169,'','" . AddSlashes(pg_result($resaco, 0, 'si67_dtabertura')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010170,'','" . AddSlashes(pg_result($resaco, 0, 'si67_nomeorgaogerenciador')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010171,'','" . AddSlashes(pg_result($resaco, 0, 'si67_exerciciolicitacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010172,'','" . AddSlashes(pg_result($resaco, 0, 'si67_nroprocessolicitatorio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010173,'','" . AddSlashes(pg_result($resaco, 0, 'si67_codmodalidadelicitacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010175,'','" . AddSlashes(pg_result($resaco, 0, 'si67_dtataregpreco')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010176,'','" . AddSlashes(pg_result($resaco, 0, 'si67_dtvalidade')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010177,'','" . AddSlashes(pg_result($resaco, 0, 'si67_naturezaprocedimento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010178,'','" . AddSlashes(pg_result($resaco, 0, 'si67_dtpublicacaoavisointencao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010179,'','" . AddSlashes(pg_result($resaco, 0, 'si67_objetoadesao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010180,'','" . AddSlashes(pg_result($resaco, 0, 'si67_cpfresponsavel')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010181,'','" . AddSlashes(pg_result($resaco, 0, 'si67_descontotabela')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010182,'','" . AddSlashes(pg_result($resaco, 0, 'si67_processoporlote')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010183,'','" . AddSlashes(pg_result($resaco, 0, 'si67_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2011579,'','" . AddSlashes(pg_result($resaco, 0, 'si67_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-    }
+
     return true;
   }
 
@@ -435,8 +412,8 @@ class cl_regadesao102024
         $virgula = ",";
       }
     }
-    if (trim($this->si67_nomeorgaogerenciador) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si67_nomeorgaogerenciador"])) {
-      $sql .= $virgula . " si67_nomeorgaogerenciador = '$this->si67_nomeorgaogerenciador' ";
+    if (trim($this->si67_cnpjorgaogerenciador) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si67_cnpjorgaogerenciador"])) {
+      $sql .= $virgula . " si67_cnpjorgaogerenciador = '$this->si67_cnpjorgaogerenciador' ";
       $virgula = ",";
     }
     if (trim($this->si67_exerciciolicitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si67_exerciciolicitacao"])) {
@@ -452,7 +429,7 @@ class cl_regadesao102024
     }
     if (trim($this->si67_codmodalidadelicitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si67_codmodalidadelicitacao"])) {
       if (trim($this->si67_codmodalidadelicitacao) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si67_codmodalidadelicitacao"])) {
-        $this->si67_codmodalidadelicitacao = "0";
+        $this->si67_codmodalidadelicitacao = "null";
       }
       $sql .= $virgula . " si67_codmodalidadelicitacao = $this->si67_codmodalidadelicitacao ";
       $virgula = ",";
@@ -497,13 +474,6 @@ class cl_regadesao102024
     }
     if (trim($this->si67_cpfresponsavel) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si67_cpfresponsavel"])) {
       $sql .= $virgula . " si67_cpfresponsavel = '$this->si67_cpfresponsavel' ";
-      $virgula = ",";
-    }
-    if (trim($this->si67_descontotabela) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si67_descontotabela"])) {
-      if (trim($this->si67_descontotabela) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si67_descontotabela"])) {
-        $this->si67_descontotabela = "0";
-      }
-      $sql .= $virgula . " si67_descontotabela = $this->si67_descontotabela ";
       $virgula = ",";
     }
     if (trim($this->si67_processoporlote) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si67_processoporlote"])) {
@@ -568,59 +538,6 @@ class cl_regadesao102024
     if ($si67_sequencial != null) {
       $sql .= " si67_sequencial = $this->si67_sequencial";
     }
-    $resaco = $this->sql_record($this->sql_query_file($this->si67_sequencial));
-    if ($this->numrows > 0) {
-      for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2010164,'$this->si67_sequencial','A')");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_sequencial"]) || $this->si67_sequencial != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010164,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_sequencial')) . "','$this->si67_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_tiporegistro"]) || $this->si67_tiporegistro != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010165,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_tiporegistro')) . "','$this->si67_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_codorgao"]) || $this->si67_codorgao != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010166,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_codorgao')) . "','$this->si67_codorgao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_codunidadesub"]) || $this->si67_codunidadesub != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010167,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_codunidadesub')) . "','$this->si67_codunidadesub'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_nroprocadesao"]) || $this->si67_nroprocadesao != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010168,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_nroprocadesao')) . "','$this->si67_nroprocadesao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si63_exercicioadesao"]) || $this->si63_exercicioadesao != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2011310,'" . AddSlashes(pg_result($resaco, $conresaco, 'si63_exercicioadesao')) . "','$this->si63_exercicioadesao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_dtabertura"]) || $this->si67_dtabertura != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010169,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_dtabertura')) . "','$this->si67_dtabertura'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_nomeorgaogerenciador"]) || $this->si67_nomeorgaogerenciador != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010170,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_nomeorgaogerenciador')) . "','$this->si67_nomeorgaogerenciador'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_exerciciolicitacao"]) || $this->si67_exerciciolicitacao != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010171,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_exerciciolicitacao')) . "','$this->si67_exerciciolicitacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_nroprocessolicitatorio"]) || $this->si67_nroprocessolicitatorio != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010172,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_nroprocessolicitatorio')) . "','$this->si67_nroprocessolicitatorio'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_codmodalidadelicitacao"]) || $this->si67_codmodalidadelicitacao != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010173,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_codmodalidadelicitacao')) . "','$this->si67_codmodalidadelicitacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_nromodalidade"]) || $this->si67_nromodalidade != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010174,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_nromodalidade')) . "','$this->si67_nromodalidade'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_dtataregpreco"]) || $this->si67_dtataregpreco != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010175,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_dtataregpreco')) . "','$this->si67_dtataregpreco'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_dtvalidade"]) || $this->si67_dtvalidade != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010176,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_dtvalidade')) . "','$this->si67_dtvalidade'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_naturezaprocedimento"]) || $this->si67_naturezaprocedimento != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010177,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_naturezaprocedimento')) . "','$this->si67_naturezaprocedimento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_dtpublicacaoavisointencao"]) || $this->si67_dtpublicacaoavisointencao != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010178,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_dtpublicacaoavisointencao')) . "','$this->si67_dtpublicacaoavisointencao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_objetoadesao"]) || $this->si67_objetoadesao != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010179,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_objetoadesao')) . "','$this->si67_objetoadesao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_cpfresponsavel"]) || $this->si67_cpfresponsavel != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010180,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_cpfresponsavel')) . "','$this->si67_cpfresponsavel'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_descontotabela"]) || $this->si67_descontotabela != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010181,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_descontotabela')) . "','$this->si67_descontotabela'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_processoporlote"]) || $this->si67_processoporlote != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010182,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_processoporlote')) . "','$this->si67_processoporlote'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_mes"]) || $this->si67_mes != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2010183,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_mes')) . "','$this->si67_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si67_instit"]) || $this->si67_instit != "")
-          $resac = db_query("insert into db_acount values($acount,2010296,2011579,'" . AddSlashes(pg_result($resaco, $conresaco, 'si67_instit')) . "','$this->si67_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("
@@ -676,7 +593,7 @@ class cl_regadesao102024
         $resac = db_query("insert into db_acount values($acount,2010296,2010168,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si67_nroprocadesao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010296,2011310,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si63_exercicioadesao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010296,2010169,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si67_dtabertura')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010296,2010170,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si67_nomeorgaogerenciador')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,2010296,2010170,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si67_cnpjorgaogerenciador')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010296,2010171,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si67_exerciciolicitacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010296,2010172,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si67_nroprocessolicitatorio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010296,2010173,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si67_codmodalidadelicitacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -687,7 +604,6 @@ class cl_regadesao102024
         $resac = db_query("insert into db_acount values($acount,2010296,2010178,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si67_dtpublicacaoavisointencao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010296,2010179,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si67_objetoadesao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010296,2010180,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si67_cpfresponsavel')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010296,2010181,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si67_descontotabela')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010296,2010182,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si67_processoporlote')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010296,2010183,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si67_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010296,2011579,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si67_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -771,7 +687,7 @@ class cl_regadesao102024
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -792,7 +708,7 @@ class cl_regadesao102024
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -807,7 +723,7 @@ class cl_regadesao102024
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -828,7 +744,7 @@ class cl_regadesao102024
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];

@@ -233,7 +233,8 @@ try {
     case "getDadosElementos":
 
       $clpcmaterele = new cl_pcmaterele();
-      $sql_record = $clpcmaterele->sql_record($clpcmaterele->sql_query($oParam->pc_mat, null, "o56_codele,o56_descr,o56_elemento", "o56_descr"));
+
+      $sql_record = $clpcmaterele->sql_record($clpcmaterele->sql_query($oParam->pc_mat, null, "o56_codele,o56_descr,o56_elemento,pc01_complmater", "o56_descr"));
       $dad_select = array();
       for ($i = 0; $i < $clpcmaterele->numrows; $i++) {
         db_fieldsmemory($sql_record, $i);
@@ -241,6 +242,7 @@ try {
         $dad_select[$i][0] = $o56_codele;
         $dad_select[$i][1] = $o56_elemento;
         $dad_select[$i][2] = urlencode($o56_descr);
+        $dad_select[$i][3] = urlencode($pc01_complmater);
       }
 
       $arrayRetornoEle = array();
@@ -257,6 +259,10 @@ try {
           }
           if ($keyCel == 2) {
             $objValorEle->nome    =  $cell;
+          }
+
+          if ($keyCel == 3) {
+            $objValorEle->complemento    =  $cell;
           }
         }
 
@@ -332,7 +338,7 @@ try {
     case "getDotacoes":
 
       $anousu = db_getsession('DB_anousu');
-      $sql = "select o58_coddot,fc_estruturaldotacao(o58_anousu,o58_coddot) as o50_estrutdespesa from orcdotacao 
+      $sql = "select o58_coddot,fc_estruturaldotacao(o58_anousu,o58_coddot) as o50_estrutdespesa from orcdotacao
       inner join orcelemento on o56_codele = o58_codele and o56_anousu = o58_anousu
       where o58_coddot in ((select distinct pc13_coddot from solicitem
       inner join pcdotac on pc11_codigo = pc13_codigo where pc11_numero = $oParam->numero)) and o58_anousu = $anousu";
@@ -359,7 +365,7 @@ try {
     case "getDotacoesProcItens":
       $licitacao = $oParam->licitacao;
       $anousu = db_getsession('DB_anousu');
-      $sql = " select distinct o58_coddot,fc_estruturaldotacao(o58_anousu,o58_coddot) as o50_estrutdespesa,o56_elemento from pcdotac 
+      $sql = " select distinct o58_coddot,fc_estruturaldotacao(o58_anousu,o58_coddot) as o50_estrutdespesa,o56_elemento from pcdotac
       inner join orcdotacao on o58_coddot = pc13_coddot
       inner join orcelemento on o56_codele = o58_codele and o56_anousu = o58_anousu
       where o58_anousu = $anousu and pc13_codigo in (select pc11_codigo from pcprocitem inner join solicitem on pc81_solicitem = pc11_codigo
@@ -415,7 +421,7 @@ try {
 
       $licitacao = $oParam->licitacao;
       $itens_processos = db_query("select distinct pc81_codproc from pcprocitem inner join solicitem on pc81_solicitem = pc11_codigo
-      where pc81_codprocitem in (select l21_codpcprocitem from liclicitem where l21_codliclicita = $licitacao) 
+      where pc81_codprocitem in (select l21_codpcprocitem from liclicitem where l21_codliclicita = $licitacao)
       order by pc81_codproc ;");
 
 

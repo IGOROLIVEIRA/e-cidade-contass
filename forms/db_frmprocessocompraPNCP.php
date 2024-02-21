@@ -490,7 +490,7 @@ $clrotulo->label("descrdepto");
 
             js_OpenJanelaIframe('CurrentWindow.corpo',
                 'db_iframe_pcproc',
-                'func_excautitem.php?exc=ok&funcao_js=parent.js_pesquisa.preenche|pc80_codproc',
+                'func_excautitem.php?funcao_js=parent.js_pesquisa.preenche|pc80_codproc',
                 'Pesquisa de Processo de Compras',
                 true);
 
@@ -519,17 +519,6 @@ $clrotulo->label("descrdepto");
                     return false;
                 }
 
-                if (oRetorno.lLicitacao) {
-                    alert(_M(MENSAGENS + "processo_com_licitacao"));
-                    js_pesquisa();
-                    return false;
-                }
-
-                if (oRetorno.lOrcamento) {
-                    alert(_M(MENSAGENS + "processo_com_orcamento"));
-                    js_pesquisa();
-                    return false;
-                }
                 js_consultaamparolegal(oRetorno.pc80_modalidadecontratacao);
                 iCodigoProcesso = oRetorno.pc80_codproc;
 

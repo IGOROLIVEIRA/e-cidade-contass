@@ -46,12 +46,15 @@ try{
                 }
 
                 for ($x = 0; $x < count($aDadosSicom[$i]->aSaldos) ; $x++ ) {
-
-                    //print_r($aDadosSicom[$i]->aSaldos[$x]);
+            
+                    $iFonteNova = $aDadosSicom[$i]->aSaldos[$x]->si96_codfontrecursos;
+                    if ($iAno>2022) {
+                        $iFonteNova = $aDadosSicom[$i]->aSaldos[$x]->o15_codigo;
+                    }
                     $clconctbsaldo = new cl_conctbsaldo;
                     $clconctbsaldo->ces02_codcon = $aDadosSicom[$i]->codcon;
                     $clconctbsaldo->ces02_reduz = $aDadosSicom[$i]->reduz;
-                    $clconctbsaldo->ces02_fonte = $aDadosSicom[$i]->aSaldos[$x]->si96_codfontrecursos;
+                    $clconctbsaldo->ces02_fonte = $iFonteNova;
                     $clconctbsaldo->ces02_valor = $aDadosSicom[$i]->aSaldos[$x]->si96_vlsaldofinalfonte;
                     $clconctbsaldo->ces02_anousu = $iAno + 1;
                     $clconctbsaldo->ces02_inst = $iInstituicao;
@@ -89,6 +92,11 @@ function getDadosSicom($iAno){
     $sCampos .= " si95_contabancaria, si95_digitoverificadorcontabancaria, si95_tipoconta, si95_tipoaplicacao, si95_nroseqaplicacao, ";
     $sCampos .= " si95_desccontabancaria, si95_contaconvenio, si95_nroconvenio::varchar, si95_dataassinaturaconvenio, si95_mes, si95_instit ";
 
+    if (db_getsession('DB_anousu') > 2022) {
+        $sCampos  = " si95_sequencial, si95_tiporegistro, si95_codctb, si95_codorgao, lpad(si95_banco,3,0) as si95_banco, si95_agencia, si95_digitoverificadoragencia, ";
+        $sCampos .= " si95_contabancaria, si95_digitoverificadorcontabancaria, si95_tipoconta, '' as si95_tipoaplicacao, si95_nroseqaplicacao, ";
+        $sCampos .= " si95_desccontabancaria, si95_contaconvenio, si95_nroconvenio::varchar, si95_dataassinaturaconvenio, si95_mes, si95_instit ";
+    }
     $sSql10 = "select * from (";
     for($i = 2014; $i < db_getsession('DB_anousu'); $i++){
 
@@ -153,11 +161,20 @@ function getSaldoCTB($iCodCtb, $iAno){
     $sNomeClasseCTB20 = "cl_ctb20{$iAno}";
     $cCtb20 = new $sNomeClasseCTB20;
 
-    $sSql = $cCtb20->sql_query(NULL,"si96_codfontrecursos, si96_vlsaldofinalfonte", NULL, " si96_codctb = {$iCodCtb} and si96_mes = 12 order by 1 ");
-    $rRes = $cCtb20->sql_record($sSql);
-    if(pg_num_rows($rRes) <= 0){
-        $sSql = $cCtb20->sql_query(NULL,"si96_codfontrecursos, si96_vlsaldofinalfonte", NULL, " si96_codctb = {$iCodCtb} and si96_mes = 11 order by 1 ");
+    if ($iAno > 2022) {
+        $sSql = $cCtb20->sql_query_fonte8digitos(NULL,"o15_codigo, si96_vlsaldofinalfonte", NULL, " si96_codctb = {$iCodCtb} and si96_mes = 12 order by 1 ");
         $rRes = $cCtb20->sql_record($sSql);
+        if(pg_num_rows($rRes) <= 0){
+            $sSql = $cCtb20->sql_query_fonte8digitos(NULL,"o15_codigo, si96_vlsaldofinalfonte", NULL, " si96_codctb = {$iCodCtb} and si96_mes = 11 order by 1 ");
+            $rRes = $cCtb20->sql_record($sSql);
+        }
+    } else {
+        $sSql = $cCtb20->sql_query(NULL,"si96_codfontrecursos, si96_vlsaldofinalfonte", NULL, " si96_codctb = {$iCodCtb} and si96_mes = 12 order by 1 ");
+        $rRes = $cCtb20->sql_record($sSql);
+        if(pg_num_rows($rRes) <= 0){
+            $sSql = $cCtb20->sql_query(NULL,"si96_codfontrecursos, si96_vlsaldofinalfonte", NULL, " si96_codctb = {$iCodCtb} and si96_mes = 11 order by 1 ");
+            $rRes = $cCtb20->sql_record($sSql);
+        }
     }
 
     return db_utils::getCollectionByRecord($rRes);

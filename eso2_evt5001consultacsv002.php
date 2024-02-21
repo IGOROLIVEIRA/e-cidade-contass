@@ -53,6 +53,9 @@ if (!empty($rh218_perapurano)) {
 if (!empty($rh218_perapurmes)) {
   $sWhere .= " and rh218_perapurmes = $rh218_perapurmes ";
 }
+if (!empty($rh218_perapurano) && empty($rh218_perapurmes)) {
+  $sWhere .= " and rh218_perapurmes is null ";
+}
 
 $oEvt5001Consulta = db_utils::getDao('evt5001consulta');
 
@@ -60,8 +63,8 @@ $campos = $oEvt5001Consulta->getCamposRelConsulta();
 $sSql = $oEvt5001Consulta->sql_query(null, $campos, "rh218_sequencial desc", $sWhere);
 $rsDados = $oEvt5001Consulta->sql_record($sSql);
 
-if ($oEvt5001Consulta->numrows == 0){
-   db_redireciona("db_erros.php?fechar=true&db_erro=Não existem dados nesse período");
+if ($oEvt5001Consulta->numrows == 0) {
+  db_redireciona("db_erros.php?fechar=true&db_erro=Não existem dados nesse período");
 }
 
 header("Content-type: text/plain");
@@ -80,32 +83,32 @@ echo "CPF;Nome/Razão Social;Matrícula;Categoria;Base Sistema;Base eSocial;Difere
 
 for ($iCont = 0; $iCont < pg_num_rows($rsDados); $iCont++) {
 
-   $oDados = db_utils::fieldsMemory($rsDados, $iCont);
-   $fDiferenca = DBPessoal::arredondarValor($oDados->diferenca);
-   $fDifSistemaEsocial = DBPessoal::arredondarValor($oDados->vlr_sistema-$oDados->rh218_vlrbasecalc);
+  $oDados = db_utils::fieldsMemory($rsDados, $iCont);
+  $fDiferenca = DBPessoal::arredondarValor($oDados->diferenca);
+  $fDifSistemaEsocial = DBPessoal::arredondarValor($oDados->vlr_sistema - $oDados->rh218_vlrbasecalc);
 
-   echo db_formatar($oDados->z01_cgccpf, "cpf").";",
-   "{$oDados->z01_nome};",
-   "{$oDados->rh218_regist};",
-   "{$oDados->rh218_codcateg};",
-   "{$oDados->vlr_sistema};",
-   "{$oDados->rh218_vlrbasecalc};",
-   "{$fDifSistemaEsocial};",
-   "{$oDados->rh218_vrdescseg};",
-   "{$oDados->rh218_vrcpseg};",
-   "{$fDiferenca};\n";
+  echo db_formatar($oDados->z01_cgccpf, "cpf") . ";",
+  "{$oDados->z01_nome};",
+  "{$oDados->rh218_regist};",
+  "{$oDados->rh218_codcateg};",
+  "{$oDados->vlr_sistema};",
+  "{$oDados->rh218_vlrbasecalc};",
+  "{$fDifSistemaEsocial};",
+  "{$oDados->rh218_vrdescseg};",
+  "{$oDados->rh218_vrcpseg};",
+  "{$fDiferenca};\n";
 
-   $totalContribSocial += $oDados->rh218_vlrbasecalc;
-   $totalDescRealizado += $oDados->rh218_vrdescseg;
-   $totalValorDevido += $oDados->rh218_vrcpseg;
-   $totalDiferenca += DBPessoal::arredondarValor($fDiferenca);
-   $totalBaseSistema += $oDados->vlr_sistema;
-   $totalDiferencaBase += $fDifSistemaEsocial;
+  $totalContribSocial += $oDados->rh218_vlrbasecalc;
+  $totalDescRealizado += $oDados->rh218_vrdescseg;
+  $totalValorDevido += $oDados->rh218_vrcpseg;
+  $totalDiferenca += DBPessoal::arredondarValor($fDiferenca);
+  $totalBaseSistema += $oDados->vlr_sistema;
+  $totalDiferencaBase += $fDifSistemaEsocial;
 }
 
 
 echo "TOTAL DE REGISTROS :;",
-pg_num_rows($rsDados).";",
+pg_num_rows($rsDados) . ";",
 ";;",
 "$totalBaseSistema;",
 "$totalContribSocial;",
@@ -113,5 +116,3 @@ pg_num_rows($rsDados).";",
 "$totalDescRealizado;",
 "$totalValorDevido;",
 "$totalDiferenca;\n";
-
-?>

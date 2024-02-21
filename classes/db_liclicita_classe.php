@@ -1209,22 +1209,15 @@ class cl_liclicita
         if (trim($this->l20_tipoprocesso != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_tipoprocesso"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
             $sql .= $virgula . " l20_tipoprocesso = '$this->l20_tipoprocesso' ";
             $virgula = ",";
-        }
-
-        if ($this->l20_tipoprocesso == null) {
-            $this->l20_tipoprocesso = 'null';
-            $sql .= $virgula . " l20_tipoprocesso = $this->l20_tipoprocesso ";
-            $virgula = ",";
-        }
-
-        if ($this->l20_tipoprocesso == "0") {
-            $this->erro_sql = " Campo Tipo de processo não foi informado.";
-            $this->erro_campo = "l20_tipoprocesso";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
+            if ($this->l20_tipoprocesso == "0") {
+                $this->erro_sql = " Campo Tipo de processo não foi informado.";
+                $this->erro_campo = "l20_tipoprocesso";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
         }
 
         if (trim($this->l20_veicdivulgacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_veicdivulgacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
@@ -1456,10 +1449,7 @@ class cl_liclicita
             }
         }
 
-        if (trim($this->l20_dataencproposta) == null || trim($this->l20_dataencproposta) == "") {
-            $sql .= $virgula . " l20_dataencproposta =null ";
-            $virgula = ",";
-        } else {
+        if (trim($this->l20_dataencproposta) != null || trim($this->l20_dataencproposta) != "") {
             $sql .= $virgula . " l20_dataencproposta = '$this->l20_dataencproposta' ";
             $virgula = ",";
         }
@@ -3572,27 +3562,12 @@ class cl_liclicita
 
     public function sql_query_pncp($l20_codigo = null)
     {
-        $sql  = " select distinct (SELECT CASE
-        WHEN o41_subunidade != 0
-             OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
-                OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-                  OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
-        ELSE lpad((CASE WHEN o40_codtri = '0'
-             OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-               OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
-       END AS codunidadesub
-       FROM db_departorg
-       JOIN infocomplementares ON si08_anousu = db01_anousu
-       AND si08_instit = " . db_getsession("DB_instit") . "
-       JOIN orcunidade ON db01_orgao=o41_orgao
-       AND db01_unidade=o41_unidade
-       AND db01_anousu = o41_anousu
-       JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-       WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) AS codigoUnidadeCompradora,
-       CASE
-            WHEN l03_pctipocompratribunal IN (110,51,53,52,50,102) THEN 1
+        $sql  = "
+       SELECT DISTINCT CASE
+            WHEN l03_pctipocompratribunal IN (110,51,53,52,50) THEN 1
             WHEN l03_pctipocompratribunal = 101 THEN 2
             WHEN l03_pctipocompratribunal = 100 THEN 3
+            WHEN l03_pctipocompratribunal IN (102,103) THEN 4
        END AS tipoInstrumentoConvocatorioId,
        CASE
            WHEN l03_pctipocompratribunal = 110 THEN 2
@@ -3605,7 +3580,10 @@ class cl_liclicita
            WHEN l03_pctipocompratribunal = 100 THEN 9
            WHEN l03_pctipocompratribunal = 102 THEN 12
        END AS modalidadeId,
-        liclicita.l20_mododisputa AS modoDisputaId,
+       CASE
+           WHEN l03_pctipocompratribunal IN (100,101,102,103) THEN 5
+           ELSE liclicita.l20_mododisputa
+       END AS modoDisputaId,
         liclicita.l20_edital AS numeroCompra,
         liclicita.l20_anousu AS anoCompra,
         liclicita.l20_edital||'/'||liclicita.l20_anousu AS numeroProcesso,
@@ -3741,6 +3719,7 @@ class cl_liclicita
                 solicitem.pc11_reservado,
                 solicitem.pc11_quant,
                 liclicita.l20_codigo,
+                solicitem.pc11_reservado,
                 CASE
                     WHEN liclicitem.l21_sigilo IS NOT NULL THEN liclicitem.l21_sigilo
                     ELSE 'f'
@@ -3808,7 +3787,6 @@ class cl_liclicita
         LEFT JOIN situacaoitem ON l217_sequencial=l219_situacao
         WHERE liclicita.l20_codigo = $l20_codigo
         AND liclicitem.l21_ordem = $ordem
-        AND pc23_vlrun > 0
         ORDER BY l217_sequencial desc limit 1";
     }
 
@@ -3933,19 +3911,19 @@ class cl_liclicita
                 WHERE l21_codliclicita = $l20_codigo
                     AND pc24_pontuacao = 1
                 UNION
-                SELECT pc01_codmater,
-                        l21_ordem,
-                        pc24_pontuacao,
-                        pc01_descrmater,
-                        CASE
-                            WHEN l20_tipojulg = 3 THEN l04_descricao
-                            ELSE NULL
-                        END AS l04_descricao,
-                        cgm.z01_numcgm,
-                        cgm.z01_nome,
-                        matunid.m61_descr,
-                        solicitem.pc11_quant,
-                        pcorcamval.pc23_valor
+                SELECT DISTINCT pc01_codmater,
+                l21_ordem,
+                pc24_pontuacao,
+                pc01_descrmater,
+                CASE
+                    WHEN l20_tipojulg = 3 THEN l04_descricao
+                    ELSE NULL
+                END AS l04_descricao,
+                0 AS z01_numcgm,
+                '' AS z01_nome,
+                matunid.m61_descr,
+                solicitem.pc11_quant,
+                pcorcamval.pc23_valor
                 FROM liclicitem
                 INNER JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
                 INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
@@ -3974,7 +3952,7 @@ class cl_liclicita
                 WHERE l21_codliclicita = $l20_codigo
                     AND pc23_orcamitem NOT IN
                         (SELECT pc24_orcamitem
-                        FROM pcorcamjulg)
+                         FROM pcorcamjulg)
                 ORDER BY l21_ordem";
 
         return $sql;

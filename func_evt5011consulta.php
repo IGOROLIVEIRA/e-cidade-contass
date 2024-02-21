@@ -161,8 +161,8 @@ if (!isset($chave_rh219_indapuracao)) {
                         if (isset($chave_rh219_indapuracao) && (trim($chave_rh219_indapuracao) != "")) {
                             $where .= " and rh219_indapuracao = $chave_rh219_indapuracao ";
                         }
-                        if (!empty($chave_rh219_perapurano) && isset($chave_rh219_perapurmes)) {
-                            $where .= " and rh218_perapurmes is null ";
+                        if (!empty($chave_rh219_perapurano) && empty($chave_rh219_perapurmes)) {
+                            $where .= " and rh219_perapurmes is null ";
                         }
                         $sql = $clevt5011consulta->sql_query(null, $campos, "rh219_sequencial desc", $where);
                         db_lovrot($sql, 15, "()", "", $funcao_js);
