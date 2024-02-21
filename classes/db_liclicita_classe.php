@@ -3719,6 +3719,7 @@ class cl_liclicita
                 solicitem.pc11_reservado,
                 solicitem.pc11_quant,
                 liclicita.l20_codigo,
+                solicitem.pc11_reservado,
                 CASE
                     WHEN liclicitem.l21_sigilo IS NOT NULL THEN liclicitem.l21_sigilo
                     ELSE 'f'
@@ -3786,7 +3787,6 @@ class cl_liclicita
         LEFT JOIN situacaoitem ON l217_sequencial=l219_situacao
         WHERE liclicita.l20_codigo = $l20_codigo
         AND liclicitem.l21_ordem = $ordem
-        AND pc23_vlrun > 0
         ORDER BY l217_sequencial desc limit 1";
     }
 
@@ -3911,19 +3911,19 @@ class cl_liclicita
                 WHERE l21_codliclicita = $l20_codigo
                     AND pc24_pontuacao = 1
                 UNION
-                SELECT pc01_codmater,
-                        l21_ordem,
-                        pc24_pontuacao,
-                        pc01_descrmater,
-                        CASE
-                            WHEN l20_tipojulg = 3 THEN l04_descricao
-                            ELSE NULL
-                        END AS l04_descricao,
-                        cgm.z01_numcgm,
-                        cgm.z01_nome,
-                        matunid.m61_descr,
-                        solicitem.pc11_quant,
-                        pcorcamval.pc23_valor
+                SELECT DISTINCT pc01_codmater,
+                l21_ordem,
+                pc24_pontuacao,
+                pc01_descrmater,
+                CASE
+                    WHEN l20_tipojulg = 3 THEN l04_descricao
+                    ELSE NULL
+                END AS l04_descricao,
+                0 AS z01_numcgm,
+                '' AS z01_nome,
+                matunid.m61_descr,
+                solicitem.pc11_quant,
+                pcorcamval.pc23_valor
                 FROM liclicitem
                 INNER JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
                 INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
@@ -3952,7 +3952,7 @@ class cl_liclicita
                 WHERE l21_codliclicita = $l20_codigo
                     AND pc23_orcamitem NOT IN
                         (SELECT pc24_orcamitem
-                        FROM pcorcamjulg)
+                         FROM pcorcamjulg)
                 ORDER BY l21_ordem";
 
         return $sql;

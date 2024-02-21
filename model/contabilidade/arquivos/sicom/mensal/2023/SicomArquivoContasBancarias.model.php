@@ -967,14 +967,28 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
       $cCtb20->si96_codorgao = $oCtb20->si96_codorgao;
       $cCtb20->si96_codctb = $oCtb20->si96_codctb;
       $cCtb20->si96_codfontrecursos = $oCtb20->si96_codfontrecursos;
-      $cCtb20->si96_saldocec = $oCtb20->si96_saldocec;
+      $cCtb20->si96_saldocec = $oCtb20->si96_saldocec == 0 ? 1 : $oCtb20->si96_saldocec;
       $cCtb20->si96_vlsaldoinicialfonte = $oCtb20->si96_vlsaldoinicialfonte;
       $cCtb20->si96_vlsaldofinalfonte = $oCtb20->si96_vlsaldofinalfonte;
       $cCtb20->si96_vlsaldofinalfonte = (abs(number_format($oCtb20->si96_vlsaldofinalfonte, 2, ".", "")) == 0) ? 0 : $oCtb20->si96_vlsaldofinalfonte;
       $cCtb20->si96_mes = $oCtb20->si96_mes;
       $cCtb20->si96_instit = $oCtb20->si96_instit;
 
-      $cCtb20->incluir(null);
+      $where = " si96_mes = $oCtb20->si96_mes and si96_instit = $oCtb20->si96_instit and si96_codfontrecursos = $oCtb20->si96_codfontrecursos and  si96_codctb= $oCtb20->si96_codctb";
+      $sSqlCtb20 = $cCtb20->sql_query_file(null, "*", null, $where);
+      $rsTotalCtb20 = $cCtb20->sql_record($sSqlCtb20) or die($sSqlCtb20);
+      
+      if (pg_num_rows($rsTotalCtb20) > 0 ) {
+        $oRegistrosCtb = db_utils::fieldsMemory($rsTotalCtb20, 0);
+        $cCtb20si96_sequencial = $oRegistrosCtb->si96_sequencial; 
+        $cCtb20->si96_vlsaldoinicialfonte = $oRegistrosCtb->si96_vlsaldoinicialfonte + $oCtb20->si96_vlsaldoinicialfonte;
+        $cCtb20->si96_vlsaldofinalfonte   = $oRegistrosCtb->si96_vlsaldofinalfonte + $oCtb20->si96_vlsaldofinalfonte;
+        $cCtb20->si96_vlsaldofinalfonte   = number_format($cCtb20->si96_vlsaldofinalfonte, 2, ".", "");
+        $cCtb20->alterar($oRegistrosCtb->si96_sequencial);
+        
+      } else {
+        $cCtb20->incluir(null);
+      }
       if ($cCtb20->erro_status == 0) {
         throw new Exception($cCtb20->erro_msg);
       }
@@ -1004,7 +1018,10 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
         
         $cCtb21->si97_codidentificafr = ($oCtb21agrupado->si97_tipoentrsaida == 94 ? $oCtb21agrupado->si97_codidentificafr : 'null');
         $cCtb21->si97_mes = $oCtb21agrupado->si97_mes;
-        $cCtb21->si97_reg20 = $cCtb20->si96_sequencial;
+        if (pg_num_rows($rsTotalCtb20) == 0 ) {
+           $cCtb20si96_sequencial = $cCtb20->si96_sequencial;
+        }
+        $cCtb21->si97_reg20 = $cCtb20si96_sequencial;
         $cCtb21->si97_instit = $oCtb21agrupado->si97_instit;
 
         $cCtb21->incluir(null);

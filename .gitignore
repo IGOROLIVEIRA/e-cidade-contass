@@ -5,11 +5,13 @@ tmp/*
 manuais
 .idea
 config/PNCP/.env
+config/EfdReinf/.env
 .vscode
 .history
 .editorconfig
 config/sicom
 config/PNCP/.env
+config/EfdReinf/.env
 imagens/files/
 login_externo.php
 config/preferencias.json
