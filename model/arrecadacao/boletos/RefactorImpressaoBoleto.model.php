@@ -28,6 +28,14 @@
 /**
  * Dependencias
  */
+
+use App\Models\Numpref;
+use App\Models\RecibopagaQrcodePix;
+use App\Services\Tributario\Arrecadacao\GenerateQrCodeImageService;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\Writer\PngWriter;
+
 db_app::import('regraEmissao');
 db_app::import('convenio');
 
@@ -1785,6 +1793,8 @@ class RefactorImpressaoBoleto {
 
     $pdf1 = $oRegraEmissao->getObjPdf();
 
+    $pdf1 = $this->usePixIntegration($pdf1, $k03_numpre);
+
     /*********************************************************************************************************************************/
     if (isset($reemite_recibo)) {
       $k03_numpre = $k03_numnov;
@@ -2615,4 +2625,41 @@ class RefactorImpressaoBoleto {
     return $desconto;
   }
 
+  private function isPixActived(): bool
+  {
+    $settings = Numpref::query()
+      ->where('k03_anousu', db_getsession("DB_anousu"))
+      ->where('k03_instit', db_getsession("DB_instit"))
+      ->first();
+
+    return !!$settings->k03_ativo_integracao_pix;
+  }
+
+    private function usePixIntegration(db_impcarne $pdfObject, int $numnov): db_impcarne
+    {
+
+        if (!$this->isPixActived()) {
+            return $pdfObject;
+        }
+
+        $recibopagaQrcodePix = RecibopagaQrcodePix::query()->where('k176_numnov', $numnov)->first();
+
+        $pdfObject->hasQrCode = true;
+
+        $builder = Builder::create()
+            ->size(300)
+            ->margin(10)
+            ->validateResult(false)
+            ->writerOptions([])
+            ->writer(new PngWriter())
+            ->encoding(new Encoding('UTF-8'));
+
+        $qrcodeImgService = new GenerateQrCodeImageService($builder);
+
+        $imagePath = $qrcodeImgService->execute($recibopagaQrcodePix->k176_qrcode);
+
+        $pdfObject->qrcode = $imagePath;
+        $pdfObject->hasQrCode = true;
+        return $pdfObject;
+    }
 }
