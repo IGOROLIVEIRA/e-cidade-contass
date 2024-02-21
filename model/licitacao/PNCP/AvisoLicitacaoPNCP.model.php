@@ -66,7 +66,8 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
             $oDadosAPI->itensCompra[$key]->valorUnitarioEstimado       = $item->valorunitarioestimado;
             $oDadosAPI->itensCompra[$key]->valorTotal                  = $vlrtotal;
             //DISPENSA E INEXIGIBILIDADE
-            if($oDado->modalidadeid == "8" || $oDado->modalidadeid == "9"){
+            $iModalidades = array(8,9,12);
+            if(in_array($oDado->modalidadeid,$iModalidades)){
                 $oDadosAPI->itensCompra[$key]->criterioJulgamentoId    = 7;
             }else{
                 $oDadosAPI->itensCompra[$key]->criterioJulgamentoId    = $item->criteriojulgamentoid;

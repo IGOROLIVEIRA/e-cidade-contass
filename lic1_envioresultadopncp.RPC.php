@@ -68,6 +68,7 @@ switch ($oParam->exec) {
 
 
         break;
+
     case 'enviarResultado':
         /*
             [iLicitacao] => 499
@@ -134,7 +135,7 @@ switch ($oParam->exec) {
         $rsAvisoPNCP = $clliccontrolepncp->sql_record($clliccontrolepncp->sql_query(null, "l213_numerocompra,l213_anousu", null, "l213_licitacao = $oParam->iLicitacao limit 1"));
         $oDadosAvisoPNCP = db_utils::fieldsMemory($rsAvisoPNCP, 0);
         try {
-                //RETIFICA O RESULTADO
+                //Retificar Resultado de Item de Contratação
                 foreach ($oParam->aItensLicitacao as $item) {
 
                     $aItensLicitacao = array();
@@ -160,7 +161,7 @@ switch ($oParam->exec) {
                     }
                 }
 
-                //RETIFICAR O ITEM ALTERANDO A SITUACAO
+                //Retificar Item de Contratação
                 foreach ($oParam->aItensLicitacao as $item) {
 
                     $aItensRetificaItemLicitacao = array();
@@ -169,6 +170,15 @@ switch ($oParam->exec) {
                     for ($i = 0; $i < pg_num_rows($rsItensRetificacao); $i++) {
                         $oDadosResultado = db_utils::fieldsMemory($rsItensRetificacao, $i);
                         $aItensRetificaItemLicitacao[] = $oDadosResultado;
+                    }
+                    /*
+                     * Aqui eu fiz uma consulta para conseguir o valor estimado do item reservado
+                     */
+
+                    if ($aItensRetificaItemLicitacao[0]->pc11_reservado == "t") {
+                        $rsReservado = $clliclicita->sql_record($clliclicita->sql_query_valor_item_reservado($aItensRetificaItemLicitacao[0]->pc11_numero, $aItensRetificaItemLicitacao[0]->pc01_codmater));
+                        db_fieldsmemory($rsReservado, 0);
+                        $aItensRetificaItemLicitacao[0]->valorunitarioestimado = $valorunitarioestimado;
                     }
 
                     //classe modelo
