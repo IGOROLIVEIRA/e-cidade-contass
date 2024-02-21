@@ -3564,7 +3564,7 @@ class cl_liclicita
     {
         $sql  = "
        SELECT DISTINCT CASE
-            WHEN l03_pctipocompratribunal IN (110,51,53,52,50,102) THEN 1
+            WHEN l03_pctipocompratribunal IN (110,51,53,52,50) THEN 1
             WHEN l03_pctipocompratribunal = 101 THEN 2
             WHEN l03_pctipocompratribunal = 100 THEN 3
             WHEN l03_pctipocompratribunal IN (102,103) THEN 4
