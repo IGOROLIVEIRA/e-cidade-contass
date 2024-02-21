@@ -37,7 +37,7 @@ class ResultadoItensPNCP extends ModeloBasePNCP
         $oDadosAPI->codigoPais                      = $oDado[0]->codigopais;
         $oDadosAPI->indicadorSubcontratacao         = $oDado[0]->indicadorsubcontratacao == 2 ? 'false' : 'true';
         $oDadosAPI->ordemClassificacaoSrp           = 1;
-        $oDadosAPI->dataResultado                   = $this->formatDate($oDado[0]->dataresultado);
+        $oDadosAPI->dataResultado                   = $oDado[0]->dataresultado != "" ? $this->formatDate($oDado[0]->dataresultado) : '';
         $oDadosAPI->situacaoCompraItemResultadoId   = 1;
 
         //naturezaJuridicaId faltando campo nao obrigatorio

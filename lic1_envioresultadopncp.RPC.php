@@ -29,6 +29,7 @@ switch ($oParam->exec) {
         if($oParam->iTipo == "1"){
             //Itens para Inclusao de resultado
             $resultItens = $clliclicita->sql_record($clliclicita->sql_query_item_pncp($oParam->iLicitacao));
+
             for ($iCont = 0; $iCont < pg_num_rows($resultItens); $iCont++) {
 
                 $oItensLicitacao = db_utils::fieldsMemory($resultItens, $iCont);
@@ -82,22 +83,20 @@ switch ($oParam->exec) {
             foreach ($oParam->aItensLicitacao as $item) {
                 $clliccontrolepncp = new cl_liccontrolepncpitens();
                 //verifica se ja foi enviado resultado do item
-                $rsPNCP = $clliccontrolepncp->sql_record($clliccontrolepncp->sql_query(null, "*", null, "l214_ordem = $item->l21_ordem and l214_licitacao=$oParam->iLicitacao"));
-
-                if (pg_num_rows($rsPNCP)) {
-                    throw new Exception('Rusultado do Iten PNCP ja foi enviado Item seq: ' . $item->l21_ordem);
-                }
+//                $rsPNCP = $clliccontrolepncp->sql_record($clliccontrolepncp->sql_query(null, "*", null, "l214_ordem = $item->l21_ordem and l214_licitacao=$oParam->iLicitacao"));
+//
+//                if (pg_num_rows($rsPNCP)) {
+//                    throw new Exception('Rusultado do Iten PNCP ja foi enviado Item seq: ' . $item->l21_ordem);
+//                }
 
                 $aItensLicitacao = array();
-                $rsResultado = $clliclicita->sql_record($clliclicita->sql_query_resultado_pncp($oParam->iLicitacao, $item->l21_ordem));
+                $rsResultado = $clliclicita->sql_record($clliclicita->sql_query_resultado_pncp($oParam->iLicitacao, $item->l21_ordem,$item->z01_numcgm));
 
-                /*if (!pg_num_rows($rsResultado)) {
-                    throw new Exception('Dados do Rultado do Iten PNCP não Encontrato! Licitacao:' . $aLicitacao->codigo . "Item seq: " . $item->l21_ordem);
-                }*/
                 for ($i = 0; $i < pg_num_rows($rsResultado); $i++) {
                     $oDadosResultado = db_utils::fieldsMemory($rsResultado, $i);
                     $aItensLicitacao[] = $oDadosResultado;
                 }
+
                 //classe modelo
                 $clResultadoItensPNCP = new ResultadoItensPNCP($aItensLicitacao);
                 //monta o json com os dados da licitacao
@@ -139,7 +138,7 @@ switch ($oParam->exec) {
                 foreach ($oParam->aItensLicitacao as $item) {
 
                     $aItensLicitacao = array();
-                    $rsResultado = $clliclicita->sql_record($clliclicita->sql_query_resultado_retifica_pncp($oParam->iLicitacao, $item->l21_ordem));
+                    $rsResultado = $clliclicita->sql_record($clliclicita->sql_query_resultado_retifica_pncp($oParam->iLicitacao, $item->l21_ordem,$item->z01_numcgm));
 
                     if (!pg_num_rows($rsResultado)) {
                         continue;
