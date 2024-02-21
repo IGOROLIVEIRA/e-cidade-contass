@@ -123,34 +123,6 @@ if (isset($l20_codigo)) {
                     ?>
                 </td>
             </tr>
-
-            <!--            <tr>-->
-            <!--                <td nowrap title="--><? //=@$Tl20_justificativa
-                                                        ?>
-            <!--">-->
-            <!--                    <strong>Justificativa:</strong>-->
-            <!--                </td>-->
-            <!--                <td>-->
-            <!--                    --><? //
-                                        //                    db_textarea('l20_justificativa',0,53,$Il20_justificativa,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
-                                        //
-                                        ?>
-            <!--                </td>-->
-            <!--            </tr>-->
-            <!---->
-            <!--            <tr>-->
-            <!--                <td nowrap title="--><? //=@$Tl20_razao
-                                                        ?>
-            <!--">-->
-            <!--                    <strong>Razão:</strong>-->
-            <!--                </td>-->
-            <!--                <td>-->
-            <!--                    --><? //
-                                        //                    db_textarea('l20_razao',0,53,$Il20_razao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
-                                        //
-                                        ?>
-            <!--                </td>-->
-            <!--            </tr>-->
         </table>
     </fieldset>
     <?php
