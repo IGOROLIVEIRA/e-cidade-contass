@@ -24,4 +24,26 @@ class MaterCatMat extends LegacyModel
         'faxx_i_ativo',
         'faxx_i_susten',
     ];
+
+    public function sqlQueryCatmat($where) {
+        $sql = $this->newQuery()
+            ->select([
+                '*',
+            ])
+            ->where($where)
+            ->toSql();
+        $sql = str_replace('"','',$sql);
+        $sql = str_replace('is null','',$sql);
+
+        return $sql;
+    }
+
+    public function sqlQueryAllCatMat() {
+        $sql = $this->newQuery()
+            ->select([
+                '*',
+            ])
+            ->toSql();
+        return str_replace('"','',$sql);
+    }
 }
