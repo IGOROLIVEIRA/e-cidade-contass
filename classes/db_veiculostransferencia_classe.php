@@ -537,7 +537,9 @@ class cl_veiculostransferencia
         $sql .= " inner join transferenciaveiculos as tv on tv.ve80_sequencial = vt.ve81_transferencia";
         $sql .= " inner join db_usuarios as u on u.id_usuario = ve80_id_usuario";
         $sql .= " inner join db_depart as a on a.coddepto = tv.ve80_coddeptoatual";
-        $sql .= " inner join db_depart d on d.coddepto  = tv.ve80_coddeptodestino";
+        $sql .= " inner join db_depart as d on d.coddepto  = tv.ve80_coddeptodestino";
+        $sql .= " inner join veiccadcentral as vca on vca.ve36_coddepto = a.coddepto";
+        $sql .= " inner join veiccadcentral as vcd on vcd.ve36_coddepto = d.coddepto";
         $sql .= " where ve81_sequencial = $sequencial";
 
         return $sql;

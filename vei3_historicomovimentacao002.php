@@ -19,9 +19,11 @@ $db_opcao = 3;
 switch ($oGet->tipo) {
   case 'TRANSFERENCIA':
     $campos = "ve81_sequencial,ve80_dt_transferencia,ve80_hora,ve81_codigo,ve81_placa";
+    $campos .= ",vca.ve36_sequencial as coddepto_origem, vcd.ve36_sequencial as coddepto_destino";
     $campos .= ",ve80_coddeptoatual,a.descrdepto as descrdeptoatual,ve80_motivo";
     $campos .= ",ve80_coddeptodestino,d.descrdepto as descrdeptodestino,id_usuario,nome";
     $sql = $clveiculostransferencia->sql_buscar_detalhes($oGet->codigo, $campos);
+    
     $result = $clveiculostransferencia->sql_record($sql);
     if ($clveiculostransferencia->numrows > 0) {
       db_fieldsmemory($result, 0);
@@ -112,19 +114,19 @@ switch ($oGet->tipo) {
         <tr>
           <td class="title">Central Anterior:</td>
           <td>
-            <? db_input('ve80_coddeptoatual', 10, $ve80_coddeptoatual, true, 'text', $db_opcao, ""); ?>
+            <? db_input('coddepto_origem', 10, $coddepto_origem, true, 'text', $db_opcao, ""); ?>
             <? db_input('descrdeptoatual', 30, $descrdeptoatual, true, 'text', $db_opcao, ""); ?>
           </td>
           <td class="title">Central Atual:</td>
           <td>
-            <? db_input('ve80_coddeptodestino', 10, $ve80_coddeptodestino, true, 'text', $db_opcao, ""); ?>
+            <? db_input('coddepto_destino', 10, $coddepto_destino, true, 'text', $db_opcao, ""); ?>
             <? db_input('descrdeptodestino', 30, $descrdeptodestino, true, 'text', $db_opcao, ""); ?>
           </td>
         </tr>
         <tr>
           <td class="title" style="vertical-align: top;">Observação:</td>
           <td class="removeinfo">
-            <? db_textarea('ve80_motivo', 6, 40, $ve80_motivo, true, 'text', $db_opcao, '', "", "", 200); ?>
+            <? db_textarea('ve80_motivo', 6, 43, $ve80_motivo, true, 'text', $db_opcao, '', "", "", 200); ?>
           </td>
           <td class="title" style="vertical-align: top;">Usuário:</td>
           <td style="vertical-align: top;">
