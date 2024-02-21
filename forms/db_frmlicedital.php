@@ -90,22 +90,26 @@ $db_botao = true;
                 <tr>
                     <td>
                         <b>Licitação:</b>
-
-
                     </td>
                     <td>
-                        <?php db_input('codigolicitacao', 10, '', true, 'text', 3, ""); ?>
+                        <div style="display: flex;">
+                            <div style="width: 50%;">
+                                <?php db_input('codigolicitacao', 10, '', true, 'text', 3, ""); ?>
+                            </div>
 
-                        <?php if (!in_array($tipo_tribunal, array(100, 101, 102, 103, 104, 106))) : ?>
+                            <?php if (!in_array($tipo_tribunal, array(100, 101, 102, 103, 104, 106))) : ?>
 
-                            <span style="padding-left: 49%;"><strong>Edital:</strong></span>
-                            <?php
-                            db_input('numero_edital', 10, '', true, 'text', 3, "");
-                            db_input('codigolicitacao', 10, '', true, 'hidden', 3);
-                            db_input('naturezaobjeto', 10, '', true, 'hidden', 3);
-                            ?>
+                            <div style="text-align: end; width: 50%;">
 
+                            <strong>Edital:</strong>
+                                <?php
+                                db_input('numero_edital', 10, '', true, 'text', 3, "");
+                                db_input('codigolicitacao', 10, '', true, 'hidden', 3);
+                                db_input('naturezaobjeto', 10, '', true, 'hidden', 3);
+                                ?>
+                            </div>
                         <?php endif; ?>
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -171,7 +175,7 @@ $db_botao = true;
                   </td>
                   <td>
                     <?
-                    db_textarea('links', 4, 58, '', true, 'text', 1, '', '', '', 200);
+                    db_textarea('links', 4, 58, '', true, 'text', 1, "", '', '', 200);
                     ?>
                   </td>
                 </tr>
@@ -569,5 +573,7 @@ $db_botao = true;
       document.getElementById('links').value = valor.replace(/;/g, ',');
       alert('Caractere ponto e vírgula não é permitido e será substituído por vírgula.');
     }
+    document.getElementById('links').value = valor.replace(/\r|\n/, ' ');
   });
+
 </script>

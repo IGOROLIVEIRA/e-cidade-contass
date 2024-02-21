@@ -143,7 +143,7 @@ if (isset($incluir) && isset($licitacao)) {
 
         if (!$sqlerro) {
             $data_formatada = str_replace('/', '-', db_formatar($data_referencia, 'd'));
-            $clliclancedital->l47_linkpub = preg_replace( "/\r|\n/", " ", $links);
+            $clliclancedital->l47_linkpub = $links;
             $clliclancedital->l47_origemrecurso = $origem_recurso;
             $clliclancedital->l47_descrecurso = $descricao_recurso;
             $clliclancedital->l47_dataenvio = $data_formatada;
