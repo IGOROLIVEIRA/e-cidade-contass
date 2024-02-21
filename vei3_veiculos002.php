@@ -178,7 +178,7 @@ $oVeiculo         = db_utils::fieldsMemory($rsBuscaVeiculo, false);
                     <strong>Status</strong>
                 </td>
                 <td class="valores">
-                    <?= $oVeiculo->ve01_ativo ? 'ATIVO' : '<span style="color: red;">BAIXADO</span>' ?>
+                    <?= $oVeiculo->ve01_ativo ? 'ATIVO' : '<span style="color: red; font-weight: bold;">BAIXADO</span>' ?>
                 </td>
 
             </tr>

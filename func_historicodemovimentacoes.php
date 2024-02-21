@@ -109,7 +109,7 @@ $sSqlHistoricoDeMovimentacoes = <<<SQL
         var sUrl = `vei3_historicomovimentacao002.php?codigo=${vehistmov_codigo}&tipo=${tipo}`;
         var iWidth = parent.document.body.scrollWidth - 100;
         var iHeight = parent.document.body.scrollHeight - 100;
-        js_OpenJanelaIframe('parent', 'func_historicodemovimentacoes', sUrl, titulo, true, '0', 0, iWidth, iHeight);
+        js_OpenJanelaIframe('parent', `func_historicodemovimentacoes_${tipo}`, sUrl, titulo, true, '0', 0, iWidth, iHeight);
       }
     }
   </script>

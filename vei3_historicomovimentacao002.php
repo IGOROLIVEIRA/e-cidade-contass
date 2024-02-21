@@ -72,19 +72,21 @@ switch ($oGet->tipo) {
 </head>
 
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-  <div style="max-width: 900px; margin: auto; margin-top: 20px;">
-    <h3>Dados Complementares</h3>
+  <fieldset style="max-width: 900px; margin: auto; margin-top: 20px;">
+    <legend style="font-weight: bold;">
+      DADOS COMPLEMENTARES
+    </legend>
     <table border="0">
       <? if ($oGet->tipo == "TRANSFERENCIA") { ?>
         <tr>
           <td class="title">Sequencial:</td>
           <td>
-            <? db_input('ve81_sequencial', 12, $ve81_sequencial, true, 'text', $db_opcao, ""); ?>
+            <? db_input('ve81_sequencial', 10, $ve81_sequencial, true, 'text', $db_opcao, ""); ?>
           </td>
           <td class="title">Veículo:</td>
           <td>
-            <? db_input('ve81_codigo', 12, $ve81_codigo, true, 'text', $db_opcao, ""); ?>
-            <? db_input('ve81_placa', 12, $ve81_placa, true, 'text', $db_opcao, ""); ?>
+            <? db_input('ve81_codigo', 10, $ve81_codigo, true, 'text', $db_opcao, ""); ?>
+            <? db_input('ve81_placa', 10, $ve81_placa, true, 'text', $db_opcao, ""); ?>
           </td>
         </tr>
         <tr>
@@ -103,30 +105,30 @@ switch ($oGet->tipo) {
           <td class="title">Hora:</td>
           <td>
             <?
-            db_input('ve80_hora', 12, $ve80_hora, true, 'text', $db_opcao, "");
+            db_input('ve80_hora', 10, $ve80_hora, true, 'text', $db_opcao, "");
             ?>
           </td>
         </tr>
         <tr>
           <td class="title">Central Anterior:</td>
           <td>
-            <? db_input('ve80_coddeptoatual', 12, $ve80_coddeptoatual, true, 'text', $db_opcao, ""); ?>
+            <? db_input('ve80_coddeptoatual', 10, $ve80_coddeptoatual, true, 'text', $db_opcao, ""); ?>
             <? db_input('descrdeptoatual', 30, $descrdeptoatual, true, 'text', $db_opcao, ""); ?>
           </td>
           <td class="title">Central Atual:</td>
           <td>
-            <? db_input('ve80_coddeptodestino', 12, $ve80_coddeptodestino, true, 'text', $db_opcao, ""); ?>
+            <? db_input('ve80_coddeptodestino', 10, $ve80_coddeptodestino, true, 'text', $db_opcao, ""); ?>
             <? db_input('descrdeptodestino', 30, $descrdeptodestino, true, 'text', $db_opcao, ""); ?>
           </td>
         </tr>
         <tr>
           <td class="title" style="vertical-align: top;">Observação:</td>
           <td class="removeinfo">
-            <? db_textarea('ve80_motivo', 6, 42, $ve80_motivo, true, 'text', $db_opcao, '', "", "", 200); ?>
+            <? db_textarea('ve80_motivo', 6, 40, $ve80_motivo, true, 'text', $db_opcao, '', "", "", 200); ?>
           </td>
           <td class="title" style="vertical-align: top;">Usuário:</td>
           <td style="vertical-align: top;">
-            <? db_input('id_usuario', 12, $id_usuario, true, 'text', $db_opcao, ""); ?>
+            <? db_input('id_usuario', 10, $id_usuario, true, 'text', $db_opcao, ""); ?>
             <? db_input('nome', 30, $nome, true, 'text', $db_opcao, ""); ?>
           </td>
         </tr>
@@ -134,12 +136,12 @@ switch ($oGet->tipo) {
         <tr>
           <td class="title">Sequencial:</td>
           <td>
-            <? db_input('ve04_codigo', 12, $ve04_codigo, true, 'text', $db_opcao, ""); ?>
+            <? db_input('ve04_codigo', 10, $ve04_codigo, true, 'text', $db_opcao, ""); ?>
           </td>
           <td class="title">Veículo:</td>
           <td>
-            <? db_input('ve01_codigo', 12, $ve01_codigo, true, 'text', $db_opcao, ""); ?>
-            <? db_input('ve01_placa', 12, $ve01_placa, true, 'text', $db_opcao, ""); ?>
+            <? db_input('ve01_codigo', 10, $ve01_codigo, true, 'text', $db_opcao, ""); ?>
+            <? db_input('ve01_placa', 10, $ve01_placa, true, 'text', $db_opcao, ""); ?>
           </td>
         </tr>
         <tr>
@@ -158,18 +160,18 @@ switch ($oGet->tipo) {
           <td class="title">Hora:</td>
           <td>
             <?
-            db_input('ve04_hora', 12, $ve04_hora, true, 'text', $db_opcao, "");
+            db_input('ve04_hora', 10, $ve04_hora, true, 'text', $db_opcao, "");
             ?>
           </td>
         </tr>
         <tr>
           <td class="title" style="vertical-align: top;">Observação:</td>
           <td class="removeinfo">
-            <? db_textarea('ve04_motivo', 6, 42, $ve04_motivo, true, 'text', $db_opcao, '', "", "", 200); ?>
+            <? db_textarea('ve04_motivo', 6, 40, $ve04_motivo, true, 'text', $db_opcao, '', "", "", 200); ?>
           </td>
           <td class="title" style="vertical-align: top;">Usuário:</td>
           <td style="vertical-align: top;">
-            <? db_input('id_usuario', 12, $id_usuario, true, 'text', $db_opcao, ""); ?>
+            <? db_input('id_usuario', 10, $id_usuario, true, 'text', $db_opcao, ""); ?>
             <? db_input('nome', 30, $nome, true, 'text', $db_opcao, ""); ?>
           </td>
         </tr>
@@ -177,12 +179,12 @@ switch ($oGet->tipo) {
         <tr>
           <td class="title">Sequencial:</td>
           <td>
-            <? db_input('ve82_sequencial', 12, $ve82_sequencial, true, 'text', $db_opcao, ""); ?>
+            <? db_input('ve82_sequencial', 10, $ve82_sequencial, true, 'text', $db_opcao, ""); ?>
           </td>
           <td class="title">Veículo:</td>
           <td>
-            <? db_input('ve01_codigo', 12, $ve01_codigo, true, 'text', $db_opcao, ""); ?>
-            <? db_input('ve01_placa', 12, $ve01_placa, true, 'text', $db_opcao, ""); ?>
+            <? db_input('ve01_codigo', 10, $ve01_codigo, true, 'text', $db_opcao, ""); ?>
+            <? db_input('ve01_placa', 10, $ve01_placa, true, 'text', $db_opcao, ""); ?>
           </td>
         </tr>
         <tr>
@@ -201,24 +203,24 @@ switch ($oGet->tipo) {
           <td class="title">Hora:</td>
           <td>
             <?
-            db_input('ve82_hora', 12, $ve82_hora, true, 'text', $db_opcao, "");
+            db_input('ve82_hora', 10, $ve82_hora, true, 'text', $db_opcao, "");
             ?>
           </td>
         </tr>
         <tr>
           <td class="title" style="vertical-align: top;">Observação:</td>
           <td class="removeinfo">
-            <? db_textarea('ve82_obs', 6, 42, $ve82_obs, true, 'text', $db_opcao, '', "", "", 200); ?>
+            <? db_textarea('ve82_obs', 6, 40, $ve82_obs, true, 'text', $db_opcao, '', "", "", 200); ?>
           </td>
           <td class="title" style="vertical-align: top;">Usuário:</td>
           <td style="vertical-align: top;">
-            <? db_input('id_usuario', 12, $id_usuario, true, 'text', $db_opcao, ""); ?>
+            <? db_input('id_usuario', 10, $id_usuario, true, 'text', $db_opcao, ""); ?>
             <? db_input('nome', 30, $nome, true, 'text', $db_opcao, ""); ?>
           </td>
         </tr>
       <? } ?>
     </table>
-  </div>
+  </fieldset>
 </body>
 
 </html>
