@@ -518,8 +518,8 @@ if($numrows <> 0){
 $pdf->addpage();
 $sql="select cgmsocio.z01_numcgm,
       cgmsocio.z01_nome,
-	    cgmsocio.z01_ender,
-	    cgmsocio.z01_munic,
+	    cgmsocio.z01_cgccpf,
+	    case socios.q95_tipo when 1 then 'Sócio' when 2 then 'Responsável MEI' when 3 then 'Responsável' else 'Não informado' end as q95_tipo,
 	    q95_perc
       from issbase
 	    inner join socios on q95_cgmpri = q02_numcgm
@@ -539,19 +539,19 @@ if($numrows <> 0){
    $pdf->SetFont('Arial','',$titulo);
    $pdf->cell(10,4,"CGM",0,0,"C",1);
    $pdf->cell(68,4,"Nome",0,0,"C",1);
-   $pdf->cell(68,4,"Endereço",0,0,"C",1);
-   $pdf->cell(30,4,"Municipio",0,0,"C",1);
+   $pdf->cell(68,4,"CPF/CNPJ",0,0,"C",1);
+   $pdf->cell(30,4,"Tipo",0,0,"C",1);
    $pdf->cell(14,4,"Percentual",0,1,"C",1);
 
 
    for ($i = 0;$i < $numrows;$i++){
       db_fieldsmemory($result,$i);
       $pdf->setX(10);
-            $pdf->SetFont('Arial','',$texto);
+      $pdf->SetFont('Arial','',$texto);
       $pdf->cell(10,4,"$z01_numcgm",0,0,"C",0);
       $pdf->cell(68,4,"$z01_nome",0,0,"L",0);
-      $pdf->cell(68,4,"$z01_ender",0,0,"L",0);
-      $pdf->cell(30,4,"$z01_munic",0,0,"C",0);
+      $pdf->cell(68,4,"$z01_cgccpf",0,0,"C",0);
+      $pdf->cell(30,4,"$q95_tipo",0,0,"C",0);
       $pdf->cell(14,4,"$q95_perc",0,1,"C",0);
    }
 }
