@@ -621,9 +621,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $clcontratos10->si83_nroprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_edital : ' '; //campo 12
                 $clcontratos10->si83_exercicioprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_anousu : ' '; //campo 13
             }
-            
+
             $clcontratos10->si83_tipoprocesso = $oDados10->l20_tipoprocesso; //campo 14
-           
+
             $clcontratos10->si83_naturezaobjeto = $oDados10->ac02_acordonatureza; //campo 15
             $clcontratos10->si83_objetocontrato = substr($this->removeCaracteres($oDados10->ac16_objeto), 0, 1000); //campo 16
             $clcontratos10->si83_datainiciovigencia = $oDados10->ac16_datainicio; //campo 17
@@ -1904,10 +1904,6 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
                                 if ($clcontratos21->erro_status == 0) {
                                     throw new Exception($clcontratos21->erro_msg);
-                                }
-
-                                if ($oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero) === 0) {
-                                    continue;
                                 }
 
                                 $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
