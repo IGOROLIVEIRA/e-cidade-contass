@@ -88,7 +88,7 @@ function enviarDados() {
 
       if (iProcessoCompra == "" && iSolicitacao == "") {
 
-        alert("Informe o código do processo de compras ou solicitação.");
+        alert("Informe o código do processo de compras.");
         return false;
       }
 

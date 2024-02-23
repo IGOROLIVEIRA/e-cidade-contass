@@ -1091,16 +1091,6 @@ class ProcessoCompras
                 $aItemSolcitem[] = $oItem->solicitem;
             }
 
-            $oDadosRegistroPreco = $this->getDadosAutorizacao();
-
-            if ($oDados->oAdesaoRegPrecoCod != "") {
-                $oDadosAdesao = $this->getDadosAdesaoRegpreco($oDados->oAdesaoRegPrecoCod);
-            }
-
-            if ($oDados->oLicoutrosorgaosCod != "") {
-                $oDadosLicOutrosOrgaos = $this->getLicoutrosOrgaos($oDados->oLicoutrosorgaosCod);
-            }
-
             $oAutorizacao->setDestino($oDados->destino);
             $oAutorizacao->setContato($oDados->sContato);
             $oAutorizacao->setResumo(addslashes($sResumo));
@@ -1114,6 +1104,9 @@ class ProcessoCompras
             $oAutorizacao->setCondicaoPagamento($oDados->condicaopagamento);
             $oAutorizacao->setSTipoautorizacao($this->getTipoAutorizacao($oDados->tipocompra));
             $oAutorizacao->setSTipoorigem($this->getTipoOrigemAutorizacao($oDados->tipocompra));
+            $oAutorizacao->setSAdesaoregpreco($oDados->oAdesaoRegPrecoCod);
+            $oAutorizacao->setCodigoLicitacao($oDados->oLicitacaoCodigo);
+            $oAutorizacao->setSLicoutrosorgaos($oDados->oLicoutrosorgaosCod);
 
             $oAutorizacao->salvar();
 

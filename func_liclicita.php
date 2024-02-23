@@ -201,6 +201,10 @@ $sWhereContratos = " and 1 = 1 ";
                     $dbwhere .= " l20_leidalicitacao = 1 AND ";
                 }
 
+                if(isset($licitacaoemandamento) && $licitacaoemandamento){
+                    $dbwhere .= " l20_licsituacao = 0 AND ";
+                }
+
                 if (isset($tiponatu) && $tiponatu == '2') {
                     $dbwhere .= " l20_tipnaturezaproced  = 2 AND ";
                 }
