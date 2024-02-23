@@ -353,7 +353,6 @@ ORDER BY nroprocessolicitatorio
                   ";
         $rsResult10 = db_query($sSql);
 
-
         /**
          * registro 10
          */
@@ -401,7 +400,12 @@ ORDER BY nroprocessolicitatorio
             $clralic10->si180_dscorigemrecurso = $oDados10->dscorigemrecurso; //27
             $clralic10->si180_qtdlotes = $oDados10->qtdlotes; //28
             $clralic10->si180_emailcontato = $oDados10->emailcontato; //29
-            $clralic10->si180_mesexercicioreforc = $oDados10->datacotacao; //23
+
+            $clralic10->si180_mesexercicioreforc = '';
+            if ((int)$clralic10->si180_naturezaobjeto === 1 || (int)$clralic10->si180_naturezaobjeto === 7) {
+                $clralic10->si180_mesexercicioreforc = $oDados10->datacotacao; //23
+            }
+
             $clralic10->si180_instit = db_getsession("DB_instit");
 
             $clralic10->incluir(null);
