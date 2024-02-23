@@ -320,6 +320,8 @@ switch ($oParam->exec) {
     case 'atualizarDatasMateriais' :
 
       $rsCodigosMateriaisAtualizados = false;
+      $clhistoricomaterial = new cl_historicomaterial;
+      $clpcmater = new cl_pcmater();
 
       foreach ($oParam->materiaisParaAtualizacao as $oMaterial) {
 
@@ -362,14 +364,12 @@ switch ($oParam->exec) {
               break;
           }
 
-          $clhistoricomaterial = new cl_historicomaterial;
-
           if($oMaterial->data_alteracao){
 
               $rsHistMat = $clhistoricomaterial->sql_record($clhistoricomaterial->sql_query(null,"*",null,"db150_coditem = $oMaterial->codigo_sicom and db150_tipocadastro = $oMaterial->tipo"));
               $aData = explode('/', $oMaterial->data_alteracao);
               $oMat = db_utils::getCollectionByRecord($rsHistMat,false,false,true);
-
+              $db150_tipocadastro = $oMat[0]->db150_tipocadastro;
               if(pg_num_rows($rsHistMat)) {
 
                   $clhistoricomaterial->db150_data = $oMaterial->data_alteracao;
@@ -377,30 +377,40 @@ switch ($oParam->exec) {
                   $clhistoricomaterial->db150_sequencial = $oMat[0]->db150_sequencial;
                   $clhistoricomaterial->alterar($oMat[0]->db150_sequencial);
 
-                  if($oMat[0]->db150_tipocadastro == "2"){
-                      $clpcmater = new cl_pcmater();
-                      $clpcmater->pc01_dataalteracao = $oMaterial->data;
-                      $clpcmater->pc01_codmater = $oMaterial->codigo;
-                      $clpcmater->pc01_tabela  = $oMat[0]->pc01_tabela;
-                      $clpcmater->pc01_taxa  = $oMat[0]->pc01_taxa;
-                      $clpcmater->alterar($oMaterial->codigo);
+                  if($db150_tipocadastro == "2"){
+
+                      $sql = "
+                        UPDATE
+                            pcmater
+                            SET
+                                pc01_dataalteracao = {$oMaterial->data}
+                        WHERE pc01_codmater = {$oMaterial->codigo} ";
+                        $rsCodigosMateriaisAtualizados = (bool)db_query($sql);
+
                   }else{
-                      $clpcmater = new cl_pcmater();
-                      $clpcmater->pc01_data = $oMaterial->data;
-                      $clpcmater->pc01_codmater = $oMaterial->codigo;
-                      $clpcmater->pc01_tabela  = $oMat[0]->pc01_tabela;
-                      $clpcmater->pc01_taxa  = $oMat[0]->pc01_taxa;
-                      $clpcmater->alterar($oMaterial->codigo);
 
-                      if($oMaterial->data) {
+                      $sql = "
+                        UPDATE
+                            pcmater
+                            SET
+                                pc01_data = {$oMaterial->data}
+                        WHERE pc01_codmater = {$oMaterial->codigo} ";
+                      $rsCodigosMateriaisAtualizados = (bool)db_query($sql);
 
-                          $aDataInclusao = explode('/', $oMaterial->data);
+                      $dataMaterial = $oMaterial->data;
 
-                          $clhistoricomaterial->db150_mes = $aDataInclusao[1];
-                          $clhistoricomaterial->db150_sequencial = $oMatTipo1[0]->db150_sequencial;
-                          $clhistoricomaterial->alterar($oMat[0]->db150_sequencial);
+                      if($dataMaterial) {
+
+                          $aDataInclusao = explode('/', $oMaterial->data_alteracao);
+
+                          $sql = "
+                            UPDATE
+                                historicomaterial
+                                SET
+                                    db150_mes = {$aDataInclusao[1]}
+                            WHERE db150_sequencial = {$oMat[0]->db150_sequencial} ";
+                          $rsCodigosMateriaisAtualizados = (bool)db_query($sql);
                       }
-
                   }
               }
           }
