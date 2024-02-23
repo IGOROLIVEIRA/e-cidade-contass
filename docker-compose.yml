@@ -61,7 +61,7 @@ services:
       networks:
         - ecidade
       ports:
-        - "8484:8080"
+        - "${ADMINER_PORT:-8484}:8080"
       depends_on:
         bd:
           condition: service_healthy
