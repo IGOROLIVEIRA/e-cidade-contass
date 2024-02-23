@@ -29,7 +29,20 @@ class GerarEXT extends GerarAM
     $sSql = "select * from ext102024 where si124_mes = " . $this->iMes . " and  si124_instit = " . db_getsession("DB_instit");
     $rsEXT10 = db_query($sSql);
 
-    $sSql = "select * from ext202024 where si165_mes = " . $this->iMes . " and  si165_instit = " . db_getsession("DB_instit");
+    $sSql = "select si165_tiporegistro,
+                  si165_codorgao,
+                  si165_codext,
+                  si165_codfontrecursos,
+                  si165_natsaldoanteriorfonte,
+                  sum(si165_vlsaldoanteriorfonte) as si165_vlsaldoanteriorfonte,
+                  sum(si165_totaldebitos) as si165_totaldebitos,
+                  sum(si165_totalcreditos) as si165_totalcreditos ,
+                  sum(si165_vlsaldoatualfonte) as si165_vlsaldoatualfonte,
+                  si165_exerciciocompdevo 
+                  from ext202024 
+                  where si165_mes = " . $this->iMes . " and  si165_instit = " . db_getsession("DB_instit")."
+                  group by si165_codext, si165_codfontrecursos,si165_tiporegistro,si165_codorgao,si165_exerciciocompdevo,si165_natsaldoanteriorfonte
+                  order by si165_codext, si165_codfontrecursos " ;
     $rsEXT20 = db_query($sSql);
 
     $sSql3 = "select * from EXT302024 where si126_mes = " . $this->iMes . " and  si126_instit = " . db_getsession("DB_instit");
@@ -124,7 +137,7 @@ class GerarEXT extends GerarAM
 
           }
         }else{
-          //echo substr($aEXT20['si165_natsaldoanteriorfonte'], 0, 1);
+                                            
           $aCSVEXT20['si165_natsaldoanteriorfonte'] = substr($aEXT20['si165_natsaldoanteriorfonte'], 0, 1);
         }
 
@@ -163,7 +176,7 @@ class GerarEXT extends GerarAM
 
           //echo substr($aEXT20['si165_natsaldoatualfonte'], 0, 1);
 
-          $aCSVEXT20['si165_natsaldoatualfonte']    = substr($aEXT20['si165_natsaldoatualfonte'], 0, 1);
+          $aCSVEXT20['si165_natsaldoatualfonte']    = $aEXT20['si165_vlsaldoatualfonte'] > 0 ? 'C' : 'D';
         }
 
         $this->sLinha = $aCSVEXT20;
