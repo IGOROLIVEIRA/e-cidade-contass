@@ -71,9 +71,6 @@ switch ($oParam->exec) {
         break;
 
     case 'enviarResultado':
-        /*
-            [iLicitacao] => 499
-        */
         $clliclicita           = new cl_liclicita();
         $clliccontrolepncp     = new cl_liccontrolepncp();
         //Buscos Chave da compra no PNCP
@@ -81,13 +78,7 @@ switch ($oParam->exec) {
         $oDadosAvisoPNCP = db_utils::fieldsMemory($rsAvisoPNCP, 0);
         try {
             foreach ($oParam->aItensLicitacao as $item) {
-                $clliccontrolepncp = new cl_liccontrolepncpitens();
-                //verifica se ja foi enviado resultado do item
-//                $rsPNCP = $clliccontrolepncp->sql_record($clliccontrolepncp->sql_query(null, "*", null, "l214_ordem = $item->l21_ordem and l214_licitacao=$oParam->iLicitacao"));
-//
-//                if (pg_num_rows($rsPNCP)) {
-//                    throw new Exception('Rusultado do Iten PNCP ja foi enviado Item seq: ' . $item->l21_ordem);
-//                }
+                $clliccontrolepncpitens = new cl_liccontrolepncpitens();
 
                 $aItensLicitacao = array();
                 $rsResultado = $clliclicita->sql_record($clliclicita->sql_query_resultado_pncp($oParam->iLicitacao, $item->l21_ordem,$item->z01_numcgm));
@@ -103,14 +94,22 @@ switch ($oParam->exec) {
                 $odadosResultado = $clResultadoItensPNCP->montarDados();
                 //envia para pncp
                 $rsApiPNCP = $clResultadoItensPNCP->enviarResultado($odadosResultado, $oDadosAvisoPNCP->l213_numerocompra, $oDadosAvisoPNCP->l213_anousu, $item->l21_ordem);
-
                 if ($rsApiPNCP[1] == '201') {
-                    $clliccontrolepncp->l214_numeroresultado = 1;
-                    $clliccontrolepncp->l214_numerocompra = $oDadosAvisoPNCP->l213_numerocompra;
-                    $clliccontrolepncp->l214_anousu = $oDadosAvisoPNCP->l213_anousu;
-                    $clliccontrolepncp->l214_licitacao = $oParam->iLicitacao;
-                    $clliccontrolepncp->l214_ordem = $item->l21_ordem;
-                    $clliccontrolepncp->incluir();
+
+                    $aResultadoItem = explode('/',$rsApiPNCP[0]);
+                    $l214_sequencialresultado = preg_replace("/[^0-9]/", "", $aResultadoItem[13]);
+                    $clliccontrolepncpitens->l214_numeroresultado = 1;
+                    $clliccontrolepncpitens->l214_numerocompra = $oDadosAvisoPNCP->l213_numerocompra;
+                    $clliccontrolepncpitens->l214_anousu = $oDadosAvisoPNCP->l213_anousu;
+                    $clliccontrolepncpitens->l214_licitacao = $oParam->iLicitacao;
+                    $clliccontrolepncpitens->l214_ordem = $item->l21_ordem;
+                    $clliccontrolepncpitens->l214_fornecedor = $item->z01_numcgm;
+                    $clliccontrolepncpitens->l214_sequencialresultado = $l214_sequencialresultado;
+                    $clliccontrolepncpitens->incluir();
+
+                    if($clliccontrolepncpitens->erro_status == 0){
+                        throw new Exception(utf8_decode($clliccontrolepncpitens->erro_msg));
+                    }
 
                     $oRetorno->status  = 1;
                     $oRetorno->message = "Enviado com Sucesso !";
@@ -125,14 +124,13 @@ switch ($oParam->exec) {
         break;
 
     case 'RetificarResultado':
-        /*
-            [iLicitacao] => 499
-        */
+
         $clliclicita           = new cl_liclicita();
         $clliccontrolepncp     = new cl_liccontrolepncp();
         //Buscos Chave da compra no PNCP
         $rsAvisoPNCP = $clliccontrolepncp->sql_record($clliccontrolepncp->sql_query(null, "l213_numerocompra,l213_anousu", null, "l213_licitacao = $oParam->iLicitacao limit 1"));
         $oDadosAvisoPNCP = db_utils::fieldsMemory($rsAvisoPNCP, 0);
+
         try {
                 //Retificar Resultado de Item de Contratação
                 foreach ($oParam->aItensLicitacao as $item) {
@@ -153,7 +151,7 @@ switch ($oParam->exec) {
                     $odadosResultado = $clResultadoItensPNCP->montarDados();
 
                     //envia para pncp
-                    $rsApiPNCP = $clResultadoItensPNCP->retificarResultado($odadosResultado, $oDadosAvisoPNCP->l213_numerocompra, $oDadosAvisoPNCP->l213_anousu, $item->l21_ordem, $oDadosResultado->l214_numeroresultado);
+                    $rsApiPNCP = $clResultadoItensPNCP->retificarResultado($odadosResultado, $oDadosAvisoPNCP->l213_numerocompra, $oDadosAvisoPNCP->l213_anousu, $item->l21_ordem, $oDadosResultado->l214_sequencialresultado);
 
                     if ($rsApiPNCP[0] != 201) {
                         throw new Exception(utf8_decode($rsApiPNCP[1]));
