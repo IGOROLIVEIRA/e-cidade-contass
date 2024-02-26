@@ -14,4 +14,5 @@ class SeqDdc102024 extends AbstractMigration
             MAXVALUE 9223372036854775807
             START 1");
     }
+
 }
