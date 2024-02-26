@@ -1175,7 +1175,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                         <label class="bold">Critério de Adjudicação:</label>
                      </td>
                      <td>
-                        <? 
+                        <?
                         $aCriterios = array("1" => "1- Desconto sobre tabela", "2" => "2 - Menor taxa ou percentual", "3" => "3 - Outros");
                         db_select("criterioadjudicao_dispensainexibilidade", $aCriterios, true, '');
                         ?>
@@ -1328,7 +1328,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                     listaamparolegal.remove($x);
                 }
 
-                for ($x = 0; $x < 60; $x++) {
+                for ($x = 0; $x < 200; $x++) {
                     if (oRetorno.amparo[$x] != "" && oRetorno.amparo[$x] != null) {
 
                         listaamparolegal.add(new Option(oRetorno.amparo[$x], $x));
@@ -1483,7 +1483,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("local").style.display = 'none';
             document.getElementById("respAvaliaBens").style.display = "none";
             document.getElementById("respAberProcesso").style.display = "none";
-            document.getElementById("respEmissaoEdi").style.display = "none";    
+            document.getElementById("respEmissaoEdi").style.display = "none";
         } else {
             var codigo_lei = document.form1.l20_leidalicitacao.value;
             document.getElementById("linha_nroedital").style.display = '';
