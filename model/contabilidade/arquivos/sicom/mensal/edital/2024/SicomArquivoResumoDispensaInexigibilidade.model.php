@@ -550,7 +550,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
             $clredispi12->si185_numero = !$oResult12->numero ? 0 : $oResult12->numero;
             $clredispi12->si185_bairro = $oResult12->bairro;
             $tipoInstituicao = db_gettipoinstit(db_getsession('DB_instit'));
-            $clredispi12->si185_cidade = $tipoInstituicao == "51" ? $oResult12->municipio : "";//12
+            $clredispi12->si185_cidade = $tipoInstituicao == "51" ? $oResult12->cidade : "";//12
             $clredispi12->si185_distrito = $oResult12->distrito;
             $clredispi12->si185_cep = $oResult12->cep;
             $clredispi12->si185_latitude = $oResult12->latitude;
