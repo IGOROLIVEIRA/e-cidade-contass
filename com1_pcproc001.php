@@ -77,7 +77,9 @@ if (isset($incluir) || isset($juntar)) {
     db_inicio_transacao();
 
     if ($pc80_numdispensa != "") {
-      $sql = "select pc80_numdispensa as numerodispensa,pc80_codproc as codigoprocesso from pcproc where pc80_numdispensa={$pc80_numdispensa} and pc80_numdispensa > 0";
+      $sql = "select pc80_numdispensa as numerodispensa,pc80_codproc as codigoprocesso from pcproc
+                inner join db_depart on coddepto = pc80_depto
+              where pc80_numdispensa={$pc80_numdispensa} AND db_depart.instit = ". db_getsession('DB_instit') . " and pc80_numdispensa > 0";
       $rsPccompra = db_query($sql);
 
       $dispensacadastrada = db_utils::getColectionByRecord($rsPccompra);

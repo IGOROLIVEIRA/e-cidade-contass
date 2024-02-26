@@ -704,7 +704,8 @@ class cl_rsp102024
                   documentocreddor,
                   e60_anousu,
                   pessoal,
-                  dototigres
+                  dototigres,
+                  e60_codco
               FROM
               (SELECT '10' AS tiporegistro,
                       e60_numemp AS codreduzidorsp,
@@ -721,6 +722,7 @@ class cl_rsp102024
                       o41_subunidade AS subunidade,
                       e60_codemp AS nroempenho,
                       e60_anousu AS exercicioempenho,
+                      e60_codco,
                       e60_emiss AS dtempenho,
                       CASE
                           WHEN e60_anousu >= 2013 THEN ' '
@@ -806,7 +808,7 @@ class cl_rsp102024
                     AND e60_instit = {$instit}
                     AND c70_data <= '" . (db_getsession("DB_anousu") - 1) . "-12-31'
                 GROUP BY e60_anousu, e60_codemp, e60_emiss, z01_numcgm, z01_cgccpf, z01_nome, e60_numemp, o58_codigo, o58_orgao, o58_unidade, o41_subunidade, o58_funcao, o58_subfuncao, o58_programa, o58_projativ,
-                        orcelemento.o56_elemento, t1.o56_elemento, o15_codtri, si09_codorgaotce, o40_codtri, orcorgao.o40_orgao, orcunidade.o41_codtri, orcunidade.o41_unidade, de_para_fontes.ano2022, de_para_fontes.ano2024) AS restos
+                        orcelemento.o56_elemento, t1.o56_elemento, o15_codtri, si09_codorgaotce, o40_codtri, orcorgao.o40_orgao, orcunidade.o41_codtri, orcunidade.o41_unidade, de_para_fontes.ano2022, de_para_fontes.ano2024,e60_codco) AS restos
               WHERE (vlremp - vlranu - vlrliq) > 0
               OR (vlrliq - vlrpag) > 0";
 

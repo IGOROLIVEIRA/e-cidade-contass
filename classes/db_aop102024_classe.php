@@ -714,7 +714,8 @@ class cl_aop102024
                    o41_subunidade AS subunidade,
                    e60_emendaparlamentar,
                     e60_esferaemendaparlamentar,
-                    e60_tipodespesa
+                    e60_tipodespesa,
+                    e60_codco
             FROM conlancam
             JOIN conlancamdoc ON c71_codlan = c70_codlan
             JOIN conlancamord ON c80_codlan = c71_codlan
