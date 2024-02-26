@@ -7,7 +7,7 @@ require_once("classes/db_emp122024_classe.php");
 require_once("classes/db_emp302024_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarEMP.model.php");
 require_once("model/empenho/EmpenhoFinanceiro.model.php");
-require_once("model/orcamento/ControleOrcamentario.model.php");
+
 
 /**
  * detalhamento dos empenhos do mês Sicom Acompanhamento Mensal
@@ -209,6 +209,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
          o15_codigo,
          e60_emendaparlamentar,
         e60_esferaemendaparlamentar,
+        e60_codco,
         si09_codorgaotce AS codorgao,
         lpad((CASE
         WHEN orcorgao.o40_codtri = '0'
@@ -708,17 +709,11 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
        */
       $oDadosEmpenhoFonte = new cl_emp112024();
 
-      $oCodigoAcompanhamento = new ControleOrcamentario();
-      $oCodigoAcompanhamento->setTipoDespesa($oEmpenho10->e60_tipodespesa);
-      $oCodigoAcompanhamento->setFonte($oEmpenho10->o15_codigo);
-      $oCodigoAcompanhamento->setEmendaParlamentar($oEmpenho10->e60_emendaparlamentar);
-      $oCodigoAcompanhamento->setEsferaEmendaParlamentar($oEmpenho10->e60_esferaemendaparlamentar);
-      $oCodigoAcompanhamento->setDeParaFonteCompleta();
       $oDadosEmpenhoFonte->si107_tiporegistro = 11;
       $oDadosEmpenhoFonte->si107_codunidadesub = $sCodUnidade;
       $oDadosEmpenhoFonte->si107_nroempenho = $oEmpenho10->nroempenho;
       $oDadosEmpenhoFonte->si107_codfontrecursos = $oEmpenho10->o15_codtri;
-      $oDadosEmpenhoFonte->si107_codco = $oCodigoAcompanhamento->getCodigoParaEmpenho();
+      $oDadosEmpenhoFonte->si107_codco = $oEmpenho10->e60_codco;
       $oDadosEmpenhoFonte->si107_valorfonte = $oEmpenho10->vlbruto;
       $oDadosEmpenhoFonte->si107_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $oDadosEmpenhoFonte->si107_reg10 = $oDadosEmpenho10->si106_sequencial;
