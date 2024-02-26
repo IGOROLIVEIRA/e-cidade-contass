@@ -378,11 +378,12 @@ switch ($oParam->exec) {
           if (db_getsession("DB_anousu") > 2016 && $sArquivo == "SuperavitFinanceiro") {
             continue;
           }
-          if (($sArquivo == 'DetalhamentoExtraOrcamentarias' && in_array($sInstCgc, $aCgcExtFonte))
-            || ($sArquivo == 'DetalhamentoExtraOrcamentarias' && $nEXTFonte > 0)
+          if ( db_getsession("DB_anousu") < 2024 && (($sArquivo == 'DetalhamentoExtraOrcamentarias' && in_array($sInstCgc, $aCgcExtFonte))
+          || ($sArquivo == 'DetalhamentoExtraOrcamentarias' && $nEXTFonte > 0))
           ) {
             $sArquivo = "DetalhamentoExtraOrcamentariasPorFonte";
           }
+
           if (($sArquivo == 'SicomArquivoAnulacaoExtraOrcamentaria' && in_array($sInstCgc, $aCgcExtFonte))
             || ($sArquivo == 'SicomArquivoAnulacaoExtraOrcamentaria' && $nEXTFonte > 0)
           ) {

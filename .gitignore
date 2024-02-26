@@ -3,12 +3,12 @@ tmp/*
 !tmp/.tmp
 manuais
 .idea
-legacy_config/PNCP/.env
+config/PNCP/.env
 .vscode
 .history
 .editorconfig
-legacy_config/sicom
-legacy_config/PNCP/.env
+config/sicom
+config/PNCP/.env
 imagens/files/
 login_externo.php
 legacy_config/preferencias.json
