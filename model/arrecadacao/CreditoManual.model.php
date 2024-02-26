@@ -376,9 +376,9 @@
    * @return number
    */
   public function geraRecibo () {
-    
-    $oRecibo = new recibo(1, $this->getCgm()->getCodigo());
-    
+
+    $oRecibo = new recibo(1, $this->getCgm()->getCodigo(), 1, null, false, true);
+
     $oRecibo->setDataRecibo($this->getDataLancamento()->getDate());
     $oRecibo->setDataVencimentoRecibo($this->getDataLancamento()->getDate());
     $oRecibo->adicionarReceita($this->getCodigoReceita(), $this->getValor());

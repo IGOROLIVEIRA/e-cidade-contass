@@ -160,6 +160,8 @@ class Recibo
 
   private bool $isReciboRetencao;
 
+  private bool $isReciboCredito;
+
   /**
    * Cria um novo recibo
    *
@@ -168,9 +170,17 @@ class Recibo
    * @param integer
    *
    */
-  public function __construct($iTipoEmissao = null, $iNumCgm = null, $iTipo = 1, $iNumnov = null, $reciboRetencao = false) {
+    public function __construct($iTipoEmissao = null,
+                                $iNumCgm = null,
+                                $iTipo = 1,
+                                $iNumnov = null,
+                                $reciboRetencao = false,
+                                $isReciboCredito = false
+    )
+    {
 
     $this->isReciboRetencao = $reciboRetencao;
+    $this->isReciboCredito = $isReciboCredito;
 
   	if ($iNumnov != null) {
 
@@ -816,7 +826,7 @@ class Recibo
       /**
        * Não gera qrcode para recibos de retencao
        */
-      if (!$settings->k03_ativo_integracao_pix || $this->isReciboRetencao) {
+      if (!$settings->k03_ativo_integracao_pix || $this->isReciboRetencao || $this->isReciboCredito) {
           return true;
       }
 
