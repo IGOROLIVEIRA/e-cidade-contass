@@ -401,7 +401,8 @@ ORDER BY nroprocessolicitatorio
             $clralic10->si180_qtdlotes = $oDados10->qtdlotes; //28
             $clralic10->si180_emailcontato = $oDados10->emailcontato; //29
 
-            $clralic10->si180_mesexercicioreforc = '';
+            $clralic10->si180_mesexercicioreforc = 'null';//23
+
             if ((int)$clralic10->si180_naturezaobjeto === 1 || (int)$clralic10->si180_naturezaobjeto === 7) {
                 $clralic10->si180_mesexercicioreforc = $oDados10->datacotacao; //23
             }
