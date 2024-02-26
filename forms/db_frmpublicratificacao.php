@@ -259,8 +259,7 @@ if (isset($l20_codigo)) {
 
     function js_retornoConsulta(chave, licitacao) {
         db_iframe_publicratificacao.hide();
-        console.log("chegou aqui");
-        console.log(licitacao.l03_pctipocompratribunal);
+
         if (db_opcao === 33 || db_opcao === 3) {
             window.location.href = "lic1_publicratificacao003.php?chavepesquisa=" + chave + "&l03_pctipocompratribunal=" +
                 licitacao.l03_pctipocompratribunal + "&l20_tipoprocesso=" + licitacao.l20_tipoprocesso;
