@@ -132,7 +132,6 @@ if (isset($l20_codigo)) {
         $sCampos  = "DISTINCT pc81_codprocitem, pc11_seq, pc11_codigo, pc11_quant, pc11_vlrun, m61_descr, pc01_codmater, pc01_descrmater, pc11_resum";
 
         $joinPrecoReferencia = false;
-
         if (in_array($l03_pctipocompratribunal, array(102, 103))) {
             $sCampos .= ", si02_vlprecoreferencia";
             $valorUnitario = 'si02_vlprecoreferencia';
@@ -151,6 +150,7 @@ if (isset($l20_codigo)) {
         }
 
         $sSqlItemLicitacao = $clhomologacaoadjudica->sql_query_itens(null, $sCampos, $sOrdem, $sWhere, $joinPrecoReferencia);
+
         $sResultitens = $clhomologacaoadjudica->sql_record($sSqlItemLicitacao);
         $aItensLicitacao = db_utils::getCollectionByRecord($sResultitens);
         $numrows = $clhomologacaoadjudica->numrows;
@@ -241,7 +241,7 @@ if (isset($l20_codigo)) {
 <script>
     db_opcao = <?= $db_opcao ?>;
 
-    js_verificatipoproc();
+    //js_verificatipoproc();
 
     function js_pesquisa(ratificacao = false) {
         if (ratificacao) {
@@ -259,7 +259,8 @@ if (isset($l20_codigo)) {
 
     function js_retornoConsulta(chave, licitacao) {
         db_iframe_publicratificacao.hide();
-
+        console.log("chegou aqui");
+        console.log(licitacao.l03_pctipocompratribunal);
         if (db_opcao === 33 || db_opcao === 3) {
             window.location.href = "lic1_publicratificacao003.php?chavepesquisa=" + chave + "&l03_pctipocompratribunal=" +
                 licitacao.l03_pctipocompratribunal + "&l20_tipoprocesso=" + licitacao.l20_tipoprocesso;
@@ -278,7 +279,7 @@ if (isset($l20_codigo)) {
      */
 
     function js_verificatipoproc(tipocompratribunal) {
-        alert(tipocompratribunal)
+        console.log(tipocompratribunal);
         if (tipocompratribunal === '102' || tipocompratribunal === '103') {
             document.getElementById('trdtlimitecredenciamento').style.display = "";
         }
@@ -343,9 +344,9 @@ if (isset($l20_codigo)) {
         if (db_opcao == 1) {
             let caminho = "lic1_publicratificacao001.php?";
             window.location.href = caminho + "l20_codigo=" + chave1
-                + "&l20_objeto=" + chave2 + "&l20_tipoprocesso=" + tipoProcesso;
+                + "&l20_objeto=" + chave2 + "&l20_tipoprocesso=" + tipoProcesso +  "&l03_pctipocompratribunal=" + chave3;
         } else {
-            window.location.href = "lic1_publicratificacao002.php?chavepesquisa=" + chave1 +  "&l20_tipoprocesso=" + tipoProcesso;
+            window.location.href = "lic1_publicratificacao002.php?chavepesquisa=" + chave1 +  "&l20_tipoprocesso=" + tipoProcesso + "&l03_pctipocompratribunal=" + chave3;
         }
         db_iframe_liclicita.hide();
     }
