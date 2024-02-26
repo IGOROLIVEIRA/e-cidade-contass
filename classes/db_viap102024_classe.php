@@ -1,5 +1,3 @@
-classes/db_viap102024_classe.php
-
 <?php
 //MODULO: sicom
 //CLASSE DA ENTIDADE viap102024
@@ -374,7 +372,7 @@ class cl_viap102024 {
          return true;
        } else {
          $this->erro_banco = "";
-         $this->erro_sql = "Altera��o efetuada com Sucesso\\n";
+         $this->erro_sql = "Alteracao efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$this->si198_sequencial;
         $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -474,7 +472,7 @@ class cl_viap102024 {
        $this->erro_status = "0";
        return false;
      }
-     $this->numrows = pg_numrows($result);
+     $this->numrows = pg_num_rows($result);
       if ($this->numrows==0) {
         $this->erro_banco = "";
         $this->erro_sql   = "Record Vazio na Tabela:viap102024";
