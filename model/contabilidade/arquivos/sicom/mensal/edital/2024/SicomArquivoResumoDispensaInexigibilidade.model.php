@@ -503,7 +503,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 						   obrasdadoscomplementareslote.db150_logradouro AS logradouro,
 						   obrasdadoscomplementareslote.db150_numero AS numero,
 						   obrasdadoscomplementareslote.db150_bairro AS bairro,
-						   cadendermunicipio.db72_descricao AS cidade,
+						   db125_codigosistema AS cidade,
 						   obrasdadoscomplementareslote.db150_distrito AS distrito,
 						   obrasdadoscomplementareslote.db150_cep AS cep,
 						   obrasdadoscomplementareslote.db150_latitude AS latitude,
@@ -518,7 +518,8 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 					INNER JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
 					INNER JOIN obrasdadoscomplementareslote ON obrascodigos.db151_codigoobra = obrasdadoscomplementareslote.db150_codobra
 					INNER JOIN cadendermunicipio on obrasdadoscomplementareslote.db150_municipio = db72_sequencial
-					WHERE db_config.codigo= " . db_getsession('DB_instit') . " AND liclicita.l20_edital = " . $oDados10->nroprocesso . "
+          INNER JOIN cadendermunicipiosistema on db72_sequencial = db125_cadendermunicipio
+					WHERE db_config.codigo= " . db_getsession('DB_instit') . " and db125_db_sistemaexterno = 4 AND liclicita.l20_edital = " . $oDados10->nroprocesso . "
 						AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106)
 				";
           $rsResult12 = db_query($sSql12);
@@ -548,7 +549,8 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
             $clredispi12->si185_logradouro = $oResult12->logradouro;
             $clredispi12->si185_numero = !$oResult12->numero ? 0 : $oResult12->numero;
             $clredispi12->si185_bairro = $oResult12->bairro;
-            $clredispi12->si185_cidade = $oResult12->cidade;
+            $tipoInstituicao = db_gettipoinstit(db_getsession('DB_instit'));
+            $clredispi12->si185_cidade = $tipoInstituicao == "51" ? $oResult12->municipio : "";//12
             $clredispi12->si185_distrito = $oResult12->distrito;
             $clredispi12->si185_cep = $oResult12->cep;
             $clredispi12->si185_latitude = $oResult12->latitude;
