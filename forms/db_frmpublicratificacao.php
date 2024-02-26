@@ -241,7 +241,7 @@ if (isset($l20_codigo)) {
 <script>
     db_opcao = <?= $db_opcao ?>;
 
-    //js_verificatipoproc();
+    js_verificatipoproc();
 
     function js_pesquisa(ratificacao = false) {
         if (ratificacao) {
@@ -278,9 +278,10 @@ if (isset($l20_codigo)) {
      *
      */
 
-    function js_verificatipoproc(tipocompratribunal) {
-        console.log(tipocompratribunal);
-        if (tipocompratribunal === '102' || tipocompratribunal === '103') {
+    function js_verificatipoproc() {
+        const tipocompratribunal = document.getElementById("l03_pctipocompratribunal");
+
+        if (tipocompratribunal === 102 || tipocompratribunal === 103) {
             document.getElementById('trdtlimitecredenciamento').style.display = "";
         }
     }
