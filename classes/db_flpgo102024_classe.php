@@ -23,6 +23,7 @@ class cl_flpgo102024 {
     var $si195_indtipopagamento = null;
     var $si195_dsctipopagextra = null;
     var $si195_indsituacaoservidorpensionista = null;
+    var $si195_datatransferenciareserva = null;
     var $si195_nrocpfinstituidor = null;
     var $si195_datobitoinstituidor_dia = null;
     var $si195_datobitoinstituidor_mes = null;
@@ -30,9 +31,11 @@ class cl_flpgo102024 {
     var $si195_datobitoinstituidor = null;
     var $si195_tipodependencia = 0;
     var $si195_dscdependencia = null;
+    var $si195_optouafastpreliminar = null;
     var $si195_datfastpreliminar_dia = null;
     var $si195_datfastpreliminar_mes = null;
     var $si195_datfastpreliminar_ano = null;
+    var $si195_datfastpreliminar = null;
     var $si195_indpensionista = null;
     var $si195_datconcessaoaposentadoriapensao_dia = null;
     var $si195_datconcessaoaposentadoriapensao_mes = null;
@@ -46,6 +49,7 @@ class cl_flpgo102024 {
     var $si195_indcessao = null;
     var $si195_dsclotacao = null;
     var $si195_indsalaaula = null;
+    var $si195_dedicacaoexclusiva = null;
     var $si195_vlrcargahorariasemanal = 0;
     var $si195_datefetexercicio_dia = null;
     var $si195_datefetexercicio_mes = null;
@@ -78,6 +82,7 @@ class cl_flpgo102024 {
                  si195_indtipopagamento = varchar(1) = Tipo de pagamento
                  si195_dsctipopagextra = varchar(150) = Descrição do tipo de pagamento extra
                  si195_indsituacaoservidorpensionista = varchar(1) = Indica a situação do servidor público
+                 si195_dataTransferenciaReserva = date = Data de transferencia reserva
                  si195_nrocpfinstituidor = varchar(11) = Número do CPF do instituidor da pensão
                  si195_datobitoinstituidor = date = Data de óbito do instituidor
                  si195_tipodependencia = int8 = Tipo de dependência do pensionista
@@ -93,6 +98,7 @@ class cl_flpgo102024 {
                  si195_indcessao = varchar(3) = Servidor Cedido com ônus
                  si195_dsclotacao = varchar(250) = Descrição da lotação
                  si195_indsalaaula = varchar(1) = Atividade em sala de aula para o professor
+                 si195_dedicacaoexclusiva = varchar(1) = Dedicação exclusiva
                  si195_vlrcargahorariasemanal = int8 = Valor da carga horaria
                  si195_datefetexercicio = date = Data de exercício no cargo
                  si195_datcomissionado = date = Data de ingresso no cargo comissionado
@@ -130,6 +136,7 @@ class cl_flpgo102024 {
             $this->si195_indtipopagamento = ($this->si195_indtipopagamento == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_indtipopagamento"]:$this->si195_indtipopagamento);
             $this->si195_dsctipopagextra = ($this->si195_dsctipopagextra == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dsctipopagextra"]:$this->si195_dsctipopagextra);
             $this->si195_indsituacaoservidorpensionista = ($this->si195_indsituacaoservidorpensionista == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_indsituacaoservidorpensionista"]:$this->si195_indsituacaoservidorpensionista);
+            $this->si195_datatransferenciareserva = ($this->si195_datatransferenciareserva == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_datatransferenciareserva"]:$this->si195_datatransferenciareserva);
             $this->si195_nrocpfinstituidor = ($this->si195_nrocpfinstituidor == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_nrocpfinstituidor"]:$this->si195_nrocpfinstituidor);
             if($this->si195_datobitoinstituidor == ""){
                 $this->si195_datobitoinstituidor_dia = ($this->si195_datobitoinstituidor_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_datobitoinstituidor_dia"]:$this->si195_datobitoinstituidor_dia);
@@ -167,6 +174,7 @@ class cl_flpgo102024 {
             $this->si195_indcessao = ($this->si195_indcessao == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_indcessao"]:$this->si195_indcessao);
             $this->si195_dsclotacao = ($this->si195_dsclotacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dsclotacao"]:$this->si195_dsclotacao);
             $this->si195_indsalaaula = ($this->si195_indsalaaula == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_indsalaaula"]:$this->si195_indsalaaula);
+            $this->si195_dedicacaoexclusiva = ($this->si195_dedicacaoexclusiva == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dedicacaoexclusiva"]:$this->si195_dedicacaoexclusiva);
             $this->si195_vlrcargahorariasemanal = ($this->si195_vlrcargahorariasemanal == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_vlrcargahorariasemanal"]:$this->si195_vlrcargahorariasemanal);
             if($this->si195_datefetexercicio == ""){
                 $this->si195_datefetexercicio_dia = ($this->si195_datefetexercicio_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_datefetexercicio_dia"]:$this->si195_datefetexercicio_dia);
@@ -357,6 +365,7 @@ class cl_flpgo102024 {
                                       ,si195_indtipopagamento
                                       ,si195_dsctipopagextra
                                       ,si195_indsituacaoservidorpensionista
+                                      ,si195_datatransferenciareserva
                                       ,si195_nrocpfinstituidor
                                       ,si195_datobitoinstituidor
                                       ,si195_tipodependencia
@@ -373,6 +382,7 @@ class cl_flpgo102024 {
                                       ,si195_indcessao
                                       ,si195_dsclotacao
                                       ,si195_indsalaaula
+                                      ,si195_dedicacaoexclusiva
                                       ,si195_vlrcargahorariasemanal
                                       ,si195_datefetexercicio
                                       ,si195_datcomissionado
@@ -393,6 +403,7 @@ class cl_flpgo102024 {
                                ,'$this->si195_indtipopagamento'
                                ,'$this->si195_dsctipopagextra'
                                ,'$this->si195_indsituacaoservidorpensionista'
+                               ,".($this->si195_datatransferenciareserva == "null" || $this->si195_datatransferenciareserva == ""?"null":"'".$this->si195_datatransferenciareserva."'")."
                                ,'$this->si195_nrocpfinstituidor'
                                ,".($this->si195_datobitoinstituidor== "null" || $this->si195_datobitoinstituidor == ""?"null":"'".$this->si195_datobitoinstituidor."'")."
                                ,".($this->si195_tipodependencia== "null" || $this->si195_tipodependencia == ""?"0":"'".$this->si195_tipodependencia."'")."
@@ -409,6 +420,7 @@ class cl_flpgo102024 {
                                ,'$this->si195_indcessao'
                                ,'$this->si195_dsclotacao'
                                ,'$this->si195_indsalaaula'
+                               ,'$this->si195_dedicacaoexclusiva'
                                ,$this->si195_vlrcargahorariasemanal
                                ,".($this->si195_datefetexercicio == "null" || $this->si195_datefetexercicio == ""?"null":"'".$this->si195_datefetexercicio."'")."
                                ,".($this->si195_datcomissionado == "null" || $this->si195_datcomissionado == ""?"null":"'".$this->si195_datcomissionado."'")."
@@ -578,6 +590,10 @@ class cl_flpgo102024 {
                 return false;
             }
         }
+        if(trim($this->si195_datatransferenciareserva)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_datatransferenciareserva"])) {
+            $sql .= $virgula . " si195_datatransferenciareserva = '$this->si195_datatransferenciareserva' ";
+            $virgula = ",";
+        }
         if(trim($this->si195_dscdependencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_dscdependencia"])) {
             $sql .= $virgula . " si195_dscdependencia = '$this->si195_dscdependencia' ";
             $virgula = ",";
@@ -632,6 +648,10 @@ class cl_flpgo102024 {
         }
         if(trim($this->si195_indsalaaula)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_indsalaaula"])){
             $sql  .= $virgula." si195_indsalaaula = '$this->si195_indsalaaula' ";
+            $virgula = ",";
+        }
+        if(trim($this->si195_dedicacaoexclusiva)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_dedicacaoexclusiva"])){
+            $sql  .= $virgula." si195_dedicacaoexclusiva = '$this->si195_dedicacaoexclusiva' ";
             $virgula = ",";
         }
         if(trim($this->si195_vlrcargahorariasemanal)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_vlrcargahorariasemanal"])){
@@ -950,7 +970,7 @@ class cl_flpgo102024 {
             $this->erro_status = "0";
             return false;
         }
-        $this->numrows = pg_numrows($result);
+        $this->numrows = pg_num_rows($result);
         if($this->numrows==0){
             $this->erro_banco = "";
             $this->erro_sql   = "Record Vazio na Tabela:flpgo102024";
@@ -965,7 +985,7 @@ class cl_flpgo102024 {
     function sql_query ( $si195_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
         $sql = "select ";
         if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+            $campos_sql = explode("#",$campos);
             $virgula = "";
             for($i=0;$i<sizeof($campos_sql);$i++){
                 $sql .= $virgula.$campos_sql[$i];
@@ -986,7 +1006,7 @@ class cl_flpgo102024 {
         $sql .= $sql2;
         if($ordem != null ){
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = explode("#",$ordem);
             $virgula = "";
             for($i=0;$i<sizeof($campos_sql);$i++){
                 $sql .= $virgula.$campos_sql[$i];
@@ -999,7 +1019,7 @@ class cl_flpgo102024 {
     function sql_query_file ( $si195_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
         $sql = "select ";
         if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+            $campos_sql = explode("#",$campos);
             $virgula = "";
             for($i=0;$i<sizeof($campos_sql);$i++){
                 $sql .= $virgula.$campos_sql[$i];
@@ -1020,7 +1040,7 @@ class cl_flpgo102024 {
         $sql .= $sql2;
         if($ordem != null ){
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = explode("#",$ordem);
             $virgula = "";
             for($i=0;$i<sizeof($campos_sql);$i++){
                 $sql .= $virgula.$campos_sql[$i];

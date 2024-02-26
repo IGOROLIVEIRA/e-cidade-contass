@@ -1,7 +1,7 @@
 <?php
 //MODULO: sicom
-//CLASSE DA ENTIDADE viap102023
-class cl_viap102023 { 
+//CLASSE DA ENTIDADE viap102024
+class cl_viap102024 { 
   // cria variaveis de erro 
   public $rotulo     = null; 
   public $query_sql  = null; 
@@ -37,7 +37,7 @@ class cl_viap102023 {
   //funcao construtor da classe 
   function __construct() {
     //classes dos rotulos dos campos
-    $this->rotulo = new rotulo("viap102023");
+    $this->rotulo = new rotulo("viap102024");
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
 
@@ -70,76 +70,76 @@ class cl_viap102023 {
   function incluir ($si198_sequencial) {
       $this->atualizacampos();
      if ($this->si198_tiporegistro == null ) { 
-       $this->erro_sql = " Campo si198_tiporegistro n�o informado.";
+       $this->erro_sql = " Campo si198_tiporegistro nao informado.";
        $this->erro_campo = "si198_tiporegistro";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
      if ($this->si198_nrocpfagentepublico == null ) {
-       $this->erro_sql = " Campo si198_nrocpfagentepublico n�o informado. ".$this->si198_codvinculopessoa;
+       $this->erro_sql = " Campo si198_nrocpfagentepublico nao informado. ".$this->si198_codvinculopessoa;
        $this->erro_campo = "si198_nrocpfagentepublico";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
      if ($this->si198_codmatriculapessoa == null ) { 
-       $this->erro_sql = " Campo si198_codmatriculapessoa n�o informado.";
+       $this->erro_sql = " Campo si198_codmatriculapessoa nao informado.";
        $this->erro_campo = "si198_codmatriculapessoa";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
      if ($this->si198_codvinculopessoa == null ) { 
-       $this->erro_sql = " Campo si198_codvinculopessoa n�o informado.";
+       $this->erro_sql = " Campo si198_codvinculopessoa nao informado.";
        $this->erro_campo = "si198_codvinculopessoa";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
      if ($this->si198_mes == null ) { 
-       $this->erro_sql = " Campo si198_mes n�o informado.";
+       $this->erro_sql = " Campo si198_mes nao informado.";
        $this->erro_campo = "si198_mes";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
      if ($this->si198_instit == null ) { 
-       $this->erro_sql = " Campo si198_instit n�o informado.";
+       $this->erro_sql = " Campo si198_instit nao informado.";
        $this->erro_campo = "si198_instit";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
       if($si198_sequencial == "" || $si198_sequencial == null ){
-          $result = db_query("select nextval('viap102023_si198_sequencial_seq')");
+          $result = db_query("select nextval('viap102024_si198_sequencial_seq')");
           if($result==false){
               $this->erro_banco = str_replace("\n","",@pg_last_error());
-              $this->erro_sql   = "Verifique o cadastro da sequencia: viap102023_si198_sequencial_seq do campo: si198_sequencial";
-              $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+              $this->erro_sql   = "Verifique o cadastro da sequencia: viap102024_si198_sequencial_seq do campo: si198_sequencial";
+              $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
               $this->erro_status = "0";
               return false;
           }
           $this->si198_sequencial = pg_result($result,0,0);
       }else{
-          $result = db_query("select last_value from viap102023_si198_sequencial_seq");
+          $result = db_query("select last_value from viap102024_si198_sequencial_seq");
           if(($result != false) && (pg_result($result,0,0) < $si198_sequencial)){
-              $this->erro_sql = " Campo si198_sequencial maior que �ltimo n�mero da sequencia.";
-              $this->erro_banco = "Sequencia menor que este n�mero.";
-              $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+              $this->erro_sql = " Campo si198_sequencial maior que ultimo numero da sequencia.";
+              $this->erro_banco = "Sequencia menor que este numero.";
+              $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
               $this->erro_status = "0";
               return false;
@@ -150,12 +150,12 @@ class cl_viap102023 {
      if (($this->si198_sequencial == null) || ($this->si198_sequencial == "") ) { 
        $this->erro_sql = " Campo si198_sequencial nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
-       $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     $sql = "insert into viap102023(
+     $sql = "insert into viap102024(
                                        si198_sequencial 
                                       ,si198_tiporegistro 
                                       ,si198_nrocpfagentepublico 
@@ -177,13 +177,13 @@ class cl_viap102023 {
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if ( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ) {
-         $this->erro_sql   = "viap102023 ($this->si198_sequencial) nao Inclu�do. Inclusao Abortada.";
-         $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_banco = "viap102023 j� Cadastrado";
+         $this->erro_sql   = "viap102024 ($this->si198_sequencial) nao Incluido. Inclusao Abortada.";
+         $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_banco = "viap102024 ja Cadastrado";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        } else {
-         $this->erro_sql   = "viap102023 ($this->si198_sequencial) nao Inclu�do. Inclusao Abortada.";
-         $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_sql   = "viap102024 ($this->si198_sequencial) nao Incluido. Inclusao Abortada.";
+         $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }
        $this->erro_status = "0";
@@ -193,7 +193,7 @@ class cl_viap102023 {
      $this->erro_banco = "";
      $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$this->si198_sequencial;
-     $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+     $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
@@ -223,16 +223,16 @@ class cl_viap102023 {
   // funcao para alteracao
   function alterar ($si198_sequencial=null) { 
       $this->atualizacampos();
-     $sql = " update viap102023 set ";
+     $sql = " update viap102024 set ";
      $virgula = "";
      if (trim($this->si198_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si198_sequencial"])) { 
        $sql  .= $virgula." si198_sequencial = $this->si198_sequencial ";
        $virgula = ",";
        if (trim($this->si198_sequencial) == null ) { 
-         $this->erro_sql = " Campo si198_sequencial n�o informado.";
+         $this->erro_sql = " Campo si198_sequencial nao informado.";
          $this->erro_campo = "si198_sequencial";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -242,10 +242,10 @@ class cl_viap102023 {
        $sql  .= $virgula." si198_tiporegistro = $this->si198_tiporegistro ";
        $virgula = ",";
        if (trim($this->si198_tiporegistro) == null ) { 
-         $this->erro_sql = " Campo si198_tiporegistro n�o informado.";
+         $this->erro_sql = " Campo si198_tiporegistro nao informado.";
          $this->erro_campo = "si198_tiporegistro";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -255,10 +255,10 @@ class cl_viap102023 {
        $sql  .= $virgula." si198_nrocpfagentepublico = '$this->si198_nrocpfagentepublico' ";
        $virgula = ",";
        if (trim($this->si198_nrocpfagentepublico) == null ) { 
-         $this->erro_sql = " Campo si198_nrocpfagentepublico n�o informado.";
+         $this->erro_sql = " Campo si198_nrocpfagentepublico nao informado.";
          $this->erro_campo = "si198_nrocpfagentepublico";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -268,10 +268,10 @@ class cl_viap102023 {
        $sql  .= $virgula." si198_codmatriculapessoa = $this->si198_codmatriculapessoa ";
        $virgula = ",";
        if (trim($this->si198_codmatriculapessoa) == null ) { 
-         $this->erro_sql = " Campo si198_codmatriculapessoa n�o informado.";
+         $this->erro_sql = " Campo si198_codmatriculapessoa nao informado.";
          $this->erro_campo = "si198_codmatriculapessoa";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -281,10 +281,10 @@ class cl_viap102023 {
        $sql  .= $virgula." si198_codvinculopessoa = $this->si198_codvinculopessoa ";
        $virgula = ",";
        if (trim($this->si198_codvinculopessoa) == null ) { 
-         $this->erro_sql = " Campo si198_codvinculopessoa n�o informado.";
+         $this->erro_sql = " Campo si198_codvinculopessoa nao informado.";
          $this->erro_campo = "si198_codvinculopessoa";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -294,10 +294,10 @@ class cl_viap102023 {
        $sql  .= $virgula." si198_mes = $this->si198_mes ";
        $virgula = ",";
        if (trim($this->si198_mes) == null ) { 
-         $this->erro_sql = " Campo si198_mes n�o informado.";
+         $this->erro_sql = " Campo si198_mes nao informado.";
          $this->erro_campo = "si198_mes";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -307,10 +307,10 @@ class cl_viap102023 {
        $sql  .= $virgula." si198_instit = $this->si198_instit ";
        $virgula = ",";
        if (trim($this->si198_instit) == null ) { 
-         $this->erro_sql = " Campo si198_instit n�o informado.";
+         $this->erro_sql = " Campo si198_instit nao informado.";
          $this->erro_campo = "si198_instit";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -353,9 +353,9 @@ class cl_viap102023 {
      $result = db_query($sql);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "viap102023 nao Alterado. Alteracao Abortada.\\n";
+       $this->erro_sql   = "viap102024 nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->si198_sequencial;
-       $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        $this->numrows_alterar = 0;
@@ -363,18 +363,18 @@ class cl_viap102023 {
      } else {
        if (pg_affected_rows($result)==0) {
          $this->erro_banco = "";
-         $this->erro_sql = "viap102023 nao foi Alterado. Alteracao Executada.\\n";
+         $this->erro_sql = "viap102024 nao foi Alterado. Alteracao Executada.\\n";
          $this->erro_sql .= "Valores : ".$this->si198_sequencial;
-         $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_alterar = 0;
          return true;
        } else {
          $this->erro_banco = "";
-         $this->erro_sql = "Altera��o efetuada com Sucesso\\n";
+         $this->erro_sql = "Alteracao efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$this->si198_sequencial;
-        $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
@@ -414,7 +414,7 @@ class cl_viap102023 {
          }
        }
      }
-     $sql = " delete from viap102023
+     $sql = " delete from viap102024
                     where ";
      $sql2 = "";
      if ($dbwhere==null || $dbwhere =="") {
@@ -430,9 +430,9 @@ class cl_viap102023 {
      $result = db_query($sql.$sql2);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "viap102023 nao Exclu�do. Exclus�o Abortada.\\n";
+       $this->erro_sql   = "viap102024 nao Excluido. Exclusao Abortada.\\n";
        $this->erro_sql .= "Valores : ".$si198_sequencial;
-       $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        $this->numrows_excluir = 0;
@@ -440,18 +440,18 @@ class cl_viap102023 {
      } else {
        if (pg_affected_rows($result)==0) {
          $this->erro_banco = "";
-         $this->erro_sql = "viap102023 nao Encontrado. Exclus�o n�o Efetuada.\\n";
+         $this->erro_sql = "viap102024 nao Encontrado. Exclusao nao Efetuada.\\n";
          $this->erro_sql .= "Valores : ".$si198_sequencial;
-         $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_excluir = 0;
          return true;
        } else {
          $this->erro_banco = "";
-         $this->erro_sql = "Exclus�o efetuada com Sucesso\\n";
+         $this->erro_sql = "Exclusao efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$si198_sequencial;
-         $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
@@ -467,16 +467,16 @@ class cl_viap102023 {
        $this->numrows    = 0;
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Erro ao selecionar os registros.";
-       $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     $this->numrows = pg_numrows($result);
+     $this->numrows = pg_num_rows($result);
       if ($this->numrows==0) {
         $this->erro_banco = "";
-        $this->erro_sql   = "Record Vazio na Tabela:viap102023";
-        $this->erro_msg   = "Usu�rio: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_sql   = "Record Vazio na Tabela:viap102024";
+        $this->erro_msg   = "Usuario: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "0";
         return false;
@@ -497,11 +497,11 @@ class cl_viap102023 {
      } else {
        $sql .= $campos;
      }
-     $sql .= " from viap102023 ";
+     $sql .= " from viap102024 ";
      $sql2 = "";
      if ($dbwhere=="") {
        if ($si198_sequencial!=null ) {
-         $sql2 .= " where viap102023.si198_sequencial = $si198_sequencial "; 
+         $sql2 .= " where viap102024.si198_sequencial = $si198_sequencial "; 
        } 
      } else if ($dbwhere != "") {
        $sql2 = " where $dbwhere";
@@ -532,11 +532,11 @@ class cl_viap102023 {
      } else {
        $sql .= $campos;
      }
-     $sql .= " from viap102023 ";
+     $sql .= " from viap102024 ";
      $sql2 = "";
      if ($dbwhere=="") {
        if ($si198_sequencial!=null ) {
-         $sql2 .= " where viap102023.si198_sequencial = $si198_sequencial "; 
+         $sql2 .= " where viap102024.si198_sequencial = $si198_sequencial "; 
        } 
      } else if ($dbwhere != "") {
        $sql2 = " where $dbwhere";

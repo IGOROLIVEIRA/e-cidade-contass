@@ -7,6 +7,7 @@ include("libs/db_libdocumento.php");
 include("classes/db_liccomissaocgm_classe.php");
 include("classes/db_db_config_classe.php");
 include("classes/db_db_documento_classe.php");
+include("lic1_relatorio_helper.php");
 
 $clhomologacaoadjudica = new cl_homologacaoadjudica();
 $clliclicita =  new cl_liclicita();
@@ -80,7 +81,7 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
     $sAssinaturaCotacao = db_utils::fieldsMemory($rsCotacao, 0)->db02_texto;
 
     if($nome==""){
-        
+
         $comissao = $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null,'l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm) as z01_nome, l31_tipo',null,"l31_licitacao=$codigo_preco"));
         for($i=0;$i<$clliccomissaocgm->numrows;$i++){
             $comisaoRes = db_utils::fieldsMemory($comissao, $i);
@@ -100,13 +101,13 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
     $oLibDocumento->l44_descricao = strtoupper($resultLici->l44_descricao);
     $oLibDocumento->l20_numero = $resultLici->l20_numero;
     $oLibDocumento->z01_nome = $nome;
-    
+
     $aParagrafos = $oLibDocumento->getDocParagrafos();
 
 
     $data = "Data: ";
 
-    $mPDF = new Relatorio('', 'A4-L', 0, "", 7, 7, 50);
+    $mPDF = new Relatorio('', 'A4-L', 8, "arial", 7, 7, 50);
 
     $mPDF
         ->addInfo($head3, 2)
@@ -123,7 +124,7 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
     <head>
         <title>Relatório</title>
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-        <link rel="stylesheet" type="text/css" href="estilos/relatorios/padrao.style.css">
+<!--        <link rel="stylesheet" type="text/css" href="estilos/relatorios/padrao.style.css">-->
         <style type="text/css">
             .content {
                 width: 1070px;
@@ -131,7 +132,7 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
 
             .table {
                 font-size: 10px;
-                background: url("imagens/px_preto.jpg") repeat center;
+                /*background: url("imagens/px_preto.jpg") repeat center;*/
                 background-repeat: repeat-y;
                 background-position: 0 50px;
                 height: 30px;
@@ -152,6 +153,10 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
             .col-valor_un {
                 width: 80px;
                 padding-right: 5px;
+            }
+
+            .col-descricao-item-layout-antigo {
+                width: 245px;
             }
 
             .col-quant {
@@ -231,7 +236,7 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
     <body>
     <h2 style="text-align: center;">ADJUDICAÇÃO DE PROCESSO</h2>
             <?php
-            foreach ($aParagrafos as $oParag) {  
+            foreach ($aParagrafos as $oParag) {
                 $texto = $oParag->oParag->db02_texto;
             }
 
@@ -246,10 +251,12 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
             <table border="1">
             <?php
             $nTotalItens = 0;
-            
-                
-            $campos = "DISTINCT pc01_codmater,pc01_tabela,pc01_taxa,pc01_descrmater,cgmforncedor.z01_nome,cgmforncedor.z01_cgccpf,m61_descr,m61_abrev,pc11_quant,pc23_obs,pc23_valor,pcorcamval.pc23_vlrun,pcorcamval.pc23_percentualdesconto as mediapercentual,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao,pc11_seq";
-
+            $lote = FALSE;
+            $sem_percentual = FALSE;
+            $com_percentual = FALSE;
+            $mostra_homologado_geral = FALSE;
+            $somaTotalHomologados = 0;
+            $campos = "DISTINCT pc01_codmater,pc01_tabela,pc01_taxa,pc01_descrmater,pc01_complmater,cgmforncedor.z01_nome,cgmforncedor.z01_cgccpf,m61_descr,m61_abrev,pc11_quant,pc23_obs,pc23_valor,pcorcamval.pc23_vlrun,pcorcamval.pc23_percentualdesconto,pcorcamval.pc23_perctaxadesctabela,l203_homologaadjudicacao,pc81_codprocitem,l20_criterioadjudicacao,l04_descricao,pc11_seq,liclicitem.l21_ordem AS ordem";
             $sWhere = " liclicitem.l21_codliclicita = {$codigo_preco} and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial is null";
             $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_semhomologacao(null,$campos,"pc11_seq,z01_nome",$sWhere));
             $array1 = array();
@@ -277,10 +284,9 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
                 }
 
             }
-            
-        //var_dump($array1);
+
         for($j=0;$j<$op;$j++){
-            
+
             if(strlen($array1[$j][1])==14){
                 $bloco_1 = substr($array1[$j][1],0,2);
                 $bloco_2 = substr($array1[$j][1],2,3);
@@ -297,33 +303,37 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
                 $cpf_cnpj_formatado = "CPF ".$bloco_1.".".$bloco_2.".".$bloco_3."-".$dig_verificador;
 
             }
-                
+
             ?>
         <br>
-            
-            
-            <tr style="">
-            
-            <th colspan="7"><?echo  $array1[$j][2]." - ".$cpf_cnpj_formatado?> </th>
-            
+            <?php
+            $colspan = getColspan($tipojulgamento, $oResult->l20_criterioadjudicacao);
+            ?>
+
+            <tr>
+                <th colspan="<?php echo $colspan; ?>">
+                    <?php echo $array1[$j][2]." - ".$cpf_cnpj_formatado ?>
+                </th>
             </tr>
 
-                <?php
-                if($tipojulgamento!=3){?>
-                <tr style="background-color: #CDC9C9;">
-                    <th>Item</th>
-                    <th>Material/Serviços</th>
-                    <th>Unidade</th>
-                    <th>Marca</th>
-                    <th>Quant</th>
-                    <th>Uni/Taxa</th>
-                    <th>Total</th>
-                </tr>
             <?php
+                if (isCriterioAdjucacaoOutrosTipoJulgamentoLote($tipojulgamento, $oResult->l20_criterioadjudicacao) ||
+                    isCriterioAdjucacaoDescontoMenorTaxaPercTipoJulgamentoLote($tipojulgamento, $oResult->l20_criterioadjudicacao)
+                ) {
+                    getCabecalhoTabelaLinhaLote($array1[$j][3], $colspan,'word');
                 }
-            
-            ?>    
-                
+
+                if (isCriterioAdjucacaoTipoJulgamentoCabecalhoSemPercentual($tipojulgamento, $oResult->l20_criterioadjudicacao)) {
+                    $mostra_homologado_geral = TRUE;
+                    getCabecalhoTabelaLayout('word');
+                } elseif (isCriterioAdjucacaoTipoJulgamentoCabecalhoComPercentual($tipojulgamento, $oResult->l20_criterioadjudicacao)) {
+                    $mostra_homologado_geral = TRUE;
+                    getCabecalhoTabelaLayoutComPercentual('word');
+                } elseif ($tipojulgamento != 3) {
+                    getCabecalhoTabelaLayoutAntigo('word');
+                }
+            ?>
+
             <?php
             $nTotalItens = 0;
             $valor = 0;
@@ -331,141 +341,55 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
             for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
                 $oDadosDaLinha = new stdClass();
                 $oResult = db_utils::fieldsMemory($result, $iCont);
-                if($array1[$j][1]==$oResult->z01_cgccpf){
 
-                if($tipojulgamento==3){
-                    if($array1[$j][3]==$oResult->l04_descricao){
-                        if($controle==0){?>
-                             <tr style="">
-            
-                                <th colspan="7"><?echo $oResult->l04_descricao?> </th>
-            
-                            </tr>
-                            <tr style="background-color: #CDC9C9;">
-                                <th>Item</th>
-                                <th>Material/Serviços</th>
-                                <th>Unidade</th>
-                                <th>Marca</th>
-                                <th>Quant</th>
-                                <th>Uni/Taxa</th>
-                                <th>Total</th>
-                            </tr>
-                        <?php   
-                        $controle = 1;
+                if ($array1[$j][1] == $oResult->z01_cgccpf) {
+                    $nTotalItens += $oResult->pc23_valor;
+                    $valor += $oResult->pc23_valor;
+                    $oDadosDaLinha = new stdClass();
+                    $oDadosDaLinha->seq = $iCont + 1;
+                    $oDadosDaLinha->item = $oResult->pc01_codmater;
+                    $oDadosDaLinha->descricao = strtoupper($oResult->pc01_descrmater) . " " . strtoupper($oResult->pc01_complmater);
+                    $oDadosDaLinha->unidadeDeMedida = strtoupper($oResult->m61_abrev);
+                    $oDadosDaLinha->marca = $oResult->pc23_obs == "" ? "-" : strtoupper($oResult->pc23_obs);
+                    $oDadosDaLinha->quantidade = $oResult->pc11_quant;
+                    $oDadosDaLinha->valorUnitario = "R$" . number_format($oResult->pc23_vlrun, $oGet->quant_casas, ",", ".");
+                    $oDadosDaLinha->total = number_format($oResult->pc23_valor, 2, ",", ".");
+
+                    if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
+                        if ($oResult->pc01_tabela == "t") {
+                            $oDadosDaLinha->percentual = $oResult->pc23_perctaxadesctabela . "%";
+                        } else {
+                            $oDadosDaLinha->percentual =  $oResult->pc23_percentualdesconto . "%";
                         }
-                    }else{
-                        $array1[$j][3]=$oResult->l04_descricao;?>
-                        <tr>
-                            <td >
-                                Valor
-                            </td>
-                            <td style="text-align: right;" colspan="6">
-                                <?= "R$" . number_format($valor, 2, ",", ".") ?>
-                            </td>
-                        </tr>
-                            <tr style="">
-                                
-                                <th colspan="7"><?echo $oResult->l04_descricao?> </th>
 
-                            </tr>
-                            <tr style="background-color: #CDC9C9;">
-                                <th>Item</th>
-                                <th>Material/Serviços</th>
-                                <th>Unidade</th>
-                                <th>Marca</th>
-                                <th>Quant</th>
-                                <th>Uni/Taxa</th>
-                                <th>Total</th>
-                            </tr>
-                    <?php
-                        $valor = 0;
-                    }
-                }
-
-                $lTotal = round($oResult->pc23_vlrun, $oGet->quant_casas) * $oResult->pc11_quant;
-
-                $nTotalItens += $lTotal;
-                $valor += $lTotal;
-                $oDadosDaLinha = new stdClass();
-                $oDadosDaLinha->seq = $iCont + 1;
-                $oDadosDaLinha->item = $oResult->pc01_codmater;
-                $oDadosDaLinha->descricao = strtoupper($oResult->pc01_descrmater);
-                
-                if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
-                    
-                    $oDadosDaLinha->quantidade = $oResult->pc11_quant;
-                    if ($oResult->mediapercentual == 0) {
-                        $oDadosDaLinha->valorUnitario = "-";
+                        $oDadosDaLinha->valorUnitario = '-';
                     } else {
-                        $oDadosDaLinha->valorUnitario = number_format($oResult->mediapercentual, 2) . "%";
+                        $oDadosDaLinha->percentual = "-";
                     }
-                    $oDadosDaLinha->unidadeDeMedida = strtoupper($oResult->m61_abrev);
-                    $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
-                } else {
-                    $oDadosDaLinha->valorUnitario = "R$".number_format($oResult->pc23_vlrun, $oGet->quant_casas, ",", ".");
-                    $oDadosDaLinha->quantidade = $oResult->pc11_quant;
-                    if ($oResult->mediapercentual == 0) {
-                        $oDadosDaLinha->mediapercentual = "-";
+
+                    if (isCriterioAdjucacaoTipoJulgamentoCabecalhoSemPercentual($tipojulgamento, $oResult->l20_criterioadjudicacao)) {
+                        getDadosTabelaLayout($oResult, $oDadosDaLinha, 'word');
+                    } elseif (isCriterioAdjucacaoTipoJulgamentoCabecalhoComPercentual($tipojulgamento, $oResult->l20_criterioadjudicacao)) {
+                        getDadosTabelaLayoutComPercentual($oResult, $oDadosDaLinha,'word');
                     } else {
-                        $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
+                        getDadosTabelaLayoutAntigo($oDadosDaLinha, 'word');
                     }
-                    $oDadosDaLinha->unidadeDeMedida = strtoupper($oResult->m61_abrev);
-                    $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
                 }
-                if($oResult->pc23_obs==""){
-                    $oDadosDaLinha->marca = "-";
-                }else{
-                    $oDadosDaLinha->marca = strtoupper($oResult->pc23_obs);
-                }
-            echo"<tr>";
-                echo"<td>".$oDadosDaLinha->item."</td>";
-           
-
-            
-                echo"<td>".$oDadosDaLinha->descricao."</td>";
-           
-
-           
-                echo"<td>".$oDadosDaLinha->unidadeDeMedida."</td>";
-            
-
-           
-                echo"<td>".$oDadosDaLinha->marca."</td>";
-           
-
-          
-                echo"<td>".$oDadosDaLinha->quantidade."</td>";
-            
-
-            
-                echo"<td>".$oDadosDaLinha->valorUnitario."</td>";
-           
-
-           
-                echo"<td>".$oDadosDaLinha->total."</td>";
-            echo"</tr>";  
             }
-        }?>
-        <tr>
-                        <td >
-                            Valor
-                        </td>
-                        <td style="text-align: right;" colspan="6">
-                            <?= "R$" . number_format($valor, 2, ",", ".") ?>
-                        </td>
-        </tr>
-        <tr>
-        <td >
-            Vlr TOTAL
-        </td>
-        <td style="text-align: right;" colspan="6">
-            <?= "R$" . number_format($nTotalItens, 2, ",", ".") ?>
-        </td>
-        </tr>
 
-    <?php
+            if ($mostra_homologado_geral) {
+                $somaTotalHomologados += $nTotalItens;
+                getTabelaLinhaTotalHomologado($nTotalItens, $colspan, 'word');
+            } else {
+                getTabelaLinhaSemTotalHomologado($valor, $nTotalItens, $colspan, 'word');
+            }
     }
     ?>
+            <?php
+            if ($mostra_homologado_geral) {
+                getTabelaLinhaTotalGeral($somaTotalHomologados, $colspan, 'word');
+            }
+            ?>
 </table>
 <?php
 $data = date('d/m/Y');
@@ -482,7 +406,7 @@ $data = date('d/m/Y');
             case 2:
                 $mes = "Fevereiro";
                 break;
-            
+
             case 3:
                 $mes = "Março";
                 break;
@@ -490,7 +414,7 @@ $data = date('d/m/Y');
             case 4:
                 $mes = "Abril";
                 break;
-        
+
             case 5:
                 $mes = "Maio";
                 break;
@@ -510,7 +434,7 @@ $data = date('d/m/Y');
             case 9:
                 $mes = "Setembro";
                 break;
-        
+
             case 10:
                 $mes = "Outubro";
                 break;
@@ -527,7 +451,7 @@ $data = date('d/m/Y');
 
         $resultado = $cldb_config->sql_record($cldb_config->sql_query_file(db_getsession('DB_instit')));
         $resultado = db_utils::fieldsMemory($resultado, 0);
-        
+
         ?>
         <br>
         <br>
