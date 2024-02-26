@@ -1079,6 +1079,11 @@ class Recibo
     {
         $totalRecibo = (float) $this->getTotalRecibo();
         $debitos = current($this->getDebitosRecibo());
+
+        if(!$debitos) {
+            return $totalRecibo;
+        }
+
         $arretipo = Arretipo::query()->where('k00_tipo', $debitos->k00_tipo)->firstOrFail();
         $valorTaxaExpediente = (float) $arretipo->k00_txban;
         return $totalRecibo + $valorTaxaExpediente;
