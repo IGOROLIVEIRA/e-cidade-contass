@@ -917,7 +917,8 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
         if (parseFloat(nValorDebito) > 0) {
             nValorSaldo = nValorDebito;
         }
-        if (nValorSaldo === nValorDistribuido) {
+        var resultado = nValorSaldo.replace(",", ".") - nValorDistribuido.replace(",", ".");
+        if (nValorSaldo === nValorDistribuido || resultado < 0) {
 
             $('processar').disabled = false;
         }

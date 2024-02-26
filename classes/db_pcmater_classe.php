@@ -626,43 +626,7 @@ class cl_pcmater
     if ($pc01_codmater != null) {
       $sql .= " pc01_codmater = $this->pc01_codmater";
     }
-    $resaco = $this->sql_record($this->sql_query_file($this->pc01_codmater));
-    if ($this->numrows > 0) {
-      for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,5491,'$this->pc01_codmater','A')");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["pc01_codmater"]) || $this->pc01_codmater != "")
-          $resac = db_query("insert into db_acount values($acount,855,5491,'" . AddSlashes(pg_result($resaco, $conresaco, 'pc01_codmater')) . "','$this->pc01_codmater'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["pc01_descrmater"]) || $this->pc01_descrmater != "")
-          $resac = db_query("insert into db_acount values($acount,855,5492,'" . AddSlashes(pg_result($resaco, $conresaco, 'pc01_descrmater')) . "','$this->pc01_descrmater'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["pc01_complmater"]) || $this->pc01_complmater != "")
-          $resac = db_query("insert into db_acount values($acount,855,5493,'" . AddSlashes(pg_result($resaco, $conresaco, 'pc01_complmater')) . "','$this->pc01_complmater'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["pc01_codsubgrupo"]) || $this->pc01_codsubgrupo != "")
-          $resac = db_query("insert into db_acount values($acount,855,5494,'" . AddSlashes(pg_result($resaco, $conresaco, 'pc01_codsubgrupo')) . "','$this->pc01_codsubgrupo'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["pc01_ativo"]) || $this->pc01_ativo != "")
-          $resac = db_query("insert into db_acount values($acount,855,6602,'" . AddSlashes(pg_result($resaco, $conresaco, 'pc01_ativo')) . "','$this->pc01_ativo'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["pc01_conversao"]) || $this->pc01_conversao != "")
-          $resac = db_query("insert into db_acount values($acount,855,6761,'" . AddSlashes(pg_result($resaco, $conresaco, 'pc01_conversao')) . "','$this->pc01_conversao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["pc01_id_usuario"]) || $this->pc01_id_usuario != "")
-          $resac = db_query("insert into db_acount values($acount,855,7425,'" . AddSlashes(pg_result($resaco, $conresaco, 'pc01_id_usuario')) . "','$this->pc01_id_usuario'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["pc01_libaut"]) || $this->pc01_libaut != "")
-          $resac = db_query("insert into db_acount values($acount,855,8068,'" . AddSlashes(pg_result($resaco, $conresaco, 'pc01_libaut')) . "','$this->pc01_libaut'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["pc01_servico"]) || $this->pc01_servico != "")
-          $resac = db_query("insert into db_acount values($acount,855,10556,'" . AddSlashes(pg_result($resaco, $conresaco, 'pc01_servico')) . "','$this->pc01_servico'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["pc01_veiculo"]) || $this->pc01_veiculo != "")
-          $resac = db_query("insert into db_acount values($acount,855,11473,'" . AddSlashes(pg_result($resaco, $conresaco, 'pc01_veiculo')) . "','$this->pc01_veiculo'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["pc01_fraciona"]) || $this->pc01_fraciona != "")
-          $resac = db_query("insert into db_acount values($acount,855,11708,'" . AddSlashes(pg_result($resaco, $conresaco, 'pc01_fraciona')) . "','$this->pc01_fraciona'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["pc01_validademinima"]) || $this->pc01_validademinima != "")
-          $resac = db_query("insert into db_acount values($acount,855,11727,'" . AddSlashes(pg_result($resaco, $conresaco, 'pc01_validademinima')) . "','$this->pc01_validademinima'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["pc01_obrigatorio"]) || $this->pc01_obrigatorio != "")
-          $resac = db_query("insert into db_acount values($acount,855,11728,'" . AddSlashes(pg_result($resaco, $conresaco, 'pc01_obrigatorio')) . "','$this->pc01_obrigatorio'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["pc01_liberaresumo"]) || $this->pc01_liberaresumo != "")
-          $resac = db_query("insert into db_acount values($acount,855,17390,'" . AddSlashes(pg_result($resaco, $conresaco, 'pc01_liberaresumo')) . "','$this->pc01_liberaresumo'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
+
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
