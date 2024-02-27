@@ -162,8 +162,8 @@ switch ($oParam->exec) {
                 foreach ($oParam->aItensLicitacao as $item) {
 
                     $aItensRetificaItemLicitacao = array();
-                    $rsItensRetificacao = $clliclicita->sql_record($clliclicita->sql_query_pncp_itens_retifica_situacao($oParam->iLicitacao, $item->l21_ordem));
 
+                    $rsItensRetificacao = $clliclicita->sql_record($clliclicita->sql_query_pncp_itens_retifica_situacao($oParam->iLicitacao, $item->l21_ordem));
                     for ($i = 0; $i < pg_num_rows($rsItensRetificacao); $i++) {
                         $oDadosResultado = db_utils::fieldsMemory($rsItensRetificacao, $i);
                         $aItensRetificaItemLicitacao[] = $oDadosResultado;

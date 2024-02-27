@@ -3744,9 +3744,17 @@ class cl_liclicita
                     ELSE 3
                 END AS itemCategoriaId,
                 pcmater.pc01_regimobiliario AS codigoRegistroImobiliario,
-                CASE
-                                      WHEN l03_pctipocompratribunal IN (100,101,102,103) AND pc23_vlrun > 0 THEN 2
-                                      WHEN l03_pctipocompratribunal IN (100,101,102,103) AND pc23_vlrun = 0 THEN 4
+                                  CASE
+                                      WHEN l03_pctipocompratribunal IN (100,
+                                                                        101,
+                                                                        102,
+                                                                        103)
+                                           AND credenciamento.l205_fornecedor IS NOT NULL THEN 2
+                                      WHEN l03_pctipocompratribunal IN (100,
+                                                                        101,
+                                                                        102,
+                                                                        103)
+                                           AND credenciamento.l205_fornecedor IS NULL THEN 4
                                       ELSE l217_codsituacao
                                   END AS situacaoCompraItemId,
                 l218_motivoanulacao as justificativa,
@@ -3789,6 +3797,8 @@ class cl_liclicita
         AND l218_liclicitem=l21_codigo
         LEFT JOIN situacaoitemlic ON l219_codigo=l218_codigo
         LEFT JOIN situacaoitem ON l217_sequencial=l219_situacao
+        LEFT JOIN credenciamento ON credenciamento.l205_licitacao = l20_codigo
+        AND pc81_codprocitem = credenciamento.l205_item
         WHERE liclicita.l20_codigo = $l20_codigo
         AND liclicitem.l21_ordem = $ordem
         ORDER BY l217_sequencial desc limit 1";
@@ -4013,7 +4023,7 @@ class cl_liclicita
                 INNER JOIN pcorcamitem ON pc22_orcamitem = pc31_orcamitem
                 INNER JOIN pcorcam ON pc20_codorc = pc22_codorc
                 INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
-                INNER JOIN pcorcamforne ON pc21_codorc = pc20_codorc
+                LEFT JOIN pcorcamforne ON pc21_codorc = pc20_codorc
                 INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
                 INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
                 INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
@@ -4024,9 +4034,9 @@ class cl_liclicita
                 INNER JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
                 INNER JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
                 INNER JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-                INNER JOIN credenciamento ON credenciamento.l205_licitacao = l20_codigo
+                LEFT JOIN credenciamento ON credenciamento.l205_licitacao = l20_codigo
                 AND pc81_codprocitem = credenciamento.l205_item
-                INNER JOIN cgm ON z01_numcgm = credenciamento.l205_fornecedor
+                LEFT JOIN cgm ON z01_numcgm = credenciamento.l205_fornecedor
                 INNER JOIN itemprecoreferencia ON itemprecoreferencia.si02_itemproccompra = pcorcamitem.pc22_orcamitem
                 WHERE l21_codliclicita = $l20_codigo
                 ORDER BY l21_ordem";
