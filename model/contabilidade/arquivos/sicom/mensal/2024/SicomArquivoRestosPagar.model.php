@@ -283,7 +283,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
          */
         if ($oDados10->codfontrecursos == 1704000 || $oDados10->codfontrecursos == 186 || $oDados10->codfontrecursos == 2704000 || $oDados10->codfontrecursos == 286) {
 
-          if (($oDados10->codfontrecursos == $this->oDeParaRecurso->getDePara2024($oDados10->codfontrecursos)) || (in_array($oDados10->codfontrecursos, $this->aFontesEncerradas))) {
+          if (($oDados10->codfontrecursos == $this->oDeParaRecurso->getDePara($oDados10->codfontrecursos)) || (in_array($oDados10->codfontrecursos, $this->aFontesEncerradas))) {
 
             if ($oDados10->vlsaldoantproce > 0) {
 
@@ -446,7 +446,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
   public function gerarReg202024($oDados10, $clrsp10, $iTiporestospagar, $iTipoMovimento, $vlSaldoproce, $sJustificativa, $bRestabelecimento)
   {
 
-    $fonte = substr($this->oDeParaRecurso->getDePara2024(substr($oDados10->codfontrecursos."0",0,8)), 0, 7);
+    $fonte = substr($this->oDeParaRecurso->getDePara(substr($oDados10->codfontrecursos."0",0,8)), 0, 7);
     $codIdentificaFR = $oDados10->codfontrecursos;
 
     if ($iTipoMovimento == 6) {

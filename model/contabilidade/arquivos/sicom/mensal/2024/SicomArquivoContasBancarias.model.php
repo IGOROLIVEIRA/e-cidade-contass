@@ -763,7 +763,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
 
         $iFonte = db_utils::fieldsMemory($rsReg20Fonte, $iCont20)->fontemovimento;
-        $iFonte = substr($clDeParaFonte->getDePara2024($iFonte), 0, 7);
+        $iFonte = substr($clDeParaFonte->getDePara($iFonte), 0, 7);
 
         $nat_vlr_si = db_utils::fieldsMemory($rsReg20Fonte, $iCont20)->nat_vlr_si;
         $nat_vlr_sf = db_utils::fieldsMemory($rsReg20Fonte, $iCont20)->nat_vlr_sf;
@@ -938,7 +938,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
         $clDeParaFonte = new DeParaRecurso;
 
         $iFonte = db_utils::fieldsMemory($rsBalancete, 0)->c61_codigo;
-        $iFonte = strlen($iFonte) <= 4 ? substr($clDeParaFonte->getDePara2024($iFonte), 0, 7) : substr($iFonte, 0, 7);
+        $iFonte = strlen($iFonte) <= 4 ? substr($clDeParaFonte->getDePara($iFonte), 0, 7) : substr($iFonte, 0, 7);
 
         $saldoInicial = db_utils::fieldsMemory($rsBalancete, 0)->saldo_anterior;
         $saldoFinal = db_utils::fieldsMemory($rsBalancete, 0)->saldo_final;
