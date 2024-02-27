@@ -183,7 +183,7 @@ db_app::load("estilos.css");
               ?>
               <tr>
                 <td nowrap title="<?= @$Tve70_origemgasto ?>">
-                  <? //= @$Lve70_origemgasto 
+                  <? //= @$Lve70_origemgasto
                   ?>
                   <strong>Origem Gasto</strong>
                 </td>
@@ -241,7 +241,7 @@ db_app::load("estilos.css");
                   ?>
                 </td>
                 <td>
-                  <? //db_ancora("Seq. Empenho", "js_pesquisae60_codemp(true);", 1); 
+                  <? //db_ancora("Seq. Empenho", "js_pesquisae60_codemp(true);", 1);
                   ?>
 
                   <?php db_input('si05_numemp', 10, $Isi05_numemp, true, 'hidden', 1); ?>
@@ -254,8 +254,8 @@ db_app::load("estilos.css");
               <tr id="trSaldoDisponivel">
                 <td><b>Saldo Disponível: </b></td>
                 <td>
-                  <?php 
-                  db_input('saldodisponivel', 10, 1, true, 'text', 3); 
+                  <?php
+                  db_input('saldodisponivel', 10, 1, true, 'text', 3);
                   $resultParam = $clveicparam->sql_record($clveicparam->sql_query_file(null, "*", null, "ve50_instit = " . db_getsession("DB_instit")));
                   $resultParamres = db_utils::fieldsMemory($resultParam, 0);
                   if ($resultParamres->ve50_abastempenho != 1) {
@@ -518,6 +518,7 @@ db_app::load("estilos.css");
   //--------------------------------
   //Para filtrar apenas empenhos com o elemento 333903099000000, usar o parametro filtroabast=1
   function js_pesquisae60_codemp(mostra, controlador) {
+
     var ve70_abast = $F("ve70_dtabast");
     var e60_codemp = $F("e60_codemp");
     if (mostra == true) {
@@ -529,13 +530,13 @@ db_app::load("estilos.css");
       document.form1.ve71_veiccadposto.value = "";
       document.form1.posto.value = "";
       if (controlador == 0) {
-        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&chave_e60_codemp=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm|saldodisponivel', 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho003.php?filtroabast=1&todos=1&ve70_abast=' + ve70_abast + '&chave_e60_codemp=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm|saldodisponivel', 'Pesquisa', true);
       } else {
-        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm|saldodisponivel', 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho003.php?filtroabast=1&todos=1&ve70_abast=' + ve70_abast + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm|saldodisponivel', 'Pesquisa', true);
       }
 
     } else {
-      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&lPesquisaPorCodigoEmpenho=1&ve70_abast=' + ve70_abast + '&pesquisa_chave=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho003.php?filtroabast=1&lPesquisaPorCodigoEmpenho=1&todos=1&ve70_abast=' + ve70_abast + '&pesquisa_chave=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
     }
   }
   /*
@@ -592,6 +593,7 @@ db_app::load("estilos.css");
 
   function js_mostraempempenho(e60_codemp,erro,e60_numcgm,si05_numemp,saldoDisponivel) {
     if(erro){
+        console.log(erro);
       document.form1.e60_codemp.value = '';
       return false;
     }
@@ -601,7 +603,7 @@ db_app::load("estilos.css");
     document.form1.saldodisponivel.value = saldoDisponivel;
 
     db_iframe_empempenho.hide();
-    
+
     let itemEmpenho = document.getElementById("si05_item_empenho").value;
 
     if (itemEmpenho == 't') {
@@ -611,7 +613,7 @@ db_app::load("estilos.css");
     }
 
     js_pesquisave71_veiccadposto(true, 0);
-    
+
   }
 
   function js_mostraempempenhoalteracao(e60_codemp,erro,e60_numcgm,si05_numemp,saldoDisponivel) {
@@ -625,7 +627,7 @@ db_app::load("estilos.css");
     document.form1.saldodisponivel.value = saldoDisponivel;
 
     db_iframe_empempenho.hide();
-    
+
     let itemEmpenho = document.getElementById("si05_item_empenho").value;
 
     if (itemEmpenho == 't') {
@@ -635,7 +637,7 @@ db_app::load("estilos.css");
     }
 
     js_pesquisave71_veiccadposto(true, 0);
-    
+
   }
 
   //--------------------------------
@@ -853,7 +855,7 @@ db_app::load("estilos.css");
       location.href='vei1_veicabast001.php';
     }else{
       document.form1.ve01_placa.value = chave;
-      
+
       if (erro == true) {
         document.form1.ve70_veiculos.focus();
         document.form1.ve70_veiculos.value = '';

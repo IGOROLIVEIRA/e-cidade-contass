@@ -416,7 +416,7 @@ $todos = !empty($todos) && (int)$todos === 1;
                                 $anoant = db_getsession("DB_anousu") - 1;
                                 $ve70_abast = implode("-", array_reverse(explode("/", $ve70_abast)));
                                 $aCodEmp  = explode("/", $pesquisa_chave);
-                                $dbwhere .= " e60_codemp = '" . $aCodEmp[0] . "'";
+                                $dbwhere = " e60_codemp = '" . $aCodEmp[0] . "'";
                                 $dbwhere .= " and e60_anousu = " . $aCodEmp[1];
                                 $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000','3449030000000','3339039990000') ";
                                 $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
@@ -478,6 +478,7 @@ $todos = !empty($todos) && (int)$todos === 1;
                             if ($numemp == true) {
                                 $dbwhere = " WHERE empempenho.e60_numemp = $pesquisa_chave ";
                             }
+
                             //Parametro adicionado a pedido de ivan OC18994
                             $clpcparam = new cl_pcparam();
                             $rspcparam = $clpcparam->sql_record($clpcparam->sql_query(db_getsession('DB_instit'), "pc30_liboccontrato"));
