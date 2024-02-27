@@ -7,7 +7,7 @@
     include("classes/db_liccomissaocgm_classe.php");
     include("classes/db_db_config_classe.php");
     include("classes/db_db_documento_classe.php");
-
+    include("lic1_relatorio_helper.php");
 
     $clhomologacaoadjudica = new cl_homologacaoadjudica();
     $clliclicita =  new cl_liclicita();
@@ -189,7 +189,20 @@
             }
 
             .col-descricao_item {
+                width: 210px;
+            }
+
+            .col-seq {
+                width: 40px;
+                padding-right: 5px;
+            }
+
+            .col-descricao-item-layout-antigo {
                 width: 245px;
+            }
+
+            .col-descricao-item-sem-percentual {
+                width: 215px;
             }
 
             .col-valor_un {
@@ -197,16 +210,64 @@
                 padding-right: 5px;
             }
 
-            .col-quant {
-                width: 60px;
+            .col-percentual {
+                width: 80px;
+                padding-right: 5px;
             }
 
-            .col-un {
+            .col-seq-item-percentual {
                 width: 45px;
             }
 
+            .col-item-percentual {
+                width: 45px;
+            }
+
+            .col-descricao-item-percentual {
+                width: 235px;
+            }
+
+            .col-unidade-percentual {
+                width: 40px;
+                padding-right: 5px;
+            }
+
+            .col-marca-percentual {
+                width: 40px;
+                padding-right: 5px;
+            }
+
+            .col-quantidade-percentual {
+                width: 70px;
+            }
+
+            .col-unitario-percentual {
+                width: 40px;
+                padding-right: 5px;
+            }
+
+            .col-percentual-percentual {
+                width: 40px;
+            }
+
+            .col-total-percentual {
+                width: 70px;
+            }
+
+            .col-geral-percentual {
+                width: 50px;
+            }
+
+            .col-quant {
+                width: 65px;
+            }
+
+            .col-un {
+                width: 40px;
+            }
+
             .col-total {
-                width: 90px;
+                width: 65px;
                 padding-left: 5px;
             }
 
@@ -223,6 +284,7 @@
             .row .col-un,
             .row .col-total,
             .row .col-quant,
+            .row .col-seq,
             .row .col-valor_un,
             .row .col-valor_un {}
 
@@ -264,7 +326,10 @@
             .item-total-color {
                 background: #f5f5f0;
                 font-weight: bold;
-                width: 935px;
+            }
+
+            .total-background {
+                background: #f5f5f0;
             }
 
             td
@@ -295,15 +360,17 @@
 
         <?php
         $nTotalItens = 0;
+        $lote = FALSE;
+        $outros = FALSE;
+        $mostra_homologado_geral = FALSE;
+        $somaTotalHomologados = 0;
 
-
-        $campos = "DISTINCT pc01_codmater,pc01_tabela,pc01_taxa,pc01_descrmater,cgmforncedor.z01_nome,cgmforncedor.z01_cgccpf,m61_descr,m61_abrev,pc11_quant,pc23_obs,pc23_valor,pcorcamval.pc23_vlrun,pcorcamval.pc23_percentualdesconto as mediapercentual,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao,pc11_seq";
-
+        $campos = "DISTINCT pc01_codmater,pc01_tabela,pc01_taxa,pc01_descrmater,pc01_complmater,cgmforncedor.z01_nome,cgmforncedor.z01_cgccpf,m61_descr,m61_abrev,pc11_quant,pc23_obs,pc23_valor,pcorcamval.pc23_vlrun,pcorcamval.pc23_percentualdesconto,pcorcamval.pc23_perctaxadesctabela,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao,pc11_seq,l20_criterioadjudicacao,liclicitem.l21_ordem AS ordem";
         $sWhere = " liclicitem.l21_codliclicita = {$codigo_preco} and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial is null";
         $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_semhomologacao(null, $campos, "pc11_seq,z01_nome", $sWhere));
-
         $array1 = array();
         $op = 0;
+
         for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
             $oResult = db_utils::fieldsMemory($result, $iCont);
             $verifica = 0;
@@ -346,24 +413,32 @@
 
         ?>
             <br>
+            <?php
+                $colspan = getColspan($tipojulgamento, $oResult->l20_criterioadjudicacao);
+            ?>
             <div class="table">
                 <div class="tr bg_eb">
-                    <div class="th col-item align-left" style="width:600px"><? echo  $array1[$j][2] . " - " . $cpf_cnpj_formatado ?></div>
+                    <div class="th col-item align-left" style="width:600px"><?php echo  $array1[$j][2] . " - " . $cpf_cnpj_formatado ?></div>
                 </div>
                 <?php
-                if ($tipojulgamento != 3) { ?>
-                    <div class="tr bg_eb">
-                        <div class="th col-item align-center" style="width:49px">Item</div>
-                        <div class="th col-descricao_item  align-center">Material/Serviços</div>
-                        <div class="th col-valor_un align-center">Unidade</div>
-                        <div class="th col-valor_un align-center">Marca</div>
-                        <div class="th col-quant align-center">Quant</div>
-                        <div class="th col-valor_un align-right">Uni/taxa</div>
-                        <div class="th col-total align-right">Total</div>
-                    </div>
-                <?php
+                if (isCriterioAdjucacaoOutrosTipoJulgamentoLote($tipojulgamento, $oResult->l20_criterioadjudicacao) ||
+                    isCriterioAdjucacaoDescontoMenorTaxaPercTipoJulgamentoLote($tipojulgamento, $oResult->l20_criterioadjudicacao)
+                ) {
+                    $lote = TRUE;
+                    getCabecalhoTabelaLinhaLote($array1[$j][3], $colspan);
                 }
 
+                if (isCriterioAdjucacaoTipoJulgamentoCabecalhoSemPercentual($tipojulgamento, $oResult->l20_criterioadjudicacao)) {
+                    $outros = TRUE;
+                    $mostra_homologado_geral = TRUE;
+                    getCabecalhoTabelaLayout();
+                } elseif (isCriterioAdjucacaoTipoJulgamentoCabecalhoComPercentual($tipojulgamento, $oResult->l20_criterioadjudicacao)) {
+                    $outros = TRUE;
+                    $mostra_homologado_geral = TRUE;
+                    getCabecalhoTabelaLayoutComPercentual();
+                } else {
+                    getCabecalhoTabelaLayoutAntigo();
+                }
                 ?>
 
                 <?php
@@ -374,141 +449,52 @@
                     $oDadosDaLinha = new stdClass();
                     $oResult = db_utils::fieldsMemory($result, $iCont);
                     if ($array1[$j][1] == $oResult->z01_cgccpf) {
-
-                        if ($tipojulgamento == 3) {
-                            if ($array1[$j][3] == $oResult->l04_descricao) {
-                                if ($controle == 0) { ?>
-                                    <div class="tr bg_eb">
-                                        <div class="th col-item align-left" style="width:600px"><? echo $oResult->l04_descricao ?></div>
-                                    </div>
-                                    <div class="tr bg_eb">
-                                        <div class="th col-item align-center" style="width:49px">Item</div>
-                                        <div class="th col-descricao_item  align-center">Material/Serviços</div>
-                                        <div class="th col-valor_un align-center">Unidade</div>
-                                        <div class="th col-valor_un align-center">Marca</div>
-                                        <div class="th col-quant align-center">Quant</div>
-                                        <div class="th col-valor_un align-right">Uni/taxa</div>
-                                        <div class="th col-total align-right">Total</div>
-                                    </div>
-                                <?php
-                                    $controle = 1;
-                                }
-                            } else {
-                                $array1[$j][3] = $oResult->l04_descricao; ?>
-                                <div class="tr row">
-                                    <div class="td item-total-color" style="width: 650px;">
-                                        VALOR
-
-                                    </div>
-                                    <div class="item-menu-color">
-                                        <?= "R$" . number_format($valor, 2, ",", ".") ?>
-                                    </div>
-                                </div>
-                                <div class="tr bg_eb">
-                                    <div class="th col-item align-left" style="width:600px"><? echo $oResult->l04_descricao ?></div>
-                                </div>
-                                <div class="tr bg_eb">
-                                    <div class="th col-item align-center" style="width:49px">Item</div>
-                                    <div class="th col-descricao_item  align-center">Material/Serviços</div>
-                                    <div class="th col-valor_un align-center">Unidade</div>
-                                    <div class="th col-valor_un align-center">Marca</div>
-                                    <div class="th col-quant align-center">Quant</div>
-                                    <div class="th col-valor_un align-right">Uni/taxa</div>
-                                    <div class="th col-total align-right">Total</div>
-                                </div>
-                <?php
-                                $valor = 0;
-                            }
-                        }
-
-
-
-                        $lTotal = round($oResult->pc23_vlrun, $oGet->quant_casas) * $oResult->pc11_quant;
-
-                        $nTotalItens += $lTotal;
-                        $valor += $lTotal;
+                        $nTotalItens += $oResult->pc23_valor;
+                        $valor += $oResult->pc23_valor;
                         $oDadosDaLinha = new stdClass();
                         $oDadosDaLinha->seq = $iCont + 1;
                         $oDadosDaLinha->item = $oResult->pc01_codmater;
-                        $oDadosDaLinha->descricao = strtoupper($oResult->pc01_descrmater);
+                        $oDadosDaLinha->descricao = strtoupper($oResult->pc01_descrmater) . " " . strtoupper($oResult->pc01_complmater);
+                        $oDadosDaLinha->unidadeDeMedida = strtoupper($oResult->m61_abrev);
+                        $oDadosDaLinha->marca = $oResult->pc23_obs == "" ? "-" : strtoupper($oResult->pc23_obs);
+                        $oDadosDaLinha->quantidade = $oResult->pc11_quant;
+                        $oDadosDaLinha->valorUnitario = "R$" . number_format($oResult->pc23_vlrun, $oGet->quant_casas, ",", ".");
+                        $oDadosDaLinha->total = number_format($oResult->pc23_valor, 2, ",", ".");
 
                         if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
+                            if ($oResult->pc01_tabela == "t") {
+                                $oDadosDaLinha->percentual = $oResult->pc23_perctaxadesctabela . "%";
+                            } else {
+                                $oDadosDaLinha->percentual =  $oResult->pc23_percentualdesconto . "%";
+                            }
 
-                            $oDadosDaLinha->quantidade = $oResult->pc11_quant;
-                            if ($oResult->mediapercentual == 0) {
-                                $oDadosDaLinha->valorUnitario = "-";
-                            } else {
-                                $oDadosDaLinha->valorUnitario = number_format($oResult->mediapercentual, 2) . "%";
-                            }
-                            $oDadosDaLinha->unidadeDeMedida = strtoupper($oResult->m61_abrev);
-                            $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
+                            $oDadosDaLinha->valorUnitario = '-';
                         } else {
-                            $oDadosDaLinha->valorUnitario = "R$" . number_format($oResult->pc23_vlrun, $oGet->quant_casas, ",", ".");
-                            $oDadosDaLinha->quantidade = $oResult->pc11_quant;
-                            if ($oResult->mediapercentual == 0) {
-                                $oDadosDaLinha->mediapercentual = "-";
-                            } else {
-                                $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
-                            }
-                            $oDadosDaLinha->unidadeDeMedida = strtoupper($oResult->m61_abrev);
-                            $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
-                        }
-                        if ($oResult->pc23_obs == "") {
-                            $oDadosDaLinha->marca = "-";
-                        } else {
-                            $oDadosDaLinha->marca = strtoupper($oResult->pc23_obs);
+                            $oDadosDaLinha->percentual = "-";
                         }
 
-
-                        echo <<<HTML
-         <div class="tr row">
-          <div class="td col-item align-center">
-            {$oDadosDaLinha->item}
-          </div>
-
-          <div class="td col-descricao_item align-justify">
-            {$oDadosDaLinha->descricao}
-          </div>
-          <div class="td col-valor_un  align-center">
-            {$oDadosDaLinha->unidadeDeMedida}
-          </div>
-          <div class="td col-valor_un  align-center">
-            {$oDadosDaLinha->marca}
-          </div>
-          <div class="td col-quant align-center">
-            {$oDadosDaLinha->quantidade}
-          </div>
-          <div class="td col-valor_un align-right">
-             {$oDadosDaLinha->valorUnitario}
-          </div>
-
-
-          <div class="td col-total align-right">
-            R$ {$oDadosDaLinha->total}
-          </div>
-        </div>
-HTML;
+                        if (isCriterioAdjucacaoTipoJulgamentoCabecalhoSemPercentual($tipojulgamento, $oResult->l20_criterioadjudicacao)) {
+                            getDadosTabelaLayout($oResult, $oDadosDaLinha);
+                        } elseif (isCriterioAdjucacaoTipoJulgamentoCabecalhoComPercentual($tipojulgamento, $oResult->l20_criterioadjudicacao)) {
+                            getDadosTabelaLayoutComPercentual($oResult, $oDadosDaLinha);
+                        } else {
+                            getDadosTabelaLayoutAntigo($oDadosDaLinha);
+                        }
                     }
-                } ?>
-                <div class="tr row">
-                    <div class="td item-total-color" style="width: 650px;">
-                        VALOR
+                }
 
-                    </div>
-                    <div class="item-menu-color">
-                        <?= "R$" . number_format($valor, 2, ",", ".") ?>
-                    </div>
-                </div>
-                <div style="tr row">
-                    <div class="td item-total-color" style="width: 650px;">
-                        VALOR TOTAL
-                    </div>
-                    <div class=" item-menu-color">
-                        <?= "R$" . number_format($nTotalItens, 2, ",", ".") ?>
-                    </div>
-                </div>
-            <?php
+                if ($mostra_homologado_geral) {
+                    $somaTotalHomologados += $nTotalItens;
+                    getTabelaLinhaTotalHomologado($nTotalItens, $colspan);
+                } else {
+                    getTabelaLinhaSemTotalHomologado($valor, $nTotalItens, $colspan);
+                }
         }
+        ?>
+            <?php
+                if ($mostra_homologado_geral) {
+                    getTabelaLinhaTotalGeral($somaTotalHomologados, $colspan);
+                }
             ?>
 
             </div>
@@ -585,7 +571,7 @@ HTML;
             <br>
             <br>
             <div style="text-align: right; margin-right: 5px;">
-                <? echo $resultado->munic; ?>, <? echo $dataformatada; ?>
+                <?php echo $resultado->munic; ?>, <?php echo $dataformatada; ?>
             </div>
             <?php
 

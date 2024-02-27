@@ -214,10 +214,11 @@ class SicomArquivoAnulacaoExtraOrcamentaria extends SicomArquivoBase implements 
                             FROM corlanc
                                 INNER JOIN corrente ON corlanc.k12_id = corrente.k12_id AND corlanc.k12_data = corrente.k12_data AND corlanc.k12_autent = corrente.k12_autent
                                 INNER JOIN slip on slip.k17_codigo = corlanc.k12_codigo
+								INNER JOIN sliprecurso on slip.k17_codigo = k29_slip
                                 INNER JOIN slipanul ON k18_codigo = k17_codigo
                                 INNER JOIN conplanoreduz on slip.k17_credito = conplanoreduz.c61_reduz and c61_anousu = " . db_getsession("DB_anousu") . "
                                 INNER JOIN conplano ON (conplano.c60_codcon, conplano.c60_anousu) = (conplanoreduz.c61_codcon, conplanoreduz.c61_anousu)
-                                INNER JOIN orctiporec on orctiporec.o15_codigo = conplanoreduz.c61_codigo
+                                INNER JOIN orctiporec on orctiporec.o15_codigo = sliprecurso.k29_recurso
                                 INNER JOIN slipnum on slipnum.k17_codigo = slip.k17_codigo
                                 INNER JOIN cgm cc on cc.z01_numcgm = slipnum.k17_numcgm
                                 LEFT JOIN corconf ON corlanc.k12_id = corconf.k12_id AND corlanc.k12_data = corconf.k12_data AND corlanc.k12_autent = corconf.k12_autent

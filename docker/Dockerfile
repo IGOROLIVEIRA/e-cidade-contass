@@ -194,4 +194,4 @@ USER contass
 #
 #RUN /var/www/html/composer install
 
-CMD ["/bin/bash", "/iniciar.sh"]
+#CMD ["/bin/bash", "/iniciar.sh"]
