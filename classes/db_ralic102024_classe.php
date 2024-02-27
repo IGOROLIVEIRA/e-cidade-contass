@@ -393,6 +393,7 @@ class cl_ralic102024
                                ,$this->si180_tipoorcamento
                                ,'$this->si180_emailcontato'
                       )";
+
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("

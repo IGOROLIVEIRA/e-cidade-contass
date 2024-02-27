@@ -71,7 +71,7 @@ class GerarRALIC extends GerarAM
         }else{
             $aCSVRALIC10['si180_bdi']                     = '';
         }
-        $aCSVRALIC10['si180_mesexercicioreforc']         = $this->padLeftZero($aRALIC10['si180_mesexercicioreforc'], 6);
+        $aCSVRALIC10['si180_mesexercicioreforc']         = empty($aRALIC10['si180_mesexercicioreforc']) ? '' :$this->padLeftZero($aRALIC10['si180_mesexercicioreforc'], 6);
         $aCSVRALIC10['si180_origemrecurso']              = $aRALIC10['si180_origemrecurso'];
         $aCSVRALIC10['si180_dscorigemrecurso']           = substr($aRALIC10['si180_dscorigemrecurso'], 0, 150);
         $aCSVRALIC10['si180_qtdlotes']                   = $aRALIC10['si180_qtdlotes'];

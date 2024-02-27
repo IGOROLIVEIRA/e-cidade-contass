@@ -123,34 +123,6 @@ if (isset($l20_codigo)) {
                     ?>
                 </td>
             </tr>
-
-            <!--            <tr>-->
-            <!--                <td nowrap title="--><? //=@$Tl20_justificativa
-                                                        ?>
-            <!--">-->
-            <!--                    <strong>Justificativa:</strong>-->
-            <!--                </td>-->
-            <!--                <td>-->
-            <!--                    --><? //
-                                        //                    db_textarea('l20_justificativa',0,53,$Il20_justificativa,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
-                                        //                    
-                                        ?>
-            <!--                </td>-->
-            <!--            </tr>-->
-            <!---->
-            <!--            <tr>-->
-            <!--                <td nowrap title="--><? //=@$Tl20_razao
-                                                        ?>
-            <!--">-->
-            <!--                    <strong>Razão:</strong>-->
-            <!--                </td>-->
-            <!--                <td>-->
-            <!--                    --><? //
-                                        //                    db_textarea('l20_razao',0,53,$Il20_razao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
-                                        //                    
-                                        ?>
-            <!--                </td>-->
-            <!--            </tr>-->
         </table>
     </fieldset>
     <?php
@@ -160,7 +132,6 @@ if (isset($l20_codigo)) {
         $sCampos  = "DISTINCT pc81_codprocitem, pc11_seq, pc11_codigo, pc11_quant, pc11_vlrun, m61_descr, pc01_codmater, pc01_descrmater, pc11_resum";
 
         $joinPrecoReferencia = false;
-
         if (in_array($l03_pctipocompratribunal, array(102, 103))) {
             $sCampos .= ", si02_vlprecoreferencia";
             $valorUnitario = 'si02_vlprecoreferencia';
@@ -179,6 +150,7 @@ if (isset($l20_codigo)) {
         }
 
         $sSqlItemLicitacao = $clhomologacaoadjudica->sql_query_itens(null, $sCampos, $sOrdem, $sWhere, $joinPrecoReferencia);
+
         $sResultitens = $clhomologacaoadjudica->sql_record($sSqlItemLicitacao);
         $aItensLicitacao = db_utils::getCollectionByRecord($sResultitens);
         $numrows = $clhomologacaoadjudica->numrows;
@@ -290,7 +262,7 @@ if (isset($l20_codigo)) {
 
         if (db_opcao === 33 || db_opcao === 3) {
             window.location.href = "lic1_publicratificacao003.php?chavepesquisa=" + chave + "&l03_pctipocompratribunal=" +
-                licitacao.l03_pctipocompratribunal;
+                licitacao.l03_pctipocompratribunal + "&l20_tipoprocesso=" + licitacao.l20_tipoprocesso;
         } else if (db_opcao === 22 || db_opcao === 2) {
             window.location.href = "lic1_publicratificacao002.php?chavepesquisa=" + chave + "&l03_pctipocompratribunal=" +
                 licitacao.l03_pctipocompratribunal + "&l20_objeto=" + licitacao.l20_objeto;
@@ -305,9 +277,10 @@ if (isset($l20_codigo)) {
      *
      */
 
-    function js_verificatipoproc(tipocompratribunal) {
-        alert(tipocompratribunal)
-        if (tipocompratribunal === '102' || tipocompratribunal === '103') {
+    function js_verificatipoproc() {
+        const tipocompratribunal = document.getElementById("l03_pctipocompratribunal");
+
+        if (tipocompratribunal === 102 || tipocompratribunal === 103) {
             document.getElementById('trdtlimitecredenciamento').style.display = "";
         }
     }
@@ -337,7 +310,7 @@ if (isset($l20_codigo)) {
     function js_pesquisaLicitacao(mostra) {
         if (mostra == true) {
             js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_liclicita', 'func_liclicita.php?credenciamento=true' + (db_opcao == 1 ? '&situacao=1&ratificacao=false' : '&situacao=10&ratificacao=true') +
-                '+&dispensas=true&ocultacampos=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal', 'Pesquisa', true);
+                '+&dispensas=true&ocultacampos=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal|l20_tipoprocesso', 'Pesquisa', true);
         } else {
             if (document.form1.l20_codigo.value != '') {
                 js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_liclicita', 'func_liclicita.php?credenciamento=true' +
@@ -350,7 +323,7 @@ if (isset($l20_codigo)) {
         }
     }
 
-    function js_mostraliclicita(chave, erro, chave2) {
+    function js_mostraliclicita(chave, erro, chave2, tipoProcesso) {
         document.form1.l20_objeto.value = chave;
         if (erro == true) {
             document.form1.l20_codigo.focus();
@@ -358,22 +331,22 @@ if (isset($l20_codigo)) {
         } else {
             if (db_opcao == 1) {
                 window.location.href = "lic1_publicratificacao001.php?l20_codigo=" +
-                    document.form1.l20_codigo.value + "&l20_objeto=" + chave;
+                    document.form1.l20_codigo.value + "&l20_objeto=" + chave + "&l20_tipoprocesso=" + tipoProcesso;
             } else {
                 window.location.href = "lic1_publicratificacao002.php?chavepesquisa=" +
-                    document.form1.l20_codigo.value;
+                    document.form1.l20_codigo.value + "&l20_tipoprocesso=" + tipoProcesso;
             }
         }
 
     }
 
-    function js_mostraliclicita1(chave1, chave2, chave3) {
-        // let caminho = db_opcao == 1 ? "lic1_publicratificacao001.php?" : "lic1_publicratificacao002.php?";
+    function js_mostraliclicita1(chave1, chave2, chave3, tipoProcesso) {
         if (db_opcao == 1) {
             let caminho = "lic1_publicratificacao001.php?";
-            window.location.href = caminho + "l20_codigo=" + chave1 + "&l20_objeto=" + chave2;
+            window.location.href = caminho + "l20_codigo=" + chave1
+                + "&l20_objeto=" + chave2 + "&l20_tipoprocesso=" + tipoProcesso +  "&l03_pctipocompratribunal=" + chave3;
         } else {
-            window.location.href = "lic1_publicratificacao002.php?chavepesquisa=" + chave1;
+            window.location.href = "lic1_publicratificacao002.php?chavepesquisa=" + chave1 +  "&l20_tipoprocesso=" + tipoProcesso + "&l03_pctipocompratribunal=" + chave3;
         }
         db_iframe_liclicita.hide();
     }
@@ -682,6 +655,7 @@ if (isset($l20_codigo)) {
     }
 
     function js_findTipos(licitacao) {
+
         let request = new Ajax.Request('lic4_licitacao.RPC.php', {
             method: 'post',
             exec: 'findTipos',
@@ -729,7 +703,7 @@ if (isset($l20_codigo)) {
     function js_mostracgm(erro, chave) {
         document.getElementById(varNomeCampo).value = chave;
         if (erro == true) {
-            //  document.form1.l31_numcgm.focus(); 
+            //  document.form1.l31_numcgm.focus();
             document.getElementById(varNumCampo).value = "";
             alert("Responsável não encontrado!");
         }

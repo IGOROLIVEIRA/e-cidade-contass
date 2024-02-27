@@ -1,6 +1,7 @@
 <?php
 
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model.php");
+require_once("model/orcamento/DeParaRecurso.model.php");
 
 /**
  * Sicom Acompanhamento Mensal
@@ -17,12 +18,15 @@ class GerarRSP extends GerarAM
    */
   public $iMes;
 
+  public $oDeParaRecurso;
+  
   public function gerarDados()
   {
 
     $this->sArquivo = "RSP";
     $this->abreArquivo();
-
+    $this->oDeParaRecurso = new DeParaRecurso();
+    
     $sSql = "SELECT DISTINCT si112_sequencial,
                      si112_tiporegistro,
                      si112_codreduzidorsp,
@@ -202,7 +206,7 @@ class GerarRSP extends GerarAM
 
             $aCSVRSP21['si116_tiporegistro']        = $this->padLeftZero($aRSP21['si116_tiporegistro'], 2);
             $aCSVRSP21['si116_codreduzidomov']      = substr($aRSP21['si116_codreduzidomov'], 0, 15);
-            $aCSVRSP21['si116_codfontrecursos']     = $aRSP21['si116_codfontrecursos'];
+            $aCSVRSP21['si116_codfontrecursos']     = $aRSP21['si116_codfontrecursos'];//$this->padLeftZero($aRSP20['si115_tipomovimento'], 1) == 6 ? $aRSP21['si116_codidentificafr'] : $aRSP21['si116_codfontrecursos'];
             $aCSVRSP21['si116_codco']               = $aRSP21['si116_codco'];
             $aCSVRSP21['si116_codidentificafr']     = $aRSP21['si116_codidentificafr'];
             $aCSVRSP21['si116_vlmovimentacaofonte'] = $this->sicomNumberReal($aRSP21['si116_vlmovimentacaofonte'], 2);

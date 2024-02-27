@@ -5,7 +5,6 @@ require_once("classes/db_alq102024_classe.php");
 require_once("classes/db_alq112024_classe.php");
 require_once("classes/db_alq122024_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarALQ.model.php");
-require_once("model/orcamento/ControleOrcamentario.model.php");
 require_once("model/orcamento/DeParaRecurso.model.php");
 
 /**
@@ -144,7 +143,8 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
                    o56_elemento,
                    e60_emendaparlamentar,
                    e60_esferaemendaparlamentar,
-                   e60_tipodespesa
+                   e60_tipodespesa,
+                   e60_codco
             FROM empempenho
             INNER JOIN conlancamemp ON c75_numemp = empempenho.e60_numemp
             INNER JOIN conlancam ON c70_codlan = c75_codlan
@@ -331,17 +331,11 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
       $oDados11 = new cl_alq112024();
 
       $oDadosAgrupados->Reg11->si122_codfontrecursos = $this->oDeParaRecurso->getDePara($oDadosAgrupados->Reg11->si122_codfontrecursos);
-      $oControleOrcamentario = new ControleOrcamentario();
-      $oControleOrcamentario->setTipoDespesa($oDadosAgrupados->e60_tipodespesa);
-      $oControleOrcamentario->setFonte($oDadosAgrupados->Reg11->si122_codfontrecursos);
-      $oControleOrcamentario->setEmendaParlamentar($oDadosAgrupados->e60_emendaparlamentar);
-      $oControleOrcamentario->setEsferaEmendaParlamentar($oDadosAgrupados->e60_esferaemendaparlamentar);
-      $oControleOrcamentario->setDeParaFonteCompleta();
-
+      
       $oDados11->si122_tiporegistro = 11;
       $oDados11->si122_codreduzido = $oDadosAgrupados->Reg11->si122_codreduzido;
       $oDados11->si122_codfontrecursos = $oDadosAgrupados->Reg11->si122_codfontrecursos;
-      $oDados11->si122_codco = $oControleOrcamentario->getCodigoParaEmpenho();
+      $oDados11->si122_codco = $oDadosAgrupados->e60_codco;
       $oDados11->si122_valoranuladofonte = $oDadosAgrupados->Reg11->si122_valoranuladofonte;
       $oDados11->si122_mes = $oDadosAgrupados->Reg11->si122_mes;
       $oDados11->si122_reg10 = $oDados10->si121_sequencial;
