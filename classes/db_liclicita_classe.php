@@ -4034,11 +4034,12 @@ class cl_liclicita
                 INNER JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
                 INNER JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
                 INNER JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-                INNER JOIN credenciamento ON credenciamento.l205_licitacao = l20_codigo
+                LEFT JOIN credenciamento ON credenciamento.l205_licitacao = l20_codigo
                 AND pc81_codprocitem = credenciamento.l205_item
-                INNER JOIN cgm ON z01_numcgm = credenciamento.l205_fornecedor
+                LEFT JOIN cgm ON z01_numcgm = credenciamento.l205_fornecedor
                 INNER JOIN itemprecoreferencia ON itemprecoreferencia.si02_itemproccompra = pcorcamitem.pc22_orcamitem
                 WHERE l21_codliclicita = $l20_codigo
+                AND l03_pctipocompratribunal IN (102,103)
                 ORDER BY l21_ordem";
 
         return $sql;
