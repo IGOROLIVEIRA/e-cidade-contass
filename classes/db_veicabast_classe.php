@@ -1329,12 +1329,17 @@ if($dbwhere==""){
                               where ve07_sequencial = ve01_veictipoabast) as ve07_sigla,
                             coalesce( coalesce( (select ve70_medida
                                                         from veicabast a
-                                                  where ve70_codigo = (select max(ve70_codigo)
-                                                                              from veicabast t
-                                                                       where t.ve70_codigo < veicabast.ve70_codigo
-                                                                             and t.ve70_veiculos = veicabast.ve70_veiculos
-                                                                             and t.ve70_medida < veicabast.ve70_medida
-                                                                             limit 1)
+                                                  where ve70_codigo = (
+                                                      select 
+                                                        ve70_codigo
+                                                      from 
+                                                        veicabast t 
+                                                      where 
+                                                        TO_TIMESTAMP(t.ve70_dtabast  || ' ' || t.ve70_hora, 'YYYY-MM-DD HH24:MI:SS') < TO_TIMESTAMP(veicabast.ve70_dtabast  || ' ' || veicabast.ve70_hora, 'YYYY-MM-DD HH24:MI:SS') 
+                                                        and t.ve70_veiculos = veicabast.ve70_veiculos 
+                                                        and t.ve70_medida < veicabast.ve70_medida 
+                                                        order by TO_TIMESTAMP(t.ve70_dtabast  || ' ' || t.ve70_hora, 'YYYY-MM-DD HH24:MI:SS') desc  limit 1
+                                                  )
                                                  ), ve60_medidasaida ), ve70_medida ) as ve60_medidasaida,
                             (select ve61_medidadevol
                                from veicdevolucao

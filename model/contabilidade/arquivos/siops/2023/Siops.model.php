@@ -712,7 +712,7 @@ class Siops {
             $iCod = '9_';
         }
 
-        if (in_array($oDespesa->o58_codigo, array(16040000, 16590000, 16000000, 26040000, 26590000, 26000000))) {
+        if (in_array($oDespesa->o58_codigo, array(16590000, 16000000, 26590000, 26000000))) {
 
             $iCod = '86_';
         }
@@ -722,9 +722,16 @@ class Siops {
             $iCod = '88_';
         }
 
+        if (in_array($oDespesa->o58_codigo, array(16040000, 26040000))) {
+            $iCod = '94_';
+        }
+        if (in_array($oDespesa->o58_codigo, array(16050000, 26050000))) {
+            $iCod = '95_';
+        }
+
         if ((strpos(strtolower($oDespesa->o55_descr), 'covid'))) {
             
-            if (in_array($oDespesa->o58_codigo, array(16040000, 16590000, 16000000, 26040000, 26590000, 26000000))) {
+            if (in_array($oDespesa->o58_codigo, array(16590000, 16000000, 26590000, 26000000))) {
                 $iCod = '87_';
             }
 

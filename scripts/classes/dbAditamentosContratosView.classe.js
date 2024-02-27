@@ -2339,7 +2339,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             $('btnItens').style.display = '';
             $('btnItens').observe('click', me.novoItem);
         }
-        this.lidaTiposAdimentos();
     }
 
     this.lidaTiposAdimentos = () => {

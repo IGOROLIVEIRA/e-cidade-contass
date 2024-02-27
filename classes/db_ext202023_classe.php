@@ -112,15 +112,23 @@ class cl_ext202023
     }
     if ($this->si165_totaldebitos == null) {
       $this->si165_totaldebitos = "0";
+    }else {
+      $this->si165_totaldebitos = (float) str_replace(',', '.', $this->si165_totaldebitos);
     }
     if ($this->si165_totalcreditos == null) {
       $this->si165_totalcreditos = "0";
+    }else {
+      $this->si165_totalcreditos = (float) str_replace(',', '.', $this->si165_totalcreditos);
     }
     if ($this->si165_vlsaldoanteriorfonte == null) {
       $this->si165_vlsaldoanteriorfonte = "0";
+    } else {
+      $this->si165_vlsaldoanteriorfonte = (float) str_replace(',', '.', $this->si165_vlsaldoanteriorfonte);
     }
     if ($this->si165_vlsaldoatualfonte == null) {
       $this->si165_vlsaldoatualfonte = "0";
+    } else {
+      $this->si165_vlsaldoatualfonte = (float) str_replace(',', '.', $this->si165_vlsaldoatualfonte);
     }
     if ($this->si165_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
