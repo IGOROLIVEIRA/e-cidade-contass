@@ -339,7 +339,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
           if (pg_num_rows($rsPagOrd11) > 0) {
             $clops11 = new cl_ops112024();
 
-            $clops11->si133_codfontrecursos = $this->oDeParaRecurso->getDePara2024($reg11->o15_codigo);
+            $clops11->si133_codfontrecursos = $this->oDeParaRecurso->getDePara($reg11->o15_codigo);
            
             if ($reg11->subunidade != '' && $reg11->subunidade != 0) {
               $reg11->codunidadesub .= str_pad($reg11->subunidade, 3, "0", STR_PAD_LEFT);
@@ -991,7 +991,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
           if (pg_num_rows($rsPagOrd11) > 0) {
             $clops11 = new cl_ops112024();
 
-            $clops11->si133_codfontrecursos = $this->oDeParaRecurso->getDePara2024($reg11->o15_codigo);
+            $clops11->si133_codfontrecursos = $this->oDeParaRecurso->getDePara($reg11->o15_codigo);
             
             if ($reg11->subunidade != '' && $reg11->subunidade != 0) {
               $reg11->codunidadesub .= str_pad($reg11->subunidade, 3, "0", STR_PAD_LEFT);
