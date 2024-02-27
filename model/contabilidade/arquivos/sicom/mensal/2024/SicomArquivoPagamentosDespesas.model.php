@@ -266,7 +266,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
           $sSql11 = " SELECT tiporegistro, codreduzidoop, codunidadesub, nroop, tipopagamento, nroempenho, dtempenho, nroliquidacao, dtliquidacao,
                              codfontrecursos, sum(valorfonte) AS valorfonte, o15_codigo, e60_emendaparlamentar,
-                            e60_esferaemendaparlamentar, tipodocumentocredor, nrodocumento, codorgaoempop, codunidadeempop, subunidade, tipodespesa
+                            e60_esferaemendaparlamentar, tipodocumentocredor,e60_codco, nrodocumento, codorgaoempop, codunidadeempop, subunidade, tipodespesa
                       FROM
                           (SELECT 11 AS tiporegistro,
                                   c71_codlan||e50_codord AS codreduzidoop,
@@ -330,7 +330,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                            ORDER BY c71_codlan) AS pagamentos
                       GROUP BY tiporegistro, codreduzidoop, codunidadesub, nroop, tipopagamento, nroempenho, dtempenho, nroliquidacao,
                                dtliquidacao, codfontrecursos, tipodocumentocredor, nrodocumento, codorgaoempop, codunidadeempop, subunidade, o15_codigo,e60_emendaparlamentar,
-                               e60_esferaemendaparlamentar, tipodespesa ";
+                               e60_esferaemendaparlamentar, tipodespesa, e60_codco ";
 
           $rsPagOrd11 = db_query($sSql11);
 
@@ -338,8 +338,6 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
           if (pg_num_rows($rsPagOrd11) > 0) {
             $clops11 = new cl_ops112024();
-
-            $clops11->si133_codfontrecursos = $this->oDeParaRecurso->getDePara($reg11->o15_codigo);
            
             if ($reg11->subunidade != '' && $reg11->subunidade != 0) {
               $reg11->codunidadesub .= str_pad($reg11->subunidade, 3, "0", STR_PAD_LEFT);
@@ -359,7 +357,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                 $clops11->si133_nroliquidacao = $reg11->nroliquidacao;
                 $clops11->si133_dtliquidacao = $reg11->dtliquidacao;
             }
-            $clops11->si133_codfontrecursos = $clops11->si133_codfontrecursos;
+            
+            $clops11->si133_codfontrecursos = $this->oDeParaRecurso->getDePara($reg11->o15_codigo);
             $clops11->si133_codco = $reg11->e60_codco;
             $clops11->si133_valorfonte = $oEmpPago->valor;
             $clops11->si133_tipodocumentocredor = $reg11->tipodocumentocredor;
@@ -927,7 +926,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
           $sSql11 = " SELECT tiporegistro, codreduzidoop, codunidadesub, nroop, tipopagamento, nroempenho, dtempenho, nroliquidacao, dtliquidacao,
                              codfontrecursos, sum(valorfonte) AS valorfonte, tipodocumentocredor, nrodocumento, codorgaoempop, codunidadeempop, subunidade, o15_codigo,  e60_emendaparlamentar,
-                                  e60_esferaemendaparlamentar,tipodespesa
+                                  e60_esferaemendaparlamentar,e60_codco,tipodespesa
                       FROM
                           (SELECT 11 AS tiporegistro,
                                   c71_codlan||e50_codord AS codreduzidoop,
@@ -943,6 +942,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                                   e60_emiss AS dtempenho,
                                   e60_emendaparlamentar,
                                   e60_esferaemendaparlamentar,
+                                  e60_codco,
                                   CASE
                                       WHEN date_part('year',e50_data) < 2024 THEN e71_codnota::varchar
                                       ELSE (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0'))
@@ -982,7 +982,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       GROUP BY tiporegistro, codreduzidoop, codunidadesub, nroop, tipopagamento, nroempenho, dtempenho, nroliquidacao,
                                dtliquidacao, codfontrecursos, tipodocumentocredor, nrodocumento, codorgaoempop, codunidadeempop, subunidade,
                                o15_codigo, e60_emendaparlamentar,
-                               e60_esferaemendaparlamentar,tipodespesa ";
+                               e60_esferaemendaparlamentar,tipodespesa,e60_codco ";
 
           $rsPagOrd11 = db_query($sSql11);
 
@@ -990,8 +990,6 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
           if (pg_num_rows($rsPagOrd11) > 0) {
             $clops11 = new cl_ops112024();
-
-            $clops11->si133_codfontrecursos = $this->oDeParaRecurso->getDePara($reg11->o15_codigo);
             
             if ($reg11->subunidade != '' && $reg11->subunidade != 0) {
               $reg11->codunidadesub .= str_pad($reg11->subunidade, 3, "0", STR_PAD_LEFT);
@@ -1011,7 +1009,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                   $clops11->si133_nroliquidacao = $reg11->nroliquidacao;
                   $clops11->si133_dtliquidacao = $reg11->dtliquidacao;
               }
-            $clops11->si133_codfontrecursos = $clops11->si133_codfontrecursos;
+            $clops11->si133_codfontrecursos = $this->oDeParaRecurso->getDePara($reg11->o15_codigo);
             $clops11->si133_codco = $reg11->e60_codco;
             $clops11->si133_valorfonte = $oEmpPago->valor;
             $clops11->si133_tipodocumentocredor = $reg11->tipodocumentocredor;

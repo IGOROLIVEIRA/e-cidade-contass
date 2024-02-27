@@ -33,15 +33,15 @@ class GerarEXT extends GerarAM
                   si165_codorgao,
                   si165_codext,
                   si165_codfontrecursos,
-                  si165_natsaldoanteriorfonte,
-                  sum(si165_vlsaldoanteriorfonte) as si165_vlsaldoanteriorfonte,
+                  sum (case when si165_natsaldoanteriorfonte = 'D' then (si165_vlsaldoanteriorfonte) *-1
+                  else  (si165_vlsaldoanteriorfonte)  end) as si165_vlsaldoanteriorfonte,
                   sum(si165_totaldebitos) as si165_totaldebitos,
                   sum(si165_totalcreditos) as si165_totalcreditos ,
                   sum(si165_vlsaldoatualfonte) as si165_vlsaldoatualfonte,
                   si165_exerciciocompdevo 
                   from ext202024 
                   where si165_mes = " . $this->iMes . " and  si165_instit = " . db_getsession("DB_instit")."
-                  group by si165_codext, si165_codfontrecursos,si165_tiporegistro,si165_codorgao,si165_exerciciocompdevo,si165_natsaldoanteriorfonte
+                  group by si165_codext, si165_codfontrecursos,si165_tiporegistro,si165_codorgao,si165_exerciciocompdevo
                   order by si165_codext, si165_codfontrecursos " ;
     $rsEXT20 = db_query($sSql);
 
@@ -138,7 +138,7 @@ class GerarEXT extends GerarAM
           }
         }else{
                                             
-          $aCSVEXT20['si165_natsaldoanteriorfonte'] = substr($aEXT20['si165_natsaldoanteriorfonte'], 0, 1);
+          $aCSVEXT20['si165_natsaldoanteriorfonte'] = $aEXT20['si165_vlsaldoatualfonte'] > 0 ? 'C' : 'D';
         }
 
         $aCSVEXT20['si165_totaldebitos']          = $this->sicomNumberReal(abs($aEXT20['si165_totaldebitos']), 2);
