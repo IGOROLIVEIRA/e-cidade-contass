@@ -330,7 +330,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
 
       $oDados11 = new cl_alq112024();
 
-      $oDadosAgrupados->Reg11->si122_codfontrecursos = $this->oDeParaRecurso->getDePara2024($oDadosAgrupados->Reg11->si122_codfontrecursos);
+      $oDadosAgrupados->Reg11->si122_codfontrecursos = $this->oDeParaRecurso->getDePara($oDadosAgrupados->Reg11->si122_codfontrecursos);
       
       $oDados11->si122_tiporegistro = 11;
       $oDados11->si122_codreduzido = $oDadosAgrupados->Reg11->si122_codreduzido;

@@ -299,9 +299,7 @@ $sWhereContratos = " and 1 = 1 ";
                         }
                     }
 
-                    //                $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
-                    //                $campos .= ", l03_codcom as tipcom";
-                    //                $campos .= ", l03_pctipocompratribunal as tipocomtribunal";
+                    $campos .= ", l03_pctipocompratribunal as tipocomtribunal";
                     $campos .= ', l08_descr as dl_Situacao';
                     $campos .= " , l20_tipoprocesso";
                     if ($credenciamentotermo == "true") {

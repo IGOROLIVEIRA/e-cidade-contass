@@ -317,6 +317,10 @@ class cl_balancete142024
       $this->si181_idsubacao = " ";
     }
 
+    if ($this->si181_codco == null) {
+      $this->si181_codco = "0000";
+    }
+
     if ($this->si181_saldofinalrsp == null) {
       $this->erro_sql = " Campo si181_saldofinalrsp não informado.";
       $this->erro_campo = "si181_saldofinalrsp";
@@ -1183,7 +1187,7 @@ class cl_balancete142024
                                 e60_codemp nroempenho,
                                 e60_numemp numemp,
                                 e60_anousu anoinscricao,
-                                o58_orgao,o58_unidade, e60_emendaparlamentar, e60_esferaemendaparlamentar
+                                o58_orgao,o58_unidade, e60_emendaparlamentar, e60_esferaemendaparlamentar,e60_codco
                                 from conlancamval
                                 inner join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
                                 inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
@@ -1221,7 +1225,7 @@ class cl_balancete142024
                                 e60_codemp nroempenho,
                                 e60_numemp numemp,
                                 e60_anousu anoinscricao,
-                                o58_orgao,o58_unidade, e60_emendaparlamentar, e60_esferaemendaparlamentar
+                                o58_orgao,o58_unidade, e60_emendaparlamentar, e60_esferaemendaparlamentar,e60_codco
                                 from conlancamval
                                 inner join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
                                 inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
@@ -1258,7 +1262,7 @@ class cl_balancete142024
                                     e60_codemp nroempenho,
                                     e60_numemp numemp,
                                     e60_anousu anoinscricao,
-                                    o58_orgao,o58_unidade, e60_emendaparlamentar, e60_esferaemendaparlamentar
+                                    o58_orgao,o58_unidade, e60_emendaparlamentar, e60_esferaemendaparlamentar,e60_codco
                                     from contacorrentedetalhe
                                     inner join empempenho on e60_numemp = c19_numemp
                                     inner join orcdotacao on e60_anousu = o58_anousu and o58_coddot = e60_coddot
@@ -1296,7 +1300,7 @@ class cl_balancete142024
                                     e60_codemp nroempenho,
                                     e60_numemp numemp,
                                     e60_anousu anoinscricao,
-                                    o58_orgao,o58_unidade
+                                    o58_orgao,o58_unidade,e60_codco
                                     from conlancamval
                                     inner join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
                                     inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe

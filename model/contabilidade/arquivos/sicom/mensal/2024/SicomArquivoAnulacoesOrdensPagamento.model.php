@@ -381,7 +381,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                 if (in_array($oDadosAnulacaoFonte->si138_codfontrecursos, $this->aFontesEncerradas)) {
                     $oDadosAnulacaoFonte->si138_codfontrecursos = substr($oDadosAnulacaoFonte->si138_codfontrecursos, 0, 1) . '59';
                 }
-                $oDadosAnulacaoFonte->si138_codfontrecursos = substr($this->oDeParaRecurso->getDePara2024($oDadosAnulacaoFonte->si138_codfontrecursos), 0, 7);
+                $oDadosAnulacaoFonte->si138_codfontrecursos = substr($this->oDeParaRecurso->getDePara($oDadosAnulacaoFonte->si138_codfontrecursos), 0, 7);
 
                 $oDadosAnulacaoFonte->si138_codco = $oAnulacoes->e60_codco;
                 $oDadosAnulacaoFonte->si138_valoranulacaofonte = $oAnulacoes->vlrordem;

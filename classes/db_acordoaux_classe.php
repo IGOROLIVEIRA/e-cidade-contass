@@ -152,7 +152,7 @@ class cl_acordoaux {
                  ac16_adesaoregpreco = int8 = adesao de registro de precos
                  ac16_tipocadastro   = int8 = tipo de cadastro
                  ac16_reajuste = boll = possui reajuste
-                 ac16_criterioreajuste = 
+                 ac16_criterioreajuste =
                  ac16_datareajuste = ;
                  ac16_periodoreajuste = ;
                  ac16_datareajuste_dia = ;
@@ -720,7 +720,7 @@ class cl_acordoaux {
         }
        $virgula = ",";
      }
-     
+
       if (empty($this->ac16_reajuste)) {
         $sql  .= $virgula." ac16_reajuste = null ";
       } else {
@@ -741,41 +741,41 @@ class cl_acordoaux {
       $sql  .= $virgula." ac16_datareajuste = '$this->ac16_datareajuste' ";
     }
     $virgula = ",";
-   
+
     if (empty($this->ac16_periodoreajuste)) {
       $sql  .= $virgula." ac16_periodoreajuste = null ";
     } else {
       $sql  .= $virgula." ac16_periodoreajuste = '$this->ac16_periodoreajuste' ";
     }
     $virgula = ",";
-   
 
-   
+
+
     if (empty($this->ac16_indicereajuste)) {
       $sql  .= $virgula." ac16_indicereajuste = null ";
     } else {
       $sql  .= $virgula." ac16_indicereajuste = '$this->ac16_indicereajuste' ";
     }
     $virgula = ",";
-   
 
-   
+
+
     if (empty($this->ac16_descricaoreajuste)) {
       $sql  .= $virgula." ac16_descricaoreajuste = null ";
     } else {
       $sql  .= $virgula." ac16_descricaoreajuste = '$this->ac16_descricaoreajuste' ";
     }
     $virgula = ",";
-   
 
-  
+
+
     if (empty($this->ac16_descricaoindice)) {
       $sql  .= $virgula." ac16_descricaoindice = null ";
     } else {
       $sql  .= $virgula." ac16_descricaoindice = '$this->ac16_descricaoindice' ";
     }
     $virgula = ",";
-   
+
 
 
 
@@ -1125,7 +1125,7 @@ class cl_acordoaux {
 
         if (trim($this->ac16_vigenciaindeterminada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_vigenciaindeterminada"])) {
           $this->ac16_vigenciaindeterminada = $this->ac16_vigenciaindeterminada == "null" ? 'false' : $this->ac16_vigenciaindeterminada;
-          $sql .= $virgula . " ac16_vigenciaindeterminada = $this->ac16_vigenciaindeterminada ";
+          $sql .= $virgula . " ac16_vigenciaindeterminada = '$this->ac16_vigenciaindeterminada' ";
         }
 
      $sql .= " where ";
