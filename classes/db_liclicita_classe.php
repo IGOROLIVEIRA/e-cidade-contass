@@ -807,6 +807,8 @@ class cl_liclicita
             $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
+        }else{
+            $this->l20_horaaberturaprop = $this->l20_horaaberturaprop.':00';
         }
 
         if ($this->l20_horaencerramentoprop == null) {
@@ -817,6 +819,8 @@ class cl_liclicita
             $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
+        }else{
+            $this->l20_horaencerramentoprop = $this->l20_horaencerramentoprop.':00';
         }
 
         if ($this->l20_criterioadjudicacao == null) {
@@ -1957,6 +1961,7 @@ class cl_liclicita
         }
 
         if (trim($this->l20_horaaberturaprop) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_horaaberturaprop"])) {
+            $this->l20_horaaberturaprop = $this->l20_horaaberturaprop.':00';
             $sql .= $virgula . " l20_horaaberturaprop = '$this->l20_horaaberturaprop'";
             $virgula = ",";
             if (trim($this->l20_horaaberturaprop) == null) {
@@ -1971,6 +1976,7 @@ class cl_liclicita
         }
 
         if (trim($this->l20_horaencerramentoprop) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_horaencerramentoprop"])) {
+            $this->l20_horaencerramentoprop = $this->l20_horaencerramentoprop.':00';
             $sql .= $virgula . " l20_horaencerramentoprop = '$this->l20_horaencerramentoprop'";
             $virgula = ",";
             if (trim($this->l20_horaencerramentoprop) == null) {
@@ -3650,7 +3656,9 @@ class cl_liclicita
             ELSE liclicita.l20_usaregistropreco
         END AS srp,
         liclicita.l20_dataaberproposta AS dataAberturaProposta,
+        liclicita.l20_horaaberturaprop AS horaAberturaProposta,
         liclicita.l20_dataencproposta AS dataEncerramentoProposta,
+        liclicita.l20_horaencerramentoprop AS horaEncerramentoProposta,
         liclicita.l20_amparolegal as amparoLegalId,
         liclicita.l20_linkpncp as linkSistemaOrigem,
         liclicita.l20_justificativapncp as justificativaPresencial,

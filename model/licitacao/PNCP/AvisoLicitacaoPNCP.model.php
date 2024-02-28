@@ -46,8 +46,8 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $oDadosAPI->informacaoComplementar          = $oDado->informacaocomplementar;
         $oDadosAPI->srp                             = $oDado->srp == 'f' ? 'false' : 'true';
         $oDadosAPI->justificativaPresencial         = utf8_encode($oDado->justificativapresencial);
-        $oDadosAPI->dataAberturaProposta            = $this->formatDate($oDado->dataaberturaproposta);
-        $oDadosAPI->dataEncerramentoProposta        = $this->formatDate($oDado->dataencerramentoproposta);
+        $oDadosAPI->dataAberturaProposta            = $oDado->dataaberturaproposta.'T'.$oDado->horaaberturaproposta;
+        $oDadosAPI->dataEncerramentoProposta        = $oDado->dataencerramentoproposta.'T'.$oDado->horaencerramentoproposta;
         $oDadosAPI->amparoLegalId                   = $oDado->amparolegalid;
         $oDadosAPI->linkSistemaOrigem               = $oDado->linksistemaorigem;
         //ITENS
