@@ -63,17 +63,17 @@ $clMaterCatMat = new MaterCatMat();
     </fieldset>
     <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
     <input name="limpar" type="reset" id="limpar" value="Limpar" >
-    <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_far_matersaude.hide();">
+    <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_far_catmat.hide();">
 </form>
 <?php
 
 if (!isset($fa01_i_catmat) && !isset($codigo_barras))  {
     if (isset ( $chave_faxx_i_codigo ) && (trim ( $chave_faxx_i_codigo ) != "")) {
-        $sql = $clMaterCatMat->sqlQueryCatmat('far_matercatmat.faxx_i_codigo = '.$chave_faxx_i_codigo);
+        $sql = $clMaterCatMat->sqlQueryCatmat('faxx_i_codigo,faxx_i_desc','far_matercatmat.faxx_i_codigo = '.$chave_faxx_i_codigo);
     } else if (isset ( $chave_faxx_i_desc ) && (trim ( $chave_faxx_i_desc ) != "")) {
-        $sql = $clMaterCatMat->sqlQueryCatmat('far_matercatmat.faxx_i_desc like \'%'.$chave_faxx_i_desc.'%\'');
+        $sql = $clMaterCatMat->sqlQueryCatmat('faxx_i_codigo,faxx_i_desc','far_matercatmat.faxx_i_desc like \'%'.$chave_faxx_i_desc.'%\'');
     }else{
-        $sql = $clMaterCatMat->sqlQueryAllCatMat();
+        $sql = $clMaterCatMat->sqlQueryAllCatMat('faxx_i_codigo,faxx_i_desc');
     }
 
     echo '<div class="container">';
@@ -88,11 +88,15 @@ if (!isset($fa01_i_catmat) && !isset($codigo_barras))  {
 </body>
 </html>
 <?
-if(!isset($fa01_i_catmat)){
-    ?>
-    <script>
-    </script>
-    <?
+if(isset($fa01_i_catmat)){
+
+    $result = $clMaterCatMat->getFirstCatMat('faxx_i_codigo,faxx_i_desc','far_matercatmat.faxx_i_codigo = '.$fa01_i_catmat);
+
+    if($result){
+        echo "<script>".$funcao_js."('$result->faxx_i_desc',false);</script>";
+    }else{
+        echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+    }
 }
 ?>
 <script>

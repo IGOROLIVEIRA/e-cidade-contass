@@ -530,12 +530,18 @@ function js_pesquisacatmat(mostra){
     }
 }
 
-function js_mostraCatMat(chave1,chave1){
-
+function js_mostraCatMat(chave1,chave2){
+    document.form1.fa01_i_catmat.value = chave1;
+    document.form1.faxx_i_desc.value = chave2;
+    db_iframe_far_catmat.hide();
 }
 
-function js_mostraCatMat(chave,error){
-
+function js_mostraCatMat1(chave,error){
+    document.form1.faxx_i_desc.value = chave;
+    if(erro==true){
+        document.form1.fa01_i_catmat.focus();
+        document.form1.fa01_i_catmat.value = '';
+    }
 }
 
 
