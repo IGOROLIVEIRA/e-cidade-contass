@@ -617,7 +617,7 @@ ORDER BY nroprocessolicitatorio
                              obrasdadoscomplementareslote.db150_numero as numero,
                              obrasdadoscomplementareslote.db150_bairro as bairro,
                              obrasdadoscomplementareslote.db150_distrito as distrito,
-                             db72_descricao AS municipio,
+                             db125_codigosistema AS municipio,
                              obrasdadoscomplementareslote.db150_cep as cep,
                              obrasdadoscomplementareslote.db150_latitude as latitude,
                              obrasdadoscomplementareslote.db150_longitude as longitude,
@@ -632,7 +632,8 @@ ORDER BY nroprocessolicitatorio
                       INNER JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
                       INNER JOIN obrasdadoscomplementareslote ON obrascodigos.db151_codigoobra = obrasdadoscomplementareslote.db150_codobra
                       INNER JOIN cadendermunicipio on db72_sequencial = db150_municipio
-                      WHERE db_config.codigo= " . db_getsession('DB_instit') . "
+                      INNER JOIN cadendermunicipiosistema on db72_sequencial = db125_cadendermunicipio
+                      WHERE db_config.codigo= " . db_getsession('DB_instit') . " and db125_db_sistemaexterno = 4
                           AND pctipocompratribunal.l44_sequencial NOT IN ('100','101','102', '103', '106') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio
                       ORDER BY obrasdadoscomplementareslote.db150_codobra";
 
@@ -663,7 +664,8 @@ ORDER BY nroprocessolicitatorio
                         $clralic12->si182_numero = $oResult12->numero;//9
                         $clralic12->si182_bairro = $oResult12->bairro;//10
                         $clralic12->si182_distrito = $oResult12->distrito;//11
-                        $clralic12->si182_municipio = $this->removeCaracteres($oResult12->municipio);//12
+                        $tipoInstituicao = db_gettipoinstit(db_getsession('DB_instit'));
+                        $clralic12->si182_municipio = $tipoInstituicao == "51" ? $oResult12->municipio : "";//12
                         $clralic12->si182_cep = $oResult12->cep;//13
                         $clralic12->si182_latitude = $oResult12->latitude;//14
                         $clralic12->si182_longitude = $oResult12->longitude;//15
