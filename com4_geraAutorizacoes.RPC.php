@@ -159,44 +159,28 @@ switch ($oParam->exec) {
 
 
   case "getDados":
-    
-    $rsProcessoCompra = db_query("
-    select
-    *
-    from
-      pcproc
-    left join pcprocitem on
-      pc81_codproc = pc80_codproc
-    left join liclicitem on
-      l21_codpcprocitem = pc81_codprocitem
-    left join liclicita on
-      l20_codigo = l21_codliclicita
-    left join adesaoregprecos on
-      si06_processocompra = pc80_codproc
-    left join cflicita on
-      l03_codigo = l20_codtipocom
-    where pc80_codproc = $oParam->iCodigo");
 
-    $oProcessoCompra = db_utils::fieldsMemory($rsProcessoCompra, 0);
-    
+    $oProcessoCompra  = new ProcessoCompras($oParam->iCodigo);
+    $dadosAutorizacao = $oProcessoCompra->getDadosAutorizacao()[0];
+
     /* Verificando se processo de compra está vinculado a licitação. */
 
-    if($oProcessoCompra->l20_codigo != null){
+    if($dadosAutorizacao->l20_codigo != null){
       $oRetorno->vinculo = "licitacao";
-      $oRetorno->tipocompra = $oProcessoCompra->l03_codcom;
-      $oRetorno->numerolicitacao = $oProcessoCompra->l20_edital . "/" . $oProcessoCompra->l20_anousu;
-      $oRetorno->numeromodalidade = $oProcessoCompra->l20_numero;
+      $oRetorno->tipocompra = $dadosAutorizacao->l03_codcom;
+      $oRetorno->numerolicitacao = $dadosAutorizacao->l20_edital . "/" . $dadosAutorizacao->l20_anousu;
+      $oRetorno->numeromodalidade = $dadosAutorizacao->l20_numero;
       break;
     }
 
     /* Verificando se processo de compra está vinculado a Adesão de Registro de Preço. */
 
-    if($oProcessoCompra->si06_sequencial != null){
+    if($dadosAutorizacao->si06_sequencial != null){
       $oRetorno->vinculo = "adesao";
       $rsTipoCompra = db_query("select pc50_codcom from pctipocompra where pc50_pctipocompratribunal = 104;");
       $oRetorno->tipocompra = db_utils::fieldsMemory($rsTipoCompra, 0)->pc50_codcom;
-      $oRetorno->numerolicitacao = $oProcessoCompra->si06_numeroadm . "/" . $oProcessoCompra->si06_anomodadm;
-      $oRetorno->numeromodalidade = $oProcessoCompra->si06_nummodadm;
+      $oRetorno->numerolicitacao = $dadosAutorizacao->si06_numeroadm . "/" . $dadosAutorizacao->si06_anomodadm;
+      $oRetorno->numeromodalidade = $dadosAutorizacao->si06_nummodadm;
       break;
     }
 
