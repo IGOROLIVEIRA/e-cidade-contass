@@ -70,7 +70,7 @@ function mostraJanelaPesquisa() {
     $parametro = "";
     //alert('setor '+F.j34_setor.value+' quadra = '+F.j34_quadra.value+' lote= '+F.j34_lote.value);
     if (F.j34_setor.value.length == 0){
-    alert('ï¿½ necessï¿½rio preencher o setor');
+    alert('É necessário preencher o setor');
     return false;
     }
     if (F.j34_setor.value.length > 0) $parametro = $parametro + "setor=" + encodeURIComponent(F.j34_setor.value);
@@ -214,7 +214,7 @@ function mostraJanelaPesquisa() {
     VisualizacaoBairros.show();
   VisualizacaoBairros.focus();
   }
-  // adicionada lookup para mostrar todas matrï¿½culas da matricula do registro de imï¿½veis
+  // adicionada lookup para mostrar todas matrículas da matricula do registro de im?veis
   function mostraTodasMatriculas_PesquisaMatricregimo(matricula){
       VisualizacaoMatricula.jan.location.href = 'cad3_conscadastronovo_002.php?cod_matricula=' + matricula;
       VisualizacaoMatricula.mostraMsg();
@@ -285,7 +285,7 @@ function js_comTeclaEnter(evt) {
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
         <td colspan="2">
-        <fieldset><legend> <b>Dados referentes a matrÃ­cula</b></legend>
+        <fieldset><legend> <b>Dados referentes a matrícula</b></legend>
         <table border="0">
 
 
@@ -392,7 +392,7 @@ function js_comTeclaEnter(evt) {
 
       <tr>
         <td colspan="3" align="left" valign="top" nowrap><?$db_opcao=1; ?>
-        <fieldset><legend> <b>Dados referentes ao registro de imÃ³veis</b></legend>
+        <fieldset><legend> <b>Dados referentes ao registro de imóveis</b></legend>
         <table>
           </tr>
           <tr>
