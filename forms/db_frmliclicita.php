@@ -1344,7 +1344,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                     listaamparolegal.remove($x);
                 }
 
-                for ($x = 0; $x < 60; $x++) {
+                for ($x = 0; $x < 200; $x++) {
                     if (oRetorno.amparo[$x] != "" && oRetorno.amparo[$x] != null) {
 
                         listaamparolegal.add(new Option(oRetorno.amparo[$x], $x));
