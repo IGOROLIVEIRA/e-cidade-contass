@@ -393,7 +393,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 							$cExt20->si165_tiporegistro = '20';
 							$cExt20->si165_codorgao = $oExt10Agrupado->si124_codorgao;
 							$cExt20->si165_codext = $oContasReg20->c61_codtce;
-							$cExt20->si165_codfontrecursos = substr($clDeParaFonte->getDePara2024($oContasReg20->fontemovimento),0,7);;
+							$cExt20->si165_codfontrecursos = substr($clDeParaFonte->getDePara($oContasReg20->fontemovimento),0,7);
 							$cExt20->si165_exerciciocompdevo = $oExtExercicioComDevo;
 							$cExt20->si165_vlsaldoanteriorfonte += $oContasReg20->saldoinicial;
 							$cExt20->si165_natsaldoanteriorfonte = $natsaldoanteriorfonte ;
@@ -501,7 +501,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 
 								$cExt30->si126_tiporegistro = $oExt30->tiporegitro;
 								$cExt30->si126_codext = $oExt10Agrupado->si124_codext;
-								$cExt30->si126_codfontrecursos = $oExt30->codfontrecursos;
+								$cExt30->si126_codfontrecursos = substr($clDeParaFonte->getDePara(strlen($oExt30->codfontrecursos) == 7 ? $oExt30->codfontrecursos."0" : $oExt30->codfontrecursos),0,7);
 								$cExt30->si126_codreduzidoop = $oExt30->codreduzidoop;
 								$cExt30->si126_nroop = $oExt30->nroop;
 								$cExt30->si126_codunidadesub = $oExt30->codunidadesub;
@@ -740,7 +740,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 										$cExt31->si127_tipodocumentoop = $oExt31->tipodocumentoop;
 										$cExt31->si127_nrodocumento = ($oExt31->tipodocumentoop == '99' && $oExt31->e81_numdoc != '') ? ' ' : $oExt31->nrodocumento;
 										$cExt31->si127_codctb = $oExt31->tipodocumentoop == 5 ? 0 : $oConta->conta;
-										$cExt31->si127_codfontectb = $oExt31->codfontectb;
+										$cExt31->si127_codfontectb = substr($clDeParaFonte->getDePara(strlen($oExt31->codfontectb) == 7 ? $oExt31->codfontectb."0" : $oExt31->codfontectb),0,7);
 										if ($oExt31->tipodocumentoop == '99' && $oExt31->e81_numdoc != '') {
 											$cExt31->si127_desctipodocumentoop = $oExt31->e81_numdoc;
 										} elseif ($oExt31->tipodocumentoop == '99') {

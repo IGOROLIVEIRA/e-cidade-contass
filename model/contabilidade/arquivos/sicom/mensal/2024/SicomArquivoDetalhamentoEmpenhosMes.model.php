@@ -94,11 +94,12 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
     $rsCodunidadeSubAdesao = db_query($sSql);
     $oUnidadeSubAdesao = db_utils::fieldsMemory($rsCodunidadeSubAdesao, 0);
 
-    if ($oUnidadeSubAdesao->si06_codunidadesubant != "") {
+    if (!empty($oUnidadeSubAdesao->si06_codunidadesubant)) {
       return $oUnidadeSubAdesao->si06_codunidadesubant;
     } else {
       return $oUnidadeSubAdesao->codunidadesubresp;
     }
+
   }
 
   public function getLicitacaoOutrosOrgaos($processo,$anouso){
@@ -514,11 +515,13 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
       */
       if ($oEmpenho10->despdeclicitacao == "4") {
 
-        if ($oEmpenho10->si06_departamento == NULL && $oEmpenho10->si06_sequencial != NULL) {
-          $sCodSubAdesao = $this->getCodunidadesubrespAdesao($oEmpenho10->si06_sequencial, false);
-        } else {
-          $sCodSubAdesao = $this->getCodunidadesubrespAdesao($oEmpenho10->si06_sequencial, true);
-        }
+            if ($oEmpenho10->si06_departamento == NULL && $oEmpenho10->si06_sequencial != NULL) {
+              $sCodSubAdesao = $this->getCodunidadesubrespAdesao($oEmpenho10->si06_sequencial, false);
+            } elseif($oEmpenho10->si06_sequencial != NULL) {
+              $sCodSubAdesao = $this->getCodunidadesubrespAdesao($oEmpenho10->si06_sequencial, true);
+            } else {
+                $sCodSubAdesao = "0";
+            }
       }
 
       $sElemento = substr($oEmpenho10->naturezadadespesa, 0, 8);

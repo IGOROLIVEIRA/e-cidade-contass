@@ -89,6 +89,18 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
                     )
                     or
                     (date_part('MONTH',rh05_recis) = 12
+                     and date_part('YEAR',rh05_recis) = 2023
+                    )
+                    or
+                    (date_part('MONTH',rh05_recis) = 12
+                     and date_part('YEAR',rh05_recis) = 2022
+                    )
+                    or
+                    (date_part('MONTH',rh05_recis) = 12
+                     and date_part('YEAR',rh05_recis) = 2021
+                    )
+                    or
+                    (date_part('MONTH',rh05_recis) = 12
                      and date_part('YEAR',rh05_recis) = 2020
                     )
                     or
