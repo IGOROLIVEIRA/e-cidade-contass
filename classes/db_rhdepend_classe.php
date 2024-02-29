@@ -122,7 +122,7 @@ class cl_rhdepend
             $this->erro_sql = " Campo MatrÃ­cula do Servidor nao Informado.";
             $this->erro_campo = "rh31_regist";
             $this->erro_banco = "";
-            $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -131,7 +131,7 @@ class cl_rhdepend
             $this->erro_sql = " Campo Nome do Dependente nao Informado.";
             $this->erro_campo = "rh31_nome";
             $this->erro_banco = "";
-            $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -140,7 +140,7 @@ class cl_rhdepend
             $this->erro_sql = " Campo Data de Nascimento nao Informado.";
             $this->erro_campo = "rh31_dtnasc_dia";
             $this->erro_banco = "";
-            $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -149,7 +149,7 @@ class cl_rhdepend
             $this->erro_sql = " Campo Parentesco nao Informado.";
             $this->erro_campo = "rh31_gparen";
             $this->erro_banco = "";
-            $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -158,7 +158,7 @@ class cl_rhdepend
             $this->erro_sql = " Campo SalÃ¡rio FamÃ­lia nao Informado.";
             $this->erro_campo = "rh31_depend";
             $this->erro_banco = "";
-            $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -167,7 +167,7 @@ class cl_rhdepend
             $this->erro_sql = " Campo IRF nao Informado.";
             $this->erro_campo = "rh31_irf";
             $this->erro_banco = "";
-            $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -176,7 +176,7 @@ class cl_rhdepend
             $this->erro_sql = " Campo Especial nao Informado.";
             $this->erro_campo = "rh31_especi";
             $this->erro_banco = "";
-            $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -185,7 +185,7 @@ class cl_rhdepend
             $this->erro_sql = " Campo CPF do Dependente nao Informado.";
             $this->erro_campo = "rh31_cpf";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -194,8 +194,8 @@ class cl_rhdepend
             $result = db_query("select nextval('rhdepend_rh31_codigo_seq')");
             if ($result == false) {
                 $this->erro_banco = str_replace("\n", "", @pg_last_error());
-                $this->erro_sql   = "Verifique o cadastro da sequencia: rhdepend_rh31_codigo_seq do campo: rh31_codigo";
-                $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_sql   = "Verifique o cadastro da sequência: rhdepend_rh31_codigo_seq do campo: rh31_codigo";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -204,9 +204,9 @@ class cl_rhdepend
         } else {
             $result = db_query("select last_value from rhdepend_rh31_codigo_seq");
             if (($result != false) && (pg_result($result, 0, 0) < $rh31_codigo)) {
-                $this->erro_sql = " Campo rh31_codigo maior que Ãºltimo nÃºmero da sequencia.";
-                $this->erro_banco = "Sequencia menor que este nÃºmero.";
-                $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_sql = " Campo rh31_codigo maior que Último número da sequência.";
+                $this->erro_banco = "Sequência menor que este número.";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -217,7 +217,7 @@ class cl_rhdepend
         if (($this->rh31_codigo == null) || ($this->rh31_codigo == "")) {
             $this->erro_sql = " Campo rh31_codigo nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
-            $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -253,12 +253,12 @@ class cl_rhdepend
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
                 $this->erro_sql   = "Dependentes ($this->rh31_codigo) nao IncluÃ­do. Inclusao Abortada.";
-                $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_banco = "Dependentes jÃ¡ Cadastrado";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             } else {
                 $this->erro_sql   = "Dependentes ($this->rh31_codigo) nao IncluÃ­do. Inclusao Abortada.";
-                $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             }
             $this->erro_status = "0";
@@ -268,7 +268,7 @@ class cl_rhdepend
         $this->erro_banco = "";
         $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $this->rh31_codigo;
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_incluir = pg_affected_rows($result);
@@ -302,7 +302,7 @@ class cl_rhdepend
                 $this->erro_sql = " Campo CÃ³digo nao Informado.";
                 $this->erro_campo = "rh31_codigo";
                 $this->erro_banco = "";
-                $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -315,7 +315,7 @@ class cl_rhdepend
                 $this->erro_sql = " Campo MatrÃ­cula do Servidor nao Informado.";
                 $this->erro_campo = "rh31_regist";
                 $this->erro_banco = "";
-                $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -328,7 +328,7 @@ class cl_rhdepend
                 $this->erro_sql = " Campo Nome do Dependente nao Informado.";
                 $this->erro_campo = "rh31_nome";
                 $this->erro_banco = "";
-                $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -341,7 +341,7 @@ class cl_rhdepend
                 $this->erro_sql = " Campo Data de Nascimento nao Informado.";
                 $this->erro_campo = "rh31_dtnasc_dia";
                 $this->erro_banco = "";
-                $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -354,7 +354,7 @@ class cl_rhdepend
                     $this->erro_sql = " Campo Data de Nascimento nao Informado.";
                     $this->erro_campo = "rh31_dtnasc_dia";
                     $this->erro_banco = "";
-                    $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                     $this->erro_status = "0";
                     return false;
@@ -368,7 +368,7 @@ class cl_rhdepend
                 $this->erro_sql = " Campo Parentesco nao Informado.";
                 $this->erro_campo = "rh31_gparen";
                 $this->erro_banco = "";
-                $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -381,7 +381,7 @@ class cl_rhdepend
                 $this->erro_sql = " Campo SalÃ¡rio FamÃ­lia nao Informado.";
                 $this->erro_campo = "rh31_depend";
                 $this->erro_banco = "";
-                $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -394,7 +394,7 @@ class cl_rhdepend
                 $this->erro_sql = " Campo IRF nao Informado.";
                 $this->erro_campo = "rh31_irf";
                 $this->erro_banco = "";
-                $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -407,7 +407,7 @@ class cl_rhdepend
                 $this->erro_sql = " Campo Especial nao Informado.";
                 $this->erro_campo = "rh31_especi";
                 $this->erro_banco = "";
-                $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -420,7 +420,7 @@ class cl_rhdepend
                 $this->erro_sql = " Campo CPF do Dependente nao Informado.";
                 $this->erro_campo = "rh31_cpf";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -482,7 +482,7 @@ class cl_rhdepend
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Dependentes nao Alterado. Alteracao Abortada.\\n";
             $this->erro_sql .= "Valores : " . $this->rh31_codigo;
-            $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_alterar = 0;
@@ -492,7 +492,7 @@ class cl_rhdepend
                 $this->erro_banco = "";
                 $this->erro_sql = "Dependentes nao foi Alterado. Alteracao Executada.\\n";
                 $this->erro_sql .= "Valores : " . $this->rh31_codigo;
-                $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = 0;
@@ -501,7 +501,7 @@ class cl_rhdepend
                 $this->erro_banco = "";
                 $this->erro_sql = "AlteraÃ§Ã£o efetuada com Sucesso\\n";
                 $this->erro_sql .= "Valores : " . $this->rh31_codigo;
-                $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = pg_affected_rows($result);
@@ -551,7 +551,7 @@ class cl_rhdepend
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Dependentes nao ExcluÃ­do. ExclusÃ£o Abortada.\\n";
             $this->erro_sql .= "Valores : " . $rh31_codigo;
-            $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_excluir = 0;
@@ -561,7 +561,7 @@ class cl_rhdepend
                 $this->erro_banco = "";
                 $this->erro_sql = "Dependentes nao Encontrado. ExclusÃ£o nÃ£o Efetuada.\\n";
                 $this->erro_sql .= "Valores : " . $rh31_codigo;
-                $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = 0;
@@ -570,7 +570,7 @@ class cl_rhdepend
                 $this->erro_banco = "";
                 $this->erro_sql = "ExclusÃ£o efetuada com Sucesso\\n";
                 $this->erro_sql .= "Valores : " . $rh31_codigo;
-                $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = pg_affected_rows($result);
@@ -586,7 +586,7 @@ class cl_rhdepend
             $this->numrows    = 0;
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Erro ao selecionar os registros.";
-            $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -595,7 +595,7 @@ class cl_rhdepend
         if ($this->numrows == 0) {
             $this->erro_banco = "";
             $this->erro_sql   = "Record Vazio na Tabela:rhdepend";
-            $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
