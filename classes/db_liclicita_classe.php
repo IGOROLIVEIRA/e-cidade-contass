@@ -3640,7 +3640,7 @@ class cl_liclicita
            WHEN l03_pctipocompratribunal = 50 and l03_presencial='t' THEN 5
            WHEN l03_pctipocompratribunal = 101 THEN 8
            WHEN l03_pctipocompratribunal = 100 THEN 9
-           WHEN l03_pctipocompratribunal = 102 THEN 12
+           WHEN l03_pctipocompratribunal in (102,103) THEN 12
        END AS modalidadeId,
        CASE
            WHEN l03_pctipocompratribunal IN (100,101,102,103) THEN 5
@@ -3833,6 +3833,7 @@ class cl_liclicita
                     WHEN l03_pctipocompratribunal = 101 THEN 8
                     WHEN l03_pctipocompratribunal = 100 THEN 9
                     WHEN l03_pctipocompratribunal = 102 THEN 12
+                    WHEN l03_pctipocompratribunal = 103 THEN 12
                 END AS modalidadeId,
                 pc23_vlrun
         FROM liclicita
