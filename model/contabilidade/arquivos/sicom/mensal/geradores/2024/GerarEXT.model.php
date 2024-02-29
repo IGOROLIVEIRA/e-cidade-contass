@@ -146,7 +146,7 @@ class GerarEXT extends GerarAM
           $sDataInicialFiltros = db_getsession("DB_anousu") . "-{$this->iMes}-01";
           $sDataFinalFiltros   = db_getsession("DB_anousu") . "-{$this->iMes}-{$iUltimoDiaMes}";
           $rsPlanoContasSaldo = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $sDataInicialFiltros, $sDataFinalFiltros, false, $where);
-
+          
           db_fim_transacao(true);
 
           for ($iContPlano = 0; $iContPlano < pg_num_rows($rsPlanoContasSaldo); $iContPlano++) {
@@ -165,6 +165,28 @@ class GerarEXT extends GerarAM
 
               $aSaldosIniFim[] = $oSaldoInicioFim;
             }
+          } 
+          if (pg_num_rows($rsPlanoContasSaldo) == 0) {
+            $codext = $aCSVEXT20['si165_codext'];
+            $sSql = "select si165_tiporegistro,
+                  si165_codorgao,
+                  si165_codext,
+                  si165_codfontrecursos,
+                  si165_natsaldoanteriorfonte,
+                  sum (case when si165_natsaldoanteriorfonte = 'D' then (si165_vlsaldoanteriorfonte) *-1
+                  else  (si165_vlsaldoanteriorfonte)  end) as si165_vlsaldoanteriorfonte,
+                  sum(si165_totaldebitos) as si165_totaldebitos,
+                  sum(si165_totalcreditos) as si165_totalcreditos ,
+                  sum(si165_vlsaldoatualfonte) as si165_vlsaldoatualfonte,
+                  si165_exerciciocompdevo 
+                  from ext202024 
+                  where si165_mes = " . $this->iMes . " and  si165_instit = " . db_getsession("DB_instit")." and si165_codext = {$codext}  and si165_natsaldoanteriorfonte != ''
+                  group by si165_codext, si165_codfontrecursos,si165_tiporegistro,si165_codorgao,si165_exerciciocompdevo,si165_natsaldoanteriorfonte
+                  order by si165_codext, si165_codfontrecursos " ;
+                  $rsEXT20novo = db_query($sSql);
+
+                  $aEXT20novo = db_utils::fieldsMemory($rsEXT20novo, 0);
+         
           }
           foreach ($aSaldosIniFim as $nSaldoIniFim) {
             if ($nSaldoIniFim->reduz == $aCSVEXT20['si165_codext']) {
@@ -178,7 +200,7 @@ class GerarEXT extends GerarAM
             }
           }		
 
-          $aCSVEXT20['si165_natsaldoanteriorfonte'] = $natsaldoanteriorfonte;
+          $aCSVEXT20['si165_natsaldoanteriorfonte'] = $natsaldoanteriorfonte ? $natsaldoanteriorfonte : $aEXT20novo->si165_natsaldoanteriorfonte;
         }
 
         $aCSVEXT20['si165_totaldebitos']          = $this->sicomNumberReal(abs($aEXT20['si165_totaldebitos']), 2);
