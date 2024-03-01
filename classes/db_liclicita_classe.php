@@ -149,7 +149,8 @@ class cl_liclicita
     var $l20_categoriaprocesso = null;
     var $l20_justificativapncp = null;
     var $l20_receita = null;
-
+    var $l20_horaaberturaprop = null;
+    var $l20_horaencerramentoprop = null;
 
     // cria propriedade com as variaveis do arquivo
     var $campos = "
@@ -227,6 +228,8 @@ class cl_liclicita
                  l20_categoriaprocesso = int4 = Categoria Processo;
                  l20_justificativapncp = text = justificativa para pncp
                  l20_receita = bool = receita
+                 l20_horaaberturaprop = string = hora de abertura das propostas
+                 l20_horaencerramentoprop = string = hora de encerramento das propostas
                  ";
 
     //funcao construtor da classe
@@ -423,6 +426,8 @@ class cl_liclicita
         $this->l20_categoriaprocesso = ($this->l20_categoriaprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_categoriaprocesso"] : $this->l20_categoriaprocesso);
         $this->l20_justificativapncp = ($this->l20_justificativapncp == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_justificativapncp"] : $this->l20_justificativapncp);
         $this->l20_receita = ($this->l20_receita == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_receita"] : $this->l20_receita);
+        $this->l20_horaaberturaprop = ($this->l20_horaaberturaprop == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_horaaberturaprop"] : $this->l20_horaaberturaprop);
+        $this->l20_horaencerramentoprop = ($this->l20_horaencerramentoprop == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_horaencerramentoprop"] : $this->l20_horaencerramentoprop);
     }
 
     // funcao para inclusao aqui
@@ -794,6 +799,30 @@ class cl_liclicita
             return false;
         }
 
+        if ($this->l20_horaaberturaprop == null) {
+            $this->erro_sql = " Campo Hora de Abertura Proposta não foi informado.";
+            $this->erro_campo = "l20_horaaberturaprop";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }else{
+
+        }
+
+        if ($this->l20_horaencerramentoprop == null) {
+            $this->erro_sql = " Campo Hora Encerramento Proposta não foi informado.";
+            $this->erro_campo = "l20_horaencerramentoprop";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }else{
+
+        }
+
         if ($this->l20_criterioadjudicacao == null) {
             $this->l20_criterioadjudicacao = "3";
         }
@@ -942,6 +971,8 @@ class cl_liclicita
                 ,l20_categoriaprocesso
                 ,l20_justificativapncp
                 ,l20_receita
+                ,l20_horaaberturaprop
+                ,l20_horaencerramentoprop
                        )
                 values (
                  $this->l20_codigo
@@ -1001,7 +1032,8 @@ class cl_liclicita
                 ,$this->l20_categoriaprocesso
                 ,'$this->l20_justificativapncp'
                 ,'$this->l20_receita'
-
+                ,'$this->l20_horaaberturaprop'
+                ,'$this->l20_horaencerramentoprop'
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -1926,6 +1958,36 @@ class cl_liclicita
         if (trim($this->l20_receita) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_receita"])) {
             $sql .= $virgula . " l20_receita = '$this->l20_receita'";
             $virgula = ",";
+        }
+
+        if (trim($this->l20_horaaberturaprop) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_horaaberturaprop"])) {
+
+            $sql .= $virgula . " l20_horaaberturaprop = '$this->l20_horaaberturaprop'";
+            $virgula = ",";
+            if (trim($this->l20_horaaberturaprop) == null) {
+                $this->erro_sql = " Hora Abertura Proposta não Informado.";
+                $this->erro_campo = "l20_horaaberturaprop";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
+        if (trim($this->l20_horaencerramentoprop) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_horaencerramentoprop"])) {
+
+            $sql .= $virgula . " l20_horaencerramentoprop = '$this->l20_horaencerramentoprop'";
+            $virgula = ",";
+            if (trim($this->l20_horaencerramentoprop) == null) {
+                $this->erro_sql = " Hora Encerramento Proposta não Informado.";
+                $this->erro_campo = "l20_horaencerramentoprop";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
         }
 
         $sql .= " where ";
@@ -3578,7 +3640,7 @@ class cl_liclicita
            WHEN l03_pctipocompratribunal = 50 and l03_presencial='t' THEN 5
            WHEN l03_pctipocompratribunal = 101 THEN 8
            WHEN l03_pctipocompratribunal = 100 THEN 9
-           WHEN l03_pctipocompratribunal = 102 THEN 12
+           WHEN l03_pctipocompratribunal in (102,103) THEN 12
        END AS modalidadeId,
        CASE
            WHEN l03_pctipocompratribunal IN (100,101,102,103) THEN 5
@@ -3594,7 +3656,9 @@ class cl_liclicita
             ELSE liclicita.l20_usaregistropreco
         END AS srp,
         liclicita.l20_dataaberproposta AS dataAberturaProposta,
+        liclicita.l20_horaaberturaprop AS horaAberturaProposta,
         liclicita.l20_dataencproposta AS dataEncerramentoProposta,
+        liclicita.l20_horaencerramentoprop AS horaEncerramentoProposta,
         liclicita.l20_amparolegal as amparoLegalId,
         liclicita.l20_linkpncp as linkSistemaOrigem,
         liclicita.l20_justificativapncp as justificativaPresencial,
@@ -3769,6 +3833,7 @@ class cl_liclicita
                     WHEN l03_pctipocompratribunal = 101 THEN 8
                     WHEN l03_pctipocompratribunal = 100 THEN 9
                     WHEN l03_pctipocompratribunal = 102 THEN 12
+                    WHEN l03_pctipocompratribunal = 103 THEN 12
                 END AS modalidadeId,
                 pc23_vlrun
         FROM liclicita
