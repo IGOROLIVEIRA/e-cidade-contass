@@ -216,7 +216,10 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV
             WHEN rh30_vinculo = 'A' THEN rh02_hrssem
             WHEN h13_tipocargo in (2,3,6) THEN 99
         END AS si195_vlrcargahorariasemanal,
-        rh01_admiss AS si195_datefetexercicio,
+        CASE
+            WHEN rh01_tipadm = '5' THEN rh01_dtingressocargoefetivo
+            ELSE rh01_admiss
+        END AS si195_datefetexercicio,
         CASE
             WHEN rh37_dedicacaoexc = 't' THEN 1
             ELSE 2
@@ -640,7 +643,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV
                 $clflpgo10->si195_indsalaaula                       = ($oDados10->rh30_vinculo != 'I' ? $oDados10->rh37_exerceatividade : '');
                 $clflpgo10->si195_dedicacaoexclusiva                = (in_array($clflpgo10->si195_indsituacaoservidorpensionista, array('02')) && $oDados10->si195_sglcargo != 'APO') ? $aTiposPagamento[$iContEx]['si195_dedicacaoexclusiva'] : '';
                 $clflpgo10->si195_vlrcargahorariasemanal            = (in_array($clflpgo10->si195_indsituacaoservidorpensionista, array('02')) && $oDados10->si195_sglcargo != 'APO' && $oDados10->si195_dedicacaoexclusiva == 2) ? $oDados10->si195_vlrcargahorariasemanal : '';
-                $clflpgo10->si195_datefetexercicio                  = $oDados10->si195_datefetexercicio;
+                $clflpgo10->si195_datefetexercicio                  = ($oDados10->si195_datefetexercicio == null) ? $oDados10->si195_datconcessaoaposentadoriapensao : $oDados10->si195_datefetexercicio;
                 $clflpgo10->si195_datcomissionado                   = $oDados10->si195_datefetexercicio;
                 $clflpgo10->si195_datexclusao                       = $oDados10->si195_datexclusao;
                 $clflpgo10->si195_datcomissionadoexclusao           = $oDados10->si195_datexclusao;
