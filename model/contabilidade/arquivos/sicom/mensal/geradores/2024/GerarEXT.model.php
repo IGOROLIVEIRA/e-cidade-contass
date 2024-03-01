@@ -33,15 +33,15 @@ class GerarEXT extends GerarAM
                   si165_codorgao,
                   si165_codext,
                   si165_codfontrecursos,
-                  si165_natsaldoanteriorfonte,
-                  sum(si165_vlsaldoanteriorfonte) as si165_vlsaldoanteriorfonte,
+                  sum (case when si165_natsaldoanteriorfonte = 'D' then (si165_vlsaldoanteriorfonte) *-1
+                  else  (si165_vlsaldoanteriorfonte)  end) as si165_vlsaldoanteriorfonte,
                   sum(si165_totaldebitos) as si165_totaldebitos,
                   sum(si165_totalcreditos) as si165_totalcreditos ,
                   sum(si165_vlsaldoatualfonte) as si165_vlsaldoatualfonte,
                   si165_exerciciocompdevo 
                   from ext202024 
                   where si165_mes = " . $this->iMes . " and  si165_instit = " . db_getsession("DB_instit")."
-                  group by si165_codext, si165_codfontrecursos,si165_tiporegistro,si165_codorgao,si165_exerciciocompdevo,si165_natsaldoanteriorfonte
+                  group by si165_codext, si165_codfontrecursos,si165_tiporegistro,si165_codorgao,si165_exerciciocompdevo
                   order by si165_codext, si165_codfontrecursos " ;
     $rsEXT20 = db_query($sSql);
 
@@ -137,8 +137,70 @@ class GerarEXT extends GerarAM
 
           }
         }else{
-                                            
-          $aCSVEXT20['si165_natsaldoanteriorfonte'] = substr($aEXT20['si165_natsaldoanteriorfonte'], 0, 1);
+          $where = " c61_instit in (" . db_getsession("DB_instit") . ") ";
+			    $where .= " and c61_reduz = ".$aCSVEXT20['si165_codext']." and c61_reduz != 0";
+
+          db_inicio_transacao();
+          $ano = db_getsession("DB_anousu");
+          $iUltimoDiaMes = date("d", mktime(0, 0, 0, $this->iMes + 1, 0,$ano ));
+          $sDataInicialFiltros = db_getsession("DB_anousu") . "-{$this->iMes}-01";
+          $sDataFinalFiltros   = db_getsession("DB_anousu") . "-{$this->iMes}-{$iUltimoDiaMes}";
+          $rsPlanoContasSaldo = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $sDataInicialFiltros, $sDataFinalFiltros, false, $where);
+          
+          db_fim_transacao(true);
+
+          for ($iContPlano = 0; $iContPlano < pg_num_rows($rsPlanoContasSaldo); $iContPlano++) {
+
+            if (db_utils::fieldsMemory($rsPlanoContasSaldo, $iContPlano)->c61_reduz != 0) {
+              $oPlanoContas = db_utils::fieldsMemory($rsPlanoContasSaldo, $iContPlano);
+              $oSaldoInicioFim = new stdClass();
+              $oSaldoInicioFim->reduz = $oPlanoContas->c61_reduz;
+              $oSaldoInicioFim->sinal_anterior = $oPlanoContas->sinal_anterior;
+              $oSaldoInicioFim->sinal_final = $oPlanoContas->sinal_final;
+              $oSaldoInicioFim->sdini = $oPlanoContas->saldo_anterior;
+              $oSaldoInicioFim->sdfim = $oPlanoContas->saldo_final;
+              $oSaldoInicioFim->saldo_debito = $oPlanoContas->saldo_anterior_debito;
+              $oSaldoInicioFim->saldo_credito = $oPlanoContas->saldo_anterior_credito;
+
+
+              $aSaldosIniFim[] = $oSaldoInicioFim;
+            }
+          } 
+          if (pg_num_rows($rsPlanoContasSaldo) == 0) {
+            $codext = $aCSVEXT20['si165_codext'];
+            $sSql = "select si165_tiporegistro,
+                  si165_codorgao,
+                  si165_codext,
+                  si165_codfontrecursos,
+                  si165_natsaldoanteriorfonte,
+                  sum (case when si165_natsaldoanteriorfonte = 'D' then (si165_vlsaldoanteriorfonte) *-1
+                  else  (si165_vlsaldoanteriorfonte)  end) as si165_vlsaldoanteriorfonte,
+                  sum(si165_totaldebitos) as si165_totaldebitos,
+                  sum(si165_totalcreditos) as si165_totalcreditos ,
+                  sum(si165_vlsaldoatualfonte) as si165_vlsaldoatualfonte,
+                  si165_exerciciocompdevo 
+                  from ext202024 
+                  where si165_mes = " . $this->iMes . " and  si165_instit = " . db_getsession("DB_instit")." and si165_codext = {$codext}  and si165_natsaldoanteriorfonte != ''
+                  group by si165_codext, si165_codfontrecursos,si165_tiporegistro,si165_codorgao,si165_exerciciocompdevo,si165_natsaldoanteriorfonte
+                  order by si165_codext, si165_codfontrecursos " ;
+                  $rsEXT20novo = db_query($sSql);
+
+                  $aEXT20novo = db_utils::fieldsMemory($rsEXT20novo, 0);
+         
+          }
+          foreach ($aSaldosIniFim as $nSaldoIniFim) {
+            if ($nSaldoIniFim->reduz == $aCSVEXT20['si165_codext']) {
+              $saldoanterior = $nSaldoIniFim->sinal_anterior == 'C' ? ($nSaldoIniFim->sdini * -1) : $nSaldoIniFim->sdini;
+              $saldofinal = $nSaldoIniFim->sinal_final == 'C' ? ($nSaldoIniFim->sdfim * -1) : $nSaldoIniFim->sdfim;
+              $natsaldoanteriorfonte = $nSaldoIniFim->sinal_anterior;
+              $natsaldoatualfonte = $nSaldoIniFim->sinal_final;
+              $saldodebito = $nSaldoIniFim->saldo_debito;
+              $saldocredito = $nSaldoIniFim->saldo_credito;
+              break;
+            }
+          }		
+
+          $aCSVEXT20['si165_natsaldoanteriorfonte'] = $natsaldoanteriorfonte ? $natsaldoanteriorfonte : $aEXT20novo->si165_natsaldoanteriorfonte;
         }
 
         $aCSVEXT20['si165_totaldebitos']          = $this->sicomNumberReal(abs($aEXT20['si165_totaldebitos']), 2);

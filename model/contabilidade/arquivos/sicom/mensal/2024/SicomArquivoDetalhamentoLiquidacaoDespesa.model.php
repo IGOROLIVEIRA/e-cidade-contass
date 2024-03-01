@@ -292,7 +292,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
 
         $cllqd11->si119_tiporegistro = $oDados11->si119_tiporegistro;
         $cllqd11->si119_codreduzido = $oDados11->si119_codreduzido;
-        $cllqd11->si119_codfontrecursos = $oDeParaRecurso->getDePara2024($oDados11->si119_codfontrecursos);
+        $cllqd11->si119_codfontrecursos = $oDeParaRecurso->getDePara(strlen($oDados11->si119_codfontrecursos) == 7 ? $oDados11->si119_codfontrecursos."0" : $oDados11->si119_codfontrecursos);
         $cllqd11->si119_codco = $oDados11->si119_codco;
         $cllqd11->si119_valorfonte = $oDados11->si119_valorfonte;
         $cllqd11->si119_mes = $oDados11->si119_mes;

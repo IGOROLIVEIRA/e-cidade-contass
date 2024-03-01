@@ -393,7 +393,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 							$cExt20->si165_tiporegistro = '20';
 							$cExt20->si165_codorgao = $oExt10Agrupado->si124_codorgao;
 							$cExt20->si165_codext = $oContasReg20->c61_codtce;
-							$cExt20->si165_codfontrecursos = substr($clDeParaFonte->getDePara2024($oContasReg20->fontemovimento),0,7);;
+							$cExt20->si165_codfontrecursos = substr($clDeParaFonte->getDePara($oContasReg20->fontemovimento),0,7);
 							$cExt20->si165_exerciciocompdevo = $oExtExercicioComDevo;
 							$cExt20->si165_vlsaldoanteriorfonte += $oContasReg20->saldoinicial;
 							$cExt20->si165_natsaldoanteriorfonte = $natsaldoanteriorfonte ;
@@ -501,7 +501,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 
 								$cExt30->si126_tiporegistro = $oExt30->tiporegitro;
 								$cExt30->si126_codext = $oExt10Agrupado->si124_codext;
-								$cExt30->si126_codfontrecursos = $oExt30->codfontrecursos;
+								$cExt30->si126_codfontrecursos = substr($clDeParaFonte->getDePara(strlen($oExt30->codfontrecursos) == 7 ? $oExt30->codfontrecursos."0" : $oExt30->codfontrecursos),0,7);
 								$cExt30->si126_codreduzidoop = $oExt30->codreduzidoop;
 								$cExt30->si126_nroop = $oExt30->nroop;
 								$cExt30->si126_codunidadesub = $oExt30->codunidadesub;
@@ -616,7 +616,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 													si95_digitoverificadoragencia = c63_dvagencia and
 													si95_contabancaria = c63_conta::int8 and
 													si95_digitoverificadorcontabancaria = c63_dvconta and
-													si95_tipoconta::int8 = c63_tipoconta join ctb202024 on si96_codctb = si95_codctb and si96_mes = si95_mes
+													si95_tipoconta::int8 = c63_tipoconta
 															where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu") . "
 															and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 										$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
@@ -628,7 +628,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 															si95_digitoverificadoragencia = c63_dvagencia and
 															si95_contabancaria = c63_conta::int8 and
 															si95_digitoverificadorcontabancaria = c63_dvconta and
-															si95_tipoconta::int8 = c63_tipoconta join ctb202023 on si96_codctb = si95_codctb and si96_mes = si95_mes
+															si95_tipoconta::int8 = c63_tipoconta
 																	where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
 															
 										$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
@@ -640,7 +640,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 													si95_digitoverificadoragencia = c63_dvagencia and
 													si95_contabancaria = c63_conta::int8 and
 													si95_digitoverificadorcontabancaria = c63_dvconta and
-													si95_tipoconta::int8 = c63_tipoconta join ctb202022 on si96_codctb = si95_codctb and si96_mes = si95_mes
+													si95_tipoconta::int8 = c63_tipoconta
 															where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
 										$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 													join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -651,7 +651,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 													si95_digitoverificadoragencia = c63_dvagencia and
 													si95_contabancaria = c63_conta::int8 and
 													si95_digitoverificadorcontabancaria = c63_dvconta and
-													si95_tipoconta::int8 = c63_tipoconta join ctb202021 on si96_codctb = si95_codctb and si96_mes = si95_mes
+													si95_tipoconta::int8 = c63_tipoconta
 															where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
 										$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 													join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -662,7 +662,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 													si95_digitoverificadoragencia = c63_dvagencia and
 													si95_contabancaria = c63_conta::int8 and
 													si95_digitoverificadorcontabancaria = c63_dvconta and
-													si95_tipoconta::int8 = c63_tipoconta join ctb202020 on si96_codctb = si95_codctb and si96_mes = si95_mes
+													si95_tipoconta::int8 = c63_tipoconta
 															where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
 										$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 													join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -673,7 +673,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 													si95_digitoverificadoragencia = c63_dvagencia and
 													si95_contabancaria = c63_conta::int8 and
 													si95_digitoverificadorcontabancaria = c63_dvconta and
-													si95_tipoconta::int8 = c63_tipoconta join ctb202019 on si96_codctb = si95_codctb and si96_mes = si95_mes
+													si95_tipoconta::int8 = c63_tipoconta
 															where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
 										$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 													join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -684,7 +684,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 													si95_digitoverificadoragencia = c63_dvagencia and
 													si95_contabancaria = c63_conta::int8 and
 													si95_digitoverificadorcontabancaria = c63_dvconta and
-													si95_tipoconta::int8 = c63_tipoconta join ctb202018 on si96_codctb = si95_codctb and si96_mes = si95_mes
+													si95_tipoconta::int8 = c63_tipoconta
 															where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
 										$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 													join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -695,7 +695,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 													si95_digitoverificadoragencia = c63_dvagencia and
 													si95_contabancaria = c63_conta::int8 and
 													si95_digitoverificadorcontabancaria = c63_dvconta and
-													si95_tipoconta::int8 = c63_tipoconta join ctb202017 on si96_codctb = si95_codctb and si96_mes = si95_mes
+													si95_tipoconta::int8 = c63_tipoconta
 															where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
 										$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 													join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -706,7 +706,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 													si95_digitoverificadoragencia = c63_dvagencia and
 													si95_contabancaria = c63_conta::int8 and
 													si95_digitoverificadorcontabancaria = c63_dvconta and
-													si95_tipoconta::int8 = c63_tipoconta join ctb202016 on si96_codctb = si95_codctb and si96_mes = si95_mes
+													si95_tipoconta::int8 = c63_tipoconta
 															where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
 										$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 													join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -717,7 +717,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 													si95_digitoverificadoragencia = c63_dvagencia and
 													si95_contabancaria = c63_conta::int8 and
 													si95_digitoverificadorcontabancaria = c63_dvconta and
-													si95_tipoconta::int8 = c63_tipoconta join ctb202015 on si96_codctb = si95_codctb and si96_mes = si95_mes
+													si95_tipoconta::int8 = c63_tipoconta
 															where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
 										$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 													join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -728,7 +728,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 													si95_digitoverificadoragencia = c63_dvagencia and
 													si95_contabancaria = c63_conta::int8 and
 													si95_digitoverificadorcontabancaria = c63_dvconta and
-													si95_tipoconta::int8 = c63_tipoconta join ctb202014 on si96_codctb = si95_codctb and si96_mes = si95_mes
+													si95_tipoconta::int8 = c63_tipoconta
 															where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
 										$rsResultContaPag = db_query($sSqlContaPagFont);
 										$oConta = db_utils::fieldsMemory($rsResultContaPag, 0);
@@ -740,7 +740,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 										$cExt31->si127_tipodocumentoop = $oExt31->tipodocumentoop;
 										$cExt31->si127_nrodocumento = ($oExt31->tipodocumentoop == '99' && $oExt31->e81_numdoc != '') ? ' ' : $oExt31->nrodocumento;
 										$cExt31->si127_codctb = $oExt31->tipodocumentoop == 5 ? 0 : $oConta->conta;
-										$cExt31->si127_codfontectb = $oExt31->codfontectb;
+										$cExt31->si127_codfontectb = substr($clDeParaFonte->getDePara(strlen($oExt31->codfontectb) == 7 ? $oExt31->codfontectb."0" : $oExt31->codfontectb),0,7);
 										if ($oExt31->tipodocumentoop == '99' && $oExt31->e81_numdoc != '') {
 											$cExt31->si127_desctipodocumentoop = $oExt31->e81_numdoc;
 										} elseif ($oExt31->tipodocumentoop == '99') {

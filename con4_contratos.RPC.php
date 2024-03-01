@@ -2010,6 +2010,22 @@ switch ($oParam->exec) {
             $oResultLicitacao = $cl_liclicita->sql_record($sQueryLicitacao);
             $oRetorno->leiLicitacao = db_utils::fieldsMemory($oResultLicitacao,0)->l20_leidalicitacao;
         break;
+
+        case 'getItensAditamento':
+            $cl_acordoitem = new cl_acordoitem;
+            $query = $cl_acordoitem->queryGetItensAdimento($oParam->iAcordo);
+            $oResult = $cl_acordoitem->sql_record($query);
+            $aResult = array();
+            if ($cl_acordoitem->numrows > 0) {
+                for ($i = 0; $i < $cl_acordoitem->numrows; $i++) {
+                    $linha = db_utils::fieldsMemory($oResult, $i);
+                    array_push($aResult,$linha);
+                }
+            }
+            $oRetorno->status  = 1;
+            $oRetorno->itens = $aResult;
+        break;
+
 }
 /**
  * Função que verifica se a data de assinatura do acordo é anterior a data de homologação da licitação
