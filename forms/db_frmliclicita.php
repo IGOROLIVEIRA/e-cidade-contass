@@ -790,6 +790,14 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         <?
                                         db_inputdata("l20_dataaberproposta", @$l20_dataaberproposta_dia, @$l20_dataaberproposta_mes, @$l20_dataaberproposta_ano, true, 'text', $db_opcao, "");
                                         ?>
+                                        <strong>Hora Abertura Prop:</strong>
+                                        <?php
+                                        if (empty($l20_horaaberturaprop)) {
+                                            $l20_horaaberturaprop = db_hora();
+                                        }
+                                        db_input('l20_horaaberturaprop', 5, $Il20_horaaberturaprop, true, 'text', $db_opcao, "onchange='js_verifica_hora(this.value,this.name)';onkeypress='return js_mask(event, \"0-9|:|0-9\"); '");
+                                        echo "hh:mm";
+                                        ?>
                                     </td>
                                 </tr>
 
@@ -800,6 +808,14 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     <td>
                                         <?
                                         db_inputdata("l20_dataencproposta", @$l20_dataencproposta_dia, @$l20_dataencproposta_mes, @$l20_dataencproposta_ano, true, 'text', $db_opcao, "");
+                                        ?>
+                                        <strong>Hora Encerramento:</strong>
+                                        <?php
+                                        if (empty($l20_horaencerramentoprop)) {
+                                            $l20_horaencerramentoprop = db_hora();
+                                        }
+                                        db_input('l20_horaencerramentoprop', 5, $Il20_horaencerramentoprop, true, 'text', $db_opcao, "onchange='js_verifica_hora(this.value,this.name)';onkeypress='return js_mask(event, \"0-9|:|0-9\"); '");
+                                        echo "hh:mm";
                                         ?>
                                     </td>
                                 </tr>
@@ -1328,7 +1344,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                     listaamparolegal.remove($x);
                 }
 
-                for ($x = 0; $x < 60; $x++) {
+                for ($x = 0; $x < 200; $x++) {
                     if (oRetorno.amparo[$x] != "" && oRetorno.amparo[$x] != null) {
 
                         listaamparolegal.add(new Option(oRetorno.amparo[$x], $x));

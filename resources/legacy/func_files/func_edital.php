@@ -124,7 +124,7 @@ $iAnoSessao = db_getsession("DB_anousu");
                        AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
                        WHEN l03_pctipocompratribunal IN (100, 101, 102, 103, 106) 
                        AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
-                       END) >= 2020 $sWhere AND (liclicita.l20_naturezaobjeto in (1, 7) OR (EXTRACT(YEAR FROM liclicita.l20_recdocumentacao) >= 2023))
+                       END) >= 2020 $sWhere AND (liclicita.l20_naturezaobjeto in (1, 7) OR (EXTRACT(YEAR FROM liclicita.l20_datacria) > 2023))
                        AND (select count(l21_codigo) from liclicitem where l21_codliclicita = liclicita.l20_codigo) >= 1
                     ORDER BY l20_codigo";
 

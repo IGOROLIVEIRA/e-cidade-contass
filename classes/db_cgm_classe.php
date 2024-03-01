@@ -17,7 +17,7 @@
  *  detalhes.
  *
  *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
+ *  junto com este programa; se não, escreva para a Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
  *  02111-1307, USA.
  *
@@ -338,7 +338,7 @@ class cl_cgm {
     function incluir ($z01_numcgm){
         $this->atualizacampos();
         if($this->z01_nome == null ){
-            $this->erro_sql = " Campo Nome/Razão Social nao Informado.";
+            $this->erro_sql = " Campo Nome/Razão Social não Informado.";
             $this->erro_campo = "z01_nome";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -347,7 +347,7 @@ class cl_cgm {
             return false;
         }
         if($this->z01_ender == null ){
-            $this->erro_sql = " Campo Endereço nao Informado.";
+            $this->erro_sql = " Campo Endereço não Informado.";
             $this->erro_campo = "z01_ender";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -439,7 +439,7 @@ class cl_cgm {
             }
         }
         if(($this->z01_numcgm == null) || ($this->z01_numcgm == "") ){
-            $this->erro_sql = " Campo z01_numcgm nao declarado.";
+            $this->erro_sql = " Campo z01_numcgm não declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -578,12 +578,12 @@ class cl_cgm {
         if($result==false){
             $this->erro_banco = str_replace("\n","",@pg_last_error());
             if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
-                $this->erro_sql   = "Cadastro Geral de Contribuinte ($this->z01_numcgm) nao Incluído. Inclusao Abortada.";
+                $this->erro_sql   = "Cadastro Geral de Contribuinte ($this->z01_numcgm) não Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_banco = "Cadastro Geral de Contribuinte já Cadastrado";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             }else{
-                $this->erro_sql   = "Cadastro Geral de Contribuinte ($this->z01_numcgm) nao Incluído. Inclusao Abortada.";
+                $this->erro_sql   = "Cadastro Geral de Contribuinte ($this->z01_numcgm) não Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             }
@@ -681,7 +681,7 @@ class cl_cgm {
             $sql  .= $virgula." z01_numcgm = $this->z01_numcgm ";
             $virgula = ",";
             if(trim($this->z01_numcgm) == null ){
-                $this->erro_sql = " Campo Numcgm nao Informado.";
+                $this->erro_sql = " Campo Numcgm não Informado.";
                 $this->erro_campo = "z01_numcgm";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -694,7 +694,7 @@ class cl_cgm {
             $sql  .= $virgula." z01_nome = '$this->z01_nome' ";
             $virgula = ",";
             if(trim($this->z01_nome) == null ){
-                $this->erro_sql = " Campo Nome/Razão Social nao Informado.";
+                $this->erro_sql = " Campo Nome/Razão Social não Informado.";
                 $this->erro_campo = "z01_nome";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -707,7 +707,7 @@ class cl_cgm {
             $sql  .= $virgula." z01_ender = '$this->z01_ender' ";
             $virgula = ",";
             if(trim($this->z01_ender) == null ){
-                $this->erro_sql = " Campo Endereço nao Informado.";
+                $this->erro_sql = " Campo Endereço não Informado.";
                 $this->erro_campo = "z01_ender";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -1158,7 +1158,7 @@ class cl_cgm {
         $result = db_query($sql);
         if($result==false){
             $this->erro_banco = str_replace("\n","",@pg_last_error());
-            $this->erro_sql   = "Cadastro Geral de Contribuinte nao Alterado. Alteracao Abortada.\\n";
+            $this->erro_sql   = "Cadastro Geral de Contribuinte não Alterado. Alteracao Abortada.\\n";
             $this->erro_sql .= "Valores : ".$this->z01_numcgm;
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -1168,7 +1168,7 @@ class cl_cgm {
         }else{
             if(pg_affected_rows($result)==0){
                 $this->erro_banco = "";
-                $this->erro_sql = "Cadastro Geral de Contribuinte nao foi Alterado. Alteracao Executada.\\n";
+                $this->erro_sql = "Cadastro Geral de Contribuinte não foi Alterado. Alteracao Executada.\\n";
                 $this->erro_sql .= "Valores : ".$this->z01_numcgm;
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -1286,7 +1286,7 @@ class cl_cgm {
         $result = db_query($sql.$sql2);
         if($result==false){
             $this->erro_banco = str_replace("\n","",@pg_last_error());
-            $this->erro_sql   = "Cadastro Geral de Contribuinte nao Excluï¿½do. Exclusï¿½o Abortada.\\n";
+            $this->erro_sql   = "Cadastro Geral de Contribuinte não Excluído. Exclusão Abortada.\\n";
             $this->erro_sql .= "Valores : ".$z01_numcgm;
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -1296,7 +1296,7 @@ class cl_cgm {
         }else{
             if(pg_affected_rows($result)==0){
                 $this->erro_banco = "";
-                $this->erro_sql = "Cadastro Geral de Contribuinte nao Encontrado. Exclusï¿½o nï¿½o Efetuada.\\n";
+                $this->erro_sql = "Cadastro Geral de Contribuinte não Encontrado. Exclusão não Efetuada.\\n";
                 $this->erro_sql .= "Valores : ".$z01_numcgm;
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -1305,7 +1305,7 @@ class cl_cgm {
                 return true;
             }else{
                 $this->erro_banco = "";
-                $this->erro_sql = "Exclusï¿½o efetuada com Sucesso\\n";
+                $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
                 $this->erro_sql .= "Valores : ".$z01_numcgm;
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -1749,7 +1749,7 @@ class cl_cgm {
             $sql  .= $virgula." z01_numcgm = $this->z01_numcgm ";
             $virgula = ",";
             if(trim($this->z01_numcgm) == null ){
-                $this->erro_sql = " Campo Numcgm nao Informado.";
+                $this->erro_sql = " Campo Numcgm não Informado.";
                 $this->erro_campo = "z01_numcgm";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -1763,7 +1763,7 @@ class cl_cgm {
             $sql  .= $virgula." z01_nome = '$this->z01_nome' ";
             $virgula = ",";
             if(trim($this->z01_nome) == null ){
-                $this->erro_sql = " Campo Nome/Razão Social nao Informado.";
+                $this->erro_sql = " Campo Nome/Razão Social não Informado.";
                 $this->erro_campo = "z01_nome";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -1776,7 +1776,7 @@ class cl_cgm {
             $sql  .= $virgula." z01_ender = '$this->z01_ender' ";
             $virgula = ",";
             if(trim($this->z01_ender) == null ){
-                $this->erro_sql = " Campo Endereço nao Informado.";
+                $this->erro_sql = " Campo Endereço não Informado.";
                 $this->erro_campo = "z01_ender";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -2140,7 +2140,7 @@ class cl_cgm {
         $result = db_query($sql);
         if($result==false){
             $this->erro_banco = str_replace("\n","",@pg_last_error());
-            $this->erro_sql   = "Cadastro Geral de Contribuinte nao Alterado. Alteracao Abortada.\\n";
+            $this->erro_sql   = "Cadastro Geral de Contribuinte não Alterado. Alteracao Abortada.\\n";
             $this->erro_sql .= "Valores : ".$this->z01_numcgm;
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -2150,7 +2150,7 @@ class cl_cgm {
         }else{
             if(pg_affected_rows($result)==0){
                 $this->erro_banco = "";
-                $this->erro_sql = "Cadastro Geral de Contribuinte nao foi Alterado. Alteracao Executada.\\n";
+                $this->erro_sql = "Cadastro Geral de Contribuinte não foi Alterado. Alteracao Executada.\\n";
                 $this->erro_sql .= "Valores : ".$this->z01_numcgm;
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

@@ -195,6 +195,7 @@ db_app::load("estilos.css, grid.style.css");
                 var itemResultado = new Object();
                 itemResultado.pc01_codmater = aCells[1].getValue();
                 itemResultado.l21_ordem = aCells[2].getValue();
+                itemResultado.z01_numcgm = aCells[5].getValue();
                 oParam.aItensLicitacao.push(itemResultado);
             }
         }
