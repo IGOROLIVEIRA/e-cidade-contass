@@ -79,7 +79,7 @@ if (!isset($fa01_i_catmat) && !isset($codigo_barras))  {
     echo '<div class="container">';
     echo '  <fieldset>';
     echo '    <legend>Resultado da Pesquisa</legend>';
-    db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
+    db_loveloq($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
     echo '  </fieldset>';
     echo '</div>';
 

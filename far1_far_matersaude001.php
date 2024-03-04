@@ -82,7 +82,8 @@ if ( isset($incluir) ) {
     if ( $fa02_b_numestoque == 't' ) {
       $fa01_i_codigo=$fa01_i_codmater;
     }
-
+    
+    $clfar_matersaude->fa01_i_catmat = $fa01_i_catmat;
     $clfar_matersaude->incluir($fa01_i_codigo);
     db_fim_transacao($clfar_matersaude->erro_status == '0' ? true : false);
   }
