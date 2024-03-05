@@ -503,6 +503,9 @@ db_app::load("estilos.css, grid.style.css");
         oParam.dtHomologacao = $F('l202_datahomologacao');
         oParam.iHomologacao = $F('l202_sequencial');
         oParam.respHomologcodigo = $F('respHomologcodigo');
+        oParam.dataReferencia = $F('l202_datareferencia');
+        oParam.possuiDataReferencia = document.getElementById('trdatareferencia').style.display == "none" ? false : true;
+        
         if (oParam.respHomologcodigo == "") {
             alert('Campo Responsável pela Homologação não informado');
             return false;
@@ -530,9 +533,16 @@ db_app::load("estilos.css, grid.style.css");
             document.getElementById('l202_sequencial').value = '';
             document.getElementById('respHomologcodigo').value = '';
             document.getElementById('respHomolognome').value = '';
-        } else {
-            alert(oRetorno.message.urlDecode());
+            return;
+        } 
+
+
+        if (oRetorno.periodosicomencerrado) {
+            document.getElementById('trdatareferencia').style.display = '';
         }
+
+        alert(oRetorno.message.urlDecode());
+        
     }
 
     function js_excluirHomologacao() {

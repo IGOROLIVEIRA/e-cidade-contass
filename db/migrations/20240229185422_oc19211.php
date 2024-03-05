@@ -13,8 +13,12 @@ class Oc19211 extends AbstractMigration
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo where nomearq = 'homologacaoadjudica'),(select codcam from db_syscampo where nomecam = 'l202_datareferencia'),5,0);
 
         ALTER TABLE homologacaoadjudica ADD COLUMN l202_datareferencia date;
+
+        UPDATE homologacaoadjudica SET l202_datareferencia = l202_datahomologacao
         
         COMMIT;
         ";
+
+        $this->execute($sSql);
     }
 }
