@@ -3809,13 +3809,11 @@ class cl_liclicita
                 END AS itemCategoriaId,
                 pcmater.pc01_regimobiliario AS codigoRegistroImobiliario,
                                   CASE
-                                      WHEN l03_pctipocompratribunal IN (100,
-                                                                        101,
+                                      WHEN l03_pctipocompratribunal IN (
                                                                         102,
                                                                         103)
                                            AND credenciamento.l205_fornecedor IS NOT NULL THEN 2
-                                      WHEN l03_pctipocompratribunal IN (100,
-                                                                        101,
+                                      WHEN l03_pctipocompratribunal IN (
                                                                         102,
                                                                         103)
                                            AND credenciamento.l205_fornecedor IS NULL THEN 4
@@ -3835,7 +3833,7 @@ class cl_liclicita
                     WHEN l03_pctipocompratribunal = 102 THEN 12
                     WHEN l03_pctipocompratribunal = 103 THEN 12
                 END AS modalidadeId,
-                pc23_vlrun
+                pc23_orcamforne
         FROM liclicita
         JOIN db_depart ON coddepto=l20_codepartamento
         JOIN db_config ON codigo=instit
