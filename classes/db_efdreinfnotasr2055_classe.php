@@ -25,15 +25,15 @@ class cl_efdreinfnotasr2055
     public $efd08_ambiente         = null;
     public $efd08_instit           = 0;
     public $efd08_protocolo        = 0;
-    public $efd08_serie            = 0; 
+    public $efd08_serie            = 0;
     public $efd08_numnotafiscal    = 0;
     public $efd08_numeroop         = 0;
     public $efd08_numemp           = 0;
-    public $efd08_dtEmissaoNF      = 0; 
+    public $efd08_dtEmissaoNF      = 0;
     public $efd08_vlrBruto         = 0;
     public $efd08_vlrCP            = 0;
-    public $efd08_vlrGilrat        = 0; 
-    public $efd08_vlrSenar        = 0; 
+    public $efd08_vlrGilrat        = 0;
+    public $efd08_vlrSenar        = 0;
 
     // cria propriedade com as variaveis do arquivo 
     public $campos = "
@@ -82,7 +82,7 @@ class cl_efdreinfnotasr2055
         if ($exclusao == false) {
             $this->efd08_sequencial = ($this->efd08_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd08_sequencial"] : $this->efd08_sequencial);
             $this->efd08_mescompetencia = ($this->efd08_mescompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd04_licitacao"] : $this->efd08_mescompetencia);
-            $this->efd08_cpfcnpjprodutor = ($this->efd08_cpfcnpjprodutor == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd08_cpfcnpjprodutor"]: $this->efd08_cpfcnpjprodutor);            
+            $this->efd08_cpfcnpjprodutor = ($this->efd08_cpfcnpjprodutor == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd08_cpfcnpjprodutor"] : $this->efd08_cpfcnpjprodutor);
             $this->efd08_indaquisicao = ($this->efd08_indaquisicao == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd08_indaquisicao"] : $this->efd08_indaquisicao);
             $this->efd08_ambiente = ($this->efd08_ambiente == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd08_ambiente"] : $this->efd08_ambiente);
             $this->efd08_instit = ($this->efd08_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd08_instit"] : $this->efd08_instit);
@@ -104,7 +104,7 @@ class cl_efdreinfnotasr2055
     // funcao para inclusao
     function incluir()
     {
-    
+
         $this->atualizacampos();
         if ($this->efd08_mescompetencia == null) {
             $this->erro_sql = " Campo efd08_mescompetencia não informado.";
@@ -126,7 +126,7 @@ class cl_efdreinfnotasr2055
         }
         if ($this->efd08_cpfcnpjprodutor == null) {
             $this->erro_sql = " Campo efd08_cpfcnpjprodutoro informado.";
-            $this->erro_campo = "efd08_cpfcnpjprodutor";           
+            $this->erro_campo = "efd08_cpfcnpjprodutor";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -202,7 +202,7 @@ class cl_efdreinfnotasr2055
             $result = db_query("select last_value from efdreinfnotasr2055_efd08_sequencial_seq");
             if (($result != false) && (pg_result($result, 0, 0) < $this->efd08_sequencial)) {
                 $this->erro_sql = " Campo efd08_sequencial maior que ultimo número da sequencia.";
-                $this->erro_banco = "Sequencia menor que este nï¿½mero.";
+                $this->erro_banco = "Sequencia menor que este número.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
@@ -219,7 +219,7 @@ class cl_efdreinfnotasr2055
             $this->erro_status = "0";
             return false;
         }
-        
+
         $sql = "insert into efdreinfnotasr2055(
                                        efd08_sequencial 
                                       ,efd08_mescompetencia
@@ -257,7 +257,7 @@ class cl_efdreinfnotasr2055
                                ,$this->efd08_vlrCP
                                ,$this->efd08_vlrGilrat
                                ,$this->efd08_vlrSenar
-                      )"; 
+                      )";
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -334,14 +334,14 @@ class cl_efdreinfnotasr2055
                 return false;
             }
         }
-      
-       
+
+
         if (trim($this->efd08_cpfcnpjprodutor) != "" || isset($GLOBALS["HTTP_POST_VARS"]["efd08_cpfcnpjprodutor"])) {
             $sql  .= $virgula . " efd08_cpfcnpjprodutor = '$this->efd08_cpfcnpjprodutor' ";
             $virgula = ",";
             if (trim($this->efd08_cpfcnpjprodutor) == null) {
                 $this->erro_sql = " Campo efd08_cpfcnpjprodutoro informado.";
-                $this->erro_campo = "efd08_cpfcnpjprodutor";                
+                $this->erro_campo = "efd08_cpfcnpjprodutor";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -475,7 +475,7 @@ class cl_efdreinfnotasr2055
             $this->efd08_numemp = "";
             $sql  .= $virgula . " efd08_numemp = $this->efd08_numemp ";
             $virgula = ",";
-        }        
+        }
         if (trim($this->efd08_dtEmissaoNF) != "" || isset($GLOBALS["HTTP_POST_VARS"]["efd08_dtEmissaoNF"])) {
             $sql  .= $virgula . " efd08_dtEmissaoNF = $this->efd08_dtEmissaoNF ";
             $virgula = ",";
@@ -536,7 +536,7 @@ class cl_efdreinfnotasr2055
         $result = db_query($sql . $sql2);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "efdreinfnotasr2055 nao Excluï¿½do. Exclusï¿½o Abortada.\\n";
+            $this->erro_sql   = "efdreinfnotasr2055 nao Excluído. Exclusão Abortada.\\n";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -545,7 +545,7 @@ class cl_efdreinfnotasr2055
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "efdreinfnotasr2055 nao Encontrado. Exclusï¿½o não Efetuada.\\n";
+                $this->erro_sql = "efdreinfnotasr2055 nao Encontrado. Exclusão não Efetuada.\\n";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -553,7 +553,7 @@ class cl_efdreinfnotasr2055
                 return true;
             } else {
                 $this->erro_banco = "";
-                $this->erro_sql = "Exclusï¿½o efetuada com Sucesso\\n";
+                $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";

@@ -168,7 +168,7 @@ if ($oDaoSolicitaVInculo->numrows > 0) {
 $trancaCodEle = 1;
 if (isset($pc11_codigo) && $pc11_codigo != '') {
 
-  // faremos uma query na pcdotac para ver se o item, possui dotaï¿½ï¿½o
+  // faremos uma query na pcdotac para ver se o item, possui dotação
   // caso nao possua, podemos liberar a seleï¿½ï¿½o de Sub elelemnto
   $oDaoPcDotac = db_utils::getDao("pcdotac");
   $sSqlPcDotac = $oDaoPcDotac->sql_query_file(null, null, null, "*", null, "pc13_codigo = {$pc11_codigo}");
@@ -180,24 +180,25 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
 }
 ?>
 <style type="text/css">
-    .hoverBox {
-        background-color: #6699CC;
-        max-width: 100%;
-        max-height: 150px;
-        position: absolute;
-        bottom: 50%;
-        text-align: start;
-        padding: 15px;
-        display: content;
-    }
-    .hoverBoxDisabled {
-        display: none;
-    }
+  .hoverBox {
+    background-color: #6699CC;
+    max-width: 100%;
+    max-height: 150px;
+    position: absolute;
+    bottom: 50%;
+    text-align: start;
+    padding: 15px;
+    display: content;
+  }
+
+  .hoverBoxDisabled {
+    display: none;
+  }
 </style>
 
 <div id="hoverBox" class="hoverBox hoverBoxDisabled">
   <p><strong>Descricao Material: </strong></p>
-  <p id="hoverText" class="descricao" ></p>
+  <p id="hoverText" class="descricao"></p>
 </div>
 
 <form name="form1" method="post" action="" onsubmit=" return js_validarFormulario(); ">
@@ -332,7 +333,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           ?>
         </td>
         <td colspan="7">
-           <input type="hidden" id="complmater" name="complmater" value="teste">
+          <input type="hidden" id="complmater" name="complmater" value="teste">
           <?
           if (!isset($pc11_quant) || (isset($pc11_quant) && $pc11_quant == "")) {
             $pc11_quant = 1;
@@ -499,7 +500,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           echo "</td>";
         }
 
-        // Alteraï¿½ï¿½o feita para processo de compra e licitacao
+        // Alteração feita para processo de compra e licitacao
         if (isset($param) && trim($param) != "") {
           db_input("param", 10, "", false, "hidden", 3);
           db_input("codproc", 10, "", false, "hidden", 3);
@@ -566,7 +567,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
       </tr>
       <tr style="display: none;">
         <td>
-            <?php db_input("pc01_complmater", 10, "", false, "", 3); ?>
+          <?php db_input("pc01_complmater", 10, "", false, "", 3); ?>
         </td>
       </tr>
       <tr style="display:none;" id="subEl">
@@ -851,8 +852,6 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
   ?>
 </form>
 <script>
-
-
   /**
    * Codigo do material informado, pesquisa quantidade restante do item da estimativa
    */
@@ -1445,18 +1444,17 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     let complemento = document.getElementById('pc01_complmater').value;
 
     if (value != "") {
-        document.getElementById('hoverBox').classList.remove('hoverBoxDisabled');
-        document.getElementById('hoverText').textContent = descricao + " " + complemento;
+      document.getElementById('hoverBox').classList.remove('hoverBoxDisabled');
+      document.getElementById('hoverText').textContent = descricao + " " + complemento;
     }
 
     setTimeout(() => {
-        document.getElementById('hoverBox').classList.add('hoverBoxDisabled');
+      document.getElementById('hoverBox').classList.add('hoverBoxDisabled');
     }, 3000);
 
   }
 
   js_verificaServico();
-
 </script>
 
 <?php

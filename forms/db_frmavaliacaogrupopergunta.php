@@ -43,7 +43,7 @@ if (isset($oPost->db_opcaoal)) {
   $db_opcao = 2;
   echo "<script>parent.document.formaba.avaliacaopergunta.disabled=false;</script>";
   echo "<script>
-          var sUrl = 'hab1_avaliacaopergunta001.php?db103_avaliacaogrupopergunta=".$db102_sequencial."';
+          var sUrl = 'hab1_avaliacaopergunta001.php?db103_avaliacaogrupopergunta=" . $db102_sequencial . "';
           CurrentWindow.corpo.iframe_avaliacaopergunta.location.href=sUrl;
         </script>";
 } else if (isset($oPost->opcao) && $oPost->opcao == "excluir") {
@@ -63,189 +63,184 @@ if (isset($oPost->db_opcaoal)) {
 
   if (isset($oPost->incluir) && $sqlerro == false || isset($oPost->alterar) && $sqlerro == false) {
 
-  	$db_opcao = 2;
+    $db_opcao = 2;
     echo "<script>parent.document.formaba.avaliacaopergunta.disabled=false;</script>";
     echo "<script>
-            var sUrl = 'hab1_avaliacaopergunta001.php?db103_avaliacaogrupopergunta=".$db102_sequencial."';
+            var sUrl = 'hab1_avaliacaopergunta001.php?db103_avaliacaogrupopergunta=" . $db102_sequencial . "';
             CurrentWindow.corpo.iframe_avaliacaopergunta.location.href=sUrl;
           </script>";
   }
-
 }
 ?>
 <form name="form1" method="post" action="">
-<fieldset>
-<legend><b>Grupo</b></legend>
-<table border="0" align="left" width="100%">
-  <tr>
-    <td nowrap title="<?=@$Tdb102_avaliacao?>">
-      <b>Cï¿½digo da Avaliaï¿½ï¿½o:</b>
-    </td>
-    <td width="10">
-			<?
-			  db_input('db102_sequencial',10,$Idb102_sequencial,true,'hidden',3,"");
-			  db_input('db102_avaliacao',10,$Idb102_avaliacao,true,'text',3," onchange='js_pesquisadb102_avaliacao(false);'");
-      ?>
-    </td>
-    <td>
-      <?
-        db_input('db101_descricao',100,$Idb101_descricao,true,'text',3,'');
-      ?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tdb102_descricao?>">
-      <?=@$Ldb102_descricao?>
-    </td>
-    <td colspan="2">
-			<?
-			  db_input('db102_descricao',100,$Idb102_descricao,true,'text',$db_opcao,"")
-			?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tdb102_identificador?>">
-      <?=@$Ldb102_identificador?>
-    </td>
-    <td colspan="2">
-      <?
-        db_input('db102_identificador',100,$Idb102_identificador,true,'text',$db_opcao,"")
-      ?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tdb102_identificadorcampo?>">
-      <?=@$Ldb102_identificadorcampo?>
-    </td>
-    <td colspan="2">
-			<?
-			  db_input('db102_identificadorcampo',100,$Idb102_identificador,true,'text',$db_opcao,"")
-			?>
-    </td>
-  </tr>
-</table>
-</fieldset>
-<table>
-  <tr>
-    <td colspan="2">&nbsp;</td>
-  </tr>
-  <tr>
-    <td>
-      <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
-             type="submit" id="db_opcao" onclick="js_validaCaracteres();";
-             value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"
-             <?=($db_botao==false?"disabled":"")?>  >
-    </td>
-    <td>
-      <input name="novo"
-             type="button" id="cancelar" value="Novo" onclick="js_cancelar();"
-             <?=($db_opcao==1||isset($db_opcaoal)?"style='visibility:hidden;'":"")?> >
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2">&nbsp;</td>
-  </tr>
-</table>
-<table>
-  <tr>
-    <td valign="top"  align="center">
-	    <?
-	      $sWhere   = "db102_avaliacao = {$db102_avaliacao}";
-			  $chavepri = array("db102_sequencial"=>@$db102_sequencial);
-			  $cliframe_alterar_excluir->chavepri=$chavepri;
-			  $cliframe_alterar_excluir->sql     = $clavaliacaogrupopergunta->sql_query_file(null, "*", "db102_sequencial", $sWhere);
-			  $cliframe_alterar_excluir->campos  ="db102_sequencial,db102_avaliacao,db102_descricao, db102_identificador,db102_identificadorcampo";
-			  $cliframe_alterar_excluir->legenda="ITENS LANï¿½ADOS";
-			  $cliframe_alterar_excluir->iframe_height ="160";
-			  $cliframe_alterar_excluir->iframe_width ="600";
-			  $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
-	    ?>
-    </td>
-  </tr>
-</table>
+  <fieldset>
+    <legend><b>Grupo</b></legend>
+    <table border="0" align="left" width="100%">
+      <tr>
+        <td nowrap title="<?= @$Tdb102_avaliacao ?>">
+          <b>Código da Avaliaï¿½ï¿½o:</b>
+        </td>
+        <td width="10">
+          <?
+          db_input('db102_sequencial', 10, $Idb102_sequencial, true, 'hidden', 3, "");
+          db_input('db102_avaliacao', 10, $Idb102_avaliacao, true, 'text', 3, " onchange='js_pesquisadb102_avaliacao(false);'");
+          ?>
+        </td>
+        <td>
+          <?
+          db_input('db101_descricao', 100, $Idb101_descricao, true, 'text', 3, '');
+          ?>
+        </td>
+      </tr>
+      <tr>
+        <td nowrap title="<?= @$Tdb102_descricao ?>">
+          <?= @$Ldb102_descricao ?>
+        </td>
+        <td colspan="2">
+          <?
+          db_input('db102_descricao', 100, $Idb102_descricao, true, 'text', $db_opcao, "")
+          ?>
+        </td>
+      </tr>
+      <tr>
+        <td nowrap title="<?= @$Tdb102_identificador ?>">
+          <?= @$Ldb102_identificador ?>
+        </td>
+        <td colspan="2">
+          <?
+          db_input('db102_identificador', 100, $Idb102_identificador, true, 'text', $db_opcao, "")
+          ?>
+        </td>
+      </tr>
+      <tr>
+        <td nowrap title="<?= @$Tdb102_identificadorcampo ?>">
+          <?= @$Ldb102_identificadorcampo ?>
+        </td>
+        <td colspan="2">
+          <?
+          db_input('db102_identificadorcampo', 100, $Idb102_identificador, true, 'text', $db_opcao, "")
+          ?>
+        </td>
+      </tr>
+    </table>
+  </fieldset>
+  <table>
+    <tr>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>
+        <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" onclick="js_validaCaracteres();" ; value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
+      </td>
+      <td>
+        <input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();" <?= ($db_opcao == 1 || isset($db_opcaoal) ? "style='visibility:hidden;'" : "") ?>>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <td valign="top" align="center">
+        <?
+        $sWhere   = "db102_avaliacao = {$db102_avaliacao}";
+        $chavepri = array("db102_sequencial" => @$db102_sequencial);
+        $cliframe_alterar_excluir->chavepri = $chavepri;
+        $cliframe_alterar_excluir->sql     = $clavaliacaogrupopergunta->sql_query_file(null, "*", "db102_sequencial", $sWhere);
+        $cliframe_alterar_excluir->campos  = "db102_sequencial,db102_avaliacao,db102_descricao, db102_identificador,db102_identificadorcampo";
+        $cliframe_alterar_excluir->legenda = "ITENS LANï¿½ADOS";
+        $cliframe_alterar_excluir->iframe_height = "160";
+        $cliframe_alterar_excluir->iframe_width = "600";
+        $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
+        ?>
+      </td>
+    </tr>
+  </table>
 </form>
 <script>
-$('db101_descricao').style.width = '100%';
-$('db102_descricao').style.width  = '100%';
+  $('db101_descricao').style.width = '100%';
+  $('db102_descricao').style.width = '100%';
 
-function js_validar(){
+  function js_validar() {
 
-  var sOpcao = $('db_opcao').value;
-  if (sOpcao == 'Excluir') {
+    var sOpcao = $('db_opcao').value;
+    if (sOpcao == 'Excluir') {
 
-    if (!confirm('Excluir todas as perguntas para esse grupo?')) {
+      if (!confirm('Excluir todas as perguntas para esse grupo?')) {
+        return false;
+      }
+    }
+    return js_validaCaracteres();
+  }
+
+  function js_cancelar() {
+    var opcao = document.createElement("input");
+    opcao.setAttribute("type", "hidden");
+    opcao.setAttribute("name", "novo");
+    opcao.setAttribute("value", "true");
+    document.form1.appendChild(opcao);
+    document.form1.submit();
+  }
+
+  /**
+   * Validamos os caracteres do identificador registrado
+   * Primeiramente verificamos o caracter inicial, permitindo apenas letras
+   * Em seguida, verificamos o que vem a seguir, permitindo letras, numeros e _
+   */
+  function js_validaCaracteres() {
+
+    var sValorInicial = $F('db102_identificador').substring(0, 1);
+    var sExpressaoInicial = /[A-Za-z]/;
+    var sRegExpInicial = new RegExp(sExpressaoInicial);
+    var lResultadoInicial = sRegExpInicial.test(sValorInicial);
+
+    if (sValorInicial == '') {
+
+      alert('ï¿½ necessï¿½rio informar um identificador');
+      $('db102_identificador').focus();
       return false;
     }
-  }
-  return js_validaCaracteres();
-}
 
-function js_cancelar(){
-  var opcao = document.createElement("input");
-  opcao.setAttribute("type","hidden");
-  opcao.setAttribute("name","novo");
-  opcao.setAttribute("value","true");
-  document.form1.appendChild(opcao);
-  document.form1.submit();
-}
+    if (lResultadoInicial) {
 
-/**
- * Validamos os caracteres do identificador registrado
- * Primeiramente verificamos o caracter inicial, permitindo apenas letras
- * Em seguida, verificamos o que vem a seguir, permitindo letras, numeros e _
- */
-function js_validaCaracteres() {
+      var sValorCaracteres = $F('db102_identificador').substring(1);
+      var sExpressaoCaracteres = /^[A-Za-z0-9_-]+?$/i;
+      var sRegExpCaracteres = new RegExp(sExpressaoCaracteres);
+      var lResultadoCaracteres = sRegExpCaracteres.test(sValorCaracteres);
+      if (!lResultadoCaracteres) {
 
-  var sValorInicial     = $F('db102_identificador').substring(0,1);
-  var sExpressaoInicial = /[A-Za-z]/;
-  var sRegExpInicial    = new RegExp(sExpressaoInicial);
-  var lResultadoInicial = sRegExpInicial.test(sValorInicial);
+        alert('Sï¿½o permitidas apenas letras, nï¿½meros e/ou caracter "_" (underline)');
+        return false;
+      }
+    } else {
 
-  if (sValorInicial == '') {
-
-    alert('ï¿½ necessï¿½rio informar um identificador');
-    $('db102_identificador').focus();
-    return false;
-  }
-
-  if (lResultadoInicial) {
-
-    var sValorCaracteres      = $F('db102_identificador').substring(1);
-    var sExpressaoCaracteres  = /^[A-Za-z0-9_-]+?$/i;
-    var sRegExpCaracteres     = new RegExp(sExpressaoCaracteres);
-    var lResultadoCaracteres  = sRegExpCaracteres.test(sValorCaracteres);
-    if (!lResultadoCaracteres) {
-
-      alert('Sï¿½o permitidas apenas letras, nï¿½meros e/ou caracter "_" (underline)');
+      alert('ï¿½ permitido apenas letra no caracter inicial');
       return false;
     }
-  } else {
-
-    alert('ï¿½ permitido apenas letra no caracter inicial');
-    return false;
+    return true;
   }
-  return true;
-}
-function montarIdentificador(textoBase) {
 
-        var listaStringTrocar = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
-        var listaStringSubstituir = "aaaaaeeeeiiiiooooouuuucAAAAAEEEEIIIIOOOOOUUUUC";
-        var stringIdentificador = "";
-        for (var i = 0; i < textoBase.length; i++) {
-            if (listaStringTrocar.indexOf(textoBase.charAt(i)) != -1) {
-                stringIdentificador += listaStringSubstituir.substr(listaStringTrocar.search(textoBase.substr(i, 1)), 1);
-            } else {
-                stringIdentificador += textoBase.substr(i, 1);
-            }
-        }
+  function montarIdentificador(textoBase) {
 
-        stringIdentificador = stringIdentificador.replace(/[^a-zA-Z 0-9]/g, '');
-        var identificador = stringIdentificador.replace(/ /g, '-').toLowerCase().substr(0, 90);
-        return identificador;
+    var listaStringTrocar = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+    var listaStringSubstituir = "aaaaaeeeeiiiiooooouuuucAAAAAEEEEIIIIOOOOOUUUUC";
+    var stringIdentificador = "";
+    for (var i = 0; i < textoBase.length; i++) {
+      if (listaStringTrocar.indexOf(textoBase.charAt(i)) != -1) {
+        stringIdentificador += listaStringSubstituir.substr(listaStringTrocar.search(textoBase.substr(i, 1)), 1);
+      } else {
+        stringIdentificador += textoBase.substr(i, 1);
+      }
     }
-    $('db102_descricao').observe('blur', function() {
-        if ($F('db102_identificador') == ''){
-            $('db102_identificador').value = montarIdentificador(this.value);
-        }
-    });
+
+    stringIdentificador = stringIdentificador.replace(/[^a-zA-Z 0-9]/g, '');
+    var identificador = stringIdentificador.replace(/ /g, '-').toLowerCase().substr(0, 90);
+    return identificador;
+  }
+  $('db102_descricao').observe('blur', function() {
+    if ($F('db102_identificador') == '') {
+      $('db102_identificador').value = montarIdentificador(this.value);
+    }
+  });
 </script>

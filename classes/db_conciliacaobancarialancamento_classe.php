@@ -39,7 +39,8 @@ class cl_conciliacaobancarialancamento
         ";
 
     // funcao erro
-    function erro($mostra, $retorna) {
+    function erro($mostra, $retorna)
+    {
         if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
             echo "<script>alert(\"" . $this->erro_msg . "\");</script>";
             if ($retorna == true) {
@@ -49,82 +50,84 @@ class cl_conciliacaobancarialancamento
     }
 
     // funcao para atualizar campos
-    function atualizacampos($exclusao = false) {
+    function atualizacampos($exclusao = false)
+    {
         if ($exclusao == false) {
-            $this->k172_conta = ($this->k172_conta == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_conta"]:$this->k172_conta);
+            $this->k172_conta = ($this->k172_conta == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_conta"] : $this->k172_conta);
             if ($this->k172_data == "") {
-                $this->k172_data_dia = ($this->k172_data_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["k172_data_dia"]:$this->k172_data_dia);
-                $this->k172_data_mes = ($this->k172_data_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["k172_data_mes"]:$this->k172_data_mes);
-                $this->k172_data_ano = ($this->k172_data_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["k172_data_ano"]:$this->k172_data_ano);
+                $this->k172_data_dia = ($this->k172_data_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_data_dia"] : $this->k172_data_dia);
+                $this->k172_data_mes = ($this->k172_data_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_data_mes"] : $this->k172_data_mes);
+                $this->k172_data_ano = ($this->k172_data_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_data_ano"] : $this->k172_data_ano);
                 if ($this->k172_data_dia != "") {
-                    $this->k172_data = $this->k172_data_ano."-".$this->k172_data_mes."-".$this->k172_data_dia;
+                    $this->k172_data = $this->k172_data_ano . "-" . $this->k172_data_mes . "-" . $this->k172_data_dia;
                 }
             }
-            $this->k172_numcmg = ($this->k172_numcmg == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_conta"]:$this->k172_numcmg);
-            $this->k172_coddoc = ($this->k172_coddoc == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_conta"]:$this->k172_coddoc);
-            $this->k172_codigo = ($this->k172_codigo == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_conta"]:$this->k172_codigo);
-            $this->k172_valor = ($this->k172_valor == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_valor"]:$this->k172_valor);
-            $this->k172_mov = ($this->k172_mov == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_mov"]:$this->k172_mov);
+            $this->k172_numcmg = ($this->k172_numcmg == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_conta"] : $this->k172_numcmg);
+            $this->k172_coddoc = ($this->k172_coddoc == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_conta"] : $this->k172_coddoc);
+            $this->k172_codigo = ($this->k172_codigo == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_conta"] : $this->k172_codigo);
+            $this->k172_valor = ($this->k172_valor == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_valor"] : $this->k172_valor);
+            $this->k172_mov = ($this->k172_mov == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_mov"] : $this->k172_mov);
             if ($this->k172_dataconciliacao == "") {
-                $this->k172_data_conciliacao_dia = ($this->k172_data_conciliacao_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["k172_data_conciliacao_dia"]:$this->k172_data_conciliacao_dia);
-                $this->k172_data_conciliacao_mes = ($this->k172_data_conciliacao_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["k172_data_conciliacao_mes"]:$this->k172_data_conciliacao_mes);
-                $this->k172_data_conciliacao_ano = ($this->k172_data_conciliacao_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["k172_data_conciliacao_ano"]:$this->k172_data_conciliacao_ano);
+                $this->k172_data_conciliacao_dia = ($this->k172_data_conciliacao_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_data_conciliacao_dia"] : $this->k172_data_conciliacao_dia);
+                $this->k172_data_conciliacao_mes = ($this->k172_data_conciliacao_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_data_conciliacao_mes"] : $this->k172_data_conciliacao_mes);
+                $this->k172_data_conciliacao_ano = ($this->k172_data_conciliacao_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_data_conciliacao_ano"] : $this->k172_data_conciliacao_ano);
                 if ($this->k172_data_conciliacao_dia != "") {
-                    $this->k172_dataconciliacao = $this->k172_data_conciliacao_ano."-".$this->k172_data_conciliacao_mes."-".$this->k172_data_conciliacao_dia;
+                    $this->k172_dataconciliacao = $this->k172_data_conciliacao_ano . "-" . $this->k172_data_conciliacao_mes . "-" . $this->k172_data_conciliacao_dia;
                 }
             }
         } else {
-            $this->k172_conta = ($this->k172_conta == ""?@$GLOBALS["HTTP_POST_VARS"]["k172_conta"]:$this->k172_conta);
+            $this->k172_conta = ($this->k172_conta == "" ? @$GLOBALS["HTTP_POST_VARS"]["k172_conta"] : $this->k172_conta);
         }
     }
 
     // funcao para inclusao
-    function incluir() {
+    function incluir()
+    {
         $this->atualizacampos();
         if (($this->k172_conta == null) || ($this->k172_conta == "")) {
-            $this->erro_sql = " Campo k172_conta não declarado.";
+            $this->erro_sql = " Campo k172_conta n�o declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
 
         if ($this->k172_data == null) {
-            $this->erro_sql = " Campo Data não Informado.";
+            $this->erro_sql = " Campo Data n�o Informado.";
             $this->erro_campo = "k172_data_dia";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
 
         if ($this->k172_mov == null) {
-            $this->erro_sql = " Campo Movimentação não Informado.";
+            $this->erro_sql = " Campo Movimentação n�o Informado.";
             $this->erro_campo = "k172_mov";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
 
         if ($this->k172_valor == null) {
-            $this->erro_sql = " Campo Valor não Informado.";
+            $this->erro_sql = " Campo Valor n�o Informado.";
             $this->erro_campo = "k172_valor";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
 
         if ($this->k172_dataconciliacao == null) {
-            $this->erro_sql = " Campo Data da Conciliação não Informado.";
+            $this->erro_sql = " Campo Data da Conciliação n�o Informado.";
             $this->erro_campo = "k172_data_dia";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -137,13 +140,13 @@ class cl_conciliacaobancarialancamento
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
                 $this->erro_sql   = "Conciliacao Bancaria para o Lancamento da conta ({$this->k172_conta}) nao Incluido. Inclusao Abortada.";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_banco = "Documento Automático Lançamento já Cadastrado";
                 $this->erro_msg  .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             } else {
                 $this->erro_sql   = "Conciliacao Bancaria para o Lancamento da conta ({$this->k172_conta}) nao Incluido. Inclusao Abortada.";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg  .=  str_replace('"', "",str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg  .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_msg  =  $sql;
             }
             $this->erro_status = "0";
@@ -153,7 +156,7 @@ class cl_conciliacaobancarialancamento
         $this->erro_banco = "";
         $this->erro_sql  = "Inclusao efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $this->k172_conta;
-        $this->erro_msg  = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg  = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_incluir = pg_affected_rows($result);
@@ -163,8 +166,8 @@ class cl_conciliacaobancarialancamento
             $resaco = $this->sql_record($this->sql_query_file($this->k172_conta));
             if (($resaco != false) || ($this->numrows != 0)) {
                 $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                $acount = pg_result($resac,0,0);
-                $resac = db_query("insert into db_acountacesso values($acount, " . db_getsession("DB_acessado"). ")");
+                $acount = pg_result($resac, 0, 0);
+                $resac = db_query("insert into db_acountacesso values($acount, " . db_getsession("DB_acessado") . ")");
                 $resac = db_query("insert into db_acountkey values($acount, 5213, '$this->k172_conta', 'I')");
                 $resac = db_query("insert into db_acount values($acount, 764, 5213, '', '" . AddSlashes(pg_result($resaco, 0, 'k172_conta')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
                 $resac = db_query("insert into db_acount values($acount, 764, 5214, '', '" . AddSlashes(pg_result($resaco, 0, 'k172_data')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -179,7 +182,8 @@ class cl_conciliacaobancarialancamento
     }
 
     // funcao para alteracao
-    function alterar() {
+    function alterar()
+    {
         $this->atualizacampos();
         $sql = " update conciliacaobancarialancamento set ";
         $virgula = "";
@@ -187,10 +191,10 @@ class cl_conciliacaobancarialancamento
             $sql .= $virgula . " k172_conta = $this->k172_conta ";
             $virgula = ",";
             if (trim($this->k172_conta) == null) {
-                $this->erro_sql = " Campo Código Lançamento não Informado.";
+                $this->erro_sql = " Campo Código Lançamento n�o Informado.";
                 $this->erro_campo = "k172_conta";
                 $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -198,13 +202,13 @@ class cl_conciliacaobancarialancamento
         }
 
         if (trim($this->k172_valor) != "" || isset($GLOBALS["HTTP_POST_VARS"]["k172_valor"])) {
-            $sql .= $virgula." k172_valor = $this->k172_valor ";
+            $sql .= $virgula . " k172_valor = $this->k172_valor ";
             $virgula = ",";
             if (trim($this->k172_valor) == null) {
-                $this->erro_sql = " Campo Código não Informado.";
+                $this->erro_sql = " Campo Código n�o Informado.";
                 $this->erro_campo = "k172_valor";
                 $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -212,13 +216,13 @@ class cl_conciliacaobancarialancamento
         }
 
         if (trim($this->k172_numcgm) != "" || isset($GLOBALS["HTTP_POST_VARS"]["k172_numcgm"])) {
-            $sql .= $virgula." k172_numcgm = $this->k172_numcgm ";
+            $sql .= $virgula . " k172_numcgm = $this->k172_numcgm ";
             $virgula = ",";
             if (trim($this->k172_numcgm) == null) {
-                $this->erro_sql = " Campo Código não Informado.";
+                $this->erro_sql = " Campo Código n�o Informado.";
                 $this->erro_campo = "k172_numcgm";
                 $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -226,13 +230,13 @@ class cl_conciliacaobancarialancamento
         }
 
         if (trim($this->k172_coddoc) != "" || isset($GLOBALS["HTTP_POST_VARS"]["k172_coddoc"])) {
-            $sql .= $virgula." k172_coddoc = $this->k172_coddoc ";
+            $sql .= $virgula . " k172_coddoc = $this->k172_coddoc ";
             $virgula = ",";
             if (trim($this->k172_coddoc) == null) {
-                $this->erro_sql = " Campo Código não Informado.";
+                $this->erro_sql = " Campo Código n�o Informado.";
                 $this->erro_campo = "k172_coddoc";
                 $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -240,13 +244,13 @@ class cl_conciliacaobancarialancamento
         }
 
         if (trim($this->k172_codigo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["k172_codigo"])) {
-            $sql .= $virgula." k172_codigo = '{$this->k172_codigo}' ";
+            $sql .= $virgula . " k172_codigo = '{$this->k172_codigo}' ";
             $virgula = ",";
             if (trim($this->k172_codigo) == null) {
-                $this->erro_sql = " Campo Código não Informado.";
+                $this->erro_sql = " Campo Código n�o Informado.";
                 $this->erro_campo = "k172_codigo";
                 $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -254,13 +258,13 @@ class cl_conciliacaobancarialancamento
         }
 
         if (trim($this->k172_mov) != "" || isset($GLOBALS["HTTP_POST_VARS"]["k172_mov"])) {
-            $sql .= $virgula." k172_mov = $this->k172_mov ";
+            $sql .= $virgula . " k172_mov = $this->k172_mov ";
             $virgula = ",";
             if (trim($this->k172_mov) == null) {
-                $this->erro_sql = " Campo Mov. não Informado.";
+                $this->erro_sql = " Campo Mov. n�o Informado.";
                 $this->erro_campo = "k172_mov";
                 $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -268,13 +272,13 @@ class cl_conciliacaobancarialancamento
         }
 
         if (trim($this->k172_data) != "" || isset($GLOBALS["HTTP_POST_VARS"]["k172_data_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["k172_data_dia"] != "")) {
-            $sql .= $virgula." k172_data = '$this->k172_data' ";
+            $sql .= $virgula . " k172_data = '$this->k172_data' ";
             $virgula = ",";
             if (trim($this->k172_data) == null) {
-                $this->erro_sql = " Campo Data não Informado.";
+                $this->erro_sql = " Campo Data n�o Informado.";
                 $this->erro_campo = "k172_data_dia";
                 $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -284,10 +288,10 @@ class cl_conciliacaobancarialancamento
                 $sql .= $virgula . " k172_data = null ";
                 $virgula = ",";
                 if (trim($this->k172_data) == null) {
-                    $this->erro_sql = " Campo Data não Informado.";
+                    $this->erro_sql = " Campo Data n�o Informado.";
                     $this->erro_campo = "k172_data_dia";
                     $this->erro_banco = "";
-                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                    $this->erro_msg   = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                     $this->erro_status = "0";
                     return false;
@@ -296,13 +300,13 @@ class cl_conciliacaobancarialancamento
         }
 
         if (trim($this->k172_dataconciliacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["k172_data_conciliacao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["k172_data_conciliacao_dia"] != "")) {
-            $sql .= $virgula." k172_dataconciliacao = '$this->k172_dataconciliacao' ";
+            $sql .= $virgula . " k172_dataconciliacao = '$this->k172_dataconciliacao' ";
             $virgula = ",";
             if (trim($this->k172_dataconciliacao) == null) {
-                $this->erro_sql = " Campo Data não Informado.";
+                $this->erro_sql = " Campo Data n�o Informado.";
                 $this->erro_campo = "k172_data_conciliacao_dia";
                 $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -312,10 +316,10 @@ class cl_conciliacaobancarialancamento
                 $sql .= $virgula . " k172_dataconciliacao = null ";
                 $virgula = ",";
                 if (trim($this->k172_dataconciliacao) == null) {
-                    $this->erro_sql = " Campo Data da Conciliação não Informado.";
+                    $this->erro_sql = " Campo Data da Conciliação n�o Informado.";
                     $this->erro_campo = "k172_data_conciliacao_dia";
                     $this->erro_banco = "";
-                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                    $this->erro_msg   = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                     $this->erro_status = "0";
                     return false;
@@ -368,7 +372,7 @@ class cl_conciliacaobancarialancamento
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql = "Documento Automático Lançamento nao Alterado. Alteracao Abortada.\\n";
             $this->erro_sql .= "Valores : " . $this->k172_conta;
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_msg = "$sql\\n";
             $this->erro_status = "0";
@@ -379,7 +383,7 @@ class cl_conciliacaobancarialancamento
                 $this->erro_banco = "";
                 $this->erro_sql = "Documento Automático Lançamento nao foi Alterado. Alteracao Executada.\\n";
                 $this->erro_sql .= "Valores : " . $this->k172_conta;
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = 0;
@@ -388,7 +392,7 @@ class cl_conciliacaobancarialancamento
                 $this->erro_banco = "";
                 $this->erro_sql = "Alteração efetuada com Sucesso\\n";
                 $this->erro_sql .= "Valores : " . $this->k172_conta;
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql." \\n\\n";
+                $this->erro_msg = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = pg_affected_rows($result);
@@ -398,7 +402,8 @@ class cl_conciliacaobancarialancamento
     }
 
     // funcao para exclusao
-    function excluir($k172_conta = null, $dbwhere = null) {
+    function excluir($k172_conta = null, $dbwhere = null)
+    {
         $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
         if (isset($lSessaoDesativarAccount) && $lSessaoDesativarAccount === false) {
             if ($dbwhere == null || $dbwhere == "") {
@@ -411,7 +416,7 @@ class cl_conciliacaobancarialancamento
                 for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
                     $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
                     $acount = pg_result($resac, 0, 0);
-                    $resac = db_query("insert into db_acountacesso values($acount, ". db_getsession("DB_acessado") . ")");
+                    $resac = db_query("insert into db_acountacesso values($acount, " . db_getsession("DB_acessado") . ")");
                     $resac = db_query("insert into db_acountkey values($acount, 5213, '$k172_conta', 'E')");
                     $resac = db_query("insert into db_acount values($acount, 764, 5213, '', '" . AddSlashes(pg_result($resaco, $iresaco, 'k172_conta')) . "', " . db_getsession('DB_datausu') . ", " . db_getsession('DB_id_usuario') . ")");
                     $resac = db_query("insert into db_acount values($acount, 764, 5214, '', '" . AddSlashes(pg_result($resaco, $iresaco, 'k172_valor')) . "', " . db_getsession('DB_datausu') . ", " . db_getsession('DB_id_usuario') . ")");
@@ -421,7 +426,7 @@ class cl_conciliacaobancarialancamento
         }
         $sql = " delete from conciliacaobancarialancamento where ";
         $sql2 = "";
-        if  ($dbwhere == null || $dbwhere == "") {
+        if ($dbwhere == null || $dbwhere == "") {
             if ($this->k172_conta != "") {
                 if ($sql2 != "") {
                     $sql2 .= " and ";
@@ -469,10 +474,10 @@ class cl_conciliacaobancarialancamento
         }
         $result = db_query($sql . $sql2);
         if ($result == false) {
-            $this->erro_banco = str_replace("\n","",@pg_last_error());
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql = "Documento Automático Lançamento nao Excluído. Exclusão Abortada.\\n";
             $this->erro_sql .= "Valores : " . $k172_conta;
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_excluir = 0;
@@ -480,9 +485,9 @@ class cl_conciliacaobancarialancamento
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "Documento Automático Lançamento nao Encontrado. Exclusão não Efetuada.\\n";
+                $this->erro_sql = "Documento Automático Lançamento nao Encontrado. Exclusão n�o Efetuada.\\n";
                 $this->erro_sql .= "Valores : " . $k172_conta;
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = 0;
@@ -491,7 +496,7 @@ class cl_conciliacaobancarialancamento
                 $this->erro_banco = "";
                 $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
                 $this->erro_sql .= "Valores : " . $k172_conta;
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = pg_affected_rows($result);
@@ -501,13 +506,14 @@ class cl_conciliacaobancarialancamento
     }
 
     // funcao do recordset
-    function sql_record($sql) {
+    function sql_record($sql)
+    {
         $result = db_query($sql);
-        if  ($result == false) {
+        if ($result == false) {
             $this->numrows = 0;
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql = "Erro ao selecionar os registros.";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -516,7 +522,7 @@ class cl_conciliacaobancarialancamento
         if ($this->numrows == 0) {
             $this->erro_banco = "";
             $this->erro_sql = "Record Vazio na Tabela:conciliacaobancarialancamento";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -524,13 +530,14 @@ class cl_conciliacaobancarialancamento
         return $result;
     }
 
-    function sql_query($k172_conta = null, $campos = "*", $ordem = null, $dbwhere = "") {
+    function sql_query($k172_conta = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
         if ($campos != "*") {
             $campos_sql = split("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
-                $sql .= $virgula.$campos_sql[$i];
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         } else {
@@ -548,25 +555,26 @@ class cl_conciliacaobancarialancamento
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
-                $sql .= $virgula.$campos_sql[$i];
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
 
-    function sql_query_file($k172_conta = null, $campos = "*", $ordem = null, $dbwhere = "") {
+    function sql_query_file($k172_conta = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
         if ($campos != "*") {
             $campos_sql = split("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
-                $sql .= $virgula.$campos_sql[$i];
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
-          }
+            }
         } else {
             $sql .= $campos;
         }
@@ -585,7 +593,7 @@ class cl_conciliacaobancarialancamento
             $campos_sql = split("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
-                $sql .= $virgula.$campos_sql[$i];
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }

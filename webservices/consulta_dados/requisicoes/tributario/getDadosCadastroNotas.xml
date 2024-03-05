@@ -72,12 +72,12 @@
                                   from isscadsimples
                                      left join isscadsimplesbaixa on q38_sequencial = q39_isscadsimples
                                  where q38_inscr = q138_inscr
-                                  order by q38_sequencial desc limit 1) is null then 'NÃ£o' else 'Sim' end"                         label="optante_simples_baixado"    />
+                                  order by q38_sequencial desc limit 1) is null then 'Não' else 'Sim' end"                         label="optante_simples_baixado"    />
     <campo campo="case when (select q38_sequencial
                                   from isscadsimples
                                      left join isscadsimplesbaixa on q38_sequencial = q39_isscadsimples
                                  where q38_inscr = q138_inscr
-                                  order by q38_sequencial desc limit 1) is null then 'NÃ£o' else 'Sim' end"                         label="optante_simples"    />
+                                  order by q38_sequencial desc limit 1) is null then 'Não' else 'Sim' end"                         label="optante_simples"    />
 
     <campo campo="(select db140_sequencial
                      from issbasecaracteristica

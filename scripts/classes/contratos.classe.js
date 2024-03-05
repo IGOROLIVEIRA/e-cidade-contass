@@ -476,7 +476,7 @@ contrato = function () {
         }
         if(iOrigem == '3') {
             if ((iTipoOrigem == '2' || iTipoOrigem == '3') && !iLicitacao) {
-                alert('Informe uma Licitaï¿½ï¿½o.');
+                alert('Informe uma Licitação.');
                 $('ac16_licitacao').focus();
                 return false;
             }
@@ -874,7 +874,7 @@ contrato = function () {
     };
 
     /**
-     * Verifica se deve mostrar o valor para alteraï¿½ï¿½o ou nï¿½o
+     * Verifica se deve mostrar o valor para alteração ou não
      */
     this.mostraValorAcordo = function() {
 

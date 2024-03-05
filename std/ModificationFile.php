@@ -1,6 +1,7 @@
 <?php
 
-class ModificationFile {
+class ModificationFile
+{
 
   /**
    * @var string
@@ -35,7 +36,8 @@ class ModificationFile {
   /**
    * @param string $path
    */
-  public function __construct($path) {
+  public function __construct($path)
+  {
 
     if (!is_readable($path)) {
       throw new Exception("Sem permissÃ£o de leitura no arquivo: $path");
@@ -47,21 +49,24 @@ class ModificationFile {
   /**
    * @return string
    */
-  public function getKey() {
+  public function getKey()
+  {
     return $this->key;
   }
 
   /**
    * @return string
    */
-  public function getPath() {
+  public function getPath()
+  {
     return $this->path;
   }
 
   /**
    * @return string
    */
-  public function getContent() {
+  public function getContent()
+  {
     return $this->content;
   }
 
@@ -69,7 +74,8 @@ class ModificationFile {
    * @param StdClass $operation
    * @return ModificationFile
    */
-  public function addOperation($operation) {
+  public function addOperation($operation)
+  {
 
     $this->operations[] = $operation;
     return $this;
@@ -79,26 +85,30 @@ class ModificationFile {
    * @param string $xmlPath
    * @return ModificationFile
    */
-  public function addModification($xmlPath) {
+  public function addModification($xmlPath)
+  {
 
     $this->modifications[] = $xmlPath;
     return $this;
   }
 
-  public function getModifications() {
+  public function getModifications()
+  {
     return $this->modifications;
   }
 
-  public function load() {
+  public function load()
+  {
 
     if (!file_exists($this->path)) {
-      throw new Exception('Arquivo nÃ£o existe: ' . $this->path);
+      throw new Exception('Arquivo não existe: ' . $this->path);
     }
     $this->content = file_get_contents($this->path);
     return $this;
   }
 
-  public function unload() {
+  public function unload()
+  {
 
     $this->content = null;
     return $this;
@@ -107,9 +117,10 @@ class ModificationFile {
   /**
    * @return ModificationFile
    */
-  public function parse() {
+  public function parse()
+  {
 
-    foreach($this->operations as $operation) {
+    foreach ($this->operations as $operation) {
 
       $search = $operation->search->content;
       $limit = $operation->search->limit;
@@ -125,29 +136,29 @@ class ModificationFile {
         default:
         case 'replace':
           $replace = $add;
-        break;
+          break;
 
         case 'before':
           $replace = $add . $search;
-        break;
+          break;
 
         case 'after':
           $replace = $search . $add;
-        break;
+          break;
 
-        // final do arquivo
+          // final do arquivo
         case 'bottom':
 
           $this->content = $this->content . $add;
           continue;
-        break;
+          break;
 
-        // inicio do arquivo
+          // inicio do arquivo
         case 'top':
 
           $this->content = $add . $this->content;
           continue;
-        break;
+          break;
       }
 
       if ($operation->search->regex) {
@@ -199,7 +210,6 @@ class ModificationFile {
           $match[$iFix] -= $posFix;
         }
       }
-
     }
 
     return $this;
@@ -208,7 +218,8 @@ class ModificationFile {
   /**
    * @return bool
    */
-  public function hasCache() {
+  public function hasCache()
+  {
 
     $fileCache = ECIDADE_MODIFICATION_CACHE_PATH . $this->getKey();
     if (file_exists($fileCache) && !is_dir($fileCache)) {
@@ -221,10 +232,11 @@ class ModificationFile {
   /**
    * @return ModificationFile
    */
-  public function clearCache() {
+  public function clearCache()
+  {
 
     if (!unlink(ECIDADE_MODIFICATION_CACHE_PATH . $this->getKey())) {
-      throw new Exception("NÃ£o foi possivle remover cache: " . ECIDADE_MODIFICATION_CACHE_PATH . $this->getKey());
+      throw new Exception("Não foi possivle remover cache: " . ECIDADE_MODIFICATION_CACHE_PATH . $this->getKey());
     }
 
     return $this;
@@ -234,7 +246,8 @@ class ModificationFile {
    * @throws Exception
    * @return ModificationFile
    */
-  public function save() {
+  public function save()
+  {
 
     if (!file_put_contents(ECIDADE_MODIFICATION_CACHE_PATH . $this->getKey(), $this->getContent())) {
       throw new Exception("Erro ao salvar arquivo de cache: " . $this->getKey());
@@ -249,7 +262,8 @@ class ModificationFile {
    * @param string $file
    * @return string
    */
-  public static function createKey($file) {
+  public static function createKey($file)
+  {
     return str_replace('/', '-', str_replace(ECIDADE_PATH, '', $file));
   }
 
@@ -258,7 +272,8 @@ class ModificationFile {
    * @param string $file
    * @return ModificationFile
    */
-  public static function getInstance($file) {
+  public static function getInstance($file)
+  {
 
     if (empty(self::$instances[$file])) {
       self::$instances[$file] = new ModificationFile($file);
@@ -266,5 +281,4 @@ class ModificationFile {
 
     return self::$instances[$file];
   }
-
 }

@@ -53,12 +53,12 @@ class GrupoMenuseSocial extends AbstractMigration
 
         INSERT INTO db_itensmenu
         VALUES ((SELECT MAX(id_item)+1 FROM db_itensmenu),
-            'Eventos N茫o Peri贸dicos',
-            'Eventos N茫o Peri贸dicos',
+            'Eventos N鉶 Peri贸dicos',
+            'Eventos N鉶 Peri贸dicos',
             '',
             1,
             1,
-            'Eventos N茫o Peri贸dicos',
+            'Eventos N鉶 Peri贸dicos',
             't');
 
         INSERT INTO db_menu 
