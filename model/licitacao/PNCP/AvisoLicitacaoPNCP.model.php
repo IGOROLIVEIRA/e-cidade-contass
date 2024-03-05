@@ -103,14 +103,12 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         //$oDadosAPI->codigoUnidadeCompradora         = '01001';
         $oDadosAPI->tipoInstrumentoConvocatorioId   = $oDado->tipoinstrumentoconvocatorioid;
         $oDadosAPI->modalidadeId                    = $oDado->modalidadeid;
-        if($oDado->modalidadeid == "8" || $oDado->modalidadeid == "9"){
-            if($oDado->tipoinstrumentoconvocatorioid == "2"){
-                $oDadosAPI->modoDisputaId                   = 4;
-            }else{
-                $oDadosAPI->modoDisputaId                   = 5;
-            }
+        //DISPENSA E INEXIGIBILIDADE
+        $iModalidades = array(8,9,12);
+        if(in_array($oDado->modalidadeid,$iModalidades)){
+            $oDadosAPI->itensCompra[$key]->criterioJulgamentoId    = 7;
         }else{
-            $oDadosAPI->modoDisputaId                   = $oDado->mododisputaid;
+            $oDadosAPI->itensCompra[$key]->criterioJulgamentoId    = $item->criteriojulgamentoid;
         }
         $oDadosAPI->numeroCompra                    = $oDado->numerocompra;
         $oDadosAPI->numeroProcesso                  = $oDado->numeroprocesso;
@@ -229,7 +227,19 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
         $retorno = json_decode($contentpncp);
 
-        return $retorno;
+        //enviado de api
+        if ($retorno->status == "422") {
+            return array(422, $retorno->message);
+        }
+        //enviado de cadastro
+        if($retorno->erros){
+            return array(422, $retorno->erros[0]->mensagem);
+        }
+        //enviado com sucesso
+        if($retorno == null){
+            return array(201, "");
+        }
+
     }
 
     public function excluirAviso($sCodigoControlePNCP, $iAnoCompra)
