@@ -267,18 +267,18 @@ class db_impcarne extends cl_assinatura
 
     // VARIAVEIS PARA EMISSAO PRECO REFERENCIA
 
-     public $inscricaoestadualinstituicao = 0;
-     public $codpreco = 0;
-     public $precoreferencia = 0;
-     public $datacotacao = 0;
-     public $pc80_tipoprocesso = 0;
-     public $pc80_criterioadjudicacao = 0;
-     public $impjust = 0;
-     public $tipoprecoreferencia = 0;
-     public $rsLotes = null;
-     public $sqlitens = null;
-     public $quant_casas = 0;
-     public $quantLinhas = 0;
+    public $inscricaoestadualinstituicao = 0;
+    public $codpreco = 0;
+    public $precoreferencia = 0;
+    public $datacotacao = 0;
+    public $pc80_tipoprocesso = 0;
+    public $pc80_criterioadjudicacao = 0;
+    public $impjust = 0;
+    public $tipoprecoreferencia = 0;
+    public $rsLotes = null;
+    public $sqlitens = null;
+    public $quant_casas = 0;
+    public $quantLinhas = 0;
 
 
     //////  VARIÁVEIS PARA EMISSAO DE ALVARÁ
@@ -368,8 +368,8 @@ class db_impcarne extends cl_assinatura
     public $emaildepto = null;
 
     // solicita
-    public $Snumero = null;  //nï¿½mero da solicitaï¿½ï¿½o
-    public $Snumero_ant = null;  //nï¿½mero da solicitaï¿½ï¿½o
+    public $Snumero = null;  //número da solicitaï¿½ï¿½o
+    public $Snumero_ant = null;  //número da solicitaï¿½ï¿½o
     public $Sdata = null;  //data da solicitaï¿½ï¿½o
     public $Svalor = null;  //valor aproximado da solicitaï¿½ï¿½o
     public $Sorgao = null;  //orgï¿½o
@@ -379,7 +379,7 @@ class db_impcarne extends cl_assinatura
     public $Stipcom = '';    //tipo de compra da solicitaï¿½ï¿½o
     public $Sdepart = '';    //departamento da solicitaï¿½ï¿½o
     public $Srespdepart = '';    //responsï¿½vel pelo departamento
-    public $Susuarioger = '';    //Usuï¿½rio que gerou a solicitaï¿½ï¿½o
+    public $Susuarioger = '';    //Usuário que gerou a solicitaï¿½ï¿½o
 
     public $cod_concarpeculiar = null;  // Codigo da caracteristica peculiar
     public $descr_concarpeculiar = null;  // Descricao da caracteristica peculiar
@@ -401,19 +401,19 @@ class db_impcarne extends cl_assinatura
     public $sunidade = '';    //unidade (caixa,unitï¿½rio, etc...)
     public $sservico = '';    //se ï¿½ serviï¿½o ou material
     public $svalortot = '';    //valor total (quantidade * valor)
-    public $susaquant = '';    //se usa a quantidade ex. caixa (usa quant),unitï¿½rio(nï¿½o usa)
+    public $susaquant = '';    //se usa a quantidade ex. caixa (usa quant),unitï¿½rio(não usa)
     public $selemento = '';    //elemento do item da solicitaï¿½ï¿½o
     public $sdelemento = '';    //descriï¿½aï¿½ do elemento do item da solicitaï¿½ï¿½o
 
     // pcdotac
-    public $dcodigo = null;  //cï¿½digo da dotaï¿½ï¿½o
-    public $dcoddot = null;  //cï¿½digo da dotaï¿½ï¿½o
-    public $danousu = null;  //ano da dotaï¿½ï¿½o
-    public $dquant = null;  //quantidade do item na dotaï¿½ï¿½o
-    public $dvalor = null;  //valor da dotaï¿½ï¿½o
-    public $delemento = '';    //elemento da dotaï¿½ï¿½o
+    public $dcodigo = null;  //código da dotação
+    public $dcoddot = null;  //código da dotação
+    public $danousu = null;  //ano da dotação
+    public $dquant = null;  //quantidade do item na dotação
+    public $dvalor = null;  //valor da dotação
+    public $delemento = '';    //elemento da dotação
     public $dvalortot = '';    //valor total (quantidade * valor)
-    public $dreserva = '';    //se o valor da dotaï¿½ï¿½o foi reservado
+    public $dreserva = '';    //se o valor da dotação foi reservado
     public $resultdasdotac = null;  // recordset com dados dos fornecedores
     public $linhasdasdotac = null;  // numero de linhas retornadas no recordsert
     public $dcprojativ = '';
@@ -435,7 +435,7 @@ class db_impcarne extends cl_assinatura
     //labels dos itens do processo do orï¿½amento do processo de compras e orï¿½amento de solicitaï¿½ï¿½o
     public $labtitulo = '';         // se ï¿½ orï¿½amento de solicitaï¿½ï¿½o ou PC
     public $labdados = '';         // se ï¿½ orï¿½amento de solicitaï¿½ï¿½o ou PC
-    public $labsolproc = '';         // cï¿½digo do orï¿½amento ou solicitaï¿½ï¿½o
+    public $labsolproc = '';         // código do orï¿½amento ou solicitaï¿½ï¿½o
     public $labtipo = '';         // se for solicitaï¿½ï¿½o, label do tipo
     public $declaracao = "";         // Usado para imprimir declaracao no orï¿½amento (OSORIO)
 
@@ -487,9 +487,9 @@ class db_impcarne extends cl_assinatura
     public $coddot = null;    // codigo reduzido da despesa
     public $destino = null;    // destino do material ou serviï¿½o
     public $resumo = null;    // destino do material ou serviï¿½o
-    public $licitacao = null;    // tipo de licitaï¿½ï¿½o
-    public $num_licitacao = null;    // numero da licitaï¿½ï¿½o
-    public $descr_licitacao = null;    // descriï¿½ï¿½o do tipo de licitaï¿½ï¿½o
+    public $licitacao = null;    // tipo de licitação
+    public $num_licitacao = null;    // numero da licitação
+    public $descr_licitacao = null;    // descriï¿½ï¿½o do tipo de licitação
     public $descr_tipocompra = null;    // descriï¿½ï¿½o do tipo de compra
     public $prazo_ent = null;    // prazo de entrega
     //  var $obs		= null;		// observaï¿½ï¿½es
@@ -519,7 +519,7 @@ class db_impcarne extends cl_assinatura
     public $data_est = null;         // data estorno
     public $descr_anu = null;         // descriï¿½ï¿½o da anulaï¿½ï¿½o
     public $Scodemp = null;         // descriï¿½ï¿½o da anulaï¿½ï¿½o
-    public $resumo_item = null;         // resumo de item de SC em aut. de licitaï¿½ï¿½o
+    public $resumo_item = null;         // resumo de item de SC em aut. de licitação
     public $informa_adic = null;         // informaï¿½ï¿½es adicionais de autorizaï¿½ï¿½o: PC - aut. de processo de compras
     public $unid = null; // unidade do item
     public $servico = null; // tipo servico

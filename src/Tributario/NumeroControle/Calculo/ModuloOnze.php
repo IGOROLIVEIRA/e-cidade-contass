@@ -1,4 +1,5 @@
 <?php
+
 /**
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2015  DBSeller Servicos de Informatica
@@ -66,24 +67,26 @@ class ModuloOnze implements NumeroControle
   private $lDigitoVerificador = true;
 
   /**
-   * Função responsável para calcular o número de controle
+   * Função responsável para calcular o n�mero de controle
    */
   public function calcular()
   {
-    if ( empty($this->sNumeracao) ) {
-      throw new \BusinessException("Numeração para o cálculo do Módulo 11 não foi definida.");
+    if (empty($this->sNumeracao)) {
+      throw new \BusinessException("Numeração para o cálculo do Módulo 11 n�o foi definida.");
     }
 
     $iDigitoVerificador = 2;
 
-    if ( $this->lDigitoVerificador ) {
+    if ($this->lDigitoVerificador) {
       $iDigitoVerificador = 1;
     }
 
     $oNumeroControle      = new \NumeroControle();
-    $iResultadoModuloOnze = $oNumeroControle->calcularModuloOnze($this->sNumeracao,
-                                                                $iDigitoVerificador,
-                                                                $this->iPeso);
+    $iResultadoModuloOnze = $oNumeroControle->calcularModuloOnze(
+      $this->sNumeracao,
+      $iDigitoVerificador,
+      $this->iPeso
+    );
 
     if (empty($iResultadoModuloOnze)) {
       $iResultadoModuloOnze = 0;

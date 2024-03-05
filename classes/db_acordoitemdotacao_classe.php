@@ -52,7 +52,7 @@ class cl_acordoitemdotacao
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  ac22_sequencial = int4 = Sequencial
-                 ac22_coddot = int4 = Cï¿½digo Dotaï¿½ï¿½o
+                 ac22_coddot = int4 = Código Dotaï¿½ï¿½o
                  ac22_anousu = int4 = Ano Exercï¿½cio
                  ac22_acordoitem = int4 = Acordo Item
                  ac22_valor = float8 = Valor
@@ -95,10 +95,10 @@ class cl_acordoitemdotacao
     //throw new Exception($this->ac22_sequencial .$this->ac22_coddot .$this->ac22_anousu.$this->ac22_acordoitem . $ac22_sequencial);
     //$this->atualizacampos();
     if ($this->ac22_coddot == null) {
-      $this->erro_sql = " Campo Cï¿½digo Dotaï¿½ï¿½o nao Informado.";
+      $this->erro_sql = " Campo Código Dotaï¿½ï¿½o nao Informado.";
       $this->erro_campo = "ac22_coddot";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -107,7 +107,7 @@ class cl_acordoitemdotacao
       $this->erro_sql = " Campo Ano Exercï¿½cio nao Informado.";
       $this->erro_campo = "ac22_anousu";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -116,7 +116,7 @@ class cl_acordoitemdotacao
       $this->erro_sql = " Campo Acordo Item nao Informado. ";
       $this->erro_campo = "ac22_acordoitem";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -128,13 +128,13 @@ class cl_acordoitemdotacao
        $this->erro_sql = " Campo Valor nao Informado.";
        $this->erro_campo = "ac22_valor";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuï¿½rio: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }*/
     if ($this->ac22_quantidade == null) {
-        $this->ac22_quantidade = 1;
+      $this->ac22_quantidade = 1;
     }
 
     if ($ac22_sequencial == "" || $ac22_sequencial == null) {
@@ -142,7 +142,7 @@ class cl_acordoitemdotacao
       if ($result == false) {
         $this->erro_banco = str_replace("\n", "", @pg_last_error());
         $this->erro_sql   = "Verifique o cadastro da sequencia: acordoitemdotacao_ac22_sequencial_seq do campo: ac22_sequencial";
-        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -151,9 +151,9 @@ class cl_acordoitemdotacao
     } else {
       $result = db_query("select last_value from acordoitemdotacao_ac22_sequencial_seq");
       if (($result != false) && (pg_result($result, 0, 0) < $ac22_sequencial)) {
-        $this->erro_sql = " Campo ac22_sequencial maior que ï¿½ltimo nï¿½mero da sequencia.";
-        $this->erro_banco = "Sequencia menor que este nï¿½mero.";
-        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_sql = " Campo ac22_sequencial maior que último número da sequencia.";
+        $this->erro_banco = "Sequencia menor que este número.";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -164,7 +164,7 @@ class cl_acordoitemdotacao
     if (($this->ac22_sequencial == null) || ($this->ac22_sequencial == "")) {
       $this->erro_sql = " Campo ac22_sequencial nao declarado.";
       $this->erro_banco = "Chave Primaria zerada.";
-      $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -189,13 +189,13 @@ class cl_acordoitemdotacao
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-        $this->erro_sql   = "Acordo Item Dotaï¿½ï¿½o ($this->ac22_sequencial) nao Incluï¿½do. Inclusao Abortada.";
-        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_banco = "Acordo Item Dotaï¿½ï¿½o jï¿½ Cadastrado";
+        $this->erro_sql   = "Acordo Item Dotaï¿½ï¿½o ($this->ac22_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_banco = "Acordo Item Dotaï¿½ï¿½o já Cadastrado";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       } else {
-        $this->erro_sql   = "Acordo Item Dotaï¿½ï¿½o ($this->ac22_sequencial) nao Incluï¿½do. Inclusao Abortada.";
-        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_sql   = "Acordo Item Dotaï¿½ï¿½o ($this->ac22_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       }
       $this->erro_status = "0";
@@ -205,7 +205,7 @@ class cl_acordoitemdotacao
     $this->erro_banco = "";
     $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
     $this->erro_sql .= "Valores : " . $this->ac22_sequencial;
-    $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
@@ -237,7 +237,7 @@ class cl_acordoitemdotacao
         $this->erro_sql = " Campo Sequencial nao Informado.";
         $this->erro_campo = "ac22_sequencial";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -247,10 +247,10 @@ class cl_acordoitemdotacao
       $sql  .= $virgula . " ac22_coddot = $this->ac22_coddot ";
       $virgula = ",";
       if (trim($this->ac22_coddot) == null) {
-        $this->erro_sql = " Campo Cï¿½digo Dotaï¿½ï¿½o nao Informado.";
+        $this->erro_sql = " Campo Código Dotaï¿½ï¿½o nao Informado.";
         $this->erro_campo = "ac22_coddot";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -263,7 +263,7 @@ class cl_acordoitemdotacao
         $this->erro_sql = " Campo Ano Exercï¿½cio nao Informado.";
         $this->erro_campo = "ac22_anousu";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -276,7 +276,7 @@ class cl_acordoitemdotacao
         $this->erro_sql = " Campo Acordo Item nao Informado.";
         $this->erro_campo = "ac22_acordoitem";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -289,7 +289,7 @@ class cl_acordoitemdotacao
         $this->erro_sql = " Campo Valor nao Informado.";
         $this->erro_campo = "ac22_valor";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -302,7 +302,7 @@ class cl_acordoitemdotacao
         $this->erro_sql = " Campo Quantidade nao Informado.";
         $this->erro_campo = "ac22_quantidade";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -338,7 +338,7 @@ class cl_acordoitemdotacao
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql   = "Acordo Item Dotaï¿½ï¿½o nao Alterado. Alteracao Abortada.\\n";
       $this->erro_sql .= "Valores : " . $this->ac22_sequencial;
-      $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
@@ -348,16 +348,16 @@ class cl_acordoitemdotacao
         $this->erro_banco = "";
         $this->erro_sql = "Acordo Item Dotaï¿½ï¿½o nao foi Alterado. Alteracao Executada.\\n";
         $this->erro_sql .= "Valores : " . $this->ac22_sequencial;
-        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
         return true;
       } else {
         $this->erro_banco = "";
-        $this->erro_sql = "Alteraï¿½ï¿½o efetuada com Sucesso\\n";
+        $this->erro_sql = "Alteração efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $this->ac22_sequencial;
-        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
@@ -403,9 +403,9 @@ class cl_acordoitemdotacao
     $result = db_query($sql . $sql2);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql   = "Acordo Item Dotaï¿½ï¿½o nao Excluï¿½do. Exclusï¿½o Abortada.\\n";
+      $this->erro_sql   = "Acordo Item Dotaï¿½ï¿½o nao Excluído. Exclusão Abortada.\\n";
       $this->erro_sql .= "Valores : " . $ac22_sequencial;
-      $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
@@ -413,18 +413,18 @@ class cl_acordoitemdotacao
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "Acordo Item Dotaï¿½ï¿½o nao Encontrado. Exclusï¿½o nï¿½o Efetuada.\\n";
+        $this->erro_sql = "Acordo Item Dotaï¿½ï¿½o nao Encontrado. Exclusão não Efetuada.\\n";
         $this->erro_sql .= "Valores : " . $ac22_sequencial;
-        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
         return true;
       } else {
         $this->erro_banco = "";
-        $this->erro_sql = "Exclusï¿½o efetuada com Sucesso\\n";
+        $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $ac22_sequencial;
-        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
@@ -440,7 +440,7 @@ class cl_acordoitemdotacao
       $this->numrows    = 0;
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql   = "Erro ao selecionar os registros.";
-      $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -449,7 +449,7 @@ class cl_acordoitemdotacao
     if ($this->numrows == 0) {
       $this->erro_banco = "";
       $this->erro_sql   = "Record Vazio na Tabela:acordoitemdotacao";
-      $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;

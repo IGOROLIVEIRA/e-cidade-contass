@@ -171,7 +171,7 @@ switch ($oParam->exec) {
             $dtcadastro = $oAcordo->getDataInicial();
 
             if ($dtcadastro < $z09_datacadastro) {
-                throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+                throw new Exception("Usu�rio: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
             }
 
             $oMembro = new AcordoComissaoMembro($oParam->iCodigo);
@@ -203,7 +203,7 @@ switch ($oParam->exec) {
             $dtcadastro = $oAcordo->getDataInicial();
 
             if ($dtcadastro < $z09_datacadastro) {
-                throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+                throw new Exception("Usu�rio: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
             }
 
             if (!$oAcordo->membroExists($oParam->iCodigoCgm)) {
@@ -456,7 +456,7 @@ switch ($oParam->exec) {
         /**
          * se o contrato esta preenchido, estamos em alteração
          * verificamos se para esse contrato ja foi incluido itens, de alguma outra licitação
-         * se tiver, não mostramos outras licitações
+         * se tiver, n�o mostramos outras licitações
          */
         if (isset($oParam->iContrato) && $oParam->iContrato != '') {
 
@@ -483,7 +483,7 @@ switch ($oParam->exec) {
         /**
          * se o contrato esta preenchido, estamos em alteração
          * verificamos se para esse contrato ja foi incluido itens, de alguma outra licitação
-         * se tiver, não mostramos outras licitações
+         * se tiver, n�o mostramos outras licitações
          */
         if (isset($oParam->iContrato) && $oParam->iContrato != '') {
 
@@ -578,7 +578,7 @@ switch ($oParam->exec) {
 
             if ($oParam->contrato->dtPublicacao < $oParam->contrato->dtAssinatura) {
                 $lAcordoValido = false;
-                $sMessagemInvalido = "A data de publicação do acordo {$oParam->contrato->dtPublicacao} não pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";
+                $sMessagemInvalido = "A data de publicação do acordo {$oParam->contrato->dtPublicacao} n�o pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";
             }
 
             if ($lAcordoValido) {
@@ -587,7 +587,7 @@ switch ($oParam->exec) {
                 $dtsession   = date("Y-m-d", db_getsession("DB_datausu"));
 
                 if ($dtsession < $z09_datacadastro) {
-                    $sMessagemInvalido = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
+                    $sMessagemInvalido = "Usu�rio: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
                     $lAcordoValido = true;
                 }
 
@@ -937,12 +937,12 @@ switch ($oParam->exec) {
         break;
 
     case "getItensAcordo":
-        
+
 
         if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
-            
+
             $oContrato                = $_SESSION["oContrato"];
-            
+
             $oRetorno->iTipoContrato  = $oContrato->getOrigem();
             $oPosicao                 = $oContrato->getUltimaPosicao(true);
             $oRetorno->iCodigoPosicao = $oPosicao->getCodigo();
@@ -1089,7 +1089,7 @@ switch ($oParam->exec) {
             } else {
 
                 $oRetorno->status = 2;
-                $oRetorno->message = urlencode("O item selecionado não foi encontrado.");
+                $oRetorno->message = urlencode("O item selecionado n�o foi encontrado.");
             }
         }
         break;
@@ -1136,7 +1136,7 @@ switch ($oParam->exec) {
             } else {
 
                 $oRetorno->status = 2;
-                $oRetorno->message = urlencode("O item selecionado não foi encontrado.");
+                $oRetorno->message = urlencode("O item selecionado n�o foi encontrado.");
             }
         }
         break;
@@ -1175,7 +1175,7 @@ switch ($oParam->exec) {
             } else {
 
                 $oRetorno->status = 2;
-                $oRetorno->message = urlencode("O item selecionado não foi encontrado.");
+                $oRetorno->message = urlencode("O item selecionado n�o foi encontrado.");
             }
             $oRetorno->dotacoes = $oItem->getDotacoes();
         }
@@ -1513,11 +1513,11 @@ switch ($oParam->exec) {
 
         break;
 
-        case 'getLeiLicitacao':
-            $cl_liclicita = new cl_liclicita;
-            $sQueryLicitacao = $cl_liclicita->sql_query_file($oParam->iLicitacao);
-            $oResultLicitacao = $cl_liclicita->sql_record($sQueryLicitacao);
-            $oRetorno->leiLicitacao = db_utils::fieldsMemory($oResultLicitacao,0)->l20_leidalicitacao;
+    case 'getLeiLicitacao':
+        $cl_liclicita = new cl_liclicita;
+        $sQueryLicitacao = $cl_liclicita->sql_query_file($oParam->iLicitacao);
+        $oResultLicitacao = $cl_liclicita->sql_record($sQueryLicitacao);
+        $oRetorno->leiLicitacao = db_utils::fieldsMemory($oResultLicitacao, 0)->l20_leidalicitacao;
         break;
 }
 /**

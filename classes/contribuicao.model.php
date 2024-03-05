@@ -26,8 +26,9 @@
  */
 
 
-class contribuicaoModel {
-  
+class contribuicaoModel
+{
+
   /*
    * @description Método Construtor
    *
@@ -35,62 +36,64 @@ class contribuicaoModel {
    * @return  void
    *
    */
-  
+
   var $iContribuicao      = "";
   var $sErroMsg           = "";
   var $lSqlErro           = false;
   var $oContribuicaoDAO   = null;
   var $aMatriculasContrib = array();
   var $aServicos          = array();
-  var $nTotalTestada      = 0;  
-  
-  function contribuicaoModel($iContribuicao) {
-    
+  var $nTotalTestada      = 0;
+
+  function contribuicaoModel($iContribuicao)
+  {
+
     $this->iContribuicao = $iContribuicao;
 
     require_once("libs/db_utils.php");
     $this->oContribuicaoDAO = db_utils::getDao('contrib');
-    
   }
-  
-  function getiContribuicao() {
+
+  function getiContribuicao()
+  {
     return $this->iContribuicao;
   }
-  
-  function setiContribuicao( $iContribuicao ) {
+
+  function setiContribuicao($iContribuicao)
+  {
     $this->iContribuicao = $iContribuicao;
   }
-  
-  function getDadosEdital() {
-      
+
+  function getDadosEdital()
+  {
+
     $this->sErroMsg = "";
     $this->lSqlErro = false;
-    
+
     $oEditalRua        = db_utils::getDao('editalrua');
     $sCampos           = "*";
-    $sSqlContribuicao  = $oEditalRua->sql_query(null, "{$sCampos}", "j14_nome", " d02_contri = {$this->iContribuicao} ");  
+    $sSqlContribuicao  = $oEditalRua->sql_query(null, "{$sCampos}", "j14_nome", " d02_contri = {$this->iContribuicao} ");
     $rsContribuicao    = $this->oContribuicaoDAO->sql_record($sSqlContribuicao);
-    
-    if ($this->oContribuicaoDAO->numrows == 0 ) {
-      
-      $this->sErroMsg = "Não Foi possível buscar dados do edital da contribuição : {$this->iContribuicao}. ";
+
+    if ($this->oContribuicaoDAO->numrows == 0) {
+
+      $this->sErroMsg = "N�o Foi possível buscar dados do edital da contribuição : {$this->iContribuicao}. ";
       $this->lSqlErro = true;
       return false;
-      
-    } else {      
+    } else {
       /*
        * Retornando dados do edital
-       */        
-      return db_utils::fieldsMemory($rsContribuicao,0 );      
+       */
+      return db_utils::fieldsMemory($rsContribuicao, 0);
     }
-    
   }
-  
-  function getMatriculasContrib() {
+
+  function getMatriculasContrib()
+  {
 
     $sCampos  = " distinct j01_matric, j40_refant, z01_nome, lote.j34_idbql, lote.j34_area, d40_trecho, ";
     $sCampos .= " j34_setor, j34_quadra, j34_lote, j34_zona,( d41_testada + d41_eixo) as d05_testad ";
-    
+
     $sSqlContribuicao  = " select {$sCampos}                                                 ";
     $sSqlContribuicao .= "   from contlot                                                    ";
     $sSqlContribuicao .= "        inner join lote                on j34_idbql  = d05_idbql   ";
@@ -103,32 +106,29 @@ class contribuicaoModel {
     $sSqlContribuicao .= "        inner join projmelhorias       on d40_codigo = d41_codigo  ";
     $sSqlContribuicao .= "  where d05_contri = {$this->iContribuicao}                        ";
     $sSqlContribuicao .= "  order by j40_refant                                              ";
-    $rsContribuicao    = $this->oContribuicaoDAO->sql_record($sSqlContribuicao );
-    
-    if ($this->oContribuicaoDAO->numrows == 0 ) {
-      
-      $this->sErroMsg = "Não Foi possível buscar dados da contribuição : {$this->iContribuicao} .";
+    $rsContribuicao    = $this->oContribuicaoDAO->sql_record($sSqlContribuicao);
+
+    if ($this->oContribuicaoDAO->numrows == 0) {
+
+      $this->sErroMsg = "N�o Foi possível buscar dados da contribuição : {$this->iContribuicao} .";
       $this->lSqlErro = true;
       return false;
-      
     } else {
-      
+
       /*
        * Percorre as matriculas com contribuicao
        */
       for ($iInd = 0; $iInd < $this->oContribuicaoDAO->numrows; $iInd++) {
-        
-        $this->aMatriculasContrib[] = db_utils::fieldsMemory($rsContribuicao,$iInd );
-        
+
+        $this->aMatriculasContrib[] = db_utils::fieldsMemory($rsContribuicao, $iInd);
       }
-      
+
       return $this->aMatriculasContrib;
-      
     }
-    
   }
 
-  function getTotalTestada() {
+  function getTotalTestada()
+  {
 
     $this->sErroMsg = "";
     $this->lSqlErro = false;
@@ -142,54 +142,50 @@ class contribuicaoModel {
     $sSqlSomaTestada .= "                                      and d41_matric = j01_matric  ";
     $sSqlSomaTestada .= "  where d05_contri = $this->iContribuicao ";
     $rsSomaTestada    = $this->oContribuicaoDAO->sql_record($sSqlSomaTestada);
-    
-    if ($this->oContribuicaoDAO->numrows > 0 ) {
-      
-      $this->sErroMsg = "Não Foi possível buscar soma das testadas dos lotes da contribuição : {$this->iContribuicao}.";
+
+    if ($this->oContribuicaoDAO->numrows > 0) {
+
+      $this->sErroMsg = "N�o Foi possível buscar soma das testadas dos lotes da contribuição : {$this->iContribuicao}.";
       $this->lSqlErro = true;
       return false;
-      
     } else {
 
-      $this->nTotalTestada = db_utils::fieldsMemory($rsSomaTestada,0)->total_testada ;
+      $this->nTotalTestada = db_utils::fieldsMemory($rsSomaTestada, 0)->total_testada;
       unset($rsSomaTestada);
       return (float)$this->nTotalTestada;
-
     }
-
   }
 
-  function getServicos() {
-      
+  function getServicos()
+  {
+
     $this->sErroMsg    = "";
-    $this->lSqlErro    = false;    
+    $this->lSqlErro    = false;
     $oEditalServ       = db_utils::getDao('editalserv');
     $sCampos           = "*";
-    $sSqlContribuicao  = $oEditalServ->sql_query(null,null,"{$sCampos}",null," d04_contri = {$this->iContribuicao}" ); 
+    $sSqlContribuicao  = $oEditalServ->sql_query(null, null, "{$sCampos}", null, " d04_contri = {$this->iContribuicao}");
     $rsContribuicao    = $this->oContribuicaoDAO->sql_record($sSqlContribuicao);
-    
-    if ($this->oContribuicaoDAO->numrows == 0 ) {
-      
-      $this->sErroMsg = "Não Foi possível buscar Serviços da contribuição : {$this->iContribuicao}. ";
+
+    if ($this->oContribuicaoDAO->numrows == 0) {
+
+      $this->sErroMsg = "N�o Foi possível buscar Serviços da contribuição : {$this->iContribuicao}. ";
       $this->lSqlErro = true;
       return false;
-      
     } else {
-      
+
       /*
        * Percorre as matriculas com contribuicao
        */
       for ($iInd = 0; $iInd < $this->oContribuicaoDAO->numrows; $iInd++) {
-        $this->aServicos[] = db_utils::fieldsMemory($rsContribuicao,$iInd );
+        $this->aServicos[] = db_utils::fieldsMemory($rsContribuicao, $iInd);
       }
 
       return $this->aServicos;
-      
     }
-    
   }
-  
-  function getEnderecoMatricula($iMatricula) {
+
+  function getEnderecoMatricula($iMatricula)
+  {
 
     $sCampos  = " substr(endereco,001,40) as endereco, ";
     $sCampos .= " substr(endereco,042,10) as numero, ";
@@ -199,7 +195,7 @@ class contribuicaoModel {
     $sCampos .= " substr(endereco,156,02) as uf, ";
     $sCampos .= " substr(endereco,159,08) as cep, ";
     $sCampos .= " substr(endereco,168,20) as cxpostal ";
-    
+
     $sSqlEndereco  = " select {$sCampos} ";
     $sSqlEndereco .= "   from ( ";
     $sSqlEndereco .= "          select fc_iptuender(j01_matric) as endereco";
@@ -208,54 +204,51 @@ class contribuicaoModel {
     $sSqlEndereco .= "        ) as endereco_matricula";
 
     $rsEndereco    = $this->oContribuicaoDAO->sql_record($sSqlEndereco);
-    
-    if ($this->oContribuicaoDAO->numrows == 0 ) {
-      
-      $this->sErroMsg = "Não Foi possível buscar endereco matricula : {$iMatricula} .";
+
+    if ($this->oContribuicaoDAO->numrows == 0) {
+
+      $this->sErroMsg = "N�o Foi possível buscar endereco matricula : {$iMatricula} .";
       $this->lSqlErro = true;
       return false;
-      
-    } 
-      
-    return db_utils::fieldsMemory($rsEndereco,0);
-    
+    }
+
+    return db_utils::fieldsMemory($rsEndereco, 0);
   }
 
-  function calculaContribuicaoPorMatricula($iTipo=null, $aParametros=null) {
+  function calculaContribuicaoPorMatricula($iTipo = null, $aParametros = null)
+  {
 
     $this->sErroMsg = "";
     $this->lSqlErro = false;
 
     if ($iTipo == null) {
 
-      $this->sErroMsg = "Parametros invalidos ! \n Não Foi possível executar calculo para matricula ";
+      $this->sErroMsg = "Parametros invalidos ! \n N�o Foi possível executar calculo para matricula ";
       $this->lSqlErro = true;
       return false;
-
     }
 
-    switch ( (int)$iTipo ) {
-      
+    switch ((int)$iTipo) {
+
       case 1:
 
         return $this->calculoPorValor($aParametros);
         break;
-        
+
       case 2:
 
-        return $this->calculoPorValorValorizacao($aParametros);        
+        return $this->calculoPorValorValorizacao($aParametros);
         break;
-        
+
       case 3:
-        
+
         return $this->calculoPorTestadaProporcional($aParametros);
         break;
-        
     }
-    
   }
 
-  function calculoPorTestadaProporcional($aParametros) {
+  function calculoPorTestadaProporcional($aParametros)
+  {
 
     $this->sErroMsg = "";
     $this->lSqlErro = false;
@@ -274,19 +267,18 @@ class contribuicaoModel {
     $sSqlValVenal .= "                    where j23_anousu = {$aParametros['ano']} ";
     $sSqlValVenal .= "                      and j23_matric = {$aParametros['matric']} ) as j23_vlrter ) as j23_vlrter ";
     $rsValorVenal  = $oContribuicaoDAO->sql_record($sSqlValVenal);
-    
-    if ($this->oContribuicaoDAO->numrows == 0 ) {
-      
-      $this->sErroMsg = "Não Foi possível buscar dados de calculo para matricula : {$aParametros['matric']} para o ano : {$aParametros['ano']}. ";
+
+    if ($this->oContribuicaoDAO->numrows == 0) {
+
+      $this->sErroMsg = "N�o Foi possível buscar dados de calculo para matricula : {$aParametros['matric']} para o ano : {$aParametros['ano']}. ";
       $this->lSqlErro = true;
       return false;
-      
     }
 
-    $objValorVenal = db_utils::fieldsMemory($rsValorVenal,0);
+    $objValorVenal = db_utils::fieldsMemory($rsValorVenal, 0);
 
     $nTotalTestada = $this->getTotalTestada();
-    $nLarguraRua   = ( $objEditalServ->d02_profun * 2 );
+    $nLarguraRua   = ($objEditalServ->d02_profun * 2);
 
     $this->aServicos = $this->getServicos();
 
@@ -298,55 +290,51 @@ class contribuicaoModel {
     $nCustoTotal = 0;
 
     foreach ($this->aServicos as $oServico) {
-      
+
       (float)$nValorVenal    = $objValorVenal->j23_vlrter;
       // Área Real Total
-      (float)$nAreaRealTotal = ( $oServico->d04_quant * $nLarguraRua );
+      (float)$nAreaRealTotal = ($oServico->d04_quant * $nLarguraRua);
       // area total
-      (float)$nAreaTotal     = ( $nTotalTestada *  $oServico->d02_profun );
+      (float)$nAreaTotal     = ($nTotalTestada *  $oServico->d02_profun);
       // valor do m2
-      (float)$nValorM2       = round(( $oServico->d04_vlrobra / $nAreaRealTotal ) ,2);
+      (float)$nValorM2       = round(($oServico->d04_vlrobra / $nAreaRealTotal), 2);
       // valor valorizacao
-      (float)$nValorizacao   = ( $nValorVenal * $oServico->d02_valorizacao / 100 );
+      (float)$nValorizacao   = ($nValorVenal * $oServico->d02_valorizacao / 100);
       // area parcial
-      (float)$nAreaParcial   = ( $objMatriculas->d05_testad * $oServico->d02_profun );
+      (float)$nAreaParcial   = ($objMatriculas->d05_testad * $oServico->d02_profun);
       // area corrigida
-      (float)$nAreaCorrigida = ( $nAreaParcial / $nAreaTotal * $nAreaRealTotal );
+      (float)$nAreaCorrigida = ($nAreaParcial / $nAreaTotal * $nAreaRealTotal);
       // valor venal
-      (float)$nValorFinal    = ( $nValorVenal + $nValorizacao );
+      (float)$nValorFinal    = ($nValorVenal + $nValorizacao);
       // Custo
-      (float)$nCusto         = ( $nAreaCorrigida * $nValorM2 )  * ( $oServico->d01_perc / 100 );
-      
+      (float)$nCusto         = ($nAreaCorrigida * $nValorM2)  * ($oServico->d01_perc / 100);
+
       //
       // Se Custo maior que a valorizacao entao custo fica a valorizacao
       //
-      if ($nCusto > $nValorizacao ) {
-        
-        (float)$nCusto = $nValorizacao;
-        
-      }
-      
-      (float)$nCustoTotal += $nCusto;
+      if ($nCusto > $nValorizacao) {
 
+        (float)$nCusto = $nValorizacao;
+      }
+
+      (float)$nCustoTotal += $nCusto;
     }
 
     return $nCustoTotal;
-
   }
-  
-  function calculoPorValor($aParametros) {
+
+  function calculoPorValor($aParametros)
+  {
 
     $valorizacaoval  = $valorizacao;
-    $custoindividual = round(($valmetro - ($valmetro * $d01_perc / 100)) * $m2,2);
-    
+    $custoindividual = round(($valmetro - ($valmetro * $d01_perc / 100)) * $m2, 2);
   }
-  
-  function calculoPorValorValorizacao($aParametros) {
+
+  function calculoPorValorValorizacao($aParametros)
+  {
 
     $valmetroval     = ($valmetroval - ($valmetroval * $d01_perc / 100));
-    $valorizacaoval  = round(($valmetroval * $m2) + $d07_venal,2);
-    $custoindividual = round(($valmetro - ($valmetro * $d01_perc / 100)) * $m2,2);
-    
+    $valorizacaoval  = round(($valmetroval * $m2) + $d07_venal, 2);
+    $custoindividual = round(($valmetro - ($valmetro * $d01_perc / 100)) * $m2, 2);
   }
-  
 }

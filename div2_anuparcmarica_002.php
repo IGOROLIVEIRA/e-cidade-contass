@@ -35,7 +35,7 @@ require_once("libs/db_sql.php");
 require_once("libs/db_utils.php");
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 if ( !isset($parcel) || $parcel == '' ) {
-  db_redireciona('db_erros.php?fechar=true&db_erro=Parcelamento nÃ£o encontrado!');
+  db_redireciona('db_erros.php?fechar=true&db_erro=Parcelamento não encontrado!');
   exit;
 }
 
@@ -961,4 +961,3 @@ if ( $bErro == false ) {
   echo $sMsgErro;
   db_fim_transacao(true);
 }
-?>

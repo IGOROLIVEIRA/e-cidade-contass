@@ -33,7 +33,8 @@ require_once("model/planilhaRetencao.model.php");
  * @author Renan Melo <renan@dbseller.com.br>
  * @package ISSQN
  */
-class PlanilhaRetencaoWebService extends planilhaRetencao {
+class PlanilhaRetencaoWebService extends planilhaRetencao
+{
 
   /**
    * Tipo de Imposto.
@@ -64,35 +65,37 @@ class PlanilhaRetencaoWebService extends planilhaRetencao {
    * @var integer
    */
   private $iCgmTomador;
-  
+
   /**
    * Ano da competencia
    * @var integer
    */
   private $iAnoCompetencia;
-  
+
   /**
    * Motivo anualacao da planilha
    */
   private $sMotivoAnulacao;
-   
+
   /**
    * Sobrecarregado para não executar validação de parametros.
    */
-  public function __construct( $iCodigoPlanilha = null){
-    
-    if ( !empty($iCodigoPlanilha) ) {
+  public function __construct($iCodigoPlanilha = null)
+  {
+
+    if (!empty($iCodigoPlanilha)) {
       parent::__construct($iCodigoPlanilha);
     }
   }
-  
+
   /**
    * Retornar mes competencia
    *
    * @access public
    * @return integer
    */
-  public function getMesCompetencia() {
+  public function getMesCompetencia()
+  {
     return $this->iMesCompetencia;
   }
 
@@ -100,15 +103,16 @@ class PlanilhaRetencaoWebService extends planilhaRetencao {
    * Persisite os Dados da Nota, e retorna o código gerado.
    * @throws BusinessException
    */
-  public function salvar() {
+  public function salvar()
+  {
 
     try {
-        
+
       //Se houver inscricao nao precisa cgm e verifica o numero do CGM de acordo com o Cpf ou o Cnpj informados
       db_app::import('CgmFactory');
       db_app::import('issqn.Empresa');
 
-      if ( empty($this->iInscricaoTomador) ) {
+      if (empty($this->iInscricaoTomador)) {
 
         if (!empty($this->sCnpj)) {
           $oCGM = CgmFactory::getInstanceByCnpjCpf($this->sCnpj);
@@ -132,59 +136,63 @@ class PlanilhaRetencaoWebService extends planilhaRetencao {
         $iNumCgm = $this->iCgmTomador;
       }
 
-      parent::__construct($this->getCodigoPlanilha(),
-                          $iNumCgm,
-                          $this->iAnoCompetencia,
-                          $this->iMesCompetencia,
-                          $this->iInscricaoTomador);
-
-    } catch ( Exception $eErro ) {
+      parent::__construct(
+        $this->getCodigoPlanilha(),
+        $iNumCgm,
+        $this->iAnoCompetencia,
+        $this->iMesCompetencia,
+        $this->iInscricaoTomador
+      );
+    } catch (Exception $eErro) {
       throw new Exception($eErro->getMessage());
     }
 
     return $this->getCodigoPlanilha();
   }
 
-  public function anularPlanilha() {
-    
+  public function anularPlanilha()
+  {
+
     try {
-    
+
       db_inicio_transacao();
       parent::anularPlanilha($this->getMotivoAnulacao());
-      
+
       db_fim_transacao(false);
-    
-    } catch ( Exception $eErro ) {
-    
+    } catch (Exception $eErro) {
+
       db_fim_transacao(true);
       throw new Exception($eErro->getMessage());
     }
-    
+
     return true;
   }
-  
-  
+
+
   /**
    * Seta o Tipo de Imposto
    * @param string $sTipoImposto
    */
-  public function setTipoImposto($sTipoImposto) {
+  public function setTipoImposto($sTipoImposto)
+  {
     $this->sTipoImposto = $sTipoImposto;
   }
 
   /**
-   * Seta o nÃºmero do cpf
+   * Seta o número do cpf
    * @param string $sCpf
    */
-  public function setCpf($sCpf) {
+  public function setCpf($sCpf)
+  {
     $this->sCpf = $sCpf;
   }
 
   /**
-   * Seta o nÃºmero de Cnpj
+   * Seta o número de Cnpj
    * @param string $sCnpj
    */
-  public function setCnpj($sCnpj) {
+  public function setCnpj($sCnpj)
+  {
     $this->sCnpj = $sCnpj;
   }
 
@@ -192,7 +200,8 @@ class PlanilhaRetencaoWebService extends planilhaRetencao {
    * Seta o numero de inscricao do Tomador
    * @param integer $sInscricaoTomador
    */
-  public function setInscricaoTomador($iInscricaoTomador) {
+  public function setInscricaoTomador($iInscricaoTomador)
+  {
     $this->iInscricaoTomador = $iInscricaoTomador;
   }
 
@@ -200,18 +209,20 @@ class PlanilhaRetencaoWebService extends planilhaRetencao {
    * Seta o número de Cgm do Tomador
    * @param integer $iCgmTomador
    */
-  public function setCgmTomador($iCgmTomador) {
+  public function setCgmTomador($iCgmTomador)
+  {
     $this->iCgmTomador = $iCgmTomador;
   }
-  
+
   /**
    * Define a Compertencia do Imposto Retido
    *
    * @param integer $iMesCompetencia
    * @param integer $iAnoCompetencia
    */
-  public function setCompetencia($iMesCompetencia, $iAnoCompetencia) {
-    
+  public function setCompetencia($iMesCompetencia, $iAnoCompetencia)
+  {
+
     $this->iMesCompetencia = $iMesCompetencia;
     $this->iAnoCompetencia = $iAnoCompetencia;
   }
@@ -221,38 +232,41 @@ class PlanilhaRetencaoWebService extends planilhaRetencao {
    * @param string $sMotivoAnulacao
    * @return void
    */
-  public function setMotivoAnulacao($sMotivoAnulacao) {
-    
+  public function setMotivoAnulacao($sMotivoAnulacao)
+  {
+
     $this->sMotivoAnulacao = $sMotivoAnulacao;
   }
-  
+
   /**
    * retorna o motivo da anulacao
    * @return string
    */
-  public function getMotivoAnulacao () {
+  public function getMotivoAnulacao()
+  {
     return $this->sMotivoAnulacao;
   }
-  
+
   /**
    * define o codigo da planilha
    * @return integer
    */
-  public function setCodigoPlanilha ($iCodigoPlanilha) {
+  public function setCodigoPlanilha($iCodigoPlanilha)
+  {
     $this->iCodigoPlanilha = $iCodigoPlanilha;
   }
-  
-  
-  
+
+
+
   /**
    * Verifica se Cpf, Cnpj ou numero de inscrição estão preenchidos
    * @throws BusinessException
    */
-  public function validaDados() {
-     
-    if( empty($this->sCpf) && empty($this->sCnpj) && empty($this->iInscricaoTomador) ) {
+  public function validaDados()
+  {
+
+    if (empty($this->sCpf) && empty($this->sCnpj) && empty($this->iInscricaoTomador)) {
       throw new BusinessException('Cpf, Cnpj ou numero de inscricao do tomador devem ser preenchidos');
     }
   }
-
 }

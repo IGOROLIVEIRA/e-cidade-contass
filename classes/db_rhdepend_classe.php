@@ -559,7 +559,7 @@ class cl_rhdepend
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "Dependentes nao Encontrado. ExclusÃ£o nÃ£o Efetuada.\\n";
+                $this->erro_sql = "Dependentes nao Encontrado. ExclusÃ£o não Efetuada.\\n";
                 $this->erro_sql .= "Valores : " . $rh31_codigo;
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
