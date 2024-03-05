@@ -6,7 +6,6 @@ require_once("classes/db_lqd102024_classe.php");
 require_once("classes/db_lqd112024_classe.php");
 require_once("classes/db_lqd122024_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarLQD.model.php");
-require_once("model/orcamento/ControleOrcamentario.model.php");
 require_once("model/orcamento/DeParaRecurso.model.php");
 
 /**
@@ -98,6 +97,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
                    e60_numemp,
                    e60_emendaparlamentar,
                    e60_esferaemendaparlamentar,
+                   e60_codco,
                    e60_codemp,
                    e60_emiss,
                    e60_datasentenca,
@@ -243,21 +243,14 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
          */
 
         $oDadosLiquidacaoFonte = new stdClass();
-        $oControleOrcamentario = new ControleOrcamentario();
-        $oDadosLiquidacaoFonte->si119_codfontrecursos = $oDeParaRecurso->getDePara($oLiquidacao->o15_codigo);
-        $oControleOrcamentario->setTipoDespesa($oLiquidacao->e60_tipodespesa);
-        $oControleOrcamentario->setFonte($oDadosLiquidacaoFonte->si119_codfontrecursos);
-        $oControleOrcamentario->setEmendaParlamentar($oLiquidacao->e60_emendaparlamentar);
-        $oControleOrcamentario->setEsferaEmendaParlamentar($oLiquidacao->e60_esferaemendaparlamentar);
-        $oControleOrcamentario->setDeParaFonteCompleta();
-
+       
         $oDadosLiquidacaoFonte->si119_tiporegistro = '11';
         $oDadosLiquidacaoFonte->si119_codreduzido = substr($oLiquidacao->codreduzido, 0, 15);
         $oDadosLiquidacaoFonte->si119_codfontrecursos = $iFonteAlterada != 0 ? $iFonteAlterada : substr($oLiquidacao->o15_codtri, 0, 7);
         if (in_array($oDadosLiquidacaoFonte->si119_codfontrecursos, $this->aFontesEncerradas)) {
             $oDadosLiquidacaoFonte->si119_codfontrecursos = substr($oDadosLiquidacaoFonte->si119_codfontrecursos, 0 , 1).'59';
         }
-        $oDadosLiquidacaoFonte->si119_codco = $oControleOrcamentario->getCodigoParaEmpenho();
+        $oDadosLiquidacaoFonte->si119_codco = $oLiquidacao->e60_codco;
         $oDadosLiquidacaoFonte->si119_valorfonte = $oLiquidacao->e53_valor;
         $oDadosLiquidacaoFonte->si119_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
@@ -299,7 +292,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
 
         $cllqd11->si119_tiporegistro = $oDados11->si119_tiporegistro;
         $cllqd11->si119_codreduzido = $oDados11->si119_codreduzido;
-        $cllqd11->si119_codfontrecursos = $oDeParaRecurso->getDePara($oDados11->si119_codfontrecursos);
+        $cllqd11->si119_codfontrecursos = $oDeParaRecurso->getDePara(strlen($oDados11->si119_codfontrecursos) == 7 ? $oDados11->si119_codfontrecursos."0" : $oDados11->si119_codfontrecursos);
         $cllqd11->si119_codco = $oDados11->si119_codco;
         $cllqd11->si119_valorfonte = $oDados11->si119_valorfonte;
         $cllqd11->si119_mes = $oDados11->si119_mes;

@@ -46,8 +46,8 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $oDadosAPI->informacaoComplementar          = $oDado->informacaocomplementar;
         $oDadosAPI->srp                             = $oDado->srp == 'f' ? 'false' : 'true';
         $oDadosAPI->justificativaPresencial         = utf8_encode($oDado->justificativapresencial);
-        $oDadosAPI->dataAberturaProposta            = $this->formatDate($oDado->dataaberturaproposta);
-        $oDadosAPI->dataEncerramentoProposta        = $this->formatDate($oDado->dataencerramentoproposta);
+        $oDadosAPI->dataAberturaProposta            = $oDado->dataaberturaproposta.'T'.$oDado->horaaberturaproposta.':00';
+        $oDadosAPI->dataEncerramentoProposta        = $oDado->dataencerramentoproposta.'T'.$oDado->horaencerramentoproposta.':00';
         $oDadosAPI->amparoLegalId                   = $oDado->amparolegalid;
         $oDadosAPI->linkSistemaOrigem               = $oDado->linksistemaorigem;
         //ITENS
@@ -66,7 +66,8 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
             $oDadosAPI->itensCompra[$key]->valorUnitarioEstimado       = $item->valorunitarioestimado;
             $oDadosAPI->itensCompra[$key]->valorTotal                  = $vlrtotal;
             //DISPENSA E INEXIGIBILIDADE
-            if($oDado->modalidadeid == "8" || $oDado->modalidadeid == "9"){
+            $iModalidades = array(8,9,12);
+            if(in_array($oDado->modalidadeid,$iModalidades)){
                 $oDadosAPI->itensCompra[$key]->criterioJulgamentoId    = 7;
             }else{
                 $oDadosAPI->itensCompra[$key]->criterioJulgamentoId    = $item->criteriojulgamentoid;
@@ -119,8 +120,8 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         //$oDadosAPI->cnpjOrgaoSubRogado            = $oDado->cnpjOrgaoSubRogado;
         //$oDadosAPI->codigoUnidadeSubRogada        = $oDado->codigoUnidadeSubRogada;
         $oDadosAPI->srp                             = $oDado->srp == 'f' ? 'false' : 'true';
-        $oDadosAPI->dataAberturaProposta            = $this->formatDate($oDado->dataaberturaproposta);
-        $oDadosAPI->dataEncerramentoProposta        = $this->formatDate($oDado->dataencerramentoproposta);
+        $oDadosAPI->dataAberturaProposta            = $oDado->dataaberturaproposta.'T'.$oDado->horaaberturaproposta.':00';
+        $oDadosAPI->dataEncerramentoProposta        = $oDado->dataencerramentoproposta.'T'.$oDado->horaencerramentoproposta.':00';
         $oDadosAPI->amparoLegalId                   = $oDado->amparolegalid;
         $oDadosAPI->linkSistemaOrigem               = $oDado->linksistemaorigem;
         //$oDadosAPI->justificativa                   = $oDado->justificativa;

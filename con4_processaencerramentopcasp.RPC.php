@@ -103,6 +103,26 @@ try {
       $lEncerramentoVariacoesPatrimoniais = in_array(EncerramentoExercicio::ENCERRAR_VARIACOES_PATRIMONIAIS, $aEncerramentos);
       $lEncerramentoImplantacaoSaldos     = in_array(EncerramentoExercicio::ENCERRAR_IMPLANTACAO_SALDOS, $aEncerramentos);
 
+      $clCondataconf = new cl_condataconf ();
+      $iAnoUsu = db_getsession('DB_anousu');
+      $iInstit = db_getsession('DB_instit');
+      $clCondataconf->c99_data     = $iAnoUsu.'-12-30';
+      $clCondataconf->c99_datapat  = $iAnoUsu.'-12-30';
+      $clCondataconf->c99_data_dia = '30';
+      $clCondataconf->c99_data_mes = '12';
+      $clCondataconf->c99_data_ano = $iAnoUsu;
+      $clCondataconf->c99_anousu   = $iAnoUsu;
+      $clCondataconf->c99_instit   = $iInstit;
+      $clCondataconf->c99_usuario  = db_getsession("DB_id_usuario");
+
+      $rsCondataconf = $clCondataconf->sql_record($clCondataconf->sql_query_file($iAnoUsu,$iInstit));
+
+      if ($rsCondataconf == false || $clCondataconf->numrows == 0) {
+        $clCondataconf->incluir($iAnoUsu,$iInstit);
+      }else{
+        $clCondataconf->alterar($iAnoUsu,$iInstit);
+      }
+
       if ($iTipoEncerramento == EncerramentoExercicio::TRANSFERENCIA_CREDITOS_EMPENHADOS_RP) {
 
         /**
@@ -159,7 +179,7 @@ try {
           }
           $oEncerramentoExercicio->encerrar(EncerramentoExercicio::ENCERRAR_IMPLANTACAO_SALDOS);
         }
-
+      }
         /*Encerramento Patrimonial OC 8874*/
         $c99_anousu = db_getsession("DB_anousu");
         $c99_instit = db_getsession("DB_instit");
@@ -183,7 +203,7 @@ try {
           $clcondataconf->alterar($c99_anousu,$c99_instit);
         }
         /*fim OC 8874*/
-      }
+      
 
       break;
 
@@ -207,6 +227,26 @@ try {
       $lEncerramentoRestosPagar           = in_array(EncerramentoExercicio::ENCERRAR_RESTOS_A_PAGAR, $aEncerramentos);
       $lEncerramentoVariacoesPatrimoniais = in_array(EncerramentoExercicio::ENCERRAR_VARIACOES_PATRIMONIAIS, $aEncerramentos);
       $lEncerramentoImplantacaoSaldos     = in_array(EncerramentoExercicio::ENCERRAR_IMPLANTACAO_SALDOS, $aEncerramentos);
+
+      $clCondataconf = new cl_condataconf ();
+      $iAnoUsu = db_getsession('DB_anousu');
+      $iInstit = db_getsession('DB_instit');
+      $clCondataconf->c99_data     = $iAnoUsu.'-12-30';
+      $clCondataconf->c99_datapat  = $iAnoUsu.'-12-30';
+      $clCondataconf->c99_data_dia = '30';
+      $clCondataconf->c99_data_mes = '12';
+      $clCondataconf->c99_data_ano = $iAnoUsu;
+      $clCondataconf->c99_anousu   = $iAnoUsu;
+      $clCondataconf->c99_instit   = $iInstit;
+      $clCondataconf->c99_usuario  = db_getsession("DB_id_usuario");
+
+      $rsCondataconf = $clCondataconf->sql_record($clCondataconf->sql_query_file($iAnoUsu,$iInstit));
+
+      if($rsCondataconf == false || $clCondataconf->numrows == 0) {
+        $clCondataconf->incluir($iAnoUsu,$iInstit);
+      }else{
+        $clCondataconf->alterar($iAnoUsu,$iInstit);
+      }
 
       if ($iTipoEncerramento == EncerramentoExercicio::TRANSFERENCIA_CREDITOS_EMPENHADOS_RP) {
 
@@ -249,6 +289,26 @@ try {
           throw new BusinessException("Implantação de Saldos não processado ou já cancelado para o exercício.");
         }
         $oEncerramentoExercicio->cancelarImplantacaoSaldos();
+      }
+
+      $clCondataconf = new cl_condataconf ();
+      $iAnoUsu = db_getsession('DB_anousu');
+      $iInstit = db_getsession('DB_instit');
+      $clCondataconf->c99_data     = $iAnoUsu.'-12-31';
+      $clCondataconf->c99_datapat  = $iAnoUsu.'-12-31';
+      $clCondataconf->c99_data_dia = '31';
+      $clCondataconf->c99_data_mes = '12';
+      $clCondataconf->c99_data_ano = $iAnoUsu;
+      $clCondataconf->c99_anousu   = $iAnoUsu;
+      $clCondataconf->c99_instit   = $iInstit;
+      $clCondataconf->c99_usuario  = db_getsession("DB_id_usuario");
+
+      $rsCondataconf = $clCondataconf->sql_record($clCondataconf->sql_query_file($iAnoUsu,$iInstit));
+
+      if($rsCondataconf == false || $clCondataconf->numrows == 0) {
+        $clCondataconf->incluir($iAnoUsu,$iInstit);
+      }else{
+        $clCondataconf->alterar($iAnoUsu,$iInstit);
       }
 
       break;
@@ -329,6 +389,102 @@ try {
       $sSqlImportarRegras .= "       AND c117_instit = ". db_getsession("DB_instit") ;
 
       $oDaoRegrasEncerramento->sql_record($sSqlImportarRegras);
+
+      break;
+    case "removerRegrasSelecionadas":
+
+      if (empty($oParam->aCodigoRegra)) {
+        throw new Exception("Nenhuma regra selecionada.");
+      }
+
+      $oDaoRegrasEncerramento = new cl_regraencerramentonaturezaorcamentaria();
+      $aRegras = array();
+      foreach ($oParam->aCodigoRegra as $regra){
+        $aRegras[] = $regra[0];
+      }
+
+      $oDaoRegrasEncerramento->excluir( null,
+      "c117_sequencial in (".implode(',', $aRegras).") "
+      . "and c117_anousu = " . db_getsession("DB_anousu")
+      . " and c117_instit = " . db_getsession("DB_instit") );
+      
+      if ($oDaoRegrasEncerramento->erro_status == 0) {
+        throw new Exception($oDaoRegrasEncerramento->erro_msg);
+      }
+        
+      break;
+    case "alterarRegra":
+      if (empty($oParam->iSequencial)) {
+        throw new Exception("Nenhuma regra selecionada.");
+      }
+      
+      $oDaoRegrasEncerramento = new cl_regraencerramentonaturezaorcamentaria();
+      $oDaoRegrasEncerramento->c117_sequencial = $oParam->iSequencial;
+      $oDaoRegrasEncerramento->c117_contadevedora = $oParam->sCtCredora;
+      $oDaoRegrasEncerramento->c117_contacredora = $oParam->sCtDevedora;
+      $oDaoRegrasEncerramento->c117_contareferencia = $oParam->sCtReferencia;
+      
+      $oDaoRegrasEncerramento->sql_record($oDaoRegrasEncerramento->sql_query($oParam->iSequencial));
+      
+      if ($oDaoRegrasEncerramento->numrows > 0) {
+        $oDaoRegrasEncerramento->alterar($oParam->iSequencial);
+      } else {        
+        throw new Exception("Regra não encontrada.");        
+      }
+
+      if ($oDaoRegrasEncerramento->erro_status == 0) {
+        throw new Exception($oDaoRegrasEncerramento->erro_msg);
+      }
+      break;
+    case "importaRegrasCsv":
+      $oArquivos = db_utils::postMemory($_FILES);
+      if (strtolower(substr($oArquivos->regrasCSV['name'], -4)) != '.csv') {
+        throw new BusinessException("Arquivo importado com formato inválido! Arquivo deve ser do formato CSV.");
+      }
+      
+      if (trim(file_get_contents($oArquivos->regrasCSV['tmp_name'])) == "") {
+        throw new BusinessException("Não é possível importar arquivo vazio.");
+      }
+      
+      $oArquivo = new File($oArquivos->regrasCSV['tmp_name']);
+      $linhas = file($oArquivos->regrasCSV['tmp_name'], FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+      $dadosArray = array_map('str_getcsv', $linhas);
+      $iRegrasSalvas = 0;
+      
+      foreach($dadosArray as $dadosRegra){
+        $regra = explode(';', $dadosRegra[0]);
+        if (count($regra) == 3){
+          $oDaoRegrasEncerramento = new cl_regraencerramentonaturezaorcamentaria();
+          $oDaoRegrasEncerramento->c117_sequencial = null;
+          $oDaoRegrasEncerramento->c117_anousu     = db_getsession("DB_anousu");
+          $oDaoRegrasEncerramento->c117_instit     = db_getsession("DB_instit");
+
+          if ($regra[0] != '' && is_numeric($regra[0])) {
+            $oDaoRegrasEncerramento->c117_contadevedora = $regra[0];
+          } else {
+            continue;
+          }
+          if ($regra[1] != '' && is_numeric($regra[1])) {
+            $oDaoRegrasEncerramento->c117_contacredora = $regra[1];
+          } else {
+            continue;
+          }
+          if ($regra[2] == 'D' || $regra[2] == 'C') {
+            $oDaoRegrasEncerramento->c117_contareferencia = $regra[2];
+          } else {
+            continue;
+          }
+          $oDaoRegrasEncerramento->incluir(null);
+          if ($oDaoRegrasEncerramento->erro_status != 0) {
+            $iRegrasSalvas++;
+          }
+        }
+      }
+      if ($iRegrasSalvas > 0){
+        $oRetorno->sMessage = $iRegrasSalvas." regras foram importadas com sucesso!";
+      } else {
+        $oRetorno->sMessage = "Houve um erro para importar regras.";
+      }      
 
       break;
   }

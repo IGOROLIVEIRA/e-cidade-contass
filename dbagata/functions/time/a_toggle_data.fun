@@ -4,8 +4,8 @@
  * @param $string_column   - é o valor atual da coluna 
  * @param $array_row       - é um vetor contendo a linha atual
  * @param $array_last_row  - é um vetor contendo a linha anterior
- * @param $row_num         - é o número da linha atual 
- * @param $col_num         - é o número da coluna atual
+ * @param $row_num         - é o n�mero da linha atual 
+ * @param $col_num         - é o n�mero da coluna atual
  * @param $alias           - é o alias da coluna
  * @param $format          - formato do relatório (html, pdf, rtf)
  * @param $parameters      - parémetros do relatório

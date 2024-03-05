@@ -4,9 +4,11 @@ class DeParaRecurso
 {
     private $dePara;
     private $deParaAnterior;
+    private $ano;
 
     public function __construct()
     {
+        $this->setAno();
         $this->setDePara();
         $this->setDeParaAnterior();
     }
@@ -24,6 +26,7 @@ class DeParaRecurso
         $de = strlen(ltrim($de,0)) == 3 ? substr(ltrim($de,0),1,2) : substr($de, 1, 7);
         return (array_key_exists($de, $this->deParaAnterior)) ? $iPrimeiroDigito . $this->deParaAnterior[$de] : $iPrimeiroDigito . $de;
     }
+    
 
     public function setDePara()
     {
@@ -62,6 +65,11 @@ class DeParaRecurso
             "45" => "5530000",
             "46" => "5690000",
             "47" => "5500000",
+            "48" => "6000000",
+            "49" => "6000000",
+            "50" => "6000000",
+            "51" => "6000000",
+            "52" => "6000000",
             "53" => "6010000",
             "54" => "6590000",
             "55" => "6210000",
@@ -69,7 +77,7 @@ class DeParaRecurso
             "57" => "7520000",
             "58" => "8990060",
             "59" => "6000000",
-            "60" => "7040000",
+            "60" => ($this->ano > 2023) ? "7210000" : "7040000",
             "61" => "7070000",
             "62" => "7490120",
             "63" => "7130070",
@@ -95,7 +103,7 @@ class DeParaRecurso
             "83" => "7030000",
             "84" => "7090000",
             "85" => "7530000",
-            "86" => "7040000",
+            "86" => ($this->ano > 2023) ? "7200000" :"7040000",
             "87" => "7050000",
             "88" => "5000000",
             "89" => "5000000",
@@ -103,6 +111,7 @@ class DeParaRecurso
             "91" => "7540000",
             "92" => "7550000",
             "93" => "8990000",
+            "7040000" => ($this->ano > 2023) ? "7200000" : "7040000"
         );
     }
 
@@ -143,6 +152,11 @@ class DeParaRecurso
              "5530000" => "45",
              "5690000" => "46",
              "5500000" => "47",
+             "6000000" => "48",
+             "6000000" => "49",
+             "6000000" => "50",
+             "6000000" => "51",
+             "6000000" => "52",
              "6010000" => "53",
              "6590000" => "54",
              "6210000" => "55",
@@ -184,4 +198,9 @@ class DeParaRecurso
              "8990000" => "93",
         );
     }
+    public function setAno()
+    {
+        $this->ano = db_getsession('DB_anousu');
+    }
 }
+

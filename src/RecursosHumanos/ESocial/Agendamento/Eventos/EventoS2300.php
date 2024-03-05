@@ -3,6 +3,7 @@
 namespace ECidade\RecursosHumanos\ESocial\Agendamento\Eventos;
 
 use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
+use stdClass;
 
 /**
  * Classe responsável por montar as informações do evento S2300 Esocial
@@ -86,13 +87,14 @@ class EventoS2300 extends EventoBase
             $oDadosAPI->evtTSVInicio->cargofuncao->cboCargo = empty($oDados->cbocargo) ? null : $oDados->cbocargo;
             $oDadosAPI->evtTSVInicio->cargofuncao->nmFuncao = empty($oDados->nmfuncao) ? null : $oDados->nmfuncao;
             $oDadosAPI->evtTSVInicio->cargofuncao->cboFuncao = empty($oDados->cbofuncao) ? null : $oDados->cbofuncao;
-            
+
             $oDadosAPI->evtTSVInicio->remuneracao->vrSalFx = empty($oDados->vrsalfx) ? null : $oDados->vrsalfx;
             $oDadosAPI->evtTSVInicio->remuneracao->undSalFixo = empty($oDados->undsalfixo) ? null : $oDados->undsalfixo;
             $oDadosAPI->evtTSVInicio->remuneracao->dscSalVar = empty($oDados->dscsalvar) ? null : $oDados->dscsalvar;
 
             $oDadosAPI->evtTSVInicio->infotrabcedido = null;
             if (!empty($oDados->categorig)) {
+                $oDadosAPI->evtTSVInicio->infotrabcedido = new stdClass();
                 $oDadosAPI->evtTSVInicio->infotrabcedido->categorig = empty($oDados->categorig) ? null : "301";
                 $oDadosAPI->evtTSVInicio->infotrabcedido->cnpjcednt = empty($oDados->cnpjcednt) ? null : $oDados->cnpjcednt;
                 $oDadosAPI->evtTSVInicio->infotrabcedido->matricCed = empty($oDados->matricced) ? null : $oDados->matricced;
@@ -103,6 +105,7 @@ class EventoS2300 extends EventoBase
 
             $oDadosAPI->evtTSVInicio->infoMandElet = null;
             if (!empty($oDados->tpregtrabinfomandelet)) {
+                $oDadosAPI->evtTSVInicio->infoMandElet = new stdClass();
                 $oDadosAPI->evtTSVInicio->infoMandElet->indRemunCargo = empty($oDados->indremuncargo) ? null : $oDados->indremuncargo;
                 $oDadosAPI->evtTSVInicio->infoMandElet->tpRegTrab = empty($oDados->tpregtrabinfomandelet) ? null : $oDados->tpregtrabinfomandelet;
                 $oDadosAPI->evtTSVInicio->infoMandElet->tpRegPrev = empty($oDados->tpregprevinfomandelet) ? null : $oDados->tpregprevinfomandelet;
@@ -110,6 +113,7 @@ class EventoS2300 extends EventoBase
 
             $oDadosAPI->evtTSVInicio->infoEstagiario = null;
             if (!empty($oDados->natestagio)) {
+                $oDadosAPI->evtTSVInicio->infoEstagiario = new stdClass();
                 $oDadosAPI->evtTSVInicio->infoEstagiario->natEstagio = empty($oDados->natestagio) ? null : $oDados->natestagio;
                 $oDadosAPI->evtTSVInicio->infoEstagiario->nivEstagio = empty($oDados->nivestagio) ? null : $oDados->nivestagio;
                 $oDadosAPI->evtTSVInicio->infoEstagiario->areaAtuacao = empty($oDados->areaatuacao) ? null : $oDados->areaatuacao;
@@ -122,8 +126,13 @@ class EventoS2300 extends EventoBase
                 $oDadosAPI->evtTSVInicio->infoEstagiario->cpfSupervisor = empty($oDados->cpfsupervisor) ? null : $oDados->cpfsupervisor;
             }
 
+            $oDadosAPI->evtTSVInicio->nfoComplementares->localTrabGeral->tpinsc   = 1;
+            $oDadosAPI->evtTSVInicio->nfoComplementares->localTrabGeral->nrinsc   = $oDados->nrinsc_localtrabgeral;
+            $oDadosAPI->evtTSVInicio->nfoComplementares->localTrabGeral->desccomp = $oDados->desccomp_localtrabgeral;
+
             $oDadosAPI->evtTSVInicio->afastamento = null;
             if (!empty($oDados->dtiniafast)) {
+                $oDadosAPI->evtTSVInicio->afastamento = new stdClass();
                 $oDadosAPI->evtTSVInicio->afastamento->dtIniAfast = empty($oDados->dtiniafast) ? null : $oDados->dtiniafast;
                 $oDadosAPI->evtTSVInicio->afastamento->codMotAfast = empty($oDados->codmotafast) ? null : $oDados->codmotafast;
             }

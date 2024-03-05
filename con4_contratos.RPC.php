@@ -72,6 +72,7 @@ require_once("classes/db_historicomaterial_classe.php");
 require_once("classes/db_pcmater_classe.php");
 require_once("classes/db_matunid_classe.php");
 require_once("classes/db_acordoitem_classe.php");
+require_once("classes/db_historicomaterial_classe.php");
 
 db_app::import("configuracao.DBDepartamento");
 
@@ -726,7 +727,7 @@ switch ($oParam->exec) {
                     $dataFinal = $dataFinal->createFromTimestamp($timestampDatafinal);
                     $oParam->contrato->dtTermino = $dataFinal;
                 }
-                
+
                 $oContrato->setDataPublicacao($oParam->contrato->dtPublicacao);
                 $oContrato->setDataInicial($oParam->contrato->dtInicio);
                 $oContrato->setDataFinal($oParam->contrato->dtTermino);
@@ -981,6 +982,43 @@ switch ($oParam->exec) {
         try {
 
             db_inicio_transacao();
+
+            $oPcmater = new MaterialCompras($oParam->material->iMaterial);
+            $db150_coditem = $oPcmater->getMaterial().$oParam->material->iUnidade;
+
+            $clhistoricomaterial = new cl_historicomaterial();
+            $rsHistoricoMaterial = $clhistoricomaterial->sql_record($clhistoricomaterial->sql_query(null,"*",null,"db150_coditem = $db150_coditem"));
+
+            $clpcmater = new cl_pcmater();
+            if(pg_num_rows($rsHistoricoMaterial) == 0 ){
+                $rsMaterial = $clpcmater->sql_record($clpcmater->sql_query(null,"pc01_descrmater,pc01_complmater",null,"pc01_codmater = {$oPcmater->getMaterial()}"));
+                $oMaterial = db_utils::fieldsmemory($rsMaterial, 0);
+
+                $clmatunid = new cl_matunid();
+                $rsMatunid = $clmatunid->sql_record($clmatunid->sql_query_file($oParam->material->iUnidade));
+                $oMatunid = db_utils::fieldsmemory($rsMatunid, 0);
+                $dataInicioPeriodo = implode('-',array_reverse(explode('/',$oParam->material->aPeriodo[0]->dtDataInicial)));
+
+                //inserir na tabela historico material
+                $clhistoricomaterial->db150_tiporegistro              = 10;
+                $clhistoricomaterial->db150_coditem                   = $db150_coditem;
+                $clhistoricomaterial->db150_pcmater                   = $oPcmater->getMaterial();
+                $clhistoricomaterial->db150_dscitem                   = substr($oMaterial->pc01_descrmater.'-'.$oMaterial->pc01_complmater,0,999);
+                $clhistoricomaterial->db150_unidademedida             = $oMatunid->m61_descr;
+                $clhistoricomaterial->db150_tipocadastro              = 1;
+                $clhistoricomaterial->db150_justificativaalteracao    = '';
+                $clhistoricomaterial->db150_mes                       = explode('/',$oParam->material->aPeriodo[0]->dtDataInicial)[1];
+                $clhistoricomaterial->db150_data                      = $dataInicioPeriodo;
+                $clhistoricomaterial->db150_instit                    = db_getsession('DB_instit');
+                $clhistoricomaterial->incluir(null);
+
+                if ($clhistoricomaterial->erro_status == 0) {
+                    $sqlerro = true;
+                    $msg_alert = $clhistoricomaterial->erro_msg;
+                    throw new Exception("Erro na inclusão na historicomaterial código do material:\n\n{$clhistoricomaterial->erro_msg}");
+                }
+            }
+
             $oItemContrato = new AcordoItem();
             $oContrato     = $_SESSION["oContrato"];
             $oPosicao      = $oContrato->getUltimaPosicao();
@@ -998,9 +1036,6 @@ switch ($oParam->exec) {
             $oItemContrato->setPeriodos($oParam->material->aPeriodo);
             $oItemContrato->setMarca($oParam->material->sMarca);
             $oItemContrato->setPeriodosExecucao($oContrato->getCodigoAcordo(), $oContrato->getPeriodoComercial());
-            //removido pois impedia a inclusao de itens no acordo normal
-            //            $oItemContrato->setILicitacao($oContrato->getLicitacao());
-            //            $oItemContrato->setITipocompratribunal($iTipocompraTribunal);
             $oItemContrato->save();
 
             $oPosicao->adicionarItens($oItemContrato);
@@ -1838,7 +1873,7 @@ switch ($oParam->exec) {
                 $nomearquivo = $oRetorno->nomearquivo;
                 $rsApiPNCP = $clContratoPNCP->enviarArquivoContrato($dadospncp, $sNomeArquivo, $Documentos);
 
-                if ($rsApiPNCP[1] == 201) {
+                if ($rsApiPNCP[1] == "201") {
 
                     $codigocontrato = explode('x-content-type-options', $rsApiPNCP[0]);
                     $codigocontrato = preg_replace('#\s+#', '', $codigocontrato);
@@ -1857,6 +1892,11 @@ switch ($oParam->exec) {
                     $clacoanexopncp->ac214_sequencialpncp = $codigocontrato[9];
                     $clacoanexopncp->ac214_sequencialarquivo = $codigocontrato[11];
                     $clacoanexopncp->incluir();
+
+                    if($clacoanexopncp->erro_status == 0){
+                        $erro = $clacoanexopncp->erro_msg;
+                        $sqlerro = true;
+                    }
 
                     $oRetorno->status  = 1;
                 } else {
@@ -1970,6 +2010,22 @@ switch ($oParam->exec) {
             $oResultLicitacao = $cl_liclicita->sql_record($sQueryLicitacao);
             $oRetorno->leiLicitacao = db_utils::fieldsMemory($oResultLicitacao,0)->l20_leidalicitacao;
         break;
+
+        case 'getItensAditamento':
+            $cl_acordoitem = new cl_acordoitem;
+            $query = $cl_acordoitem->queryGetItensAdimento($oParam->iAcordo);
+            $oResult = $cl_acordoitem->sql_record($query);
+            $aResult = array();
+            if ($cl_acordoitem->numrows > 0) {
+                for ($i = 0; $i < $cl_acordoitem->numrows; $i++) {
+                    $linha = db_utils::fieldsMemory($oResult, $i);
+                    array_push($aResult,$linha);
+                }
+            }
+            $oRetorno->status  = 1;
+            $oRetorno->itens = $aResult;
+        break;
+
 }
 /**
  * Função que verifica se a data de assinatura do acordo é anterior a data de homologação da licitação

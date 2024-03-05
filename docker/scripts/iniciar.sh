@@ -36,7 +36,7 @@ sudo a2ensite ecidade.conf
 #: ${WWW_UID:=33}
 #: ${WWW_GID:=33}
 
-# Mapeia o usuário e grupo do apache caso tenham sido configurados
+# Mapeia o usu�rio e grupo do apache caso tenham sido configurados
 # via variável de ambiente
 #usermod -u $WWW_UID www-data
 #groupmod -g $WWW_GID www-data

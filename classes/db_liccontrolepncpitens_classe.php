@@ -3,7 +3,7 @@
 //CLASSE DA ENTIDADE liccontrolepncpitens
 class cl_liccontrolepncpitens
 {
-    // cria variaveis de erro 
+    // cria variaveis de erro
     public $rotulo     = null;
     public $query_sql  = null;
     public $numrows    = 0;
@@ -16,7 +16,7 @@ class cl_liccontrolepncpitens
     public $erro_msg   = null;
     public $erro_campo = null;
     public $pagina_retorno = null;
-    // cria variaveis do arquivo 
+    // cria variaveis do arquivo
     public $l214_sequencial = 0;
     public $l214_licitacao = 0;
     public $l214_pcproc = 0;
@@ -24,18 +24,24 @@ class cl_liccontrolepncpitens
     public $l214_numerocompra = null;
     public $l214_anousu = null;
     public $l214_ordem = 0;
-    // cria propriedade com as variaveis do arquivo 
+
+    public $l214_fornecedor = null;
+
+    public $l214_sequencialresultado = null;
+    // cria propriedade com as variaveis do arquivo
     public $campos = "
-                 l214_sequencial = int8 = l214_sequencial 
-                 l214_licitacao = int8 = l214_licitacao 
+                 l214_sequencial = int8 = l214_sequencial
+                 l214_licitacao = int8 = l214_licitacao
                  l214_numeroresultado = int8 = situacao da licitacao pncp
                  l214_numerocompra = int8 = numero da compra no pncp
                  l214_anousu = int8 = ano da compra
                  l214_pcproc = int8 = numero do processo de compras
-                 l214_ordem = int8 = l214_ordem 
+                 l214_ordem = int8 = l214_ordem
+                 l214_fornecedor = int8 = fornecedor
+                 l214_sequencialresultado = int8 = sequencial do resultado no pncp
                  ";
 
-    //funcao construtor da classe 
+    //funcao construtor da classe
     function __construct()
     {
         //classes dos rotulos dos campos
@@ -43,7 +49,7 @@ class cl_liccontrolepncpitens
         $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
     }
 
-    //funcao erro 
+    //funcao erro
     function erro($mostra, $retorna)
     {
         if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
@@ -65,6 +71,8 @@ class cl_liccontrolepncpitens
             $this->l214_numerocompra = ($this->l214_numerocompra == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_numerocompra"] : $this->l214_numerocompra);
             $this->l214_anousu = ($this->l214_anousu == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_anousu"] : $this->l214_anousu);
             $this->l214_ordem = ($this->l214_ordem == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_ordem"] : $this->l214_ordem);
+            $this->l214_fornecedor = ($this->l214_fornecedor == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_fornecedor"] : $this->l214_fornecedor);
+            $this->l214_sequencialresultado = ($this->l214_sequencialresultado == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_sequencialresultado"] : $this->l214_sequencialresultado);
         }
     }
 
@@ -79,6 +87,14 @@ class cl_liccontrolepncpitens
 
         if ($this->l214_pcproc == null || $this->l214_pcproc == "") {
             $this->l214_pcproc = "NULL";
+        }
+
+        if ($this->l214_fornecedor == null || $this->l214_fornecedor == "") {
+            $this->l214_fornecedor = "NULL";
+        }
+
+        if ($this->l214_sequencialresultado == null || $this->l214_sequencialresultado == "") {
+            $this->l214_sequencialresultado = "NULL";
         }
 
         if ($this->l214_ordem == null) {
@@ -150,22 +166,26 @@ class cl_liccontrolepncpitens
             return false;
         }
         $sql = "insert into liccontrolepncpitens(
-                                       l214_sequencial 
-                                      ,l214_licitacao 
-                                      ,l214_numeroresultado 
-                                      ,l214_numerocompra 
-                                      ,l214_anousu 
+                                       l214_sequencial
+                                      ,l214_licitacao
+                                      ,l214_numeroresultado
+                                      ,l214_numerocompra
+                                      ,l214_anousu
                                       ,l214_ordem
-                                      ,l214_pcproc 
+                                      ,l214_pcproc
+                                      ,l214_fornecedor
+                                      ,l214_sequencialresultado
                        )
                 values (
-                                $this->l214_sequencial 
-                               ,$this->l214_licitacao 
+                                $this->l214_sequencial
+                               ,$this->l214_licitacao
                                ,$this->l214_numeroresultado
                                ,$this->l214_numerocompra
                                ,$this->l214_anousu
                                ,$this->l214_ordem
-                               ,$this->l214_pcproc 
+                               ,$this->l214_pcproc
+                               ,$this->l214_fornecedor
+                               ,$this->l214_sequencialresultado
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -274,7 +294,7 @@ class cl_liccontrolepncpitens
         }
     }
 
-    // funcao para exclusao 
+    // funcao para exclusao
     function excluir($l214_sequencial = null, $dbwhere = null)
     {
 
@@ -316,7 +336,7 @@ class cl_liccontrolepncpitens
         }
     }
 
-    // funcao do recordset 
+    // funcao do recordset
     function sql_record($sql)
     {
         $result = db_query($sql);
@@ -341,7 +361,7 @@ class cl_liccontrolepncpitens
         return $result;
     }
 
-    // funcao do sql 
+    // funcao do sql
     function sql_query($l214_sequencial = null, $campos = "liccontrolepncpitens.l214_sequencial,*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
@@ -377,7 +397,7 @@ class cl_liccontrolepncpitens
         return $sql;
     }
 
-    // funcao do sql 
+    // funcao do sql
     function sql_query_file($l214_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";

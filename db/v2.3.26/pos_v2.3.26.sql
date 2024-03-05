@@ -1151,7 +1151,7 @@ begin
        and db89_codagencia = new.rh44_agencia
        and db89_digito     = new.rh44_dvagencia;
     --
-    -- Caso n√£o encontre, cria uma nova com os dados informados.
+    -- Caso n„o encontre, cria uma nova com os dados informados.
     --
     if not found then 
       

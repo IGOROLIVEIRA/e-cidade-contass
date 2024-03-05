@@ -4,7 +4,7 @@ use Phinx\Migration\AbstractMigration;
 
 class Oc18547 extends AbstractMigration
 {
-    
+
     public function up()
     {
         $sql = "BEGIN;
@@ -34,7 +34,7 @@ class Oc18547 extends AbstractMigration
 
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_sequencial'	 		,'int8' ,'Sequencial'			,'', 'Sequencial'			 ,11	,false, false, false, 1, 'int8', 'Sequencial');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_licitacao'	 		,'int8' ,'Licitação' ,'', 'Licitação'	 ,11	,false, false, false, 1, 'int8', 'Licitação');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_numata'		,'varchar' ,'Número da Ata'		,'', 'Número da Ata'		 ,16	,false, false, false, 1, 'varchar', 'Número da Ata');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_numata'		,'varchar' ,'N�mero da Ata'		,'', 'N�mero da Ata'		 ,16	,false, false, false, 1, 'varchar', 'N�mero da Ata');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_exercicio'  		,'varchar' ,'Exercício da Ata'				,'', 'Exercício da Ata'				 ,4	,false, false, false, 1, 'varchar', 'Exercício da Ata');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_fornecedor'    		,'int8' ,'Fornecedor'			,'', 'Fornecedor'			 ,11	,false, false, false, 0, 'int8', 'Fornecedor');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_dataini'	,'date' ,'Data Inicio da Ata'		,'', 'Data Inicio da Ata'		 ,16	,false, false, false, 0, 'date', 'Data Inicio da Ata');
@@ -115,6 +115,5 @@ class Oc18547 extends AbstractMigration
         ";
 
         $this->execute($sql);
-
     }
 }
