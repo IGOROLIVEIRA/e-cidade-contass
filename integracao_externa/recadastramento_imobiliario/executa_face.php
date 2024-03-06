@@ -1,5 +1,5 @@
 <?php
-// Declarando variáveis necessárias para que a inclusão das bibliotecas n�o retorne mensagens.
+// Declarando variáveis necessárias para que a inclusão das bibliotecas não retorne mensagens.
 $HTTP_SERVER_VARS['HTTP_HOST']      = '';
 $HTTP_SERVER_VARS['PHP_SELF']       = '';
 $HTTP_SERVER_VARS["HTTP_REFERER"]   = '';
@@ -24,12 +24,15 @@ try {
 
   pg_query(Conexao::getInstancia()->getConexao(), "BEGIN");
   pg_query(Conexao::getInstancia()->getConexao(), "SELECT fc_startsession();");
-
+  
   $oImportacaoFaces = new ImportacaoFaces(PATH_IMPORTACAO . 'arquivos/facedequadra.txt');
   $oImportacaoFaces->carregarArquivo();
   $oImportacaoFaces->processarInformacoes();
   pg_query(Conexao::getInstancia()->getConexao(), "COMMIT");
-} catch (Exception $eErro) {
+  
+} catch( Exception $eErro ) {
 
   pg_query(Conexao::getInstancia()->getConexao(), "ROLLBACK");
+  
 }
+

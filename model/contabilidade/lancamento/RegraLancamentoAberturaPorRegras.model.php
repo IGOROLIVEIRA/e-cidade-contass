@@ -16,7 +16,7 @@ require_once("interfaces/IRegraLancamentoContabil.interface.php");
  *   PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
  *   detalhes.
  *   Você deve ter recebido uma cópia da Licença Pública Geral GNU
- *   junto com este programa; se n�o, escreva para a Free Software
+ *   junto com este programa; se não, escreva para a Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
  *   02111-1307, USA.
  *   Cópia da licença no diretório licenca/licenca_en.txt
@@ -32,11 +32,9 @@ require_once("interfaces/IRegraLancamentoContabil.interface.php");
  * @version $Revision: 1.2 $
  * Class RegraLancamentoEncerramentoRP
  */
-class RegraLancamentoAberturaPorRegras implements IRegraLancamentoContabil
-{
+class RegraLancamentoAberturaPorRegras implements IRegraLancamentoContabil {
 
-  public function getRegraLancamento($iCodigoDocumento, $iCodigoLancamento, ILancamentoAuxiliar $oLancamentoAuxiliar)
-  {
+  public function getRegraLancamento($iCodigoDocumento, $iCodigoLancamento, ILancamentoAuxiliar $oLancamentoAuxiliar) {
 
     $oEventoContabil           = EventoContabilRepository::getEventoContabilByCodigo($iCodigoDocumento, db_getsession("DB_anousu"));
     $oLancamentoEventoContabil = $oEventoContabil->getEventoContabilLancamentoPorCodigo($iCodigoLancamento);
@@ -77,4 +75,5 @@ class RegraLancamentoAberturaPorRegras implements IRegraLancamentoContabil
     EventoContabilLancamentoRepository::removerEventoContabilLancamento($oLancamentoEventoContabil);
     return $oRegraLancamento;
   }
+
 }

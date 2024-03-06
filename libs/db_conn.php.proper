@@ -32,8 +32,8 @@ $DB_EXEC      = "/usr/bin/dbs";
 $DB_NETSTAT   = "netstat";
 
 // Variaveis de Configuracao
-$DB_USUARIO   = "dbportal";  // Usu·rio do PostgreSQL
-$DB_SENHA     = "";          // Senha do usu·rio do PostgreSQL
+$DB_USUARIO   = "dbportal";  // Usu√°rio do PostgreSQL
+$DB_SENHA     = "";          // Senha do usu√°rio do PostgreSQL
 
 $DB_SERVIDOR  = "localhost"; // Ip do servidor para a conex√£o com a base de dados
 $DB_PORTA     = "5432";      // Porta para conexao com o banco de dados (porta do Pool de Conexoes quando utilizado)

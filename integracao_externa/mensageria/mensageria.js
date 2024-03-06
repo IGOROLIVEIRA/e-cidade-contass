@@ -34,7 +34,7 @@
   function buscarLoginSistema() {
 
     /**
-     * Caso pagina n„o tenha carregado scripts/strings.js
+     * Caso pagina n√£o tenha carregado scripts/strings.js
      */
     if (!new String().hasOwnProperty('urlDecode')) {
       String.prototype.urlDecode = function() {

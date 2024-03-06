@@ -5,8 +5,7 @@ namespace ECidade\V3\Datasource;
 use \Exception;
 use \ECidade\V3\Extension\Registry;
 
-class Database
-{
+class Database {
 
   public static $oInstance;
 
@@ -35,7 +34,7 @@ class Database
   private $sPorta = "";
 
   /**
-   * Usu�rio do banco
+   * Usuário do banco
    * @var string
    */
   private $sUsuario  = "";
@@ -46,53 +45,43 @@ class Database
    */
   private $sSenha    = "";
 
-  public function setBase($sBase)
-  {
+  public function setBase($sBase) {
     $this->sBase = $sBase;
   }
 
-  public function setServidor($sServidor)
-  {
+  public function setServidor($sServidor) {
     $this->sServidor = $sServidor;
   }
 
-  public function getServidor()
-  {
+  public function getServidor() {
     return $this->sServidor;
   }
 
-  public function setPorta($sPorta)
-  {
+  public function setPorta($sPorta) {
     $this->sPorta = $sPorta;
   }
 
-  public function getPorta()
-  {
-    return $this->sPorta;
-  }
+    public function getPorta() {
+        return $this->sPorta;
+    }
 
-  public function setUsuario($sUsuario)
-  {
+  public function setUsuario($sUsuario) {
     $this->sUsuario = $sUsuario;
   }
 
-  public function getUsuario()
-  {
-    return $this->sUsuario;
-  }
+    public function getUsuario() {
+        return $this->sUsuario;
+    }
 
-  public function setSenha($sSenha)
-  {
+  public function setSenha($sSenha) {
     $this->sSenha = $sSenha;
   }
 
-  public function getSenha()
-  {
-    return $this->sSenha;
-  }
+    public function getSenha() {
+        return $this->sSenha;
+    }
 
-  public function getBase()
-  {
+  public function getBase() {
     return $this->sBase;
   }
 
@@ -100,8 +89,7 @@ class Database
    * Retorna o resource de conexão com o banco
    * @return resource
    */
-  public function getResource()
-  {
+  public function getResource() {
     return $this->oConnection;
   }
 
@@ -110,12 +98,11 @@ class Database
    * @throws Exception
    * @return resource
    */
-  public function connect()
-  {
+  public function connect() {
     $this->oConnection = pg_connect("host={$this->sServidor} port={$this->sPorta} dbname={$this->sBase} user={$this->sUsuario} password={$this->sSenha}");
 
-    if (!$this->oConnection) {
-      throw new Exception("N�o foi possível conectar na base de dados.");
+    if(!$this->oConnection){
+      throw new Exception("Não foi possível conectar na base de dados.");
     }
 
     $this->setEncoding(Registry::get('app.config')->get('db.client_encoding'));
@@ -127,8 +114,7 @@ class Database
    * Desconecta da base de dados
    * @return boolean
    */
-  public function disconnect()
-  {
+  public function disconnect() {
 
     if ($this->oConnection) {
       return pg_close($this->oConnection);
@@ -139,8 +125,7 @@ class Database
    * @param string $encoding
    * @return bool
    */
-  public function setEncoding($encoding)
-  {
+  public function setEncoding($encoding) {
     return pg_set_client_encoding($this->oConnection, $encoding);
   }
 
@@ -150,13 +135,12 @@ class Database
    * @param  string $sQuery Query a ser executada
    * @return recordset
    */
-  public function execute($sQuery)
-  {
+  public function execute($sQuery) {
 
     $rsResultSet = @pg_query($this->oConnection, $sQuery);
 
     if ($rsResultSet === false) {
-      throw new Exception(pg_last_error($this->oConnection));
+      throw new Exception( pg_last_error($this->oConnection) );
     }
 
     return $rsResultSet;
@@ -167,8 +151,7 @@ class Database
    * @param  recordset $rsRecordset
    * @return array
    */
-  public function getCollectionByRecord($rsRecordset)
-  {
+  public function getCollectionByRecord( $rsRecordset ) {
     return pg_fetch_all($rsRecordset);
   }
 
@@ -178,12 +161,11 @@ class Database
    * @param  integer $index
    * @return stdclass
    */
-  public function fetchRow($resource, $index)
-  {
+  public function fetchRow( $resource, $index ) {
 
     $oObject = pg_fetch_object($resource, $index);
 
-    // Tratamento feito para n�o dar erro nos campos texto vazios que são not null
+    // Tratamento feito para não dar erro nos campos texto vazios que são not null
     foreach ($oObject as $sKey => &$mValue) {
       $mValue = trim($mValue);
     }
@@ -195,8 +177,7 @@ class Database
    * Get Instance
    * @return Database
    */
-  public static function getInstance()
-  {
+  public static function getInstance() {
 
     if (self::$oInstance == null) {
       self::$oInstance = self::build();
@@ -209,13 +190,11 @@ class Database
    * @author Jeferson Belmiro <jeferson.belmiro@dbseller.com.br>
    * @return Database Retorna o getInstance
    */
-  public static function init()
-  {
+  public static function init() {
     return self::getInstance();
   }
 
-  private static function build()
-  {
+  private static function build() {
 
     $session = Registry::get('app.request')->session();
 
@@ -234,41 +213,41 @@ class Database
     return $oDatabase;
   }
 
-  public function begin()
-  {
+  public function begin() {
 
     if (!$this->inTransation()) {
       $this->execute('BEGIN');
     }
+
   }
 
-  public function commit()
-  {
+  public function commit() {
 
     if ($this->inTransation()) {
       $this->execute('COMMIT');
     }
+
   }
 
-  public function rollback()
-  {
+  public function rollback() {
 
     if ($this->inTransation()) {
       $this->execute('ROLLBACK');
     }
+
   }
 
-  public function inTransation()
-  {
+  public function inTransation() {
 
-    switch (pg_transaction_status($this->oConnection)) {
+    switch( pg_transaction_status( $this->oConnection ) ) {
 
       case PGSQL_TRANSACTION_ACTIVE:
       case PGSQL_TRANSACTION_INTRANS:
         return true;
-        break;
+      break;
     }
 
     return false;
   }
+
 }

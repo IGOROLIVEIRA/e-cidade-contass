@@ -5,9 +5,9 @@ use Classes\PostgresMigration;
 class Oc18009FcRecibo extends PostgresMigration
 {
 
-  public function up()
-  {
-    $sql = <<<SQL
+    public function up()
+    {
+        $sql = <<<SQL
 
         BEGIN;
         SELECT fc_startsession();
@@ -195,7 +195,7 @@ BEGIN
      rtp_recibo.rlErro        := true;
 
      if lRaise is true then
-       perform fc_debug('<recibo> Não encontrados registros do numpre na tabela db_reciboweb' , lRaise, false, false);
+       perform fc_debug('<recibo> NÃ£o encontrados registros do numpre na tabela db_reciboweb' , lRaise, false, false);
        perform fc_debug('<recibo> '                                                           , lRaise, false, false);
        perform fc_debug('<recibo> 2 - Fim do processamento - Retorno: '||rtp_recibo.rvMensagem, lRaise, false, false);
        perform fc_debug('<recibo> '                                                           , lRaise, false, true);
@@ -1437,7 +1437,7 @@ BEGIN
       rtp_recibo.rlErro        := true;
 
       if lRaise is true then
-        perform fc_debug('<recibo> Não encontrados registros na tabela arrecad'                , lRaise, false, false);
+        perform fc_debug('<recibo> NÃ£o encontrados registros na tabela arrecad'                , lRaise, false, false);
         perform fc_debug('<recibo> '                                                           , lRaise, false, false);
         perform fc_debug('<recibo> 4 - Fim do processamento - Retorno: '||rtp_recibo.rvMensagem, lRaise, false, false);
         perform fc_debug('<recibo> '                                                           , lRaise, false, true);
@@ -1454,6 +1454,7 @@ END;
         COMMIT;        
 
 SQL;
-    $this->execute($sql);
-  }
+        $this->execute($sql);
+    }
+
 }

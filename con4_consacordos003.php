@@ -183,18 +183,18 @@ db_app::import("configuracao.DBDepartamento");
                                     ?>
                                 </td>
                                 <td width="150">
-                                    <?php
-                                    if ($clAcordo->getVigenciaIndeterminada() == "t") {
-                                        echo ("<b> Vigência Inicial:</b>");
+                                <?php
+                                    if($clAcordo->getVigenciaIndeterminada() == "t"){
+                                        echo("<b> Vigência Inicial:</b>");
                                     } else {
-                                        echo ("<b> Período de Vigência:</b>");
+                                        echo("<b> Período de Vigência:</b>");
                                     }
-                                    ?>
+                                ?>
                                 </td>
                                 <td class="tdBgColor">
 
                                     <?php
-                                    if ($clAcordo->getVigenciaIndeterminada() == "t") {
+                                    if($clAcordo->getVigenciaIndeterminada() == "t"){
                                         $oDataInicial  = $clAcordo->getDataInicialVigenciaOriginal();
                                         echo "{$oDataInicial->getDate(DBDate::DATA_PTBR)}";
                                     } else {
@@ -274,7 +274,7 @@ db_app::import("configuracao.DBDepartamento");
                                 <td class="tdWidth"><b>Critério de Reajuste:</b></td>
                                 <td class="tdBgColor" colspan="3">
                                     <?php
-                                    echo $criterioReajuste = $clAcordo->getReajuste() == "t" ? "Sim" : "Não";
+                                        echo $criterioReajuste = $clAcordo->getReajuste() == "t" ? "Sim" : "Não";
                                     ?>
                                 </td>
                             </tr>
@@ -407,13 +407,12 @@ db_app::import("configuracao.DBDepartamento");
                     "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=licrealizadaoutrosorgaos"
                 );
             }
-
-            if ($clAcordo->getReajuste() == "t") {
+            
+            if($clAcordo->getReajuste() == "t"){
                 $oTabDetalhes->add(
                     "criterioreajuste",
                     "Critério de Reajuste",
-                    "con4_consacordosdetalhescriterioreajuste001.php?ac16_sequencial={$oGet->ac16_sequencial}"
-                );
+                    "con4_consacordosdetalhescriterioreajuste001.php?ac16_sequencial={$oGet->ac16_sequencial}");
             }
 
             $oTabDetalhes->add(
@@ -470,7 +469,7 @@ db_app::import("configuracao.DBDepartamento");
 
             if ($clAcordo->getNaturezaAcordo($oGet->ac16_sequencial) ==  "1" || $clAcordo->getNaturezaAcordo($oGet->ac16_sequencial) ==  "7") {
                 $oDados = $clAcordo->getObraAcordo();
-                if (!empty($oDados)) {
+                if(!empty($oDados)){
                     $oTabDetalhes->add(
                         "Obras",
                         "Obras",
@@ -567,11 +566,11 @@ db_app::import("configuracao.DBDepartamento");
     }
 
     function js_consultaLicitacao(iCodigoLicitacao) {
-        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_infolic', 'lic3_licitacao002.php?l20_codigo=' + iCodigoLicitacao, 'Pesquisa Licitação', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_infolic', 'lic3_licitacao002.php?l20_codigo=' + iCodigoLicitacao, 'Pesquisa Licitaï¿½ï¿½o', true);
     }
 
     function js_consultaLicitacaooutroorgao(iCodigoLicitacao) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_infolic', 'lic3_licitacao002.php?l20_codigo=' + iCodigoLicitacao, 'Pesquisa Licitação', true);
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_infolic', 'lic3_licitacao002.php?l20_codigo=' + iCodigoLicitacao, 'Pesquisa Licitaï¿½ï¿½o', true);
     }
 
     function js_consultaProcessoCompras(iCodigoProcesso) {

@@ -1,5 +1,4 @@
 <?php
-
 namespace ECidade\V3\Extension;
 
 use Exception;
@@ -8,8 +7,7 @@ use Exception;
  * @package Extension
  * @todo user monolog
  */
-class Logger
-{
+class Logger {
 
   const QUIET = 0;
   const INFO = 1;
@@ -55,72 +53,63 @@ class Logger
    *  php://stdout : visivel somente no CLI
    *  php://output : visivel CLI e APACHE
    */
-  public function __construct($path = 'php://stdout', $verbosity = self::QUIET)
-  {
+  public function __construct($path = 'php://stdout', $verbosity = self::QUIET) {
 
     $this->path = $path;
     $this->setFile($path);
     $this->setVerbosity($verbosity);
   }
 
-  public function __destruct()
-  {
+  public function __destruct() {
     fclose($this->file);
   }
 
   /**
    * @param string $message
    */
-  public function write($message)
-  {
+  public function write($message) {
     return fwrite($this->file, $message);
   }
 
   /**
    * @param string $message
    */
-  public function writeln($message)
-  {
+  public function writeln($message) {
     return $this->write($message . PHP_EOL);
   }
 
   /**
    * @param string $message
    */
-  public function info($message)
-  {
+  public function info($message) {
     return $this->verbose($message, static::INFO);
   }
 
   /**
    * @param string $message
    */
-  public function notice($message)
-  {
+  public function notice($message) {
     return $this->verbose($message, static::NOTICE);
   }
 
   /**
    * @param string $message
    */
-  public function warning($message)
-  {
+  public function warning($message) {
     return $this->verbose($message, static::WARNING);
   }
 
   /**
    * @param string $message
    */
-  public function error($message)
-  {
+  public function error($message) {
     return $this->verbose($message, static::ERROR);
   }
 
   /**
    * @param string $message
    */
-  public function debug($message)
-  {
+  public function debug($message) {
     return $this->verbose($message, static::DEBUG);
   }
 
@@ -128,14 +117,13 @@ class Logger
    * @param string message
    * @param integer $verbosity
    */
-  public function verbose($message, $verbosity)
-  {
+  public function verbose($message, $verbosity) {
 
     if ($verbosity > $this->getVerbosity()) {
       return false;
     }
 
-    $output = '[' . date('Y-m-d H:i:s') . '] ' . $this->levels[$verbosity] . ': ' . $message;
+    $output = '['. date('Y-m-d H:i:s') .'] ' . $this->levels[$verbosity] . ': '. $message;
 
     // existe funcao para modificar conteudo do log
     if (isset($this->handlers[$verbosity])) {
@@ -154,8 +142,7 @@ class Logger
   /**
    * @param string $path
    */
-  public function setFile($path)
-  {
+  public function setFile($path) {
 
     if (is_dir($path)) {
       throw new Exception('Caminho do log é um diretório: ' . $path);
@@ -168,23 +155,21 @@ class Logger
     $this->filePath = $path;
 
     if (!is_resource($this->file)) {
-      throw new Exception('N�o foi possível abrir o arquivo para escrita: ' . $path);
+      throw new Exception('Não foi possível abrir o arquivo para escrita: ' . $path);
     }
   }
 
   /**
    * @param integer $verbosity
    */
-  public function setVerbosity($verbosity)
-  {
+  public function setVerbosity($verbosity) {
     $this->verbosity = $verbosity;
   }
 
   /**
    * @return integer
    */
-  public function getVerbosity()
-  {
+  public function getVerbosity() {
     return $this->verbosity;
   }
 
@@ -193,8 +178,7 @@ class Logger
    * @param integer $level
    * @return \ECidade\Extension\Logger
    */
-  public function addHandler($handler, $level = null)
-  {
+  public function addHandler($handler, $level = null) {
 
     if ($level === null) {
       foreach ($this->levels as $level => $name) {
@@ -209,4 +193,5 @@ class Logger
 
     return $this;
   }
+
 }

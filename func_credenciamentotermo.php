@@ -56,7 +56,7 @@ $clcredenciamentotermo = new cl_credenciamentotermo;
                 db_fieldsmemory($result, 0);
                 echo "<script>" . $funcao_js . "('$l212_sequencial',false);</script>";
             } else {
-                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") nï¿½o Encontrado',true);</script>";
             }
         } else {
             echo "<script>" . $funcao_js . "('',false);</script>";

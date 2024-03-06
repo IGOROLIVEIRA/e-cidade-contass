@@ -58,7 +58,7 @@ try {
 if( $clprontuarios->numrows == 0 ){
  echo "<table width='100%'>
         <tr>
-         <td align='center'><font color='#FF0000' face='arial'><b>Verifique se o código $unidade esta cadastrada como unidade.<br><input type='button' value='Fechar' onclick='window.close()'></b></font></td>
+         <td align='center'><font color='#FF0000' face='arial'><b>Verifique se o cï¿½digo $unidade esta cadastrada como unidade.<br><input type='button' value='Fechar' onclick='window.close()'></b></font></td>
         </tr>
        </table>";
  exit;
@@ -291,3 +291,4 @@ for( $intQtd = 1; $intQtd <= $qtd; $intQtd++ ){
 }
 db_fim_transacao();
 $pdf->Output();
+?>

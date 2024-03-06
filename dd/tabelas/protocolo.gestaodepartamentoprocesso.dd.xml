@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes" ?>
 <table codigo='1010241' name='protocolo.gestaodepartamentoprocesso'
-       description="Armazena o usu�rio responsável pela gestão de processos em um departamento e que pode visualizar o relatório de processos vencidos com somente dados do departamento em que é responsável."
+       description="Armazena o usuário responsável pela gestão de processos em um departamento e que pode visualizar o relatório de processos vencidos com somente dados do departamento em que é responsável."
        prefix="p103" label="Gestão de Processos Vencidos no Departamento" type="0">
     <fields>
         <field codigo="1009532"
@@ -47,16 +47,16 @@
                campo_api=''
                name="p103_db_usuarios"
                conteudo="int4"
-               description="Código do usu�rio responsável pelos processos vencidos em um departamento."
+               description="Código do usuário responsável pelos processos vencidos em um departamento."
                inivalue="0"
-               label="Código do Usu�rio"
+               label="Código do Usuário"
                size="10"
                null="f"
                uppercase="f"
                autocompl="f"
                aceitatipo="1"
                tipoobj="text"
-               labelrel="Código do Usu�rio"
+               labelrel="Código do Usuário"
                reference=""
                ispk="f"
                hassequence="t">

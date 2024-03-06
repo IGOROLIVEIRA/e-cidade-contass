@@ -93,7 +93,8 @@ class Validator implements ValidatorInterface
 
       $this->yamlData = Yaml::parse(file_get_contents($this->path));
       $this->structValidation();
-    } catch (ParseException $e) {
+
+    } catch (ParseException $e ) {
 
       $message = $e->getMessage();
 
@@ -101,8 +102,8 @@ class Validator implements ValidatorInterface
 
         $message  = "Arquivo possui erro em sua estrutura. ";
         $message .= "Confira manual de criação e manutenção de arquivos yaml.\n";
-        $message .= "O erro no arquivo esta na linha " . $e->getParsedLine();
-        $message .= " perto de " . $e->getSnippet();
+        $message .= "O erro no arquivo esta na linha ". $e->getParsedLine();
+        $message .= " perto de ". $e->getSnippet();
       }
 
       $this->errors[] = $message;
@@ -126,14 +127,14 @@ class Validator implements ValidatorInterface
       'respostas' => 'Resposta(s)',
     );
 
-    foreach ($this->errors as $key => $fields) {
+    foreach( $this->errors as $key => $fields) {
 
       // Erro no parse do arquivo
-      if (!is_array($fields)) {
+      if ( !is_array($fields) ) {
         return $this->errors;
       }
-      foreach ($fields as $field => $times) {
-        $messages[] = sprintf("N�o foi informado o campo '%s' em %s %s.", $field, count($times), $labels[$key]);
+      foreach($fields as $field => $times) {
+        $messages[] = sprintf("Não foi informado o campo '%s' em %s %s.", $field, count($times), $labels[$key]);
       }
     }
     return $messages;
@@ -148,8 +149,8 @@ class Validator implements ValidatorInterface
    */
   private function structValidationField($key, $yamlFields)
   {
-    foreach ($this->requiredFields[$key] as $field) {
-      if (!isset($yamlFields[$field])) {
+    foreach ($this->requiredFields[$key] as $field ) {
+      if ( !isset($yamlFields[$field]) ) {
         $this->errors[$key][$field][] = true;
       }
     }
@@ -170,7 +171,7 @@ class Validator implements ValidatorInterface
    * @param array $groups
    * @return boolean
    */
-  private function structValidationGroups(array &$groups = null)
+  private function structValidationGroups(Array & $groups = null)
   {
     if (empty($groups)) {
       return false;
@@ -188,13 +189,13 @@ class Validator implements ValidatorInterface
    * @param array $questions
    * @return boolean
    */
-  private function structValidationQuestions(array &$questions = null)
+  private function structValidationQuestions(Array & $questions = null)
   {
     if (empty($questions)) {
       return false;
     }
 
-    foreach ($questions as $question) {
+    foreach($questions as $question) {
 
       $this->structValidationField('perguntas', $question);
       $this->structValidationAnswers($question['respostas']);
@@ -207,9 +208,9 @@ class Validator implements ValidatorInterface
    * @param array $answers
    * @return boolean
    */
-  private function structValidationAnswers(array &$answers = null)
+  private function structValidationAnswers(Array & $answers = null)
   {
-    if (empty($answers)) {
+    if ( empty($answers) ) {
       return false;
     }
 
@@ -219,4 +220,5 @@ class Validator implements ValidatorInterface
 
     return true;
   }
+
 }

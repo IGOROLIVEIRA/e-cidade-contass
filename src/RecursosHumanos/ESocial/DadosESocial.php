@@ -27,7 +27,7 @@ class DadosESocial
     private $responsavelPreenchimento;
 
     /**
-     * Informa o responsï¿½vel pelo preenchimento. Se não indormado, busca de todos
+     * Informa o responsï¿½vel pelo preenchimento. Se nï¿½o indormado, busca de todos
      *
      * @param mixed $responsavel
      */
@@ -78,14 +78,14 @@ class DadosESocial
                 if ($tipo == Tipo::EMPREGADOR) {
                 }
 
-                $this->buscaRespostas($preenchimentos);
-                /**
-                 * @todo Quando for o empregador, temos que buscar os dados da escala do servidor do e-cidade.
-                 *       Não ï¿½ possï¿½vel representar a escala do servidor no formulï¿½rio.
-                 *       Talvez outras informaï¿½ï¿½es de outros cadastros tambï¿½m serï¿½o buscadas do e-cidade
-                 */
-                if ($tipo == Tipo::EMPREGADOR) {
-                }
+        $this->buscaRespostas($preenchimentos);
+        /**
+         * @todo Quando for o empregador, temos que buscar os dados da escala do servidor do e-cidade.
+         *       Não ï¿½ possï¿½vel representar a escala do servidor no formulï¿½rio.
+         *       Talvez outras informaï¿½ï¿½es de outros cadastros tambï¿½m serï¿½o buscadas do e-cidade
+         */
+        if ($tipo == Tipo::EMPREGADOR) {
+        }
 
                 break;
         }
@@ -148,7 +148,7 @@ class DadosESocial
             case Tipo::CD_BENEF_IN:
                 return $preenchimento->buscarPreenchimento($this->tipo, $matricula);
             default:
-                throw new Exception('Tipo não encontrado.');
+                throw new Exception('Tipo nï¿½o encontrado.');
         }
     }
 
@@ -207,7 +207,7 @@ class DadosESocial
             case Tipo::CD_BENEF_IN:
                 return $preenchimento->pk;
             default:
-                throw new Exception('Tipo não encontrado.');
+                throw new Exception('Tipo nï¿½o encontrado.');
         }
     }
 }

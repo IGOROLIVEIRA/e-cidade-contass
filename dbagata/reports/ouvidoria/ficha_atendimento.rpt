@@ -649,7 +649,7 @@
             <details>
                 <detail1>
                     <query> SELECT procdoc.p56_descr as documento,
-		case          			when ouvidoriaatendimentodoc.ov19_entregue = 't' then 'Entregue'           else 'Não Entregue'          end as situacao_documento
+		case          			when ouvidoriaatendimentodoc.ov19_entregue = 't' then 'Entregue'           else 'NÃ£o Entregue'          end as situacao_documento
    FROM ouvidoriaatendimento  inner join 
 		 		ouvidoriaatendimentodoc on ouvidoriaatendimentodoc.ov19_ouvidoriaatendimento = ouvidoriaatendimento.ov01_sequencial  inner join 
 		 		procdoc                 on procdoc.p56_coddoc                                = ouvidoriaatendimentodoc.ov19_procdoc
@@ -660,7 +660,7 @@
                             <alias>documento</alias>
                         </field1>
                         <field2>
-                            <name>case          			when ouvidoriaatendimentodoc.ov19_entregue = 't' then 'Entregue'           else 'Não Entregue'          end as situacao_documento</name>
+                            <name>case          			when ouvidoriaatendimentodoc.ov19_entregue = 't' then 'Entregue'           else 'NÃ£o Entregue'          end as situacao_documento</name>
                             <alias>situacao_documento</alias>
                         </field2>
                     </fields>

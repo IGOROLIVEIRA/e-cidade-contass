@@ -66,143 +66,143 @@ try {
   $oRetorno->iStatus   = 1;
   $oRetorno->sMensagem = '';
 
-  switch ($oParametros->sExec) {
+  switch ( $oParametros->sExec ) {
 
-    case 'salvar':
+  case 'salvar':
 
-      $oTraceLog = TraceLog::getInstance();
+    $oTraceLog = TraceLog::getInstance();
 
 
-      if ($oParametros->lActive) {
-        db_destroysession("TracelogObject");
-      }
+    if ( $oParametros->lActive ) {
+      db_destroysession("TracelogObject");
+    }
 
-      $oTraceLog->setProperty('lActive', $oParametros->lActive);
-      $oTraceLog->setProperty('lShowAccount', $oParametros->lShowAccount);
-      $oTraceLog->setProperty('lShowSourceInfo', $oParametros->lShowSourceInfo);
-      $oTraceLog->setProperty('lShowFunctionName', $oParametros->lShowFunctionName);
-      $oTraceLog->setProperty('lShowTime', $oParametros->lShowTime);
-      $oTraceLog->setProperty('lShowBackTrace', $oParametros->lShowBackTrace);
+    $oTraceLog->setProperty('lActive'          , $oParametros->lActive);
+    $oTraceLog->setProperty('lShowAccount'     , $oParametros->lShowAccount);
+    $oTraceLog->setProperty('lShowSourceInfo'  , $oParametros->lShowSourceInfo);
+    $oTraceLog->setProperty('lShowFunctionName', $oParametros->lShowFunctionName);
+    $oTraceLog->setProperty('lShowTime'        , $oParametros->lShowTime);
+    $oTraceLog->setProperty('lShowBackTrace'   , $oParametros->lShowBackTrace);
+
+    /**
+     * Compatibiliadade com a versão antiga
+     */
+    db_putsession("DB_traceLog",true);
+
+    if ( !$oParametros->lShowAccount ) {
+      db_destroysession("DB_traceLogAcount");
+    }
+
+    if ( !$oParametros->lActive ) {
+
+      db_destroysession("DB_traceLog");
+    //  db_destroysession("DB_traceLogAcount");
+    }
+
+    break;
+
+  case 'testar':
+
+    db_query("select 'Teste 1 de Tracelog';");
+    db_query("select 'Teste 2 de Tracelog';");
+    db_query("select 'Teste 3 de Tracelog';");
+    break;
+
+  case 'retornarStaus':
+
+    $oTraceLog                              = TraceLog::getInstance();
+    $oRetorno->oTracelog                    = new stdClass();
+    $oRetorno->oTracelog->lActive           = $oTraceLog->isActive();
+    $oRetorno->oTracelog->lShowAccount      = $oTraceLog->isDisplayed('Account');
+    $oRetorno->oTracelog->lShowSourceInfo   = $oTraceLog->isDisplayed('SourceInfo');
+    $oRetorno->oTracelog->lShowFunctionName = $oTraceLog->isDisplayed('FunctionName');
+    $oRetorno->oTracelog->lShowTime         = $oTraceLog->isDisplayed('Time');
+    $oRetorno->oTracelog->lShowBackTrace    = $oTraceLog->isDisplayed('BackTrace');
+    $oRetorno->oTracelog->sFilePath         = '';
+    $sArquivo                               = $oTraceLog->getFilePath();
+    if ( file_exists($sArquivo) ) {
+      $oRetorno->oTracelog->sFilePath         = $sArquivo;
+    }
+
+    break;
+
+  case "lerArquivo":
+
+    if ( !isset($_SESSION["DB_ultima_linha_trace_log"]) ) {
+      $_SESSION["DB_ultima_linha_trace_log"] = 0;
+    }
+
+    $hArquivoAberto = fopen($oParametros->sArquivo, "r");
+    $aDadosRetorno  = array();
+
+    /**
+     * Definição das variáveis de controle
+     */
+    $iLinhaAtual    = 0;
+    $lEmTransacao  = false;
+    $lFimTransacao = false;
+
+
+    while ( !feof($hArquivoAberto) ) {
 
       /**
-       * Compatibiliadade com a versão antiga
+       * Pego a string com tamanho de 30000 caracteres.
        */
-      db_putsession("DB_traceLog", true);
-
-      if (!$oParametros->lShowAccount) {
-        db_destroysession("DB_traceLogAcount");
-      }
-
-      if (!$oParametros->lActive) {
-
-        db_destroysession("DB_traceLog");
-        //  db_destroysession("DB_traceLogAcount");
-      }
-
-      break;
-
-    case 'testar':
-
-      db_query("select 'Teste 1 de Tracelog';");
-      db_query("select 'Teste 2 de Tracelog';");
-      db_query("select 'Teste 3 de Tracelog';");
-      break;
-
-    case 'retornarStaus':
-
-      $oTraceLog                              = TraceLog::getInstance();
-      $oRetorno->oTracelog                    = new stdClass();
-      $oRetorno->oTracelog->lActive           = $oTraceLog->isActive();
-      $oRetorno->oTracelog->lShowAccount      = $oTraceLog->isDisplayed('Account');
-      $oRetorno->oTracelog->lShowSourceInfo   = $oTraceLog->isDisplayed('SourceInfo');
-      $oRetorno->oTracelog->lShowFunctionName = $oTraceLog->isDisplayed('FunctionName');
-      $oRetorno->oTracelog->lShowTime         = $oTraceLog->isDisplayed('Time');
-      $oRetorno->oTracelog->lShowBackTrace    = $oTraceLog->isDisplayed('BackTrace');
-      $oRetorno->oTracelog->sFilePath         = '';
-      $sArquivo                               = $oTraceLog->getFilePath();
-      if (file_exists($sArquivo)) {
-        $oRetorno->oTracelog->sFilePath         = $sArquivo;
-      }
-
-      break;
-
-    case "lerArquivo":
-
-      if (!isset($_SESSION["DB_ultima_linha_trace_log"])) {
-        $_SESSION["DB_ultima_linha_trace_log"] = 0;
-      }
-
-      $hArquivoAberto = fopen($oParametros->sArquivo, "r");
-      $aDadosRetorno  = array();
+      $sInstrucaoSQL = fgets($hArquivoAberto, 30000);
 
       /**
-       * Definição das variáveis de controle
+       * Leio somente as linhas que ainda não foram lidas.
        */
-      $iLinhaAtual    = 0;
-      $lEmTransacao  = false;
-      $lFimTransacao = false;
+      if ($_SESSION["DB_ultima_linha_trace_log"] > $iLinhaAtual) {
 
-
-      while (!feof($hArquivoAberto)) {
-
-        /**
-         * Pego a string com tamanho de 30000 caracteres.
-         */
-        $sInstrucaoSQL = fgets($hArquivoAberto, 30000);
-
-        /**
-         * Leio somente as linhas que ainda n�o foram lidas.
-         */
-        if ($_SESSION["DB_ultima_linha_trace_log"] > $iLinhaAtual) {
-
-          $iLinhaAtual++;
-          continue;
-        }
-
-        if (trim($sInstrucaoSQL) == "") {
-          continue;
-        }
-
-        /*
-       * Verificamos se ocorreu erro para executar a query
-       */
-        $lLinhaDeErro = false;
-        if (strpos($sInstrucaoSQL, "ERRO") > 0) {
-          $lLinhaDeErro = true;
-        }
-
-        /*
-       * Verificamos se está sendo iniciando uma transação com o banco de dados
-       */
-        if (strpos(strtolower($sInstrucaoSQL), "begin") > 0) {
-          $lEmTransacao = true;
-        }
-
-        $oStdDado               = new stdClass();
-        $oStdDado->lErro        = $lLinhaDeErro;
-        $oStdDado->sSql         = urlencode($sInstrucaoSQL);
-        $oStdDado->iLinha       = $iLinhaAtual;
-        $oStdDado->lEmTransacao = $lEmTransacao;
-
-        /*
-       * Caso esteja concluido a transação com o banco, é alterado o parãmetro
-       */
-        if (strpos(strtolower($sInstrucaoSQL), "rollback") > 0 || strpos(strtolower($sInstrucaoSQL), "commit") > 0) {
-          $lEmTransacao = false;
-        }
-
-        $aDadosRetorno[] = $oStdDado;
         $iLinhaAtual++;
+        continue;
       }
 
-      fclose($hArquivoAberto);
+      if (trim($sInstrucaoSQL) == "") {
+        continue;
+      }
 
       /*
+       * Verificamos se ocorreu erro para executar a query
+       */
+      $lLinhaDeErro = false;
+      if (strpos($sInstrucaoSQL, "ERRO") > 0) {
+        $lLinhaDeErro = true;
+      }
+
+      /*
+       * Verificamos se está sendo iniciando uma transação com o banco de dados
+       */
+      if (strpos(strtolower($sInstrucaoSQL), "begin") > 0) {
+        $lEmTransacao = true;
+      }
+
+      $oStdDado               = new stdClass();
+      $oStdDado->lErro        = $lLinhaDeErro;
+      $oStdDado->sSql         = urlencode($sInstrucaoSQL);
+      $oStdDado->iLinha       = $iLinhaAtual;
+      $oStdDado->lEmTransacao = $lEmTransacao;
+
+      /*
+       * Caso esteja concluido a transação com o banco, é alterado o parãmetro
+       */
+      if (strpos(strtolower($sInstrucaoSQL), "rollback") > 0 || strpos(strtolower($sInstrucaoSQL), "commit") > 0) {
+        $lEmTransacao = false;
+      }
+
+      $aDadosRetorno[] = $oStdDado;
+      $iLinhaAtual++;
+    }
+
+    fclose($hArquivoAberto);
+
+    /*
      * Guardo a última linha lida pelo programa
      */
-      $_SESSION["DB_ultima_linha_trace_log"] = $iLinhaAtual;
+    $_SESSION["DB_ultima_linha_trace_log"] = $iLinhaAtual;
 
-      $oRetorno->aInstrucoesSQL = $aDadosRetorno;
+    $oRetorno->aInstrucoesSQL = $aDadosRetorno;
 
 
       break;
@@ -211,10 +211,11 @@ try {
       unset($_SESSION["DB_ultima_linha_trace_log"]);
       break;
 
-    default:
-      break;
+  default:
+    break;
   }
-} catch (Exception $eErro) {
+
+} catch ( Exception $eErro ) {
 
   $oRetorno            = new stdClass();
   $oRetorno->iStatus   = 2;

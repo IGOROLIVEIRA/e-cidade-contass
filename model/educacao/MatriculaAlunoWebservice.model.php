@@ -33,8 +33,7 @@ require_once "libs/db_stdlibwebseller.php";
  * @author dbseller
  *
  */
-class MatriculaAlunoWebservice
-{
+class MatriculaAlunoWebservice {
 
   /**
    * Matricula do aluno
@@ -46,8 +45,7 @@ class MatriculaAlunoWebservice
    * Cria uma nova instancia do Servico
    * @param string $iCodigoMatricula
    */
-  public function __construct($iCodigoMatricula = null)
-  {
+  public function __construct($iCodigoMatricula = null) {
     $this->oMatricula = new Matricula($iCodigoMatricula);
   }
 
@@ -55,15 +53,14 @@ class MatriculaAlunoWebservice
    * Retorna os dados da matricula
    * @return stdClass
    */
-  public function getDados()
-  {
+  public function getDados() {
 
     $oDadosMatricula = new stdClass();
     $iCodigoMatricula                    = $this->oMatricula->getCodigo();
     $iCodigoAluno                        = $this->oMatricula->getAluno()->getCodigoAluno();
     $iCodigoTurma                        = $this->oMatricula->getTurma()->getCodigo();
     $iCodigoEnsino                       = $this->oMatricula->getTurma()->getBaseCurricular()->getCurso()
-      ->getEnsino()->getCodigo();
+                                                                        ->getEnsino()->getCodigo();
     $oDadosMatricula->codigo_matricula   = $this->oMatricula->getMatricula();
     $oDadosMatricula->data_matricula     = $this->oMatricula->getDataMatricula()->convertTo(DBDate::DATA_EN);
     $oDadosMatricula->situacao_matricula = utf8_encode($this->oMatricula->getSituacao());
@@ -71,7 +68,7 @@ class MatriculaAlunoWebservice
       $oDadosMatricula->situacao_matricula = utf8_encode("REMATRICULADO");
     }
     if ($this->oMatricula->isConcluida()) {
-      $oDadosMatricula->situacao_matricula .= " (" . utf8_encode("CONCLUÍDA") . ")";
+      $oDadosMatricula->situacao_matricula .= " (".utf8_encode("CONCLUÍDA").")";
     }
     $oDadosMatricula->etapa_matricula    = utf8_encode($this->oMatricula->getEtapaDeOrigem()->getNome());
     $oDadosMatricula->turma_matricula    = utf8_encode($this->oMatricula->getTurma()->getDescricao());
@@ -86,26 +83,24 @@ class MatriculaAlunoWebservice
 
     $oDadosMatricula->periodos_etapa            = $this->getPeridosEtapa();
     $oDadosMatricula->grade_aproveitamento      = $this->getGradeAproveitamento();
-    $oDadosMatricula->resultado_final_etapa     = utf8_encode(ResultadoFinal(
-      $iCodigoMatricula,
-      $iCodigoAluno,
-      $iCodigoTurma,
-      $this->oMatricula->getSituacao(),
-      $this->oMatricula->isConcluida() ? 'S' : 'N',
-      $iCodigoEnsino
-    ));
+    $oDadosMatricula->resultado_final_etapa     = utf8_encode(ResultadoFinal($iCodigoMatricula,
+                                                                 $iCodigoAluno,
+                                                                 $iCodigoTurma,
+                                                                 $this->oMatricula->getSituacao(),
+                                                                 $this->oMatricula->isConcluida()?'S':'N',
+                                                                 $iCodigoEnsino
+                                                                ));
     $oDadosMatricula->atividades_complementares = $this->getAtividadesComplementares();
     return $oDadosMatricula;
   }
 
-  protected function getPeridosEtapa()
-  {
+  protected function getPeridosEtapa() {
 
     $aPeriodos    = array();
     $oEtapaOrigem = $this->oMatricula->getEtapaDeOrigem();
 
     $oProcedimentoAvaliacao = $this->oMatricula->getTurma()->getProcedimentoDeAvaliacaoDaEtapa($oEtapaOrigem);
-    foreach ($oProcedimentoAvaliacao->getElementos() as $oElemento) {
+    foreach ($oProcedimentoAvaliacao->getElementos() as $oElemento){
 
       if ($oElemento->isResultado() && !$oElemento->imprimeNoBoletim()) {
         continue;
@@ -132,8 +127,7 @@ class MatriculaAlunoWebservice
    * Retorna a grade de notas do Aluno
    * @return Ambigous <Ambigous, NULL, stdClass>
    */
-  protected function getGradeAproveitamento()
-  {
+  protected function getGradeAproveitamento() {
 
     $_SESSION["DB_coddepto"] = $this->oMatricula->getTurma()->getEscola()->getCodigo();
     db_inicio_transacao();
@@ -148,8 +142,7 @@ class MatriculaAlunoWebservice
   /**
    * Retorna as Atividades complementares, e atendimento especializado do aluno
    */
-  public function getAtividadesComplementares()
-  {
+  public function getAtividadesComplementares() {
 
     $oDaoMatriculaAc     = new cl_turmaacmatricula();
     $iCodigoAluno        = $this->oMatricula->getAluno()->getCodigoAluno();
@@ -193,8 +186,7 @@ class MatriculaAlunoWebservice
    * @param int $iCodigoTurma código sequencial da turmaac
    * @return array
    */
-  protected function getProfessoresVinculadosTurmaAtividadeComplementar($iCodigoTurma)
-  {
+  protected function getProfessoresVinculadosTurmaAtividadeComplementar($iCodigoTurma) {
 
     $sCampos  = " distinct                        ";
     $sCampos .= " ed20_i_codigo,                  ";
@@ -219,7 +211,7 @@ class MatriculaAlunoWebservice
     if ($rsVinculos && $oDaoTurmaHorarioProfissional->numrows > 0) {
 
       $iLinhasProfissionais = $oDaoTurmaHorarioProfissional->numrows;
-      for ($iProfissional = 0; $iProfissional < $iLinhasProfissionais; $iProfissional++) {
+      for ($iProfissional = 0; $iProfissional < $iLinhasProfissionais; $iProfissional ++ ) {
 
         $oDadosProfissional    = db_utils::fieldsMemory($rsVinculos, $iProfissional);
 
@@ -229,7 +221,7 @@ class MatriculaAlunoWebservice
         $oHorario->sHoraInicio = $oDadosProfissional->ed346_horainicial;
         $oHorario->sHoraFinal  = $oDadosProfissional->ed346_horafinal;
 
-        if (!isset($aProfissionais[$oDadosProfissional->ed20_i_codigo])) {
+        if ( !isset($aProfissionais[$oDadosProfissional->ed20_i_codigo] ) ) {
 
           $oProfissional              = new stdClass();
           $oProfissional->iCodigo     = $oDadosProfissional->ed20_i_codigo;
@@ -240,6 +232,7 @@ class MatriculaAlunoWebservice
 
         $aProfissionais[$oDadosProfissional->ed20_i_codigo]->aHorarios[] = $oHorario;
       }
+
     }
     return $aProfissionais;
   }
@@ -249,18 +242,15 @@ class MatriculaAlunoWebservice
    * retorna quais dias da semana a turma de AC/AEE possui aulas
    * @return array
    */
-  protected function getDiasDaSemana($iCodigoTurma)
-  {
+  protected function getDiasDaSemana($iCodigoTurma) {
 
     $aDiasDeAula      = array();
     $oDaoTurmaHorario = new cl_turmaachorario();
     $sWhereDiasDeAula = "ed270_i_turmaac = {$iCodigoTurma}";
-    $sSqlDiasDeAula   = $oDaoTurmaHorario->sql_query_horario(
-      null,
-      "distinct ed32_i_codigo,ed32_c_descr",
-      "ed32_i_codigo",
-      $sWhereDiasDeAula
-    );
+    $sSqlDiasDeAula   = $oDaoTurmaHorario->sql_query_horario(null,
+                                                            "distinct ed32_i_codigo,ed32_c_descr",
+                                                            "ed32_i_codigo",
+                                                             $sWhereDiasDeAula);
     $rsDiasDeAula     = $oDaoTurmaHorario->sql_record($sSqlDiasDeAula);
     if ($rsDiasDeAula && $oDaoTurmaHorario->numrows > 0) {
       for ($iDia = 0; $iDia < $oDaoTurmaHorario->numrows; $iDia++) {
@@ -277,8 +267,7 @@ class MatriculaAlunoWebservice
    * @param string $sDadosAtendimento dados com os atendimentos Especializados que aturma possui
    * @return Ambigous <multitype:, multitype:string >
    */
-  protected function getAtividades($iTurma, $iTipoTurma, $sDadosAtendimento)
-  {
+  protected function getAtividades($iTurma, $iTipoTurma, $sDadosAtendimento) {
 
     $aListaAtividades = array();
     switch ($iTipoTurma) {
@@ -300,17 +289,15 @@ class MatriculaAlunoWebservice
    * @param unknown $iTurma
    * @return multitype:
    */
-  protected function getAtividadesComplementaresNaTurma($iTurma)
-  {
+  protected function getAtividadesComplementaresNaTurma($iTurma) {
 
     $aAtividades               = array();
     $oDaoAtividadeComplementar = new cl_turmaacativ();
-    $sSqlAtividadeComplementar = $oDaoAtividadeComplementar->sql_query(
-      null,
-      "ed133_c_descr",
-      "ed133_c_descr",
-      "ed267_i_turmaac = {$iTurma}"
-    );
+    $sSqlAtividadeComplementar = $oDaoAtividadeComplementar->sql_query(null,
+                                                                       "ed133_c_descr",
+                                                                       "ed133_c_descr",
+                                                                       "ed267_i_turmaac = {$iTurma}"
+                                                                      );
     $rsAtividadeComplementar   = $oDaoAtividadeComplementar->sql_record($sSqlAtividadeComplementar);
     if ($rsAtividadeComplementar && $oDaoAtividadeComplementar->numrows > 0) {
       for ($i = 0; $i < $oDaoAtividadeComplementar->numrows; $i++) {
@@ -325,24 +312,23 @@ class MatriculaAlunoWebservice
    * @param integer $iTurma
    * @return array
    */
-  protected function getAtendimentosEspeciaisNaTurma($sListaAtividades)
-  {
+  protected function getAtendimentosEspeciaisNaTurma($sListaAtividades) {
 
     $aAtividades      = array();
     $aListaAtividades = array(
-      'Ensino do Sistema Braile',
-      '', //está criando a string com um zero mais....
-      'Ensino do uso de recursos ópticos e n�o ópticos',
-      'Estratégias para o desenvolvimento de processos mentais',
-      'Técnicas de orientação e mobilidade',
-      'Ensino da Língua Brasileira de Sinais – Libras',
-      'Ensino de uso da Comunicação Alternativa e Aumentativa - CAA',
-      'Estratégias para enriquecimento curricular',
-      'Ensino do uso do Soroban',
-      'Ensino da usabilidade e das funcionalidades da informática acessível',
-      'Ensino da Língua Portuguesa na modalidade escrita',
-      'Estratégias para autonomia no ambiente escolar'
-    );
+                              'Ensino do Sistema Braile',
+                              '',//está criando a string com um zero mais....
+                              'Ensino do uso de recursos ópticos e não ópticos',
+                              'Estratégias para o desenvolvimento de processos mentais',
+                              'Técnicas de orientação e mobilidade',
+                              'Ensino da Língua Brasileira de Sinais – Libras',
+                              'Ensino de uso da Comunicação Alternativa e Aumentativa - CAA',
+                              'Estratégias para enriquecimento curricular',
+                              'Ensino do uso do Soroban',
+                              'Ensino da usabilidade e das funcionalidades da informática acessível',
+                              'Ensino da Língua Portuguesa na modalidade escrita',
+                              'Estratégias para autonomia no ambiente escolar'
+                             );
 
     $iTamanho = strlen($sListaAtividades);
     for ($iAtividade = 0; $iAtividade < $iTamanho; $iAtividade++) {

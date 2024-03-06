@@ -45,9 +45,9 @@ $clbaserubricasesocial = new cl_baserubricasesocial;
 $clrhrubricas = new cl_rhrubricas;
 $db_opcao = 1;
 $db_botao = true;
-$anousu = db_anofolha();
-$mesusu = db_mesfolha();
-if (isset($incluir)) {
+  $anousu = db_anofolha();
+  $mesusu = db_mesfolha();
+if(isset($incluir)){
   db_inicio_transacao();
   // db_msgbox($sselecionados);
   $sqlerro = false;
@@ -58,15 +58,15 @@ if (isset($incluir)) {
       $sqlerro=true;
   }*/
 
-  if ($sqlerro == false && trim($sselecionados) != "") {
-    $arr_dados = split(",", $sselecionados);
-    for ($i = 0; $i < sizeof($arr_dados); $i++) {
+    if($sqlerro == false && trim($sselecionados) != ""){
+    $arr_dados = split(",",$sselecionados);
+    for($i=0;$i<sizeof($arr_dados);$i++){
       $base = $arr_dados[$i];
 
-      $clbaserubricasesocial->excluir_novo($r09_rubric, null, db_getsession("DB_instit"));
+      $clbaserubricasesocial->excluir_novo($r09_rubric,null,db_getsession("DB_instit"));
       $erro_msg = $clbaserubricasesocial->erro_msg;
-      if ($clbaserubricasesocial->erro_status == 0) {
-        $sqlerro = true;
+      if($clbaserubricasesocial->erro_status==0){
+          $sqlerro=true;
       }
 
       $clbaserubricasesocial->e991_rubricasesocial = $base;
@@ -74,8 +74,8 @@ if (isset($incluir)) {
       $clbaserubricasesocial->e991_instit =  db_getsession("DB_instit");
       $clbaserubricasesocial->incluir();
       $erro_msg = $clbaserubricasesocial->erro_msg;
-      if ($clbaserubricasesocial->erro_status == 0) {
-        $sqlerro = true;
+      if($clbaserubricasesocial->erro_status==0){
+        $sqlerro=true;
         break;
       }
     }
@@ -84,226 +84,223 @@ if (isset($incluir)) {
   db_fim_transacao($sqlerro);
 }
 ?>
-
 <head>
-  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta http-equiv="Expires" CONTENT="0">
-  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-  <link href="estilos.css" rel="stylesheet" type="text/css">
+<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Expires" CONTENT="0">
+<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="js_trocacordeselect();">
-  <center>
-    <table width="60%" border="0" cellspacing="0" cellpadding="0">
-      <form name="form1" method="post">
-        <?
-        db_input('sselecionados', 20, 0, true, 'hidden', 3);
-        db_input('nselecionados', 20, 0, true, 'hidden', 3);
-        ?>
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="js_trocacordeselect();" >
+<center>
+<table width="60%" border="0" cellspacing="0" cellpadding="0">
+  <form name="form1" method="post">
+  <?
+  db_input('sselecionados',20,0,true,'hidden',3);
+  db_input('nselecionados',20,0,true,'hidden',3);
+  ?>
+  <tr>
+    <td>
+      <table>
         <tr>
           <td>
-            <table>
-              <tr>
-                <td>
-                  <fieldset>
-                    <Legend align="left">
-                      <b>Demais Bases</b>
-                    </Legend>
-                    <?
-                    $result_bases = $clrubricasesocial->sql_record($clrubricasesocial->sql_query_file(null, '*', null));
-                    $numrows_bases = $clrubricasesocial->numrows;
+            <fieldset>
+              <Legend align="left">
+                <b>Demais Bases</b>
+              </Legend>
+<?
+  $result_bases = $clrubricasesocial->sql_record($clrubricasesocial->sql_query_file(null,'*',null));
+  $numrows_bases = $clrubricasesocial->numrows;
 
-                    $result_selecionadas = $clbaserubricasesocial->sql_record($clbaserubricasesocial->sql_query(null, 'distinct e991_rubricasesocial as bsel ,e990_descricao as dsel', null, "e991_rubricas = '$r09_rubric' and  e991_instit = " . db_getsession("DB_instit")));
-                    $numrows_selecionadas = $clbaserubricasesocial->numrows;
+  $result_selecionadas = $clbaserubricasesocial->sql_record($clbaserubricasesocial->sql_query(null,'distinct e991_rubricasesocial as bsel ,e990_descricao as dsel',null,"e991_rubricas = '$r09_rubric' and  e991_instit = ".db_getsession("DB_instit")));
+  $numrows_selecionadas = $clbaserubricasesocial->numrows;
 
-                    if ($numrows_bases > 0) {
+  if($numrows_bases > 0){   
+    
+    echo "    <select name='objeto1' id='objeto1' size='25' style='width:350px' multiple onDblClick='js_incluir_item(this,document.form1.objeto2);'>\n";
 
-                      echo "    <select name='objeto1' id='objeto1' size='25' style='width:350px' multiple onDblClick='js_incluir_item(this,document.form1.objeto2);'>\n";
+    for($i=0;$i<$numrows_bases;$i++){
+      db_fieldsmemory($result_bases,$i);
+      echo $clbaserubricasesocial->sql_query_file(null,'*',null,"e991_rubricasesocial = '$e990_sequencial' and e991_rubricas = '$r09_rubric' and e991_instit = ".db_getsession("DB_instit")).";<br>";
 
-                      for ($i = 0; $i < $numrows_bases; $i++) {
-                        db_fieldsmemory($result_bases, $i);
-                        echo $clbaserubricasesocial->sql_query_file(null, '*', null, "e991_rubricasesocial = '$e990_sequencial' and e991_rubricas = '$r09_rubric' and e991_instit = " . db_getsession("DB_instit")) . ";<br>";
+      $result_menosselecionadas = $clbaserubricasesocial->sql_record($clbaserubricasesocial->sql_query_file($e990_sequencial,'*',null,"e991_rubricasesocial = '$e990_sequencial' and e991_rubricas = '$r09_rubric' and e991_instit = ".db_getsession("DB_instit")));
 
-                        $result_menosselecionadas = $clbaserubricasesocial->sql_record($clbaserubricasesocial->sql_query_file($e990_sequencial, '*', null, "e991_rubricasesocial = '$e990_sequencial' and e991_rubricas = '$r09_rubric' and e991_instit = " . db_getsession("DB_instit")));
-
-                        if ($clbaserubricasesocial->numrows == 0) {
-                          echo "      <option value='$e990_sequencial'>$e990_sequencial - $e990_descricao</option>\n";
-                        }
-                      }
-                      echo "    </select>\n";
-                      echo "  </fieldset>\n";
-                      echo "  </td>\n";
-                      echo "  <td width='10%' align='center'>\n";
-                      echo "    <table>\n";
-                      echo "      <tr>\n";
-                      echo "        <td align='center'><input type='button' name='selecionD' title='Enviar selecionados para direita' value='&nbsp;>&nbsp;' onclick='js_incluir_item(document.form1.objeto1,document.form1.objeto2);'></td>\n";
-                      echo "      </tr>\n";
-                      echo "      <tr>\n";
-                      echo "        <td align='center'><input type='button' name='seltodosD' title='Enviar todos para direita' value='>>' onclick='js_incluir_todos(document.form1.objeto1,document.form1.objeto2);'></td>\n";
-                      echo "      </tr>\n";
-                      echo "      <tr>\n";
-                      echo "        <td align='center'><input type='button' name='seltodosE' title='Enviar selecionados para esquerda' value='&nbsp;<&nbsp;' onclick='js_incluir_item(document.form1.objeto2,document.form1.objeto1);'></td>\n";
-                      echo "      </tr>\n";
-                      echo "      <tr>\n";
-                      echo "        <td align='center'><input type='button' name='selecionE' title='Enviar todos para esquerda' value='<<' onclick='js_incluir_todos(document.form1.objeto2,document.form1.objeto1);'></td>\n";
-                      echo "      </tr>\n";
-                      echo "    </table>\n";
-                      echo "  </td>\n";
-                      echo "  <td>\n";
-                      echo "    <fieldset>\n";
-                      echo "      <Legend align='left'>\n";
-                      echo "        <b>Bases selecionadas</b>\n";
-                      echo "      </Legend>\n";
-                      echo "      <select name='objeto2' id='objeto2' size='25' style='width:350px' multiple onDblClick='js_incluir_item(this,document.form1.objeto1)'>\n";
-                      for ($i = 0; $i < $numrows_selecionadas; $i++) {
-                        db_fieldsmemory($result_selecionadas, $i);
-                        echo "        <option value='$bsel'>$bsel - $dsel</option>\n";
-                      }
-                      echo "      </select>\n";
-                      echo "    </fieldset>\n";
-                    }
-                    ?>
-                </td>
-              </tr>
-              <tr>
-                <td colspan='6' align='center'>
-                  <b>Dois Clicks Movimenta as Bases</b>
-                </td>
-              </tr>
-              <tr>
-                <td colspan='6' align='center'>
-                  <input type="button" name="cadastrar" value="Cadastrar" onclick="js_retornacampos();">
-                </td>
-              </tr>
-            </table>
+      if($clbaserubricasesocial->numrows == 0){
+        echo "      <option value='$e990_sequencial'>$e990_sequencial - $e990_descricao</option>\n";
+      }
+    }
+    echo "    </select>\n";
+    echo "  </fieldset>\n";
+    echo "  </td>\n";
+    echo "  <td width='10%' align='center'>\n";
+    echo "    <table>\n";
+    echo "      <tr>\n";
+    echo "        <td align='center'><input type='button' name='selecionD' title='Enviar selecionados para direita' value='&nbsp;>&nbsp;' onclick='js_incluir_item(document.form1.objeto1,document.form1.objeto2);'></td>\n";
+    echo "      </tr>\n";
+    echo "      <tr>\n";
+    echo "        <td align='center'><input type='button' name='seltodosD' title='Enviar todos para direita' value='>>' onclick='js_incluir_todos(document.form1.objeto1,document.form1.objeto2);'></td>\n";
+    echo "      </tr>\n";
+    echo "      <tr>\n";
+    echo "        <td align='center'><input type='button' name='seltodosE' title='Enviar selecionados para esquerda' value='&nbsp;<&nbsp;' onclick='js_incluir_item(document.form1.objeto2,document.form1.objeto1);'></td>\n";
+    echo "      </tr>\n";
+    echo "      <tr>\n";
+    echo "        <td align='center'><input type='button' name='selecionE' title='Enviar todos para esquerda' value='<<' onclick='js_incluir_todos(document.form1.objeto2,document.form1.objeto1);'></td>\n";
+    echo "      </tr>\n";
+    echo "    </table>\n";
+    echo "  </td>\n";
+    echo "  <td>\n";
+    echo "    <fieldset>\n";
+    echo "      <Legend align='left'>\n";
+    echo "        <b>Bases selecionadas</b>\n";
+    echo "      </Legend>\n";
+    echo "      <select name='objeto2' id='objeto2' size='25' style='width:350px' multiple onDblClick='js_incluir_item(this,document.form1.objeto1)'>\n";
+    for($i=0;$i<$numrows_selecionadas;$i++){
+      db_fieldsmemory($result_selecionadas,$i);
+        echo "        <option value='$bsel'>$bsel - $dsel</option>\n";
+    }
+    echo "      </select>\n";
+    echo "    </fieldset>\n";
+  }
+?>
           </td>
         </tr>
-      </form>
-    </table>
-  </center>
+        <tr>
+          <td colspan='6' align='center'>
+            <b>Dois Clicks Movimenta as Bases</b>
+          </td>
+        </tr>
+        <tr>
+          <td colspan='6' align='center'>
+            <input type="button" name="cadastrar" value="Cadastrar" onclick="js_retornacampos();">
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  </form>
+</table>
+</center>
 </body>
 <script>
-  function js_retornacampos() {
-    obj1 = document.form1.objeto1;
-    obj2 = document.form1.objeto2;
+function js_retornacampos(){
+  obj1 = document.form1.objeto1;
+  obj2 = document.form1.objeto2;
+  
+  txt1 = document.form1.sselecionados;
+  txt2 = document.form1.nselecionados;
+  
+  txt1.value = "";
+  txt2.value = "";
+  
+  txt22 = "";
+  vir22 = "";
+  
+  txt11 = "";
+  vir11 = "";
 
-    txt1 = document.form1.sselecionados;
-    txt2 = document.form1.nselecionados;
+  for(i=0;i<obj1.length;i++){
+    txt22 += vir22+obj1.options[i].value;
+    vir22 = ",";
+  }
 
-    txt1.value = "";
-    txt2.value = "";
+  for(i=0;i<obj2.length;i++){
+    txt11 += vir11+obj2.options[i].value;
+    vir11 = ",";
+  }
+  
+  obj=document.createElement('input');
+  obj.setAttribute('name','incluir');
+  obj.setAttribute('type','hidden');
+  obj.setAttribute('value','incluir');
+  document.form1.appendChild(obj);
+  
+  txt1.value = txt11;
+  txt2.value = txt22;
 
-    txt22 = "";
-    vir22 = "";
-
-    txt11 = "";
-    vir11 = "";
-
-    for (i = 0; i < obj1.length; i++) {
-      txt22 += vir22 + obj1.options[i].value;
-      vir22 = ",";
-    }
-
-    for (i = 0; i < obj2.length; i++) {
-      txt11 += vir11 + obj2.options[i].value;
-      vir11 = ",";
-    }
-
-    obj = document.createElement('input');
-    obj.setAttribute('name', 'incluir');
-    obj.setAttribute('type', 'hidden');
-    obj.setAttribute('value', 'incluir');
-    document.form1.appendChild(obj);
-
-    txt1.value = txt11;
-    txt2.value = txt22;
-
-    if (obj2.length == 1) {
-      document.form1.submit();
-    } else if (obj2.length > 1) {
+  if (obj2.length == 1) {
+    document.form1.submit();
+  }else if(obj2.length > 1){
       alert('Erro:\nSelecione apenas uma base .');
       return false;
-    } else {
-
-      alert('Erro:\nNenhuma base selecionada.');
-      return false;
-
-    }
+  } else {
+  
+    alert('Erro:\nNenhuma base selecionada.');
+    return false;
+    
   }
+}
 
-  // Funï¿½ï¿½o para incluir todos os elementos do SELECT MULTIPLE escolhido no outro 
-  // Esta funï¿½ï¿½o selecionarï¿½ todos os elementos do SELECT e chamarï¿½ a funï¿½ï¿½o js_incluir_item para enviar os itens 
-  // para o SELECT desejado. Quando retornar da funï¿½ï¿½o js_incluir_item, ela limparï¿½ o select remetente  
-  function js_incluir_todos(obj1, obj2) {
-    for (i = 0; i < obj1.length; i++) {
-      obj1.options[i].selected = true;
-    }
-    linhasoption = obj2.length;
-    js_incluir_item(obj1, obj2);
-    obj1.length = 0;
-    if (linhasoption == 0) {
-      for (i = 0; i < obj2.length; i++) {
-        obj2.options[i].selected = false;
-      }
-    }
+// Funï¿½ï¿½o para incluir todos os elementos do SELECT MULTIPLE escolhido no outro 
+// Esta funï¿½ï¿½o selecionarï¿½ todos os elementos do SELECT e chamarï¿½ a funï¿½ï¿½o js_incluir_item para enviar os itens 
+// para o SELECT desejado. Quando retornar da funï¿½ï¿½o js_incluir_item, ela limparï¿½ o select remetente  
+function js_incluir_todos(obj1,obj2){
+  for(i=0;i<obj1.length;i++){    
+    obj1.options[i].selected = true;
   }
-
-  // Esta funï¿½ï¿½o serve para passar os itens de um SELECT para o outro.
-  function js_incluir_item(obj1, obj2) {
-    var erro = 0;
-
-    // Tirar o foco de todos os itens do select RECEPTOR
-    for (i = 0; i < obj2.length; i++) {
+  linhasoption = obj2.length; 
+  js_incluir_item(obj1,obj2);
+  obj1.length = 0;
+  if(linhasoption == 0){
+    for(i=0;i<obj2.length;i++){
       obj2.options[i].selected = false;
     }
-
-    // Verifica a quantidade de itens no SELECT EMISSOR
-    for (i = 0; i < obj1.length; i++) {
-
-      // Testa se o item corrente esta selecionado
-      if (obj1.options[i].selected) {
-
-        // Seta o valor defaul do novo item do SELECT RECEPTOR
-        x = obj2.length;
-
-        // Se a quantidade de itens do SELECT RECEPTOR for maior que zero, testa se encontra algum item que o valor
-        // seja maior que o item corrente do SELECT EMISSOR 
-        if (obj2.length > 0) {
-          for (x = 0; x < obj2.length; x++) {
-            if (obj1.options[i].value < obj2.options[x].value) {
-              break;
-            }
-          }
-
-          // Repete no SELECT RECEPTOR o seu último item
-          obj2.options[obj2.length] = new Option(obj2.options[obj2.length - 1].text, obj2.options[obj2.length - 1].value);
-
-          // Busca todos os itens que o valor ï¿½ menor que o último item e reorganiza os dados dentro do SELECT
-          for (y = obj2.length - 1; x < y; y--) {
-            obj2.options[y] = new Option(obj2.options[y - 1].text, obj2.options[y - 1].value);
-          }
-        }
-
-        // Inclui o item que esta vindo do select EMISSOR
-        obj2.options[x] = new Option(obj1.options[i].text, obj1.options[i].value);
-        obj2.options[x].selected = true;
-        erro++;
-      }
-    }
-    if (erro > 0) {
-      // Tira a seleï¿½ï¿½o dos itens do SELECT EMISSOR
-      for (i = 0; i < obj1.length; i++) {
-        if (obj1.options[i].selected) {
-          obj1.options[i] = null;
-          i = -1;
-        }
-      }
-    } else {
-      alert("Selecione um item");
-    }
-    js_trocacordeselect();
   }
-</script>
+}
 
+// Esta funï¿½ï¿½o serve para passar os itens de um SELECT para o outro.
+function js_incluir_item(obj1,obj2){
+  var erro = 0;
+  
+  // Tirar o foco de todos os itens do select RECEPTOR
+  for(i=0;i<obj2.length;i++){
+    obj2.options[i].selected = false;
+  }
+
+  // Verifica a quantidade de itens no SELECT EMISSOR
+  for(i=0;i<obj1.length;i++){
+  
+    // Testa se o item corrente esta selecionado
+    if(obj1.options[i].selected){
+    
+      // Seta o valor defaul do novo item do SELECT RECEPTOR
+      x = obj2.length;
+
+      // Se a quantidade de itens do SELECT RECEPTOR for maior que zero, testa se encontra algum item que o valor
+      // seja maior que o item corrente do SELECT EMISSOR 
+      if(obj2.length > 0){
+        for(x=0;x<obj2.length;x++){
+          if(obj1.options[i].value < obj2.options[x].value){
+            break;
+          }
+        }
+        
+        // Repete no SELECT RECEPTOR o seu ï¿½ltimo item
+        obj2.options[obj2.length] = new Option(obj2.options[obj2.length-1].text,obj2.options[obj2.length-1].value);
+        
+        // Busca todos os itens que o valor ï¿½ menor que o ï¿½ltimo item e reorganiza os dados dentro do SELECT
+        for(y=obj2.length-1;x<y;y--){
+          obj2.options[y] = new Option(obj2.options[y-1].text,obj2.options[y-1].value);        
+        }
+      }
+      
+      // Inclui o item que esta vindo do select EMISSOR
+      obj2.options[x] = new Option(obj1.options[i].text,obj1.options[i].value);
+      obj2.options[x].selected = true;
+      erro ++;
+    }
+  }
+  if(erro > 0){
+  	// Tira a seleï¿½ï¿½o dos itens do SELECT EMISSOR
+    for(i=0;i<obj1.length;i++){
+      if(obj1.options[i].selected){
+        obj1.options[i] = null;
+        i = -1;
+      }
+    }
+  }else{
+    alert("Selecione um item");
+  }
+  js_trocacordeselect();
+}
+</script>
 </html>

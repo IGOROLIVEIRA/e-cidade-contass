@@ -21,12 +21,12 @@ class cl_efdreinfr4020
     public $efd02_cnpjbeneficiario   = 0;
     public $efd02_identificadorop    = null;
     public $efd02_naturezarendimento = 0;
-    public $efd02_datafg             = 0;
+    public $efd02_datafg             = 0; 
     public $efd02_datafg_dia         = 0;
     public $efd02_datafg_mes         = 0;
     public $efd02_datafg_ano         = 0;
-    public $efd02_dataenvio          = 0;
-    public $efd02_valorbruto         = 0;
+    public $efd02_dataenvio          = 0; 
+    public $efd02_valorbruto         = 0; 
     public $efd02_valorbase          = 0;
     public $efd02_valorirrf          = 0;
     public $efd02_mescompetencia     = 0;
@@ -35,7 +35,7 @@ class cl_efdreinfr4020
     public $efd02_instit             = 0;
     public $efd02_protocolo          = 0;
     public $efd02_numcgm             = 0;
-    public $efd02_status             = 0;
+    public $efd02_status             = 0; 
     public $efd02_descResposta       = 0;
     public $efd02_dscResp            = 0;
 
@@ -96,12 +96,12 @@ class cl_efdreinfr4020
             $this->efd02_valorbruto = ($this->efd02_valorbruto == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd02_valorbruto"] : $this->efd02_valorbruto);
             $this->efd02_valorbase = ($this->efd02_valorbase == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd02_valorbase"] : $this->efd02_valorbase);
             $this->efd02_valorirrf = ($this->efd02_valorirrf == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd02_valorirrf"] : $this->efd02_valorirrf);
-            if ($this->efd02_datafg == "") {
-                $this->efd02_datafg_dia = ($this->efd02_datafg_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd02_datafg_dia"] : $this->efd02_datafg_dia);
-                $this->efd02_datafg_mes = ($this->efd02_datafg_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd02_datafg_mes"] : $this->efd02_datafg_mes);
-                $this->efd02_datafg_ano = ($this->efd02_datafg_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd02_datafg_ano"] : $this->efd02_datafg_ano);
-                if ($this->efd02_datafg_dia != "") {
-                    $this->efd02_datafg = $this->efd02_datafg_ano . "-" . $this->efd02_datafg_mes . "-" . $this->efd02_datafg_dia;
+            if($this->efd02_datafg == ""){
+                $this->efd02_datafg_dia = ($this->efd02_datafg_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["efd02_datafg_dia"]:$this->efd02_datafg_dia);
+                $this->efd02_datafg_mes = ($this->efd02_datafg_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["efd02_datafg_mes"]:$this->efd02_datafg_mes);
+                $this->efd02_datafg_ano = ($this->efd02_datafg_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["efd02_datafg_ano"]:$this->efd02_datafg_ano);
+                if($this->efd02_datafg_dia != ""){
+                   $this->efd02_datafg = $this->efd02_datafg_ano."-".$this->efd02_datafg_mes."-".$this->efd02_datafg_dia;
                 }
             }
             $this->efd02_protocolo = ($this->efd02_protocolo == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd02_protocolo"] : $this->efd02_protocolo);
@@ -110,6 +110,7 @@ class cl_efdreinfr4020
             $this->efd02_status = ($this->efd02_status == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd02_status"] : $this->efd02_status);
             $this->efd02_descResposta = ($this->efd02_descResposta == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd02_descResposta"] : $this->efd02_descResposta);
             $this->efd02_dscResp = ($this->efd02_dscResp == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd02_dscResp"] : $this->efd02_dscResp);
+         
         } else {
         }
     }
@@ -117,7 +118,7 @@ class cl_efdreinfr4020
     // funcao para inclusao
     function incluir()
     {
-
+        
         $this->atualizacampos();
 
         if ($this->efd02_mescompetencia == null) {
@@ -228,7 +229,7 @@ class cl_efdreinfr4020
             $result = db_query("select last_value from efdreinfr4020_efd02_sequencial_seq");
             if (($result != false) && (pg_result($result, 0, 0) < $this->efd02_sequencial)) {
                 $this->erro_sql = " Campo efd02_sequencial maior que ultimo número da sequencia.";
-                $this->erro_banco = "Sequencia menor que este número.";
+                $this->erro_banco = "Sequencia menor que este nï¿½mero.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
@@ -245,7 +246,7 @@ class cl_efdreinfr4020
             $this->erro_status = "0";
             return false;
         }
-
+        
         $sql = "insert into efdreinfr4020(
                                        efd02_sequencial 
                                       ,efd02_mescompetencia
@@ -285,7 +286,7 @@ class cl_efdreinfr4020
                                ,$this->efd02_status
                                ,'$this->efd02_descResposta'
                                ,'$this->efd02_dscResp'
-                      )";
+                      )"; 
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -422,6 +423,7 @@ class cl_efdreinfr4020
             $this->efd02_valorbase = 0;
             $sql  .= $virgula . " efd02_valorbase = $this->efd02_valorbase ";
             $virgula = ",";
+
         }
         if (trim($this->efd02_valorirrf) != "" || isset($GLOBALS["HTTP_POST_VARS"]["efd02_valorirrf"])) {
             $this->efd02_valorirrf = 0;
@@ -466,7 +468,7 @@ class cl_efdreinfr4020
                 $this->erro_status = "0";
                 return false;
             }
-        }
+        } 
         if (trim($this->efd02_numcgm) != "" || isset($GLOBALS["HTTP_POST_VARS"]["efd02_numcgm"])) {
             $sql  .= $virgula . " efd02_numcgm = $this->efd02_numcgm ";
             $virgula = ",";
@@ -566,7 +568,7 @@ class cl_efdreinfr4020
         $result = db_query($sql . $sql2);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "efdreinfr4020 nao Excluído. Exclusão Abortada.\\n";
+            $this->erro_sql   = "efdreinfr4020 nao Excluï¿½do. Exclusï¿½o Abortada.\\n";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -575,7 +577,7 @@ class cl_efdreinfr4020
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "efdreinfr4020 nao Encontrado. Exclusão não Efetuada.\\n";
+                $this->erro_sql = "efdreinfr4020 nao Encontrado. Exclusï¿½o não Efetuada.\\n";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -583,7 +585,7 @@ class cl_efdreinfr4020
                 return true;
             } else {
                 $this->erro_banco = "";
-                $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+                $this->erro_sql = "Exclusï¿½o efetuada com Sucesso\\n";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -689,7 +691,7 @@ class cl_efdreinfr4020
 
         return $sql;
     }
-    function sql_DadosEFDReinf($tipo = null, $sDataInicial, $sDataFinal, $instituicao)
+    function sql_DadosEFDReinf($tipo = null,$sDataInicial,$sDataFinal,$instituicao)
     {
         $sql = "
         SELECT * FROM
@@ -781,7 +783,7 @@ class cl_efdreinfr4020
          AND (e21_retencaotipocalc IN (1, 2) OR o56_elemento LIKE '333903614%' OR e50_retencaoir = 't')    
          AND c69_data BETWEEN  '$sDataInicial' AND '$sDataFinal') AS x
          ORDER BY credor_emp, beneficiario, e60_numemp, 2, 5 , valor_irrf ";
-
-        return $sql;
+       
+        return $sql;  
     }
 }

@@ -11,15 +11,15 @@ class FormatterFactory
     public static function get($tipo)
     {
 
-        $path = ECIDADE_PATH . DS . 'src' . DS . 'RecursosHumanos' . DS . 'ESocial' . DS . 'Integracao' . DS . 'Formatter' . DS . 'Templates';
+        $path = ECIDADE_PATH . DS . 'src' . DS . 'RecursosHumanos' . DS . 'ESocial' . DS . 'Integracao' . DS . 'Formatter'. DS . 'Templates';
 
         $formatter = new Formatter\Formatter();
         /*if ($tipo == Tipo::S1000) {
             $formatter = new Formatter\EmpregadorFormatter();
         }*/
 
-        if (!file_exists($path . DS . "template{$tipo}.php")) {
-            throw new \Exception('Template não encontrado.');
+        if (!file_exists($path. DS . "template{$tipo}.php")) {
+            throw new \Exception('Template nï¿½o encontrado.');
         }
         $formatter->setDePara(require($path . DS . "template{$tipo}.php"));
 

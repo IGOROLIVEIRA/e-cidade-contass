@@ -36,29 +36,27 @@ include("classes/db_termo_classe.php");
 $oGet    = db_utils::postmemory($_GET);
 $cltermo = new cl_termo();
 
-$rsTermo   = $cltermo->sql_record($cltermo->sql_query_file(null, "v07_numpre", null, " v07_parcel = {$oGet->parcelamento}"));
-if ($cltermo->numrows > 0) {
-  $oTermo  = db_utils::fieldsMemory($rsTermo, 0);
+$rsTermo   = $cltermo->sql_record($cltermo->sql_query_file(null,"v07_numpre",null," v07_parcel = {$oGet->parcelamento}"));
+if ($cltermo->numrows > 0 ) {
+  $oTermo  = db_utils::fieldsMemory($rsTermo,0);
 } else {
-  db_msgbox("Parcelamento não encontrado");
-  echo " <script> parent.db_iframe_consultaparc" . $oGet->parcelamento . ".hide(); </script>";
+  db_msgbox("Parcelamento nÃ£o encontrado");
+  echo " <script> parent.db_iframe_consultaparc".$oGet->parcelamento.".hide(); </script>";
   exit;
 }
 
 ?>
 <html>
-
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link href="estilos.css" rel="stylesheet" type="text/css">
-  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="estilos.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 </head>
-
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-  <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
-    <tr>
-      <td align="center" valign="top">
-        <?
+<table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
+  <tr>
+    <td align="center" valign="top">
+    <?
 
         $sqlTermoEnvolvidos  = "   select 'CGM'        as dl_tipo_da_origem, ";
         $sqlTermoEnvolvidos .= "           k00_numcgm  as dl_codigo_da_origem, ";
@@ -85,41 +83,42 @@ if ($cltermo->numrows > 0) {
 
 
         $funcao_js = "js_consultaDetalhes{$oGet->parcelamento}|dl_tipo_da_origem|dl_codigo_da_origem";
-        db_lovrot($sqlTermoEnvolvidos, 50, "()", "", "$funcao_js");
+        db_lovrot($sqlTermoEnvolvidos,50,"()","","$funcao_js");
 
-        ?>
-      </td>
-    </tr>
-  </table>
+      ?>
+     </td>
+   </tr>
+</table>
 </body>
-
 </html>
 <script>
-  function js_consultaDetalhes<?= $oGet->parcelamento ?>(tipoOrigem, codigoOrigem) {
 
-    var arquivo = '';
-    var parametros = '';
-    var nomeIframe = '';
+function js_consultaDetalhes<?=$oGet->parcelamento?>(tipoOrigem,codigoOrigem){
 
-    //alert(tipoOrigem+' -- '+codigoOrigem) ;
+  var arquivo    = '';
+  var parametros = '';
+  var nomeIframe = '';
 
-    if (tipoOrigem == 'CGM') {
-      arquivo = 'prot3_conscgm002.php';
-      parametros = 'numcgm=' + codigoOrigem + '&fechar=db_iframe_consultacgm';
-      nomeIframe = 'db_iframe_consultacgm';
-    } else if (tipoOrigem == 'MATRIC') {
-      arquivo = 'cad3_conscadastro_002.php';
-      parametros = 'cod_matricula=' + codigoOrigem;
-      nomeIframe = 'db_iframe_consultamatricula';
-    } else if (tipoOrigem == 'INSCR') {
-      arquivo = 'iss3_consinscr003.php';
-      parametros = 'numeroDaInscricao=' + codigoOrigem;
-      nomeIframe = 'db_iframe_consultacontrib';
-    }
+  //alert(tipoOrigem+' -- '+codigoOrigem) ;
 
-    if (arquivo != "" && parametros != '') {
-      js_OpenJanelaIframe('CurrentWindow.corpo', nomeIframe, arquivo + '?' + parametros, 'Detalhes da Pesquisa', true);
-    }
-
+  if (tipoOrigem == 'CGM') {
+    arquivo    = 'prot3_conscgm002.php';
+    parametros = 'numcgm='+codigoOrigem+'&fechar=db_iframe_consultacgm';
+    nomeIframe = 'db_iframe_consultacgm';
+  }else if (tipoOrigem == 'MATRIC') {
+    arquivo    = 'cad3_conscadastro_002.php';
+    parametros = 'cod_matricula='+codigoOrigem;
+    nomeIframe = 'db_iframe_consultamatricula';
+  }else if (tipoOrigem == 'INSCR') {
+    arquivo    = 'iss3_consinscr003.php';
+    parametros = 'numeroDaInscricao='+codigoOrigem;
+    nomeIframe = 'db_iframe_consultacontrib';
   }
+
+  if (arquivo != "" && parametros != '') {
+    js_OpenJanelaIframe('CurrentWindow.corpo',nomeIframe,arquivo+'?'+parametros,'Detalhes da Pesquisa',true);
+  }
+
+}
+
 </script>

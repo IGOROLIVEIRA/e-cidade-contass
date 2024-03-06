@@ -63,84 +63,84 @@ $iAnoSessao = db_getsession("DB_anousu");
 </head>
 
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-    <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
-        <tr>
-            <td height="63" align="center" valign="top">
-                <table width="35%" border="0" align="center" cellspacing="0">
-                    <form name="form2" method="post" action="">
-                        <tr>
-                            <td width="4%" align="right" nowrap title="<?= $Tl20_codigo ?>">
-                                <?= $Ll20_codigo ?>
-                            </td>
-                            <td width="96%" align="left" nowrap>
-                                <?php
-                                db_input("l20_codigo", 10, $Il20_codigo, true, "text", 4, "", "chave_l20_codigo");
-                                ?>
-                            </td>
-                        </tr>
+<table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
+    <tr>
+        <td height="63" align="center" valign="top">
+            <table width="35%" border="0" align="center" cellspacing="0">
+                <form name="form2" method="post" action="">
+                    <tr>
+                        <td width="4%" align="right" nowrap title="<?= $Tl20_codigo ?>">
+                            <?= $Ll20_codigo ?>
+                        </td>
+                        <td width="96%" align="left" nowrap>
+                            <?php
+                            db_input("l20_codigo", 10, $Il20_codigo, true, "text", 4, "", "chave_l20_codigo");
+                            ?>
+                        </td>
+                    </tr>
 
-                        <tr>
-                            <td width="4%" align="right" nowrap title="<?= $Tl20_edital ?>">
-                                <?= $Ll20_edital ?>
-                            </td>
-                            <td width="96%" align="left" nowrap>
-                                <?php
-                                db_input("l20_edital", 10, $Il20_edital, true, "text", 4, "", "chave_l20_edital");
-                                ?>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td width="4%" align="right" nowrap title="<?= $Tl20_edital ?>">
+                            <?= $Ll20_edital ?>
+                        </td>
+                        <td width="96%" align="left" nowrap>
+                            <?php
+                            db_input("l20_edital", 10, $Il20_edital, true, "text", 4, "", "chave_l20_edital");
+                            ?>
+                        </td>
+                    </tr>
 
-                        <tr>
-                            <td width="4%" align="right" nowrap title="<?= $Tl20_numero ?>">
-                                <?= $Ll20_numero ?>
-                            </td>
-                            <td width="96%" align="left" nowrap>
-                                <?php
-                                db_input("l20_numero", 10, $Il20_numero, true, "text", 4, "", "chave_l20_numero");
-                                ?>
-                            </td>
-                        </tr>
-                        <tr>
+                    <tr>
+                        <td width="4%" align="right" nowrap title="<?= $Tl20_numero ?>">
+                            <?= $Ll20_numero ?>
+                        </td>
+                        <td width="96%" align="left" nowrap>
+                            <?php
+                            db_input("l20_numero", 10, $Il20_numero, true, "text", 4, "", "chave_l20_numero");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
 
-                        <tr>
-                            <td width="4%" align="right" nowrap title="<?= $Tl03_descr ?>">
-                                <?= $Ll03_descr ?>
-                            </td>
-                            <td width="96%" align="left" nowrap>
-                                <?php
-                                db_input("l03_descr", 60, $Il03_descr, true, "text", 4, "", "chave_l03_descr");
-                                db_input("param", 10, "", false, "hidden", 3);
-                                ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="right">
-                                <b>Ano:</b>
-                            </td>
-                            <td>
-                                <?php
-                                db_input("l20_anousu", 10, "int", true, "text", 1, null, null, null, null, 4);
-                                ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" align="center">
-                                <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-                                <input name="limpar" type="reset" id="limpar" value="Limpar">
-                                <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_liclicita.hide();">
-                            </td>
-                        </tr>
-                    </form>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td align="center" valign="top">
-                <?php
-                $and            = "and ";
-                $dbwhere        = "";
-                $dbwhere_instit = "l20_licsituacao = 10 and l20_instit = " . db_getsession("DB_instit") . "{$sWhereModalidade}";
-                $campos = "
+                    <tr>
+                        <td width="4%" align="right" nowrap title="<?= $Tl03_descr ?>">
+                            <?= $Ll03_descr ?>
+                        </td>
+                        <td width="96%" align="left" nowrap>
+                            <?php
+                            db_input("l03_descr", 60, $Il03_descr, true, "text", 4, "", "chave_l03_descr");
+                            db_input("param", 10, "", false, "hidden", 3);
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            <b>Ano:</b>
+                        </td>
+                        <td>
+                            <?php
+                            db_input("l20_anousu", 10, "int", true, "text", 1, null, null, null, null, 4);
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center">
+                            <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
+                            <input name="limpar" type="reset" id="limpar" value="Limpar">
+                            <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_liclicita.hide();">
+                        </td>
+                    </tr>
+                </form>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" valign="top">
+            <?php
+            $and            = "and ";
+            $dbwhere        = "";
+            $dbwhere_instit = "l20_licsituacao = 10 and l20_instit = " . db_getsession("DB_instit") . "{$sWhereModalidade}";
+            $campos = "
                 DISTINCT liclicita.l20_codigo,
                     liclicita.l20_edital,
                     l20_anousu,
@@ -157,43 +157,43 @@ $iAnoSessao = db_getsession("DB_anousu");
                     liclicita.l20_tipojulg,
                     l08_descr AS dl_Situacao
             ";
-                if (!isset($pesquisa_chave)) {
+            if (!isset($pesquisa_chave)) {
 
-                    if (isset($chave_l20_codigo) && (trim($chave_l20_codigo) != "")) {
-                        $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere  l20_codigo = $chave_l20_codigo and $dbwhere_instit");
-                    } else if (isset($chave_l20_numero) && (trim($chave_l20_numero) != "")) {
-                        $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere l20_numero=$chave_l20_numero  and $dbwhere_instit");
-                    } else if (isset($chave_l03_descr) && (trim($chave_l03_descr) != "")) {
-                        $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere l03_descr like '$chave_l03_descr%'  and $dbwhere_instit");
-                    } else if (isset($chave_l03_codigo) && (trim($chave_l03_codigo) != "")) {
-                        $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere l03_codigo=$chave_l03_codigo  and $dbwhere_instit");
-                    } else if (isset($chave_l20_edital) && (trim($chave_l20_edital) != "")) {
-                        $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere l20_edital=$chave_l20_edital  and $dbwhere_instit");
-                    } else if (isset($l20_anousu) && (trim($l20_anousu) != "")) {
-                        $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere $dbwhere_instit and l20_anousu = {$l20_anousu}");
-                    } else {
-                        $sql = $clliclicita->sql_queryContratos("", $campos, "l20_codigo", "$dbwhere $dbwhere_instit");
-                    }
-
-                    $aRepassa = array();
-                    db_lovrot($sql . ' desc ', 15, "()", "", $funcao_js, null, 'NoMe', $aRepassa, false);
+                if (isset($chave_l20_codigo) && (trim($chave_l20_codigo) != "")) {
+                    $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere  l20_codigo = $chave_l20_codigo and $dbwhere_instit");
+                } else if (isset($chave_l20_numero) && (trim($chave_l20_numero) != "")) {
+                    $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere l20_numero=$chave_l20_numero  and $dbwhere_instit");
+                } else if (isset($chave_l03_descr) && (trim($chave_l03_descr) != "")) {
+                    $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere l03_descr like '$chave_l03_descr%'  and $dbwhere_instit");
+                } else if (isset($chave_l03_codigo) && (trim($chave_l03_codigo) != "")) {
+                    $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere l03_codigo=$chave_l03_codigo  and $dbwhere_instit");
+                } else if (isset($chave_l20_edital) && (trim($chave_l20_edital) != "")) {
+                    $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere l20_edital=$chave_l20_edital  and $dbwhere_instit");
+                } else if (isset($l20_anousu) && (trim($l20_anousu) != "")) {
+                    $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere $dbwhere_instit and l20_anousu = {$l20_anousu}");
                 } else {
-                    $result = $clliclicita->sql_record($clliclicita->sql_queryContratos(null, "*", null, "$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
-                    if ($clliclicita->numrows != 0) {
-                        db_fieldsmemory($result, 0);
-                        if ($tipoproc == "true") {
-                            echo "<script>" . $funcao_js . "('$l20_objeto','$l03_pctipocompratribunal',false);</script>";
-                        } else {
-                            echo "<script>" . $funcao_js . "('$l20_objeto',false);</script>";
-                        }
-                    } else {
-                        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n„o Encontrado',true);</script>";
-                    }
+                    $sql = $clliclicita->sql_queryContratos("", $campos, "l20_codigo", "$dbwhere $dbwhere_instit");
                 }
-                ?>
-            </td>
-        </tr>
-    </table>
+
+                $aRepassa = array();
+                db_lovrot($sql . ' desc ', 15, "()", "", $funcao_js, null, 'NoMe', $aRepassa, false);
+            } else {
+                $result = $clliclicita->sql_record($clliclicita->sql_queryContratos(null, "*", null, "$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
+                if ($clliclicita->numrows != 0) {
+                    db_fieldsmemory($result, 0);
+                    if ($tipoproc == "true") {
+                        echo "<script>" . $funcao_js . "('$l20_objeto','$l03_pctipocompratribunal',false);</script>";
+                    } else {
+                        echo "<script>" . $funcao_js . "('$l20_objeto',false);</script>";
+                    }
+                } else {
+                    echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n√£o Encontrado',true);</script>";
+                }
+            }
+            ?>
+        </td>
+    </tr>
+</table>
 </body>
 
 </html>
@@ -207,9 +207,9 @@ $iAnoSessao = db_getsession("DB_anousu");
 </script>
 <?
 if (!isset($pesquisa_chave)) {
-?>
+    ?>
     <script>
     </script>
-<?php
+    <?php
 }
 ?>

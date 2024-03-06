@@ -21,9 +21,9 @@ class cl_efdreinfr2010
     public $efd05_cnpjprestador      = 0;
     public $efd05_estabelecimento    = null;
     public $efd05_optantecprb        = 0;
-    public $efd05_dataenvio          = 0;
-    public $efd05_valorretidocp      = 0;
-    public $efd05_valorbruto         = 0;
+    public $efd05_dataenvio          = 0; 
+    public $efd05_valorretidocp      = 0; 
+    public $efd05_valorbruto         = 0; 
     public $efd05_valorbase          = 0;
     public $efd05_mescompetencia     = 0;
     public $efd05_anocompetencia     = 0;
@@ -31,7 +31,7 @@ class cl_efdreinfr2010
     public $efd05_instit             = 0;
     public $efd05_protocolo          = 0;
     public $efd05_indprestservico    = 0;
-    public $efd05_status             = 0;
+    public $efd05_status             = 0; 
     public $efd05_descResposta       = 0;
     public $efd05_dscResp            = 0;
 
@@ -82,21 +82,22 @@ class cl_efdreinfr2010
         if ($exclusao == false) {
             $this->efd05_sequencial = ($this->efd05_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_sequencial"] : $this->efd05_sequencial);
             $this->efd05_mescompetencia = ($this->efd05_mescompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd02_licitacao"] : $this->efd05_mescompetencia);
-            $this->efd05_cnpjprestador    = ($this->efd05_cnpjprestador    == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_cnpjprestador   "] : $this->efd05_cnpjprestador);
+            $this->efd05_cnpjprestador    = ($this->efd05_cnpjprestador    == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_cnpjprestador   "] : $this->efd05_cnpjprestador   );
             $this->efd05_estabelecimento = ($this->efd05_estabelecimento == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_estabelecimento"] : $this->efd05_estabelecimento);
             $this->efd05_ambiente = ($this->efd05_ambiente == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_ambiente"] : $this->efd05_ambiente);
             $this->efd05_instit = ($this->efd05_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_instit"] : $this->efd05_instit);
             $this->efd05_anocompetencia = ($this->efd05_anocompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_anocompetencia"] : $this->efd05_anocompetencia);
-            $this->efd05_optantecprb        = ($this->efd05_optantecprb        == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_optantecprb       "] : $this->efd05_optantecprb);
+            $this->efd05_optantecprb        = ($this->efd05_optantecprb        == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_optantecprb       "] : $this->efd05_optantecprb       );
             $this->efd05_valorbruto = ($this->efd05_valorbruto == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_valorbruto"] : $this->efd05_valorbruto);
             $this->efd05_valorbase = ($this->efd05_valorbase == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_valorbase"] : $this->efd05_valorbase);
             $this->efd05_dataenvio = ($this->efd05_dataenvio == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_dataenvio"] : $this->efd05_dataenvio);
             $this->efd05_protocolo = ($this->efd05_protocolo == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_protocolo"] : $this->efd05_protocolo);
-            $this->efd05_valorretidocp = ($this->efd05_valorretidocp == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_valorretidocp"] : $this->efd05_valorretidocp);
-            $this->efd05_indprestservico = ($this->efd05_indprestservico == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_indprestservico"] : $this->efd05_indprestservico);
+            $this->efd05_valorretidocp = ($this->efd05_valorretidocp == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_valorretidocp"] : $this->efd05_valorretidocp);           
+            $this->efd05_indprestservico = ($this->efd05_indprestservico == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_indprestservico"] : $this->efd05_indprestservico);              
             $this->efd05_status = ($this->efd05_status == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_status"] : $this->efd05_status);
             $this->efd05_descResposta = ($this->efd05_descResposta == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_descResposta"] : $this->efd05_descResposta);
             $this->efd05_dscResp = ($this->efd05_dscResp == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd05_dscResp"] : $this->efd05_dscResp);
+         
         } else {
         }
     }
@@ -104,7 +105,7 @@ class cl_efdreinfr2010
     // funcao para inclusao
     function incluir()
     {
-
+        
         $this->atualizacampos();
 
         if ($this->efd05_mescompetencia == null) {
@@ -178,7 +179,7 @@ class cl_efdreinfr2010
         }
         if ($this->efd05_valorretidocp == null) {
             $this->erro_sql = " Campo efd05_valorretidocp informado.";
-            $this->erro_campo = "efd05_valorretidocp";
+            $this->erro_campo = "efd05_valorretidocp";           
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -187,7 +188,7 @@ class cl_efdreinfr2010
         }
         if ($this->efd05_indprestservico == null) {
             $this->erro_sql = " Campo efd05_indprestservico não informado.";
-            $this->erro_campo = "efd05_indprestservico";
+            $this->erro_campo = "efd05_indprestservico";        
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -212,7 +213,7 @@ class cl_efdreinfr2010
             $result = db_query("select last_value from efdreinfr2010_efd05_sequencial_seq");
             if (($result != false) && (pg_result($result, 0, 0) < $this->efd05_sequencial)) {
                 $this->erro_sql = " Campo efd05_sequencial maior que ultimo número da sequencia.";
-                $this->erro_banco = "Sequencia menor que este número.";
+                $this->erro_banco = "Sequencia menor que este nï¿½mero.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
@@ -229,7 +230,7 @@ class cl_efdreinfr2010
             $this->erro_status = "0";
             return false;
         }
-
+        
         $sql = "insert into efdreinfr2010(
                                        efd05_sequencial 
                                       ,efd05_mescompetencia
@@ -267,7 +268,7 @@ class cl_efdreinfr2010
                                ,$this->efd05_status
                                ,'$this->efd05_descResposta'
                                ,'$this->efd05_dscResp'
-                      )";
+                      )"; 
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -343,10 +344,10 @@ class cl_efdreinfr2010
                 return false;
             }
         }
-        if (trim($this->efd05_cnpjprestador) != "" || isset($GLOBALS["HTTP_POST_VARS"]["efd05_cnpjprestador   "])) {
+        if (trim($this->efd05_cnpjprestador   ) != "" || isset($GLOBALS["HTTP_POST_VARS"]["efd05_cnpjprestador   "])) {
             $sql  .= $virgula . " efd05_cnpjprestador    = $this->efd05_cnpjprestador    ";
             $virgula = ",";
-            if (trim($this->efd05_cnpjprestador) == null) {
+            if (trim($this->efd05_cnpjprestador   ) == null) {
                 $this->erro_sql = " Campo efd05_cnpjprestador    não informado.";
                 $this->erro_campo = "efd05_cnpjprestador   ";
                 $this->erro_banco = "";
@@ -382,10 +383,10 @@ class cl_efdreinfr2010
                 return false;
             }
         }
-        if (trim($this->efd05_optantecprb) != "" || isset($GLOBALS["HTTP_POST_VARS"]["efd05_optantecprb       "])) {
+        if (trim($this->efd05_optantecprb       ) != "" || isset($GLOBALS["HTTP_POST_VARS"]["efd05_optantecprb       "])) {
             $sql  .= $virgula . " efd05_optantecprb        = $this->efd05_optantecprb        ";
             $virgula = ",";
-            if (trim($this->efd05_optantecprb) == null) {
+            if (trim($this->efd05_optantecprb       ) == null) {
                 $this->erro_sql = " Campo efd05_optantecprb        não informado.";
                 $this->erro_campo = "efd05_optantecprb       ";
                 $this->erro_banco = "";
@@ -404,6 +405,7 @@ class cl_efdreinfr2010
             $this->efd05_valorbase = 0;
             $sql  .= $virgula . " efd05_valorbase = $this->efd05_valorbase ";
             $virgula = ",";
+
         }
         if (trim($this->efd05_dataenvio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["efd05_dataenvio"])) {
             $sql  .= $virgula . " efd05_dataenvio = $this->efd05_dataenvio ";
@@ -443,9 +445,9 @@ class cl_efdreinfr2010
                 $this->erro_status = "0";
                 return false;
             }
-        }
-        if (trim($this->efd05_indprestservico) != "" || isset($GLOBALS["HTTP_POST_VARS"]["efd05_indprestservico"])) {
-            $sql  .= $virgula . " efd05_indprestservico = $this->efd05_indprestservico ";
+        } 
+        if (trim($this->efd05_indprestservico) != "" || isset($GLOBALS["HTTP_POST_VARS"]["efd05_indprestservico"])) { 
+            $sql  .= $virgula . " efd05_indprestservico = $this->efd05_indprestservico ";       
             $virgula = ",";
             if (trim($this->efd05_indprestservico) == null) {
                 $this->erro_sql = " Campo efd05_indprestservico não informado.";
@@ -483,7 +485,7 @@ class cl_efdreinfr2010
                 return false;
             }
         }
-
+         
         $sql .= " where ";
         $sql .= "efd05_sequencial = '$efd05_sequencial'";
         $result = db_query($sql);
@@ -531,7 +533,7 @@ class cl_efdreinfr2010
         $result = db_query($sql . $sql2);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "efdreinfr2010 nao Excluído. Exclusão Abortada.\\n";
+            $this->erro_sql   = "efdreinfr2010 nao Excluï¿½do. Exclusï¿½o Abortada.\\n";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -540,7 +542,7 @@ class cl_efdreinfr2010
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "efdreinfr2010 nao Encontrado. Exclusão não Efetuada.\\n";
+                $this->erro_sql = "efdreinfr2010 nao Encontrado. Exclusï¿½o não Efetuada.\\n";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -548,7 +550,7 @@ class cl_efdreinfr2010
                 return true;
             } else {
                 $this->erro_banco = "";
-                $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+                $this->erro_sql = "Exclusï¿½o efetuada com Sucesso\\n";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -616,7 +618,7 @@ class cl_efdreinfr2010
                 $virgula = ",";
             }
         }
-
+       
         return $sql;
     }
 
@@ -657,4 +659,5 @@ class cl_efdreinfr2010
 
         return $sql;
     }
+    
 }

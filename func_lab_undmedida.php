@@ -38,101 +38,98 @@ $cllab_undmedida->rotulo->label("la13_i_codigo");
 $cllab_undmedida->rotulo->label("la13_c_descr");
 ?>
 <html>
-
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link href="estilos.css" rel="stylesheet" type="text/css">
-  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="estilos.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 </head>
-
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-  <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
-    <tr>
-      <td height="63" align="center" valign="top">
+<table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
+  <tr> 
+    <td height="63" align="center" valign="top">
         <table width="35%" border="0" align="center" cellspacing="0">
-          <form name="form2" method="post" action="">
-            <tr>
-              <td width="4%" align="right" nowrap title="<?= $Tla13_i_codigo ?>">
-                <?= $Lla13_i_codigo ?>
-              </td>
-              <td width="96%" align="left" nowrap>
-                <?
-                db_input("la13_i_codigo", 10, $Ila13_i_codigo, true, "text", 4, "", "chave_la13_i_codigo");
-                ?>
-              </td>
-            </tr>
-            <tr>
-              <td width="4%" align="right" nowrap title="<?= $Tla13_c_descr ?>">
-                <?= $Lla13_c_descr ?>
-              </td>
-              <td width="96%" align="left" nowrap>
-                <?
-                db_input("la13_c_descr", 40, $Ila13_c_descr, true, "text", 4, "", "chave_la13_c_descr");
-                ?>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2" align="center">
-                <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-                <input name="limpar" type="reset" id="limpar" value="Limpar">
-                <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_lab_undmedida.hide();">
-              </td>
-            </tr>
-          </form>
+	     <form name="form2" method="post" action="" >
+          <tr> 
+            <td width="4%" align="right" nowrap title="<?=$Tla13_i_codigo?>">
+              <?=$Lla13_i_codigo?>
+            </td>
+            <td width="96%" align="left" nowrap> 
+              <?
+		       db_input("la13_i_codigo",10,$Ila13_i_codigo,true,"text",4,"","chave_la13_i_codigo");
+		       ?>
+            </td>
+          </tr>
+          <tr> 
+            <td width="4%" align="right" nowrap title="<?=$Tla13_c_descr?>">
+              <?=$Lla13_c_descr?>
+            </td>
+            <td width="96%" align="left" nowrap> 
+              <?
+		       db_input("la13_c_descr",40,$Ila13_c_descr,true,"text",4,"","chave_la13_c_descr");
+		       ?>
+            </td>
+          </tr>
+          <tr> 
+            <td colspan="2" align="center"> 
+              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
+              <input name="limpar" type="reset" id="limpar" value="Limpar" >
+              <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_lab_undmedida.hide();">
+             </td>
+          </tr>
+        </form>
         </table>
       </td>
-    </tr>
-    <tr>
-      <td align="center" valign="top">
-        <?
-        if (!isset($pesquisa_chave)) {
-          if (isset($campos) == false) {
-            if (file_exists("funcoes/db_func_lab_undmedida.php") == true) {
-              include("funcoes/db_func_lab_undmedida.php");
-            } else {
-              $campos = "lab_undmedida.*";
-            }
-          }
-          if (isset($chave_la13_i_codigo) && (trim($chave_la13_i_codigo) != "")) {
-            $sql = $cllab_undmedida->sql_query($chave_la13_i_codigo, $campos, "la13_i_codigo");
-          } else if (isset($chave_la13_c_descr) && (trim($chave_la13_c_descr) != "")) {
-            $sql = $cllab_undmedida->sql_query("", $campos, "la13_c_descr", " la13_c_descr like '$chave_la13_c_descr%' ");
-          } else {
-            $sql = $cllab_undmedida->sql_query("", $campos, "la13_i_codigo", "");
-          }
-          $repassa = array();
-          if (isset($chave_la13_i_codigo)) {
-            $repassa = array("chave_la13_i_codigo" => $chave_la13_i_codigo, "chave_la13_c_descr" => $chave_la13_c_descr);
-          }
-          db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
-        } else {
-          if ($pesquisa_chave != null && $pesquisa_chave != "") {
-            $result = $cllab_undmedida->sql_record($cllab_undmedida->sql_query($pesquisa_chave));
-            if ($cllab_undmedida->numrows != 0) {
-              db_fieldsmemory($result, 0);
-              echo "<script>" . $funcao_js . "('$la13_c_descr',false);</script>";
-            } else {
-              echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
-            }
-          } else {
-            echo "<script>" . $funcao_js . "('',false);</script>";
-          }
+  </tr>
+  <tr> 
+    <td align="center" valign="top"> 
+      <?
+      if(!isset($pesquisa_chave)){
+        if(isset($campos)==false){
+           if(file_exists("funcoes/db_func_lab_undmedida.php")==true){
+             include("funcoes/db_func_lab_undmedida.php");
+           }else{
+           $campos = "lab_undmedida.*";
+           }
         }
-        ?>
-      </td>
-    </tr>
-  </table>
+        if(isset($chave_la13_i_codigo) && (trim($chave_la13_i_codigo)!="") ){
+	         $sql = $cllab_undmedida->sql_query($chave_la13_i_codigo,$campos,"la13_i_codigo");
+        }else if(isset($chave_la13_c_descr) && (trim($chave_la13_c_descr)!="") ){
+	         $sql = $cllab_undmedida->sql_query("",$campos,"la13_c_descr"," la13_c_descr like '$chave_la13_c_descr%' ");
+        }else{
+           $sql = $cllab_undmedida->sql_query("",$campos,"la13_i_codigo","");
+        }
+        $repassa = array();
+        if(isset($chave_la13_i_codigo)){
+          $repassa = array("chave_la13_i_codigo"=>$chave_la13_i_codigo,"chave_la13_c_descr"=>$chave_la13_c_descr);
+        }
+        db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
+      }else{
+        if($pesquisa_chave!=null && $pesquisa_chave!=""){
+          $result = $cllab_undmedida->sql_record($cllab_undmedida->sql_query($pesquisa_chave));
+          if($cllab_undmedida->numrows!=0){
+            db_fieldsmemory($result,0);
+            echo "<script>".$funcao_js."('$la13_c_descr',false);</script>";
+          }else{
+	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") nï¿½o Encontrado',true);</script>";
+          }
+        }else{
+	       echo "<script>".$funcao_js."('',false);</script>";
+        }
+      }
+      ?>
+     </td>
+   </tr>
+</table>
 </body>
-
 </html>
 <?
-if (!isset($pesquisa_chave)) {
-?>
+if(!isset($pesquisa_chave)){
+  ?>
   <script>
   </script>
-<?
+  <?
 }
 ?>
 <script>
-  js_tabulacaoforms("form2", "chave_la13_i_codigo", true, 1, "chave_la13_i_codigo", true);
+js_tabulacaoforms("form2","chave_la13_i_codigo",true,1,"chave_la13_i_codigo",true);
 </script>

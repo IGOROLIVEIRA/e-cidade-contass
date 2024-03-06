@@ -66,7 +66,7 @@ if( $file == "bkp-ecidade" ) {
   $date = $_GET["date"];
 
   if( empty($date) ) {
-    echo "Data não informada";
+    echo "Data nÃ£o informada";
     exit;
   }
 
@@ -97,3 +97,4 @@ if (file_exists($file)) {
   readfile($file);
   exit;
 }
+?>

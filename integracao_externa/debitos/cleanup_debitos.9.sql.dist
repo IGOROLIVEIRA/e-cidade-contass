@@ -22,7 +22,7 @@ SELECT * FROM (
 
 UNION
 
--- Manter �ltimo dia do mês dos últimos 3 meses
+-- Manter último dia do mês dos últimos 3 meses
 SELECT * FROM (
   SELECT *,
          row_number() OVER (),
@@ -43,7 +43,7 @@ SELECT * FROM (
 
 UNION
 
--- Manter �ltimo 31/12 gerado e limpar anteriores
+-- Manter último 31/12 gerado e limpar anteriores
 SELECT * FROM (
   SELECT *,
          row_number() OVER (),
