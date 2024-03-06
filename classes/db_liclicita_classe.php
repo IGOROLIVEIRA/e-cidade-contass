@@ -4282,7 +4282,7 @@ class cl_liclicita
                     LEFT  JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
                     INNER JOIN liccontrolepncpitens ON liccontrolepncpitens.l214_licitacao = l21_codliclicita
                     WHERE l21_codliclicita = $l20_codigo
-                        AND l21_ordem = 1
+                        AND l21_ordem = $ordem
                         AND l202_datahomologacao IS NOT NULL
                         AND pc24_pontuacao = 1
                     union
