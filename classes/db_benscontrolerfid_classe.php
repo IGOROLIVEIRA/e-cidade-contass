@@ -188,8 +188,8 @@ class cl_benscontrolerfid
 
   // funcao para inclusao
   function incluir()
-  {
-    $this->atualizacampos();
+  { 
+    $this->atualizacampos(); 
     if ($this->t214_sequencial == "" || $this->t214_sequencial == null) {
       $result = db_query("select nextval('benscontrolerfid_t214_sequencial_seq')");
       if ($result == false) {
@@ -221,7 +221,7 @@ class cl_benscontrolerfid
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
-    }
+    } 
     if ($this->t214_placabem == null) {
       $this->erro_sql = " Campo Placa do Bem não informado.";
       $this->erro_campo = "t214_placabem";
@@ -230,7 +230,7 @@ class cl_benscontrolerfid
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
-    }
+    } 
     if ($this->t214_codigobem == "" || $this->t214_codigobem == null) {
       $this->erro_sql = " Campo Código do Bem não informado.";
       $this->erro_campo = "t214_codigobem";
@@ -239,7 +239,7 @@ class cl_benscontrolerfid
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
-    }
+    }  
     if ($this->t214_descbem == null) {
       $this->erro_sql = " Campo Descrição do bem não informado.";
       $this->erro_campo = "t214_descbem";
@@ -465,12 +465,12 @@ class cl_benscontrolerfid
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-        $this->erro_sql   = "Controle rfid () nao Incluído. Inclusao Abortada.";
+        $this->erro_sql   = "Controle rfid () nao Incluï¿½do. Inclusao Abortada.";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_banco = "Controle rfid já Cadastrado";
+        $this->erro_banco = "Controle rfid jï¿½ Cadastrado";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       } else {
-        $this->erro_sql   = "Controle rfid () nao Incluído. Inclusao Abortada.";
+        $this->erro_sql   = "Controle rfid () nao Incluï¿½do. Inclusao Abortada.";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       }
@@ -1054,7 +1054,7 @@ class cl_benscontrolerfid
         return true;
       } else {
         $this->erro_banco = "";
-        $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+        $this->erro_sql = "Alteraï¿½ï¿½o efetuada com Sucesso\\n";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
@@ -1079,7 +1079,7 @@ class cl_benscontrolerfid
     $result = db_query($sql . $sql2);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql   = "Controle rfid nao Excluído. Exclusão Abortada.\\n";
+      $this->erro_sql   = "Controle rfid nao Excluï¿½do. Exclusï¿½o Abortada.\\n";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
@@ -1088,7 +1088,7 @@ class cl_benscontrolerfid
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "Controle rfid nao Encontrado. Exclusão não Efetuada.\\n";
+        $this->erro_sql = "Controle rfid nao Encontrado. Exclusï¿½o não Efetuada.\\n";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
@@ -1096,7 +1096,7 @@ class cl_benscontrolerfid
         return true;
       } else {
         $this->erro_banco = "";
-        $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+        $this->erro_sql = "Exclusï¿½o efetuada com Sucesso\\n";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";

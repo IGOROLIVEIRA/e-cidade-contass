@@ -85,13 +85,13 @@ class Import
    * @param  Array $current
    * @return boolean
    */
-  private function removeGroups(array $file, array &$current)
+  private function removeGroups(Array $file, Array & $current)
   {
     try {
       $this->validateData($file, $current);
     } catch (\Exception $error) {
       throw new \Exception(
-        "Os seguintes grupos n�o pertencem a avalição informada: " . $error->getMessage()
+        "Os seguintes grupos não pertencem a avalição informada: " . $error->getMessage()
       );
     }
 
@@ -104,13 +104,13 @@ class Import
    * @param  Array $current
    * @return boolean
    */
-  private function removeQuestions(array $file, array &$current)
+  private function removeQuestions(Array $file, Array & $current)
   {
     try {
       $this->validateData($file, $current);
     } catch (\Exception $error) {
       throw new \Exception(
-        "As seguintes perguntas n�o pertencem a avalição informada: " . $error->getMessage()
+        "As seguintes perguntas não pertencem a avalição informada: " . $error->getMessage()
       );
     }
 
@@ -123,13 +123,13 @@ class Import
    * @param  Array $current
    * @return boolean
    */
-  private function removeOptionsAnwser(array $file, array &$current)
+  private function removeOptionsAnwser(Array $file, Array & $current)
   {
     try {
       $this->validateData($file, $current);
     } catch (\Exception $error) {
       throw new \Exception(
-        "As seguintes opções de resposta n�o pertencem a avalição informada: " . $error->getMessage()
+        "As seguintes opções de resposta não pertencem a avalição informada: " . $error->getMessage()
       );
     }
 
@@ -142,7 +142,7 @@ class Import
    * @param  Array $current
    * @return boolean
    */
-  private function validateData(array $file, array &$current)
+  private function validateData(Array $file, Array & $current)
   {
     // valida ids
     // nao permitindo editar dados de outras avaliacoes
@@ -158,11 +158,11 @@ class Import
    * @param  Array $current
    * @return boolean
    */
-  private function invalidData(array $file, array $current)
+  private function invalidData(Array $file, Array $current)
   {
     return array_diff(
-      $this->extractId($file),
-      $this->extractId($current)
+      $this->extractId( $file ),
+      $this->extractId( $current )
     );
   }
 
@@ -171,14 +171,14 @@ class Import
    * @param  Array $current
    * @return boolean
    */
-  private function removeData(array $file, array &$current)
+  private function removeData(Array $file, Array & $current)
   {
     $toRemove = array_diff(
-      $this->extractId($current),
-      $this->extractId($file)
+      $this->extractId( $current ),
+      $this->extractId( $file )
     );
 
-    if (empty($toRemove)) {
+    if( empty($toRemove) ) {
       return false;
     }
 
@@ -198,7 +198,7 @@ class Import
    * @param  Array $groups
    * @return Array
    */
-  private function extractQuestions(array $groups)
+  private function extractQuestions(Array $groups)
   {
     $questions = array();
 
@@ -213,7 +213,7 @@ class Import
    * @param  Array  $questions
    * @return Array
    */
-  private function extractOptionsAnwser(array $questions)
+  private function extractOptionsAnwser(Array $questions)
   {
     $options = array();
 
@@ -229,14 +229,15 @@ class Import
    * @param  Array $array
    * @return Array
    */
-  private function extractId(array $array)
+  private function extractId(Array $array)
   {
     $result = array();
     foreach ($array as $object) {
-      if (!!$object->getCodigo()) {
+      if ( !!$object->getCodigo() ) {
         $result[] = $object->getCodigo();
       }
     }
     return $result;
   }
+
 }

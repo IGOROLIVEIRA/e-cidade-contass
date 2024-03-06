@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Classe para ImportacaoLogradouros do Recadastramento Imobiliario
  * 
@@ -7,8 +6,7 @@
  * @author   Rafael Serpa Nery <rafael.nery@dbseller.com.br>
  * @revision $Author: dbrafael.nery $
  */
-class ImportacaoLogradouros
-{
+class ImportacaoLogradouros {
 
   private $oArquivo;
   private $oCabecalhoArquivo;
@@ -23,19 +21,18 @@ class ImportacaoLogradouros
    * Construtor da Classe 
    * @param mixed $sCaminhoArquivo 
    */
-  public function __construct($sCaminhoArquivo)
-  {
+  public function __construct( $sCaminhoArquivo ) {
 
 
-    $this->oConfiguracao  = (object)parse_ini_file(PATH_IMPORTACAO . "libs/configuracoes_importacao.ini", true);
+    $this->oConfiguracao  = (object)parse_ini_file( PATH_IMPORTACAO . "libs/configuracoes_importacao.ini",true);
     $this->oArquivo       = fopen($sCaminhoArquivo, 'r');
     $this->oLog           = new DBLog("TXT", "/tmp/log_importacao_logradouros.log");
     $rsTiposLogradouro    = pg_query(Conexao::getInstancia()->getConexao(), "select * from cadastro.ruastipo;");
 
-    if (!$rsTiposLogradouro) {
+    if ( !$rsTiposLogradouro ) {
 
       $this->oLog->escreverLog("Erro ao Buscar os Tipos de Logradouro do e-Cidade.", DBLog::LOG_INFO);
-      $this->oLog->escreverLog("Descricao do Erro: " . pg_last_error(),                DBLog::LOG_INFO);
+      $this->oLog->escreverLog("Descricao do Erro: ".pg_last_error(),                DBLog::LOG_INFO);
       throw new Exception("Erro ao Buscar Tipos de Logradouro do Sistema:" . pg_last_error());
     }
 
@@ -48,17 +45,16 @@ class ImportacaoLogradouros
    * @param mixed $sSiglaTipoLogradouro 
    * @return void
    */
-  public function getTipoLogradouro($sSiglaTipoLogradouro)
-  {
+  public function getTipoLogradouro( $sSiglaTipoLogradouro ) {
 
     $iTipoLogradouroNaoInformado = 0;
 
-    foreach ($this->aTiposPadraoSistema as $oTipoLogradouro) {
+    foreach ( $this->aTiposPadraoSistema as $oTipoLogradouro) {
 
-      if ($oTipoLogradouro->j88_sigla == $sSiglaTipoLogradouro) {
+      if ( $oTipoLogradouro->j88_sigla == $sSiglaTipoLogradouro ) {
         return $oTipoLogradouro->j88_codigo;
       }
-      if ($oTipoLogradouro->j88_sigla == "NI") {
+      if ( $oTipoLogradouro->j88_sigla == "NI" ) {
         $iTipoLogradouroNaoInformado = $oTipoLogradouro->j88_codigo;
       }
     }
@@ -67,52 +63,51 @@ class ImportacaoLogradouros
 
 
 
-  public function carregarArquivo()
-  {
+  public function carregarArquivo() {
 
     $aRuasArquivo                    = array();
     $sLinhaCabecalhoArquivo          = fgets($this->oArquivo);
     $oCabecalhoArquivo               = new stdClass();
-    $oCabecalhoArquivo->iAnoArquivo  = trim(substr($sLinhaCabecalhoArquivo, 0,  4));  //001-004 Ano
-    $oCabecalhoArquivo->iMesArquivo  = trim(substr($sLinhaCabecalhoArquivo, 4,  2));  //005-006 Mês
-    $oCabecalhoArquivo->iDiaArquivo  = trim(substr($sLinhaCabecalhoArquivo, 6,  2));  //007-008 Dia
-    $oCabecalhoArquivo->sNomeArquivo = trim(substr($sLinhaCabecalhoArquivo, 8, 92));  //009-100 Nome do arquivos
+    $oCabecalhoArquivo->iAnoArquivo  = trim( substr($sLinhaCabecalhoArquivo, 0,  4) );  //001-004 Ano
+    $oCabecalhoArquivo->iMesArquivo  = trim( substr($sLinhaCabecalhoArquivo, 4,  2) );  //005-006 Mês
+    $oCabecalhoArquivo->iDiaArquivo  = trim( substr($sLinhaCabecalhoArquivo, 6,  2) );  //007-008 Dia
+    $oCabecalhoArquivo->sNomeArquivo = trim( substr($sLinhaCabecalhoArquivo, 8, 92) );  //009-100 Nome do arquivos
 
     $this->oCabecalhoArquivo         = $oCabecalhoArquivo;
 
-    while ($sLinhaArquivo = fgets($this->oArquivo)) {
+    while ( $sLinhaArquivo = fgets( $this->oArquivo ) ) {
 
-      if (!validarUltimaLinhaArquivo($this->oArquivo)) {
+      if ( !validarUltimaLinhaArquivo($this->oArquivo) ) {
 
         $oPosicoesArquivo                          = new stdClass();
-        $oPosicoesArquivo->oDataArquivo            = trim(substr($sLinhaArquivo,   0,   8)); // 001-008 - Quantidade  8- Data do envio
-        $oPosicoesArquivo->sSequencial             = trim(substr($sLinhaArquivo,   8,   6)); // 009-014 - Quantidade  6- sequencial
-        $oPosicoesArquivo->iCodigoLogradouro       = trim(substr($sLinhaArquivo,  14,   6)); // 015-020 - Quantidade  6- Código do logradouro
-        $oPosicoesArquivo->iTipoLogradouro         = trim(substr($sLinhaArquivo,  20,   3)); // 021-023 - Quantidade  3- Tipo do logradouro
-        $oPosicoesArquivo->sTituloLogradouro       = trim(substr($sLinhaArquivo,  23,   5)); // 024-028 - Quantidade  5- Título do logradouro
-        $oPosicoesArquivo->sNomeLogradouro         = trim(substr($sLinhaArquivo,  28,  30)); // 029-058 - Quantidade 30- Nome do logradouro
-        $oPosicoesArquivo->sNomeAnteriorLogradouro = trim(substr($sLinhaArquivo,  58, 200)); // 059-258 - Quantidade200- Nome anterior do logradouro
-        $oPosicoesArquivo->sLei                    = trim(substr($sLinhaArquivo, 258,  10)); // 259-268 - Quantidade 10- Lei que atribuiu o nome
-        $oPosicoesArquivo->oDataLei                = trim(substr($sLinhaArquivo, 268,  10)); // 269-278 - Quantidade 10- Data da lei
-        $oPosicoesArquivo->iCodigoLogradouroInicio = trim(substr($sLinhaArquivo, 278,   6)); // 279-284 - Quantidade  6- Código do logradouro de início
-        $oPosicoesArquivo->iCodigoLogradouroFim    = trim(substr($sLinhaArquivo, 284,   6)); // 285-290 - Quantidade  6- Código do logradouro de fim
-
-        if (!isset($aRegistrosArquivo[$oPosicoesArquivo->iCodigoLogradouro])) {
-
+        $oPosicoesArquivo->oDataArquivo            = trim( substr($sLinhaArquivo,   0,   8) ); // 001-008 - Quantidade  8- Data do envio
+        $oPosicoesArquivo->sSequencial             = trim( substr($sLinhaArquivo,   8,   6) ); // 009-014 - Quantidade  6- sequencial
+        $oPosicoesArquivo->iCodigoLogradouro       = trim( substr($sLinhaArquivo,  14,   6) ); // 015-020 - Quantidade  6- Código do logradouro
+        $oPosicoesArquivo->iTipoLogradouro         = trim( substr($sLinhaArquivo,  20,   3) ); // 021-023 - Quantidade  3- Tipo do logradouro
+        $oPosicoesArquivo->sTituloLogradouro       = trim( substr($sLinhaArquivo,  23,   5) ); // 024-028 - Quantidade  5- Título do logradouro
+        $oPosicoesArquivo->sNomeLogradouro         = trim( substr($sLinhaArquivo,  28,  30) ); // 029-058 - Quantidade 30- Nome do logradouro
+        $oPosicoesArquivo->sNomeAnteriorLogradouro = trim( substr($sLinhaArquivo,  58, 200) ); // 059-258 - Quantidade200- Nome anterior do logradouro
+        $oPosicoesArquivo->sLei                    = trim( substr($sLinhaArquivo, 258,  10) ); // 259-268 - Quantidade 10- Lei que atribuiu o nome
+        $oPosicoesArquivo->oDataLei                = trim( substr($sLinhaArquivo, 268,  10) ); // 269-278 - Quantidade 10- Data da lei
+        $oPosicoesArquivo->iCodigoLogradouroInicio = trim( substr($sLinhaArquivo, 278,   6) ); // 279-284 - Quantidade  6- Código do logradouro de início
+        $oPosicoesArquivo->iCodigoLogradouroFim    = trim( substr($sLinhaArquivo, 284,   6) ); // 285-290 - Quantidade  6- Código do logradouro de fim
+        
+        if (!isset($aRegistrosArquivo[$oPosicoesArquivo->iCodigoLogradouro])){
+          
           $aRegistrosArquivo[$oPosicoesArquivo->iCodigoLogradouro] = $oPosicoesArquivo->iCodigoLogradouro;
           $this->aRegistrosArquivo[]                 = $oPosicoesArquivo;
         } else {
-          $this->oLog->escreverLog("Logradouro C�digo:  $oPosicoesArquivo->iCodigoLogradouro, Linha do Arquivo: " . $this->iRegistrosArquivo + 2, DBLog::LOG_NOTICE);
+          $this->oLog->escreverLog("Logradouro C�digo:  $oPosicoesArquivo->iCodigoLogradouro, Linha do Arquivo: ".$this->iRegistrosArquivo + 2, DBLog::LOG_NOTICE);
         }
         $this->iRegistrosArquivo++;
       } else {
 
         $oRodapeArquivo                            = new stdClass();
-        $oRodapeArquivo->iAnoArquivo               = substr($sLinhaArquivo,  0, 4); //001-004 Ano
-        $oRodapeArquivo->iMesArquivo               = substr($sLinhaArquivo,  4, 2); //005-006 Mês
-        $oRodapeArquivo->iDiaArquivo               = substr($sLinhaArquivo,  6, 2); //007-008 Dia
-        $oRodapeArquivo->sIdentificador            = substr($sLinhaArquivo,  8, 6); //009-014 Identificador
-        $oRodapeArquivo->iQuantidadeRegistros      = (int)substr($sLinhaArquivo, 14, 6); //015-020 N�mero de linhas de dado do arquivo
+        $oRodapeArquivo->iAnoArquivo               = substr($sLinhaArquivo,  0, 4);//001-004 Ano
+        $oRodapeArquivo->iMesArquivo               = substr($sLinhaArquivo,  4, 2);//005-006 Mês
+        $oRodapeArquivo->iDiaArquivo               = substr($sLinhaArquivo,  6, 2);//007-008 Dia
+        $oRodapeArquivo->sIdentificador            = substr($sLinhaArquivo,  8, 6);//009-014 Identificador
+        $oRodapeArquivo->iQuantidadeRegistros      = (int)substr($sLinhaArquivo, 14, 6);//015-020 Número de linhas de dado do arquivo
         $this->oRodapeArquivo                      = $oRodapeArquivo;
       }
     }
@@ -120,22 +115,21 @@ class ImportacaoLogradouros
   }
 
 
-  public function salvar()
-  {
+  public function salvar() {
 
-    if (!$this->testarCarregamentoArquivo()) {
+    if ( !$this->testarCarregamentoArquivo() ) {
       throw new Exception("Inconsistencias foram encontradas ao Carregar o Arquivo.");
     }
     $pConexao                                           = Conexao::getInstancia()->getConexao();
-    $this->aTabelas['recadastroimobiliarioarquivos']    = new tableDataManager($pConexao, "recadastroimobiliarioarquivos", "ie24_sequencial", true, 1);
-    $this->aTabelas['recadastroimobiliariologradouros'] = new tableDataManager($pConexao, "recadastroimobiliariologradouros", "ie25_sequencial", true, 1000);
-    $this->aTabelas['ruas']                             = new tableDataManager($pConexao, "cadastro.ruas", "",                true, 1000);
-    $this->aTabelas['recadastrologradouroshistorico']   = new tableDataManager($pConexao, "recadastrologradouroshistorico", "ie27_sequencial", true, 1000);
-
+    $this->aTabelas['recadastroimobiliarioarquivos']    = new tableDataManager($pConexao,"recadastroimobiliarioarquivos"   , "ie24_sequencial", true,1);
+    $this->aTabelas['recadastroimobiliariologradouros'] = new tableDataManager($pConexao,"recadastroimobiliariologradouros", "ie25_sequencial", true,1000);
+    $this->aTabelas['ruas']                             = new tableDataManager($pConexao,"cadastro.ruas"                   , "",                true,1000);
+    $this->aTabelas['recadastrologradouroshistorico']   = new tableDataManager($pConexao,"recadastrologradouroshistorico"  , "ie27_sequencial", true,1000);
+    
     $oRecadastroArquivos                                = $this->aTabelas['recadastroimobiliarioarquivos'];
     $oRecadastroLogradouros                             = $this->aTabelas['recadastroimobiliariologradouros'];
 
-    $dDataImportacao  = $this->oCabecalhoArquivo->iAnoArquivo . "-" . $this->oCabecalhoArquivo->iMesArquivo . "-" . $this->oCabecalhoArquivo->iDiaArquivo;
+    $dDataImportacao  = $this->oCabecalhoArquivo->iAnoArquivo . "-" . $this->oCabecalhoArquivo->iMesArquivo."-".$this->oCabecalhoArquivo->iDiaArquivo;
 
     /**
      * Salvando dadso da Importacao do Arquivo
@@ -155,13 +149,13 @@ class ImportacaoLogradouros
      */
     unset($oDadosInclusaoArquivo);
     $this->oLog->escreverLog("Preparando para Salvar no Banco de Dados os Registros Importados.", DBLog::LOG_INFO);
-    $this->oLog->escreverLog("Total de Registros: " . count($this->aRegistrosArquivo), DBLog::LOG_INFO);
+    $this->oLog->escreverLog("Total de Registros: ".count($this->aRegistrosArquivo), DBLog::LOG_INFO);
 
 
     /**
      * Percorre linhas do arquivo
      */
-    foreach ($this->aRegistrosArquivo as $oLinhaArquivo) {
+    foreach ( $this->aRegistrosArquivo as $oLinhaArquivo ) {
 
       $this->oLog->escreverLog(" Incluindo Registro para Processamento:  {$oLinhaArquivo->iCodigoLogradouro}", DBLog::LOG_INFO);
 
@@ -192,8 +186,7 @@ class ImportacaoLogradouros
    * @access public
    * @return void
    */
-  public function testarCarregamentoArquivo()
-  {
+  public function testarCarregamentoArquivo() {
 
 
     $this->oLog->escreverLog("#######################################", DBLog::LOG_INFO);
@@ -209,21 +202,21 @@ class ImportacaoLogradouros
     $lNomeValido = empty($oHeader->sNomeArquivo);
 
 
-    if ($lAnoVazio || $lMesVazio || $lDiaVazio || $lNomeValido) {
+    if ( $lAnoVazio || $lMesVazio || $lDiaVazio || $lNomeValido ) {
 
       $sErro        = "CABECALHO DO ARQUIVO INCONSISTENTE";
       $this->oLog->escreverLog($sErro, DBLog::LOG_ERROR);
 
-      if ($lAnoVazio) {
+      if ( $lAnoVazio ) {
         $this->oLog->escreverLog("  ANO VAZIO", DBLog::LOG_ERROR);
       }
-      if ($lMesVazio) {
+      if ( $lMesVazio ) {
         $this->oLog->escreverLog("  MES VAZIO", DBLog::LOG_ERROR);
       }
-      if ($lDiaVazio) {
+      if ( $lDiaVazio ) {
         $this->oLog->escreverLog("  DIA VAZIO", DBLog::LOG_ERROR);
       }
-      if ($lNomeValido) {
+      if ( $lNomeValido ) {
         $this->oLog->escreverLog("  NOME DO LOTE VAZIO OU DIFERENTE DO NOME DO ARQUIVO", DBLog::LOG_ERROR);
       }
       return false;
@@ -237,46 +230,46 @@ class ImportacaoLogradouros
      */
     $iTotalRegistros = $this->iRegistrosArquivo;
 
-    if ($this->oRodapeArquivo->iQuantidadeRegistros <> $iTotalRegistros) {
+    if ( $this->oRodapeArquivo->iQuantidadeRegistros <> $iTotalRegistros ) {
 
       $this->oLog->escreverLog("Quantidade de Registros do Arquivo: {$iTotalRegistros}, Diferente da Quantidade Informada: {$this->oRodapeArquivo->iQuantidadeRegistros}", DBLog::LOG_ERROR);
       return false;
     }
-
-
+  
+  
     $this->oLog->escreverLog("", DBLog::LOG_INFO);
     $this->oLog->escreverLog("Total de Registros: {$iTotalRegistros}", DBLog::LOG_INFO);
 
     /**
      * Percorrendo registros e os validando
      */
-    foreach ($this->aRegistrosArquivo as $iCodigoRegistro => $oRegistro) {
+    foreach ( $this->aRegistrosArquivo as $iCodigoRegistro => $oRegistro )  {
 
-      $iLinha                 = $iCodigoRegistro + 2; //Linha + Linha Cabecalho + Array que come�a em 0(zero)
-      $sSequencial            = trim($oRegistro->sSequencial);
-      $sCodigoLogradouro      = trim($oRegistro->iCodigoLogradouro);
-      $sNomeLogradouro        = trim($oRegistro->sNomeLogradouro);
+      $iLinha                 = $iCodigoRegistro + 2;//Linha + Linha Cabecalho + Array que come�a em 0(zero)
+      $sSequencial            = trim( $oRegistro->sSequencial );
+      $sCodigoLogradouro      = trim( $oRegistro->iCodigoLogradouro );
+      $sNomeLogradouro        = trim( $oRegistro->sNomeLogradouro );
 
-      $lSequencialVazio       = empty($sSequencial);
-      $lCodigoLogradouroVazio = empty($sCodigoLogradouro);
-      $lNomeLogradouroVazio   = empty($sNomeLogradouro);
+      $lSequencialVazio       = empty( $sSequencial ); 
+      $lCodigoLogradouroVazio = empty( $sCodigoLogradouro );
+      $lNomeLogradouroVazio   = empty( $sNomeLogradouro );
 
-      if ($lSequencialVazio || $lCodigoLogradouroVazio || $lNomeLogradouroVazio) {
+      if ( $lSequencialVazio || $lCodigoLogradouroVazio || $lNomeLogradouroVazio ) {
 
         $this->oLog->escreverLog("[{$oHeader->sNomeArquivo}:$iLinha] - Removendo registro inconsistente da Fila de Processamento", DBLog::LOG_NOTICE);
-        if ($lSequencialVazio) {
+        if ( $lSequencialVazio ) {
           $this->oLog->escreverLog("  Sequencial do Registro Vazio", DBLog::LOG_NOTICE);
         }
 
-        if ($lCodigoLogradouroVazio) {
+        if ( $lCodigoLogradouroVazio ) {
           $this->oLog->escreverLog("  Codigo do Logradouro Vazio ", DBLog::LOG_NOTICE);
         }
 
-        if ($lNomeLogradouroVazio) {
+        if ( $lNomeLogradouroVazio ) {
           $this->oLog->escreverLog("  Nome do Logradouro Vazio", DBLog::LOG_NOTICE);
         }
 
-        unset($this->aRegistrosArquivo[$iCodigoRegistro]);
+        unset( $this->aRegistrosArquivo[$iCodigoRegistro] );
         continue;
       }
 
@@ -299,22 +292,21 @@ class ImportacaoLogradouros
    * @access public
    * @return boolean
    */
-  public function processarImportacao()
-  {
+  public function processarImportacao() {
 
     $iCodigoImportacao   = $this->salvar();
-
+    
     $sSqlDadosImportados = "select * from recadastroimobiliariologradouros where  ie25_recadastroimobiliarioarquivos = {$iCodigoImportacao}";
-    $rsDadosImportados   = pg_query(Conexao::getInstancia()->getConexao(), " $sSqlDadosImportados");
+    $rsDadosImportados   = pg_query( Conexao::getInstancia()->getConexao(), " $sSqlDadosImportados" );
 
     if (!$rsDadosImportados) {
 
       $this->oLog->escreverLog("Erro ao Buscar dados Importados do Arquivo TXT.", DBLog::LOG_ERROR);
-      $this->oLog->escreverLog("Descricao do Erro: " . pg_last_error(),             DBLog::LOG_ERROR);
+      $this->oLog->escreverLog("Descricao do Erro: ".pg_last_error(),             DBLog::LOG_ERROR);
       throw new Exception("Erro ao Buscar Tipos de Logradouro do Sistema:" . pg_last_error());
     }
 
-    foreach (db_utils::getCollectionByRecord($rsDadosImportados) as $oLogradouroImportado) {
+    foreach ( db_utils::getCollectionByRecord($rsDadosImportados) as $oLogradouroImportado ) {
 
 
       $oDadosNovosLogradouro                     = new stdClass();
@@ -336,25 +328,25 @@ class ImportacaoLogradouros
 
       $oDadosAntigosLogradouro           = $this->validarExistencialogradouro($oLogradouroImportado->ie25_codigologradouro);
 
-      if ($oDadosAntigosLogradouro) {
-
+      if ( $oDadosAntigosLogradouro ) {
+         
         $this->oLog->escreverLog("Registro {$oLogradouroImportado->ie25_codigologradouro}: Alteracao.", DBLog::LOG_INFO);
         /**
          * Alteraç��o
          *
          * Valida se esta vindo do um tipo "Nao Informado" e o anterior seja diferente, mantem o anterior
          */
-        if ($oDadosAntigosLogradouro->j14_tipo <> 1 && $oDadosNovosLogradouro->j14_tipo == 1) {
+        if ( $oDadosAntigosLogradouro->j14_tipo <> 1 && $oDadosNovosLogradouro->j14_tipo == 1) {
           $oDadosNovosLogradouro->j14_tipo = $oDadosAntigosLogradouro->j14_tipo;
         }
 
 
-        if ($oLogradouroImportado->ie25_nomelogradouroanterior != '') {
+        if ( $oLogradouroImportado->ie25_nomelogradouroanterior != '' ) {
 
           $this->oLog->escreverLog("Registro {$oLogradouroImportado->ie25_codigologradouro}: Gravando historico encontrado no arquivo.", DBLog::LOG_INFO);
-          $this->aTabelas['recadastrologradouroshistorico']->setByLineOfDBUtils($oDadosHistoricoArquivo);
+          $this->aTabelas['recadastrologradouroshistorico']->setByLineOfDBUtils( $oDadosHistoricoArquivo );
           $this->aTabelas['recadastrologradouroshistorico']->insertValue();
-        }
+        } 
 
         /**
          * Nomes Iguais e Tipos Iguais N�o executa nada
@@ -362,7 +354,7 @@ class ImportacaoLogradouros
         $lNomeLogradouroIgual = $oDadosAntigosLogradouro->j14_nome == $oDadosNovosLogradouro->j14_nome;
         $lTipoLogradouroIgual = $oDadosAntigosLogradouro->j14_tipo == $oDadosNovosLogradouro->j14_tipo;
 
-        if ($lNomeLogradouroIgual && $lTipoLogradouroIgual) {
+        if ( $lNomeLogradouroIgual && $lTipoLogradouroIgual ) {
 
           $this->oLog->escreverLog("Registro {$oLogradouroImportado->ie25_codigologradouro}: Sem Modificacoes.", DBLog::LOG_INFO);
           $this->oLog->escreverLog("Logradouro: {$oDadosAntigosLogradouro->j14_nome} sem Modificacoes.", DBLog::LOG_NOTICE);
@@ -371,19 +363,19 @@ class ImportacaoLogradouros
 
         $sDataLei = empty($oDadosNovosLogradouro->j14_dtlei) ? 'null' : "'{$oDadosNovosLogradouro->j14_dtlei}'";
         $sSqlAlteracao = "update cadastro.ruas                                       \n";
-        $sSqlAlteracao .= "   set j14_nome   = '{$oDadosNovosLogradouro->j14_nome}',  \n";
-        $sSqlAlteracao .= "       j14_tipo   = '{$oDadosNovosLogradouro->j14_tipo}',  \n";
-        $sSqlAlteracao .= "       j14_rural  = '{$oDadosNovosLogradouro->j14_rural}', \n";
-        $sSqlAlteracao .= "       j14_lei    = '{$oDadosNovosLogradouro->j14_lei}',   \n";
-        $sSqlAlteracao .= "       j14_dtlei  =  {$sDataLei}, \n";
-        $sSqlAlteracao .= "       j14_bairro = '{$oDadosNovosLogradouro->j14_bairro}' \n";
-        $sSqlAlteracao .= " where j14_codigo =  {$oDadosNovosLogradouro->j14_codigo}; \n";
+        $sSqlAlteracao.= "   set j14_nome   = '{$oDadosNovosLogradouro->j14_nome}',  \n";
+        $sSqlAlteracao.= "       j14_tipo   = '{$oDadosNovosLogradouro->j14_tipo}',  \n";
+        $sSqlAlteracao.= "       j14_rural  = '{$oDadosNovosLogradouro->j14_rural}', \n";
+        $sSqlAlteracao.= "       j14_lei    = '{$oDadosNovosLogradouro->j14_lei}',   \n";
+        $sSqlAlteracao.= "       j14_dtlei  =  {$sDataLei}, \n";
+        $sSqlAlteracao.= "       j14_bairro = '{$oDadosNovosLogradouro->j14_bairro}' \n";
+        $sSqlAlteracao.= " where j14_codigo =  {$oDadosNovosLogradouro->j14_codigo}; \n";
         $rsAlteracao   = pg_query(Conexao::getInstancia()->getConexao(), $sSqlAlteracao);
 
-        if (!$rsAlteracao) {
+        if ( !$rsAlteracao ) {
 
           $this->oLog->escreverLog("Erro ao Alterar dados do Logradouro.", DBLog::LOG_ERROR);
-          $this->oLog->escreverLog("Descricao do Erro: " . pg_last_error(), DBLog::LOG_ERROR);
+          $this->oLog->escreverLog("Descricao do Erro: ".pg_last_error() , DBLog::LOG_ERROR);
           throw new Exception("Erro ao Alterar dados do Logradouro." . pg_last_error());
         }
 
@@ -397,21 +389,21 @@ class ImportacaoLogradouros
         $oDadosHistoricoArquivo->ie27_datalei      = $oDadosAntigosLogradouro->j14_dtlei;
 
         $this->oLog->escreverLog("Registro {$oLogradouroImportado->ie25_codigologradouro}: Gravando historico da Alteracao Efetuada.", DBLog::LOG_INFO);
-        $this->aTabelas['recadastrologradouroshistorico']->setByLineOfDBUtils($oDadosHistoricoArquivo);
+        $this->aTabelas['recadastrologradouroshistorico']->setByLineOfDBUtils( $oDadosHistoricoArquivo );
         $this->aTabelas['recadastrologradouroshistorico']->insertValue();
       } else {
 
         /**
          * Inclusao
          */
-
+        
         $this->oLog->escreverLog("Registro {$oLogradouroImportado->ie25_codigologradouro}: Sera Incluido.", DBLog::LOG_INFO);
         $this->aTabelas['ruas']->setByLineOfDBUtils($oDadosNovosLogradouro);
         $this->aTabelas['ruas']->insertValue();
 
-        if ($oLogradouroImportado->ie25_nomelogradouroanterior != '') {
+        if ( $oLogradouroImportado->ie25_nomelogradouroanterior != '' ) {
           $this->oLog->escreverLog("Registro {$oLogradouroImportado->ie25_codigologradouro}: Gravando historico encontrado no arquivo.", DBLog::LOG_INFO);
-          $this->aTabelas['recadastrologradouroshistorico']->setByLineOfDBUtils($oDadosHistoricoArquivo);
+          $this->aTabelas['recadastrologradouroshistorico']->setByLineOfDBUtils( $oDadosHistoricoArquivo );
           $this->aTabelas['recadastrologradouroshistorico']->insertValue();;
         }
       }
@@ -424,27 +416,28 @@ class ImportacaoLogradouros
     $this->aTabelas['recadastrologradouroshistorico']->persist();
   }
 
-  public function validarExistencialogradouro($iCodigoLogradouro)
-  {
-
+  public function validarExistencialogradouro( $iCodigoLogradouro ) {
+    
     $sSqlDadosLogradouro = "select * from cadastro.ruas where  j14_codigo = {$iCodigoLogradouro}";
-    $rsDadosLogradouro   = pg_query(Conexao::getInstancia()->getConexao(),  $sSqlDadosLogradouro);
+    $rsDadosLogradouro   = pg_query( Conexao::getInstancia()->getConexao(),  $sSqlDadosLogradouro );
 
     if (!$rsDadosLogradouro) {
 
       $this->oLog->escreverLog("Erro ao Buscar dados Importados do Arquivo TXT.", DBLog::LOG_ERROR);
-      $this->oLog->escreverLog("Descricao do Erro: " . pg_last_error(),             DBLog::LOG_ERROR);
-      throw new Exception("Erro ao Buscar Tipos de Logradouro do Sistema:" . pg_last_error());
+      $this->oLog->escreverLog("Descricao do Erro: ".pg_last_error(),             DBLog::LOG_ERROR);
+      throw new Exception("Erro ao Buscar Tipos de Logradouro do Sistema:" . pg_last_error() );
     }
 
-    if (pg_num_rows($rsDadosLogradouro) > 0) {
+    if ( pg_num_rows($rsDadosLogradouro) > 0 ) {
       return db_utils::fieldsMemory($rsDadosLogradouro, 0);
     }
     return false;
+
   }
+
+
 }
-function validarUltimaLinhaArquivo($pArquivo)
-{
+function validarUltimaLinhaArquivo($pArquivo) {
 
   /**   
    * Mostra posicao atual
@@ -460,3 +453,4 @@ function validarUltimaLinhaArquivo($pArquivo)
   fseek($pArquivo, $iPosicaoCorrente);
   return $lSemLinhasApos;
 }
+

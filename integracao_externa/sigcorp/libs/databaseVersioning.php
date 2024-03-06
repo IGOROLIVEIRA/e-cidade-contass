@@ -67,7 +67,7 @@ function loadScripts($connection, $root) {
   $sDirectoryScripts = $root . '/db';
 
   if (!is_dir($sDirectoryScripts)) {
-    db_log("ERRO: Diretório {$sDirectoryScripts} n�o existe!\n", $GLOBALS['sArquivoLog'], $GLOBALS['iParamLog']);
+    db_log("ERRO: Diretório {$sDirectoryScripts} não existe!\n", $GLOBALS['sArquivoLog'], $GLOBALS['iParamLog']);
     return false;
   }
 
@@ -207,3 +207,5 @@ function upgradeDatabase($connection, $root) {
 
   return true;
 }
+
+?>

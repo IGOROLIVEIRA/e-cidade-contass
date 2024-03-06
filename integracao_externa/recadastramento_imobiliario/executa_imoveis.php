@@ -1,5 +1,5 @@
 <?php
-// Declarando variáveis necessárias para que a inclusão das bibliotecas n�o retorne mensagens.
+// Declarando variáveis necessárias para que a inclusão das bibliotecas não retorne mensagens.
 $HTTP_SERVER_VARS['HTTP_HOST']      = '';
 $HTTP_SERVER_VARS['PHP_SELF']       = '';
 $HTTP_SERVER_VARS["HTTP_REFERER"]   = '';
@@ -11,7 +11,7 @@ define("PATH_IMPORTACAO", "integracao_externa/recadastramento_imobiliario/");
 require_once(PATH_IMPORTACAO . "RecadastroImobiliarioImoveisArquivo.php");
 require_once(PATH_IMPORTACAO . "RecadastroImobiliarioImoveisStrategy.php");
 require_once(PATH_IMPORTACAO . "RecadastroImobiliarioImoveisExclusao.php");
-require_once(PATH_IMPORTACAO . "RecadastroImobiliarioImoveisInclusao.php");
+require_once(PATH_IMPORTACAO . "RecadastroImobiliarioImoveisInclusao.php"); 
 require_once(PATH_IMPORTACAO . "libs/Conexao.model.php");
 require_once(PATH_IMPORTACAO . "libs/caracteristicas_imovel.php");
 require_once(PATH_IMPORTACAO . "libs/BarraProgressoCli.php");
@@ -36,19 +36,21 @@ try {
   Conexao::getInstancia()->query("SELECT fc_startsession();");
   Conexao::getInstancia()->query("CREATE TEMP TABLE w_testadanumero as select * from testadanumero limit 1;");
   Conexao::getInstancia()->query("CREATE TEMP TABLE w_testada       as select * from testada       limit 1;");
-
+  
   if (!file_exists(PATH_IMPORTACAO . $argv[1])) {
     throw new Exception('Arquivo n�o encontrado.');
   }
 
   $oRecadastroImobiliarioImoveisArquivo = new RecadastroImobiliarioImoveisArquivo(PATH_IMPORTACAO . $argv[1]);
 
-  if ($oRecadastroImobiliarioImoveisArquivo->processar()) {
+  if ( $oRecadastroImobiliarioImoveisArquivo->processar() ) {
     Conexao::getInstancia()->query("COMMIT");
   }
-} catch (Exception $eErro) {
+} catch( Exception $eErro ) {
 
-  print_r($eErro) . "\n";
+  print_r($eErro) . "\n" ;
 
   Conexao::getInstancia()->query("ROLLBACK");
+
 }
+

@@ -95,7 +95,7 @@ Object.extend(Window.prototype, {
 
     /**
      * EVENTO DO BOTÃO BLOCK
-     * Bloqueia a sessão do usu�rio, impedindo-o de realizar ações até
+     * Bloqueia a sessão do usuário, impedindo-o de realizar ações até
      * entrar com sua senha novamente.
      */
     $('#block').on('click', function(e) {
@@ -184,7 +184,7 @@ Object.extend(Window.prototype, {
 
     /**
      * Evento do botão fallback
-     * Retira o usu�rio do modo de visualização do e-cidade 3.0
+     * Retira o usuário do modo de visualização do e-cidade 3.0
      */
     $('#fallback').on('click', function(e) {
 
@@ -222,7 +222,7 @@ Object.extend(Window.prototype, {
     });
 
     /**
-     * identifica inatividade do usu�rio no sistema
+     * identifica inatividade do usuário no sistema
      */
     ;(function($) {
 

@@ -94,12 +94,12 @@ if (isset($l20_codigo) && $l20_codigo) {
   $sSqlTemplateModalidade = $clliclicita->sql_query_modelosatas($l20_codigo, $sCamposModelos);
   $rsTemplateModalidade   = $clliclicita->sql_record($sSqlTemplateModalidade);
 
-  if ($clliclicita->numrows > 0) {
+  if ( $clliclicita->numrows > 0 ) {
     $rsModelos = $rsTemplateModalidade;
   } else {
 
-    $rsTemplateGeral = $clAtaTemplateGeral->sql_record($clAtaTemplateGeral->sql_query(null, $sCamposModelos));
-    if ($clAtaTemplateGeral->numrows > 0) {
+    $rsTemplateGeral = $clAtaTemplateGeral->sql_record($clAtaTemplateGeral->sql_query(null,$sCamposModelos));
+    if ( $clAtaTemplateGeral->numrows > 0 ) {
       $rsModelos = $rsTemplateGeral;
     } else {
       $lListaModelos = false;
@@ -120,163 +120,155 @@ if (isset($l20_codigo) && $l20_codigo) {
 
 if (isset($confirmar) && trim($confirmar) != "") {
 
-  if (!$dtjulgamento) {
-    $erro_msg = 'Data do Julgamento n�o informada. Verifique!';
-    $sqlerro = true;
-  }
+	if(!$dtjulgamento){
+		$erro_msg = 'Data do Julgamento não informada. Verifique!';
+		$sqlerro = true;
+	}
 
-  $dtjulgamento = join('-', array_reverse(explode('/', $dtjulgamento)));
+	$dtjulgamento = join('-', array_reverse(explode('/', $dtjulgamento)));
 
-  if (!$sqlerro) {
-    $sqlTribunal = $clcflicita->sql_query_file($oDadosLicitacao->l20_codtipocom, 'l03_pctipocompratribunal', '');
-    $rsTribunal = $clcflicita->sql_record($sqlTribunal);
-    $iTribunal = db_utils::fieldsMemory($rsTribunal, 0)->l03_pctipocompratribunal;
+	if(!$sqlerro){
+        $sqlTribunal = $clcflicita->sql_query_file($oDadosLicitacao->l20_codtipocom,'l03_pctipocompratribunal', '');
+        $rsTribunal = $clcflicita->sql_record($sqlTribunal);
+        $iTribunal = db_utils::fieldsMemory($rsTribunal, 0)->l03_pctipocompratribunal;
 
-    // 1ª validação
-    if ($dtjulgamento < $oDadosLicitacao->l20_datacria) {
-      $erro_msg = 'Data de Julgamento menor que a data de Abertura de Procedimento Administrativo!';
-      $sqlerro = true;
-    }
-  }
-
-  // 2ª validação
-  if (!$sqlerro) {
-    if (in_array($iTribunal, array(49, 50, 51, 52, 53, 54))) {
-      $dataaber = $oDadosLicitacao->l20_dataaber;
-      $dtpublic = $oDadosLicitacao->l20_dtpublic;
-      $recdocumentacao = $oDadosLicitacao->l20_recdocumentacao;
-      $public1 = $oDadosLicitacao->l20_datapublicacao1;
-      $public2 = $oDadosLicitacao->l20_datapublicacao2;
-
-      if ($dtjulgamento < $dataaber) {
-        $erro_msg = 'Data inválida! Data de Julgamento menor que a Data de Abertura da Licitação\nVerifique!';
-        $sqlerro = true;
-      }
-      if ($dtjulgamento < $dtpublic) {
-        $erro_msg = 'Data inválida! Data de Julgamento menor que a Data de Publicação da Licitação\nVerifique!';
-        $sqlerro = true;
-      }
-      if ($dtjulgamento < $recdocumentacao) {
-        $erro_msg = 'Data inválida! Data de Julgamento menor que a Data de Recebimento da Documentação.\nVerifique!';
-        $sqlerro = true;
-      }
-      if ($dtjulgamento < $public1) {
-        $erro_msg = 'Data inválida! Data de Julgamento menor que a Data Publicação Edital Veiculo 1 .\nVerifique!';
-        $sqlerro = true;
-      }
-      if ($dtjulgamento < $public2) {
-        $erro_msg = 'Data inválida! Data de Julgamento menor que a Data Publicação Edital Veiculo 2.\nVerifique!';
-        $sqlerro = true;
-      }
-
-      //            4ª validação
-      if (!$sqlerro) {
-        $sqlHomoAdjudica = $clhomologadjudica->sql_query(
-          '',
-          'l202_datahomologacao, l202_dataadjudicacao',
-          '',
-          'l202_licitacao = ' . $l20_codigo
-        );
-        $rsHomoAdjudica = $clhomologadjudica->sql_record($sqlHomoAdjudica);
-        $oHomoAdjudica = db_utils::fieldsMemory($rsHomoAdjudica, 0);
-
-        if ($oHomoAdjudica->l202_datahomologacao && $oHomoAdjudica->l202_dataadjudicacao) {
-          if ($dtjulgamento > $oHomoAdjudica->l202_datahomologacao) {
-            $erro_msg = 'Data de Julgamento é maior que Data da Homologação ou maior que a data de adjudicação.';
+        // 1ª validação
+        if($dtjulgamento < $oDadosLicitacao->l20_datacria){
+            $erro_msg = 'Data de Julgamento menor que a data de Abertura de Procedimento Administrativo!';
             $sqlerro = true;
-          }
-
-          if ($dtjulgamento > $oHomoAdjudica->l202_dataadjudicacao) {
-            $erro_msg = 'Data de Julgamento é maior que Data da Homologação ou maior que a data de adjudicação.';
-            $sqlerro = true;
-          }
         }
-      }
     }
-  }
+
+    // 2ª validação
+    if(!$sqlerro){
+        if(in_array($iTribunal, array(49, 50, 51, 52, 53, 54))){
+            $dataaber = $oDadosLicitacao->l20_dataaber;
+            $dtpublic = $oDadosLicitacao->l20_dtpublic;
+            $recdocumentacao = $oDadosLicitacao->l20_recdocumentacao;
+            $public1 = $oDadosLicitacao->l20_datapublicacao1;
+            $public2 = $oDadosLicitacao->l20_datapublicacao2;
+
+            if($dtjulgamento < $dataaber){
+				$erro_msg = 'Data inválida! Data de Julgamento menor que a Data de Abertura da Licitação\nVerifique!';
+				$sqlerro = true;
+            }
+            if($dtjulgamento < $dtpublic){
+				$erro_msg = 'Data inválida! Data de Julgamento menor que a Data de Publicação da Licitação\nVerifique!';
+				$sqlerro = true;
+            }
+            if($dtjulgamento < $recdocumentacao){
+				$erro_msg = 'Data inválida! Data de Julgamento menor que a Data de Recebimento da Documentação.\nVerifique!';
+				$sqlerro = true;
+            }
+            if($dtjulgamento < $public1){
+				$erro_msg = 'Data inválida! Data de Julgamento menor que a Data Publicação Edital Veiculo 1 .\nVerifique!';
+				$sqlerro = true;
+            }
+            if($dtjulgamento < $public2){
+                $erro_msg = 'Data inválida! Data de Julgamento menor que a Data Publicação Edital Veiculo 2.\nVerifique!';
+                $sqlerro = true;
+            }
+
+  //            4ª validação
+            if(!$sqlerro){
+                $sqlHomoAdjudica = $clhomologadjudica->sql_query('', 'l202_datahomologacao, l202_dataadjudicacao',
+                    '', 'l202_licitacao = ' . $l20_codigo);
+                $rsHomoAdjudica = $clhomologadjudica->sql_record($sqlHomoAdjudica);
+                $oHomoAdjudica = db_utils::fieldsMemory($rsHomoAdjudica, 0);
+
+                if($oHomoAdjudica->l202_datahomologacao && $oHomoAdjudica->l202_dataadjudicacao){
+                    if($dtjulgamento > $oHomoAdjudica->l202_datahomologacao){
+						$erro_msg = 'Data de Julgamento é maior que Data da Homologação ou maior que a data de adjudicação.';
+						$sqlerro = true;
+                    }
+
+                    if($dtjulgamento > $oHomoAdjudica->l202_dataadjudicacao){
+                        $erro_msg = 'Data de Julgamento é maior que Data da Homologação ou maior que a data de adjudicação.';
+                        $sqlerro = true;
+                    }
+                }
+            }
+        }
+    }
 
   //     3ª validação
-  if (!$sqlerro) {
-    $sqlParecer = $clparecerlicitacao->sql_query(
-      '',
-      'l200_data',
-      '',
-      'l200_licitacao = ' . $l20_codigo
-    );
-    $rsParecer = $clparecerlicitacao->sql_record($sqlParecer);
-    $dataParecer = db_utils::fieldsMemory($rsParecer, 0)->l200_data;
+    if(!$sqlerro){
+		$sqlParecer = $clparecerlicitacao->sql_query('', 'l200_data', '',
+			'l200_licitacao = ' . $l20_codigo);
+		$rsParecer = $clparecerlicitacao->sql_record($sqlParecer);
+		$dataParecer = db_utils::fieldsMemory($rsParecer, 0)->l200_data;
 
-    if ($dataParecer) {
-      if ($dtjulgamento > $dataParecer || is_null($dataParecer)) {
-        $erro_msg = 'Data de Julgamento maior que data do Parecer. Verifique!';
-        $sqlerro = true;
-      }
+		if($dataParecer){
+            if($dtjulgamento > $dataParecer || is_null($dataParecer)){
+                $erro_msg = 'Data de Julgamento maior que data do Parecer. Verifique!';
+                $sqlerro = true;
+            }
+        }
     }
-  }
 
   //    5ª validação
-  if (in_array($iTribunal, array(100, 101, 102, 103)) && !$sqlerro) {
-    if ($dtjulgamento > $oDadosLicitacao->l20_dtpubratificacao && $oDadosLicitacao->l20_dtpubratificacao) {
-      $erro_msg = 'Data de Julgamento é maior que a Data de Publicação do Termo de Ratificação. Verifique!';
-      $sqlerro = true;
-    }
-  }
-
-  if (!$sqlerro) {
-
-    $vitens = explode(":", $itens);
-    $vpcorcamjulg = array(array());
-    $linha = 0;
-
-    $_SESSION["modeloataselecionadojulgamento"] = $documentotemplateata;
-
-    for ($i = 0; $i < count($vitens); $i++) {
-
-      $str = $vitens[$i];
-      $vetor = explode(",", $str);
-
-      /**
-       * verificamos saldo modalidade para cada item da licitacao
-       */
-
-      $iModalidade = $oDadosLicitacao->l20_codtipocom;
-      //			$dtJulgamento = date("Y-m-d", db_getsession("DB_datausu"));
-      $iItem = trim($vetor[0]);
-
-      if ($iItem != null) {
-        try {
-
-          $oVerificaSaldo = licitacao::verificaSaldoModalidade($iModalidade, $iItem, $dtjulgamento);
-        } catch (Exception $oErro) {
-
-          $erro_msg = $oErro->getMessage();
-          $sqlerro = true;
+    if(in_array($iTribunal, array(100, 101, 102, 103)) && !$sqlerro){
+		if($dtjulgamento > $oDadosLicitacao->l20_dtpubratificacao && $oDadosLicitacao->l20_dtpubratificacao){
+		    $erro_msg = 'Data de Julgamento é maior que a Data de Publicação do Termo de Ratificação. Verifique!';
+		    $sqlerro = true;
         }
-      }
-
-      if (!$sqlerro) {
-
-        if (!$oVerificaSaldo->lPossuiSaldo && $iItem != null) {
-
-          $sqlerro = true;
-          $erro_msg = $oVerificaSaldo->sMensagem;
-        }
-      }
-
-      if (trim($vetor[0]) != "" && trim($vetor[1]) != "") {
-
-        $vpcorcamjulg[$linha]["item"] = $vetor[0];
-        $vpcorcamjulg[$linha]["forne"] = $vetor[1];
-        $linha++;
-      }
     }
-  }
 
-  if ($linha == 0 && !$sqlerro) {
+    if(!$sqlerro) {
 
-    $sqlerro  = true;
-    $erro_msg = "Nenhum item a ser julgado.";
-  }
+		$vitens = explode(":", $itens);
+		$vpcorcamjulg = array(array());
+		$linha = 0;
+
+		$_SESSION["modeloataselecionadojulgamento"] = $documentotemplateata;
+
+		for ($i = 0; $i < count($vitens); $i++) {
+
+			$str = $vitens[$i];
+			$vetor = explode(",", $str);
+
+			/**
+			 * verificamos saldo modalidade para cada item da licitacao
+			 */
+
+			$iModalidade = $oDadosLicitacao->l20_codtipocom;
+  //			$dtJulgamento = date("Y-m-d", db_getsession("DB_datausu"));
+			$iItem = trim($vetor[0]);
+
+			if ($iItem != null) {
+				try {
+
+					$oVerificaSaldo = licitacao::verificaSaldoModalidade($iModalidade, $iItem, $dtjulgamento);
+				} catch (Exception $oErro) {
+
+					$erro_msg = $oErro->getMessage();
+					$sqlerro = true;
+				}
+			}
+
+			if (!$sqlerro) {
+
+				if (!$oVerificaSaldo->lPossuiSaldo && $iItem != null) {
+
+					$sqlerro = true;
+					$erro_msg = $oVerificaSaldo->sMensagem;
+				}
+			}
+
+			if (trim($vetor[0]) != "" && trim($vetor[1]) != "") {
+
+				$vpcorcamjulg[$linha]["item"] = $vetor[0];
+				$vpcorcamjulg[$linha]["forne"] = $vetor[1];
+				$linha++;
+			}
+		}
+	}
+
+    if ($linha == 0 && !$sqlerro) {
+
+        $sqlerro  = true;
+        $erro_msg = "Nenhum item a ser julgado.";
+    }
 
   if (isset($documentotemplateata) && !empty($documentotemplateata)) {
 
@@ -303,7 +295,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
 
         try {
           $oDocumentoTemplate = new documentoTemplate(5, $documentotemplateata);
-        } catch (Exception $eException) {
+        } catch (Exception $eException){
 
           $erro_msg = str_replace("\\n", "\n", $eException->getMessage());
           $sqlerro  = true;
@@ -313,25 +305,25 @@ if (isset($confirmar) && trim($confirmar) != "") {
 
         if ($lProcessado) {
 
-          db_inicio_transacao();
+        	db_inicio_transacao();
 
           $iOidGravaArquivo = pg_lo_create();
           $sStringArquivo   = file_get_contents($sCaminhoSalvoSxw);
 
-          if (!$sStringArquivo) {
-            $erro_msg = "Falha ao abrir o arquivo {$sCaminhoSalvoSxw}! Modelo de ata inicial n�o foi gerado.";
+          if ( !$sStringArquivo ) {
+            $erro_msg = "Falha ao abrir o arquivo {$sCaminhoSalvoSxw}! Modelo de ata inicial não foi gerado.";
             $sqlerro  = true;
           }
 
           $oLargeObject = pg_lo_open($iOidGravaArquivo, "w");
           if (!$oLargeObject) {
-            $erro_msg = "Falha ao buscar objeto do banco de dados! Modelo de ata inicial n�o foi gerado.";
+            $erro_msg = "Falha ao buscar objeto do banco de dados! Modelo de ata inicial não foi gerado.";
             $sqlerro  = true;
           }
 
           $lObjetoEscrito = pg_lo_write($oLargeObject, $sStringArquivo);
           if (!$lObjetoEscrito) {
-            $erro_msg = "Falha na escrita do objeto no banco de dados! Modelo de ata inicial n�o foi gerado.";
+            $erro_msg = "Falha na escrita do objeto no banco de dados! Modelo de ata inicial não foi gerado.";
             $sqlerro  = true;
           }
 
@@ -361,10 +353,10 @@ if (isset($confirmar) && trim($confirmar) != "") {
 
     db_inicio_transacao();
 
-    $dtData  =  date("Y-m-d", db_getsession('DB_datausu'));
+    $dtData  =  date("Y-m-d",db_getsession('DB_datausu'));
     $sHora   =  date("H:i");
 
-    $oDaoLogJulgamento->pc92_sequencial      = null;
+    $oDaoLogJulgamento->pc92_sequencial      = null ;
     $oDaoLogJulgamento->pc92_usuario         = db_getsession('DB_id_usuario');
     $oDaoLogJulgamento->pc92_datajulgamento  = $dtjulgamento;
     $oDaoLogJulgamento->pc92_hora            = $sHora;
@@ -378,8 +370,8 @@ if (isset($confirmar) && trim($confirmar) != "") {
     }
     $codpcorcamitemlic = '';
     for ($x = 0; $x < $linha; $x++) {
-
-      if ($x > 0) {
+      
+      if($x>0){
         $codpcorcamitemlic .= ',';
       }
       $pc24_orcamitem   = $vpcorcamjulg[$x]["item"];
@@ -408,11 +400,11 @@ if (isset($confirmar) && trim($confirmar) != "") {
 
       if (pg_num_rows($rResultado) > 0) {
         //db_inicio_transacao();
-        $clpcorcamjulg->excluir($pc24_orcamitem, $pc24_orcamforne);
+        $clpcorcamjulg->excluir($pc24_orcamitem,$pc24_orcamforne);
         //db_fim_transacao();
         if ($clpcorcamjulg->erro_status == 0) {
           $erro_msg = $clpcorcamjulg->erro_msg;
-          $sqlerro = true;
+          $sqlerro=true;
         }
       }
 
@@ -420,8 +412,8 @@ if (isset($confirmar) && trim($confirmar) != "") {
       $clpcorcamjulg->pc24_orcamforne = $pc24_orcamforne;
       $clpcorcamjulg->pc24_pontuacao  = 1;
 
-      $clpcorcamjulg->incluir($pc24_orcamitem, $pc24_orcamforne);
-      if ($clpcorcamjulg->erro_status == 0) {
+      $clpcorcamjulg->incluir($pc24_orcamitem,$pc24_orcamforne);
+      if ($clpcorcamjulg->erro_status == 0){
 
         $erro_msg = $clpcorcamjulg->erro_msg;
         $sqlerro  = true;
@@ -448,7 +440,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
         if (pg_num_rows($rsRegistroPreco) != 1) {
 
           $sqlerro  = true;
-          $erro_msg = "N�o existem registros de preços para esta solicitação.";
+          $erro_msg = "Não existem registros de preços para esta solicitação.";
           break;
         }
 
@@ -470,6 +462,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
             break;
           }
         }
+
       }
 
       $oDaoLogJulgamentoItem->pc93_sequencial            = null;
@@ -480,24 +473,26 @@ if (isset($confirmar) && trim($confirmar) != "") {
       $oDaoLogJulgamentoItem->pc93_pontuacao             = 1;
       $oDaoLogJulgamentoItem->incluir(null);
 
-      if ($oDaoLogJulgamentoItem->erro_status == 0) {
+      if ($oDaoLogJulgamentoItem->erro_status == 0){
 
         $erro_msg = $oDaoLogJulgamentoItem->erro_msg;
         $sqlerro  = true;
         break;
       }
+
+      
     }
-    $result_l218codigo = $clsituacaoitemlic->sql_record('select l218_codigo from situacaoitemcompra where l218_pcorcamitemlic not in (' . $codpcorcamitemlic . ') and l218_codigolicitacao=' . $l20_codigo . ' and l218_motivoanulacao=\'\'');
-    for ($y = 0; $y < $clsituacaoitemlic->numrows; $y++) {
-      db_fieldsmemory($result_l218codigo, $y);
-      $clsituacaoitemlic->l219_codigo = $l218_codigo;
-      $clsituacaoitemlic->l219_situacao = 4;
+    $result_l218codigo = $clsituacaoitemlic->sql_record('select l218_codigo from situacaoitemcompra where l218_pcorcamitemlic not in ('.$codpcorcamitemlic.') and l218_codigolicitacao='.$l20_codigo.' and l218_motivoanulacao=\'\'');
+    for($y=0;$y<$clsituacaoitemlic->numrows;$y++){
+      db_fieldsmemory($result_l218codigo,$y);
+      $clsituacaoitemlic->l219_codigo= $l218_codigo;
+      $clsituacaoitemlic->l219_situacao=4;
       $clsituacaoitemlic->l219_hora = db_hora();
-      $clsituacaoitemlic->l219_data = date('Y-m-d', db_getsession('DB_datausu'));
+      $clsituacaoitemlic->l219_data = date('Y-m-d',db_getsession('DB_datausu'));
       $clsituacaoitemlic->l219_id_usuario = db_getsession('DB_id_usuario');
       $clsituacaoitemlic->incluir();
     }
-
+    
 
     if ($sqlerro == false) {
       $clliclicita->l20_licsituacao = 1;
@@ -537,42 +532,42 @@ if (isset($confirmar) && trim($confirmar) != "") {
 
   if ($sqlerro == false) {
 
-    $db_opcao = 3;
-    $erro_msg = $linha . " item(ns) da licitacao " . $l20_codigo . " foram julgado(s).";
+  	$db_opcao = 3;
+    $erro_msg = $linha." item(ns) da licitacao ".$l20_codigo." foram julgado(s).";
   }
 }
 
 if (isset($salvar) && trim($salvar) != "") {
-  //$result_licitacao = $clliclicita->sql_record($clliclicita->sql_query($l20_codigo));
-  //die($l20_descrinterporrecurso);
-  $clliclicita->l20_licsituacao = 11;
-  $clliclicita->l20_codigo      = $l20_codigo;
-  $clliclicita->l20_regata = $l20_regata;
-  $clliclicita->l20_interporrecurso = $l20_interporrecurso;
-  $clliclicita->l20_descrinterporrecurso = $l20_descrinterporrecurso;
-  //db_fieldsmemory($result_licitacao, 0);
-  //$clliclicita->l20_licsituacao = 11;
-  db_inicio_transacao();
-  $clliclicita->alterar_liclicitajulgamento($l20_codigo);
+	//$result_licitacao = $clliclicita->sql_record($clliclicita->sql_query($l20_codigo));
+	//die($l20_descrinterporrecurso);
+	$clliclicita->l20_licsituacao = 11;
+	$clliclicita->l20_codigo      = $l20_codigo;
+	$clliclicita->l20_regata = $l20_regata;
+	$clliclicita->l20_interporrecurso = $l20_interporrecurso;
+	$clliclicita->l20_descrinterporrecurso = $l20_descrinterporrecurso;
+	//db_fieldsmemory($result_licitacao, 0);
+	//$clliclicita->l20_licsituacao = 11;
+	db_inicio_transacao();
+	$clliclicita->alterar_liclicitajulgamento($l20_codigo);
 
-  if ($clliclicita->erro_status != 0) {
-    //$disable_confirmar = true;
-    db_msgbox($clliclicita->erro_msg);
-    if ($l20_interporrecurso == 1) {
+ if ($clliclicita->erro_status != 0) {
+	  //$disable_confirmar = true;
+	  db_msgbox($clliclicita->erro_msg);
+	  if ($l20_interporrecurso == 1) {
       echo "<script>location.href='lic1_pcorcamtroca001.php?pc20_codorc=$pc20_codorc&pc21_orcamforne=$pc21_orcamforne&l20_codigo=$l20_codigo&disable_confirmar=true'</script>";
-    }
-  } else {
-    $sqlerro = true;
-  }
-  db_fim_transacao($sqlerro);
-  //$erro_msg = $clliclicita->erro_msg;
+	  }
+	} else {
+		$sqlerro = true;
+	}
+	db_fim_transacao($sqlerro);
+	//$erro_msg = $clliclicita->erro_msg;
 } else {
-  $sSqlDadosLicitacao = $clliclicita->sql_query_file($l20_codigo);
-  $rsDadosLicitacao   = $clliclicita->sql_record($sSqlDadosLicitacao);
-  db_fieldsmemory($rsDadosLicitacao, 0);
-  if ($l20_interporrecurso == 1) {
-    $disable_confirmar = true;
-  }
+	$sSqlDadosLicitacao = $clliclicita->sql_query_file($l20_codigo);
+	$rsDadosLicitacao   = $clliclicita->sql_record($sSqlDadosLicitacao);
+	db_fieldsmemory($rsDadosLicitacao, 0);
+	if ($l20_interporrecurso == 1) {
+	  $disable_confirmar = true;
+	}
 }
 
 
@@ -595,36 +590,33 @@ if (isset($salvar) && trim($salvar) != "") {
 
 ?>
 <html>
-
 <head>
-  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta http-equiv="Expires" CONTENT="0">
-  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-  <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-  <link href="estilos.css" rel="stylesheet" type="text/css">
+<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Expires" CONTENT="0">
+<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+<link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
-  <table border="0" cellspacing="0" cellpadding="0" align="center">
-    <tr>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <td align="left" valign="top" bgcolor="#CCCCCC">
-        <center>
-          <?
+<table border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top" bgcolor="#CCCCCC">
+    <center>
+        <?
           include("forms/db_frmpcorcamtrocalic.php");
-          ?>
-        </center>
-      </td>
-    </tr>
-  </table>
+        ?>
+    </center>
+    </td>
+  </tr>
+</table>
 </body>
 <?
-db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
-
 </html>
 <?
 /*Acrescentado o parametro criterioajudicacao OC3770*/
@@ -638,15 +630,15 @@ if (trim($erro_msg) != "") {
   db_msgbox($erro_msg);
 }
 
-if (isset($salvar)) {
-  if ($clliclicita->erro_status == "0") {
-    $clliclicita->erro(true, false);
-    $db_botao = true;
+if(isset($salvar)){
+  if($clliclicita->erro_status=="0"){
+    $clliclicita->erro(true,false);
+    $db_botao=true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    if ($clliclicita->erro_campo != "") {
-      echo "<script> document.form1." . $clliclicita->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1." . $clliclicita->erro_campo . ".focus();</script>";
-      echo "<script> document.form1." . $clliclicita->erro_campo . ".value='';</script>";
+    if($clliclicita->erro_campo!=""){
+      echo "<script> document.form1.".$clliclicita->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1.".$clliclicita->erro_campo.".focus();</script>";
+      echo "<script> document.form1.".$clliclicita->erro_campo.".value='';</script>";
     }
   }
 }

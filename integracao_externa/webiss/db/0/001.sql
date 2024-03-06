@@ -623,7 +623,7 @@ CREATE TABLE integra_recibo_baixa_detalhe
 
     primary key(sequencial),
 
--- Gerado pelo Druid com erro pois numbco da tabela integra_recibo n�o é chave
+-- Gerado pelo Druid com erro pois numbco da tabela integra_recibo não é chave
 -- foreign key(integra_recibo,integra_recibo_numdoc) references integra_recibo(sequencial,numdoc),
     foreign key(integra_recibo) references integra_recibo(sequencial),
     foreign key(integra_recibo_baixa) references integra_recibo_baixa(sequencial)

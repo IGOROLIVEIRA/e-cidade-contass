@@ -225,7 +225,7 @@ if ($adanterior == 0) {
 
             </form>
 
-            <div style="margin-right:910px; width: 10%;  <?php if (strcmp($oResult[0]->tipoaditivo, "12-Alteração de Projeto/Especificaï¿½ï¿½o") != 0) {
+            <div style="margin-right:910px; width: 10%;  <?php if (strcmp($oResult[0]->tipoaditivo, "12-Alteraï¿½ï¿½o de Projeto/Especificaï¿½ï¿½o") != 0) {
                                                                 echo "display: none;";
                                                             } ?>">
                 <fieldset>

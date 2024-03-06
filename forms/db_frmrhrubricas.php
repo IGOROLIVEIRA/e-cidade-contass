@@ -558,7 +558,7 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
         return setTimeout(function() {
             var lNumeros = new RegExp(/^[0-9\/]+$/).test(self.value);
             if (!lNumeros) {
-                alert('Código Fundamentaï¿½ï¿½o Legal deve ser preenchido somente com nï¿½meros!');
+                alert('Cï¿½digo Fundamentaï¿½ï¿½o Legal deve ser preenchido somente com nï¿½meros!');
                 self.value = '';
             }
         }, 5);
@@ -579,7 +579,7 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
          * Rubrica vazia
          */
         if ($('rh27_rubric').value == '') {
-            alert('Código da rubrica não informado.');
+            alert('Cï¿½digo da rubrica nï¿½o informado.');
             return false;
         }
 
@@ -605,7 +605,7 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
 
         require_once("scripts/classes/DBViewFormularioFolha/ValidarCodigoRubrica.js");
         /**
-         * Valida se o Código da Rubrica foi informado no formato correto.
+         * Valida se o Cï¿½digo da Rubrica foi informado no formato correto.
          */
         var lValidaCodigoRubrica = DBViewFormularioFolha.ValidarCodigoRubrica($('rh27_rubric'));
 
@@ -614,7 +614,7 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
          */
         if (!lValidaCodigoRubrica) {
 
-            alert('Código da rubrica com o formato invï¿½lido.');
+            alert('Cï¿½digo da rubrica com o formato invï¿½lido.');
             $('rh27_rubric').value = '';
             return false;
         }

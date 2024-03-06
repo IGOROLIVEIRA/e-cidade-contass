@@ -24,9 +24,9 @@ class Oc14294 extends AbstractMigration
 
             COMMIT;";
 
-        $this->execute($sql);
+      $this->execute($sql);
 
-        $sql = <<<SQL
+      $sql = <<<SQL
 
         CREATE OR REPLACE FUNCTION public.fc_verifica_lancamento(integer, date, integer, double precision)
         RETURNS text
@@ -303,7 +303,7 @@ class Oc14294 extends AbstractMigration
             v_vlrpag_g := round(v_vlrpag_g + c_lanc.c70_valor,2)::float8;
 
             /**
-            * Estorno de RP não processado - 31
+            * Estorno de RP nÃ£o processado - 31
             */
             elsif c_lanc.c53_coddoc = 38 then
             if c_lanc.c70_data <= p_dtfim then
@@ -509,5 +509,6 @@ class Oc14294 extends AbstractMigration
 
 SQL;
         $this->execute($sql);
+
     }
 }

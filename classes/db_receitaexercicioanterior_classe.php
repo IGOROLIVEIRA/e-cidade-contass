@@ -344,7 +344,7 @@ class cl_receitaexercicioanterior
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "Despesa do Exercicio Anterior nao Encontrado. Exclusão não Efetuada.\\n";
+                $this->erro_sql = "Despesa do Exercicio Anterior nao Encontrado. Exclusão nÃ£o Efetuada.\\n";
                 $this->erro_sql .= "Valores : " . $c234_sequencial;
                 $this->erro_msg  = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));

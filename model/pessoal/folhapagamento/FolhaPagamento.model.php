@@ -30,9 +30,8 @@
  * @author $Author: dbrenan $
  * @version $Revision: 1.72 $
  */
-abstract class FolhaPagamento
-{
-
+abstract class FolhaPagamento { 
+    
   /**
    * Tipos de Folha de Pagamento
    */
@@ -44,14 +43,14 @@ abstract class FolhaPagamento
   const TIPO_FOLHA_SUPLEMENTAR  = 6;
 
   const MENSAGENS = 'recursoshumanos.pessoal.FolhaPagamento.';
-
+    
   /**
    * Código unico de Cada folha de pagamento.
    *
    * @var Integer
    */
   private $iSequencial;
-
+  
   /**
    * Código de Controle da folha de pagamento, 
    * para que exista mais de uma na mesma competencia
@@ -59,7 +58,7 @@ abstract class FolhaPagamento
    * @var Integer
    */
   public $iNumero;
-
+  
   /**
    * Competência atual da folha 
    * 
@@ -75,7 +74,7 @@ abstract class FolhaPagamento
    * @access private
    */
   private $oCompetenciaReferencia;
-
+  
   /**
    * A instutição da folha
    * 
@@ -83,7 +82,7 @@ abstract class FolhaPagamento
    * @access private
    */
   private $oInstituicao;
-
+  
   /**
    * A descrição sobre a folha criada
    * 
@@ -91,7 +90,7 @@ abstract class FolhaPagamento
    * @access private
    */
   private $sDescricao;
-
+  
   /**
    * Tipo de Folha de Pagamento
    *
@@ -99,7 +98,7 @@ abstract class FolhaPagamento
    * @access protected
    */
   protected $iTipoFolha;
-
+  
   /**
    * Situação da folha de pagamento, validando se ela esta aberta ou fechada
    * 
@@ -107,40 +106,39 @@ abstract class FolhaPagamento
    * @access private
    */
   private $lAberto;
-
+  
   /**
    * Construtor da Classe
    * 
    * @param integer $iSequencial
    * @param integer $iTipoFolha
    */
-  function __construct($iSequencial, $iTipoFolha)
-  {
-
+  function __construct( $iSequencial, $iTipoFolha ) {
+    
     $this->iSequencial = $iSequencial;
     $this->setTipoFolha($iTipoFolha);
-    $this->setCompetenciaFolha(DBPessoal::getCompetenciaFolha());
+    $this->setCompetenciaFolha( DBPessoal::getCompetenciaFolha() );
 
     $oDadosMensagem          = new stdClass();
 
-    if (!empty($iSequencial)) {
+    if (!empty($iSequencial) ) {
 
       $oDaoRHFolhaPagamento    = new cl_rhfolhapagamento();
       $sSql                    = $oDaoRHFolhaPagamento->sql_query_file($iSequencial);
       $rsSql                   = db_query($sSql);
-      if (!$rsSql) {
-        throw new DBException(_M(self::MENSAGENS . "erro_instanciar_objeto"));
+      if ( !$rsSql ) {
+        throw new DBException(_M(self::MENSAGENS . "erro_instanciar_objeto") );
       }
 
-      if (pg_num_rows($rsSql) == 0) {
-
+      if ( pg_num_rows($rsSql) == 0 ) {
+       
         $oDadosMensagem->iCodigo = $iSequencial;
-        throw new DBException(_M(self::MENSAGENS . "codigo_folha_incorreto", $oDadosMensagem));
+        throw new DBException(_M(self::MENSAGENS . "codigo_folha_incorreto", $oDadosMensagem) );
       }
 
       $oDadosFolhaPagamento = db_utils::fieldsMemory($rsSql, 0);
 
-      if ($oDadosFolhaPagamento->rh141_tipofolha <> $iTipoFolha) {
+      if ( $oDadosFolhaPagamento->rh141_tipofolha <> $iTipoFolha ) {
 
         $aDescricaoFolha = array(
           FolhaPagamento::TIPO_FOLHA_SALARIO      => "Salário",
@@ -153,15 +151,15 @@ abstract class FolhaPagamento
 
         $oDadosMensagem->sTipoInformado = $aDescricaoFolha[$iTipoFolha];
         $oDadosMensagem->sTipoEsperado  = $aDescricaoFolha[$oDadosFolhaPagamento->rh141_tipofolha];
-        throw new BusinessException(_M(self::MENSAGENS . "inconsistencia_tipo", $oDadosMensagem));
+        throw new BusinessException(_M(self::MENSAGENS . "inconsistencia_tipo", $oDadosMensagem) );
       }
 
       $this->setNumero($oDadosFolhaPagamento->rh141_codigo);
-      $this->setCompetenciaReferencia(new DBCompetencia($oDadosFolhaPagamento->rh141_anoref, $oDadosFolhaPagamento->rh141_mesref));
-      $this->setCompetenciaFolha(new DBCompetencia($oDadosFolhaPagamento->rh141_anousu, $oDadosFolhaPagamento->rh141_mesusu));
-      $this->setInstituicao(InstituicaoRepository::getInstituicaoByCodigo($oDadosFolhaPagamento->rh141_instit));
+      $this->setCompetenciaReferencia(new DBCompetencia($oDadosFolhaPagamento->rh141_anoref, $oDadosFolhaPagamento->rh141_mesref) );
+      $this->setCompetenciaFolha( new DBCompetencia($oDadosFolhaPagamento->rh141_anousu, $oDadosFolhaPagamento->rh141_mesusu) );
+      $this->setInstituicao( InstituicaoRepository::getInstituicaoByCodigo($oDadosFolhaPagamento->rh141_instit) );
 
-      if ($oDadosFolhaPagamento->rh141_aberto == 't') {
+      if ( $oDadosFolhaPagamento->rh141_aberto == 't') {
         $this->setFolhaAberta();
       } else {
         $this->setFolhaFechada();
@@ -180,19 +178,17 @@ abstract class FolhaPagamento
    * 
    * @return Integer
    */
-  public function getSequencial()
-  {
+  public function getSequencial() {
     return $this->iSequencial;
   }
-
+   
   /**
    * Seta o número Sequencial da folha
    *
    * @return Integer
    */
-  public function setSequencial($iSequencial)
-  {
-    $this->iSequencial = $iSequencial;
+  public function setSequencial($iSequencial) {
+    $this->iSequencial = $iSequencial; 
   }
 
   /**
@@ -200,8 +196,7 @@ abstract class FolhaPagamento
    * 
    * @return Integer
    */
-  public function getNumero()
-  {
+  public function getNumero() {
     return $this->iNumero;
   }
 
@@ -210,18 +205,16 @@ abstract class FolhaPagamento
    * 
    * @param Integer $iNumero
    */
-  public function setNumero($iNumero)
-  {
+  public function setNumero($iNumero) {
     $this->iNumero = $iNumero;
   }
-
+  
   /**
    * Retorna a competência da folha
    * 
    * @return DBCompetencia
    */
-  public function getCompetencia()
-  {
+  public function getCompetencia() {
     return $this->oCompetenciaFolha;
   }
 
@@ -230,8 +223,7 @@ abstract class FolhaPagamento
    * 
    * @return DBCompetencia
    */
-  public function getCompetenciaReferencia()
-  {
+  public function getCompetenciaReferencia() {
     return $this->oCompetenciaReferencia;
   }
 
@@ -240,8 +232,7 @@ abstract class FolhaPagamento
    * 
    * @return Instituicao
    */
-  public function getInstituicao()
-  {
+  public function getInstituicao() {
     return $this->oInstituicao;
   }
 
@@ -250,18 +241,16 @@ abstract class FolhaPagamento
    * 
    * @return String
    */
-  public function getDescricao()
-  {
+  public function getDescricao() {
     return $this->sDescricao;
   }
-
+  
   /**
    * Verifica se a folha esta aberta ou fechada
    * 
    * @return boolean
    */
-  public function isAberto()
-  {
+  public function isAberto() {
     return $this->lAberto;
   }
 
@@ -270,8 +259,7 @@ abstract class FolhaPagamento
    * 
    * @param DBCompetencia $oCompetenciaFolha
    */
-  public function setCompetenciaFolha(DBCompetencia $oCompetenciaFolha)
-  {
+  public function setCompetenciaFolha(DBCompetencia $oCompetenciaFolha) {
     $this->oCompetenciaFolha = $oCompetenciaFolha;
   }
 
@@ -280,8 +268,7 @@ abstract class FolhaPagamento
    * 
    * @param DBCompetencia $oCompetenciaReferencia
    */
-  public function setCompetenciaReferencia(DBCompetencia $oCompetenciaReferencia)
-  {
+  public function setCompetenciaReferencia(DBCompetencia $oCompetenciaReferencia) {
     $this->oCompetenciaReferencia = $oCompetenciaReferencia;
   }
 
@@ -290,8 +277,7 @@ abstract class FolhaPagamento
    * 
    * @param Instituicao $oInstituicao
    */
-  public function setInstituicao(Instituicao $oInstituicao)
-  {
+  public function setInstituicao(Instituicao $oInstituicao) {
     $this->oInstituicao = $oInstituicao;
   }
 
@@ -300,34 +286,30 @@ abstract class FolhaPagamento
    * 
    * @param String $sDescricao
    */
-  public function setDescricao($sDescricao)
-  {
+  public function setDescricao($sDescricao) {
     $this->sDescricao = $sDescricao;
   }
 
   /**
    * Seta a folha como aberta
    */
-  public function setFolhaAberta()
-  {
+  public function setFolhaAberta() {
     $this->lAberto = true;
   }
 
   /**
    * Seta a folha como fechada
    */
-  public function setFolhaFechada()
-  {
+  public function setFolhaFechada() {
     $this->lAberto = false;
   }
-
+    
   /**
    * Retorna o tipo da folha
    * 
    * @return Integer
    */
-  public function getTipoFolha()
-  {
+  public function getTipoFolha() {
     return $this->iTipoFolha;
   }
 
@@ -336,11 +318,10 @@ abstract class FolhaPagamento
    * 
    * @param Integer $iTipoFolha
    */
-  public function setTipoFolha($iTipoFolha)
-  {
+  public function setTipoFolha($iTipoFolha) {
     $this->iTipoFolha = $iTipoFolha;
   }
-
+  
   /**
    * Retorna a ultima folha aberta do tipo passado por parametro
    * 
@@ -349,11 +330,10 @@ abstract class FolhaPagamento
    * @access public
    * @return Integer Sequencial da folha aberta
    */
-  public static function getCodigoFolha($iTipoFolha, $lAberta = null, DBCompetencia $oCompetencia = null)
-  {
-
-
-    if (is_null($oCompetencia)) {
+  public static function getCodigoFolha($iTipoFolha, $lAberta = null, DBCompetencia $oCompetencia = null) {
+ 
+    
+    if ( is_null($oCompetencia)) { 
 
       $iMesFolha            = DBPessoal::getMesFolha();
       $iAnoFolha            = DBPessoal::getAnoFolha();
@@ -364,10 +344,10 @@ abstract class FolhaPagamento
     }
     $iInstituicao         = db_getsession("DB_instit");
 
-    if (is_null($lAberta)) {
+    if ( is_null($lAberta) ) {
       $sCondicaoAberta = 'true ';
-    } else if ($lAberta === true) {
-      $sCondicaoAberta    = "rh141_aberto        = true            ";
+    } else if( $lAberta === true ) {
+      $sCondicaoAberta    = "rh141_aberto        = true            ";   
     } else {
       $sCondicaoAberta    = "rh141_aberto        = false           ";
     }
@@ -382,16 +362,16 @@ abstract class FolhaPagamento
     $sSql                 = $oDaoFolhaPagamento->sql_query_file(null, "rh141_sequencial", " rh141_anousu desc, rh141_mesusu desc, rh141_codigo desc limit 1", $sWhere);
     $rsRegistros          = db_query($sSql);
 
-    if (!$rsRegistros) {
-      throw new DBException(_M(self::MENSAGENS . "erro_buscar_dados_folha_aberta"));
+    if ( !$rsRegistros ) {
+      throw new DBException(_M(self::MENSAGENS . "erro_buscar_dados_folha_aberta")); 
     }
-
-    if (pg_num_rows($rsRegistros) == 0) {
+   
+    if ( pg_num_rows($rsRegistros) == 0 ) {
       return false;
     }
-
+    
     $oDadosFolhaPagamento = db_utils::fieldsMemory($rsRegistros, 0);
-
+    
     return $oDadosFolhaPagamento->rh141_sequencial;
   }
 
@@ -403,14 +383,13 @@ abstract class FolhaPagamento
    * 
    * @return boolean
    */
-  public static function hasFolhaAberta($iTipoFolha, DBCompetencia $oCompetencia = null)
-  {
+  public static function hasFolhaAberta($iTipoFolha, DBCompetencia $oCompetencia = null) {
 
     $iInstituicao = db_getsession("DB_instit");
 
     $sWhere  = "rh141_aberto        = true           ";
-
-    if (!is_null($oCompetencia)) {
+  
+    if ( !is_null($oCompetencia) ) {
 
       $sWhere .= " and rh141_anousu = {$oCompetencia->getAno()} ";
       $sWhere .= " and rh141_mesusu = {$oCompetencia->getMes()} ";
@@ -426,8 +405,8 @@ abstract class FolhaPagamento
     if (!$rsRegistros) {
       throw new DBException(_M(self::MENSAGENS . "erro_procurar_folha_aberta")); // arquivos message
     }
-
-    return (pg_num_rows($rsRegistros) != 0);
+    
+    return ( pg_num_rows($rsRegistros) != 0 );
   }
 
   /**
@@ -438,15 +417,14 @@ abstract class FolhaPagamento
    * @param Boolean 
    * @return Boolean
    */
-  public static function hasFolhaTipo($iTipoFolha, DBCompetencia $oCompetencia = null, $lEstado = null)
-  {
+  public static function hasFolhaTipo($iTipoFolha, DBCompetencia $oCompetencia = null, $lEstado = null) {
 
     $iInstituicao = db_getsession("DB_instit");
 
     $sWhere  = "     rh141_tipofolha = {$iTipoFolha}  ";
     $sWhere .= " AND rh141_instit    = {$iInstituicao}";
 
-    if (!is_null($lEstado)) {
+    if ( !is_null($lEstado) ) {
 
       $sEstado = $lEstado ? "true" : "false";
       $sWhere .= " and rh141_aberto is $sEstado ";
@@ -467,12 +445,12 @@ abstract class FolhaPagamento
     if (!$rsRegistros) {
       throw new DBException(_M(self::MENSAGENS . "erro_procurar_registro"));
     }
-
-    return (bool) pg_num_rows($rsRegistros);
+    
+    return (boolean) pg_num_rows($rsRegistros);
   }
 
   /**
-   * Retorna o ultimo número unico da folha pagamento, conforme o tipo passado.
+   * Retorna o ultimo nÃºmero unico da folha pagamento, conforme o tipo passado.
    * 
    * @access protected
    * @param Integer $iTipoFolha Código do tipo da folha
@@ -480,8 +458,7 @@ abstract class FolhaPagamento
    * 
    * @return Integer Valor do (maior|último) registro da folha pagamento
    */
-  protected static function getProximoNumero($iTipoFolha)
-  {
+  protected static function getProximoNumero($iTipoFolha) {
 
     $iMesFolha            = DBPessoal::getMesFolha();
     $iAnoFolha            = DBPessoal::getAnoFolha();
@@ -501,9 +478,9 @@ abstract class FolhaPagamento
     if (!$rsFolhaPagamento) {
       throw new DBException(_M(self::MENSAGENS . "error_retornar_proximo_numero"));
     }
-
+    
     $oFolhaPagamento = db_utils::fieldsMemory($rsFolhaPagamento, 0);
-
+        
     return $oFolhaPagamento->rh141_codigo + 1;
   }
 
@@ -512,8 +489,7 @@ abstract class FolhaPagamento
    *
    * @return Integer
    */
-  public function salvar()
-  {
+  public function salvar() {
 
     $oDAOFolhaPagamento = new cl_rhfolhapagamento();
     $oDAOFolhaPagamento->rh141_codigo = $this->getNumero();
@@ -530,62 +506,62 @@ abstract class FolhaPagamento
       $oDAOFolhaPagamento->rh141_tipofolha = $this->getTipoFolha();
       $oDAOFolhaPagamento->incluir(null);
       $this->iSequencial = $oDAOFolhaPagamento->rh141_sequencial;
+
     } else {
       $oDAOFolhaPagamento->rh141_sequencial = $this->getSequencial();
       $oDAOFolhaPagamento->alterar($this->getSequencial());
     }
 
-    if ($oDAOFolhaPagamento->erro_status == "0") {
+    if ( $oDAOFolhaPagamento->erro_status == "0" ) {
       throw new DBException($oDAOFolhaPagamento->erro_msg);
     }
 
     return $this->getSequencial();
   }
-
+  
   /**
    * Exclui a Folha atual (iSequencial) da tabela rhfolhapagamento
    * @return boolean
    */
-  public function excluir()
-  {
+  public function excluir() {
 
     $oDAOCalculo = db_utils::getDao($this->getTabelaCalculo());
     $oDAOCalculo->excluir($this->getCompetencia()->getAno(), $this->getCompetencia()->getMes());
-
+    
     $oDaoRhHistoricoPonto = new cl_rhhistoricoponto();
     $oDaoRhHistoricoPonto->excluir(null, "rh144_folhapagamento = {$this->iSequencial}");
 
     if ($oDaoRhHistoricoPonto->erro_status == "0") {
-      throw new DBException(_M(self::MENSAGENS . "erro_excluir_historico_ponto"));
+      throw new DBException( _M(self::MENSAGENS . "erro_excluir_historico_ponto"));
     }
 
     $oDaoRhHistoricoCalculo = new cl_rhhistoricocalculo();
     $oDaoRhHistoricoCalculo->excluir(null, "rh143_folhapagamento = {$this->iSequencial}");
 
     if ($oDaoRhHistoricoCalculo->erro_status == "0") {
-      throw new DBException(_M(self::MENSAGENS . "erro_excluir_historico_calculo"));
+      throw new DBException( _M(self::MENSAGENS . "erro_excluir_historico_calculo"));
     }
 
     $oDaoRhHistoricoPensao = new cl_rhhistoricopensao();
     $oDaoRhHistoricoPensao->excluir(null, "rh145_rhfolhapagamento = {$this->iSequencial}");
 
     if ($oDaoRhHistoricoPensao->erro_status == "0") {
-      throw new DBException(_M(self::MENSAGENS . "erro_excluir_historicopensao"));
+      throw new DBException( _M(self::MENSAGENS . "erro_excluir_historicopensao"));
     }
 
     $oDaoFolhaPagamentoGeracao = new cl_folhapagamentogeracao;
     $oDaoFolhaPagamentoGeracao->excluir(null, "rh146_folhapagamento = {$this->iSequencial}");
 
     if ($oDaoFolhaPagamentoGeracao->erro_status = "0") {
-      throw new DBException(_M(self::MENSAGENS . "erro_excluir_folhapagamentogeracao"));
+      throw new DBException( _M(self::MENSAGENS . "erro_excluir_folhapagamentogeracao"));
     }
 
 
     $oDaoFolhaPagamento = new cl_rhfolhapagamento;
     $oDaoFolhaPagamento->excluir($this->iSequencial);
 
-    if ($oDaoFolhaPagamento->erro_status == "0") {
-      throw new DBException(_M(self::MENSAGENS . "erro_excluir"));
+    if ($oDaoFolhaPagamento->erro_status == "0"){
+      throw new DBException( _M(self::MENSAGENS . "erro_excluir"));
     }
 
 
@@ -602,7 +578,7 @@ abstract class FolhaPagamento
    * Função abstrata para cancelamento da abertura da folha.
    */
   public abstract function cancelarAbertura();
-
+  
   /**
    * Realiza o cancelamento do fechamento da Folha, as seguintes 
    * regras devem ser respeitadas:
@@ -611,9 +587,8 @@ abstract class FolhaPagamento
    * - A folha informada não pode estar empenhada
    * @return boolean
    */
-  public function cancelarFechamento()
-  {
-
+  public function cancelarFechamento() {
+    
     $oDaoFolhaPagamento = new cl_rhfolhapagamento;
 
     /**
@@ -622,7 +597,7 @@ abstract class FolhaPagamento
     if ($this->lAberto) {
       throw new BusinessException(_M(self::MENSAGENS . "folha_informada_aberta"));
     }
-
+    
     /**
      * Verifica se não existe nenhuma folha aberta,
      * se existir não pode ser cancelado o  fechamento
@@ -639,11 +614,11 @@ abstract class FolhaPagamento
       $oFolhaPagamento = db_utils::fieldsMemory($rsFolhaPagamento, 0);
       throw new BusinessException(_M(self::MENSAGENS . "existe_folha_aberta", $oFolhaPagamento));
     }
-
-    /**
-     * Verifica se a folha informada não posusi empenho,
-     * se possuir não pode ser cancelado o fechamento.
-     */
+   
+   /**
+    * Verifica se a folha informada não posusi empenho,
+    * se possuir não pode ser cancelado o fechamento.
+    */
     $this->verificarEmpenho();
 
     /**
@@ -652,8 +627,8 @@ abstract class FolhaPagamento
      */
     $this->setFolhaAberta();
     $this->salvar();
-
-
+    
+   
     /**
      * Esta função retorna os dados dos históricos do ponto (rhhistoricoponto) para o ponto (pontocom)  
      */
@@ -665,9 +640,9 @@ abstract class FolhaPagamento
      */
     $oDaoRhHistoricoPonto   = new cl_rhhistoricoponto();
     $oDaoRhHistoricoPonto->excluir(null, "rh144_folhapagamento = {$this->iSequencial}");
-
-    if ($oDaoRhHistoricoPonto->erro_status == 0) {
-      throw new DBException(_M(self::MENSAGENS . "erro_excluir_historico_ponto"));
+    
+    if( $oDaoRhHistoricoPonto->erro_status == 0){
+      throw new DBException(_M(self::MENSAGENS . "erro_excluir_historico_ponto"));       
     }
 
     /**
@@ -675,10 +650,10 @@ abstract class FolhaPagamento
      */
     $oDaoRhHistoricoCalculo   = new cl_rhhistoricocalculo();
     $oDaoRhHistoricoCalculo->excluir(null, "rh143_folhapagamento = {$this->iSequencial}");
-
-    if ($oDaoRhHistoricoCalculo->erro_status == 0) {
-      throw new DBException(_M(self::MENSAGENS . "erro_excluir_historico_calculo"));
-    }
+    
+    if( $oDaoRhHistoricoCalculo->erro_status == 0){
+      throw new DBException(_M(self::MENSAGENS . "erro_excluir_historico_calculo"));       
+    }    
 
     return true;
   }
@@ -687,32 +662,30 @@ abstract class FolhaPagamento
    * Altera o a Folha de Pagamento para fechado.
    * @return boolean
    */
-  public function fecharFolha()
-  {
-
+  public function fecharFolha(){
+   
     $this->lAberto = false;
     $this->salvar();
   }
 
-  /**
-   * Exclui rubrica específica do histórico do ponto.
-   * @param  Integer $iMatricula Matricula (regist) do servidor
-   * @param  String  $sRubrica   Código da rubrica que será excluída
-   * @return boolean
-   */
-  public function excluirRubricaHistoricoPonto($iMatricula, $sRubrica)
-  {
+/**
+ * Exclui rubrica específica do histórico do ponto.
+ * @param  Integer $iMatricula Matricula (regist) do servidor
+ * @param  String  $sRubrica   Código da rubrica que será excluída
+ * @return boolean
+ */
+  public function excluirRubricaHistoricoPonto( $iMatricula, $sRubrica )  {
 
     $oDaoRhHistoricoPonto = new cl_rhhistoricoponto();
-    $oDaoRhHistoricoPonto->excluir(null, "rh144_folhapagamento = {$this->iSequencial} and rh144_regist = {$iMatricula} and rh144_rubrica = '{$sRubrica}'");
+    $oDaoRhHistoricoPonto->excluir(null,"rh144_folhapagamento = {$this->iSequencial} and rh144_regist = {$iMatricula} and rh144_rubrica = '{$sRubrica}'");
 
-    if ($oDaoRhHistoricoPonto->erro_status == 0) {
+    if ($oDaoRhHistoricoPonto->erro_status == 0){
       throw new DBException(_M(self::MENSAGENS . 'erro_excluir_historico_ponto'));
     }
 
     return true;
   }
-
+  
   /**
    * Excluí rubrica específica do histórico do cálculo.
    * 
@@ -722,24 +695,22 @@ abstract class FolhaPagamento
    * @return Boolean
    * @throws DBException
    */
-  public function excluirRubricaHistoricoCalculo($iMatricula, $sRubrica)
-  {
+  public function excluirRubricaHistoricoCalculo($iMatricula, $sRubrica)  {
 
     $oDaoRhHistoricoCalculo = new cl_rhhistoricocalculo();
-    $oDaoRhHistoricoCalculo->excluir(null, "rh143_folhapagamento = {$this->iSequencial} and rh143_regist = {$iMatricula} and rh143_rubrica = '{$sRubrica}'");
+    $oDaoRhHistoricoCalculo->excluir(null,"rh143_folhapagamento = {$this->iSequencial} and rh143_regist = {$iMatricula} and rh143_rubrica = '{$sRubrica}'");
 
-    if ($oDaoRhHistoricoCalculo->erro_status == 0) {
+    if ($oDaoRhHistoricoCalculo->erro_status == 0){
       throw new DBException(_M(self::MENSAGENS . 'erro_excluir_historico_calculo'));
     }
 
     return true;
   }
 
-  public function salvarHistoricoPonto($aServidores)
-  {
+  public function salvarHistoricoPonto ($aServidores) {
 
-    if (count($aServidores) == 0) {
-      return;
+    if ( count($aServidores) == 0 ) {
+      return ;
     }
 
     $oDaoRhHistoricoPonto = new cl_rhhistoricoponto();
@@ -751,18 +722,18 @@ abstract class FolhaPagamento
      * Percorre os servidores, buscando os registros financeiros 
      * e salvando na tabela rhhistoricopontos.
      */
-
+    
     foreach ($aServidores as $oServidor) {
+  
+      $oDaoRhHistoricoPonto->excluir(null, "rh144_folhapagamento = {$this->iSequencial} and rh144_regist = {$oServidor->getMatricula()}"); 
 
-      $oDaoRhHistoricoPonto->excluir(null, "rh144_folhapagamento = {$this->iSequencial} and rh144_regist = {$oServidor->getMatricula()}");
-
-      if ($oDaoRhHistoricoPonto->erro_status == 0) {
+      if ($oDaoRhHistoricoPonto->erro_status == 0){
         throw new DBException(_M(self::MENSAGENS . 'erro_excluir_historico_ponto'));
       }
 
       $oDaoRhHistoricoPonto->rh144_regist = $oServidor->getMatricula();
 
-      $oPonto = $oServidor->getPonto($this->getTabelaPonto());
+      $oPonto = $oServidor->getPonto( $this->getTabelaPonto() );
       $oPonto->carregarRegistros();
       $aRegistros = $oPonto->getRegistros();
 
@@ -772,12 +743,13 @@ abstract class FolhaPagamento
         $oDaoRhHistoricoPonto->rh144_quantidade = $oRegistro->getQuantidade();
         $oDaoRhHistoricoPonto->rh144_valor      = $oRegistro->getValor();
         $oDaoRhHistoricoPonto->incluir(null);
-
+        
         if ($oDaoRhHistoricoPonto->erro_status == 0) {
           throw new DBException(_M(self::MENSAGENS . 'erro_salvar_historico_ponto'));
         }
       }
     }
+
   }
 
   /**
@@ -786,8 +758,7 @@ abstract class FolhaPagamento
    * @param  array $aServidores
    * @return boolean
    */
-  public function salvarHistoricoCalculo($aServidores)
-  {
+  public function salvarHistoricoCalculo($aServidores){
 
     $oDaoRhHistoricoCalculo = new cl_rhhistoricocalculo();
     $oDaoRhHistoricoCalculo->rh143_sequencial     = null;
@@ -798,9 +769,9 @@ abstract class FolhaPagamento
      * e salvando na tabela rhhistoricocalculo.
      */
     foreach ($aServidores as $oServidor) {
-
+      
       $oDaoRhHistoricoCalculo->rh143_regist = $oServidor->getMatricula();
-
+      
       $oCalculoFinanceiro  = $oServidor->getCalculoFinanceiro($this->getTabelaCalculo());
       $aEventosFinanceiros = $oCalculoFinanceiro->getEventosFinanceiros();
 
@@ -814,10 +785,10 @@ abstract class FolhaPagamento
       }
 
       if ($oDaoRhHistoricoCalculo->erro_status == "0") {
-        throw new DBException($oDaoRhHistoricoCalculo->erro_msg);
+        throw new DBException($oDaoRhHistoricoCalculo->erro_msg);        
       }
     }
-
+    
     return true;
   }
 
@@ -826,13 +797,12 @@ abstract class FolhaPagamento
    *
    * @return @boolean
    */
-  public function retornarPonto($aServidoresCalcular = null)
-  {
+  public function retornarPonto($aServidoresCalcular = null){
 
     $oDaoRhHistoricoPonto   = new cl_rhhistoricoponto();
     $sWhereRhHistoricoPonto = "rh144_folhapagamento = {$this->iSequencial}";
 
-    if (!empty($aServidoresCalcular) && count($aServidoresCalcular) > 0) {
+    if(!empty($aServidoresCalcular) && count($aServidoresCalcular) > 0) {
       $sWhereMatriculasCalcular  = implode(",", $aServidoresCalcular);
       $sWhereRhHistoricoPonto   .= " and rh144_regist in ({$sWhereMatriculasCalcular})";
     }
@@ -845,36 +815,36 @@ abstract class FolhaPagamento
       throw new DBException(_M(self::MENSAGENS .  "erro_consulta_historico_ponto"));
     }
 
-    $aRegistrosRestaurar  = array();
-
+    $aRegistrosRestaurar  =array();
+       
     for ($iCodigoHistorico = 0; $iCodigoHistorico < pg_num_rows($rsRhHistoricoPonto); $iCodigoHistorico++) {
 
       $oHistorico     = db_utils::fieldsMemory($rsRhHistoricoPonto, $iCodigoHistorico);
       $oServidor      = ServidorRepository::getInstanciaByCodigo(
-        $oHistorico->rh144_regist,
-        $this->getCompetencia()->getAno(),
-        $this->getCompetencia()->getMes(),
+        $oHistorico->rh144_regist, 
+        $this->getCompetencia()->getAno(), 
+        $this->getCompetencia()->getMes(), 
         $this->getInstituicao()->getSequencial()
       );
-
+      
       $oServidor->getPonto($this->getTabelaPonto())->limpar();
 
       /**
        * Aqui remove os dados do ponto do servidor vinculado a matricula, 
        * essa ação é necessária para que o ponto não fique duplicado
        */
-      if ($oServidor->hasServidorVinculado()) {
+      if ( $oServidor->hasServidorVinculado() ) {
         $oServidor->getServidorVinculado()->getPonto($this->getTabelaPonto())->limpar();
       }
 
       $aRegistrosRestaurar[$oServidor->getMatricula()] = $this->getHistoricoRegistrosPonto($oServidor);
     }
 
-    while (list($iMatricula, $aRegistros) = each($aRegistrosRestaurar)) {
+    while ( list($iMatricula, $aRegistros) = each($aRegistrosRestaurar) ) {
 
       $oPonto = $oServidor->getPonto($this->getTabelaPonto());
 
-      for ($iRegistro = 0; $iRegistro < count($aRegistros); $iRegistro++) {
+      for( $iRegistro = 0; $iRegistro < count($aRegistros); $iRegistro++) {
         $oPonto->adicionarRegistro($aRegistros[$iRegistro]);
       }
       $oPonto->salvar();
@@ -882,8 +852,7 @@ abstract class FolhaPagamento
     return true;
   }
 
-  public function retornarCalculo()
-  {
+  public function retornarCalculo() {
 
     $oDaoRhHistoricoCalculo   = new cl_rhhistoricocalculo();
     $sWhereRhHistoricoCalculo = "rh143_folhapagamento = {$this->iSequencial}";
@@ -901,7 +870,7 @@ abstract class FolhaPagamento
       $oCalculoServidor = $oServidor->getCalculoFinanceiro($this->getTabelaCalculo());
       $oCalculoServidor->limpar();
 
-      foreach ($this->getHistoricoEventosFinanceiros($oServidor) as $oEventoFinanceiro) {
+      foreach ( $this->getHistoricoEventosFinanceiros($oServidor) as $oEventoFinanceiro ) {
         $oCalculoServidor->adicionarEvento($oEventoFinanceiro);
       }
 
@@ -916,19 +885,18 @@ abstract class FolhaPagamento
    * se possuir não pode ser cancelado o fechamento.
    * @return boolean
    */
-  public function verificarEmpenho()
-  {
+  public function verificarEmpenho(){
 
     $oDaoRhEmpenhoFolha  = new cl_rhempenhofolha;
-
+    
     $sSigla = $this->getSiglaFolhaPagamento();
-    if ($this->getTipoFolha() == FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR) {
+    if($this->getTipoFolha() == FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR) {
       $sSigla = 'sup';
-    }
-
-    $sSqlEmpenhoFolha = $oDaoRhEmpenhoFolha->sql_query_empenhado($this->getCompetencia()->getAno(), $this->getCompetencia()->getMes(), $sSigla, 'rh72_sequencial', $this->getNumero());
+    } 
+    
+    $sSqlEmpenhoFolha = $oDaoRhEmpenhoFolha->sql_query_empenhado( $this->getCompetencia()->getAno(), $this->getCompetencia()->getMes(), $sSigla, 'rh72_sequencial', $this->getNumero());
     $rsEmpenhoFolha   = db_query($sSqlEmpenhoFolha);
-
+    
     if (pg_num_rows($rsEmpenhoFolha) != 0) {
       throw new BusinessException(_M(self::MENSAGENS . "existe_empenho"));
     }
@@ -936,14 +904,13 @@ abstract class FolhaPagamento
     return true;
   }
 
-  public static function getFolhasFechadasCompetencia(DBCompetencia $oCompetencia, $iTipoFolha = null)
-  {
+  public static function getFolhasFechadasCompetencia(DBCompetencia $oCompetencia, $iTipoFolha = null){
 
     $oDaoRhFolhaPagamento    = new cl_rhfolhapagamento();
     $sWhereRhFolhaPagamento  = "    rh141_anousu    = {$oCompetencia->getAno()} ";
     $sWhereRhFolhaPagamento .= "and rh141_mesusu    = {$oCompetencia->getMes()} ";
-
-    if (!is_null($iTipoFolha)) {
+    
+    if ( !is_null($iTipoFolha) ) {
       $sWhereRhFolhaPagamento .= "and rh141_tipofolha = {$iTipoFolha}";
     }
 
@@ -952,9 +919,9 @@ abstract class FolhaPagamento
     $rsRhFolhaPagamento      = db_query($sSqlRhFolhaPagamento);
     $aFolhaPagamento         = array();
 
-    for ($iCodigoFolha = 0; $iCodigoFolha < pg_num_rows($rsRhFolhaPagamento); $iCodigoFolha++) {
+    for ( $iCodigoFolha = 0; $iCodigoFolha < pg_num_rows( $rsRhFolhaPagamento ); $iCodigoFolha++ ) { 
 
-      $oDadosFolha     = db_utils::fieldsMemory($rsRhFolhaPagamento, $iCodigoFolha);
+      $oDadosFolha     = db_utils::fieldsMemory( $rsRhFolhaPagamento, $iCodigoFolha );
 
       switch ($oDadosFolha->rh141_tipofolha) {
 
@@ -965,18 +932,18 @@ abstract class FolhaPagamento
         case  self::TIPO_FOLHA_SUPLEMENTAR:
           $sClasse = "FolhaPagamentoSuplementar";
           break;
-
+        
         case self::TIPO_FOLHA_COMPLEMENTAR:
           $sClasse = "FolhaPagamentoComplementar";
           break;
       }
-
+      
       $aFolhaPagamento[] = new $sClasse($oDadosFolha->rh141_sequencial);
     }
-
-    return $aFolhaPagamento;
+    
+    return $aFolhaPagamento; 
   }
-
+  
 
   /**
    * Retorna sigla da tabela de acordo com 
@@ -984,29 +951,28 @@ abstract class FolhaPagamento
    * 
    * @return string sigla da respectiva tabela
    */
-  private function getSiglaFolhaPagamento()
-  {
+  private function getSiglaFolhaPagamento(){
 
     switch ($this->iTipoFolha) {
       case FolhaPagamento::TIPO_FOLHA_SALARIO:
       case FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR:
         return 'r14';
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_RESCISAO:
         return 'r20';
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_COMPLEMENTAR:
         return 'r48';
-        break;
+      break;  
       case FolhaPagamento::TIPO_FOLHA_ADIANTAMENTO:
         return 'r22';
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_13o_SALARIO:
         return 'r35';
-        break;
+      break;
       default:
         return false;
-        break;
+      break;
     }
   }
 
@@ -1016,61 +982,59 @@ abstract class FolhaPagamento
    * 
    * @return String nome do cálculo
    */
-  public function getTabelaCalculo()
-  {
+  public function getTabelaCalculo(){
 
     switch ($this->iTipoFolha) {
       case FolhaPagamento::TIPO_FOLHA_SALARIO:
       case FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR:
         return CalculoFolha::CALCULO_SALARIO;
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_RESCISAO:
         return CalculoFolha::CALCULO_RESCISAO;
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_COMPLEMENTAR:
         return CalculoFolha::CALCULO_COMPLEMENTAR;
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_ADIANTAMENTO:
         return CalculoFolha::CALCULO_ADIANTAMENTO;
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_13o_SALARIO:
         return CalculoFolha::CALCULO_13o;
-        break;
+      break;
       default:
         return false;
-        break;
+      break;
     }
   }
 
-  /**
+   /**
    * Retorna a sigla da tabela do cálculo de 
    * acordo com o tipo folha informado
    * 
    * @return String sigla do cálculo
    */
-  public function getSiglaCalculo()
-  {
+  public function getSiglaCalculo(){
 
     switch ($this->iTipoFolha) {
       case FolhaPagamento::TIPO_FOLHA_SALARIO:
       case FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR:
         return 'r14';
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_RESCISAO:
         return 'r20';
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_COMPLEMENTAR:
         return 'r48';
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_ADIANTAMENTO:
         return 'r22';
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_13o_SALARIO:
         return 'r35';
-        break;
+      break;
       default:
         return false;
-        break;
+      break;
     }
   }
 
@@ -1079,50 +1043,48 @@ abstract class FolhaPagamento
    * 
    * @return String nome da tabela ponto
    */
-  public function getTabelaPonto()
-  {
-
+  public function getTabelaPonto(){
+    
     switch ($this->iTipoFolha) {
       case FolhaPagamento::TIPO_FOLHA_SALARIO:
       case FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR:
         return Ponto::SALARIO;
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_RESCISAO:
         return Ponto::RESCISAO;
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_COMPLEMENTAR:
         return Ponto::COMPLEMENTAR;
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_ADIANTAMENTO:
         return Ponto::ADIANTAMENTO;
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_13o_SALARIO:
         return Ponto::PONTO_13o;
-        break;
+      break;
       default:
         return false;
-        break;
+      break;
     }
   }
 
-  public function getHistoricoRegistrosPonto(Servidor $oServidor)
-  {
+  public function getHistoricoRegistrosPonto( Servidor $oServidor ) {
 
     $sWhere                   = "    rh144_folhapagamento = {$this->getSequencial()}";
     $sWhere                  .= "and rh144_regist         = {$oServidor->getMatricula()}";
     $oDaoHistoricoCalculo     =  new cl_rhhistoricoponto();
-    $sSqlEventos              = $oDaoHistoricoCalculo->sql_query_file(null, "rh144_regist, rh144_rubrica, rh144_quantidade, rh144_valor", null, $sWhere);
+    $sSqlEventos              = $oDaoHistoricoCalculo->sql_query_file(null,"rh144_regist, rh144_rubrica, rh144_quantidade, rh144_valor",null, $sWhere);
     $rsEventos                = db_query($sSqlEventos);
-    if (!$rsEventos) {
+    if ( !$rsEventos ) {
       throw new DBException(pg_last_error());
     }
-
+    
     $aDadosEventosFinanceiros = db_utils::getCollectionByRecord($rsEventos);
     $aEventosFinanceiros      = array();
 
-    foreach ($aDadosEventosFinanceiros as $oHistorico) {
-
-      $oEventoFinanceiro = new RegistroPonto(); //@todo Com férias muda o tratamento no futuro
+    foreach ($aDadosEventosFinanceiros as $oHistorico ) {
+      
+      $oEventoFinanceiro = new RegistroPonto();//@todo Com férias muda o tratamento no futuro
       $oEventoFinanceiro->setServidor($oServidor);
       $oEventoFinanceiro->setRubrica(RubricaRepository::getInstanciaByCodigo($oHistorico->rh144_rubrica));
       $oEventoFinanceiro->setValor($oHistorico->rh144_valor);
@@ -1132,25 +1094,24 @@ abstract class FolhaPagamento
     return $aEventosFinanceiros;
   }
 
-  public function getHistoricoEventosFinanceiros(Servidor $oServidor)
-  {
+  public function getHistoricoEventosFinanceiros( Servidor $oServidor ) {
 
     $sWhere                   = "    rh143_folhapagamento = {$this->getSequencial()}";
     $sWhere                  .= "and rh143_regist         = {$oServidor->getMatricula()}";
-
+    
     $oDaoHistoricoCalculo     =  new cl_rhhistoricocalculo();
-    $sSqlEventos              = $oDaoHistoricoCalculo->sql_query_file(null, "rh143_rubrica, rh143_quantidade, rh143_valor, rh143_tipoevento", null, $sWhere);
+    $sSqlEventos              = $oDaoHistoricoCalculo->sql_query_file(null,"rh143_rubrica, rh143_quantidade, rh143_valor, rh143_tipoevento",null, $sWhere);
     $rsEventos                = db_query($sSqlEventos);
 
-    if (!$rsEventos) {
+    if ( !$rsEventos ) {
       throw new DBException(_M(self::MENSAGENS . "erro_buscar_dados_eventos_folha"));
     }
-
+    
     $aDadosEventosFinanceiros = db_utils::getCollectionByRecord($rsEventos);
     $aEventosFinanceiros      = array();
 
-    foreach ($aDadosEventosFinanceiros as $oHistorico) {
-
+    foreach ($aDadosEventosFinanceiros as $oHistorico ) {
+      
       $oEventoFinanceiro     = new EventoFinanceiroFolha();
       $oEventoFinanceiro->setServidor($oServidor);
       $oEventoFinanceiro->setRubrica(RubricaRepository::getInstanciaByCodigo($oHistorico->rh143_rubrica));
@@ -1170,41 +1131,40 @@ abstract class FolhaPagamento
    * @param  Integer       $iCodigo     
    * @return FolhaPagamento[]                    
    */
-  public static function getFolhaCompetenciaTipo(DBCompetencia $oCompetencia, $iTipoFolha,  $iCodigo = null)
-  {
+  public static function getFolhaCompetenciaTipo(DBCompetencia $oCompetencia, $iTipoFolha,  $iCodigo = null) {
 
     $iInstituicao = db_getsession("DB_instit");
 
     $oDaoFolhaPagamento = new cl_rhfolhapagamento();
     $sWhere             = "     rh141_anousu    = {$oCompetencia->getAno()}";
-    $sWhere            .= " and rh141_mesusu    = {$oCompetencia->getMes()}";
-    $sWhere            .= " and rh141_tipofolha = {$iTipoFolha}";
-    $sWhere            .= " and rh141_instit    = {$iInstituicao}";
-
-    if (!is_null($iCodigo) && $iCodigo != 0) {
+    $sWhere            .= " and rh141_mesusu    = {$oCompetencia->getMes()}"; 
+    $sWhere            .= " and rh141_tipofolha = {$iTipoFolha}"; 
+    $sWhere            .= " and rh141_instit    = {$iInstituicao}"; 
+   
+    if ( !is_null($iCodigo) && $iCodigo != 0 ) {
       $sWhere .= " and rh141_codigo = {$iCodigo} ";
     }
 
     $sSqlFolhaPagamento = $oDaoFolhaPagamento->sql_query_file(null, "rh141_sequencial", null, $sWhere);
     $rsFolhaPagamento   = db_query($sSqlFolhaPagamento);
+    
+     if ($oDaoFolhaPagamento->erro_status == "0") {
+       throw new DBException(_M(self::MENSAGENS . "erro_buscar_folhapagamento"));
+     }
 
-    if ($oDaoFolhaPagamento->erro_status == "0") {
-      throw new DBException(_M(self::MENSAGENS . "erro_buscar_folhapagamento"));
-    }
+     if (pg_num_rows($rsFolhaPagamento) == 0) {
+       return false;
+     }
 
-    if (pg_num_rows($rsFolhaPagamento) == 0) {
-      return false;
-    }
+     $aFolhasPagamento = array();
 
-    $aFolhasPagamento = array();
+     for ($iFolhaPagamento = 0; $iFolhaPagamento < pg_num_rows($rsFolhaPagamento); $iFolhaPagamento++){
 
-    for ($iFolhaPagamento = 0; $iFolhaPagamento < pg_num_rows($rsFolhaPagamento); $iFolhaPagamento++) {
-
-      $iSequencialFolha = db_utils::fieldsMemory($rsFolhaPagamento, $iFolhaPagamento)->rh141_sequencial;
-      /**
-       * @TODO Modificar para utilização de factory FolhaPagamentoFactory::construirPeloCodigo
-       */
-      switch ($iTipoFolha) {
+       $iSequencialFolha = db_utils::fieldsMemory($rsFolhaPagamento, $iFolhaPagamento)->rh141_sequencial;
+       /**
+        * @TODO Modificar para utilização de factory FolhaPagamentoFactory::construirPeloCodigo
+        */
+       switch ($iTipoFolha) {
 
         case FolhaPagamento::TIPO_FOLHA_SALARIO:
           $aFolhasPagamento[] =  new FolhaPagamentoSalario($iSequencialFolha);
@@ -1224,12 +1184,12 @@ abstract class FolhaPagamento
         case FolhaPagamento::TIPO_FOLHA_13o_SALARIO:
           $aFolhasPagamento[] =  new FolhaPagamento13o($iSequencialFolha);
           break;
-      }
-    }
+       } 
+     }
 
-    return $aFolhasPagamento;
+     return $aFolhasPagamento;
   }
-
+  
   /**
    * Retorna as folhas de pagamento do servidor
    * 
@@ -1241,33 +1201,31 @@ abstract class FolhaPagamento
    * @return FolhaPagamento[]
    * @throws DBException
    */
-  public static function getFolhaServidor(
-    Servidor $oServidor,
-    DBCompetencia $oCompetencia = null,
-    Instituicao $oInstituicao = null,
-    $iTipoFolha = null,
-    $lAberta = null
-  ) {
-
-    $sCampos = "distinct rh141_sequencial, rh141_tipofolha";
+  public static function getFolhaServidor(Servidor $oServidor, 
+                                          DBCompetencia $oCompetencia = null,
+                                          Instituicao $oInstituicao = null,
+                                          $iTipoFolha = null,
+                                          $lAberta = null) {
+    
+    $sCampos = "distinct rh141_sequencial, rh141_tipofolha"; 
     $sWhere  = "rh143_regist = {$oServidor->getMatricula()} ";
-
+    
     if (!empty($oCompetencia)) {
-
+      
       $sWhere .= "and rh141_anousu = {$oCompetencia->getAno()} ";
       $sWhere .= "and rh141_mesusu = {$oCompetencia->getMes()} ";
     }
-
-    if (!empty($oInstituicao)) {
+    
+    if (!empty($oInstituicao)) {   
       $sWhere .= "and rh141_instit = {$oInstituicao->getCodigo()} ";
     }
-
+    
     if (!empty($iTipoFolha)) {
       $sWhere .= "and rh142_sequencial = {$iTipoFolha} ";
     }
-
+    
     if (!is_null($lAberta)) {
-
+      
       $sWhere .= "and rh141_aberto = ";
       $sWhere .= $lAberta ? 'true' : 'false';
     }
@@ -1279,16 +1237,16 @@ abstract class FolhaPagamento
     if (!empty($oDaoHistoricoCalculo->erro_banco)) {
       throw new DBException(_M(self::MENSAGENS . "erro_retornar_folha_servidor"));
     }
-
+    
     $aFolhasPagamento = array();
-    for ($i = 0; $i < $oDaoHistoricoCalculo->numrows; $i++) {
+    for ($i = 0; $i < $oDaoHistoricoCalculo->numrows; $i++){
 
-      $oDadosFolha      = db_utils::fieldsMemory($rsFolhasEncontradas, $i);
+      $oDadosFolha      = db_utils::fieldsMemory($rsFolhasEncontradas, $i);    
       $iSequencialFolha = $oDadosFolha->rh141_sequencial;
       $iTipoFolha       = $oDadosFolha->rh141_tipofolha;
-      /**
-       * @TODO Modificar para utilização de factory FolhaPagamentoFactory::construirPeloCodigo
-       */
+       /**
+        * @TODO Modificar para utilização de factory FolhaPagamentoFactory::construirPeloCodigo
+        */
       switch ($iTipoFolha) {
 
         case FolhaPagamento::TIPO_FOLHA_SALARIO:
@@ -1311,10 +1269,10 @@ abstract class FolhaPagamento
           break;
       }
     }
-
+    
     return $aFolhasPagamento;
   }
-
+  
   /**
    * Verifica se existe alguma rubrica no cálculo da folha de pagamento
    * 
@@ -1324,70 +1282,68 @@ abstract class FolhaPagamento
    * @return Boolean
    * @throws BusinessException
    */
-  public static function hasRubricasFolha(FolhaPagamento $oFolhaPagamento, $aRubricas)
-  {
-
+  public static function hasRubricasFolha(FolhaPagamento $oFolhaPagamento, $aRubricas) {
+    
     $iSequencial = $oFolhaPagamento->getSequencial();
     if (empty($iSequencial)) {
       throw new BusinessException(_M(self::MENSAGENS . "erro_instanciar_objeto"));
     }
-
+    
     $sConjuntoRubricas = implode("','", $aRubricas);
-
+        
     $sWhere  = "rh141_sequencial = {$iSequencial} ";
     $sWhere .= "and rh141_instit = {$oFolhaPagamento->getInstituicao()->getCodigo()} ";
     $sWhere .= "and rh141_anousu = {$oFolhaPagamento->getCompetencia()->getAno()} ";
     $sWhere .= "and rh141_mesusu = {$oFolhaPagamento->getCompetencia()->getMes()} ";
     $sWhere .= "and rh143_rubrica in ('{$sConjuntoRubricas}') ";
-
+    
     $oDaoHistoricoCalculo    = new cl_rhhistoricocalculo();
     $sSqlRubricasEncontradas = $oDaoHistoricoCalculo->sql_query(null, "rh143_sequencial", null, $sWhere);
     $rsRubricasEncontradas   = $oDaoHistoricoCalculo->sql_record($sSqlRubricasEncontradas);
-
+    
     if (!$rsRubricasEncontradas || $oDaoHistoricoCalculo->numrows == "0") {
       return false;
     }
-
+    
     return true;
   }
-
+  
   /**
    * Retorna a sigla do tipo da folha.
    * 
    * @access public
    * @return String
    */
-  public function getSigla()
-  {
-
+  public function getSigla() {
+    
     $sSigla = "";
-
+    
     switch ($this->iTipoFolha) {
-
+      
       case FolhaPagamento::TIPO_FOLHA_SALARIO:
         $sSigla = 'r14';
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR:
         $sSigla = 'sup';
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_RESCISAO:
         $sSigla = 'r20';
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_COMPLEMENTAR:
         $sSigla = 'r48';
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_ADIANTAMENTO:
         $sSigla = 'r22';
-        break;
+      break;
       case FolhaPagamento::TIPO_FOLHA_13o_SALARIO:
         $sSigla = 'r35';
-        break;
+      break;
     }
-
+    
     return $sSigla;
   }
-
-
+  
+  
   /**
    * Retorna o tipo de folha conforme a sigla.
    * 
@@ -1396,38 +1352,37 @@ abstract class FolhaPagamento
    * @param String $sSigla
    * @return Integer
    */
-  public static function getTipoFolhaBySigla($sSigla)
-  {
-
+  public static function getTipoFolhaBySigla($sSigla) {
+    
     $iTipoFolha = "";
-
+    
     switch ($sSigla) {
-
+      
       case 'r14':
         $iTipoFolha = FolhaPagamento::TIPO_FOLHA_SALARIO;
         break;
-
+      
       case 'r48':
         $iTipoFolha = FolhaPagamento::TIPO_FOLHA_COMPLEMENTAR;
         break;
-
+      
       case 'r35':
         $iTipoFolha = FolhaPagamento::TIPO_FOLHA_13o_SALARIO;
         break;
-
+      
       case 'r20':
         $iTipoFolha = FolhaPagamento::TIPO_FOLHA_RESCISAO;
         break;
-
+      
       case 'r22':
         $iTipoFolha = FolhaPagamento::TIPO_FOLHA_ADIANTAMENTO;
         break;
-
+      
       case 'sup':
         $iTipoFolha = FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR;
         break;
     }
-
+    
     return $iTipoFolha;
   }
 
@@ -1439,10 +1394,9 @@ abstract class FolhaPagamento
    * @param Integer $iInstituicao
    * @return String
    */
-  public static function migraEstruturaSuplementar($iInstituicao)
-  {
+  public static function migraEstruturaSuplementar($iInstituicao){
 
-    $oDaoGerfSal       = new cl_gerfsal;
+    $oDaoGerfSal       = new cl_gerfsal; 
     $oDaoGerfRes       = new cl_gerfres;
     $oDaoGerfCom       = new cl_gerfcom;
     $oDaoGerfS13       = new cl_gerfs13;
@@ -1461,17 +1415,17 @@ abstract class FolhaPagamento
     $sSqlEstruturaTemporaria .= "DROP TABLE IF EXISTS w_migracao_adiantamento;                 ";
     $sSqlEstruturaTemporaria .= "DROP TABLE IF EXISTS w_migracao_rescisao;                     ";
     $sSqlEstruturaTemporaria .= "DROP TABLE IF EXISTS w_migracao_13salario;                    ";
-
+    
     $sSqlEstruturaTemporaria .= "DELETE from pontofs where r10_rubric = '';                    ";
 
     $iContadorMigracaoTipoFolha = 0;
-    db_atutermometro(0, count($aSqlMigraEstrutura) + 2, 'termometro_migracao', 1);
+    db_atutermometro(0,count($aSqlMigraEstrutura)+2,'termometro_migracao',1);
     $mRetornoMigraEstruturaTemporaria = FolhaPagamento::migraEstruturaSuplementarExecutaSql($sSqlEstruturaTemporaria);
 
     foreach ($aSqlMigraEstrutura as $iTipoFolha => $sSql) {
 
-      $iContadorMigracaoTipoFolha++;
-      db_atutermometro($iContadorMigracaoTipoFolha, count($aSqlMigraEstrutura) + 2, 'termometro_migracao', 1);
+      $iContadorMigracaoTipoFolha++; 
+      db_atutermometro($iContadorMigracaoTipoFolha,count($aSqlMigraEstrutura)+2,'termometro_migracao',1);
       $mRetornoMigraSuplementarTipoFolha = FolhaPagamento::migraEstruturaSuplementarExecutaSql($sSql);
 
       switch ($iTipoFolha) {
@@ -1494,33 +1448,39 @@ abstract class FolhaPagamento
     }
 
     $sSqlEstruturaTemporaria .= "update rhfolhapagamento set rh141_aberto     = true                                                                                          ";
-    $sSqlEstruturaTemporaria .= "                      where rh141_sequencial = (select max(rh141_sequencial) from rhfolhapagamento                                           ";
+    $sSqlEstruturaTemporaria .= "                      where rh141_sequencial = (select max(rh141_sequencial) from rhfolhapagamento                                           "; 
     $sSqlEstruturaTemporaria .= "                                                where rh141_tipofolha = 1 and rh141_instit = {$iInstituicao});                              ";
-    $sSqlEstruturaTemporaria .= "UPDATE db_itensmenu SET libcliente = 'true' WHERE id_item IN (9958, 9959, 9960, 9961, 9962, 9963, 9964, 9965, 9972, 9973, 9974, 9975, 9976);";
+    $sSqlEstruturaTemporaria .= "UPDATE db_itensmenu SET libcliente = 'true' WHERE id_item IN (9958, 9959, 9960, 9961, 9962, 9963, 9964, 9965, 9972, 9973, 9974, 9975, 9976);";    
 
-    db_atutermometro(count($aSqlMigraEstrutura) + 1, count($aSqlMigraEstrutura) + 2, 'termometro_migracao', 1);
+    db_atutermometro(count($aSqlMigraEstrutura)+1,count($aSqlMigraEstrutura)+2,'termometro_migracao',1);
     $mRetornoMigraUpdateFinal = FolhaPagamento::migraEstruturaSuplementarExecutaSql($sSqlEstruturaTemporaria);
 
-    if (!$mRetornoMigraEstruturaTemporaria) {
+    if ( !$mRetornoMigraEstruturaTemporaria ){
 
       return 'erro_migracao_estrutura_temporaria';
-    } elseif (!$mRetornoMigraSalario) {
 
+    } elseif ( !$mRetornoMigraSalario ){
+      
       return 'erro_migracao_estrutura_salario';
-    } elseif (!$mRetornoMigraRescisao) {
 
+    } elseif ( !$mRetornoMigraRescisao ) {
+      
       return 'erro_migracao_estrutura_rescisao';
-    } elseif (!$mRetornoMigra13Salario) {
 
+    } elseif ( !$mRetornoMigra13Salario ) {
+      
       return 'erro_migracao_estrutura_13salario';
-    } elseif (!$mRetornoMigraAdiantamento) {
 
+    } elseif ( !$mRetornoMigraAdiantamento ) {
+      
       return 'erro_migracao_estrutura_adiantamento';
-    } elseif (!$mRetornoMigraComplementar) {
 
+    } elseif ( !$mRetornoMigraComplementar ) {
+      
       return 'erro_migracao_estrutura_complementar';
-    } elseif (!$mRetornoMigraUpdateFinal) {
 
+    } elseif ( !$mRetornoMigraUpdateFinal ) {
+      
       return 'erro_migracao_estrutura_update_final';
     }
 
@@ -1535,20 +1495,19 @@ abstract class FolhaPagamento
    * @param String  $sqlMigraEstruturaSuplementarTipo SQL a ser executado para a migração
    * @return Boolean
    */
-  public static function migraEstruturaSuplementarExecutaSql($sSqlMigraEstruturaSuplementarTipo)
-  {
+  public static function migraEstruturaSuplementarExecutaSql($sSqlMigraEstruturaSuplementarTipo){
 
     $sSqlMigraEstruturaSuplementarTipo = str_replace("'", "\'", $sSqlMigraEstruturaSuplementarTipo);
-    $rsMigraEstrutura                  = db_query("select fc_executa_ddl('" . $sSqlMigraEstruturaSuplementarTipo . "');");
+    $rsMigraEstrutura                  = db_query("select fc_executa_ddl('". $sSqlMigraEstruturaSuplementarTipo ."');");
     $sResult                           = db_utils::fieldsMemory($rsMigraEstrutura, 0)->fc_executa_ddl;
 
-    if ($sResult === false || $sResult === 'f' || $sResult === 0 || $sResult === '0') {
+    if ( $sResult === false || $sResult === 'f' || $sResult === 0 || $sResult === '0' ) {
       return false;
     }
 
     return true;
   }
-
+  
   /**
    * Verifica se deve fazer a migração da estrutura da folha de pagamento com a suplementar.
    * 
@@ -1559,13 +1518,12 @@ abstract class FolhaPagamento
    * @return Boolean
    * @throws DBException
    */
-  public static function fazerMigracao(Instituicao $oInstituicao, DBCompetencia $oCompetencia)
-  {
-
+  public static function fazerMigracao(Instituicao $oInstituicao, DBCompetencia $oCompetencia) {
+    
     $oDaoCfPess      = new cl_cfpess();
     $sSqlSuplementar = $oDaoCfPess->sql_query_suplementar($oInstituicao, $oCompetencia);
     $rsSuplementar   = db_query($sSqlSuplementar);
-
+    
     $oDaoRhFolhaPagamento = new cl_rhfolhapagamento();
     $sSqlPesquisaGerfs    = $oDaoRhFolhaPagamento->sql_query_gerfs($oInstituicao, $oCompetencia);
     $rsPesquisaGerfs      = db_query($sSqlPesquisaGerfs);
@@ -1576,15 +1534,17 @@ abstract class FolhaPagamento
     if (!$rsPesquisaGerfs) {
       throw new DBException();
     }
-
+    
     $oDadosSuplementar = db_utils::fieldsMemory($rsSuplementar, 0);
     $lSuplementar      = (bool)$oDadosSuplementar->r11_suplementar;
     $iFolhapagamento   = $oDadosSuplementar->rhfolhapagamento;
-
+    
     if ($lSuplementar && $iFolhapagamento == 0 && pg_num_rows($rsPesquisaGerfs) == 0) {
       return true;
-    }
-
+    } 
+    
     return false;
   }
+
 }
+

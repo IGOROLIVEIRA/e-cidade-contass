@@ -1,5 +1,4 @@
 <?php
-
 /**
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2016  DBSeller Servicos de Informatica
@@ -32,7 +31,7 @@ use ECidade\Tributario\NumeroControle\Calculo\ModuloDez;
 use ECidade\Tributario\NumeroControle\Calculo\ModuloOnze;
 
 /**
- * Classe que calcula o N�mero de Controle a partir dos módulos dez e onze
+ * Classe que calcula o Número de Controle a partir dos módulos dez e onze
  *
  * @author Roberto Carneiro <roberto@dbseller.com.br>
  */
@@ -53,14 +52,14 @@ class Calculo implements NumeroControle
   private $sNumeracaoCalculada;
 
   /**
-   * Função responsável para calcular o n�mero de controle
+   * Função responsável para calcular o número de controle
    *
-   * @return string N�mero de Controle calculado
+   * @return string Número de Controle calculado
    */
   public function calcular()
   {
-    if (empty($this->sNumeracao)) {
-      throw new \BusinessException("Numeração para o cálculo do N�mero de Controle(NC) n�o foi definida.");
+    if ( empty($this->sNumeracao) ) {
+      throw new \BusinessException("Numeração para o cálculo do Número de Controle(NC) não foi definida.");
     }
 
     /**
@@ -81,7 +80,7 @@ class Calculo implements NumeroControle
     $oModuloOnze->calcular();
     $iResto      = $oModuloOnze->getNumeracaoCalculada();
 
-    if ($iResto == 1) {
+    if ( $iResto == 1 ) {
 
       $iModuloDez++;
 
@@ -92,7 +91,7 @@ class Calculo implements NumeroControle
       $oModuloOnze->setNumeracao($this->sNumeracao . $iModuloDez);
       $oModuloOnze->calcular();
       $iModuloOnze = $oModuloOnze->getNumeracaoCalculada();
-    } else if ($iResto == 0) {
+    } else if ( $iResto == 0 ) {
       $iModuloOnze = $iResto;
     } else {
 
@@ -102,7 +101,7 @@ class Calculo implements NumeroControle
     }
 
     /**
-     * Juntamos o módulo dez e onze formando o n�mero de controle
+     * Juntamos o módulo dez e onze formando o número de controle
      */
     $iNumeroControle = $iModuloDez . $iModuloOnze;
 

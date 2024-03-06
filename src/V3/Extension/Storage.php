@@ -1,5 +1,4 @@
 <?php
-
 namespace ECidade\V3\Extension;
 
 use \Exception;
@@ -7,8 +6,7 @@ use \Exception;
 /**
  * @package core
  */
-class Storage
-{
+class Storage {
 
   /**
    * @string
@@ -28,40 +26,35 @@ class Storage
   /**
    * @param string $path
    */
-  public function __construct($path)
-  {
+  public function __construct($path) {
     $this->path = $path;
   }
 
   /**
    * @param boolean $serialize
    */
-  public function setSerialize($serialize)
-  {
+  public function setSerialize($serialize) {
     $this->serialize = $serialize;
   }
 
   /**
    * @param mixed $data
    */
-  public function setData($data)
-  {
+  public function setData($data) {
     $this->data = $data;
   }
 
   /**
    * @return mixed
    */
-  public function getData()
-  {
+  public function getData() {
     return $this->data;
   }
 
   /**
    * @param string $path
    */
-  public function setPath($path)
-  {
+  public function setPath($path) {
     $this->path = $path;
   }
 
@@ -69,32 +62,28 @@ class Storage
    * @param string $path
    * @return string
    */
-  public function getPath()
-  {
+  public function getPath() {
     return $this->path;
   }
 
   /**
    * @return Storage
    */
-  public function clear()
-  {
+  public function clear() {
     $this->data = null;
   }
 
   /**
    * @return boolean
    */
-  public function exists()
-  {
+  public function exists() {
     return file_exists($this->path) && !is_dir($this->path);
   }
 
   /**
    * @return Storage
    */
-  public function save()
-  {
+  public function save() {
 
     $this->createDirectory();
 
@@ -112,8 +101,7 @@ class Storage
   /**
    * @return Storage
    */
-  public function load()
-  {
+  public function load() {
 
     $this->data = null;
 
@@ -133,17 +121,16 @@ class Storage
 
     $this->data = $this->serialize ? unserialize($data) : $data;
 
-    return (bool) $this->data;
+    return (boolean) $this->data;
   }
 
   /**
    * @return boolean
    */
-  public function remove()
-  {
+  public function remove() {
 
     if ($this->exists() && !@unlink($this->path)) {
-      throw new Exception("N�o foi possivel remover cache: $this->path");
+      throw new Exception("Não foi possivel remover cache: $this->path");
     }
 
     return true;
@@ -152,13 +139,12 @@ class Storage
   /**
    * @return boolean
    */
-  public function touch()
-  {
+  public function touch() {
 
     $this->createDirectory();
 
     if (!@touch($this->path)) {
-      throw new Exception("N�o foi possivel alterar tempo de modificação: $this->path");
+      throw new Exception("Não foi possivel alterar tempo de modificação: $this->path");
     }
 
     return true;
@@ -167,13 +153,12 @@ class Storage
   /**
    * @return boolean
    */
-  private function createDirectory()
-  {
+  private function createDirectory() {
 
     $dir = dirname($this->path);
 
     if (!is_dir($dir) && !mkdir($dir, 0775, true)) {
-      throw new Exception("N�o foi possivel criar diretório de cache: " . $dir);
+      throw new Exception("Não foi possivel criar diretório de cache: " . $dir);
     }
 
     return true;
@@ -183,12 +168,11 @@ class Storage
    * @FIXME - remover
    * Essa função deve ser removida com o tempo pois somente serve para migracao do namespace
    */
-  public function fixNamespaces($data)
-  {
+  public function fixNamespaces($data) {
 
     $pattern = '/(.):(\\d*):(".?ECidade\\\\(?:Config|Datasource|Error|Event|Extension|Modification|Window))/';
 
-    return preg_replace_callback($pattern, function ($matches) {
+    return preg_replace_callback($pattern, function($matches) {
 
       $fixedData = array(
         $matches[1],
@@ -198,5 +182,7 @@ class Storage
 
       return implode(":", $fixedData);
     }, $data);
+
   }
+
 }

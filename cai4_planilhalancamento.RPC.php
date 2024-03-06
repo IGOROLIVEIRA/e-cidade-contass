@@ -34,46 +34,48 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 
 $oJson   = new services_JSON();
-$oParam  = $oJson->decode(str_replace("\\", "", $_POST["sJson"]));
+$oParam  = $oJson->decode(str_replace("\\","",$_POST["sJson"]));
 $sMensagem = "";
 
-if ($oParam->exec == 'getSaltesConvenio') {
-
+if ($oParam->exec == 'getSaltesConvenio') { 
+   
    $oDaoSaltes = db_utils::getDao("saltes");
 
-   $sqlSaltesConvenio = $oDaoSaltes->sql_query_convenio_conta(null, "c206_sequencial, c206_objetoconvenio", "", "$where k13_conta={$oParam->iCodigoSaltes} and c61_instit = " . db_getsession("DB_instit"));
-
+   $sqlSaltesConvenio = $oDaoSaltes->sql_query_convenio_conta(null,"c206_sequencial, c206_objetoconvenio","","$where k13_conta={$oParam->iCodigoSaltes} and c61_instit = ".db_getsession("DB_instit"));
+   
    $rsSaltes = $oDaoSaltes->sql_record($sqlSaltesConvenio);
-
+   
    if ($oDaoSaltes->numrows > 0) {
 
       $oSaltesConv = db_utils::fieldsMemory($rsSaltes, 0);
-      $aSaltesConv      = array("c206_sequencial" => $oSaltesConv->c206_sequencial, "c206_objetoconvenio" => utf8_encode($oSaltesConv->c206_objetoconvenio), "lValidacao" => true, "sMensagem" => $sMensagem);
+      $aSaltesConv      = array("c206_sequencial" => $oSaltesConv->c206_sequencial, "c206_objetoconvenio"=> utf8_encode($oSaltesConv->c206_objetoconvenio), "lValidacao" => true, "sMensagem" => $sMensagem);   
+     
    } else {
 
-      $sMensagem = "Usu�rio: para realizar a arrecadação da receita, vincule o convênio a respectiva conta bancária.";
+      $sMensagem = "Usuário: para realizar a arrecadação da receita, vincule o convênio a respectiva conta bancária.";
       $aSaltesConv = array("c206_sequencial" => "", "c206_objetoconvenio" => "", "lValidacao" => false, "sMensagem" => $sMensagem); //Garantimos que ira ter uma string valida para retorno
-
+      
    }
-   echo $oJson->encode($aSaltesConv);
+    echo $oJson->encode($aSaltesConv); 
 }
 
 //operao de credito
 
 if ($oParam->exec == 'getSaltesOP') {
    $oDaoSaltes = db_utils::getDao("db_operacaodecredito");
-   $sqlSaltesOP = $oDaoSaltes->sql_query(null, "op01_sequencial, op01_numerocontratoopc, op01_dataassinaturacop", "", "$where op01_sequencial={$oParam->idb83_codigoopcredito}");
+   $sqlSaltesOP = $oDaoSaltes->sql_query(null,"op01_sequencial, op01_numerocontratoopc, op01_dataassinaturacop","","$where op01_sequencial={$oParam->idb83_codigoopcredito}" );
    $rsSaltes = $oDaoSaltes->sql_record($sqlSaltesOP);
-
+   
    if ($oDaoSaltes->numrows > 0) {
 
       $oSaltesOP = db_utils::fieldsMemory($rsSaltes, 0);
 
-      $aSaltesOP     = array("op01_sequencial" => $oSaltesOP->op01_sequencial, "op01_numerocontratoopc" => $oSaltesOP->op01_numerocontratoopc, "op01_dataassinaturacop" => $oSaltesOP->op01_dataassinaturacop, "lValidacao" => true, "sMensagem" => $sMensagem);
+      $aSaltesOP     = array("op01_sequencial" => $oSaltesOP->op01_sequencial, "op01_numerocontratoopc"=> $oSaltesOP->op01_numerocontratoopc,"op01_dataassinaturacop"=> $oSaltesOP->op01_dataassinaturacop, "lValidacao" => true, "sMensagem" => $sMensagem);   
+    
    } else {
 
       $sMensagem = "";
-      $aSaltesOP = array("op01_sequencial" => "", "op01_numerocontratoopc" => "", "op01_dataassinaturacop" => "", "lValidacao" => false, "sMensagem" => $sMensagem); //Garantimos que ira ter uma string valida para retorno
+      $aSaltesOP = array("op01_sequencial" => "", "op01_numerocontratoopc" => "","op01_dataassinaturacop" => "", "lValidacao" => false, "sMensagem" => $sMensagem); //Garantimos que ira ter uma string valida para retorno
 
    }
 

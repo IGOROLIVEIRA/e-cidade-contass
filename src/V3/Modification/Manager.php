@@ -1,5 +1,4 @@
 <?php
-
 namespace ECidade\V3\Modification;
 
 use ArrayObject, Exception;
@@ -16,20 +15,18 @@ use \ECidade\V3\Modification\Data\FileTypeModification;
 /**
  * @package Modification
  */
-class Manager extends AbstractManager
-{
+class Manager extends AbstractManager {
 
   /**
    * @param Container $container
    */
-  public function __construct(Container $container = null)
-  {
+  public function __construct(Container $container = null) {
 
     // cria o container, caso nao for informado, e registra logger
     parent::__construct($container);
 
     if (!$this->container->has('group')) {
-      $this->container->register('group', function ($container) {
+      $this->container->register('group', function($container) {
         return Data\Group::restore();
       });
     }
@@ -37,10 +34,10 @@ class Manager extends AbstractManager
     // cache de \ECidade\V3\Modification\Data\Modification
     if (!$this->container->has('cacheDataModifications')) {
 
-      $this->container->register('cacheDataModifications', function ($container) {
+      $this->container->register('cacheDataModifications', function($container) {
 
         $cacheDataModifications = new ArrayObject();
-        return function ($id) use ($cacheDataModifications) {
+        return function($id) use ($cacheDataModifications) {
 
           if (!isset($cacheDataModifications[$id])) {
             $cacheDataModifications[$id] = ModificationData::restore($id);
@@ -54,10 +51,10 @@ class Manager extends AbstractManager
     // cache de \ECidade\V3\Modification\Logger
     if (!$this->container->has('cacheLoggerModifications')) {
 
-      $this->container->register('cacheLoggerModifications', function ($container) {
+      $this->container->register('cacheLoggerModifications', function($container) {
 
         $cacheLoggerModifications = new ArrayObject();
-        return function ($id) use ($cacheLoggerModifications) {
+        return function($id) use ($cacheLoggerModifications) {
 
           if (!isset($cacheLoggerModifications[$id])) {
             $cacheLoggerModifications[$id] = new Logger($id);
@@ -67,6 +64,7 @@ class Manager extends AbstractManager
         };
       });
     }
+
   }
 
   /**
@@ -74,8 +72,7 @@ class Manager extends AbstractManager
    * @param bool $force
    * @return \ECidade\V3\Modification\Data\Modification
    */
-  public function unpack($path, $force = false)
-  {
+  public function unpack($path, $force = false) {
 
     // cria diretorios
     $this->setup();
@@ -85,7 +82,7 @@ class Manager extends AbstractManager
     $dataModification = ModificationData::restore($parseModification->getId());
 
     if ($force === false && $dataModification->exists()) {
-      throw new Exception("Modificação já descompactada: " . $parseModification->getId());
+      throw new Exception("Modificação já descompactada: ". $parseModification->getId());
     }
 
     $dataModification->setId($parseModification->getId());
@@ -115,8 +112,7 @@ class Manager extends AbstractManager
    * @param string $user
    * @return boolean
    */
-  public function install($installModifcations, $user = null, $ignoreGlobal = false)
-  {
+  public function install($installModifcations, $user = null, $ignoreGlobal = false) {
 
     if (empty($installModifcations)) {
       throw new Exception("Nenhum ID informado.");
@@ -128,7 +124,7 @@ class Manager extends AbstractManager
 
     $logger = $this->container->get('logger');
     $logger->debug(
-      "Instalando modificações: " . implode(', ', $installModifcations) . (!empty($user) ? ' user ' . $user : null)
+      "Instalando modificações: ". implode(', ', $installModifcations) . (!empty($user) ? ' user '.$user : null)
     );
 
     // cache-data das modificacoes
@@ -160,7 +156,7 @@ class Manager extends AbstractManager
       }
 
       if ($modificationUserType && empty($user)) {
-        throw new Exception("Usu�rio n�o definido para modificação: $id");
+        throw new Exception("Usuário não definido para modificação: $id");
       }
 
       if ($dataModification->isEnabled($user)) {
@@ -207,6 +203,7 @@ class Manager extends AbstractManager
       }
 
       $this->parseFiles($filesReparse, $user);
+
     } catch (Exception $error) {
 
       foreach ($installModifcations as $id) {
@@ -243,8 +240,7 @@ class Manager extends AbstractManager
    * @param string $user
    * @return boolean
    */
-  public function uninstall($uninstallModifications, $user = null)
-  {
+  public function uninstall($uninstallModifications, $user = null) {
 
     if (!is_array($uninstallModifications)) {
       $uninstallModifications = array($uninstallModifications);
@@ -273,7 +269,7 @@ class Manager extends AbstractManager
     }
 
     $logger->debug(
-      "Desinstalando modificações: " . implode(', ', $uninstallModifications) . (!empty($user) ? ' user ' . $user : null)
+      "Desinstalando modificações: ". implode(', ', $uninstallModifications) . (!empty($user) ? ' user '.$user : null)
     );
 
     foreach ($uninstallModifications as $id) {
@@ -289,11 +285,11 @@ class Manager extends AbstractManager
       }
 
       if ($modificationUserType && empty($user)) {
-        throw new Exception("Usu�rio n�o definido para modificação: $id");
+        throw new Exception("Usuário não definido para modificação: $id");
       }
 
       if (!$dataModification->isEnabled($user)) {
-        throw new Exception("Modificação n�o instalada: $id");
+        throw new Exception("Modificação não instalada: $id");
       }
 
       $logModification->info('Desinstalando modificação');
@@ -379,11 +375,10 @@ class Manager extends AbstractManager
    * @param string $user
    * @return boolean
    */
-  public function updateFile($path, $user = null)
-  {
+  public function updateFile($path, $user = null) {
 
     if (!file_exists($path)) {
-      throw new Exception('Arquivo n�o existe: ' . $path);
+      throw new Exception('Arquivo não existe: ' . $path);
     }
 
     // clear absolute path
@@ -410,8 +405,7 @@ class Manager extends AbstractManager
    * @param string $user
    * @return boolean
    */
-  public function updateFileTest($path, $user = null)
-  {
+  public function updateFileTest($path, $user = null) {
 
     $logger = $this->container->get('logger');
 
@@ -459,8 +453,7 @@ class Manager extends AbstractManager
    * @param string $user
    * @return boolean
    */
-  private function parseFiles(ArrayObject $modificationsFiles, $user = null)
-  {
+  private function parseFiles(ArrayObject $modificationsFiles, $user = null) {
 
     $logger = $this->container->get('logger');
     $logger->debug('Total de arquivos para processar: ' . count($modificationsFiles));
@@ -494,8 +487,7 @@ class Manager extends AbstractManager
    * @param string $user
    * @return boolean
    */
-  private function removeDataModificationFiles(ArrayObject $filesReparse, array $modifications, $user)
-  {
+  private function removeDataModificationFiles(ArrayObject $filesReparse, Array $modifications, $user) {
 
     $logger = $this->container->get('logger');
     $cacheDataModifications = $this->container->get('cacheDataModifications');
@@ -505,7 +497,7 @@ class Manager extends AbstractManager
       $dataModification = $cacheDataModifications($id);
       $dataRemoved = 0;
 
-      $logger->debug('Removendo caches da modificação: ' . $id .  '(' . count($dataModification->getFiles()) . ')');
+      $logger->debug('Removendo caches da modificação: ' . $id .  '('. count($dataModification->getFiles()) . ')');
 
       foreach ($dataModification->getFiles() as $path) {
 
@@ -539,11 +531,10 @@ class Manager extends AbstractManager
   /**
    * @param string $path
    */
-  public function parse($path)
-  {
+  public function parse($path) {
 
     if (!file_exists($path)) {
-      throw new Exception("Arquivo n�o existe: $path");
+      throw new Exception("Arquivo não existe: $path");
     }
 
     // parse no xml
@@ -558,8 +549,7 @@ class Manager extends AbstractManager
    * @throws Exception
    * @return bool
    */
-  public function setup()
-  {
+  public function setup() {
 
     $mode = 0775;
 
@@ -581,4 +571,5 @@ class Manager extends AbstractManager
 
     return $this;
   }
+
 }

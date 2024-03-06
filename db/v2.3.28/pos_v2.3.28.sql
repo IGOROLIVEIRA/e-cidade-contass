@@ -322,7 +322,7 @@ begin
 
 
          /*
-          * IF Criado porque na anulação de empenho n�o estava levando em conta o saldo das ordens de compra automáticas para
+          * IF Criado porque na anulação de empenho não estava levando em conta o saldo das ordens de compra automáticas para
           * calcular o saldo
           *
           * Criei a validação para mudar a variavel quando o menu acessado seja o de anulação de empenho.          * 
@@ -423,7 +423,7 @@ begin
           if rSaldoItens.pc01_servico is true then
 
             /**
-             * Caso for servi�o e este n�o for controlado por quantidade, setamos o saldo para 1 sempre
+             * Caso for servi�o e este n�o for controlado por quantidade, setamos o saldo para 1 sempre
              */
             if rSaldoItens.e62_servicoquantidade is false then
 
@@ -4189,10 +4189,10 @@ begin
 
 
 
-    -- Validamos o numpre para ver se n�o está duplicado em algum lugar
+    -- Validamos o numpre para ver se não está duplicado em algum lugar
     -- arrecad(k00_numpre) = recibopaga(k00_numnov)
     -- arrecad(k00_numpre) = recibo(k00_numnov)
-    -- caso esteja n�o processa o numpre caindo em inconsistencia
+    -- caso esteja não processa o numpre caindo em inconsistencia
     if exists ( select 1 from arrecad where arrecad.k00_numpre   = r_codret.k00_numpre limit 1)
           and ( exists ( select 1 from recibopaga where recibopaga.k00_numnov = r_codret.k00_numpre limit 1) or
                 exists ( select 1 from recibo     where recibo.k00_numnov     = r_codret.k00_numpre limit 1) ) then
@@ -5417,7 +5417,7 @@ begin
             end if;
 
             if lVerificaReceita is false then
-              return '24 - Receita: '||q_disrec.k00_receit||' n�o encontrada verifique o cadastro (1).';
+              return '24 - Receita: '||q_disrec.k00_receit||' não encontrada verifique o cadastro (1).';
             end if;
 
             perform * from disrec where disrec.codcla = vcodcla and disrec.k00_receit = q_disrec.k00_receit and disrec.idret = r_idret.idret and disrec.instit = r_idret.instit;
@@ -6174,7 +6174,7 @@ begin
 
                 lVerificaReceita := fc_verificareceita(q_disrec.k00_receit);
                 if lVerificaReceita is false then
-                  return '26 - Receita: '||q_disrec.k00_receit||' n�o encontrada verifique o cadastro (3).';
+                  return '26 - Receita: '||q_disrec.k00_receit||' não encontrada verifique o cadastro (3).';
                 end if;
 
                 perform *
@@ -6658,7 +6658,7 @@ begin
 
                 lVerificaReceita := fc_verificareceita(q_disrec.k00_receit);
                 if lVerificaReceita is false then
-                  return '27 - Receita: '||q_disrec.k00_receit||' n�o encontrada verifique o cadastro (4).';
+                  return '27 - Receita: '||q_disrec.k00_receit||' não encontrada verifique o cadastro (4).';
                 end if;
 
                 perform * from disrec where disrec.codcla = vcodcla and disrec.k00_receit = q_disrec.k00_receit and disrec.idret = r_idret.idret and disrec.instit = r_idret.instit;

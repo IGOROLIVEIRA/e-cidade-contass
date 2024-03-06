@@ -495,7 +495,7 @@ $sWhereContratos = " and 1 = 1 ";
                                 db_fieldsmemory($result, 0);
                                 echo "<script>" . $funcao_js . "('$l20_objeto',false);</script>";
                             } else {
-                                echo "<script>" . $funcao_js . "('','Chave(" . $pesquisa_chave . ") n„o Encontrado',true);</script>";
+                                echo "<script>" . $funcao_js . "('','Chave(" . $pesquisa_chave . ") n√£o Encontrado',true);</script>";
                             }
                         } else if (isset($criterioadjudicacao) && $criterioadjudicacao == true) {
                             $sql = "
@@ -578,7 +578,7 @@ $sWhereContratos = " and 1 = 1 ";
                                 db_fieldsmemory($result, 0);
                                 echo "<script>" . $funcao_js . "('$l20_dtpubratificacao','$l20_veicdivulgacao',false);</script>";
                             } else {
-                                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n„o Encontrado',true);</script>";
+                                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n√£o Encontrado',true);</script>";
                             }
                         } else {
                             if ($obras == "true") {
@@ -589,7 +589,7 @@ $sWhereContratos = " and 1 = 1 ";
                                         db_fieldsmemory($result, 0);
                                         echo "<script>" . $funcao_js . "('$l20_objeto','$l20_numero','$l03_descr',false,'$l20_tipojulg','$l20_codigo');</script>";
                                     } else {
-                                        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n„o Encontrado','Chave(" . $pesquisa_chave . ") n„o Encontrado','Chave(" . $pesquisa_chave . ") n„o Encontrado',true);</script>";
+                                        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n√£o Encontrado','Chave(" . $pesquisa_chave . ") n√£o Encontrado','Chave(" . $pesquisa_chave . ") n√£o Encontrado',true);</script>";
                                     }
                                 } else {
                                     $result = $cllicobraslicitacao->sql_record($cllicobraslicitacao->sql_query($pesquisa_chave));
@@ -597,7 +597,7 @@ $sWhereContratos = " and 1 = 1 ";
                                         db_fieldsmemory($result, 0);
                                         echo "<script>" . $funcao_js . "('$l44_descricao','$obr07_objeto','$l20_numero',$false);</script>";
                                     } else {
-                                        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n„o Encontrado',true);</script>";
+                                        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n√£o Encontrado',true);</script>";
                                     }
                                 }
                             } else {
@@ -610,7 +610,7 @@ $sWhereContratos = " and 1 = 1 ";
                                         echo "<script>" . $funcao_js . "('$l20_objeto',false);</script>";
                                     }
                                 } else {
-                                    echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n„o Encontrado',true);</script>";
+                                    echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n√£o Encontrado',true);</script>";
                                 }
                             }
                         }

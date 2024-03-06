@@ -1,5 +1,4 @@
 <?php
-
 /**
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2016  DBSeller Servicos de Informatica
@@ -29,13 +28,13 @@
 namespace ECidade\Tributario\NumeroControle;
 
 /**
- * Interface que padroniza as classes usadas para calcular o n�mero de controle(NC)
+ * Interface que padroniza as classes usadas para calcular o número de controle(NC)
  * @author Roberto Carneiro <roberto@dbseller.com.br>
  */
 interface NumeroControle
 {
   /**
-   * Função responsável para calcular o n�mero de controle
+   * Função responsável para calcular o número de controle
    */
   public function calcular();
 

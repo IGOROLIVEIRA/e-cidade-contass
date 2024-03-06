@@ -6,18 +6,15 @@ use \ECidade\V3\Extension\AbstractMetadata;
 use \ECidade\V3\Extension\Registry;
 use \Extension;
 
-class Data extends AbstractMetadata
-{
+class Data extends AbstractMetadata {
 
   private $events = array();
 
-  public function __construct()
-  {
+  public function __construct() {
     parent::__construct(ECIDADE_EXTENSION_DATA_PATH . 'config');
   }
 
-  public function addEvent($event, $triggers)
-  {
+  public function addEvent($event, $triggers) {
 
     if (!is_array($triggers)) {
       $triggers = array($triggers);
@@ -28,21 +25,18 @@ class Data extends AbstractMetadata
     }
   }
 
-  public function setEvents(array $events)
-  {
+  public function setEvents(Array $events) {
     $this->events = $events;
   }
 
-  public function getEvents()
-  {
+  public function getEvents() {
     return $this->events;
   }
 
-  public function removeEvent($remove)
-  {
+  public function removeEvent($remove) {
 
     foreach ($this->events as $trigger => $events) {
-      foreach ($events as $event) {
+      foreach($events as $event) {
 
         if ($event != $remove) {
           continue;
@@ -57,14 +51,13 @@ class Data extends AbstractMetadata
     }
   }
 
-  public function loadEvents()
-  {
+  public function loadEvents() {
 
     $eventManager = Registry::get('app.eventManager');
 
     // config events
-    foreach (Registry::get('app.config')->get('app.events', array()) as $event => $callback) {
-      $eventManager->register($event, $this->normalizaCallable($callback));
+    foreach(Registry::get('app.config')->get('app.events', array()) as $event => $callback) {
+      $eventManager->register($event, $this->normalizaCallable($callback) );
     }
 
     // data eventos
@@ -77,8 +70,7 @@ class Data extends AbstractMetadata
     return $this;
   }
 
-  public function normalizaCallable($callable)
-  {
+  public function normalizaCallable($callable) {
 
     if (is_callable($callable)) {
       return $callable;
@@ -90,6 +82,7 @@ class Data extends AbstractMetadata
       return array($class, 'execute');
     }
 
-    throw new Exception(get_class($class) . ' n�o é um handler válido.');
+    throw new Exception(get_class($class) . ' não é um handler válido.');
   }
+
 }

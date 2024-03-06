@@ -33,23 +33,23 @@ require_once("libs/JSON.php");
 require_once("dbforms/db_funcoes.php");
 
 $oJson              = new services_json();
-$oParametros        = $oJson->decode(str_replace("\\", "", $_POST["json"]));
+$oParametros        = $oJson->decode(str_replace("\\","",$_POST["json"]));
 $oRetorno           = new stdClass();
 $oRetorno->iStatus  = 1;
 $oRetorno->sMessage = "";
 
 try {
-
-  switch ($oParametros->sExecucao) {
+  
+  switch ( $oParametros->sExecucao ) {
 
     case "getPreferencias":
 
       $oUsuario                = UsuarioSistemaRepository::getPorCodigo(db_getsession("DB_id_usuario"));
       $oPreferencias           = $oUsuario->getPreferenciasUsuario();
       $oRetorno->oPreferencias = $oJson->decode($oPreferencias->toJSON());
-      break;
+    break;
     case "salvar":
-
+      
       $oUsuario      = UsuarioSistemaRepository::getPorCodigo(db_getsession("DB_id_usuario"));
 
       $oPreferencias = $oUsuario->getPreferenciasUsuario();
@@ -61,7 +61,7 @@ try {
 
       $oPreferencias->limparFiltrosPersonalizados();
 
-      foreach ($oParametros->oPreferencias->oFiltrosPersonalizados as $sRotina => $aFiltros) {
+      foreach ( $oParametros->oPreferencias->oFiltrosPersonalizados as $sRotina => $aFiltros) {
         foreach ($aFiltros as $sFiltro) {
           $oPreferencias->adicionarFiltroPersonalizado($sRotina, $sFiltro);
         }
@@ -69,15 +69,15 @@ try {
 
       $oPreferencias->salvar();
 
-      break;
+    break;
     default:
-      throw new Exception("Erro ao processar a requisição. Método n�o encontrado.");
-      break;
+      throw new Exception("Erro ao processar a requisição. Método não encontrado.");
+    break;
   }
-} catch (Exception $eException) {
+} catch ( Exception $eException ) {
 
   $oRetorno->iStatus  = 2;
-  $oRetorno->sMessage = urlencode($eException->getMessage());
-}
+  $oRetorno->sMessage = urlencode( $eException->getMessage() );
+} 
 
 echo $oJson->encode($oRetorno);

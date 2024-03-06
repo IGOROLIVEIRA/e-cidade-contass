@@ -9,9 +9,10 @@ class RegistroS1050 extends PostgresMigration
     {
         $this->insertLayout();
         $this->insertMenu();
+
     }
 
-    private function insertMenu()
+    private function insertMenu() 
     {
         $sql = <<<SQL
 
@@ -130,7 +131,7 @@ SQL;
         INSERT INTO avaliacaoperguntaopcao (db104_sequencial, db104_avaliacaopergunta, db104_descricao, db104_identificador, db104_aceitatexto, db104_peso, db104_valorresposta, db104_identificadorcampo) VALUES (4000108, 4000087, '', 'iniValid-4000108', true, 0, NULL, 'iniValid');
         INSERT INTO avaliacaoperguntaopcao (db104_sequencial, db104_avaliacaopergunta, db104_descricao, db104_identificador, db104_aceitatexto, db104_peso, db104_valorresposta, db104_identificadorcampo) VALUES (4000109, 4000088, '', 'fimValid-4000109', true, 0, NULL, 'fimValid');
         INSERT INTO avaliacaoperguntaopcao (db104_sequencial, db104_avaliacaopergunta, db104_descricao, db104_identificador, db104_aceitatexto, db104_peso, db104_valorresposta, db104_identificadorcampo) VALUES (4000113, 4000092, 'Sim', 'perHorFlexivel-1-4000113', false, 0, 'S', 'perHorFlexivel-1');
-        INSERT INTO avaliacaoperguntaopcao (db104_sequencial, db104_avaliacaopergunta, db104_descricao, db104_identificador, db104_aceitatexto, db104_peso, db104_valorresposta, db104_identificadorcampo) VALUES (4000114, 4000092, 'N�o', 'perHorFlexivel-2-4000114', false, 0, 'N', 'perHorFlexivel-2');
+        INSERT INTO avaliacaoperguntaopcao (db104_sequencial, db104_avaliacaopergunta, db104_descricao, db104_identificador, db104_aceitatexto, db104_peso, db104_valorresposta, db104_identificadorcampo) VALUES (4000114, 4000092, 'Não', 'perHorFlexivel-2-4000114', false, 0, 'N', 'perHorFlexivel-2');
         INSERT INTO avaliacaoperguntaopcao (db104_sequencial, db104_avaliacaopergunta, db104_descricao, db104_identificador, db104_aceitatexto, db104_peso, db104_valorresposta, db104_identificadorcampo) VALUES (4000115, 4000093, 'Intervalo em Horário Fixo', 'tpInterv-1-4000115', false, 0, '1', 'tpInterv-1');
         INSERT INTO avaliacaoperguntaopcao (db104_sequencial, db104_avaliacaopergunta, db104_descricao, db104_identificador, db104_aceitatexto, db104_peso, db104_valorresposta, db104_identificadorcampo) VALUES (4000116, 4000093, 'Intervalo em Horário Variável', 'tpInterv-2-4000116', false, 0, '2', 'tpInterv-2');
         INSERT INTO avaliacaoperguntaopcao (db104_sequencial, db104_avaliacaopergunta, db104_descricao, db104_identificador, db104_aceitatexto, db104_peso, db104_valorresposta, db104_identificadorcampo) VALUES (4000125, 4000085, '', 'codHorContrat-4000125', true, 0, '', 'codHorContrat');

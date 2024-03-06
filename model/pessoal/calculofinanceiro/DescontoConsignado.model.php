@@ -1,5 +1,4 @@
 <?php
-
 /**
  *     E-cidade Software Publico para Gestao Municipal                
  *  Copyright (C) 2014  DBSeller Servicos de Informatica             
@@ -34,8 +33,7 @@
  * @author Rafael Serpa Nery <rafal.nery@dbseller.com.br>
  * @author Marcos Andrade <marcos.andrade@dbseller.com.br>
  */
-abstract class DescontoConsignado
-{
+abstract class DescontoConsignado {
 
   /**
    * Executa o desconto consignado respeitando o valor de 70% do salário do servidor
@@ -45,8 +43,7 @@ abstract class DescontoConsignado
    * @access public
    * @param  $iTipoFolha - Tipo da folha que esta sendo calculada.
    */
-  static public function processar($iTipoFolha, $iMatriculaServidor, $sLotacao)
-  {
+  static public function processar( $iTipoFolha, $iMatriculaServidor, $sLotacao ) {
 
     /**
      * @TODO Remover as globais
@@ -59,30 +56,30 @@ abstract class DescontoConsignado
     LogCalculoFolha::write("Total de Proventos: {$tot_prov}");
     LogCalculoFolha::write("Total de Descontos: {$tot_desc}");
 
-    if (!db_empty($tot_prov) || !db_empty($tot_desc)) {
+    if( !db_empty($tot_prov) || !db_empty($tot_desc) ) {
 
       /**
        * Buscar as Rubricas cadastradas como rubricas de consignação.
        */
       $aRubricasConsignadas = DescontoConsignado::getCodigosRubricasConsignadas();
-      $oServidor            = ServidorRepository::getInstanciaByCodigo($iMatriculaServidor, $anousu, $mesusu, $DB_instit);
+      $oServidor            = ServidorRepository::getInstanciaByCodigo($iMatriculaServidor, $anousu, $mesusu, $DB_instit); 
       $oCalculoSalario      = $oServidor->getCalculoFinanceiro(CalculoFolha::CALCULO_SALARIO);
       $aEventosConsignados  = array();
-
+      
       LogCalculoFolha::write("Rubricas consignadas Encontradas");
       LogCalculoFolha::write(implode(", ", $aRubricasConsignadas));
 
       /**
        * Percorre as rubricas configuradas, verificando tem valor lançado no cálculo 
        */
-      foreach ($aRubricasConsignadas as $sRubricaConsignada) {
+      foreach ( $aRubricasConsignadas as $sRubricaConsignada ) {
 
         $aEventos = $oCalculoSalario->getEventosFinanceiros(null, $sRubricaConsignada);
-
+        
         /**
-         * Caso n�o exista Evento financeiro, n�o adiciona a rubrica ao cálculo.
+         * Caso não exista Evento financeiro, não adiciona a rubrica ao cálculo.
          */
-        if (empty($aEventos)) {
+        if ( empty($aEventos) ) {
           continue;
         }
 
@@ -94,39 +91,39 @@ abstract class DescontoConsignado
 
 
         $sBaseAbatimento         = DescontoConsignado::getCodigoBaseAbatimento($anousu, $mesusu, $DB_instit);
-        if (!$sBaseAbatimento) {
+        if ( !$sBaseAbatimento ) {
           return false;
         }
-        $sFormulaBase            = le_var_bxxx($sBaseAbatimento, "pontofs", "gerfsal", "r10", "r14", 0);
+        $sFormulaBase            = le_var_bxxx($sBaseAbatimento, "pontofs", "gerfsal","r10","r14",0);
         LogCalculoFolha::write("Formula da Base: {$sFormulaBase}");
-        eval("\$nValorBase = $sFormulaBase;");
+        eval("\$nValorBase = $sFormulaBase;" );
         $nValorProventosAbatidos = $tot_prov - $nValorBase;
-        $nValorLiquidoFolha      = round($nValorProventosAbatidos - $tot_desc, 2);
+        $nValorLiquidoFolha      = round($nValorProventosAbatidos - $tot_desc,2);
         $nSaldoMinimo            = round($nValorProventosAbatidos * 0.3, 2);
-
+           
         LogCalculoFolha::write("Total de Proventos..: {$tot_prov}");
         LogCalculoFolha::write("Total de Descontos..: {$tot_desc}");
         LogCalculoFolha::write("Valor da Base.......: {$nValorBase}");
         LogCalculoFolha::write("Valor Liquido Folha.: {$nValorLiquidoFolha}");
         LogCalculoFolha::write("Saldo Minimo........: {$nSaldoMinimo}");
 
-        if ($nValorLiquidoFolha <= $nSaldoMinimo) {
+        if( $nValorLiquidoFolha <= $nSaldoMinimo  ) {
 
           $oDaoFolhaSalario              = new cl_gerfsal();
-          $sSqlRubricaInsuficienciaSaldo = $oDaoFolhaSalario->sql_query_file(
-            $anousu,
+          $sSqlRubricaInsuficienciaSaldo = $oDaoFolhaSalario->sql_query_file( 
+            $anousu, 
             $mesusu,
             $iMatriculaServidor,
             "R928",
             "1"
           );
           $rsRubricaInsuficienciaSaldo  = db_query($sSqlRubricaInsuficienciaSaldo);
-
-          if (!$rsRubricaInsuficienciaSaldo) {
+           
+          if ( !$rsRubricaInsuficienciaSaldo ) {
             throw new DBException("Erro ao pesquisar Rubrica de Insuficiencia de Saldo");
           }
 
-          if (pg_num_rows($rsRubricaInsuficienciaSaldo) > 0) {
+          if ( pg_num_rows($rsRubricaInsuficienciaSaldo ) > 0) {
 
             LogCalculoFolha::write("Removendo rubrica R928 do salario");
             $oDaoFolhaSalario->excluir(
@@ -145,44 +142,45 @@ abstract class DescontoConsignado
            * a margem se esgote.
            */
           $nTotalDescontado    = $tot_desc;
-          $aEventosConsignados = array_reverse($aEventosConsignados);
+          $aEventosConsignados = array_reverse( $aEventosConsignados );
 
           foreach ($aEventosConsignados as $sRubrica => $oEventoConsignado) {
 
-            if ($oEventoConsignado->getValor() == 0) {
-              continue;
+            if( $oEventoConsignado->getValor() == 0 ) {
+              continue;    
             }
 
             LogCalculoFolha::write();
             LogCalculoFolha::write("Operando a Rubrica({$sRubrica}).");
-
+            
             LogCalculoFolha::write("DescontadoAntes:{$nTotalDescontado}.");
             $nTotalDescontado    -= $oEventoConsignado->getValor();
             $nSaldo               = $nValorProventosAbatidos - $nTotalDescontado;
-
-            $sWhere  = " and r14_regist = " . db_sqlformat($iMatriculaServidor);
-            $sWhere .= " and r14_rubric = " . db_sqlformat($sRubrica);
+            
+            $sWhere  = " and r14_regist = ".db_sqlformat($iMatriculaServidor);
+            $sWhere .= " and r14_rubric = ".db_sqlformat($sRubrica);
             LogCalculoFolha::write("ValorDesconto  :{$oEventoConsignado->getValor()}");
             LogCalculoFolha::write("-----------------------------------");
             LogCalculoFolha::write("DescontadoAtual:{$nTotalDescontado}.");
             LogCalculoFolha::write("Saldo Atual($nValorProventosAbatidos - $nTotalDescontado)   :{$nSaldo}.");
-            if ($nSaldo > $nSaldoMinimo) {
+            if ( $nSaldo > $nSaldoMinimo) {
 
               $tot_desc   -= ($oEventoConsignado->getValor() - ($nSaldo - $nSaldoMinimo));
               $aChaves[1]  = "r14_valor";
               $aValores[1] = ($nSaldo - $nSaldoMinimo);
-              db_update("gerfsal", $aChaves, $aValores, bb_condicaosubpes("r14_") . $sWhere);
+              db_update( "gerfsal", $aChaves, $aValores, bb_condicaosubpes("r14_").$sWhere );
               LogCalculoFolha::write("Mudou o Valor do Desconto para: {$tot_desc}");
               break;
-            } elseif ($nSaldo <= $nSaldoMinimo || $nSaldo <= 0) {
 
+            } elseif ( $nSaldo <= $nSaldoMinimo || $nSaldo <= 0 ) {
+              
               $oDaoFolhaSalario->excluir(
                 $anousu,
                 $mesusu,
                 $iMatriculaServidor,
                 $sRubrica
               );
-              db_delete("gerfsal", bb_condicaosubpes("r14_") . $sWhere);
+              db_delete("gerfsal",bb_condicaosubpes("r14_").$sWhere);
 
               $tot_desc -= $oEventoConsignado->getValor();
               LogCalculoFolha::write("Removeu rubrica por falta de saldo");
@@ -203,8 +201,7 @@ abstract class DescontoConsignado
    * @access private
    * @return array
    */
-  private static  function getCodigosRubricasConsignadas()
-  {
+  private static  function getCodigosRubricasConsignadas(){
 
     /**
      * Rubricas a serem devolvidas
@@ -215,11 +212,11 @@ abstract class DescontoConsignado
     $sSqlRubricasConsignadas = $oDaoRubricasConsignadas->sql_query_file(null, "rh140_rubric", 'rh140_ordem', "rh140_instit = " . db_getsession('DB_instit'));
     $rsRubricasConsignadas   = db_query($sSqlRubricasConsignadas);
 
-    if (!$rsRubricasConsignadas) {
+    if (!$rsRubricasConsignadas){
       throw new DBException("Erro ao buscar as rubricas.");
     }
 
-    for ($iRubrica = 0; $iRubrica < pg_num_rows($rsRubricasConsignadas); $iRubrica++) {
+    for ( $iRubrica = 0; $iRubrica < pg_num_rows($rsRubricasConsignadas); $iRubrica++){
       $aRubricasConsignadas[] = db_utils::fieldsMemory($rsRubricasConsignadas, $iRubrica)->rh140_rubric;
     }
 
@@ -236,26 +233,26 @@ abstract class DescontoConsignado
    * @access private
    * @return String
    */
-  private static function getCodigoBaseAbatimento($iAno, $iMes, $iInstituicao)
-  {
+  private static function getCodigoBaseAbatimento($iAno, $iMes, $iInstituicao) {
 
 
     $oDaoCfPess = new cl_cfpess();
     $sSqlCfPess = $oDaoCfPess->sql_query_parametro($iAno, $iMes, $iInstituicao, "r11_baseconsignada");
-
+     
     $rsCfPess   = db_query($sSqlCfPess);
 
 
-    if (!$rsCfPess) {
+    if ( !$rsCfPess ) {
       throw new DBException("Erro ao buscar as configurações do Sistema");
     }
 
-    if (pg_num_rows($rsCfPess) == 0) {
+    if ( pg_num_rows($rsCfPess) == 0 ) {
       return false;
     }
 
     $sCodigo = db_utils::fieldsMemory($rsCfPess, 0);
 
-    return $sCodigo->r11_baseconsignada;
+    return $sCodigo->r11_baseconsignada;  
   }
+
 }

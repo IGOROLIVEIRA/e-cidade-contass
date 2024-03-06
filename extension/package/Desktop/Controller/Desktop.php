@@ -9,19 +9,16 @@ use \ECidade\V3\Datasource\Database;
 use \ECidade\V3\Modification\Data\Modification as ModificationDataModification;
 use \ECidade\V3\Extension\Manager as ExtensionManager;
 
-class Desktop extends Controller
-{
+class Desktop extends Controller {
 
-  public function beforeAction()
-  {
+  public function beforeAction() {
 
     if (!$this->request->session()->has('DB_login')) {
       $this->response->redirect(ECIDADE_REQUEST_PATH . 'login.php');
     }
   }
 
-  public function index()
-  {
+  public function index() {
 
     // limpa dados da dessao global
     $this->request->session()->remove('DB_coddepto');
@@ -69,8 +66,7 @@ class Desktop extends Controller
 
     // favicon
     $this->view->document->addLink(
-      ECIDADE_CURRENT_EXTENSION_REQUEST_PATH . 'assets/img/favicon.png',
-      array('type' => 'image/png', 'rel' => 'icon')
+      ECIDADE_CURRENT_EXTENSION_REQUEST_PATH . 'assets/img/favicon.png', array('type' => 'image/png', 'rel' => 'icon')
     );
 
     foreach ($scripts as $src) {
@@ -97,6 +93,7 @@ class Desktop extends Controller
       if ($oidFoto) {
         $this->view->caminhoFoto = $this->getCaminhoFotoUsuario($oidFoto);
       }
+
     } catch (\Exception $error) {
       $this->view->caminhoFoto = "imagens/none1.jpeg";
     }
@@ -120,8 +117,7 @@ class Desktop extends Controller
   /**
    * @todo - validation? whitelist?
    */
-  public function session()
-  {
+  public function session() {
     foreach ($this->request->post() as $name => $value) {
       $this->request->session()->set($name, utf8_decode($value));
     }
@@ -130,8 +126,7 @@ class Desktop extends Controller
   /**
    * @return string
    */
-  public function version()
-  {
+  public function version() {
 
     Database::init();
 
@@ -147,8 +142,7 @@ class Desktop extends Controller
   /**
    * @return \UsuarioSistema
    */
-  private function getUsuarioSistema()
-  {
+  private function getUsuarioSistema() {
 
     require_once(modification(ECIDADE_PATH . 'libs/db_autoload.php'));
     require_once(modification(ECIDADE_PATH . 'libs/db_stdlib.php'));
@@ -161,8 +155,7 @@ class Desktop extends Controller
    * @param integer
    * @return string
    */
-  private function getCaminhoFotoUsuario($oidFoto)
-  {
+  private function getCaminhoFotoUsuario($oidFoto) {
 
     $sCaminhoFoto = 'tmp/' . $oidFoto . ".jpg";
     \db_query('begin');
@@ -174,13 +167,12 @@ class Desktop extends Controller
   /**
    * @return string
    */
-  public function fallback()
-  {
+  public function fallback() {
 
     $login = $this->request->session()->get('DB_login');
 
     if (empty($login)) {
-      throw new \Exception('Usu�rio n�o informado para retornar versão.');
+      throw new \Exception('Usuário não informado para retornar versão.');
     }
 
     $manager = new ExtensionManager();
@@ -193,8 +185,7 @@ class Desktop extends Controller
    * @param integer $instit
    * @return array
    */
-  public function getBases($instit)
-  {
+  public function getBases($instit) {
 
     $_SESSION['DB_instit'] = $instit;
 
@@ -222,4 +213,5 @@ class Desktop extends Controller
       'bases' => $bases
     );
   }
+
 }

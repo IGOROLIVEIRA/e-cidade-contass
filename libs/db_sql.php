@@ -255,6 +255,7 @@ function debitos_matricula($matricula, $limite, $tipo, $datausu, $anousu, $total
         if ($totalizaordem === "") {
             $sql .= " order by $totaliza";
         }
+
     } else {
         if ($totalizaordem != "") {
             $sql .= " order by $totalizaordem";
@@ -262,6 +263,7 @@ function debitos_matricula($matricula, $limite, $tipo, $datausu, $anousu, $total
         if ($totalizaordem === "") {
             $sql .= " order by k00_numpre,k00_numpar, k00_receit";
         }
+
     }
 
     $result = db_query($sql) or die("<br><br><blink><font color=red>VERIFIQUE INFLATORES!!!<br></blink><font color=black> <br> $sql");
@@ -708,7 +710,7 @@ function debitos_numpre_old($numpre, $limite, $tipo, $datausu, $anousu, $numpar 
                              sum(y.total) as total
                         from ( " . $sql . " ) y
                         group by $totaliza";
-
+        
         if ($totalizaordem != "") {
             $sql .= " order by $totalizaordem";
         }
@@ -1086,6 +1088,7 @@ function debitos_numpre_carne($numpre, $numpar, $datausu, $anousu, $instit = nul
          ) as y
            group by k00_numpre,
                     k00_numpar ";
+
     }
 
     $result = db_query($sql) or die("<br><br><blink><font color=red>VERIFIQUE INFLATORES!!!<br></blink><font color=black> <br> $sql");
@@ -1688,7 +1691,7 @@ class cl_gera_sql_folha
     // O mï¿½s serï¿½ o 11 (novembro)
     // O regist serï¿½ o 2870
     // Os campos serï¿½o: r31_anousu, r31_rubric e rh01_regist (Trocarï¿½ '#s#' por 'r31')
-    // Não terï¿½ order by
+    // Nï¿½o terï¿½ order by
     // A VARIï¿½VEL where serï¿½: rh05_seqpes is null... Mas o where do SQL serï¿½:
     // where rh02_anousu = 2005 and rh02_mesusu = 11 and rh02_regist = 2870 and rh05_seqpes is null
 

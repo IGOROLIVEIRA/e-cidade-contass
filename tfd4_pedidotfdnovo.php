@@ -53,19 +53,18 @@ $iDbOpcaoRegulado           = 1;
 $db_botao                   = true;
 $sRegulador                 = "";
 
-function formataData($dData, $iTipo = 1)
-{
+function formataData($dData, $iTipo = 1) {
 
   if ($iTipo == 1) {
 
-    $dData = explode('/', $dData);
-    $dData = $dData[2] . '-' . $dData[1] . '-' . $dData[0];
+    $dData = explode('/',$dData);
+    $dData = $dData[2].'-'.$dData[1].'-'.$dData[0];
     return $dData;
   }
 
-  $dData = explode('-', $dData);
-  $dData = @$dData[2] . '/' . @$dData[1] . '/' . @$dData[0];
-  return $dData;
+ $dData = explode('-',$dData);
+ $dData = @$dData[2].'/'.@$dData[1].'/'.@$dData[0];
+ return $dData;
 }
 
 
@@ -101,8 +100,11 @@ if (isset($confirmar)) {
         $oDaoTfdPedidoTfd->erro_status = '0';
         $oDaoTfdPedidoTfd->erro_msg    = 'Problema na Inserção dos Documentos: \\n\\n';
         $oDaoTfdPedidoTfd->erro_msg   .= $oDaoTfdDocumentosEntregues->erro_msg;
+
       }
+
     }
+
   }
 
   /* Situação */
@@ -121,7 +123,9 @@ if (isset($confirmar)) {
       $oDaoTfdPedidoTfd->erro_status = '0';
       $oDaoTfdPedidoTfd->erro_msg    = 'Problema na Inserção da Situação: \\n\\n';
       $oDaoTfdPedidoTfd->erro_msg   .= $oDaoTfdSituacaoPedidoTfd->erro_msg;
+
     }
+
   }
 
   /* Procedimentos */
@@ -138,8 +142,11 @@ if (isset($confirmar)) {
         $oDaoTfdPedidoTfd->erro_status = '0';
         $oDaoTfdPedidoTfd->erro_msg    = 'Problema na Inserção dos Procedimentos: \\n\\n';
         $oDaoTfdPedidoTfd->erro_msg   .= $oDaoTfdProcPedidoTfd->erro_msg;
+
       }
+
     }
+
   }
 
   /* Prontuário */
@@ -156,8 +163,11 @@ if (isset($confirmar)) {
         $oDaoTfdPedidoTfd->erro_status = '0';
         $oDaoTfdPedidoTfd->erro_msg    = 'Problema na Inserção do Prontuário: \\n\\n';
         $oDaoTfdPedidoTfd->erro_msg   .= $oDaoTfdProntPedidoTfd->erro_msg;
+
       }
+
     }
+
   }
 
   /* Encaminhamento */
@@ -174,13 +184,16 @@ if (isset($confirmar)) {
         $oDaoTfdPedidoTfd->erro_status = '0';
         $oDaoTfdPedidoTfd->erro_msg    = 'Problema na Inserção dos Encaminhamento: \\n\\n';
         $oDaoTfdPedidoTfd->erro_msg   .= $oDaoTfdEncaminPedidoTfd->erro_msg;
+
       }
+
     }
+
   }
 
   /* Incluir o regulador padrão */
   $sInner    = " inner join tfd_procpedidotfd on sd96_i_procedimento = tf23_i_procedimento";
-  $sSubWhere = " sd96_i_cbo=rh70_sequencial  and tf23_i_pedidotfd = " . $oDaoTfdPedidoTfd->tf01_i_codigo;
+  $sSubWhere = " sd96_i_cbo=rh70_sequencial  and tf23_i_pedidotfd = ".$oDaoTfdPedidoTfd->tf01_i_codigo;
   $sWhere    = " exists (select * from sau_proccbo $sInner where $sSubWhere)";
   $sSql      = $oDaoTfdParametros->sql_query("", "tf11_especmedico", "", $sWhere);
   $rs        = $oDaoTfdParametros->sql_record($sSql);
@@ -199,18 +212,23 @@ if (isset($confirmar)) {
       $oDaoTfdPedidoTfd->erro_status = '0';
       $oDaoTfdPedidoTfd->erro_msg    = 'Problema na Inserção do Regulador: \\n\\n';
       $oDaoTfdPedidoTfd->erro_msg   .= $oDaoTfdEncaminPedidoTfd->erro_msg;
+
     }
+
   } else {
 
     $sSql      = $oDaoTfdParametros->sql_query("", "tf11_especmedico", "", "");
     $rs        = $oDaoTfdParametros->sql_record($sSql);
     if ($oDaoTfdParametros->numrows > 0) {
 
-      $sRegulador  = "Regulador padrão informado nos parâmetros n�o pode regular este pedidos,";
-      $sRegulador .= "pois sua especialidade n�o engloba todos os procedimentos deste pedido de TFD.";
+      $sRegulador  = "Regulador padrão informado nos parâmetros não pode regular este pedidos,";
+      $sRegulador .= "pois sua especialidade não engloba todos os procedimentos deste pedido de TFD.";
+
     }
+
   }
   db_fim_transacao($oDaoTfdPedidoTfd->erro_status == '0' ? true : false);
+
 }
 
 if (isset($alterar)) {
@@ -225,16 +243,14 @@ if (isset($alterar)) {
 
   if (isset($lProcedimentosAlterados) && $lProcedimentosAlterados == 'true' && $oDaoTfdPedidoTfd->erro_status != '0') {
 
-    $sSql                              = $oDaoTfdProcPedidoTfd->sql_query2(
-      null,
-      ' tf23_i_codigo',
-      ' sd63_c_nome ',
-      ' tf23_i_pedidotfd = ' . $tf01_i_codigo
-    );
+    $sSql                              = $oDaoTfdProcPedidoTfd->sql_query2(null, ' tf23_i_codigo',
+                                                                           ' sd63_c_nome ',
+                                                                           ' tf23_i_pedidotfd = '.$tf01_i_codigo
+                                                                          );
     $rs                                = $oDaoTfdProcPedidoTfd->sql_record($sSql);
     $iLinhas                           = $oDaoTfdProcPedidoTfd->numrows;
-    $oDaoTfdProcPedidoTfd->erro_status = null; // faço isso porque se a busca n�o retornar resultado,
-    // o erro_status é setado para 0, com a mensagem de record vazio
+    $oDaoTfdProcPedidoTfd->erro_status = null; // faço isso porque se a busca não retornar resultado,
+                                                // o erro_status é setado para 0, com a mensagem de record vazio
     /*
     * Laco que exclui todos os procedimentos já cadastrados
     */
@@ -248,7 +264,9 @@ if (isset($alterar)) {
         $oDaoTfdPedidoTfd->erro_status = '0';
         $oDaoTfdPedidoTfd->erro_msg    = $oDaoTfdProcPedidoTfd->erro_msg;
         break;
+
       }
+
     }
 
     /* Insere os procedimentos */
@@ -265,12 +283,17 @@ if (isset($alterar)) {
           $oDaoTfdPedidoTfd->erro_status = '0';
           $oDaoTfdPedidoTfd->erro_msg    = 'Problema na Inserção dos Procedimentos: \\n\\n';
           $oDaoTfdPedidoTfd->erro_msg   .= $oDaoTfdProcPedidoTfd->erro_msg;
+
         }
+
       }
+
     }
+
   }
 
   db_fim_transacao($oDaoTfdPedidoTfd->erro_status == '0' ? true : false);
+
 }
 
 if (isset($chavepesquisa)) {
@@ -288,53 +311,50 @@ if (isset($chavepesquisa)) {
   if ($oDaoTfdPedidoRegulado->numrows > 0) {
     $iDbOpcaoRegulado = 3;
   }
+
 }
 
 
 ?>
 <html>
-
 <head>
-  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta http-equiv="Expires" CONTENT="0">
-  <?
-  db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js, webseller.js, /widgets/dbautocomplete.widget.js");
-  db_app::load("grid.style.css");
-  ?>
-  <link href="estilos.css" rel="stylesheet" type="text/css">
+<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Expires" CONTENT="0">
+<?
+db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js, webseller.js, /widgets/dbautocomplete.widget.js");
+db_app::load("grid.style.css");
+?>
+<link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
-  <center>
-    <br><br>
-    <table width="790" border="0" cellspacing="0" cellpadding="0">
-      <tr>
-        <td align="left" valign="top" bgcolor="#CCCCCC">
-          <center>
-            <fieldset style='width: 83%; padding-bottom: 1px;'>
-              <legend><b>Pedido de Tratamento Fora do Município</b></legend>
+<center>
+<br><br>
+<table width="790" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td align="left" valign="top" bgcolor="#CCCCCC">
+    <center>
+      <fieldset style='width: 83%; padding-bottom: 1px;'> <legend><b>Pedido de Tratamento Fora do Município</b></legend>
 
-              <?
-              db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
-              require_once("forms/db_frmtfd_pedidotfd.php");
-              ?>
-            </fieldset>
-          </center>
-        </td>
-      </tr>
-    </table>
-  </center>
-  <?
-  /*db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
+	        <?
+          db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+	        require_once("forms/db_frmtfd_pedidotfd.php");
+          ?>
+      </fieldset>
+    </center>
+	</td>
+  </tr>
+</table>
+</center>
+<?
+/*db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
           db_getsession("DB_anousu"),db_getsession("DB_instit")
          );*/
-  ?>
+?>
 </body>
-
 </html>
 <script>
-  js_tabulacaoforms("form1", "tf01_i_cgsund", true, 1, "tf01_i_cgsund", true);
+js_tabulacaoforms("form1", "tf01_i_cgsund", true, 1, "tf01_i_cgsund", true);
 </script>
 <?
 if ($sRegulador != '') {
@@ -349,6 +369,7 @@ if (isset($confirmar) || isset($alterar)) {
 
     $oDaoTfdPedidoTfd->erro(true, false);
     $db_botao = true;
+
   } else {
 
     $oDaoTfdPedidoTfd->erro(true, false);
@@ -356,7 +377,9 @@ if (isset($confirmar) || isset($alterar)) {
       $sRegulador = '&lRegulador=true';
     }
 
-    db_redireciona('tfd4_tfd_pedidotfd002.php?chavepesquisa=' . $oDaoTfdPedidoTfd->tf01_i_codigo . $sRegulador);
+    db_redireciona('tfd4_tfd_pedidotfd002.php?chavepesquisa='.$oDaoTfdPedidoTfd->tf01_i_codigo.$sRegulador);
+
   }
+
 }
 ?>

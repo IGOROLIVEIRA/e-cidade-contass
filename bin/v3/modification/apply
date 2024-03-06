@@ -6,7 +6,7 @@ use \ECidade\V3\Modification\Manager;
 use \ECidade\V3\Extension\Logger;
 use \ECidade\V3\Modification\Data\Modification as ModificationDataModification;
 
-require_once(dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'bootstrap.php');
+require_once( dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'bootstrap.php' );
 
 $checkSintax = false;
 $debug = false;
@@ -25,35 +25,36 @@ ini_set('memory_limit', '-1');
 try {
 
   if (!isset($argv[1])) {
-    throw new Exception("Arquivo n�o informado.");
+    throw new Exception("Arquivo não informado.");
   }
 
-  $file = realpath($argv[1]);
+  $file = realpath($argv[1]); 
   $user = 'apply_' . mt_rand();
   $startTime = microtime(true);
 
   $manager = new Manager();
   $logger = $manager->getLogger();
   $logger->setVerbosity(Logger::DEBUG);
-  $logger->addHandler(function ($output, $level) {
+  $logger->addHandler(function($output, $level) {
 
-    switch ($level) {
+    switch($level) {
 
       case Logger::DEBUG:
         $output = Color::set($output, 'light_gray');
-        break;
+      break;
 
       case Logger::WARNING:
         $output = Color::set($output, 'brown');
-        break;
+      break;
 
       case Logger::ERROR:
         $output = Color::set($output, 'red');
-        break;
+      break;
+
     }
 
     return $output;
-  });
+  }); 
   $files = array();
   $filesPath = ECIDADE_MODIFICATION_CACHE_PATH . 'user' . DS . $user . DS;
   $backupPath = ECIDADE_PATH . 'tmp' . DS . 'bkp_' . $user . DS;
@@ -90,9 +91,9 @@ try {
       mkdir(dirname($backup), 0775, true);
     }
 
-    if (!$debug && !copy($to, $backup)) {
+    if (!$debug && !copy($to, $backup) ) {
       throw new Exception("Erro ao salvar backup do arquivo: '$backup'");
-    }
+    } 
   }
 
   foreach ($files as $from => $to) {
@@ -116,24 +117,24 @@ try {
   $manager->uninstall($data->getId(), $user);
   $logger->debug('removendo arquivo de cache da modificação: ' . basename($data->getPath()));
   $data->remove();
+
 } catch (Exception $error) {
 
-  echo "\n message: " . $error->getMessage() . "\n";
-  echo "\n trace: \n" . $error->getTraceAsString() . "\n";
+  echo "\n message: ". $error->getMessage(). "\n";
+  echo "\n trace: \n". $error->getTraceAsString(). "\n";
   exit(2);
 }
 
 echo "\n time: " .  round((microtime(true) - $startTime), 2);
-echo "\n memory: " . round((memory_get_peak_usage(true) / 1024) / 1024, 2) . "mb\n\n";
+echo "\n memory: " . round((memory_get_peak_usage(true)/1024)/1024, 2) . "mb\n\n";                  
 
-function check_syntax($filepath)
-{
+function check_syntax($filepath) {
 
   if (pathinfo($filepath, PATHINFO_EXTENSION) != 'php') {
     return true;
   }
 
-  $code = 0;
+  $code = 0; 
   $output = null;
   exec("php -l '$filepath' 2> /dev/null", $output, $code);
 

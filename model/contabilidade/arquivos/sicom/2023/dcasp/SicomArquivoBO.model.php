@@ -39,13 +39,11 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
 
   protected $sTipoGeracao;
 
-  public function getCodigoLayout()
-  {
+  public function getCodigoLayout(){
     return $this->iCodigoLayout;
   }
 
-  public function getNomeArquivo()
-  {
+  public function getNomeArquivo(){
     return $this->sNomeArquivo;
   }
 
@@ -69,8 +67,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
    * esse metodo sera implementado criando um array com os campos
    * que serao necessarios para o escritor gerar o arquivo CSV
    */
-  public function getCampos()
-  {
+  public function getCampos() {
     $aElementos  = array();
     return $aElementos;
   }
@@ -78,9 +75,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
   /**
    * Contrutor da classe
    */
-  public function __construct()
-  {
-  }
+  public function __construct() { }
 
   /**
    * selecionar os dados do balanço orcamentário pra gerar o arquivo
@@ -99,6 +94,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
       $aInstituicoes = array_map(function ($oItem) {
         return $oItem->codigo;
       }, $aInstits);
+
     } else {
       $aInstituicoes = array(db_getsession("DB_instit"));
     }
@@ -205,9 +201,9 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
      */
 
     $aFasesReceitaOrcamentaria = array(
-      1 => 'previni',
-      2 => 'prevatu',
-      3 => 'recrealiza'
+        1 => 'previni',
+        2 => 'prevatu',
+        3 => 'recrealiza'
     );
 
     foreach ($aFasesReceitaOrcamentaria as $iValorNumerico => $sChave) {
@@ -245,6 +241,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
       if ($clbodcasp10->erro_status == 0) {
         throw new Exception($clbodcasp10->erro_msg);
       }
+
     } // Registo 10
 
 
@@ -253,8 +250,8 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
      */
 
     $aFasesReceitaOrcamentaria = array(
-      2 => 'prevatu',
-      3 => 'recrealiza'
+        2 => 'prevatu',
+        3 => 'recrealiza'
     );
 
     foreach ($aFasesReceitaOrcamentaria as $iValorNumerico => $sChave) {
@@ -275,6 +272,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
       if ($clbodcasp20->erro_status == 0) {
         throw new Exception($clbodcasp20->erro_msg);
       }
+
     } // Registo 20
 
 
@@ -283,11 +281,11 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
      */
 
     $aFasesReceitaOrcamentaria = array(
-      1 => 'dotini',
-      2 => 'dotatu',
-      3 => 'despemp',
-      4 => 'despliq',
-      5 => 'desppag'
+        1 => 'dotini',
+        2 => 'dotatu',
+        3 => 'despemp',
+        4 => 'despliq',
+        5 => 'desppag'
     );
 
     foreach ($aFasesReceitaOrcamentaria as $iValorNumerico => $sChave) {
@@ -319,20 +317,21 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
       if ($clbodcasp30->erro_status == 0) {
         throw new Exception($clbodcasp30->erro_msg);
       }
+
     } // Registo 30
 
 
 
     /** BODCASP402023
-     *  Quadro da Execução de Restos a Pagar N�o Processados
+     *  Quadro da Execução de Restos a Pagar Não Processados
      */
 
     $faseRestosPagarNaoProcessados = array(
-      1 => 'exanterior',
-      2 => 'exanterior3112',
-      3 => 'liquidados',
-      4 => 'pagos',
-      5 => 'cancelados'
+        1 => 'exanterior',
+        2 => 'exanterior3112',
+        3 => 'liquidados',
+        4 => 'pagos',
+        5 => 'cancelados'
     );
 
     foreach ($faseRestosPagarNaoProcessados as $iValorNumerico => $sChave) {
@@ -356,19 +355,20 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
       if ($clbodcasp40->erro_status == 0) {
         throw new Exception($clbodcasp40->erro_msg);
       }
+
     } // $rsResult40
 
 
 
     /** BODCASP502023
-     *  Quadro da Execução de Restos a Pagar Processados e n�o Processados Liquidados
+     *  Quadro da Execução de Restos a Pagar Processados e não Processados Liquidados
      */
 
     $RestosPagarProcessadosNaoProcessadosLiquidados = array(
-      1 => 'exanterior',
-      2 => 'exanterior3112',
-      4 => 'pagos',
-      5 => 'cancelados'
+        1 => 'exanterior',
+        2 => 'exanterior3112',
+        4 => 'pagos',
+        5 => 'cancelados'
     );
 
     foreach ($RestosPagarProcessadosNaoProcessadosLiquidados as $iValorNumerico => $sChave) {
@@ -392,6 +392,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
       if ($clbodcasp50->erro_status == 0) {
         throw new Exception($clbodcasp50->erro_msg);
       }
+
     } // $rsResult50
 
 
@@ -401,5 +402,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
     $oGerarBO->iAno = $iAnoUsu;
     $oGerarBO->iPeriodo = $iCodigoPeriodo;
     $oGerarBO->gerarDados();
+
   }
+
 }

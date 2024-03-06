@@ -37,29 +37,27 @@ $cltermo = new cl_termo();
 
 $oGet    = db_utils::postmemory($_GET);
 
-$rsTermo   = $cltermo->sql_record($cltermo->sql_query_file(null, "v07_numpre", null, " v07_parcel = {$oGet->parcelamento}"));
-if ($cltermo->numrows > 0) {
-  $oTermo  = db_utils::fieldsMemory($rsTermo, 0);
-} else {
-  db_msgbox("Parcelamento não encontrado");
-  echo " <script> parent.db_iframe_consultaparc" . $oGet->parcelamento . ".hide(); </script>";
+$rsTermo   = $cltermo->sql_record($cltermo->sql_query_file(null,"v07_numpre",null," v07_parcel = {$oGet->parcelamento}"));
+if ( $cltermo->numrows > 0 ) {
+  $oTermo  = db_utils::fieldsMemory($rsTermo,0);
+}else{
+  db_msgbox("Parcelamento nÃ£o encontrado");
+  echo " <script> parent.db_iframe_consultaparc".$oGet->parcelamento.".hide(); </script>";
   exit;
 }
 
 ?>
 <html>
-
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link href="estilos.css" rel="stylesheet" type="text/css">
-  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="estilos.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 </head>
-
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-  <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
-    <tr>
-      <td align="center" valign="top">
-        <?
+<table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
+  <tr>
+    <td align="center" valign="top">
+      <?
         $camposDetalhe = "";
         $funcao_js     = "js_mudaFiltro|DB_parametro";
 
@@ -86,7 +84,7 @@ if ($cltermo->numrows > 0) {
         $sqlDividas .= "                        inner join termo    on termo.v07_parcel  = riparcel                ";
         $sqlDividas .= "                        inner join termodiv on termodiv.parcel   = riparcel                ";
         $sqlDividas .= "                        inner join divida   on divida.v01_coddiv = termodiv.coddiv         ";
-        $sqlDividas .= "                                           and v01_instit        = " . db_getsession('DB_instit');
+        $sqlDividas .= "                                           and v01_instit        = ".db_getsession('DB_instit');
         $sqlDividas .= "                        inner join proced   on proced.v03_codigo = divida.v01_proced       ";
         $sqlDividas .= "             union                                                                         ";
         $sqlDividas .= "                select $camposDetalhe                                                      ";
@@ -102,7 +100,7 @@ if ($cltermo->numrows > 0) {
         $sqlDividas .= "                        inner join inicialcert     on inicial           = v51_inicial      ";
         $sqlDividas .= "                        inner join certdiv         on v14_certid        = v51_certidao     ";
         $sqlDividas .= "                        inner join divida          on v01_coddiv        = v14_coddiv       ";
-        $sqlDividas .= "                                                  and v01_instit        = " . db_getsession('DB_instit');
+        $sqlDividas .= "                                                  and v01_instit        = ".db_getsession('DB_instit');
         $sqlDividas .= "                        inner join proced          on proced.v03_codigo = divida.v01_proced  ) as x ";
         $sqlDividas .= "        group by $camposDetalhe                                                            ";
         $sqlDividas .= "                 v01_exerc,                                                                ";
@@ -117,38 +115,42 @@ if ($cltermo->numrows > 0) {
         $arrayTot["v01_valor"]  = "v01_valor";
         $arrayTot["totalgeral"] = "v03_descr";
 
-        $array = array("s" => "Exerc&iacute;cio", "a" => "Numpre e parcela");
+        $array = array("s"=>"Exerc&iacute;cio","a"=>"Numpre e parcela");
 
         echo "<form name='form1'>";
         echo "<b>Agrupar por : </b>";
-        db_select('tipoFiltro', $array, true, "1", "onChange='js_mudaFiltro(this.value);'");
+        db_select('tipoFiltro',$array,true,"1","onChange='js_mudaFiltro(this.value);'");
         echo "</form>";
 
-        db_lovrot($sqlDividas, 15, "()", "", "$funcao_js", "", "NoMe", array("parcelamento" => "{$oGet->parcelamento}"), false, $arrayTot);
+        db_lovrot($sqlDividas,15,"()","","$funcao_js","","NoMe", array("parcelamento"=>"{$oGet->parcelamento}"),false, $arrayTot);
 
-        ?>
-      </td>
-    </tr>
-  </table>
+      ?>
+     </td>
+   </tr>
+</table>
 </body>
-
 </html>
 <script>
-  function js_mudaFiltro(valor) {
 
-    var url = 'div3_consultaParcExercicios.php';
-    var pars = 'parcelamento=<?= $oGet->parcelamento ?>&tipoFiltro=' + valor;
-    document.location.href = url + '?' + pars;
+function js_mudaFiltro(valor){
 
-  }
+  var url  = 'div3_consultaParcExercicios.php';
+  var pars = 'parcelamento=<?=$oGet->parcelamento?>&tipoFiltro='+valor;
+  document.location.href = url+'?'+pars;
 
-  function js_consultaDivida(codigoOrigem) {
-    /* alert(' inicio -- '+codigoOrigem); return false; */
-    var arquivo = 'div1_consulta003.php';
-    var parametros = 'codDiv=' + codigoOrigem;
-    var nomeIframe = 'db_iframe_consultadivida';
+}
 
-    js_OpenJanelaIframe('CurrentWindow.corpo', nomeIframe, arquivo + '?' + parametros, 'Detalhes da Pesquisa', true);
+function js_consultaDivida(codigoOrigem){
+  /* alert(' inicio -- '+codigoOrigem); return false; */
+  var  arquivo    = 'div1_consulta003.php';
+  var  parametros = 'codDiv='+codigoOrigem;
+  var  nomeIframe = 'db_iframe_consultadivida';
 
-  }
+  js_OpenJanelaIframe('CurrentWindow.corpo',nomeIframe,arquivo+'?'+parametros,'Detalhes da Pesquisa',true);
+
+}
+
+
+
+
 </script>

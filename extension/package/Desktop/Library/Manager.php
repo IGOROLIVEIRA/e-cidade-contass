@@ -1,5 +1,4 @@
 <?php
-
 namespace ECidade\Package\Desktop\Library;
 
 use \ECidade\V3\Extension\AbstractManager;
@@ -10,15 +9,13 @@ use \ECidade\V3\Extension\Data as ExtensionData;
 /**
  * @package desktop
  */
-class Manager extends AbstractManager
-{
+class Manager extends AbstractManager {
 
   /**
    * Método responsavel por rodar o unpack de todas os modification, somente para atualizar o cache.
    * @return void
    */
-  public function unpack()
-  {
+  public function unpack() {
 
     $modificationManager = new ModificationManager();
     $modificationManager->setLogger($this->container->get('logger'));
@@ -29,8 +26,7 @@ class Manager extends AbstractManager
    * @param ExtensionData $extensionData
    * @return boolean
    */
-  public function install($extensionData, $user = null)
-  {
+  public function install($extensionData, $user = null) {
 
     $modificationManager = new ModificationManager();
     $modificationManager->setLogger($this->getLogger());
@@ -70,7 +66,8 @@ class Manager extends AbstractManager
       $result = $modificationManager->install('dbportal-v3-desktop', $user);
       $modificationDesktopData = ModificationDataModification::restore('dbportal-v3-desktop');
       $extensionData->setStatus(ExtensionData::STATUS_ENABLED, $user);
-    } catch (\Exception $error) {
+
+    } catch(\Exception $error) {
 
       $extensionData->setStatus(ExtensionData::STATUS_DISABLED, $user);
       $this->container->get('logger')->error($error->getMessage());
@@ -83,15 +80,14 @@ class Manager extends AbstractManager
    * @param ExtensionData $extensionData
    * @return boolean
    */
-  public function uninstall($extensionData, $user = null)
-  {
+  public function uninstall($extensionData, $user = null) {
 
     $modificationManager = new ModificationManager();
     $modificationManager->setLogger($this->getLogger());
 
     // global uninstall
     if (!$extensionData->isUserType() && !empty($user)) {
-      throw new \Exception("Usu�rio informado para extesão do tipo global");
+      throw new \Exception("Usuário informado para extesão do tipo global");
     }
 
     $result = $modificationManager->uninstall('dbportal-v3-desktop', $user);
@@ -105,8 +101,7 @@ class Manager extends AbstractManager
    * @param array $files
    * @return array
    */
-  private function unpackModifications($modificationManager, array $files)
-  {
+  private function unpackModifications($modificationManager, array $files) {
 
     $force = true;
     $modifications = array();
@@ -117,6 +112,7 @@ class Manager extends AbstractManager
       try {
 
         $modifications[] = $modificationManager->unpack($rootPath . $path, $force)->getId();
+
       } catch (\Exception $error) {
         $this->container->get('logger')->error($error->getMessage());
       }
@@ -124,4 +120,5 @@ class Manager extends AbstractManager
 
     return $modifications;
   }
+
 }

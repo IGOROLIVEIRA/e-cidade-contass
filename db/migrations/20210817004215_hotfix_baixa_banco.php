@@ -1482,8 +1482,8 @@ class HotfixBaixaBanco extends AbstractMigration
 
                                 /**
                                 * Validamos se o recibo foi gerado por regra, pois caso tenha
-                                * sido n„o deve recalcular a origem do d√©bito
-                                * --Se for diferente de 0 n„o pode recalcular
+                                * sido n√£o deve recalcular a origem do d√©bito
+                                * --Se for diferente de 0 n√£o pode recalcular
                                 **/
                                 if lReciboPossuiPgtoParcial is true then
 
@@ -4450,7 +4450,7 @@ class HotfixBaixaBanco extends AbstractMigration
                                 end if;
 
                                 /**
-                                * Alterado para agrupar por receita quando for recibo avulso para n„o gerar registros duplicados
+                                * Alterado para agrupar por receita quando for recibo avulso para n√£o gerar registros duplicados
                                 * na arrepaga (k00_numpre k00_numpar k00_receit k00_hist)
                                 */
                                 insert into arrepaga (
@@ -4608,7 +4608,7 @@ class HotfixBaixaBanco extends AbstractMigration
                             -- GRAVA DISREC DAS RECEITAS PARA A CLASSIFICACAO
                                         lVerificaReceita := fc_verificareceita(q_disrec.k00_receit);
                                         if lVerificaReceita is false then
-                                        return '25 - Receita: '||q_disrec.k00_receit||' n„o encontrada verifique o cadastro (2).';
+                                        return '25 - Receita: '||q_disrec.k00_receit||' n√£o encontrada verifique o cadastro (2).';
                                         end if;
 
                                         perform *
