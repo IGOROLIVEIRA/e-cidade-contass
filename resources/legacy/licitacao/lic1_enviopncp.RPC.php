@@ -240,7 +240,7 @@ switch ($oParam->exec) {
                 //envia Retificacao para pncp
                 $rsApiPNCP = $clAvisoLicitacaoPNCP->enviarRetificacao($oDadosRatificacao, substr($aLicitacao->numerocontrole, 17, -5), substr($aLicitacao->numerocontrole, 24));
 
-                if ($rsApiPNCP->compraUri == null) {
+                if ($rsApiPNCP[0] == 201) {
                     //monto o codigo da compra no pncp
                     $l213_numerocontrolepncp = $aLicitacao->numerocontrole;
                     $clliccontrolepncp->l213_licitacao = $aLicitacao->codigo;
@@ -256,7 +256,7 @@ switch ($oParam->exec) {
                     $oRetorno->status  = 1;
                     $oRetorno->message = "Retificada com Sucesso !";
                 } else {
-                    throw new Exception(utf8_decode($rsApiPNCP->message));
+                    throw new Exception(utf8_decode($rsApiPNCP[1]));
                 }
             }
         } catch (Exception $eErro) {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2016  DBSeller Servicos de Informatica
@@ -51,12 +52,12 @@ class ModuloDez implements NumeroControle
   private $sNumeracaoCalculada;
 
   /**
-   * Função responsável para calcular o número de controle
+   * Função responsável para calcular o n�mero de controle
    */
   public function calcular()
   {
-    if ( empty($this->sNumeracao) ) {
-      throw new \BusinessException("Numeração para o cálculo do Módulo 10 não foi definida.");
+    if (empty($this->sNumeracao)) {
+      throw new \BusinessException("Numeração para o cálculo do Módulo 10 n�o foi definida.");
     }
 
     $oNumeroControle     = new \NumeroControle();

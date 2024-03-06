@@ -4,17 +4,17 @@ use Classes\PostgresMigration;;
 
 class Oc12734 extends PostgresMigration
 {
-    public function up()
-    {
-        $this->_createDisrecDescontoIntegralTable();
-        $this->_alterFcAutenClass();
-        $this->_alterFcCornumpDesconto();
-        $this->_alterFcBaixaBanco();
-    }
+  public function up()
+  {
+    $this->_createDisrecDescontoIntegralTable();
+    $this->_alterFcAutenClass();
+    $this->_alterFcCornumpDesconto();
+    $this->_alterFcBaixaBanco();
+  }
 
-    private function _alterFcBaixaBanco()
-    {
-        $sql = "
+  private function _alterFcBaixaBanco()
+  {
+    $sql = "
 
                 CREATE OR REPLACE FUNCTION fc_baixabanco(
                     cod_ret integer,
@@ -3029,7 +3029,7 @@ class Oc12734 extends PostgresMigration
                     -- Validamos o numpre para ver se nao esta duplicado em algum lugar
                     -- arrecad(k00_numpre) = recibopaga(k00_numnov)
                     -- arrecad(k00_numpre) = recibo(k00_numnov)
-                    -- caso esteja nÃ£o processa o numpre caindo em inconsistencia
+                    -- caso esteja não processa o numpre caindo em inconsistencia
                     if exists ( select 1 from arrecad where arrecad.k00_numpre   = r_codret.k00_numpre limit 1)
                           and ( exists ( select 1 from recibopaga where recibopaga.k00_numnov = r_codret.k00_numpre limit 1) or
                                 exists ( select 1 from recibo     where recibo.k00_numnov     = r_codret.k00_numpre limit 1) ) then
@@ -4288,7 +4288,7 @@ class Oc12734 extends PostgresMigration
                             end if;
 
                             if lVerificaReceita is false then
-                              return '24 - Receita: '||q_disrec.k00_receit||' nÃ£o encontrada verifique o cadastro (1).';
+                              return '24 - Receita: '||q_disrec.k00_receit||' não encontrada verifique o cadastro (1).';
                             end if;
 
                             perform * from disrec where disrec.codcla = vcodcla and disrec.k00_receit = q_disrec.k00_receit and disrec.idret = r_idret.idret and disrec.instit = r_idret.instit;
@@ -5069,7 +5069,7 @@ class Oc12734 extends PostgresMigration
 
                                 lVerificaReceita := fc_verificareceita(q_disrec.k00_receit);
                                 if lVerificaReceita is false then
-                                  return '26 - Receita: '||q_disrec.k00_receit||' nÃ£o encontrada verifique o cadastro (3).';
+                                  return '26 - Receita: '||q_disrec.k00_receit||' não encontrada verifique o cadastro (3).';
                                 end if;
 
                                 perform *
@@ -5553,7 +5553,7 @@ class Oc12734 extends PostgresMigration
 
                                 lVerificaReceita := fc_verificareceita(q_disrec.k00_receit);
                                 if lVerificaReceita is false then
-                                  return '27 - Receita: '||q_disrec.k00_receit||' nÃ£o encontrada verifique o cadastro (4).';
+                                  return '27 - Receita: '||q_disrec.k00_receit||' não encontrada verifique o cadastro (4).';
                                 end if;
 
                                 perform * from disrec where disrec.codcla = vcodcla and disrec.k00_receit = q_disrec.k00_receit and disrec.idret = r_idret.idret and disrec.instit = r_idret.instit;
@@ -5801,12 +5801,12 @@ class Oc12734 extends PostgresMigration
                   COST 100;
                 ALTER FUNCTION fc_baixabanco(integer, date)
                   OWNER TO dbportal;";
-        $this->execute($sql);
-    }
+    $this->execute($sql);
+  }
 
-    private function _alterFcCornumpDesconto()
-    {
-        $sql = "
+  private function _alterFcCornumpDesconto()
+  {
+    $sql = "
                     CREATE OR REPLACE FUNCTION fc_cornumpdesconto()
                       RETURNS trigger AS
                     \$BODY$
@@ -6223,12 +6223,12 @@ class Oc12734 extends PostgresMigration
                       COST 100;
                     ALTER FUNCTION fc_cornumpdesconto()
                       OWNER TO ecidade;";
-        $this->execute($sql);
-    }
+    $this->execute($sql);
+  }
 
-    private function _alterFcAutenClass()
-    {
-        $sql = "
+  private function _alterFcAutenClass()
+  {
+    $sql = "
         CREATE OR REPLACE FUNCTION fc_autenclass(
             integer,
             date,
@@ -6358,11 +6358,11 @@ class Oc12734 extends PostgresMigration
         ALTER FUNCTION fc_autenclass(integer, date, date, integer, character varying, integer)
           OWNER TO ecidade;";
 
-        $this->execute($sql);
-    }
-    private function _createDisrecDescontoIntegralTable()
-    {
-        $sql = "
+    $this->execute($sql);
+  }
+  private function _createDisrecDescontoIntegralTable()
+  {
+    $sql = "
                 CREATE TABLE caixa.disrec_desconto_integral
                 (
                   codcla integer NOT NULL DEFAULT 0,
@@ -6435,11 +6435,11 @@ class Oc12734 extends PostgresMigration
                   EXECUTE PROCEDURE fc_disrec_inc();
 
                ";
-        $this->execute($sql);
-    }
+    $this->execute($sql);
+  }
 
-    public function down()
-    {
-        $this->table('disrec_desconto_integral', array('schema' => 'caixa'))->drop();
-    }
+  public function down()
+  {
+    $this->table('disrec_desconto_integral', array('schema' => 'caixa'))->drop();
+  }
 }

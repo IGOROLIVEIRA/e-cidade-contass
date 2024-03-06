@@ -105,7 +105,7 @@ CREATE TABLE empenhos (
 );
 COMMENT ON TABLE empenhos IS 'Cadastro de Empenhos';
 COMMENT ON COLUMN empenhos.id IS 'ID do Empenho';
-COMMENT ON COLUMN empenhos.codempenho IS 'Número do Empenho';
+COMMENT ON COLUMN empenhos.codempenho IS 'N�mero do Empenho';
 COMMENT ON COLUMN empenhos.exercicio IS 'Exercício do Empenho';
 COMMENT ON COLUMN empenhos.codigo IS 'Código do Empenho';
 COMMENT ON COLUMN empenhos.instituicao_id IS 'Instituição do Empenho';

@@ -640,7 +640,7 @@ if (isset($codtab) && $codigo_tab <= 2) {
           ini" . $i . " = new Number(" . $ini . ");\n
           fim" . $i . " = new Number(" . $fim . ");\n
 	  if(valor >= ini" . $i . " && valor <= fim" . $i . "){\n
-	    alert('Alguma faixa cadastrada jï¿½ abrange este valor. Verifique.');\n
+	    alert('Alguma faixa cadastrada já abrange este valor. Verifique.');\n
 	    eval('document.form1.'+campo+'.value = \"\";');
 	    eval('document.form1.'+campo+'.focus();');
 	    erro++;

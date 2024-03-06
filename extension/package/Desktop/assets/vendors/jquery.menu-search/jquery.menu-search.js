@@ -89,7 +89,7 @@
 
         if (!_this.options('instit')) {
 
-          _this.container.empty().text('Instituição não selecionada.').show();
+          _this.container.empty().text('Instituição n�o selecionada.').show();
           return false;
         }
 

@@ -24,35 +24,35 @@ use \Mpdf\Mpdf;
 
 /**
  * PDF
- * @param string $mode              | padr„o: BLANK
- * @param mixed $format             | padr„o: A4
- * @param float $default_font_size  | padr„o: 0
- * @param string $default_font      | padr„o: ''
- * @param float $margin_left        | padr„o: 7
- * @param float $margin_right       | padr„o: 7
- * @param float $margin_top         | padr„o: 16
- * @param float $margin_bottom      | padr„o: 16
- * @param float $margin_header      | padr„o: 9
- * @param float $margin_footer      | padr„o: 9
+ * @param string $mode              | padr√£o: BLANK
+ * @param mixed $format             | padr√£o: A4
+ * @param float $default_font_size  | padr√£o: 0
+ * @param string $default_font      | padr√£o: ''
+ * @param float $margin_left        | padr√£o: 7
+ * @param float $margin_right       | padr√£o: 7
+ * @param float $margin_top         | padr√£o: 16
+ * @param float $margin_bottom      | padr√£o: 16
+ * @param float $margin_header      | padr√£o: 9
+ * @param float $margin_footer      | padr√£o: 9
  *
- * Nenhum dos par‚metros È obrigatÛrio
+ * Nenhum dos par√¢metros √© obrigat√≥rio
  */
 class Relatorio extends mPDF
 {
   /**
-   * @var string HTML do cabeÁalho
+   * @var string HTML do cabe√ßalho
    */
   private $sHeaderHTML = '';
 
 
   /**
-   * @var string HTML do rodapÈ
+   * @var string HTML do rodap√©
    */
   private $sFooterHTML = '';
 
 
   /**
-   * @var array InformaÁıes de filtro e tÌtulo do relatÛrio
+   * @var array Informa√ß√µes de filtro e t√≠tulo do relat√≥rio
    */
   private $aInformacoes = array();
 
@@ -102,8 +102,8 @@ class Relatorio extends mPDF
 
 
   /**
-   * Monta cabeÁalho HTML com os dados do cliente
-   * e as informaÁıes sobre os filtros
+   * Monta cabe√ßalho HTML com os dados do cliente
+   * e as informa√ß√µes sobre os filtros
    *
    * @return string
    */
@@ -119,7 +119,7 @@ class Relatorio extends mPDF
     global $db21_compl;
 
 
-    /*---------- Dados da InstituiÁ„o ----------*/
+    /*---------- Dados da Institui√ß√£o ----------*/
 
     $oDados = db_query(
       $conn,
@@ -147,7 +147,7 @@ class Relatorio extends mPDF
     $sEmail       = trim(pg_result($oDados,0,"email"));
 
 
-    /*---------- InformaÁıes ----------*/
+    /*---------- Informa√ß√µes ----------*/
     $sInformacoes = $this->getParagrafosDeInformacoes();
 
 
@@ -176,12 +176,11 @@ HEADER;
 
     $this->sHeaderHTML = $header;
     return $this->sHeaderHTML;
-
   }
 
 
   /**
-   * Monta rodapÈ HTML
+   * Monta rodap√© HTML
    *
    * @return string
    */
@@ -306,7 +305,7 @@ FOOTER;
 
 
   /**
-   * Altera a exibiÁ„o ou n„o do rodapÈ
+   * Altera a exibi√ß√£o ou n√£o do rodap√©
    *
    * @param boolean $lMostra
    * @return object $this
@@ -320,7 +319,7 @@ FOOTER;
 
 
   /**
-   * Retorna o array de informaÁıes em um conjunto
+   * Retorna o array de informa√ß√µes em um conjunto
    * de elementos <p> para cada um dos itens
    * @return string
    */
@@ -340,8 +339,8 @@ FOOTER;
 
 
   /**
-   * Insere informaÁıes no array $this->aInformacoes,
-   * que aparecer„o no topo direito do cabeÁalho do relatÛrio
+   * Insere informa√ß√µes no array $this->aInformacoes,
+   * que aparecer√£o no topo direito do cabe√ßalho do relat√≥rio
    *
    * @param string $value
    * @param int $key position to insert in array

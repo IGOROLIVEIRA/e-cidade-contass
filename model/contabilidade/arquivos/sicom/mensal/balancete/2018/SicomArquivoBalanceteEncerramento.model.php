@@ -40,7 +40,6 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -58,7 +57,6 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
      */
     public function getCampos()
     {
-
     }
 
     /**
@@ -68,17 +66,16 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
      */
     public function getFontReduzAM($iReduz)
     {
-//        $sSqlVerifica = " select distinct si96_codfontrecursos, si96_anousu from (
-//                          SELECT distinct si96_codfontrecursos, 2018 as si96_anousu FROM ctb202018 WHERE si96_codctb = {$iReduz}
-//                                      AND si96_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-//        $sSqlVerifica .= " UNION SELECT distinct si96_codfontrecursos, 2016 as si96_anousu FROM ctb202016 WHERE si96_codctb = {$iReduz}";
-//        $sSqlVerifica .= " UNION SELECT distinct si96_codfontrecursos, 2014 as si96_anousu FROM ctb202016 WHERE si96_codctb = {$iReduz}";
-//        $sSqlVerifica .= " UNION SELECT distinct si96_codfontrecursos, 2015 as si96_anousu FROM ctb202015 WHERE si96_codctb = {$iReduz}) as x order by 2 DESC limit 1";
-        $sSqlVerifica = "select si184_codfontrecursos  from balancete17". db_getsession('DB_anousu') ." where si184_mes=12 and si184_codctb=".$iReduz ;
+        //        $sSqlVerifica = " select distinct si96_codfontrecursos, si96_anousu from (
+        //                          SELECT distinct si96_codfontrecursos, 2018 as si96_anousu FROM ctb202018 WHERE si96_codctb = {$iReduz}
+        //                                      AND si96_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+        //        $sSqlVerifica .= " UNION SELECT distinct si96_codfontrecursos, 2016 as si96_anousu FROM ctb202016 WHERE si96_codctb = {$iReduz}";
+        //        $sSqlVerifica .= " UNION SELECT distinct si96_codfontrecursos, 2014 as si96_anousu FROM ctb202016 WHERE si96_codctb = {$iReduz}";
+        //        $sSqlVerifica .= " UNION SELECT distinct si96_codfontrecursos, 2015 as si96_anousu FROM ctb202015 WHERE si96_codctb = {$iReduz}) as x order by 2 DESC limit 1";
+        $sSqlVerifica = "select si184_codfontrecursos  from balancete17" . db_getsession('DB_anousu') . " where si184_mes=12 and si184_codctb=" . $iReduz;
         $iCodFont = db_utils::fieldsMemory(db_query($sSqlVerifica), 0)->si184_codfontrecursos;
 
         return $iCodFont;
-
     }
 
 
@@ -156,7 +153,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
          */
         if ($iTipoInstit != 1) {
 
-            $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
+            $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
 
             /*if (!file_exists($sArquivo)) {
                 throw new Exception("Arquivo de natureza da receita inexistente!");

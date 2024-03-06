@@ -206,7 +206,10 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
    when rh30_vinculo = 'A' then rh02_hrssem
    when h13_tipocargo in (2,3,6) then 99
    end as si195_vlrcargahorariasemanal,
-   rh01_admiss as si195_datefetexercicio,
+   case
+   when rh01_tipadm = '5' then rh01_dtingressocargoefetivo
+   else rh01_admiss
+   end as si195_datefetexercicio,
    rh05_recis as si195_datexclusao,
 
    '0.00' as si195_vlrabateteto,
@@ -538,7 +541,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         $clflpgo10->si195_dsclotacao 						            = $this->convert_accented_characters($oDados10->si195_dsclotacao);
         $clflpgo10->si195_indsalaaula 						          = ($oDados10->rh30_vinculo != 'I' ? $oDados10->rh37_exerceatividade : '');
         $clflpgo10->si195_vlrcargahorariasemanal 		        = ($oDados10->si195_sglcargo != 'APO') ? $oDados10->si195_vlrcargahorariasemanal : '';
-        $clflpgo10->si195_datefetexercicio                  = $oDados10->si195_datefetexercicio;
+        $clflpgo10->si195_datefetexercicio                  = ($oDados10->si195_datefetexercicio == null) ? $oDados10->si195_datconcessaoaposentadoriapensao : $oDados10->si195_datefetexercicio;
         $clflpgo10->si195_datcomissionado                   = $oDados10->si195_datefetexercicio;
         $clflpgo10->si195_datexclusao                       = $oDados10->si195_datexclusao;
         $clflpgo10->si195_datcomissionadoexclusao           = $oDados10->si195_datexclusao;
