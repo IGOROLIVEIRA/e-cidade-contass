@@ -1036,7 +1036,6 @@ class licitacao
                  * Incluí­mos os dados na OrcReserva e orcreservasol, caso o item ainda tenha valor disponí­vel
                  */
                 $oSaldo = $this->getValoresParciais($oItem->codigoprocesso, $oDados->dotacao, $oDados->contrapartida);
-
             }
             /**
              * Salvamos a Autorizacao;
@@ -1082,7 +1081,7 @@ class licitacao
             $oAutorizacao->setCondicaoPagamento($oDados->condicaopagamento);
             $oAutorizacao->setNumeroLicitacao("{$oDadosLicitacao->l20_edital}/{$oDadosLicitacao->l20_anousu}");
             $oAutorizacao->setModalidade($oDadosLicitacao->l20_numero);
-            $oAutorizacao->setDataAutorizacao(date("Y-m-d",db_getsession('DB_datausu')));
+            $oAutorizacao->setDataAutorizacao(date("Y-m-d", db_getsession('DB_datausu')));
             /**
              * Verifico o tipo de origem dalic4_editaldocumentos compra pelo codigo do tribunal
              *  @OC7425
@@ -1134,7 +1133,7 @@ class licitacao
                 $oDaoEmpAutorizaProcesso->incluir(null);
                 if ($oDaoEmpAutorizaProcesso->erro_status == 0) {
 
-                    $sMensagemProcessoAdministrativo  = "Ocorreu um erro para incluir o nÃºmero do processo administrativo ";
+                    $sMensagemProcessoAdministrativo  = "Ocorreu um erro para incluir o número do processo administrativo ";
                     $sMensagemProcessoAdministrativo .= "na autorização de empenho.\n\n{$oDaoEmpAutorizaProcesso->erro_msg}";
                     throw new Exception($sMensagemProcessoAdministrativo);
                 }

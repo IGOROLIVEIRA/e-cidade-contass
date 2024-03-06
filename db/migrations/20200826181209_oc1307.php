@@ -27,9 +27,9 @@ class Oc1307 extends AbstractMigration
      */
     public function up()
     {
-        $sql = 
-        
-        "SELECT fc_startsession();
+        $sql =
+
+            "SELECT fc_startsession();
 
         INSERT INTO db_estruturavalor
         VALUES (NEXTVAL('db_estruturavalor_db121_sequencial_seq'),
@@ -117,7 +117,7 @@ class Oc1307 extends AbstractMigration
         (165,
             'OUTROS RECURSOS VINCULADOS',
             '165',
-            'Recursos cuja aplicação seja vinculada e não tenha sido enquadrado em outras especificações.',
+            'Recursos cuja aplicação seja vinculada e n�o tenha sido enquadrado em outras especificações.',
             2,
             NULL,
             (SELECT max(db121_sequencial) FROM db_estruturavalor WHERE db121_estrutural = '165'),
@@ -149,13 +149,12 @@ class Oc1307 extends AbstractMigration
         (265,
             'OUTROS RECURSOS VINCULADOS',
             '265',
-            'Recursos cuja aplicação seja vinculada e não tenha sido enquadrado em outras especificações.',
+            'Recursos cuja aplicação seja vinculada e n�o tenha sido enquadrado em outras especificações.',
             2,
             NULL,
             (SELECT max(db121_sequencial) FROM db_estruturavalor WHERE db121_estrutural = '265'),
             29900000);";
-        
-        $this->execute($sql);
 
+        $this->execute($sql);
     }
 }

@@ -10,7 +10,8 @@ use \ECidade\V3\Extension\Glob;
 /**
  * Modificacoes
  */
-class Modification extends XMLParse {
+class Modification extends XMLParse
+{
 
   /**
    * @var integer
@@ -45,49 +46,56 @@ class Modification extends XMLParse {
   /**
    * @return integer
    */
-  public function getId() {
+  public function getId()
+  {
     return $this->id;
   }
 
   /**
    * @return string
    */
-  public function getGroup() {
+  public function getGroup()
+  {
     return $this->group;
   }
 
   /**
    * @return string
    */
-  public function getLabel() {
+  public function getLabel()
+  {
     return $this->label;
   }
 
   /**
    * @return string
    */
-  public function getType() {
+  public function getType()
+  {
     return $this->type;
   }
 
   /**
    * @return array
    */
-  public function getFilesOperations() {
+  public function getFilesOperations()
+  {
     return $this->filesOperations;
   }
 
   /**
    * @return array
    */
-  public function getOperations() {
+  public function getOperations()
+  {
     return $this->operations;
   }
 
   /**
    * @return \ECidade\Modification\Parse\Modification
    */
-  public function parse() {
+  public function parse()
+  {
 
     $this->operations = array();
     $this->filesOperations = array();
@@ -103,7 +111,7 @@ class Modification extends XMLParse {
     $nodeGroup = $nodeModification->getElementsByTagName('group')->item(0);
 
     if (empty($nodeId) || empty($nodeId->textContent)) {
-      throw new Exception("ID da modificação não informado");
+      throw new Exception("ID da modificação n�o informado");
     }
 
     $this->id = $nodeId->textContent;
@@ -159,7 +167,8 @@ class Modification extends XMLParse {
    * @param array $ignoreRegexPath
    * @return \ECidade\Modification\Parse\Modification
    */
-  private function loadFiles($path, $basePath = ECIDADE_PATH, $recursive = false, $ignoreRegexPath = array()) {
+  private function loadFiles($path, $basePath = ECIDADE_PATH, $recursive = false, $ignoreRegexPath = array())
+  {
 
     $files = Glob::find($path, $basePath, $recursive);
     $operationsPath = str_replace(ECIDADE_PATH, null, $basePath) . $path;
@@ -186,5 +195,4 @@ class Modification extends XMLParse {
 
     return $this;
   }
-
 }

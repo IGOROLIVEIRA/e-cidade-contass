@@ -33,15 +33,18 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
 
   protected $sTipoGeracao;
 
-  public function getCodigoLayout(){
+  public function getCodigoLayout()
+  {
     return $this->iCodigoLayout;
   }
 
-  public function getNomeArquivo(){
+  public function getNomeArquivo()
+  {
     return $this->sNomeArquivo;
   }
 
-  public function getCampos() {
+  public function getCampos()
+  {
     return array();
   }
 
@@ -64,7 +67,9 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
   /**
    * Contrutor da classe
    */
-  public function __construct() { }
+  public function __construct()
+  {
+  }
 
   /**
    * selecionar os dados do balanço orcamentário pra gerar o arquivo
@@ -78,7 +83,7 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
     $iCodigoRelatorio   = $this->iCodigoLayout;
 
     /**
-     * Se o tipo da geração for consolidado, busca todas as instituições do sistema. Se não, pega a instituição da sessão
+     * Se o tipo da geração for consolidado, busca todas as instituições do sistema. Se n�o, pega a instituição da sessão
      */
 
     if ($this->getTipoGeracao() == 'CONSOLIDADO') {
@@ -88,7 +93,6 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
       $aInstituicoes = array_map(function ($oItem) {
         return $oItem->codigo;
       }, $aInstits);
-
     } else {
       $aInstituicoes = array(db_getsession("DB_instit"));
     }
@@ -151,7 +155,7 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     /** BFDCASP102024 */
     $aExercicios = array(
-        1 => 'vlrexatual'
+      1 => 'vlrexatual'
     );
 
 
@@ -185,13 +189,12 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
       if ($clbfdcasp10->erro_status == 0) {
         throw new Exception($clbfdcasp10->erro_msg);
       }
-
     } // $rsResult10
 
 
     /** BFDCASP202421 */
     $aExercicios = array(
-        1 => 'vlrexatual'
+      1 => 'vlrexatual'
     );
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
@@ -224,7 +227,6 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
       if ($clbfdcasp20->erro_status == 0) {
         throw new Exception($clbfdcasp20->erro_msg);
       }
-
     } // $rsResult20
 
 
@@ -234,7 +236,5 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
     $oGerarBF->iAno = $iAnoUsu;
     $oGerarBF->iPeriodo = $iCodigoPeriodo;
     $oGerarBF->gerarDados();
-
   }
-
 }

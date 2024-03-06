@@ -1,4 +1,5 @@
 <?php
+
 /**
  * E-cidade Software Publico para Gestão Municipal
  *   Copyright (C) 2014 DBSeller Serviços de Informática Ltda
@@ -14,14 +15,15 @@
  *   PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
  *   detalhes.
  *   Você deve ter recebido uma cópia da Licença Pública Geral GNU
- *   junto com este programa; se não, escreva para a Free Software
+ *   junto com este programa; se n�o, escreva para a Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
  *   02111-1307, USA.
  *   Cópia da licença no diretório licenca/licenca_en.txt
  *                                 licenca/licenca_pt.txt
  */
 
-class AtributoValorReferenciaNumerico {
+class AtributoValorReferenciaNumerico
+{
 
   protected $iCodigo;
 
@@ -33,11 +35,11 @@ class AtributoValorReferenciaNumerico {
 
   protected $iValorAbsurdoFim;
 
-  protected $sCalculavel;//MARCO adicionado 12-02-2015
+  protected $sCalculavel; //MARCO adicionado 12-02-2015
 
   /**
-   * Número de casas decimais para apresentação dos valores de referência e resultado.
-   * Só completa com zeros o valor informado, quando setado como null não formata valor
+   * N�mero de casas decimais para apresentação dos valores de referência e resultado.
+   * Só completa com zeros o valor informado, quando setado como null n�o formata valor
    * @var integer|null
    */
   protected $iCasasDecimaisApresentacao = null;
@@ -65,7 +67,8 @@ class AtributoValorReferenciaNumerico {
    * Instancia uma referencia pelo codigo, ou cria uma nova
    * @param integer $iCodigo
    */
-  public function __construct($iCodigo = null) {
+  public function __construct($iCodigo = null)
+  {
 
     if (!empty($iCodigo)) {
 
@@ -74,11 +77,12 @@ class AtributoValorReferenciaNumerico {
       $sListaCampos  .= " la30_f_absurdomax,la30_c_calculavel,la61_tipocalculo,la61_atributobase ";
       $sListaCampos  .= " ,la30_casasdecimaisapresentacao ";
       $sListaSexos    = " array_to_string(array_accum(la60_sexo), ',') as sexos";
-      $sSqlReferencia = $oDaoReferencia->sql_query_dados_referencia(null,
-                                                                    "{$sListaCampos}, {$sListaSexos}",
-                                                                    null,
-                                                                    "la30_i_codigo = {$iCodigo} group by {$sListaCampos}"
-                                                                   );
+      $sSqlReferencia = $oDaoReferencia->sql_query_dados_referencia(
+        null,
+        "{$sListaCampos}, {$sListaSexos}",
+        null,
+        "la30_i_codigo = {$iCodigo} group by {$sListaCampos}"
+      );
 
       $rsReferencia = $oDaoReferencia->sql_record($sSqlReferencia);
 
@@ -86,19 +90,19 @@ class AtributoValorReferenciaNumerico {
 
         $oDadosReferencia = db_utils::fieldsMemory($rsReferencia, 0);
         $this->setCodigo($iCodigo);
-        $this->setCalculavel($oDadosReferencia->la30_c_calculavel);//MARCO adicionado 12-02-2015
+        $this->setCalculavel($oDadosReferencia->la30_c_calculavel); //MARCO adicionado 12-02-2015
         $this->setValorAbsurdoMaximo($oDadosReferencia->la30_f_absurdomax);
         $this->setValorAbsurdoMinimo($oDadosReferencia->la30_f_absurdomin);
         $this->setValorMinimo($oDadosReferencia->la30_f_normalmin);
         $this->setValorMaximo($oDadosReferencia->la30_f_normalmax);
         $this->setTipoCalculo($oDadosReferencia->la61_tipocalculo);
 
-        if ( $oDadosReferencia->la30_casasdecimaisapresentacao !== '' ){
+        if ($oDadosReferencia->la30_casasdecimaisapresentacao !== '') {
           $this->setCasasDecimaisApresentacao($oDadosReferencia->la30_casasdecimaisapresentacao);
         }
 
         if (!empty($oDadosReferencia->la61_atributobase)) {
-            $this->setAtributoBase(new AtributoExame($oDadosReferencia->la61_atributobase));
+          $this->setAtributoBase(new AtributoExame($oDadosReferencia->la61_atributobase));
         }
         $this->aSexos = explode(",", $oDadosReferencia->sexos);
 
@@ -114,17 +118,19 @@ class AtributoValorReferenciaNumerico {
   }
 
   //MARCO adicionado 12-02-2015
-	/**
+  /**
    * @param mixed $iValorAbsurdoFim
    */
-  public function setCalculavel($sCalculavel) {
+  public function setCalculavel($sCalculavel)
+  {
     $this->sCalculavel = $sCalculavel;
   }
 
   /**
    * @return mixed
    */
-  public function getCalculavel() {
+  public function getCalculavel()
+  {
     return $this->sCalculavel;
   }
   //END MARCO
@@ -132,91 +138,104 @@ class AtributoValorReferenciaNumerico {
   /**
    * @param mixed $iValorAbsurdoFim
    */
-  public function setValorAbsurdoMaximo($iValorAbsurdoFim) {
+  public function setValorAbsurdoMaximo($iValorAbsurdoFim)
+  {
     $this->iValorAbsurdoFim = $iValorAbsurdoFim;
   }
 
   /**
    * @return mixed
    */
-  public function getValorAbsurdoMaximo() {
+  public function getValorAbsurdoMaximo()
+  {
     return str_replace(',', '.', $this->iValorAbsurdoFim);
   }
 
   /**
    * @param mixed $iValorAbsurdoInicio
    */
-  public function setValorAbsurdoMinimo($iValorAbsurdoInicio) {
+  public function setValorAbsurdoMinimo($iValorAbsurdoInicio)
+  {
     $this->iValorAbsurdoInicio = $iValorAbsurdoInicio;
   }
 
   /**
    * @return mixed
    */
-  public function getValorAbsurdoMinimo() {
+  public function getValorAbsurdoMinimo()
+  {
     return str_replace(',', '.', $this->iValorAbsurdoInicio);
   }
 
   /**
    * @param mixed $iValorFim
    */
-  public function setValorMaximo($iValorFim) {
+  public function setValorMaximo($iValorFim)
+  {
     $this->iValorFim = $iValorFim;
   }
 
   /**
    * @return mixed
    */
-  public function getValorMaximo() {
+  public function getValorMaximo()
+  {
     return str_replace(',', '.', $this->iValorFim);
   }
 
   /**
    * @param mixed $iValorInicio
    */
-  public function setValorMinimo($iValorInicio) {
+  public function setValorMinimo($iValorInicio)
+  {
     $this->iValorInicio = $iValorInicio;
   }
 
   /**
    * @return mixed
    */
-  public function getValorMinimo() {
+  public function getValorMinimo()
+  {
     return str_replace(',', '.', $this->iValorInicio);
   }
 
   /**
    * @param DBInterval $oIdadeFinal
    */
-  public function setIdadeFinal(DBInterval $oIdadeFinal) {
+  public function setIdadeFinal(DBInterval $oIdadeFinal)
+  {
     $this->oIdadeFinal = $oIdadeFinal;
   }
 
   /**
    * @return DBInterval
    */
-  public function getIdadeFinal() {
+  public function getIdadeFinal()
+  {
     return $this->oIdadeFinal;
   }
 
   /**
    * @param DBInterval $oIdadeInicial
    */
-  public function setIdadeInicial(DBInterval $oIdadeInicial) {
+  public function setIdadeInicial(DBInterval $oIdadeInicial)
+  {
     $this->oIdadeInicial = $oIdadeInicial;
   }
 
   /**
    * @return DBInterval
    */
-  public function getIdadeInicial() {
+  public function getIdadeInicial()
+  {
     return $this->oIdadeInicial;
   }
 
   /**
    * @param integer $sSexo
    */
-  public function adicionarSexo($sSexo) {
+  public function adicionarSexo($sSexo)
+  {
 
     if (!in_array($sSexo, $this->aSexos)) {
       $this->aSexos[] = $sSexo;
@@ -226,56 +245,64 @@ class AtributoValorReferenciaNumerico {
   /**
    * @return array
    */
-  public function getSexos() {
+  public function getSexos()
+  {
     return $this->aSexos;
   }
 
   /**
    * @return array
    */
-  public function limpaSexos() {
+  public function limpaSexos()
+  {
     $this->aSexos = array();
   }
 
   /**
    * @param mixed $iCodigo
    */
-  protected function setCodigo($iCodigo) {
+  protected function setCodigo($iCodigo)
+  {
     $this->iCodigo = $iCodigo;
   }
 
   /**
    * @return mixed
    */
-  public function getCodigo() {
+  public function getCodigo()
+  {
     return $this->iCodigo;
   }
 
   /**
    * @param int $iTipoCalculo
    */
-  public function setTipoCalculo($iTipoCalculo) {
+  public function setTipoCalculo($iTipoCalculo)
+  {
     $this->iTipoCalculo = $iTipoCalculo;
   }
 
   /**
    * @return int
    */
-  public function getTipoCalculo() {
+  public function getTipoCalculo()
+  {
     return $this->iTipoCalculo;
   }
 
   /**
    * @param AtributoExame $oAtributoBase
    */
-  public function setAtributoBase(AtributoExame $oAtributoBase) {
+  public function setAtributoBase(AtributoExame $oAtributoBase)
+  {
     $this->oAtributoBase = $oAtributoBase;
   }
 
   /**
    * @return AtributoExame
    */
-  public function getAtributoBase() {
+  public function getAtributoBase()
+  {
     return $this->oAtributoBase;
   }
 
@@ -285,14 +312,15 @@ class AtributoValorReferenciaNumerico {
    * @param integer $iCodigoReferencia
    * @throws BusinessException
    */
-  public function salvar($iCodigoReferencia = null) {
+  public function salvar($iCodigoReferencia = null)
+  {
 
     $oDaoTipoRefenciaSexo   = new cl_tiporeferenciaalnumericosexo();
     $oDaoTipoRefenciaIdade  = new cl_tiporeferenciaalnumericofaixaidade();
     $oDaoReferenciaNumerica = new cl_lab_tiporeferenciaalnumerico();
     $oDaoReferenciaCalculo  = new cl_tiporeferenciacalculo();
     if (!empty($this->iCodigo)) {
-     $this->removerDadosAuxiliares();
+      $this->removerDadosAuxiliares();
     }
 
     $oDaoReferenciaNumerica->la30_c_calculavel = $this->getCalculavel();
@@ -322,14 +350,14 @@ class AtributoValorReferenciaNumerico {
     }
 
     $oDaoTipoRefenciaSexo->excluir(null, 'la60_tiporeferencialnumerico =' . $this->iCodigo);
-    
+
     foreach ($this->aSexos as $sSexo) {
 
       $oDaoTipoRefenciaSexo->la60_sexo                    = $sSexo;
       $oDaoTipoRefenciaSexo->la60_tiporeferencialnumerico = $this->iCodigo;
       $oDaoTipoRefenciaSexo->incluir(null);
       if ($oDaoTipoRefenciaSexo->erro_status == 0) {
-        throw new BusinessException("Erro ao salvar dados do sexo  da Referência numerica Erro:".$oDaoTipoRefenciaSexo->erro_msg);
+        throw new BusinessException("Erro ao salvar dados do sexo  da Referência numerica Erro:" . $oDaoTipoRefenciaSexo->erro_msg);
       }
     }
 
@@ -347,9 +375,9 @@ class AtributoValorReferenciaNumerico {
       throw new BusinessException("Erro ao salvar dados da idade  da Referência numerica");
     }
 
-    if ($this->getTipoCalculo() > 0) {//MARCO ALTERADO $this->getTipoCalculo() == 0
+    if ($this->getTipoCalculo() > 0) { //MARCO ALTERADO $this->getTipoCalculo() == 0
 
-      if($this->getTipoCalculo() == 2) {
+      if ($this->getTipoCalculo() == 2) {
         $oDaoReferenciaCalculo->la61_atributobase = $this->getAtributoBase()->getCodigo();
       }
       $oDaoReferenciaCalculo->la61_tipocalculo  = $this->getTipoCalculo();
@@ -365,7 +393,8 @@ class AtributoValorReferenciaNumerico {
    * Remove a referencia
    * @throws BusinessException
    */
-  public function remover() {
+  public function remover()
+  {
 
 
     $oDaoReferenciaNumerica = new cl_lab_tiporeferenciaalnumerico();
@@ -384,7 +413,8 @@ class AtributoValorReferenciaNumerico {
    * Remove os dados auxilires da Referencia
    * @throws BusinessException
    */
-  protected function removerDadosAuxiliares() {
+  protected function removerDadosAuxiliares()
+  {
 
     $oDaoTipoRefenciaSexo   = new cl_tiporeferenciaalnumericosexo();
     $oDaoTipoRefenciaIdade  = new cl_tiporeferenciaalnumericofaixaidade();
@@ -409,18 +439,20 @@ class AtributoValorReferenciaNumerico {
   }
 
   /**
-   * Define o número de Casas decimais para apresentação
+   * Define o n�mero de Casas decimais para apresentação
    * @param integer|null $iCasasDecimaisApresentacao
    */
-  public function setCasasDecimaisApresentacao($iCasasDecimaisApresentacao = null) {
+  public function setCasasDecimaisApresentacao($iCasasDecimaisApresentacao = null)
+  {
     $this->iCasasDecimaisApresentacao = $iCasasDecimaisApresentacao;
   }
 
   /**
-   * Retorna o número de casas decimais para apresentação do resultado final
+   * Retorna o n�mero de casas decimais para apresentação do resultado final
    * @return integer|null
    */
-  public function getCasasDecimaisApresentacao() {
+  public function getCasasDecimaisApresentacao()
+  {
     return $this->iCasasDecimaisApresentacao;
   }
 }

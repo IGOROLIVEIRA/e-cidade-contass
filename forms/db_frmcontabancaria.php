@@ -127,7 +127,7 @@ $ano = db_getsession("DB_anousu"); //ano
 						$op01_dataassinaturacop_dia = $data[2];
 						$op01_dataassinaturacop_mes = $data[1];
 						$op01_dataassinaturacop_ano = $data[0];
-						db_inputData('op01_dataassinaturacop',$op01_dataassinaturacop_dia, @$op01_dataassinaturacop_mes,@$op01_dataassinaturacop_ano, true, 'text', 3);
+						db_inputData('op01_dataassinaturacop', $op01_dataassinaturacop_dia, @$op01_dataassinaturacop_mes, @$op01_dataassinaturacop_ano, true, 'text', 3);
 						// db_input('op01_dataassinaturacop', 10, $Idop01_dataassinaturacop, true, 'text', 3);
 						?>
 					</td>
@@ -150,7 +150,7 @@ $ano = db_getsession("DB_anousu"); //ano
 					</td>
 					<td>
 						<?php
-						$aContaPlano = array('t' => 'Sim', 'f' => 'Nï¿½o');
+						$aContaPlano = array('t' => 'Sim', 'f' => 'Não');
 						db_select('db83_contaplano', $aContaPlano, true, $db_opcao, "style='width: 150px;'");
 						?>
 					</td>
@@ -164,14 +164,14 @@ $ano = db_getsession("DB_anousu"); //ano
 	    </td>
 	    <td>
 				<?
-				//$aConvenio = array('2' => 'Nï¿½o','1' => 'Sim');
+				//$aConvenio = array('2' => 'Não','1' => 'Sim');
 				//db_select('db83_convenio', $aConvenio, true, $db_opcao,"");
 				?>
 	    </td>
 	  </tr>
     -->
 				<tr>
-					<td nowrap title="Cï¿½digo c206_sequencial">
+					<td nowrap title="Código c206_sequencial">
 						<? db_ancora("Convï¿½nio", "js_pesquisadb83_numconvenio(true);", $db_opcao); ?>
 					</td>
 					<td>
@@ -248,7 +248,7 @@ $ano = db_getsession("DB_anousu"); //ano
 								'40' => "Fundos de Aï¿½ï¿½es BDR Nï¿½vel 1 - Art. 9ï¿½-A, III",
 								'60' => "Aplicaï¿½ï¿½es financeiras da taxa de administraï¿½ï¿½o do RPPS",
 								'61' => "Tï¿½tulos e valores em enquadramento",
-								'62' => "Tï¿½tulos e valores nï¿½o sujeitos ao enquadramento"
+								'62' => "Tï¿½tulos e valores não sujeitos ao enquadramento"
 							);
 							db_select('db83_tipoaplicacao', $aTipoAplicacao, true, $db_opcao, "");
 						}
@@ -258,7 +258,7 @@ $ano = db_getsession("DB_anousu"); //ano
 
 				<tr>
 					<td nowrap title="db83_nroseqaplicacao?>">
-						<b>Nï¿½mero sequencial da aplicaï¿½ï¿½o</b>
+						<b>Número sequencial da aplicação</b>
 					</td>
 					<td>
 						<?
@@ -284,18 +284,20 @@ $ano = db_getsession("DB_anousu"); //ano
 			}
 		}
 	}
+
 	function js_pesquisaop01_db_operacaodecredito(mostra) {
 		if (mostra == true) {
 			js_OpenJanelaIframe('top.corpo', 'db_iframe_db_operacaodecredito', 'func_db_operacaodecredito.php?funcao_js=parent.js_mostraoperacaodecredito1|op01_sequencial|op01_numerocontratoopc|op01_dataassinaturacop', 'Pesquisa', true);
 		} else {
 			if (document.form1.db83_codigoopcredito.value != '') {
-				js_OpenJanelaIframe('top.corpo', 'db_iframe_db_operacaodecredito', 'func_db_operacaodecredito.php?pesquisa_chave=' + document.form1.db83_codigoopcredito.value +'&funcao_js=parent.js_mostraoperacaodecredito', 'Pesquisa', false);
+				js_OpenJanelaIframe('top.corpo', 'db_iframe_db_operacaodecredito', 'func_db_operacaodecredito.php?pesquisa_chave=' + document.form1.db83_codigoopcredito.value + '&funcao_js=parent.js_mostraoperacaodecredito', 'Pesquisa', false);
 			} else {
 				document.form1.op01_numerocontratoopc.value = '';
 				document.form1.op01_dataassinaturacop.value = '';
 			}
 		}
 	}
+
 	function js_mostrabancoagencia(chave, chave1, erro) {
 
 		document.form1.db89_codagencia.value = chave;
@@ -303,13 +305,15 @@ $ano = db_getsession("DB_anousu"); //ano
 		document.form1.db83_bancoagencia.value = '';
 
 	}
+
 	function js_mostrabancoagencia1(chave1, chave2, chave3) {
 		document.form1.db83_bancoagencia.value = chave1;
 		document.form1.db89_codagencia.value = chave2;
 		document.form1.db89_digito.value = chave3;
 		db_iframe_bancoagencia.hide();
 	}
-	function js_mostraoperacaodecredito1(chave,chave1,chave2,chave3,chave4) {
+
+	function js_mostraoperacaodecredito1(chave, chave1, chave2, chave3, chave4) {
 		document.form1.db83_codigoopcredito.value = chave;
 		document.form1.op01_numerocontratoopc.value = chave1;
 		var data = chave2.split("-", 3);
@@ -317,7 +321,7 @@ $ano = db_getsession("DB_anousu"); //ano
 		db_iframe_db_operacaodecredito.hide();
 	}
 
-	function js_mostraoperacaodecredito(chave,chave1,erro) {
+	function js_mostraoperacaodecredito(chave, chave1, erro) {
 		document.form1.op01_numerocontratoopc.value = chave;
 		var data = chave1.split("-", 3);
 		document.form1.op01_dataassinaturacop.value = data[2] + "-" + data[1] + "-" + data[0];

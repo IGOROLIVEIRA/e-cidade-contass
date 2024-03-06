@@ -123,7 +123,7 @@ class Oc12207 extends PostgresMigration
         where e60_numemp = p_numemp;
 
         if v_dtini is null then
-            return '14 Empenho n√£o encontrado.';
+            return '14 Empenho n„o encontrado.';
         end if;
 
         if v_anousu < substr(p_dtfim,1,4)::integer then
@@ -285,7 +285,7 @@ class Oc12207 extends PostgresMigration
             v_vlrpag_g := round(v_vlrpag_g + c_lanc.c70_valor,2)::float8;
 
             /**
-            * Estorno de RP n√£o processado - 31
+            * Estorno de RP n„o processado - 31
             */
             elsif c_lanc.c53_coddoc = 38 then
             if c_lanc.c70_data <= p_dtfim then
@@ -308,7 +308,7 @@ class Oc12207 extends PostgresMigration
             m_erro := '0 PROCESSO AUTORIZADO.';
             v_erro := 0;
             else
-            m_erro :=  '01 N√£o existe saldo para anular nesta data.';
+            m_erro :=  '01 N„o existe saldo para anular nesta data.';
             v_erro := 1;
             end if;
 
@@ -318,7 +318,7 @@ class Oc12207 extends PostgresMigration
                 m_erro := '0 PROCESSO AUTORIZADO.';
                 v_erro := 0;
             else
-                m_erro := '02 N√£o existe saldo geral no empenho para anular.';
+                m_erro := '02 N„o existe saldo geral no empenho para anular.';
                 v_erro := 2;
             end if;
             end if;
@@ -334,7 +334,7 @@ class Oc12207 extends PostgresMigration
             m_erro := '0 PROCESSO AUTORIZADO.';
             v_erro := 0;
             else
-            m_erro := '03 N√£o existe saldo a liquidar nesta data.';
+            m_erro := '03 N„o existe saldo a liquidar nesta data.';
             v_erro := 3;
             end if;
 
@@ -344,7 +344,7 @@ class Oc12207 extends PostgresMigration
                 m_erro := '0 PROCESSO AUTORIZADO.';
                 v_erro := 0;
             else
-                m_erro := '04 N√£o existe saldo geral no empenho para liquidar.';
+                m_erro := '04 N„o existe saldo geral no empenho para liquidar.';
                 v_erro := 4;
             end if;
             end if;
@@ -381,7 +381,7 @@ class Oc12207 extends PostgresMigration
             --raise notice 'doc: % - valor: % - disp: % - numemp: % - p_dtfim: %', p_doc, p_valor, v_saldodisprp, p_numemp, p_dtfim;
 
             if p_valor > v_saldodisprp then
-                m_erro := '05 N√£o existe saldo para anular a liquida√ß√£o nesta data.) Saldo Dispon√≠vel: '|| v_saldodisprp;
+                m_erro := '05 N„o existe saldo para anular a liquida√ß√£o nesta data.) Saldo Dispon√≠vel: '|| v_saldodisprp;
                 v_erro := 5;
             end if;
 
@@ -392,7 +392,7 @@ class Oc12207 extends PostgresMigration
                 m_erro := '0 PROCESSO AUTORIZADO.';
                 v_erro := 0;
             else
-                m_erro := '05 N√£o existe saldo para anular a liquida√ß√£o nesta data.';
+                m_erro := '05 N„o existe saldo para anular a liquida√ß√£o nesta data.';
                 v_erro := 5;
             end if;
             end if;
@@ -403,7 +403,7 @@ class Oc12207 extends PostgresMigration
                 m_erro := '0 PROCESSO AUTORIZADO.';
                 v_erro := 0;
             else
-                m_erro := '06 N√£o existem saldo geral no empenho para estornar a liquida√ß√£o.';
+                m_erro := '06 N„o existem saldo geral no empenho para estornar a liquida√ß√£o.';
                 v_erro := 6;
             end if;
             end if;
@@ -420,7 +420,7 @@ class Oc12207 extends PostgresMigration
             v_erro := 0;
             m_erro := '0 PROCESSO AUTORIZADO.';
             else
-            m_erro := '07 N√£o existe saldo a pagar nesta data. Empenho: ' || to_char(p_numemp, '9999999999');
+            m_erro := '07 N„o existe saldo a pagar nesta data. Empenho: ' || to_char(p_numemp, '9999999999');
             v_erro := 7;
             end if;
 
@@ -430,7 +430,7 @@ class Oc12207 extends PostgresMigration
                 m_erro := '0 PROCESSO AUTORIZADO.';
                 v_erro := 0;
             else
-                m_erro := '08 N√£o existe saldo geral a pagar no empenho.';
+                m_erro := '08 N„o existe saldo geral a pagar no empenho.';
                 v_erro := 8;
             end if;
             end if;
@@ -446,7 +446,7 @@ class Oc12207 extends PostgresMigration
             m_erro := '0 PROCESSO AUTORIZADO.';
             v_erro := 0;
             else
-            m_erro := '09 N√£o existe saldo para anular pagamento nesta data.';
+            m_erro := '09 N„o existe saldo para anular pagamento nesta data.';
             v_erro := 9;
             end if;
 
@@ -456,7 +456,7 @@ class Oc12207 extends PostgresMigration
                 m_erro := '0 PROCESSO AUTORIZADO.';
                 v_erro := 0;
             else
-                m_erro := '10 N√£o existe saldo geral no empenho para anular o pagamento.';
+                m_erro := '10 N„o existe saldo geral no empenho para anular o pagamento.';
                 v_erro := 10;
             end if;
             end if;
@@ -693,7 +693,7 @@ class Oc12207 extends PostgresMigration
                 if rSaldoItens.pc01_servico is true then
 
                     /**
-                    * Caso for serviÔøΩo e este nÔøΩo for controlado por quantidade, setamos o saldo para 1 sempre
+                    * Caso for serviÔøΩo e este n„o for controlado por quantidade, setamos o saldo para 1 sempre
                     */
                     if rSaldoItens.e62_servicoquantidade is false then
 
@@ -741,7 +741,6 @@ class Oc12207 extends PostgresMigration
         COMMIT;
 
 SQL;
-    $this->execute($sql);
-  }
-
+        $this->execute($sql);
+    }
 }

@@ -197,7 +197,7 @@
            campo_api='' 
            name="rh197_pis" 
            conteudo="varchar(11)" 
-           description="NÃºmero PIS do servidor." 
+           description="Número PIS do servidor." 
            inivalue="" 
            label="PIS" 
            size="11" 
