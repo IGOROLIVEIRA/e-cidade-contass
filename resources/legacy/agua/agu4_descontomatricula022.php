@@ -58,7 +58,7 @@ $cliptubase->rotulo->label();
 <title>DBSeller Informática Ltda - Página Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<link href="../../../estilos.css" rel="stylesheet" type="text/css">
+<link href="estilos.css" rel="stylesheet" type="text/css">
 <?
   db_app::load('scripts.js, prototype.js, strings.js, datagrid.widget.js');
   db_app::load('estilos.css, grid.style.css');

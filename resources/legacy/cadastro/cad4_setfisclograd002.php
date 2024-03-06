@@ -56,7 +56,7 @@ function js_submit_form(){
   return true;
 }
 </script>
-<link href="../../../estilos.css" rel="stylesheet" type="text/css">
+<link href="estilos.css" rel="stylesheet" type="text/css">
 <?
   db_app::load("scripts.js");
   db_app::load("prototype.js");

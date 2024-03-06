@@ -50,8 +50,8 @@ $clrotulo->label("z01_nome");
   db_app::load('strings.js,scripts.js,datagrid.widget.js,prototype.js');
   db_app::load('estilos.css,grid.style.css');
 ?>
-<script language="JavaScript" type="text/javascript" src="../../../scripts/scripts.js"></script>
-<link href="../../../estilos.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">

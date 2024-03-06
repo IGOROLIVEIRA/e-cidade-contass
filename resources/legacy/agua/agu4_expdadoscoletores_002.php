@@ -86,7 +86,7 @@ if ($oPost->geraDadosArquivos == "t") {
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="../../../scripts/scripts.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 
 <script type="text/javascript">
 function js_voltar() {
@@ -94,7 +94,7 @@ function js_voltar() {
 }
 
 </script>
-<link href="../../../estilos.css" rel="stylesheet" type="text/css">
+<link href="estilos.css" rel="stylesheet" type="text/css">
 <style type="text/css">
 #table table {
   border-collapse: collapse;

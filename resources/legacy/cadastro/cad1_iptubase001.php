@@ -48,8 +48,8 @@ if($numrows > 0){
 
 ?>
 <head>
-  <script language="JavaScript" type="text/javascript" src="../../../scripts/scripts.js"></script>
-  <link href="../../../estilos.css" rel="stylesheet" type="text/css">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
   <script language="JavaScript" type="text/JavaScript">
     function js_novolote2(idmatricul,setor,quadra,bairro,loteam,zona,caract,setor1,bairro1,loteam1){
      document.formaba.matricula.disabled = true;

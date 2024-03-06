@@ -42,8 +42,8 @@ if(!isset($j39_numero)){
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link href="../../../estilos.css" rel="stylesheet" type="text/css">
-<script language="JavaScript" type="text/javascript" src="../../../scripts/scripts.js"></script>
+<link href="estilos.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 </head>
 <body bgcolor=#CCCCCC  leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table width="100%" height="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#CCCCCC" >

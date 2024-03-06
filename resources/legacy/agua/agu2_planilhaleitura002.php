@@ -193,7 +193,7 @@ if($objGet->tipodoc == 1) { // 1 = PDF 2 = CSV
   	<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
   	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   	<meta http-equiv="Expires" CONTENT="0">
-  	<script language="JavaScript" type="text/javascript" src="../../../scripts/scripts.js"></script>
+  	<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
   </head>
   <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="document.form1.x01_matric.focus();" >
 	<?

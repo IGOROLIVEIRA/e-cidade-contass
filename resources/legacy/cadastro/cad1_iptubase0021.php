@@ -66,8 +66,8 @@ if($cliptubaixa->numrows > 0){
 }
 
 ?>
-<script language="JavaScript" type="text/javascript" src="../../../scripts/scripts.js"></script>
-<link href="../../../estilos.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<link href="estilos.css" rel="stylesheet" type="text/css">
 <script language="JavaScript" type="text/JavaScript">
   <?
   if(isset($j01_matric)){

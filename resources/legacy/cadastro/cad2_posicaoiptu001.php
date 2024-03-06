@@ -38,7 +38,7 @@ $cliptucalc=new cl_iptucalc;
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="../../../scripts/scripts.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script>
 function js_relatorio(){
   jan = window.open('cad2_posicaoiptu002.php?exercicio='+document.form1.anousu.value+'&considerar='+document.form1.considerar.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
@@ -46,7 +46,7 @@ function js_relatorio(){
 }
 
 </script>
-<link href="../../../estilos.css" rel="stylesheet" type="text/css">
+<link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">

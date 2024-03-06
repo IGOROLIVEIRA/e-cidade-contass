@@ -28,7 +28,7 @@ $clrotulo->label("ac16_resumoobjeto");
     db_app::load("dbmessageBoard.widget.js, prototype.js, contratos.classe.js");
     db_app::load("estilos.css, grid.style.css");
     ?>
-    <script language="JavaScript" type="text/javascript" src="../../../scripts/scripts.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <script>
         function js_emite() {
 
@@ -53,7 +53,7 @@ $clrotulo->label("ac16_resumoobjeto");
             jan.moveTo(0, 0);
         }
     </script>
-    <link href="../../../estilos.css" rel="stylesheet" type="text/css">
+    <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 
 <style>

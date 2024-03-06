@@ -51,7 +51,7 @@ $j39_idcons = $oPost->iConstrucao;
   db_app::load("estilos.css, grid.style.css");
 ?>
 
-<link href="../../../estilos.css" rel="stylesheet" type="text/css">
+<link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
 

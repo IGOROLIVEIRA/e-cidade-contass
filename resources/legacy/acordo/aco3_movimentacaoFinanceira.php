@@ -46,13 +46,13 @@ $oRotuloAcordo->label();
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <meta http-equiv="Expires" CONTENT="0" />
     <script language="JavaScript" type="text/javascript" src="../../../scripts/prototype.js"></script>
-    <script language="JavaScript" type="text/javascript" src="../../../scripts/scripts.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../../scripts/strings.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../../scripts/widgets/DBAncora.widget.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../../scripts/widgets/DBLancador.widget.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../../scripts/widgets/dbtextField.widget.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../../scripts/datagrid.widget.js"></script>
-    <link href="../../../estilos.css" rel="stylesheet" type="text/css">
+    <link href="estilos.css" rel="stylesheet" type="text/css">
     <link href="../../../estilos/grid.style.css" rel="stylesheet" type="text/css">
   </head>
   <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" style="width: 600px; margin: 0 auto;">

@@ -37,7 +37,7 @@ require_once "dbforms/db_funcoes.php";
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <script language="JavaScript" type="text/javascript" src="../../../scripts/prototype.js"></script>
-    <script language="JavaScript" type="text/javascript" src="../../../scripts/scripts.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../../scripts/strings.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../../scripts/datagrid.widget.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../../scripts/AjaxRequest.js"></script>
@@ -48,7 +48,7 @@ require_once "dbforms/db_funcoes.php";
     <script language="JavaScript" type="text/javascript" src="../../../scripts/widgets/dbtextFieldData.widget.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../../scripts/widgets/dbcomboBox.widget.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../../scripts/classes/dbAditamentosContratosView.classe.js"></script>
-    <link href="../../../estilos.css" rel="stylesheet" type="text/css">
+    <link href="estilos.css" rel="stylesheet" type="text/css">
   </head>
   <body class="body-default">
     <div class="container">

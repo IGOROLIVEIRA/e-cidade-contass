@@ -79,8 +79,8 @@ $clrotulo->label('z01_nome');
 <head>
 <title>Dados da matricula - BCI</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link href="../../../estilos.css" rel="stylesheet" type="text/css">
-<script language="JavaScript" type="text/javascript" src="../../../scripts/scripts.js"></script>
+<link href="estilos.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script>
 function js_Impressao1() {
   window.open('cad3_conscadastro_impressao.php?tipo=1&parametro=<?=$cod_matricula?>','','location=0,HEIGHT=600,WIDTH=600');

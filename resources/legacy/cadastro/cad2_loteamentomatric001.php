@@ -44,7 +44,7 @@ $db_botao = true;
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="../../../scripts/scripts.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 
 <script>
 
@@ -53,7 +53,7 @@ function js_emite(){
   jan.moveTo(0,0);
 }
 </script>
-<link href="../../../estilos.css" rel="stylesheet" type="text/css">
+<link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
   <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">

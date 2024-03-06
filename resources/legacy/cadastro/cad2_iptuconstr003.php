@@ -49,8 +49,8 @@ echo "<script>parent.iframe_g2.location.href = 'cad2_iptuconstr004.php'</script>
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="../../../scripts/scripts.js"></script>
-<link href="../../../estilos.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<link href="estilos.css" rel="stylesheet" type="text/css">
 <style>
 </style>
 </head>

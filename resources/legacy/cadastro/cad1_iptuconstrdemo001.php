@@ -143,8 +143,8 @@ if(isset($incluir) || isset($alterar) || isset($excluir)){
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link href="../../../estilos.css" rel="stylesheet" type="text/css">
-<script language="JavaScript" type="text/javascript" src="../../../scripts/scripts.js"></script>
+<link href="estilos.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script>
  function js_verifica(){
    obj=document.form1;

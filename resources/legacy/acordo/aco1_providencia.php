@@ -13,8 +13,8 @@ $oGet = db_utils::postMemory($_GET);
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-	<link href="../../../estilos.css" rel="stylesheet" type="text/css">
-	<script language="JavaScript" type="text/javascript" src="../../../scripts/scripts.js"></script>
+	<link href="estilos.css" rel="stylesheet" type="text/css">
+	<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 	<script language="JavaScript" type="text/javascript" src="../../../scripts/prototype.js"></script>
 </head>
 <style>
