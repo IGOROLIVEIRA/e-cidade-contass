@@ -43,7 +43,7 @@ then
   # Start OpenOffice.org in listening mode on TCP port 8100.
   echo "Inciando OpenOffice como servico ..."
   
-  # Comentado pois n√£o estava funcionando com OO 2.4
+  # Comentado pois n„o estava funcionando com OO 2.4
   #$OOFFICE "-accept=socket,host=localhost,port=8100;urp;OpenOffice.ServiceManager" -norestore -nologo -headless &
   
   # Retirado do Site http://www.artofsolving.com/node/10

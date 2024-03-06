@@ -14,13 +14,13 @@ db_postmemory($HTTP_POST_VARS);
 
 if (isset($geratxt)) {
 
-    db_query("CREATE SEQUENCE teste_seq;");
+  db_query("CREATE SEQUENCE teste_seq;");
 
-    $datageracao_ano = date("Y", db_getsession("DB_datausu"));
-    $datageracao_mes = date("m", db_getsession("DB_datausu"));
-    $datageracao_dia = date("d", db_getsession("DB_datausu"));
+  $datageracao_ano = date("Y", db_getsession("DB_datausu"));
+  $datageracao_mes = date("m", db_getsession("DB_datausu"));
+  $datageracao_dia = date("d", db_getsession("DB_datausu"));
 
-    if($anofolha < 2018){
+  if ($anofolha < 2018) {
 
     $sSql = "
 SELECT 'I;'|| nextval('teste_seq') || ';' || lpad(x.rh02_mesusu,2,0) || ';' || x.z01_cgccpf || ';' || x.z01_nome || ';' || coalesce(x.rh55_inep,'00000000') || ';' || coalesce(x.rh55_descr,'') || ';' || x.rh02_hrssem || ';' || CASE WHEN x.rh02_tipcatprof IN (14,15,16) THEN 2 ELSE 1 END || ';' ||
@@ -35,9 +35,9 @@ WHEN x.rh02_tipcatprof = 5 THEN 'Docente pós-graduado em cursos de especializa�
 WHEN x.rh02_tipcatprof = 6 THEN 'Docente graduado bacharel e tecnólogo com diploma de mestrado ou doutorado na área do componente curricular da educação profissional técnica de nível médio' WHEN x.rh02_tipcatprof = 7 THEN 'Docente professor indígena sem prévia formação pedagógica' 
 WHEN x.rh02_tipcatprof = 8 THEN 'Docente instrutor, tradutor e intérprete de libras.' 
 WHEN x.rh02_tipcatprof = 9 THEN 'Docente professor de comunidade quilombola' 
-WHEN x.rh02_tipcatprof = 10 THEN 'Profissionais não habilitados, porém autorizados a exercer a docência em caráter precário e provisório na educação infantil e nos anos iniciais do ensino fundamental.' 
+WHEN x.rh02_tipcatprof = 10 THEN 'Profissionais n�o habilitados, porém autorizados a exercer a docência em caráter precário e provisório na educação infantil e nos anos iniciais do ensino fundamental.' 
 WHEN x.rh02_tipcatprof = 11 THEN 'Profissionais graduados, bacharéis e tecnólogos autorizados a atuar como docentes, em caráter precário e provisório, nos anos finais do ensino fundamental e no ensino médio e médio integrado à educação.' 
-WHEN x.rh02_tipcatprof = 12 THEN 'Profissionais experientes, não graduados, autorizados a atuar como docentes, em caráter precário e provisório, no ensino médio e médio integrado à educação profissional técnica de nível médio.' 
+WHEN x.rh02_tipcatprof = 12 THEN 'Profissionais experientes, n�o graduados, autorizados a atuar como docentes, em caráter precário e provisório, no ensino médio e médio integrado à educação profissional técnica de nível médio.' 
 WHEN x.rh02_tipcatprof = 13 THEN 'Profissionais em efetivo exercício no âmbito da educação infantil e ensino fundamental.' 
 WHEN x.rh02_tipcatprof = 14 THEN 'Auxiliar/Assistente Educacional' 
 WHEN x.rh02_tipcatprof = 15 THEN 'Profissionais que exercem funções de secretaria escolar, alimentação escolar (merendeiras), multimeios didáticos e infraestrutura.' 
@@ -346,9 +346,8 @@ SELECT
 group by x.rh02_mesusu,x.z01_cgccpf,x.z01_nome,x.rh55_inep,x.rh55_descr,x.rh02_hrssem,x.rh02_tipcatprof,x.rh02_salari;
 
 ";
-
-}else{
-        $sSql = "
+  } else {
+    $sSql = "
 SELECT 'I;'|| nextval('teste_seq') || ';' || lpad(x.rh02_mesusu,2,0) || ';' || x.z01_cgccpf || ';' || x.rh01_regist::varchar || ';' || x.z01_nome || ';' || coalesce(x.rh55_inep,'00000000') || ';' || coalesce(x.rh55_descr,'') || ';' || x.rh02_hrssem || ';' || CASE WHEN x.rh02_tipcatprof IN (14,15,16) THEN 2 ELSE 1 END || ';' ||
 CASE WHEN x.rh02_tipcatprof IN (14,15,16) THEN 'Outros profissionais da educação' ELSE 'Profissionais do magistério' END || ';' || 
 CASE WHEN x.rh02_tipcatprof IS NOT NULL THEN x.rh02_tipcatprof::varchar ELSE '0' END || ';'|| 
@@ -362,9 +361,9 @@ WHEN x.rh02_tipcatprof = 6 THEN 'Docente graduado bacharel e tecnólogo com dipl
 WHEN x.rh02_tipcatprof = 7 THEN 'Docente professor indígena sem prévia formação pedagógica' 
 WHEN x.rh02_tipcatprof = 8 THEN 'Docente instrutor, tradutor e intérprete de libras.' 
 WHEN x.rh02_tipcatprof = 9 THEN 'Docente professor de comunidade quilombola' 
-WHEN x.rh02_tipcatprof = 10 THEN 'Profissionais não habilitados, porém autorizados a exercer a docência em caráter precário e provisório na educação infantil e nos anos iniciais do ensino fundamental.' 
+WHEN x.rh02_tipcatprof = 10 THEN 'Profissionais n�o habilitados, porém autorizados a exercer a docência em caráter precário e provisório na educação infantil e nos anos iniciais do ensino fundamental.' 
 WHEN x.rh02_tipcatprof = 11 THEN 'Profissionais graduados, bacharéis e tecnólogos autorizados a atuar como docentes, em caráter precário e provisório, nos anos finais do ensino fundamental e no ensino médio e médio integrado à educação.' 
-WHEN x.rh02_tipcatprof = 12 THEN 'Profissionais experientes, não graduados, autorizados a atuar como docentes, em caráter precário e provisório, no ensino médio e médio integrado à educação profissional técnica de nível médio.' 
+WHEN x.rh02_tipcatprof = 12 THEN 'Profissionais experientes, n�o graduados, autorizados a atuar como docentes, em caráter precário e provisório, no ensino médio e médio integrado à educação profissional técnica de nível médio.' 
 WHEN x.rh02_tipcatprof = 13 THEN 'Profissionais em efetivo exercício no âmbito da educação infantil e ensino fundamental.' 
 WHEN x.rh02_tipcatprof = 14 THEN 'Auxiliar/Assistente Educacional' 
 WHEN x.rh02_tipcatprof = 15 THEN 'Profissionais que exercem funções de secretaria escolar, alimentação escolar (merendeiras), multimeios didáticos e infraestrutura.' 
@@ -455,7 +454,7 @@ AS dado  from
      INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
      AND rh02_anousu = $anofolha
      AND rh02_mesusu = $mesfolha
-     AND rh02_instit = ".db_getsession("DB_instit")."
+     AND rh02_instit = " . db_getsession("DB_instit") . "
      LEFT JOIN rhpesbanco ON rh44_seqpes = rh02_seqpes
      INNER JOIN rhregime ON rh02_codreg = rh30_codreg
      AND rh30_instit = rh02_instit
@@ -466,13 +465,13 @@ AS dado  from
      LEFT JOIN gerfsal ON r14_regist = rh01_regist
      AND r14_anousu = $anofolha
      AND r14_mesusu = $mesfolha
-     AND r14_instit = ".db_getsession("DB_instit")."
+     AND r14_instit = " . db_getsession("DB_instit") . "
      LEFT JOIN rhpeslocaltrab ON rh02_seqpes = rh56_seqpes 
      AND rh56_princ = 't'
     LEFT JOIN rhlocaltrab ON rh55_codigo = rh56_localtrab
     INNER JOIN cgm ON z01_numcgm = rh01_numcgm
     LEFT JOIN rhrubricas ON r14_rubric=rh27_rubric
-    AND rh27_instit = ".db_getsession("DB_instit")."
+    AND rh27_instit = " . db_getsession("DB_instit") . "
     LEFT JOIN rhrubelemento ON rh23_rubric = rh27_rubric
     AND rh23_instit = rh27_instit
     LEFT JOIN rhrubretencao ON rh75_rubric = rh27_rubric
@@ -548,7 +547,7 @@ SELECT
      INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
      AND rh02_anousu = $anofolha
      AND rh02_mesusu = $mesfolha
-     AND rh02_instit = ".db_getsession("DB_instit")."
+     AND rh02_instit = " . db_getsession("DB_instit") . "
      LEFT JOIN rhpesbanco ON rh44_seqpes = rh02_seqpes
      INNER JOIN rhregime ON rh02_codreg = rh30_codreg
      AND rh30_instit = rh02_instit
@@ -559,13 +558,13 @@ SELECT
      LEFT JOIN gerfcom ON r48_regist = rh01_regist
      AND r48_anousu = $anofolha
      AND r48_mesusu = $mesfolha
-     AND r48_instit = ".db_getsession("DB_instit")."
+     AND r48_instit = " . db_getsession("DB_instit") . "
      LEFT JOIN rhpeslocaltrab ON rh02_seqpes = rh56_seqpes
      AND rh56_princ = 't'
     LEFT JOIN rhlocaltrab ON rh55_codigo = rh56_localtrab
     INNER JOIN cgm ON z01_numcgm = rh01_numcgm
     LEFT JOIN rhrubricas ON r48_rubric=rh27_rubric
-    AND rh27_instit = ".db_getsession("DB_instit")."
+    AND rh27_instit = " . db_getsession("DB_instit") . "
     LEFT JOIN rhrubelemento ON rh23_rubric = rh27_rubric
     AND rh23_instit = rh27_instit
     LEFT JOIN rhrubretencao ON rh75_rubric = rh27_rubric
@@ -641,7 +640,7 @@ SELECT
      INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
      AND rh02_anousu = $anofolha
      AND rh02_mesusu = $mesfolha
-     AND rh02_instit = ".db_getsession("DB_instit")."
+     AND rh02_instit = " . db_getsession("DB_instit") . "
      LEFT JOIN rhpesbanco ON rh44_seqpes = rh02_seqpes
      INNER JOIN rhregime ON rh02_codreg = rh30_codreg
      AND rh30_instit = rh02_instit
@@ -652,13 +651,13 @@ SELECT
      LEFT JOIN gerfres ON r20_regist = rh01_regist
      AND r20_anousu = $anofolha
      AND r20_mesusu = $mesfolha
-     AND r20_instit = ".db_getsession("DB_instit")."
+     AND r20_instit = " . db_getsession("DB_instit") . "
      LEFT JOIN rhpeslocaltrab ON rh02_seqpes = rh56_seqpes
      AND rh56_princ = 't'
     LEFT JOIN rhlocaltrab ON rh55_codigo = rh56_localtrab
     INNER JOIN cgm ON z01_numcgm = rh01_numcgm
     LEFT JOIN rhrubricas ON r20_rubric=rh27_rubric
-    AND rh27_instit = ".db_getsession("DB_instit")."
+    AND rh27_instit = " . db_getsession("DB_instit") . "
     LEFT JOIN rhrubelemento ON rh23_rubric = rh27_rubric
     AND rh23_instit = rh27_instit
     LEFT JOIN rhrubretencao ON rh75_rubric = rh27_rubric
@@ -735,7 +734,7 @@ SELECT
      INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
      AND rh02_anousu = $anofolha
      AND rh02_mesusu = $mesfolha
-     AND rh02_instit = ".db_getsession("DB_instit")."
+     AND rh02_instit = " . db_getsession("DB_instit") . "
      LEFT JOIN rhpesbanco ON rh44_seqpes = rh02_seqpes
      INNER JOIN rhregime ON rh02_codreg = rh30_codreg
      AND rh30_instit = rh02_instit
@@ -746,13 +745,13 @@ SELECT
      LEFT JOIN gerfs13 ON r35_regist = rh01_regist
      AND r35_anousu = $anofolha
      AND r35_mesusu = $mesfolha
-     AND r35_instit = ".db_getsession("DB_instit")."
+     AND r35_instit = " . db_getsession("DB_instit") . "
      LEFT JOIN rhpeslocaltrab ON rh02_seqpes = rh56_seqpes
      AND rh56_princ = 't'
     LEFT JOIN rhlocaltrab ON rh55_codigo = rh56_localtrab
     INNER JOIN cgm ON z01_numcgm = rh01_numcgm
     LEFT JOIN rhrubricas ON r35_rubric=rh27_rubric
-    AND rh27_instit = ".db_getsession("DB_instit")."
+    AND rh27_instit = " . db_getsession("DB_instit") . "
     LEFT JOIN rhrubelemento ON rh23_rubric = rh27_rubric
     AND rh23_instit = rh27_instit
     LEFT JOIN rhrubretencao ON rh75_rubric = rh27_rubric
@@ -798,29 +797,28 @@ SELECT
 group by x.rh02_mesusu,x.z01_cgccpf,x.rh01_regist,x.z01_nome,x.rh55_inep,x.rh55_descr,x.rh02_hrssem,x.rh02_tipcatprof,x.rh02_art61ldb1,x.rh02_art61ldb2,x.rh02_art61ldb3,x.rh02_art61ldb4,x.rh02_art61ldb5,x.rh02_art61ldboutros,x.rh02_art1leiprestpsiccologia,x.rh02_art1leiprestservsocial,x.rh02_art1leioutros,x.h13_tipocargo,x.rh02_segatuacao,x.rh02_salari;
 
 ";
-}
-//echo $sSql;exit;
-$result = db_query($sSql);
+  }
+  //echo $sSql;exit;
+  $result = db_query($sSql);
   unlink("tmp/siope.csv");
   // Abre o arquivo para leitura e escrita
   $f = fopen("tmp/siope.csv", "x");
 
   // Lê o conteúdo do arquivo
   $content = "";
-  if(filesize("tmp/siope.csv") > 0)
-  $content = fread($f, filesize("tmp/siope.csv"));
+  if (filesize("tmp/siope.csv") > 0)
+    $content = fread($f, filesize("tmp/siope.csv"));
 
   for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
 
-        $oDados = db_utils::fieldsMemory($result, $iCont);
-        if (trim($oDados->dado) == '') {
-          continue;
-        }
+    $oDados = db_utils::fieldsMemory($result, $iCont);
+    if (trim($oDados->dado) == '') {
+      continue;
+    }
 
-        //echo $oDados->dado;
-        // Escreve no arquivo
-        fwrite($f, $oDados->dado."\n");
-
+    //echo $oDados->dado;
+    // Escreve no arquivo
+    fwrite($f, $oDados->dado . "\n");
   }
 
   // Libera o arquivo
@@ -835,60 +833,59 @@ $result = db_query($sSql);
   </script>";
 
   db_query("DROP SEQUENCE teste_seq;");
-
 }
 
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 
 <style>
-
- .formTable td {
-   text-align: left;
+  .formTable td {
+    text-align: left;
   }
-
 </style>
 
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
 
-<form name="form1" >
+  <form name="form1">
 
-<center>
+    <center>
 
-  <fieldset style="margin-top: 50px; width: 40%">
-  <legend style="font-weight: bold;">Siope </legend>
+      <fieldset style="margin-top: 50px; width: 40%">
+        <legend style="font-weight: bold;">Siope </legend>
 
-    <table align="left" class='formTable'>
-        <?php
-        $geraform = new cl_formulario_rel_pes;
-        $geraform->gera_form($anofolha,$mesfolha);
-        ?>
+        <table align="left" class='formTable'>
+          <?php
+          $geraform = new cl_formulario_rel_pes;
+          $geraform->gera_form($anofolha, $mesfolha);
+          ?>
 
-    </table>
+        </table>
 
-  </fieldset>
+      </fieldset>
 
-  <table style="margin-top: 10px;">
-    <tr>
-      <td colspan="2" align = "center">
-        <!-- <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" > -->
-        <input  name="geratxt" id="geratxt" type="submit" value="Processar" >
-      </td>
-    </tr>
-  </table>
+      <table style="margin-top: 10px;">
+        <tr>
+          <td colspan="2" align="center">
+            <!-- <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" > -->
+            <input name="geratxt" id="geratxt" type="submit" value="Processar">
+          </td>
+        </tr>
+      </table>
 
-</center>
-</form>
-<?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
+    </center>
+  </form>
+  <?
+  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+  ?>
 </body>
+
 </html>

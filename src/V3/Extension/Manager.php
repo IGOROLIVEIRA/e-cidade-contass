@@ -1,4 +1,5 @@
 <?php
+
 namespace ECidade\V3\Extension;
 
 use Exception, PharData;
@@ -11,14 +12,16 @@ use \ECidade\V3\Modification\Manager as ModificationManager;
 /**
  * @package extension
  */
-class Manager extends AbstractManager {
+class Manager extends AbstractManager
+{
 
   /**
    * @param string $id
    * @param string $user
    * @return boolean
    */
-  public static function isEnabled($id, $user = null) {
+  public static function isEnabled($id, $user = null)
+  {
     return ExtensionData::restore($id)->isEnabled($user);
   }
 
@@ -27,10 +30,11 @@ class Manager extends AbstractManager {
    * @param boolean $foce
    * @return ExtensionData
    */
-  public function unpack($file, $force = false) {
+  public function unpack($file, $force = false)
+  {
 
     if (!file_exists($file)) {
-      throw new Exception("Arquivo não encontrado: $file");
+      throw new Exception("Arquivo n�o encontrado: $file");
     }
 
     if (pathinfo($file, PATHINFO_EXTENSION) != "gz") {
@@ -46,7 +50,7 @@ class Manager extends AbstractManager {
     }
 
     if (!isset($pharData[$id . '/Manifest.xml'])) {
-      throw new Exception("Arquivo manifest não encontrado no package.");
+      throw new Exception("Arquivo manifest n�o encontrado no package.");
     }
 
     if (!$pharData->extractTo(ECIDADE_EXTENSION_PACKAGE_PATH, null, true)) {
@@ -80,7 +84,8 @@ class Manager extends AbstractManager {
    * @param string $id
    * @return \ECidade\Extension\Parse\Manifest
    */
-  public function parse($id) {
+  public function parse($id)
+  {
 
     $path = ECIDADE_EXTENSION_PACKAGE_PATH . $id . '/Manifest.xml';
 
@@ -94,24 +99,25 @@ class Manager extends AbstractManager {
    * @param string $user
    * @return boolean
    */
-  public function install($id, $user = null) {
+  public function install($id, $user = null)
+  {
 
-    $this->container->get('logger')->debug('Instalando '. $id . (!empty($user) ? ' user '. $user : null));
-    $this->container->get('logger')->debug('install('. $id .')');
+    $this->container->get('logger')->debug('Instalando ' . $id . (!empty($user) ? ' user ' . $user : null));
+    $this->container->get('logger')->debug('install(' . $id . ')');
 
     $extensionData = ExtensionData::restore($id);
     $configData = ConfigData::restore('config');
 
     if (!$extensionData->exists()) {
-      throw new Exception("Extensão não descompactada: '$id'");
+      throw new Exception("Extensão n�o descompactada: '$id'");
     }
 
     if ($extensionData->isUserType() && empty($user)) {
-      throw new Exception("Usuário da extensão '$id' não informado");
+      throw new Exception("Usu�rio da extensão '$id' n�o informado");
     }
 
     if ($extensionData->isEnabled($user)) {
-      throw new Exception("Extensão já instalada: '$id'" . ($extensionData->isUserType() ? " usuário '$user'" : null));
+      throw new Exception("Extensão já instalada: '$id'" . ($extensionData->isUserType() ? " usu�rio '$user'" : null));
     }
 
     if ($extensionData->hasModifications()) {
@@ -148,19 +154,20 @@ class Manager extends AbstractManager {
    * @param string $user
    * @return boolean
    */
-  public function uninstall($id, $user = null) {
+  public function uninstall($id, $user = null)
+  {
 
-    $this->container->get('logger')->debug('Desinstalando '. $id . (!empty($user) ? ' user '. $user : null));
+    $this->container->get('logger')->debug('Desinstalando ' . $id . (!empty($user) ? ' user ' . $user : null));
 
     $configData = ConfigData::restore('config');
     $extensionData = Data::restore($id);
 
     if (false === $extensionData->exists()) {
-      throw new Exception("Extensão não instalada: $id");
+      throw new Exception("Extensão n�o instalada: $id");
     }
 
     if ($extensionData->isUserType() && empty($user)) {
-      throw new Exception("Usuário da extensão '$id' não informado");
+      throw new Exception("Usu�rio da extensão '$id' n�o informado");
     }
 
     if (false === $extensionData->isEnabled($user)) {
@@ -195,5 +202,4 @@ class Manager extends AbstractManager {
 
     return true;
   }
-
 }
