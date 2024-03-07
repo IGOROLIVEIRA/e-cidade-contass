@@ -494,4 +494,3 @@ class cl_liclicitaata {
      return $sql;
   }
 }
-?>
