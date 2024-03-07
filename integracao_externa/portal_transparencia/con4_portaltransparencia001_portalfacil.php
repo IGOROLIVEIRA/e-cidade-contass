@@ -3489,6 +3489,26 @@ function patrimonialPmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connDe
 
             $oContratos = db_utils::fieldsMemory ($rsContratos, $iVwContratos);
 
+            /**
+             * Matriz de entrada
+             */
+            $what = array(
+                "'", 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û',
+                'Ä', 'Ã', 'À', 'Á', 'Â', 'Ê', 'Ë', 'È', 'É', 'Ï', 'Ì', 'Í', 'Ö', 'Õ', 'Ò', 'Ó', 'Ô', 'Ü', 'Ù', 'Ú', 'Û',
+                'ñ', 'Ñ', 'ç', 'Ç', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', '°', "°", chr (13), chr (10), "'"
+            );
+
+            /**
+             * Matriz de saida
+             */
+            $by = array(
+                " ", 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u',
+                'A', 'A', 'A', 'A', 'A', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U',
+                'n', 'N', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', " ", " ", " ", " "
+            );
+
+            $oContratos->dsobjeto = trim (preg_replace ("/[^a-zA-Z0-9' ]/", "", str_replace ($what, $by, $oContratos->dsobjeto)));
+
             $sqlInsertContratos = "insert into transparencia.transparenciacontrato_tb values (
                                                         '{$oContratos->cdcontrato}',
                                                         '{$oContratos->cdfornecedor}',
