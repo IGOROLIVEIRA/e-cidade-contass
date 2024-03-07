@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -67,7 +67,7 @@ $clRotulo->label('ac16_sequencial');
     ?>
   </head>
   <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-  
+
     <div style="margin-top: 30px;"></div>
     <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
       <center>
@@ -154,7 +154,7 @@ $clRotulo->label('ac16_sequencial');
     </form>
     <?php
       db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-    ?> 
+    ?>
   </body>
   <div id='teste' style='display:none'></div>
 </html>
@@ -171,11 +171,11 @@ function js_pesquisaContrato(lMostra) {
   var sFuncao = 'func_acordoinstit.php?funcao_js=parent.js_mostraContrato|ac16_sequencial|ac16_resumoobjeto';
 
   if (lMostra == false) {
-  
+
     var iContrato = $F('iCodigoContrato');
     sFuncao = 'func_acordoinstit.php?pesquisa_chave='+iContrato+'&funcao_js=parent.js_completaContrato'+
               '&descricao=true';
-  } 
+  }
 
   js_OpenJanelaIframe('', 'db_iframe_contrato', sFuncao,'Pesquisar Contrato', lMostra, '25');
 }
@@ -210,7 +210,7 @@ function js_mostraContrato (iCodigo, sDescricao) {
 }
 
 function js_controlaCampos(lBloqueia) {
-  
+
   if (lBloqueia) {
 
     $("uploadfile").setAttribute("disabled", true);
@@ -226,7 +226,7 @@ function js_controlaCampos(lBloqueia) {
     $("uploadfile").removeAttribute("disabled");
     $("uploadfile").style.backgroundColor = "#FFFFFF";
 
-    $("l213_sequencial").style.backgroundColor = "#FFFFFF";  
+    $("l213_sequencial").style.backgroundColor = "#FFFFFF";
     $("l213_sequencial").removeAttribute("disabled");
 
     $("btnSalvar").removeAttribute("disabled");
@@ -249,7 +249,7 @@ oGridDocumento.show($('ctnDbGridDocumentos'));
  */
 $("uploadfile").observe('change', function() {
 
-  startLoading();  
+  startLoading();
   var iFrame = document.createElement("iframe");
   iFrame.src = 'func_uploadfiledocumento.php?clone=form1';
   iFrame.id  = 'uploadIframe';
@@ -278,7 +278,7 @@ function js_salvarDocumento() {
     alert('Selecione o tipo de Anexo!');
     return false;
   }
-  
+
   var oParam       = new Object();
   oParam.exec      = 'adicionarDocumento';
   oParam.acordo    = $F('iCodigoContrato');
@@ -291,7 +291,7 @@ function js_salvarDocumento() {
                                method: 'post',
                                asynchronous:false,
                                onComplete : js_retornoSalvarFoto
-                             });    
+                             });
 }
 
 function js_retornoSalvarFoto(oAjax) {
@@ -323,11 +323,11 @@ function js_getDocumento() {
                                asynchronous:false,
                                method: 'post',
                                onComplete : js_retornoGetDocumento
-                             });   
+                             });
 }
 
 function js_retornoGetDocumento(oAjax) {
-	
+
   var oRetorno = eval('('+oAjax.responseText+")");
   oGridDocumento.clearAll(true);
 
@@ -340,26 +340,26 @@ function js_retornoGetDocumento(oAjax) {
     var aLinha = new Array();
     aLinha[0]  = oDocumento.iCodigo;
     aLinha[1]  = oDocumento.iAcordo;
-    aLinha[2]  = decodeURIComponent(oDocumento.sDescricao.replace(/\+/g,  " "));
+    aLinha[2]  = decodeURIComponent(escape(oDocumento.sDescricao));;
     aLinha[3]  = '<input type="button" value="Alterar" onclick="js_alterarDocumento(' +oDocumento.iCodigo+ ');" >  ';
     aLinha[3]  += '<input type="button" value="Excluir" onclick="js_excluirDocumento(' +oDocumento.iCodigo+ ')" />  ';
-   
 
-   
-    oGridDocumento.addRow(aLinha);  
+
+
+    oGridDocumento.addRow(aLinha);
   });
 
   oGridDocumento.renderRows();
 
 }
 $('btnSalvar').observe("click",js_salvarDocumento);
-js_getDocumento(); 
+js_getDocumento();
 
 function js_excluirDocumento(iCodigoDocumento) {
 
   if (!confirm('Confirma a Exclusão do Documento?')) {
     return false;
-  }  
+  }
   var oParam             = new Object();
   oParam.exec            = 'excluirDocumento';
   oParam.acordo          = iAcordo;
@@ -371,7 +371,7 @@ function js_excluirDocumento(iCodigoDocumento) {
                                parameters: 'json='+Object.toJSON(oParam),
                                method: 'post',
                                onComplete : js_retornoExcluiDocumento
-                             });   
+                             });
 
 }
 
@@ -392,7 +392,7 @@ function js_documentoDownload(iCodigoDocumento) {
 
   if (!confirm('Deseja realizar o Download do Documento?')) {
     return false;
-  }  
+  }
   var oParam              = new Object();
   oParam.exec             = 'downloadDocumento';
   oParam.acordo           = iAcordo;
@@ -404,8 +404,8 @@ function js_documentoDownload(iCodigoDocumento) {
                                parameters: 'json='+Object.toJSON(oParam),
                                method: 'post',
                                onComplete : js_downloadDocumento
-                             });   
-} 
+                             });
+}
 
 function js_downloadDocumento(oAjax) {
 
@@ -415,7 +415,7 @@ function js_downloadDocumento(oAjax) {
      alert("Não foi possivel carregar o documento:\n "+ oRetorno.message);
   }
   window.open("db_download.php?arquivo="+oRetorno.nomearquivo);
-} 
+}
 
 
 function js_enviarDocumentoPNCP(){
@@ -433,7 +433,7 @@ function js_enviarDocumentoPNCP(){
     if (!confirm('Confirma o Envio do Documento?')) {
     return false;
   }
-    
+
     if (empty(iCodigoProcesso)) {
 
       alert('Acordo não informado.');
@@ -447,7 +447,7 @@ function js_enviarDocumentoPNCP(){
 
     var iTipo = documentosSelecionados[iIndice].aCells[3].getValue();
     aTipo.push(iTipo);
-  
+
     }
 
     js_divCarregando('Aguarde... Enviando documentos!', 'msgbox');
@@ -466,7 +466,7 @@ function js_enviarDocumentoPNCP(){
         asynchronous: false,
 
         /**
-         * 
+         *
          * Retorno do RPC
          */
         onComplete: function(oAjax) {
@@ -484,7 +484,7 @@ function js_enviarDocumentoPNCP(){
           }
           alert("Anexo(s) Enviado(s) com Sucesso!");
 
-          
+
         }
       });
 
@@ -539,7 +539,7 @@ var oAjax = new Ajax.Request(
     asynchronous: false,
 
     /**
-     * 
+     *
      * Retorno do RPC
      */
     onComplete: function(oAjax) {
@@ -556,8 +556,8 @@ var oAjax = new Ajax.Request(
         return false;
       }
       alert("Documento(s) Excluido(s) com Sucesso do PNCP!");
-            
-      
+
+
     }
   });
 
@@ -611,7 +611,7 @@ var oAjax = new Ajax.Request(
     asynchronous: false,
 
     /**
-     * 
+     *
      * Retorno do RPC
      */
     onComplete: function(oAjax) {
@@ -630,8 +630,8 @@ var oAjax = new Ajax.Request(
 
       alert("Anexo(s) Excluido(s) com Sucesso!");
       oGridDocumento.renderRows();
-     
-      
+
+
     }
   });
 
@@ -684,7 +684,7 @@ var oAjax = new Ajax.Request(
     asynchronous: false,
 
     /**
-     * 
+     *
      * Retorno do RPC
      */
     onComplete: function(oAjax) {
@@ -703,10 +703,10 @@ var oAjax = new Ajax.Request(
       for (var cont = 0; cont < oRetorno.contador; cont++) {
         window.open("db_download.php?arquivo="+oRetorno.nomearquivo[cont]);
       }
-      
+
       alert("Download do(s) Anexo(s) efetuado com Sucesso!");
-     
-      
+
+
     }
   });
 
