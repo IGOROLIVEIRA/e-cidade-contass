@@ -1,4 +1,7 @@
 <?php
+
+use App\Models\Socio;
+
 include_once "fpdf151/pdf.php";
 include_once "libs/db_sql.php";
 include_once "dbforms/db_funcoes.php";
@@ -513,17 +516,9 @@ if ($numrows <> 0) {
     $pdf->cell(190, 4, "NÃO POSSUI ATIVIDADE", 0, 1, "C", 0);
 }
 $pdf->addpage();
-$sql = "select cgmsocio.z01_numcgm,
-      cgmsocio.z01_nome,
-	    cgmsocio.z01_cgccpf,
-	    case socios.q95_tipo when 1 then 'Sócio' when 2 then 'Responsável MEI' when 3 then 'Responsável' else 'Não informado' end as q95_tipo,
-	    q95_perc
-      from issbase
-	    inner join socios on q95_cgmpri = q02_numcgm
-	    inner join cgm cgmsocio on cgmsocio.z01_numcgm = q95_numcgm
-	    inner join cgm cgmempresa on cgmempresa.z01_numcgm = q02_numcgm where q02_inscr =$inscr";
-$result = pg_exec($sql);
-$numrows = pg_num_rows($result);
+
+$socios = (new Socio())->getSociosBCI()->where('q02_inscr', $inscr)->get();
+
 $pdf->Cell(200, 4, "", "", 1, "C", 0);
 $pdf->setX(5);
 $pdf->SetFont('Arial', 'B', $titulo);
@@ -531,7 +526,7 @@ $pdf->Cell(200, 4, "Socios", "LRBT", 1, "C", 0);
 $pdf->setX(5);
 $pdf->Cell(200, 4, "", "", 1, "C", 0);
 
-if ($numrows <> 0) {
+if ($socios->isNotEmpty()) {
     $pdf->setX(10);
     $pdf->SetFont('Arial', '', $titulo);
     $pdf->cell(10, 4, "CGM", 0, 0, "C", 1);
@@ -541,15 +536,14 @@ if ($numrows <> 0) {
     $pdf->cell(14, 4, "Percentual", 0, 1, "C", 1);
 
 
-    for ($i = 0; $i < $numrows; $i++) {
-        db_fieldsmemory($result, $i);
+    foreach ($socios as $socio) {
         $pdf->setX(10);
         $pdf->SetFont('Arial', '', $texto);
-        $pdf->cell(10, 4, "$z01_numcgm", 0, 0, "C", 0);
-        $pdf->cell(68, 4, "$z01_nome", 0, 0, "L", 0);
-        $pdf->cell(68, 4, "$z01_cgccpf", 0, 0, "C", 0);
-        $pdf->cell(30, 4, "$q95_tipo", 0, 0, "C", 0);
-        $pdf->cell(14, 4, "$q95_perc", 0, 1, "C", 0);
+        $pdf->cell(10, 4, "$socio->z01_numcgm", 0, 0, "C", 0);
+        $pdf->cell(68, 4, "$socio->z01_nome", 0, 0, "L", 0);
+        $pdf->cell(68, 4, "$socio->z01_cgccpf", 0, 0, "C", 0);
+        $pdf->cell(30, 4, "$socio->q95_tipo", 0, 0, "C", 0);
+        $pdf->cell(14, 4, "$socio->q95_perc", 0, 1, "C", 0);
     }
 } else {
     $pdf->cell(190, 4, "NÃO POSSUI SOCIOS", 0, 1, "C", 0);
