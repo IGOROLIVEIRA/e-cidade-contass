@@ -3287,7 +3287,7 @@ db_logTitulo (" ****************************************************************
  */
 function financeiroPmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connDestino)
 {
-    db_logTitulo (" EMPENHOS MONTALVANIA", $sArquivoLog, $iParamLog);
+    db_logTitulo (" EMPENHOS - PORTAL_FACIL", $sArquivoLog, $iParamLog);
     $rsEmpTransp = db_query ($connOrigem, "SELECT * FROM vw_transparenciaempenho_tb");
 
     if (pg_num_rows ($rsEmpTransp) > 0) {
@@ -3343,7 +3343,7 @@ function financeiroPmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connDes
             db_query ($connDestino, $sqlInsertEmpTransp);
         }
     }
-    db_logTitulo (" LIQUIDACAO MONTALVANIA", $sArquivoLog, $iParamLog);
+    db_logTitulo (" LIQUIDACAO - PORTAL_FACIL", $sArquivoLog, $iParamLog);
     $rsLqdTransp = db_query ($connOrigem, "SELECT * FROM vw_transparencialiquidacao_tb");
 
     if (pg_num_rows ($rsLqdTransp) > 0) {
@@ -3367,7 +3367,7 @@ function financeiroPmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connDes
             db_query ($connDestino, $sqlInsertLqdTransp);
         }
     }
-    db_logTitulo (" PAGAMENTO MONTALVANIA", $sArquivoLog, $iParamLog);
+    db_logTitulo (" PAGAMENTO - PORTAL_FACIL", $sArquivoLog, $iParamLog);
     $rsPgTransp = db_query ($connOrigem, "SELECT * FROM vw_transparenciaordempagamento_tb");
 
     if (pg_num_rows ($rsPgTransp) > 0) {
@@ -3388,7 +3388,7 @@ function financeiroPmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connDes
             db_query ($connDestino, $sqlInsertPgTransp);
         }
     }
-    db_logTitulo (" RPs MONTALVANIA", $sArquivoLog, $iParamLog);
+    db_logTitulo (" RPs - PORTAL_FACIL", $sArquivoLog, $iParamLog);
     $rsRestosTransp = db_query ($connOrigem, "SELECT * FROM vw_transparenciarestosapagar_tb");
 
     if (pg_num_rows ($rsRestosTransp) > 0) {
@@ -3408,7 +3408,7 @@ function financeiroPmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connDes
             db_query ($connDestino, $sqlInsertRP);
         }
     }
-    db_logTitulo (" LIQUIDACAO RPs MONTALVANIA", $sArquivoLog, $iParamLog);
+    db_logTitulo (" LIQUIDACAO RPs - PORTAL_FACIL", $sArquivoLog, $iParamLog);
     $rsLqdRpTransp = db_query ($connOrigem, "SELECT * FROM vw_transparencialiquidacaorp_tb");
 
     if (pg_num_rows ($rsLqdRpTransp) > 0) {
@@ -3429,7 +3429,7 @@ function financeiroPmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connDes
             db_query ($connDestino, $sqlInsertLqdRp);
         }
     }
-    db_logTitulo (" PAGAMENTO RPs MONTALVANIA", $sArquivoLog, $iParamLog);
+    db_logTitulo (" PAGAMENTO RPs - PORTAL_FACIL", $sArquivoLog, $iParamLog);
     $rsPgRpTransp = db_query ($connOrigem, "SELECT * FROM vw_transparenciaordempagamentorp_tb");
 
     if (pg_num_rows ($rsPgRpTransp) > 0) {
@@ -3450,7 +3450,7 @@ function financeiroPmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connDes
             db_query ($connDestino, $sqlInsertPgRp);
         }
     }
-    db_logTitulo (" EXTRA MONTALVANIA", $sArquivoLog, $iParamLog);
+    db_logTitulo (" EXTRA - PORTAL_FACIL", $sArquivoLog, $iParamLog);
     $rsExtraTransp = db_query ($connOrigem, "SELECT * FROM vw_transparenciaextra_tb");
 
     if (pg_num_rows ($rsExtraTransp) > 0) {
@@ -3480,7 +3480,7 @@ function financeiroPmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connDes
 
 function patrimonialPmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connDestino)
 {
-    db_logTitulo (" CONTRATO MONTALVANIA", $sArquivoLog, $iParamLog);
+    db_logTitulo (" CONTRATO - PORTAL_FACIL", $sArquivoLog, $iParamLog);
     $rsContratos = db_query ($connOrigem, "SELECT * FROM vw_transparenciacontrato_tb");
 
     if (pg_num_rows ($rsContratos) > 0) {
@@ -3528,7 +3528,7 @@ function patrimonialPmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connDe
         }
     }
 
-    db_logTitulo (" ITEM CONTRATO MONTALVANIA", $sArquivoLog, $iParamLog);
+    db_logTitulo (" ITEM CONTRATO - PORTAL_FACIL", $sArquivoLog, $iParamLog);
     $rsContratosItens = db_query ($connOrigem, "SELECT * FROM vw_transparenciacontratoitem_tb");
 
     if (pg_num_rows ($rsContratosItens) > 0) {
@@ -3548,7 +3548,7 @@ function patrimonialPmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connDe
             db_query ($connDestino, $sqlInsertContratosItens);
         }
     }
-    db_logTitulo (" ADIT CONTRATO MONTALVANIA", $sArquivoLog, $iParamLog);
+    db_logTitulo (" ADIT CONTRATO - PORTAL_FACIL", $sArquivoLog, $iParamLog);
     $rsContratosAdit = db_query ($connOrigem, "SELECT * FROM vw_transparenciacontratoadit_tb");
 
     if (pg_num_rows ($rsContratosAdit) > 0) {
@@ -3573,7 +3573,7 @@ function patrimonialPmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connDe
         }
     }
 
-    db_logTitulo (" BENS MONTALVANIA", $sArquivoLog, $iParamLog);
+    db_logTitulo (" BENS - PORTAL_FACIL", $sArquivoLog, $iParamLog);
     $rsBensMovTransp = db_query ($connOrigem, "SELECT * FROM vw_transparenciapatrimoniobensmoveis_tb");
 
     if (pg_num_rows ($rsBensMovTransp) > 0) {
@@ -3615,7 +3615,7 @@ function patrimonialPmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connDe
 
     // Criar a parte dos bens imóveis
 
-    db_logTitulo (" FROTA MONTALVANIA", $sArquivoLog, $iParamLog);
+    db_logTitulo (" FROTA - PORTAL_FACIL", $sArquivoLog, $iParamLog);
     $rsFrotaTransp = db_query ($connOrigem, "SELECT * FROM vw_transparenciapatrimoniofrota_tb");
 
     if (pg_num_rows ($rsFrotaTransp) > 0) {
@@ -3637,7 +3637,7 @@ function patrimonialPmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connDe
         }
     }
 
-    db_logTitulo(" FORNECEDOR MONTALVANIA",$sArquivoLog,$iParamLog);
+    db_logTitulo(" FORNECEDOR - PORTAL_FACIL",$sArquivoLog,$iParamLog);
     $rsFornecedorTransp = db_query($connOrigem, "SELECT * FROM vw_transparenciafornecedor_tb");
 
     if (pg_num_rows($rsFornecedorTransp)>0) {
@@ -3659,7 +3659,7 @@ function patrimonialPmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connDe
 
 function contrachequePmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connDestino)
 {
-    db_logTitulo (" CONTRACHEQUE MONTALVANIA", $sArquivoLog, $iParamLog);
+    db_logTitulo (" CONTRACHEQUE - PORTAL_FACIL", $sArquivoLog, $iParamLog);
     $rsChequeTransp = db_query ($connOrigem, "SELECT * FROM vw_transparenciacontracheque_tb");
 
     if (pg_num_rows ($rsChequeTransp) > 0) {
@@ -3689,7 +3689,7 @@ function contrachequePmMontalvania($sArquivoLog, $iParamLog, $connOrigem, $connD
         }
     }
 
-    db_logTitulo (" ITEM CONTRACHEQUE MONTALVANIA", $sArquivoLog, $iParamLog);
+    db_logTitulo (" ITEM CONTRACHEQUE - PORTAL_FACIL", $sArquivoLog, $iParamLog);
     $rsChequeItemTransp = db_query ($connOrigem, "SELECT * FROM vw_transparenciacontrachequeitem_tb");
 
     if (pg_num_rows ($rsChequeItemTransp) > 0) {
