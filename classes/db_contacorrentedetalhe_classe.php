@@ -1148,12 +1148,9 @@ class cl_contacorrentedetalhe {
 
       //Converte fontes antigas pra o codigo atual e soma as fontes iguais
       foreach ($aContaCorrente as $aCC){
-        if (strlen($aCC['codtri']) == 3){
             $clDeParaRecurso = new DeParaRecurso;
             $codtri = substr($clDeParaRecurso->getDePara($aCC['codtri']), 0, -1);
-        }else{
-            $codtri = substr($aCC['codtri'], 0, -1);
-        }
+  
         if (isset($aTotalPorCodtri[$codtri])){
             $saldoAnterior = $aTotalPorCodtri[$codtri]['sinal_anterior'] == 'D' ? $aTotalPorCodtri[$codtri]['saldo_anterior'] * -1 : $aTotalPorCodtri[$codtri]['saldo_anterior'];
             $aCCSaldoAnterior = $aCC['sinal_anterior'] == 'D' ? $aCC['saldo_anterior'] * -1 : $aCC['saldo_anterior'];
