@@ -1155,7 +1155,7 @@ class cl_acordo
                 $sql .= $virgula . " ac16_vigenciaindeterminada = '$this->ac16_vigenciaindeterminada' ";
             }
         }
-        
+
         $sql .= " where ";
         if ($ac16_sequencial != null) {
             $sql .= " ac16_sequencial = $this->ac16_sequencial";
@@ -2562,7 +2562,7 @@ class cl_acordo
                     JOIN liccontrolepncp ON ac16_licitacao = l213_licitacao
                     LEFT JOIN acocontratopncp ON ac213_contrato = ac16_sequencial
                     WHERE ac16_instit = " . db_getsession('DB_instit') . "
-                    AND ac16_acordosituacao = 4
+                    AND ac16_acordosituacao in (4,2)
                         AND ac16_anousu = " . db_getsession('DB_anousu') . "
         union
                     SELECT DISTINCT ac16_sequencial,
@@ -2611,7 +2611,7 @@ class cl_acordo
                     LEFT JOIN liccontrolepncp ON  l213_processodecompras = pc80_codproc
                     LEFT JOIN acocontratopncp ON ac213_contrato = ac16_sequencial
                     WHERE ac16_instit = " . db_getsession('DB_instit') . "
-                    AND ac16_acordosituacao = 4
+                    AND ac16_acordosituacao in (4,2)
                     AND ac16_anousu = " . db_getsession('DB_anousu') . "
                     AND pc80_dispvalor = 't') AS X ORDER BY ac16_sequencial DESC
         ";
