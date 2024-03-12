@@ -135,7 +135,7 @@ $desco    = 0;
 $patronal = 0;
 $agentes_nocivos = 0;
 
-for ($iCont = 0; $iCont < pg_numrows($rsPrevidencia); $iCont++) {
+for ($iCont = 0; $iCont < pg_num_rows($rsPrevidencia); $iCont++) {
     $oPrevidencia = db_utils::fieldsMemory($rsPrevidencia, $iCont);
     $descr_nome .= $virg_nome . $oPrevidencia->r33_nome;
     $virg_nome   = ', ';
@@ -388,7 +388,7 @@ for ($iCont = 0; $iCont < pg_numrows($rsPrevidencia); $iCont++) {
     }
     
     $rsValores = db_query($sSqlValores);
-    $xxnum = pg_numrows($rsValores);
+    $xxnum = pg_num_rows($rsValores);
 
     if ($xxnum == 0) {
         db_redireciona('db_erros.php?fechar=true&db_erro=Não existem Códigos cadastrados no período de ' . $mes . ' / ' . $ano." para a Previdência {$oPrevidencia->r33_codtab} - {$oPrevidencia->r33_nome}");
