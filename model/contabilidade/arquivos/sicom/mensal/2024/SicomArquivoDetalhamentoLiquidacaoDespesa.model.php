@@ -246,7 +246,8 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
        
         $oDadosLiquidacaoFonte->si119_tiporegistro = '11';
         $oDadosLiquidacaoFonte->si119_codreduzido = substr($oLiquidacao->codreduzido, 0, 15);
-        $oDadosLiquidacaoFonte->si119_codfontrecursos = $iFonteAlterada != 0 ? $iFonteAlterada : substr($oLiquidacao->o15_codtri, 0, 7);
+        $oDadosLiquidacaoFonte->si119_codfontrecursos = $iFonteAlterada != 0 ? substr($oDeParaRecurso->getDePara($iFonteAlterada),0,7) : substr($oDeParaRecurso->getDePara(strlen($oLiquidacao->o15_codtri) == 7 ? $oLiquidacao->o15_codtri."0" : $oLiquidacao->o15_codtri), 0, 7);
+
         if (in_array($oDadosLiquidacaoFonte->si119_codfontrecursos, $this->aFontesEncerradas)) {
             $oDadosLiquidacaoFonte->si119_codfontrecursos = substr($oDadosLiquidacaoFonte->si119_codfontrecursos, 0 , 1).'59';
         }
@@ -292,7 +293,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
 
         $cllqd11->si119_tiporegistro = $oDados11->si119_tiporegistro;
         $cllqd11->si119_codreduzido = $oDados11->si119_codreduzido;
-        $cllqd11->si119_codfontrecursos = $oDeParaRecurso->getDePara(strlen($oDados11->si119_codfontrecursos) == 7 ? $oDados11->si119_codfontrecursos."0" : $oDados11->si119_codfontrecursos);
+        $cllqd11->si119_codfontrecursos = $oDados11->si119_codfontrecursos;
         $cllqd11->si119_codco = $oDados11->si119_codco;
         $cllqd11->si119_valorfonte = $oDados11->si119_valorfonte;
         $cllqd11->si119_mes = $oDados11->si119_mes;

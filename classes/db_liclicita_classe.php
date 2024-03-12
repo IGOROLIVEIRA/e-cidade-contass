@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*
  *     E-cidade Software Publico para Gestao Municipal
@@ -4163,7 +4163,7 @@ class cl_liclicita
                     LEFT  JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
                     LEFT  JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
                     WHERE l21_codliclicita = $l20_codigo
-                        AND l21_ordem = 1
+                        AND l21_ordem = $ordem
                         AND l202_datahomologacao IS NOT NULL
                         AND pc24_pontuacao = 1
                     union

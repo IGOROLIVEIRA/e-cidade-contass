@@ -2,6 +2,7 @@
 
 require_once("libs/db_liborcamento.php");
 require_once("libs/db_libcontabilidade.php");
+require_once("model/orcamento/DeParaRecurso.model.php");
 
 
 class Caspweb {
@@ -80,7 +81,7 @@ class Caspweb {
     }
 
     public function gerarMapaApropriacao() {
-
+        $clDeParaRecurso = new DeParaRecurso;
         $sSqlMapaApropriacao = "    SELECT
                                         codtipomapa,
                                         codentcont,
@@ -105,8 +106,12 @@ class Caspweb {
                                         -- NULL AS espfontanalitica,
                                         NULL AS instjuridico,
                                         codenttransfinanc,
-                                        coalesce(debito,0) AS debito,
-                                        coalesce(credito,0) AS credito
+                                        CASE
+                                            WHEN fonte IS NULL THEN '1500000'
+                                            ELSE fonte
+                                        END AS fonte,
+                                        SUM(coalesce(round(substr(dadosfonte, 59, 15)::float8, 2), debito, 0)) AS debito,
+                                        SUM(coalesce(round(substr(dadosfonte, 75, 15)::float8, 2), credito, 0)) AS credito
                                     FROM
                                     (SELECT 
                                         32 AS codtipomapa,
@@ -139,6 +144,8 @@ class Caspweb {
                                             WHEN substr(c60_estrut,1,5) IN ('35112','45112') THEN '201'
                                             ELSE ''
                                         END AS codenttransfinanc,
+                                        c19_orctiporec AS fonte,
+                                        fc_saldocontacorrente({$this->iAnoUsu}, c19_sequencial, 103, {$this->iMes}, c19_instit) AS dadosfonte,
                                         (SELECT sum(c69_valor)
                                             FROM conlancamval
                                             WHERE c69_credito = c61_reduz
@@ -152,11 +159,14 @@ class Caspweb {
                                         INNER JOIN conplanoexe ON c62_reduz = c61_reduz AND c61_anousu = c62_anousu
                                         LEFT JOIN conplanoconta ON c63_codcon = c60_codcon AND c63_anousu = c60_anousu
                                         LEFT JOIN vinculocaspweb ON c232_estrutecidade = c60_estrut AND c232_anousu = c60_anousu
+                                        LEFT JOIN contacorrentedetalhe ON c19_reduz = c61_reduz AND c19_conplanoreduzanousu = c61_anousu AND c19_instit = $this->iInstit
                                         WHERE c60_anousu = $this->iAnoUsu
                                         AND substr(c60_estrut,1,1)::integer IN (1,2,3,4,7,8)
                                         AND substr(c60_estrut,1,7) NOT IN ('2371101', '2371102')) AS x
-                                    WHERE debito != 0
-                                    OR credito != 0
+                                    WHERE coalesce(round(substr(dadosfonte, 59, 15)::float8, 2), debito, 0) != 0
+                                    OR coalesce(round(substr(dadosfonte, 75, 15)::float8, 2), credito, 0) != 0
+                                    GROUP BY contacontabil, codagencia, codconta, 
+                                    fonte, codtipomapa, codentcont, exercicio, mes, indsuperavit, codbanco, indapfincanc, codenttransfinanc
                                     ORDER BY contacontabil, codbanco";
 
         $rsMapaAprop = db_query($sSqlMapaApropriacao);
@@ -167,9 +177,16 @@ class Caspweb {
 
             if(!(substr($oContaContabil->contacontabil,0,3) == '237' && $this->iMes == 01)){
 
-                $sHash = $oContaContabil->contacontabil;
+                if (strlen($oContaContabil->fonte) == 3 || $oContaContabil->fonte == '1'){
+                    $oContaContabil->fonte = $clDeParaRecurso->getDePara($oContaContabil->fonte);
+                }
 
-                if(!isset($this->aMapa[$sHash])) {
+                /**
+                 * OC22076
+                 */
+                // $sHash = $oContaContabil->contacontabil;
+
+                // if(!isset($this->aMapa[$sHash])) {
 
                     $aMapaAprop = array();
                     $aMapaAprop['codtipomapa'] = $oContaContabil->codtipomapa;
@@ -185,9 +202,9 @@ class Caspweb {
                     $aMapaAprop['dotorcamentaria'] = $oContaContabil->dotorcamentaria;
                     $aMapaAprop['tipopesssoa'] = $oContaContabil->tipopesssoa;
                     $aMapaAprop['codcred_forn'] = $oContaContabil->codcred_forn;
-                    $aMapaAprop['codgruposiafic'] = '1';
-                    $aMapaAprop['codsiaficfonte'] = '500';
-                    $aMapaAprop['codsiaficdetalhamentofonte'] = '000';
+                    $aMapaAprop['codgruposiafic'] = substr($oContaContabil->fonte, 0, 1);
+                    $aMapaAprop['codsiaficfonte'] = substr($oContaContabil->fonte, 1, 3);
+                    $aMapaAprop['codsiaficdetalhamentofonte'] = substr($oContaContabil->fonte, 4, 3);
                     $aMapaAprop['codsiaficcodigoorcamentario'] = '0000';
                     // $aMapaAprop['grupfontanalitica'] = $oContaContabil->grupfontanalitica;
                     // $aMapaAprop['espfontanalitica'] = $oContaContabil->espfontanalitica;
@@ -197,14 +214,14 @@ class Caspweb {
                     $aMapaAprop['credito'] = $oContaContabil->credito;
 
 
-                    $this->aMapa[$sHash] = $aMapaAprop;
+                    $this->aMapa[] = $aMapaAprop;
 
-                } else {
+                // } else {
 
-                    $this->aMapa[$sHash]['debito'] += $oContaContabil->debito;
-                    $this->aMapa[$sHash]['credito'] += $oContaContabil->credito;
+                //     $this->aMapa[$sHash]['debito'] += $oContaContabil->debito;
+                //     $this->aMapa[$sHash]['credito'] += $oContaContabil->credito;
 
-                }
+                // }
 
             }
 
@@ -213,6 +230,8 @@ class Caspweb {
     }
 
     public function gerarMapaRsp () {
+
+        $clDeParaRecurso = new DeParaRecurso;
 
         $aContasContRSP = "'531200000000000', '532200000000000', '631100000000000', '631200000000000', '631300000000000', 
                             '631400000000000', '631910000000000', '632100000000000', '632200000000000', '632910000000000', '631990000000000', '632990000000000'";
@@ -259,6 +278,11 @@ class Caspweb {
                                     WHEN substr(o56_elemento,2,2) = '44' and e60_anousu < 2021 THEN '04'
                                     ELSE '00'
                                 END AS fonte,
+                                o15_codtri AS codfonte,
+                                CASE
+                                    WHEN e60_codco IS NOT NULL THEN e60_codco
+                                    ELSE '0000'
+                                END AS codco,
                                 e60_codemp nroempenho,
                                 e60_numemp numemp,
                                 e60_anousu anoinscricao
@@ -284,6 +308,10 @@ class Caspweb {
             for ($iContRestos = 0; $iContRestos < pg_num_rows($rsRestos); $iContRestos++) {
 
                 $oResto = db_utils::fieldsMemory($rsRestos, $iContRestos);
+
+                if (strlen($oResto->codfonte) == 3 || $oResto->codfonte == '1'){
+                    $oResto->codfonte = $clDeParaRecurso->getDePara($oResto->codfonte);
+                }
 
                 $sSqlDebCred = "    SELECT 
                                             coalesce((SELECT sum(c69_valor)
@@ -333,9 +361,10 @@ class Caspweb {
                     $sDotacaoOrcamentaria .= substr($oResto->acao,0,1).".".substr($oResto->acao,1,3).".";//Ação: o58_projativ
                     $sDotacaoOrcamentaria .= "0001.";                       //Sub-ação: o55_origemacao eu não sei se tá retornando no sistema, mas é sempre 0001
                     $sDotacaoOrcamentaria .= "$oResto->naturezadadespesa";  //Natureza Despesa: substr(o56_elemento,2,6)
-                    $sDotacaoOrcamentaria .= "$oResto->itemdespesa.";        //Item Despesa: substr(o56_elemento,8,2)
-                    $sDotacaoOrcamentaria .= "$oResto->fonte";              //Fonte: elemento iniciado em 31 a fonte é 01, ini em 33 é 03 e ini em 44 é 04
-                    $sDotacaoOrcamentaria .= "00";                          //Fonte Detalhe: 00
+                    $sDotacaoOrcamentaria .= "$oResto->itemdespesa";        //Item Despesa: substr(o56_elemento,8,2)
+                    // $sDotacaoOrcamentaria .= "$oResto->itemdespesa.";        //Item Despesa: substr(o56_elemento,8,2)
+                    // $sDotacaoOrcamentaria .= "$oResto->fonte";              //Fonte: elemento iniciado em 31 a fonte é 01, ini em 33 é 03 e ini em 44 é 04
+                    // $sDotacaoOrcamentaria .= "00";                          //Fonte Detalhe: 00
 
                     //OC14173
                     if ($sDotacaoOrcamentaria == '0101.1000.09.272.033.000.3.003.0001.31900101.0100') {
@@ -360,10 +389,10 @@ class Caspweb {
                         $aMapaRsp['dotorcamentaria'] = $sDotacaoOrcamentaria;
                         $aMapaRsp['tipopesssoa'] = '';
                         $aMapaRsp['codcred_forn'] = '';
-                        $aMapaRsp['codgruposiafic'] = '1';
-                        $aMapaRsp['codsiaficfonte'] = '500';
-                        $aMapaRsp['codsiaficdetalhamentofonte'] = '000';
-                        $aMapaRsp['codsiaficcodigoorcamentario'] = '0000';
+                        $aMapaRsp['codgruposiafic'] = substr($oResto->codfonte, 0, 1);
+                        $aMapaRsp['codsiaficfonte'] = substr($oResto->codfonte, 1, 3);
+                        $aMapaRsp['codsiaficdetalhamentofonte'] = substr($oResto->codfonte, 4, 3);
+                        $aMapaRsp['codsiaficcodigoorcamentario'] = $oResto->codco;
                         // $aMapaRsp['grupfontanalitica'] = '';
                         // $aMapaRsp['espfontanalitica'] = '';
                         $aMapaRsp['instjuridico'] = '';
