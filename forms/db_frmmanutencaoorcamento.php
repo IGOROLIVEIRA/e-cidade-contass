@@ -1,4 +1,4 @@
-<form name="form1" method="post" action="" enctype="multipart/form-data">
+<form id="form1" name="form1" method="post" action="" enctype="multipart/form-data">
     <center>
         <table border="0" style="width: 80%; align:center;">
             <tr>
@@ -31,6 +31,11 @@
                                     <td>
                                         <?php
                                             db_input('l20_codigo', 12, '', true, 'text', 1, "onchange='pesquisaLicitacao(false);'");
+                                        ?>
+                                    </td>
+                                    <td style="display:none;">
+                                        <?php
+                                            db_input('codigoorcamento', 12, 1, true, 'text', 1, "");
                                         ?>
                                     </td>
                                 </tr>
@@ -103,8 +108,11 @@
                                 </td>
                             </tr>
                         </table>
-                        <div style="margin-top:10px;" id='gridItensOrcamento'></div>
-
+                        <div style="margin-top:10px;" id='gridItensOrcamento'>
+                        </div>
+                        <center>
+                            <input style="margin-top:10px;" type='button' value="Salvar" onclick="salvar();" />
+                        </center>
                     </fieldset>
                 <td>
             </tr>
@@ -115,11 +123,12 @@
 
     const oGridItensOrcamento          = new DBGrid('gridItensOrcamento');
     oGridItensOrcamento.nameInstance = 'oGridProcessoCompra';
-    oGridItensOrcamento.setCellWidth( [ '5%', '5%', '25%','15%','10%','10%','10%', '10%', '10%'] );
-    oGridItensOrcamento.setHeader( [ 'Item', 'Código', 'Descrição','Marca','Quantidade','Qtde. Orçada','Porcentagem','Valor Unit.','Valor Total'] );
-    oGridItensOrcamento.setCellAlign( [ 'center', 'center', 'left','left','center','center','center','center','center'] );
+    oGridItensOrcamento.setCellWidth( [ '0%','0%','5%', '5%', '20%','20%','10%','10%','10%', '10%', '10%'] );
+    oGridItensOrcamento.setHeader( [ '','','Item', 'Código', 'Descrição','Marca','Quantidade','Qtde. Orçada','Porcentagem','Valor Unit.','Valor Total'] );
+    oGridItensOrcamento.setCellAlign( [ 'center','center','center', 'center', 'left','left','center','center','center','center','center'] );
     oGridItensOrcamento.setHeight(130);
-    //oGridItensOrcamento.aHeaders[0].lDisplayed = false;
+    oGridItensOrcamento.aHeaders[0].lDisplayed = false;
+    oGridItensOrcamento.aHeaders[1].lDisplayed = false;
     oGridItensOrcamento.show($('gridItensOrcamento'));
     oGridItensOrcamento.renderRows();
 
@@ -250,8 +259,18 @@
             return alert("Nenhum orçamento selecionado! Selecione pelo menos um Orçamento ou Processo.");
         }
 
+        codigoOrcamento = codigoOrcamento != "" ? codigoOrcamento : null;
+        codigoProcessoCompra = codigoProcessoCompra != "" ? codigoProcessoCompra : null;
+        codigoLicitacao = codigoLicitacao != "" ? codigoLicitacao : null;
+
         let oParametros = new Object();
-        oParametros.sequencial = document.getElementById("l20_codigo").value;
+        oParametros.sExecuta = "processar";
+        oParametros.codigoOrcamento = codigoOrcamento;
+        oParametros.codigoProcessoCompra = codigoProcessoCompra;
+        oParametros.codigoLicitacao = codigoLicitacao;
+
+        js_divCarregando('Carregando dados do orçamento...', 'msgBox');
+
         let oAjax = new Ajax.Request('m4_manutencaoorcamento.RPC.php', {
             method: 'post',
             parameters: 'json=' + Object.toJSON(oParametros),
@@ -263,10 +282,19 @@
 
     function retornoProcessamento(oAjax) {
 
+        js_removeObj('msgBox');
         let oRetorno = eval("(" + oAjax.responseText + ")");
+
+        if(oRetorno.status == 2){
+            limparCampos(oGridItensOrcamento);
+            return alert(oRetorno.erro.urlDecode());
+        }
+
         if (oRetorno.status == 1) {
+
             oGridItensOrcamento.clearAll(true);
 
+            document.getElementById('codigoorcamento').value = oRetorno.codigoorcamento;
             document.getElementById('pc20_dtate').value = oRetorno.dataorcamento;
             document.getElementById('pc20_hrate').value = oRetorno.horadoorcamento;
             document.getElementById('pc20_prazoentrega').value = oRetorno.prazoentrega;
@@ -276,21 +304,89 @@
 
             oRetorno.itens.each(function (oItem, iItem) {
                 let aLinha = [];
-                aLinha.push(oItem.item);
-                aLinha.push(oItem.codigo);
-                aLinha.push(oItem.descricao);
-                aLinha.push(oItem.marca);
-                aLinha.push(oItem.qtddorcada);
-                aLinha.push(oItem.qtddsolicitada);
-                aLinha.push("TESTE");
-                aLinha.push(oItem.vlrun);
-                aLinha.push(oItem.vlrtotal);
+                aLinha.push(`<input name="orcamforne[]" type='text' style='text-align: center;width:100%;' value='${oItem.orcamforne}' /> `);
+                aLinha.push(`<input name="orcamitem[]" type='text' style='text-align: center;width:100%;' value='${oItem.orcamitem}' /> `);
+                aLinha.push(`<input readonly type='text' style='text-align: center;width:100%;border: none;' value='${oItem.item}' /> `);
+                aLinha.push(`<input readonly type='text' style='text-align: center;width:100%;border: none;' value='${oItem.codigo}' /> `);
+                aLinha.push(`<input readonly type='text' title='${oItem.descricao}' style='text-align: left;width:100%;border: none;' value='${oItem.descricao}' /> `);
+                aLinha.push(`<input name="marca[]" type='text' title='${oItem.marca}' style='text-align: left;width:100%;' value='${oItem.marca}' /> `);
+                aLinha.push(`<input readonly type='text' style='text-align: center;width:100%;border: none;' value='${oItem.qtddsolicitada}' /> `);
+                aLinha.push(`<input name="qtddorcada[]" type='text' style='text-align: center;width:100%;' oninput="js_ValidaCampos(this,4,'Qtde. Orçada','','',event);" value='${oItem.qtddorcada}' /> `);
+                aLinha.push(`<input name="porcentagem[]" type='text' style='text-align: center;width:100%;border: none;' value='${oItem.porcentagem}' /> `);
+                aLinha.push(`<input name="vlrun[]" type='text' oninput="js_ValidaCampos(this,4,'Qtde. Orçada','','',event);formataValor(event,4);" style='text-align: center;width:100%;' value='${oItem.vlrun}' /> `);
+                aLinha.push(`<input name="vlrtotal[]" type='text' style='text-align: center;width:100%;' oninput="js_ValidaCampos(this,4,'Qtde. Orçada','','',event);formataValor(event,2);" value='${oItem.vlrtotal}' /> `);
                 oGridItensOrcamento.addRow(aLinha);
-
             });
+
             oGridItensOrcamento.renderRows();
 
+            if(oRetorno.criterioadjudicacao == "3") oGridItensOrcamento.showColumn(false,9);
+            if(oRetorno.criterioadjudicacao != "3") oGridItensOrcamento.showColumn(true,9);
+
         }
+    }
+
+    function salvar() {
+
+        let oParametros = new Object();
+        oParametros.sExecuta = "salvar";
+        oParametros.codigoorcamento = document.getElementById('codigoorcamento').value;
+        oParametros.pc20_dtate = document.getElementById("pc20_dtate").value;
+        oParametros.pc20_hrate = document.getElementById("pc20_hrate").value;
+        oParametros.pc20_prazoentrega = document.getElementById("pc20_prazoentrega").value;
+        oParametros.pc20_validadeorcamento = document.getElementById("pc20_validadeorcamento").value;
+        oParametros.pc20_cotacaoprevia = document.getElementById("pc20_cotacaoprevia").value;
+        oParametros.pc20_obs = encodeURIComponent(tagString(document.getElementById("pc20_obs").value));
+        oParametros.aItens = new Array();
+
+        for(i = 0; i < oGridItensOrcamento.getNumRows(); i++) {
+            oItem = new Object();
+            oItem.orcamforne = document.getElementsByName("orcamforne[]")[i].value;
+            oItem.orcamitem = document.getElementsByName("orcamitem[]")[i].value;
+            oItem.marca = document.getElementsByName("marca[]")[i].value;
+            oItem.qtddorcada = document.getElementsByName("qtddorcada[]")[i].value;
+            oItem.vlrun = document.getElementsByName("vlrun[]")[i].value;
+            oItem.vlrtotal = document.getElementsByName("vlrtotal[]")[i].value;
+            oItem.porcentagem = document.getElementsByName("porcentagem[]")[i].value;
+            oParametros.aItens.push(oItem);
+        }
+
+        js_divCarregando('Salvando alterações...', 'msgBox');
+
+        let oAjax = new Ajax.Request('m4_manutencaoorcamento.RPC.php', {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParametros),
+            onComplete: retornoSalvar
+
+        });
+
+    }
+
+    function retornoSalvar(oAjax) {
+
+        js_removeObj('msgBox');
+        let oRetorno = eval("(" + oAjax.responseText + ")");
+        alert(oRetorno.erro.urlDecode());
+
+    }
+
+    function formataValor(e,casasdecimais){
+        if(casasdecimais == 4) return e.target.value = e.target.value.replace(/(\.\d{1,4}).*/g, '$1');
+        if(casasdecimais == 2) return e.target.value = e.target.value.replace(/(\.\d{1,2}).*/g, '$1');
+    }
+
+    function limparCampos(oGrid){
+        oGrid.clearAll(true);
+        document.getElementById('codigoorcamento').value = "";
+        document.getElementById("pc20_dtate").value = "";
+        document.getElementById("pc20_hrate").value = "";
+        document.getElementById("pc20_prazoentrega").value = "";
+        document.getElementById("pc20_validadeorcamento").value = "";
+        document.getElementById("pc20_cotacaoprevia").value = "";
+        document.getElementById("pc20_obs").value = "";
+        document.getElementById("pc20_codorc").value = "";
+        document.getElementById("pc80_codproc").value = "";
+        document.getElementById("l20_codigo").value = "";
     }
 
 </script>
