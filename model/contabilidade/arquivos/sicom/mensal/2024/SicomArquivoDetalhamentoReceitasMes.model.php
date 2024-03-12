@@ -234,8 +234,8 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                          */
                         $sHash11 = substr($oDadosRec->o70_codigo, 0, 7) . $sEmParlamentar;
 
-                        if (!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
-
+                        if (!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11]) || in_array(substr($oDadosRec->o70_codigo, 0, 7), array('1574000','1634000','1754000')))    {
+                            
                             $var = trim("\ ");
                             $sSql = "SELECT taborc.k02_estorc,
                                     CASE
@@ -313,12 +313,14 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                             for ($iContCgm = 0; $iContCgm < pg_num_rows($result); $iContCgm++) {
 
                                 $oCodFontRecursos = db_utils::fieldsMemory($result, $iContCgm);
-
+                                
                                 // Criação padrão de hash
+                                // || in_array(substr($oDadosRec->o70_codigo, 0, 7), array('1574000','1634000','1754000'))
                                 $sHashCgm = $sHash10 . $sHash11
                                     . $oCodFontRecursos->z01_cgccpf
                                     . $oCodFontRecursos->c206_nroconvenio
                                     . $oCodFontRecursos->c206_dataassinatura
+                                    . $oCodFontRecursos->op01_numerocontratoopc
                                     . (in_array($oControleOrcamentario->getCodigoPorReceita(), array('1001', '1002', '1070')) ? '0000' : $oControleOrcamentario->getCodigoPorReceita());
                                 // Condição para criação do convênio
                                 if (!isset($aDadosCgm11[$sHashCgm]) && $oCodFontRecursos->c206_nroconvenio != '') {
@@ -368,12 +370,38 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
                                 }
 
+                                if (!isset($aDadosCgm11[$sHashCgm]) && in_array(substr($oDadosRec->o70_codigo, 0, 7), array('1574000','1634000','1754000'))) {
+                                    
+                                    $oDados11 = new stdClass();
+                                    $oDados11->si26_tiporegistro = 11;
+                                    $oDados11->si26_codreceita = $oCodFontRecursos->o70_codrec;
+                                    $oDados11->si26_codfontrecursos = substr($oCodFontRecursos->o15_codtri, 0, 7);
+                                    $oDados11->si26_codigocontroleorcamentario = in_array($oControleOrcamentario->getCodigoPorReceita(), array('1001', '1002', '1070')) ? '0000' : $oControleOrcamentario->getCodigoPorReceita();
+                                    if(strlen($oCodFontRecursos->z01_cgccpf) == 11){
+                                        $oDados11->si26_tipodocumento = 1;
+                                    } elseif (strlen($oCodFontRecursos->z01_cgccpf) == 14){
+                                        $oDados11->si26_tipodocumento = 2;
+                                    }else{
+                                        $oDados11->si26_tipodocumento = "";
+                                    }
+                                    $oDados11->si26_cnpjorgaocontribuinte = $oCodFontRecursos->z01_cgccpf;
+                                    $oDados11->si26_nroconvenio = $oCodFontRecursos->c206_nroconvenio;
+                                    $oDados11->si26_dataassinatura = $oCodFontRecursos->c206_dataassinatura;
+                                    $oDados11->si26_nrocontratoop = $oCodFontRecursos->op01_numerocontratoopc;
+                                    $oDados11->si26_dataassinaturacontratoop = $oCodFontRecursos->op01_dataassinaturacop;
+                                    $oDados11->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                                    $oDados11->si26_vlarrecadadofonte = $oCodFontRecursos->c70_valor;
+
+                                    $aDadosCgm11[$sHashCgm] = $oDados11;
+                                   
+                                }
+
                                 if ($oCodFontRecursos->z01_cgccpf != '' OR $oCodFontRecursos->c206_nroconvenio != '') {
                                     $aDadosCgm11[$sHashCgm]->si26_vlarrecadadofonte += $oCodFontRecursos->c70_valor;
                                 }
-
                             }
-
+                            // echo "<pre>";
+                            //         print_r($aDadosCgm11);
                             $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
 
                             if(!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]) && empty($aDadosCgm11)) {
@@ -397,7 +425,9 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                 $aDados->si26_dataassinaturacontratoop = $oCodFontRecursos->op01_dataassinaturacop;
                                 $aDados->si26_vlarrecadadofonte = $oCodDoc2->c70_valor;
                                 $aDados->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-
+                                
+                                // echo "<pre>"; print_r($oCodFontRecursos);
+                                // echo "<pre>"; print_r($aDados);
                                 $aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11] = $aDados;
 
                             }

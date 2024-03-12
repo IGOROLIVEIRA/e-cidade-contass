@@ -43,7 +43,7 @@ class RetificaitensPNCP extends ModeloBasePNCP
 
         //DISPENSA E INEXIGIBILIDADE
         if($oDado[0]->modalidadeid == "8" || $oDado[0]->modalidadeid == "9"){
-            $oDadosAPI->situacaoCompraItemId        = $oDado[0]->pc23_vlrun > 0 ? 2 : 4;
+            $oDadosAPI->situacaoCompraItemId        = $oDado[0]->pc23_orcamforne ? 2 : 4;
             $oDadosAPI->criterioJulgamentoId        = 7;
         }
 

@@ -15,6 +15,7 @@ class DeParaRecurso
 
     public function getDePara($de)
     {
+        $de = $de == 1 ? 100 : $de;
         $iPrimeiroDigito = strlen(ltrim($de,0)) == 3 ? substr(ltrim($de,0),0,1) : substr($de, 0, 1);
         $de = strlen(ltrim($de,0)) == 3 ? substr(ltrim($de,0),1,2) : substr($de, 1, 7);
         return (array_key_exists($de, $this->dePara)) ? $iPrimeiroDigito . $this->dePara[$de] : $iPrimeiroDigito . $de;

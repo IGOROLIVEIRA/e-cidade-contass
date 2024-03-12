@@ -228,7 +228,7 @@ class ContratoPNCP extends ModeloBasePNCP
         return $retorno;
     }
 
-    public function enviarArquivoContrato($dados, $file, $Documentos)
+    public function enviarArquivoContrato($dados, $file, $Documentos,$tipoAnexo)
     {
 
         $token = $this->login();
@@ -250,7 +250,7 @@ class ContratoPNCP extends ModeloBasePNCP
             'Content-Type: multipart/form-data',
             'Authorization: ' . $token,
             'Titulo-Documento: Contrato ' . $dados->ac213_sequencialpncp . "/" . $dados->ac213_ano . " Anexo " . $Documentos,
-            'Tipo-Documento-Id: 12'
+            'Tipo-Documento-Id:' . $tipoAnexo
         );
 
         $optionspncp = $this->getParancurl('POST',$arquivo,$headers,false,true);
