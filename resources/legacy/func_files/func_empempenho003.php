@@ -58,8 +58,8 @@ $todos = !empty($todos) && (int)$todos === 1;
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <script>
-        function js_mascara(evt) {
-            let evt;
+        function js_mascara(event) {
+            let evt = event;
 
             if (!evt) {
                 if (window.event) {

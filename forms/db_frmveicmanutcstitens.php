@@ -298,7 +298,7 @@ db_app::load("estilos.css, grid.style.css");
 
             <tr id="" style="display: none;">
                 <td nowrap title="<?= $Tve62_numemp ?>">
-                    <? db_ancora("Seq. Empenhooo", "js_pesquisae60_codemp(true);", 1); ?>
+                    <? db_ancora("Seq. Empenho", "js_pesquisae60_codemp(true);", 1); ?>
 
                 </td>
 
@@ -877,9 +877,13 @@ db_app::load("estilos.css, grid.style.css");
     }
     //Para filtrar apenas empenhos com o elemento 333903037000000, usar o parametro filtromanut=1
     function js_pesquisae60_codemp(mostra) {
+        if (empty($F("ve62_itensempenho"))) {
+            alert('Informe o campo Itens do empenho SIM ou NÃO.');
+            return false;
+        }
         var itememp = $F("ve62_itensempenho");
-
         if (itememp == 1) {
+
             var ve62_dtmanut = $F("ve62_dtmanut");
             var e60_codemp = $F("e60_codemp");
             if (mostra == true) {
@@ -910,6 +914,7 @@ db_app::load("estilos.css, grid.style.css");
                 }
             }
         }
+
     }
 
 
