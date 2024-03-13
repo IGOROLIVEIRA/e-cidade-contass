@@ -91,7 +91,7 @@ class GerarBO extends GerarAM
         $aCSVBO20['si202_tiporegistro']           = $this->padLeftZero($aBO20['si202_tiporegistro'], 2);
         $aCSVBO20['si202_faserecorcamentaria']    = $this->padLeftZero($aBO20['si202_faserecorcamentaria'], 1);
         $aCSVBO20['si202_vlsaldoexeantsupfin']    = $this->sicomNumberReal($aBO20['si202_vlsaldoexeantsupfin'], 2);
-        $aCSVBO20['si202_vlsaldoexeantrecredad']  = $this->sicomNumberReal($aBO20['si202_vlsaldoexeantrecredad'], 2);
+        // $aCSVBO20['si202_vlsaldoexeantrecredad']  = $this->sicomNumberReal($aBO20['si202_vlsaldoexeantrecredad'], 2);
         $aCSVBO20['si202_vltotalsaldoexeant']     = $this->sicomNumberReal($aBO20['si202_vltotalsaldoexeant'], 2);
 
         $this->sLinha = $aCSVBO20;
