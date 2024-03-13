@@ -73,12 +73,20 @@ switch ($oParam->exec) {
     case 'enviarResultado':
         $clliclicita           = new cl_liclicita();
         $clliccontrolepncp     = new cl_liccontrolepncp();
+        $clliccontrolepncpitens = new cl_liccontrolepncpitens();
+
         //Buscos Chave da compra no PNCP
         $rsAvisoPNCP = $clliccontrolepncp->sql_record($clliccontrolepncp->sql_query(null, "l213_numerocompra,l213_anousu", null, "l213_licitacao = $oParam->iLicitacao limit 1"));
         $oDadosAvisoPNCP = db_utils::fieldsMemory($rsAvisoPNCP, 0);
         try {
             foreach ($oParam->aItensLicitacao as $item) {
-                $clliccontrolepncpitens = new cl_liccontrolepncpitens();
+
+                //verifica se ja foi enviado resultado do item
+                $rsPNCP = $clliccontrolepncpitens->sql_record($clliccontrolepncpitens->sql_query(null, "*", null, "l214_ordem = $item->l21_ordem and l214_licitacao=$oParam->iLicitacao and l214_fornecedor = $item->z01_numcgm"));
+
+                if (pg_num_rows($rsPNCP)) {
+                    throw new Exception('Rusultado deste Fornecedor ja foi enviado ao PNCP para esse Item seq: ' . $item->l21_ordem);
+                }
 
                 $aItensLicitacao = array();
                 $rsResultado = $clliclicita->sql_record($clliclicita->sql_query_resultado_pncp($oParam->iLicitacao, $item->l21_ordem,$item->z01_numcgm));
