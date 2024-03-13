@@ -24,6 +24,7 @@ class cl_rpsd112024 {
   public $si190_reg10 = 0;
   public $si190_mes = 0;
   public $si190_instit = 0;
+  public $si190_codco = 0;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
                  si190_sequencial = int8 = Sequencial
@@ -34,6 +35,7 @@ class cl_rpsd112024 {
                  si190_reg10 = int8 = Registro 10
                  si190_mes = int8 = Mês
                  si190_instit = int8 = Instituição
+                 si190_codco = varchar = Codigo CO
                  ";
 
   //funcao construtor da classe
@@ -64,6 +66,7 @@ class cl_rpsd112024 {
        $this->si190_reg10 = ($this->si190_reg10 == ""?@$GLOBALS["HTTP_POST_VARS"]["si190_reg10"]:$this->si190_reg10);
        $this->si190_mes = ($this->si190_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si190_mes"]:$this->si190_mes);
        $this->si190_instit = ($this->si190_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si190_instit"]:$this->si190_instit);
+       $this->si190_codco = ($this->si190_codco == ""?@$GLOBALS["HTTP_POST_VARS"]["si190_codco"]:$this->si190_codco); 
      } else {
        $this->si190_sequencial = ($this->si190_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si190_sequencial"]:$this->si190_sequencial);
      }
@@ -135,6 +138,15 @@ class cl_rpsd112024 {
        $this->erro_status = "0";
        return false;
      }
+     if ($this->si190_codco == null ) {
+      $this->erro_sql = " Campo Codigo CO não informado.";
+      $this->erro_campo = "si190_codco";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      if ($si190_sequencial == "" || $si190_sequencial == null ) {
        $result = db_query("select nextval('rpsd112024_si190_sequencial_seq')");
        if ($result==false) {
@@ -176,6 +188,7 @@ class cl_rpsd112024 {
                                       ,si190_reg10
                                       ,si190_mes
                                       ,si190_instit
+                                      ,si190_codco
                        )
                 values (
                                 $this->si190_sequencial
@@ -186,6 +199,7 @@ class cl_rpsd112024 {
                                ,$this->si190_reg10
                                ,$this->si190_mes
                                ,$this->si190_instit
+                               ,$this->si190_codco
                       )";
      $result = db_query($sql);
      if ($result==false) {
@@ -344,6 +358,22 @@ class cl_rpsd112024 {
          return false;
        }
      }
+     if (trim($this->si190_codco)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si190_codco"])) {
+      $sql  .= $virgula." si190_codco = $this->si190_codco ";
+      $virgula = ",";
+      if (trim($this->si190_codco) == null ) {
+        $this->erro_sql = " Campo Codigo CO não informado.";
+        $this->erro_campo = "si190_codco";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+
+
+     
      $sql .= " where ";
      if ($si190_sequencial!=null) {
        $sql .= " si190_sequencial = $this->si190_sequencial";
