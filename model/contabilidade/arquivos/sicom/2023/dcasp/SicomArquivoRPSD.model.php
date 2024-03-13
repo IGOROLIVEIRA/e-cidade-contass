@@ -108,7 +108,8 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                                 sum(CASE
                                         WHEN c53_tipo = 31 THEN c70_valor * -1 
                                         ELSE c70_valor 
-                                    END) AS vlpagofontersp
+                                    END) AS vlpagofontersp,
+                                e60_codco    
                         FROM empempenho 
                         INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu
                         INNER JOIN orcprojativ ON o58_anousu = o55_anousu AND o58_projativ = o55_projativ
@@ -124,7 +125,7 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                           AND e60_instit = ".$oInstit->codigo." 
                           AND o15_codtri = '" . $iFonte . "' 
                           AND DATE_PART('YEAR',c70_data) = ".db_getsession("DB_anousu") ."
-                          AND e60_anousu between 2012 AND 2019
+                          AND e60_anousu between 2012 AND 2022
                         GROUP BY 1,2,3,4,5,6,7,8,9,10,11
                         ORDER BY e60_emiss";
               $rsRPPago = db_query($sSqlRP);
@@ -178,6 +179,7 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                   $clrpsd11->si190_tiporegistro = 11;
                   $clrpsd11->si190_codreduzidorsp = $oDadosRPSD->codreduzidorsp;
                   $clrpsd11->si190_codfontrecursos = $iFonteAlterada;
+                  $clrpsd11->si190_codco = $oDadosRPSD->e60_codco ? $oDadosRPSD->e60_codco : "0000";
                   $clrpsd11->si190_vlpagofontersp = $oDadosRPSD->vlpagofontersp;
                   $clrpsd11->si190_reg10 = $clrpsd10->si189_sequencial;
                   $clrpsd11->si190_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
