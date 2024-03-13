@@ -178,17 +178,22 @@ if ($e53_codord) {
              * @see: Ocorrência 1814.
              */
             $nValorOrdem = getValorOP($oDados->k00_codord, $oDados->k17_codigo);
-            if (!empty($oDados->k00_codord)) {
-                $rsResultCodOrd = db_query("SELECT sum(k00_valorpag) as vlpago FROM ordembancariapagamento WHERE k00_codord = {$oDados->k00_codord} having sum(k00_valorpag) >= {$nValorOrdem}");
-            }
+            /**
+             * OC22076
+             */
+            // if (!empty($oDados->k00_codord)) {
+            //     $rsResultCodOrd = db_query("SELECT sum(k00_valorpag) as vlpago FROM ordembancariapagamento WHERE k00_codord = {$oDados->k00_codord} having sum(k00_valorpag) >= {$nValorOrdem}");
+            // }
             if (!empty($oDados->k17_codigo)) {
                 $rsResultSlip = db_query("SELECT sum(k00_valorpag) as vlpago FROM ordembancariapagamento WHERE k00_slip = {$oDados->k17_codigo} having sum(k00_valorpag) >= {$nValorOrdem}");
             }
             if ($oDados->k00_contabanco == '') {
                 $oDados->k00_contabanco = 0;
             }
-
-            if (pg_num_rows($rsResultCodOrd) == 0 && pg_num_rows($rsResultSlip) == 0) {
+            /**
+             * OC22076
+             */
+            if (/* pg_num_rows($rsResultCodOrd) == 0 &&*/ pg_num_rows($rsResultSlip) == 0) {
                 if ($oDados->k00_codord == '') {
                     $oDados->k00_codord = 'null';
                 }
