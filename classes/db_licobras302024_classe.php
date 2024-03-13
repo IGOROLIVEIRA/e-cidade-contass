@@ -176,60 +176,17 @@ class cl_licobras302024 {
             return false;
         }
 
-//        if ($this->si203_dscalteracao == null ) {
-//            $this->erro_sql = " Campo descricao alteracao não informado.";
-//            $this->erro_campo = "si203_dscalteracao";
-//            $this->erro_banco = "";
-//            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//            $this->erro_status = "0";
-//            return false;
-//        }
-
-        if ($this->si203_novadatatermino == null ) {
-            $this->erro_sql = " Campo nova data de termino não informado.";
-            $this->erro_campo = "si203_novadatatermino";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-            $this->erro_status = "0";
-            return false;
+        if ($this->si203_dscalteracao == null ) {
+            $this->si203_dscalteracao = null;
         }
 
-        if ($this->si203_tipodetalhamento == null ) {
-            $this->erro_sql = " Campo tipo detalhamento nao informado não informado.";
-            $this->erro_campo = "si203_tipodetalhamento";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-            $this->erro_status = "0";
-            return false;
+        if ($this->si203_novadatatermino == null ) {
+            $this->si203_novadatatermino = null;
         }
 
         if ($this->si203_valoraditivo == null ) {
             $this->si203_valoraditivo = 0;
         }
-
-        if ($this->si203_mes == null ) {
-            $this->erro_sql = " Campo mes não informado.";
-            $this->erro_campo = "si203_mes";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-
-        if ($this->si203_instit == null ) {
-            $this->erro_sql = " Campo instituicao não informado.";
-            $this->erro_campo = "si203_instit";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-
 
         $sql = "insert into licobras302024(
                                        si203_sequencial
@@ -259,7 +216,7 @@ class cl_licobras302024 {
                                ,$this->si203_tipoalteracaovalor
                                ,'$this->si203_tipotermoaditivo'
                                ,'$this->si203_dscalteracao'
-                               ,'$this->si203_novadatatermino'
+                               ," . ($this->si203_novadatatermino == "null" || $this->si203_novadatatermino == "" ? "null" : "'" . $this->si203_novadatatermino . "'") . "
                                ,$this->si203_tipodetalhamento
                                ,$this->si203_valoraditivo
                                ,$this->si203_mes

@@ -764,8 +764,34 @@ class cl_balancete312024
                                 WHERE substr(c60_estrut,1 ,1 ) in ('4')
                                 AND c19_reduz IN (" . implode(',', $aContas) . ")
                                 AND conplanoorcamentoanalitica.c61_instit = " . db_getsession('DB_instit') . "
-                                AND conplanoorcamentoanalitica.c61_anousu = " . db_getsession("DB_anousu");
+                                AND conplanoorcamentoanalitica.c61_anousu = " . db_getsession("DB_anousu") . "
+                                AND ( o15_codtri not in ('1574000','1634000','1754000') AND op01_numerocontratoopc is  null OR (o15_codtri in ('1574000','1634000','1754000') AND op01_numerocontratoopc is not null))
+                                ";
             return $sSqlVinculoContaOrcamento;
+  }
+
+  function sql_query_vinculo_conta_orcamentoop($aContas, $nContaCorrente, $sEstrut, $nMes, $sWhereEncerramento, $whereEmenda)
+  {
+            $sSqlVinculoContaOrcamento = " SELECT *
+                                            FROM conlancamval
+                                            INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                                            AND conlancam.c70_anousu = conlancamval.c69_anousu
+                                            INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                            INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                                            INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                                            INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                                            WHERE c28_tipo = 'C'
+                                                AND DATE_PART('MONTH',c69_data) = " . $nMes . "
+                                                AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
+                                                AND c19_contacorrente = {$nContaCorrente}
+                                                AND c19_reduz IN (" . implode(',', $aContas) . ")
+                                                AND c19_estrutural = '{$sEstrut}'
+                                                {$whereEmenda}
+                                                {$sWhereEncerramento}
+                                             ";
+
+  
+                            return $sSqlVinculoContaOrcamento;
   }
 
   function sql_query_reg31_saldos($aContas, $nContaCorrente, $sEstrut, $nMes, $sWhereEncerramento, $whereEmenda)

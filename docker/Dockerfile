@@ -3,7 +3,7 @@ FROM ubuntu:22.04
 LABEL maintainer="igor@contassconsultoria.com.br.com.br"
 ENV GIT_SSH_COMMAND "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
-# Habilita modo não interativo na instalação de pacotes
+# Habilita modo n�o interativo na instalação de pacotes
 ENV DEBIAN_FRONTEND noninteractive
 
 # Desabilita o cache do gerenciador de pacote
@@ -194,4 +194,4 @@ USER contass
 #
 #RUN /var/www/html/composer install
 
-CMD ["/bin/bash", "/iniciar.sh"]
+#CMD ["/bin/bash", "/iniciar.sh"]

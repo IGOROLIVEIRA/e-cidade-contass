@@ -4,6 +4,7 @@ namespace App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Implementati
 
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IAuth;
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IConfiguration;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class Configuration implements IConfiguration
 {
@@ -62,7 +63,8 @@ class Configuration implements IConfiguration
 
     public function __construct()
     {
-        $this->authService = new Auth($this);
+        $session = new Session();
+        $this->authService = new Auth($this, $session);
     }
 
     /**

@@ -98,9 +98,9 @@ switch ($oParam->exec) {
 
                             }
 
-
+                            db_inicio_transacao();
                             $sSqlCampos = "SELECT column_name,data_type FROM information_schema.columns WHERE table_name ='" . $sTabela . "' order by table_name";
-                            $rsSqlCampos = db_query($sSqlCampos);
+                            $rsSqlCampos = pg_query($sSqlCampos);
                             $aCampos = db_utils::getColectionByRecord($rsSqlCampos);
 
                             $aSigla = explode('_', $aCampos[0]->column_name);
@@ -147,6 +147,26 @@ switch ($oParam->exec) {
                                     $oClasse->$sColuna = $mes;
                                 } elseif ($aux[1] == "instit") {
                                     $oClasse->$sColuna = db_getsession('DB_instit');
+                                } elseif ($aux[1] == "vlsaldoinicialfonte" && $sColuna == "si96_vlsaldoinicialfonte") {
+                                    $oClasse->$sColuna = str_replace("'","",trim($data[5]));
+                                } elseif ($aux[1] == "vlsaldofinalfonte" && $sColuna == "si96_vlsaldofinalfonte") {
+                                    $oClasse->$sColuna = str_replace("'","",trim($data[6]));
+                                } elseif ($aux[1] == "saldocec" && $sColuna == "si96_saldocec" ) {
+                                    $oClasse->$sColuna = $data[4];   
+                                } elseif ($aux[1] == "exerciciocompdevo" && $sColuna == "si165_exerciciocompdevo") {
+                                    $oClasse->$sColuna = $data[4] == '' ? $data[4] : 0;
+                                } elseif ($aux[1] == "vlsaldoanteriorfonte" && $sColuna == "si165_vlsaldoanteriorfonte") {
+                                    $oClasse->$sColuna = str_replace("'","",trim($data[5]));
+                                } elseif ($aux[1] == "natsaldoanteriorfonte" && $sColuna == "si165_natsaldoanteriorfonte" ) {
+                                    $oClasse->$sColuna = $data[6];
+                                } elseif ($aux[1] == "totaldebitos" && $sColuna == "si165_totaldebitos" ) {
+                                    $oClasse->$sColuna = str_replace("'","",trim($data[7]));   
+                                } elseif ($aux[1] == "totalcreditos" && $sColuna == "si165_totalcreditos" ) {
+                                    $oClasse->$sColuna = str_replace("'","",trim($data[8]));   
+                                } elseif ($aux[1] == "vlsaldoatualfonte" && $sColuna == "si165_vlsaldoatualfonte" ) {
+                                    $oClasse->$sColuna = str_replace("'","",trim($data[9]));  
+                                } elseif ($aux[1] == "natsaldoatualfonte" && $sColuna == "si165_natsaldoatualfonte" ) {
+                                    $oClasse->$sColuna = $data[10];     
                                 } elseif (substr($aux[1], 0, 3) == "reg") {
 
                                     $sTabelaAnterior = strtolower($aArquivoCSV[0]) . substr($aux[1], -2) . $ano;
@@ -208,7 +228,7 @@ switch ($oParam->exec) {
                             }
 
                         }
-
+                        db_fim_transacao();
                     }
                     fclose($handle);
                     db_fim_transacao();

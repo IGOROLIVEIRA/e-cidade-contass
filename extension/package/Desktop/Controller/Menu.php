@@ -1,4 +1,5 @@
 <?php
+
 namespace ECidade\Package\Desktop\Controller;
 
 use \ECidade\V3\Extension\Controller;
@@ -6,18 +7,21 @@ use \ECidade\V3\Extension\Exceptions\ResponseException;
 use \ECidade\Package\Desktop\Model\Menu as ModelMenu;
 use \Exception;
 
-class Menu extends Controller {
+class Menu extends Controller
+{
 
-  public function beforeAction() {
+  public function beforeAction()
+  {
     if (!$this->request->session()->has('DB_login')) {
-      throw new ResponseException("Sessão não inicializada.");
+      throw new ResponseException("Sessão n�o inicializada.");
     }
   }
 
   /**
    * @return array
    */
-  public function getInstituicoes() {
+  public function getInstituicoes()
+  {
 
     $oMenu = new ModelMenu();
     $aInstituicoes = \DBString::utf8_encode_all($oMenu->getInstituicoes());
@@ -27,7 +31,8 @@ class Menu extends Controller {
   /**
    * @return array
    */
-  public function getAreas() {
+  public function getAreas()
+  {
 
     $iInstitId = $this->request->get()->get('iInstitId');
     $oMenu = new ModelMenu();
@@ -39,7 +44,8 @@ class Menu extends Controller {
   /**
    * @return array
    */
-  public function getModulos() {
+  public function getModulos()
+  {
 
     $iInstitId = $this->request->get()->get('iInstitId');
     $iAreaId = $this->request->get()->get('iAreaId');
@@ -53,7 +59,8 @@ class Menu extends Controller {
   /**
    * @return array
    */
-  public function getItensMenu() {
+  public function getItensMenu()
+  {
 
     $iInstitId = $this->request->get()->get('iInstitId');
     $iAreaId = $this->request->get()->get('iAreaId');
@@ -70,12 +77,13 @@ class Menu extends Controller {
    * @param integer $instit
    * @return arrray
    */
-  public function search($needle = null, $instit = null) {
+  public function search($needle = null, $instit = null)
+  {
 
     ignore_user_abort(false);
 
     if (empty($instit)) {
-      throw new ResponseException('Instituição não informada.');
+      throw new ResponseException('Instituição n�o informada.');
     }
 
     $menus = $this->getEstruturaMenu($instit);
@@ -88,7 +96,7 @@ class Menu extends Controller {
     $search->threshold(1);
     $matches = array();
 
-    foreach($search->execute($needle) as $match) {
+    foreach ($search->execute($needle) as $match) {
       $matches[] = array(
         'highlight' => $match->highlight(),
         'score' => $match->score(),
@@ -103,10 +111,11 @@ class Menu extends Controller {
    * @param $instit
    * @return array
    */
-  public function getEstruturaMenu($instit = null) {
+  public function getEstruturaMenu($instit = null)
+  {
 
     if (empty($instit)) {
-      throw new ResponseException('Instituição não informada.');
+      throw new ResponseException('Instituição n�o informada.');
     }
 
     $this->request->session()->close();
@@ -119,10 +128,11 @@ class Menu extends Controller {
    * @param string $file
    * @return Stdclass
    */
-  public function getMenuArquivo($file = null) {
+  public function getMenuArquivo($file = null)
+  {
 
     if (empty($file)) {
-      throw new ResponseException('Arquivo não informado.');
+      throw new ResponseException('Arquivo n�o informado.');
     }
 
     $data = (object) array('id' => null, 'breadcrumb' => null, 'permission' => true);
@@ -138,10 +148,11 @@ class Menu extends Controller {
 
     $data->breadcrumb = $model->getBreadcrumbMenu($data->id);
     $data->permission = $model->getPermissaoMenu(
-      $this->request->session()->get('DB_anousu'), $this->request->session()->get('DB_modulo'), $data->id
+      $this->request->session()->get('DB_anousu'),
+      $this->request->session()->get('DB_modulo'),
+      $data->id
     );
 
     return \DBString::utf8_encode_all($data);
   }
-
 }

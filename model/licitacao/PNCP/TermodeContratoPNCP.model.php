@@ -109,8 +109,7 @@ class TermodeContrato extends ModeloBasePNCP
             'Authorization: ' . $token
         );
 
-        $optionspncp = $this->getParancurl('POST',$oDados,$headers,false,false);
-
+        $optionspncp = $this->getParancurl('POST',$oDados,$headers,false,true);
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
         curl_close($chpncp);

@@ -1,5 +1,4 @@
 <?php
-//ini_set('display_errors','on');
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -165,6 +164,7 @@ try {
             break;
 
         case "processarAditamento":
+            $clcondataconf = new cl_condataconf;
             if ($sqlerro == false) {
                 validaPeriodoSicom($oParam, $oRetorno);
             }

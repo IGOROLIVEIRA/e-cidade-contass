@@ -186,6 +186,7 @@ switch ($oParam->exec) {
         $sSqlRegistro .= "       inner join pcorcamitem    on pc26_orcamitem   = pc22_orcamitem  ";
         $sSqlRegistro .= " where cast('{$dtDia}' as date) between pc54_datainicio and pc54_datatermino ";
         $sSqlRegistro .= "   and l20_licsituacao = 10";
+        $sSqlRegistro .= "   and l20_instit = ".db_getsession('DB_instit');
         $sSqlRegistro .= " order by l21_codliclicita";
         $rsRegistro    = db_query($sSqlRegistro);
 
@@ -732,7 +733,8 @@ switch ($oParam->exec) {
         $sSql = "
             SELECT DISTINCT l03_pctipocompratribunal,
                             l03_codcom,
-                            l20_objeto
+                            l20_objeto,
+                            l20_tipoprocesso
                     FROM liclicita
                     INNER JOIN db_usuarios ON db_usuarios.id_usuario = liclicita.l20_id_usucria
                     INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
@@ -1786,17 +1788,17 @@ switch ($oParam->exec) {
 
 
         break;
-    
+
     case 'itensSemLoteCount':
         // Retorna a quantidade de itens sem lote
         $sqlItensSemLote = "
-            SELECT 
+            SELECT
                 COUNT(li.l21_codigo) AS itensSemLotCount
-            FROM 
+            FROM
                 liclicitem li
-            LEFT JOIN 
+            LEFT JOIN
                 liclicitemlote lil ON li.l21_codigo = lil.l04_liclicitem
-            WHERE 
+            WHERE
                 li.l21_codliclicita = $oParam->licitacao
                 AND lil.l04_liclicitem IS NULL;
         ";

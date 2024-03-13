@@ -198,7 +198,7 @@ if (isset($alterar) || isset($chavepesquisa)) {
     $erro_msg = $clsolicita->erro_msg;
 
     /**
-     * Alteração do cï¿½digo do Protocolo Administrativo
+     * Alteração do código do Protocolo Administrativo
      */
     if (!$sqlerro) {
       $pc90_sequencial              = null;
@@ -388,7 +388,7 @@ if (isset($alterar) || isset($chavepesquisa)) {
     } else if (isset($o74_sequencial) && $o74_sequencial != "") {
 
       /**
-       * Verificamos se o usuï¿½rio já cadastrou algum item
+       * Verificamos se o usuário já cadastrou algum item
        * caso tenha, nao podemos deixar o usuario vincular a solicitacao
        * a um pacto
        */
@@ -522,7 +522,7 @@ if (isset($chavepesquisa) || isset($pc10_numero)) {
     }
   }
   if($erro==true){
-    db_msgbox("Usuï¿½rio: \\n\\nFoi gerada autorização de empenho para um ou mais item desta solicitação.\\nSolicitação de compras não poderï¿½ ser alterada.\\n\\nAdiministrador:");
+    db_msgbox("Usuário: \\n\\nFoi gerada autorização de empenho para um ou mais item desta solicitação.\\nSolicitação de compras não poderï¿½ ser alterada.\\n\\nAdiministrador:");
     echo "<script>CurrentWindow.corpo.iframe_solicita.location.href = 'com1_solicita005.php'</script>";
   }
   */

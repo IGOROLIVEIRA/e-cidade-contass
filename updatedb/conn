@@ -45,7 +45,6 @@ cmfranciscodumont		5432 cmnavarro
 ammesf				    5432	e-cidade
 cii-amaje			    5432	e-cidade
 cimams				    5432	e-cidade
-cimva				    5432	e-cidade
 cindecon			    5432	e-cidade
 cmberizal			    5432	e-cidade
 cmbotumirim			    5432	e-cidade
@@ -138,6 +137,7 @@ e-cidade            5432 pmvarzelandiav3
 e-cidade            5432 pmibiracatuv3
 e-cidade            5432 pmsaojoaomissoes
 pmlagoadospatos     5432 pmsaojoaomissoes
+cimva               5432 pmsaojoaomissoes
 
 
 ammesf                  5432 e-cidadev3-prod
@@ -150,7 +150,6 @@ cisgraomogol            5432 e-cidadev3-prod
 converdegran            5432 e-cidadev3-prod
 inframinas              5432 e-cidadev3-prod
 cimams                  5432 e-cidadev3-prod
-cimva                   5432 e-cidadev3-prod
 cisnorte                5432 e-cidadev3-prod
 comar                   5432 e-cidadev3-prod
 cisarp                  5432 e-cidadev3-prod
@@ -160,3 +159,5 @@ samu                    5432 e-cidadev3-prod
 prevcap				    5432 e-cidadev3-prod
 cmmirabela			    5432 e-cidadev3-prod
 cmpatis			        5432 e-cidadev3-prod
+cmbrasilandia			5432 e-cidadev3-prod
+e-cidade                5432 cmcapitaoeneasv3

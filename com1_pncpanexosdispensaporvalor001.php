@@ -88,7 +88,7 @@ $oRotulo->label("pc80_resumo");
 
                             $tipo = array();
                             $tipo[0] = "Selecione";
-                            $result_tipo = $cltipoanexo->sql_record($cltipoanexo->sql_query(null, "*", "l213_sequencial", "l213_sequencial in (1,3,4,7,10,16)"));
+                            $result_tipo = $cltipoanexo->sql_record($cltipoanexo->sql_query(null, "*", "l213_sequencial", "l213_sequencial in (5,6,8,9,10,16,20)"));
 
 
                             for ($iIndiceTipo = 0; $iIndiceTipo < $cltipoanexo->numrows; $iIndiceTipo++) {

@@ -496,7 +496,7 @@ class cl_aberlic102024
                                ,'$this->si46_linkedital'
                                ,$this->si46_diariooficialdivulgacao
                                ,$this->si46_mododisputa
-                               ,'$this->si46_codunidadesubedital'
+                               ," . ($this->si46_codunidadesubedital == "null" || $this->si46_codunidadesubedital == "" ? "null" : "'" . $this->si46_codunidadesubedital . "'") . "
                       )";
 
     $result = db_query($sql);

@@ -87,6 +87,16 @@ $aMeses = array(
                             ?>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                        <b>Tipo:</b>
+                        <td>
+                            <?$aTipos = array(1 => "Sintético", 2 => "Analítico - Fonte");
+                            db_select('tipoRelatorio',$aTipos,false,1);
+                            ?>
+                        </td>
+                        </td>
+                    </tr>
                 </table>
             </div>
 
@@ -103,6 +113,7 @@ $aMeses = array(
         var mes     = document.form1.mes.value;
         var selinstit= document.form1.db_selinstit.value;
         var estrut_inicial = document.form1.estrut_inicial.value;
+        var tipoRel = document.form1.tipoRelatorio.value;
         var arquivo = "";
 
         if (!mes) {
@@ -113,7 +124,7 @@ $aMeses = array(
         arquivo = 'con2_balanceteverificacaocontacorrente002.php';
 
         var query = "";
-        query += ("mes="+mes+"&selinstit="+selinstit+"&estrut_inicial="+estrut_inicial);
+        query += ("mes="+mes+"&selinstit="+selinstit+"&estrut_inicial="+estrut_inicial)+"&tipoRel="+tipoRel;
 
         jan = window.open(
             arquivo+"?" + query,

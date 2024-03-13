@@ -63,6 +63,7 @@ if (!isset($alterar)) {
   $numero_edital = $oDados->l20_nroedital;
   $objeto = $oDados->l20_objeto;
   $edital = $oDados->l20_edital;
+  $codigoModalidade = $oDados->l20_numero;
   $tipo_tribunal = $oDados->l44_sequencial;
   $descr_tribunal = strtoupper($oDados->l44_descricao);
   $origem_recurso = $oDados->l47_origemrecurso;

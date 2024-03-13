@@ -52,6 +52,7 @@ if (isset($pc16_codmater)) {
   $pcmateranterior = $pc16_codmater;
 }
 
+
 if ((isset($opcao) && $opcao == "alterar")) {
   echo "<script>var operador = 1;</script>";
 } else {
@@ -167,7 +168,7 @@ if ($oDaoSolicitaVInculo->numrows > 0) {
 $trancaCodEle = 1;
 if (isset($pc11_codigo) && $pc11_codigo != '') {
 
-  // faremos uma query na pcdotac para ver se o item, possui dotaï¿½ï¿½o
+  // faremos uma query na pcdotac para ver se o item, possui dotação
   // caso nao possua, podemos liberar a seleï¿½ï¿½o de Sub elelemnto
   $oDaoPcDotac = db_utils::getDao("pcdotac");
   $sSqlPcDotac = $oDaoPcDotac->sql_query_file(null, null, null, "*", null, "pc13_codigo = {$pc11_codigo}");
@@ -178,6 +179,27 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
   }
 }
 ?>
+<style type="text/css">
+  .hoverBox {
+    background-color: #6699CC;
+    max-width: 100%;
+    max-height: 150px;
+    position: absolute;
+    bottom: 50%;
+    text-align: start;
+    padding: 15px;
+    display: content;
+  }
+
+  .hoverBoxDisabled {
+    display: none;
+  }
+</style>
+
+<div id="hoverBox" class="hoverBox hoverBoxDisabled">
+  <p><strong>Descricao Material: </strong></p>
+  <p id="hoverText" class="descricao"></p>
+</div>
 
 <form name="form1" method="post" action="" onsubmit=" return js_validarFormulario(); ">
   <center>
@@ -311,12 +333,12 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           ?>
         </td>
         <td colspan="7">
+          <input type="hidden" id="complmater" name="complmater" value="teste">
           <?
-
           if (!isset($pc11_quant) || (isset($pc11_quant) && $pc11_quant == "")) {
             $pc11_quant = 1;
           }
-          db_input('pc01_descrmater', 65, $Ipc01_descrmater, true, 'text', 3, '');
+          db_input('pc01_descrmater', 65, $Ipc01_descrmater, true, 'text', 3, 'onmouseover = js_inlineMouseHover(this.value)');
           $result_unidade = array();
           $desabilita_qtd = array();
           if (isset($verificado)) {
@@ -478,7 +500,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           echo "</td>";
         }
 
-        // Alteraï¿½ï¿½o feita para processo de compra e licitacao
+        // Alteração feita para processo de compra e licitacao
         if (isset($param) && trim($param) != "") {
           db_input("param", 10, "", false, "hidden", 3);
           db_input("codproc", 10, "", false, "hidden", 3);
@@ -542,6 +564,11 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
         db_input("o56_codelefunc", 5, $Io56_codele, true, 'hidden', $db_opcao);
         ?>
 
+      </tr>
+      <tr style="display: none;">
+        <td>
+          <?php db_input("pc01_complmater", 10, "", false, "", 3); ?>
+        </td>
       </tr>
       <tr style="display:none;" id="subEl">
         <td nowrap title="<?= @$To56_descr ?>">
@@ -646,6 +673,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
       </tr>
       <tr>
         <td valign="top" align="center" width="100%">
+
           <?
           $codigos = "";
           if ($pc30_ultdotac == "t") {
@@ -880,10 +908,11 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
       js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicitem',
         'db_iframe_pcmater',
         '<?= $sUrlLookup ?>?funcao_js=CurrentWindow.corpo.iframe_solicitem.js_mostrapcmater1' +
-        '|pc01_codmater|pc01_descrmater|o56_codele|pc01_veiculo<?= $sFiltro ?><?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>' +
+        '|pc01_codmater|pc01_descrmater|o56_codele|pc01_veiculo|pc01_complmater<?= $sFiltro ?><?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>' +
         '&iRegistroPreco=<?= $iRegistroPreco; ?>',
         'Pesquisa de Materiais',
         true, '0');
+
     } else {
       if (document.form1.pc16_codmater.value != '') {
         js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicitem',
@@ -939,9 +968,12 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
   }
 
 
-  function js_mostrapcmater(chave, erro, lVeic) {
+  function js_mostrapcmater(chave, erro, lVeic, pc01Complmater) {
     document.form1.pc01_descrmater.value = chave;
     document.form1.o56_codelefunc.value = '';
+
+    document.form1.pc01_complmater.value = pc01Complmater;
+
     if (erro == true) {
       document.form1.pc16_codmater.focus();
       document.form1.pc16_codmater.value = '';
@@ -971,17 +1003,22 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     }
   }
 
-  function js_mostrapcmater1(chave1, chave2, codele, lVeic, iRegistro) {
+  function js_mostrapcmater1(chave1, chave2, codele, lVeic, pc01Complmater, iRegistro) {
 
     js_esconteVeic(lVeic);
+
+    document.form1.pc01_complmater.value = pc01Complmater;
+
 
     if (iRegistro != null) {
       document.getElementById('codigoitemregistropreco').value = iRegistro;
     }
+
     document.form1.iCodigoRegistro.value = iRegistro;
     document.form1.pc16_codmater.value = chave1;
     document.form1.pc01_descrmater.value = chave2;
     document.form1.o56_codelefunc.value = codele;
+
     db_iframe_pcmater.hide();
     obj = document.createElement('input');
     obj.setAttribute('name', 'codigomaterial');
@@ -1008,7 +1045,6 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     } else {
       js_materanterior();
     }
-
 
   }
 
@@ -1060,9 +1096,10 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
   }
 
   function js_preencheqtd(valor) {
-    console.log('js_prenencheqtd : ' + valor);
+
     document.form1.quant_rest.value = valor;
   }
+
   if (document.form1.pc11_vlrun.value != "") {
     x = document.form1.pc11_vlrun.value;
     if (x.indexOf(".") == -1 && x.indexOf(",") == -1) {
@@ -1230,6 +1267,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     oRetorno.dados.forEach(function(oItem) {
       valor = oItem.codigo + " - " + oItem.elemento + " - " + oItem.nome.urlDecode();
       valorElem = oItem.elemento;
+      document.getElementById('pc01_complmater').value = oItem.complemento.urlDecode().toUpperCase();
       $('eleSub').options[0] = new Option(valor, oItem.codigo);
     });
 
@@ -1275,8 +1313,6 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
         document.form1.pc11_quant.style.backgroundColor = "#FFFFFF";
       }
       if ($F('pc11_servicoquantidade') == "false") {
-        //document.form1.pc11_quant.value="1";
-        console.log('[1] quant_rest');
         document.form1.quant_rest.value = "1";
       }
 
@@ -1402,6 +1438,22 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     return true;
   }
 
+  function js_inlineMouseHover(value) {
+
+    let descricao = document.getElementById('pc01_descrmater').value;
+    let complemento = document.getElementById('pc01_complmater').value;
+
+    if (value != "") {
+      document.getElementById('hoverBox').classList.remove('hoverBoxDisabled');
+      document.getElementById('hoverText').textContent = descricao + " " + complemento;
+    }
+
+    setTimeout(() => {
+      document.getElementById('hoverBox').classList.add('hoverBoxDisabled');
+    }, 3000);
+
+  }
+
   js_verificaServico();
 </script>
 
@@ -1415,7 +1467,6 @@ $sSqlServicoQuantidade   = $oDaoSolicitem->sql_query_file(null, "pc11_servicoqua
 $rsServicoQuantidade     = $oDaoSolicitem->sql_record($sSqlServicoQuantidade);
 
 //if ($oDaoSolicitem->numrows > 0) {
-
 $pc11_servicoquantidade = db_utils::fieldsMemory($rsServicoQuantidade, 0)->pc11_servicoquantidade;
 
 if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '34490') {
@@ -1465,7 +1516,7 @@ if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '34490') {
   //echo "  $('pc17_unid').style.visibility           = 'visible';                  ";
   echo "  $('pc17_quant').style.visibility           = 'hidden';                  ";
   echo "  document.form1.pc11_servicoquantidade.style.visibility  = 'hidden'; ";
-  echo "  document.form1.pc11_servicoquantidade.value = 'false';  ";
+  echo "  document.form1.pc11_servicoquantidade.value = 'true';  ";
   echo "</script>                                                                  ";
 }
 

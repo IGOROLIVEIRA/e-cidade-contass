@@ -140,7 +140,7 @@ INSERT INTO db_sysarqmod (codmod, codarq) VALUES (4, (select max(codarq) from db
 
 --Inserção dos campos
 INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'p104_sequencial', 'int4', 'Ordem de compra do protocolo de Pirapora', '0', 'Prot. Ord. Compra', 11, false, false, true, 1, 'text', 'Prot. Ord. Compra');
-INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'p104_codordem', 'int8', 'Código da ordem de compra', '0', 'Codigo', 10, false, false, false, 1, 'text', 'C�digo da ordem de compra');
+INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'p104_codordem', 'int8', 'Código da ordem de compra', '0', 'Codigo', 10, false, false, false, 1, 'text', 'C�digo da ordem de compra');
 INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'p104_protocolo', 'int4', 'Autorizacao de Ordem de Compra do Protocolo de Pirapora.', '0', 'Protocolo', 11, false, false, false, 1, 'text', 'Protocolo');
 
 
