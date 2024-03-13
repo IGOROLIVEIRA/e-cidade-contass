@@ -1,4 +1,5 @@
 <?php
+//ini_set('display_errors','on');
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -33,7 +34,6 @@ require_once "dbforms/db_funcoes.php";
 require_once("libs/JSON.php");
 require_once("classes/db_condataconf_classe.php");
 
-use App\Domain\Patrimonial\Aditamento\Aditamento;
 use  App\Services\Patrimonial\Aditamento\AditamentoService;
 
 $oJson             = new services_json();
@@ -164,7 +164,6 @@ try {
             break;
 
         case "processarAditamento":
-            $clcondataconf = new cl_condataconf;
             if ($sqlerro == false) {
                 validaPeriodoSicom($oParam, $oRetorno);
             }
@@ -355,12 +354,12 @@ function validaPeriodoSicom($aditamento, $oRetorno)
 
     if ($aditamento->datareferencia != "") {
         if (substr($c99_datapat, 0, 4) == substr($datareferencia, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferencia, 5, 2)) {
-            throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
+            throw new Exception('Usurio: A data de referncia dever ser no ms posterior ao ms da data inserida.');
         }
 
         if ($c99_datapat != "" && $datareferencia <= $c99_datapat) {
 
-            throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+            throw new Exception(' O perodo j foi encerrado para envio do SICOM. Verifique os dados do lanamento e entre em contato com o suporte.');
         }
     }
 
@@ -370,7 +369,7 @@ function validaPeriodoSicom($aditamento, $oRetorno)
         if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
 
             $oRetorno->datareferencia = true;
-            throw new Exception(' O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.');
+            throw new Exception(' O perodo j foi encerrado para envio do SICOM. Preencha o campo Data de Referncia com uma data no ms subsequente.');
         }
     }
 }
