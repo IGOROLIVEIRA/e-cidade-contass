@@ -13,11 +13,11 @@ class Oc22068 extends AbstractMigration
 
         ALTER TABLE bpdcasp102023 ADD si208_vlativonaocircucredilongoprazo double precision NOT NULL DEFAULT 0;
         ALTER TABLE bpdcasp102023 ADD si208_vlativonaocircuinvestemplongpraz double precision NOT NULL DEFAULT 0;
-        ALTER TABLE bpdcasp712023 ADD column si215_codfontrecursos24 int4 NOT NULL DEFAULT 0
+        ALTER TABLE bpdcasp712023 ADD column si215_codfontrecursos24 int4 NOT NULL DEFAULT 0;
 
         ALTER TABLE bpdcasp102024 ADD si208_vlativonaocircucredilongoprazo double precision NOT NULL DEFAULT 0;
         ALTER TABLE bpdcasp102024 ADD si208_vlativonaocircuinvestemplongpraz double precision NOT NULL DEFAULT 0;
-        ALTER TABLE bpdcasp712024 ADD column si215_codfontrecursos24 int4 NOT NULL DEFAULT 0
+        ALTER TABLE bpdcasp712024 ADD column si215_codfontrecursos24 int4 NOT NULL DEFAULT 0;
 
         ALTER TABLE rpsd112023 ADD si190_codco varchar(4) NULL; 
         ALTER TABLE rpsd112024 ADD si190_codco varchar(4) NULL;
