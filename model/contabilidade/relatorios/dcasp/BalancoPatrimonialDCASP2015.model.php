@@ -179,13 +179,13 @@ class BalancoPatrimonialDCASP2015 extends RelatoriosLegaisBase  {
     $sDescricao = str_repeat(' ', $oLinha->nivel * 2) . $oLinha->descricao;
 
     if (isset($oLinha->codigo)) {
-      $this->oPdf->Cell($this->iLargura * 0.05, $this->iAltura, $oLinha->codigo, $sBorda . 'R', 0, 'L');
+      $this->oPdf->Cell($this->iLargura * 0.05, $this->iAltura, $oLinha->codigo, $sBorda . 'R', 0, 'C');
       $nPorcemtagemDescricao -= 0.05;
     }
 
     $this->oPdf->Cell($this->iLargura * $nPorcemtagemDescricao, $this->iAltura, $sDescricao, $sBorda, 0, 'L');
-    $this->oPdf->Cell($this->iLargura * 0.20, $this->iAltura, db_formatar($oLinha->vlrexatual, 'f'), 'L' . $sBorda, 0, 'C');
-    $this->oPdf->Cell($this->iLargura * 0.20, $this->iAltura, $sExercioAnterior, 'L' . $sBorda, 1, 'C');
+    $this->oPdf->Cell($this->iLargura * 0.20, $this->iAltura, db_formatar($oLinha->vlrexatual, 'f'), 'L' . $sBorda, 0, 'R');
+    $this->oPdf->Cell($this->iLargura * 0.20, $this->iAltura, $sExercioAnterior, 'L' . $sBorda, 1, 'R');
 
     if ($oLinha->totalizadorFinal && !$oLinha->ultimaLinhaQuadro) {
       $this->oPdf->Cell($this->iLargura, $this->iAltura / 2, "", 'B', 1);
@@ -511,8 +511,11 @@ class BalancoPatrimonialDCASP2015 extends RelatoriosLegaisBase  {
           $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes, 0);
           $nSaldoFinal = ($oSaldoFontes->saldoanterior + $oSaldoFontes->debito - $oSaldoFontes->credito);
 
+          $clDeParaRecurso = new DeParaRecurso;
+          $iFonteRecurso = strlen($oRecursoConta->o15_codtri) == 7 ? $oRecursoConta->o15_codtri."0" : $oRecursoConta->o15_codtri; 
+          $codtri = substr($clDeParaRecurso->getDePara($iFonteRecurso),0,7);
 
-          $sHash = $oRecursoConta->o15_codtri;
+          $sHash = $codtri;
           if($iAno==2016)
               $valores =  $oSaldoFontes->saldoanterior * -1;
           else
@@ -520,7 +523,7 @@ class BalancoPatrimonialDCASP2015 extends RelatoriosLegaisBase  {
 
           if ( !isset($aLinhas[$sHash]) ) {
               $oLinha            = new stdClass();
-              $oLinha->codigo    = $oRecursoConta->o15_codtri;
+              $oLinha->codigo    = $codtri;
               $oLinha->descricao = $oRecursoConta->o15_descr;
               $oLinha->total     = $valores;
               $aLinhas[$sHash]   = $oLinha;
@@ -532,6 +535,7 @@ class BalancoPatrimonialDCASP2015 extends RelatoriosLegaisBase  {
 
       }
 
+      ksort($aLinhas);
     return $aLinhas;
   }
 
