@@ -16,6 +16,7 @@ require_once("model/contrato/PNCP/ContratoPNCP.model.php");
 require_once("model/Acordo.model.php");
 
 db_app::import("configuracao.DBDepartamento");
+$envs = parse_ini_file('config/PNCP/.env', true);
 $oJson             = new services_json();
 $oParam            = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oErro             = new stdClass();
@@ -65,12 +66,20 @@ switch ($oParam->exec) {
                 $arraybensjson = json_encode(DBString::utf8_encode_all($oDados));
 
                 $rsApiPNCP = $clContratoPNCP->enviarContrato($arraybensjson);
-                //array(201,'//pncp.gov.br/pncp-api/v1/orgaos/23539463000121/contratos/2024/6 x-content-type-options');
-                if ($rsApiPNCP[0] == 201) {
-                    $anocontrato = substr($rsApiPNCP[1], 58, 4);
 
+                //$rsApiPNCP = array(201,'//treina.pncp.gov.br/pncp-api/v1/orgaos/23539463000121/contratos/2024/6 x-content-type-options');
+
+                if ($rsApiPNCP[0] == 201) {
+                    //producao
+                    $anocontrato = substr($rsApiPNCP[1], 58, 4);
                     $ac213_sequencialpncp = trim(substr(str_replace('x-content-type-options', '', $rsApiPNCP[1]), 63));
                     $ac213_numerocontrolepncp = db_utils::getCnpj() . '-2-' . str_pad($ac213_sequencialpncp, 6, '0', STR_PAD_LEFT) . '/' . $anocontrato;
+                    //treinamento
+                    if($envs['APP_ENV'] == "T"){
+                        $anocontrato = substr($rsApiPNCP[1], 65, 4);
+                        $ac213_sequencialpncp = trim(substr(str_replace('x-content-type-options', '', $rsApiPNCP[1]), 70));
+                        $ac213_numerocontrolepncp = db_utils::getCnpj() . '-2-' . str_pad($ac213_sequencialpncp, 6, '0', STR_PAD_LEFT) . '/' . $anocontrato;
+                    }
 
                     //monto o codigo do contrato no pncp
                     $clacocontrolepncp->ac213_contrato = $aContrato->codigo;
