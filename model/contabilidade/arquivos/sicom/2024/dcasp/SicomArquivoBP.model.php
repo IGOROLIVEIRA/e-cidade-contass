@@ -435,11 +435,22 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
        */
       $nContaCorrente = 103;
 
+      $sSqlGeral = "select codigo from db_config ";
+      $rsInstit = db_query($sSqlGeral);
+
+      for ($iCont = 0;$iCont < pg_num_rows($rsInstit); $iCont++) {
+        $oInstit = false;
+        if($this->getTipoGeracao() == 'ISOLADO'){
+            break;
+        }
+        $oInstit = db_utils::fieldsMemory($rsInstit,$iCont);
+      }    
+
       for ($iContfr = 0; $iContfr < pg_num_rows($rsSqlfr); $iContfr++) {
 
         $clbpdcasp71 = new cl_bpdcasp712024();
         $objContasfr = db_utils::fieldsMemory($rsSqlfr, $iContfr);
-        $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente(false,$objContasfr->o15_codigo)) ;
+        $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente($oInstit,$objContasfr->o15_codigo)) ;
         //db_criatabela($rsSaldoFontes);
         $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes,0);
         //echo "<pre>";print_r($oSaldoFontes);
@@ -495,7 +506,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
           }
           $nVltotalsupdef += $oDadosBP71->si215_vlsaldofonte*-1;
 
-        } elseif ($oDadosBP71->si215_vlsaldofonte == 100){
+        } elseif ($oDadosBP71->si215_codfontrecursos == 100){
 
             $clbpdcasp71 = new cl_bpdcasp712024();
             $clbpdcasp71->si215_ano = $iAnoUsu;

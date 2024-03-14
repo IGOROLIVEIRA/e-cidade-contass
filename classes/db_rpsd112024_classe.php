@@ -199,7 +199,7 @@ class cl_rpsd112024 {
                                ,$this->si190_reg10
                                ,$this->si190_mes
                                ,$this->si190_instit
-                               ,$this->si190_codco
+                               ,'$this->si190_codco'
                       )";
      $result = db_query($sql);
      if ($result==false) {
