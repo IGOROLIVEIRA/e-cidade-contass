@@ -1088,7 +1088,7 @@ class cl_acordo
             $sql  .= $virgula . " ac16_veiculodivulgacao = '$this->ac16_veiculodivulgacao' ";
             $virgula = ",";
             if (trim($this->ac16_veiculodivulgacao) == null) {
-                $this->erro_sql = " Campo Forma de pagamento do Contrato não informado.";
+                $this->erro_sql = " Campo Veiculo de Divulgacao não informado.";
                 $this->erro_campo = "ac16_veiculodivulgacao";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
