@@ -4,6 +4,7 @@ require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once("classes/db_rpsd102023_classe.php");
 require_once("classes/db_rpsd112023_classe.php");
 require_once("model/contabilidade/arquivos/sicom/2023/dcasp/geradores/GerarRPSD.model.php");
+require_once("model/orcamento/DeParaRecurso.model.php");
 
 
 
@@ -125,7 +126,7 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                           AND e60_instit = ".$oInstit->codigo." 
                           AND o15_codtri = '" . $iFonte . "' 
                           AND DATE_PART('YEAR',c70_data) = ".db_getsession("DB_anousu") ."
-                          AND e60_anousu between 2012 AND 2022
+                          AND e60_anousu between 2012 AND 2019
                         GROUP BY 1,2,3,4,5,6,7,8,9,10,11
                         ORDER BY e60_emiss";
               $rsRPPago = db_query($sSqlRP);
@@ -175,6 +176,10 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                   if ($clrpsd10->erro_status == 0) {
                       throw new Exception($clrpsd10->erro_msg);
                   }
+
+                  $clDeParaFonte = new DeParaRecurso;
+                  $iFonteAlterada = substr($clDeParaFonte->getDePara(strlen($iFonteAlterada) == 7 ? $iFonteAlterada."0" : $iFonteAlterada),0,7);
+        
                   $clrpsd11 = new cl_rpsd112023();
                   $clrpsd11->si190_tiporegistro = 11;
                   $clrpsd11->si190_codreduzidorsp = $oDadosRPSD->codreduzidorsp;
