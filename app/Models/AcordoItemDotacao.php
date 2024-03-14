@@ -8,10 +8,20 @@ class AcordoItemDotacao extends LegacyModel
 {
     use LegacyAccount;
 
+    /**
+     *
+     * @var boolean
+     */
     public $timestamps = false;
 
+    /**
+     * @var string
+     */
     protected $table = 'acordos.acordoitemdotacao';
 
+    /**
+     * @var string
+     */
     protected $primaryKey = 'ac22_sequencial';
 
     protected string $sequenceName = 'acordoitemdotacao_ac22_sequencial_seq';
