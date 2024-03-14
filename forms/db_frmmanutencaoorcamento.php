@@ -47,7 +47,7 @@
                 </td>
             </tr>
         </table>
-        <table border="0" style="width: 80%; align:center;">
+        <table border="0" style="width: 80%; align:center;display:none;" id="tableDadosOrcamento">
             <tr>
                 <td>
                     <fieldset>
@@ -83,7 +83,7 @@
                                 </td>
                                 <td>
                                     <?php
-                                        db_input('pc20_hrate', 30, 1, true, 'time', 1, '', '', '', 'width:62%;', null);
+                                        db_input('pc20_hrate', 30, 0, true, 'time', 1, '', '', '', 'width:62%;', null);
                                     ?>
                                 </td>
                                 <td nowrap title="">
@@ -131,6 +131,8 @@
     oGridItensOrcamento.aHeaders[1].lDisplayed = false;
     oGridItensOrcamento.show($('gridItensOrcamento'));
     oGridItensOrcamento.renderRows();
+    
+    var criterioAdjudicacao = "";
 
     function pesquisaLicitacao(mostra) {
 
@@ -249,25 +251,43 @@
 
     }
 
+    function getOrigemOrcamento(){
+
+        if(document.getElementById("pc20_codorc").value != ""){
+            return "orcamento";
+        }
+
+        if(document.getElementById("l20_codigo").value != ""){
+            return "licitacao";
+        }
+
+        if(document.getElementById("pc80_codproc").value != ""){
+            return "processocompra";
+        }
+
+        return "";
+    }
+
     function processar() {
 
-        let codigoOrcamento = document.getElementById("pc20_codorc").value;
-        let codigoProcessoCompra = document.getElementById("pc80_codproc").value;
-        let codigoLicitacao = document.getElementById("l20_codigo").value;
+        let aSequencialOrigemOrcamento = {
+            "orcamento": document.getElementById("pc20_codorc").value,
+            "licitacao": document.getElementById("l20_codigo").value,
+            "processocompra": document.getElementById("pc80_codproc").value
+        }
 
-        if (codigoOrcamento == "" && codigoProcessoCompra == "" && codigoLicitacao == "") {          
+        let origemOrcamento = getOrigemOrcamento();
+
+        if(origemOrcamento == ""){
             return alert("Nenhum orçamento selecionado! Selecione pelo menos um Orçamento ou Processo.");
         }
 
-        codigoOrcamento = codigoOrcamento != "" ? codigoOrcamento : null;
-        codigoProcessoCompra = codigoProcessoCompra != "" ? codigoProcessoCompra : null;
-        codigoLicitacao = codigoLicitacao != "" ? codigoLicitacao : null;
+        let sequencial = aSequencialOrigemOrcamento[origemOrcamento];
 
         let oParametros = new Object();
         oParametros.sExecuta = "processar";
-        oParametros.codigoOrcamento = codigoOrcamento;
-        oParametros.codigoProcessoCompra = codigoProcessoCompra;
-        oParametros.codigoLicitacao = codigoLicitacao;
+        oParametros.origemOrcamento = origemOrcamento;
+        oParametros.sequencial = sequencial;
 
         js_divCarregando('Carregando dados do orçamento...', 'msgBox');
 
@@ -290,19 +310,22 @@
             return alert(oRetorno.erro.urlDecode());
         }
 
+        document.getElementById("tableDadosOrcamento").style.display = "";
+        criterioAdjudicacao = oRetorno.dados[0].criterioadjudicacao;
+
         if (oRetorno.status == 1) {
 
             oGridItensOrcamento.clearAll(true);
 
-            document.getElementById('codigoorcamento').value = oRetorno.codigoorcamento;
-            document.getElementById('pc20_dtate').value = oRetorno.dataorcamento;
-            document.getElementById('pc20_hrate').value = oRetorno.horadoorcamento;
-            document.getElementById('pc20_prazoentrega').value = oRetorno.prazoentrega;
-            document.getElementById('pc20_validadeorcamento').value = oRetorno.validade;
-            document.getElementById('pc20_cotacaoprevia').value = oRetorno.cotacaoprevia;
-            document.getElementById('pc20_obs').value = oRetorno.observacao.urlDecode();
+            document.getElementById('codigoorcamento').value = oRetorno.dados[0].codigoorcamento;
+            document.getElementById('pc20_dtate').value = oRetorno.dados[0].dataorcamento;
+            document.getElementById('pc20_hrate').value = oRetorno.dados[0].horadoorcamento;
+            document.getElementById('pc20_prazoentrega').value = oRetorno.dados[0].prazoentrega;
+            document.getElementById('pc20_validadeorcamento').value = oRetorno.dados[0].validade;
+            document.getElementById('pc20_cotacaoprevia').value = oRetorno.dados[0].cotacaoprevia;
+            document.getElementById('pc20_obs').value = oRetorno.dados[0].obs;
 
-            oRetorno.itens.each(function (oItem, iItem) {
+            oRetorno.dados.each(function (oItem, iItem) {
                 let aLinha = [];
                 aLinha.push(`<input name="orcamforne[]" type='text' style='text-align: center;width:100%;' value='${oItem.orcamforne}' /> `);
                 aLinha.push(`<input name="orcamitem[]" type='text' style='text-align: center;width:100%;' value='${oItem.orcamitem}' /> `);
@@ -312,7 +335,7 @@
                 aLinha.push(`<input name="marca[]" type='text' title='${oItem.marca}' style='text-align: left;width:100%;' value='${oItem.marca}' /> `);
                 aLinha.push(`<input readonly type='text' style='text-align: center;width:100%;border: none;' value='${oItem.qtddsolicitada}' /> `);
                 aLinha.push(`<input name="qtddorcada[]" type='text' style='text-align: center;width:100%;' oninput="js_ValidaCampos(this,4,'Qtde. Orçada','','',event);" value='${oItem.qtddorcada}' /> `);
-                aLinha.push(`<input name="porcentagem[]" type='text' style='text-align: center;width:100%;border: none;' value='${oItem.porcentagem}' /> `);
+                aLinha.push(`<input name="porcentagem[]" type='text' style='text-align: center;width:100%;' value='${oItem.porcentagem}' /> `);
                 aLinha.push(`<input name="vlrun[]" type='text' oninput="js_ValidaCampos(this,4,'Qtde. Orçada','','',event);formataValor(event,4);" style='text-align: center;width:100%;' value='${oItem.vlrun}' /> `);
                 aLinha.push(`<input name="vlrtotal[]" type='text' style='text-align: center;width:100%;' oninput="js_ValidaCampos(this,4,'Qtde. Orçada','','',event);formataValor(event,2);" value='${oItem.vlrtotal}' /> `);
                 oGridItensOrcamento.addRow(aLinha);
@@ -320,8 +343,8 @@
 
             oGridItensOrcamento.renderRows();
 
-            if(oRetorno.criterioadjudicacao == "3") oGridItensOrcamento.showColumn(false,9);
-            if(oRetorno.criterioadjudicacao != "3") oGridItensOrcamento.showColumn(true,9);
+            if(oRetorno.dados[0].criterioadjudicacao == "3") oGridItensOrcamento.showColumn(false,9);
+            if(oRetorno.dados[0].criterioadjudicacao != "3") oGridItensOrcamento.showColumn(true,9);
 
         }
     }
@@ -330,24 +353,33 @@
 
         let oParametros = new Object();
         oParametros.sExecuta = "salvar";
-        oParametros.codigoorcamento = document.getElementById('codigoorcamento').value;
-        oParametros.pc20_dtate = document.getElementById("pc20_dtate").value;
-        oParametros.pc20_hrate = document.getElementById("pc20_hrate").value;
-        oParametros.pc20_prazoentrega = document.getElementById("pc20_prazoentrega").value;
-        oParametros.pc20_validadeorcamento = document.getElementById("pc20_validadeorcamento").value;
-        oParametros.pc20_cotacaoprevia = document.getElementById("pc20_cotacaoprevia").value;
-        oParametros.pc20_obs = encodeURIComponent(tagString(document.getElementById("pc20_obs").value));
+
+        oPcOrcam = new Object();
+        oPcOrcam.pc20_codorc = document.getElementById('codigoorcamento').value;
+        oPcOrcam.pc20_dtate = document.getElementById("pc20_dtate").value;
+        oPcOrcam.pc20_hrate = document.getElementById("pc20_hrate").value;
+        oPcOrcam.pc20_prazoentrega = document.getElementById("pc20_prazoentrega").value;
+        oPcOrcam.pc20_validadeorcamento = document.getElementById("pc20_validadeorcamento").value;
+        oPcOrcam.pc20_cotacaoprevia = document.getElementById("pc20_cotacaoprevia").value;
+        oPcOrcam.pc20_obs = encodeURIComponent(tagString(document.getElementById("pc20_obs").value));
+        oParametros.oPcOrcam = oPcOrcam;
+
         oParametros.aItens = new Array();
 
         for(i = 0; i < oGridItensOrcamento.getNumRows(); i++) {
             oItem = new Object();
-            oItem.orcamforne = document.getElementsByName("orcamforne[]")[i].value;
-            oItem.orcamitem = document.getElementsByName("orcamitem[]")[i].value;
-            oItem.marca = document.getElementsByName("marca[]")[i].value;
-            oItem.qtddorcada = document.getElementsByName("qtddorcada[]")[i].value;
-            oItem.vlrun = document.getElementsByName("vlrun[]")[i].value;
-            oItem.vlrtotal = document.getElementsByName("vlrtotal[]")[i].value;
-            oItem.porcentagem = document.getElementsByName("porcentagem[]")[i].value;
+            oItem.pc23_orcamforne = document.getElementsByName("orcamforne[]")[i].value;
+            oItem.pc23_orcamitem = document.getElementsByName("orcamitem[]")[i].value;
+            oItem.pc23_obs = document.getElementsByName("marca[]")[i].value;
+            oItem.pc23_quant = document.getElementsByName("qtddorcada[]")[i].value;
+            oItem.pc23_vlrun = document.getElementsByName("vlrun[]")[i].value;
+            oItem.pc23_valor = document.getElementsByName("vlrtotal[]")[i].value;
+            if(criterioAdjudicacao == "1"){
+                oItem.pc23_perctaxadesctabela = document.getElementsByName("porcentagem[]")[i].value;
+            }
+            if(criterioAdjudicacao == "2"){
+                oItem.pc23_percentualdesconto = document.getElementsByName("porcentagem[]")[i].value;
+            }
             oParametros.aItens.push(oItem);
         }
 
@@ -366,6 +398,9 @@
 
         js_removeObj('msgBox');
         let oRetorno = eval("(" + oAjax.responseText + ")");
+        if(oRetorno.status == 1){
+           return alert("Alteração efetuada com sucesso.");
+        }
         alert(oRetorno.erro.urlDecode());
 
     }
