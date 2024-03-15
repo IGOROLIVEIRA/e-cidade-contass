@@ -537,7 +537,7 @@ if (isset($alterar)) {
     $sqlerro = alteracaoTipoOrigem($ac16_tipoorigem,$ac16_licitacao,$ac16_licoutroorgao,$ac16_adesaoregpreco,$ac16_sequencial,$ac16_origem);
 
 
-    if ($sqlerro == false) {
+    if ($sqlerro == false && $clacordo->erro_status != '0') {
       db_msgbox('Alteração efetuada');
 
       $rsApostilamento = db_query(
@@ -598,7 +598,7 @@ if (isset($alterar)) {
 } elseif (isset($chavepesquisa)) {
   $db_opcao = 2;
   $db_botao = true;
-  $result = $clacordo->sql_record($clacordo->sql_query_vinculos($chavepesquisa, "ac16_sequencial,ac16_resumoobjeto,ac16_datareferencia,ac16_datapublicacao,ac16_veiculodivulgacao,ac16_acordosituacao, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim,ac16_reajuste,ac16_criterioreajuste,ac16_datareajuste,ac16_periodoreajuste,ac16_indicereajuste,ac16_descricaoreajuste,ac16_descricaoindice", null, ""));
+  $result = $clacordo->sql_record($clacordo->sql_query_vinculos($chavepesquisa, "ac16_sequencial,ac16_resumoobjeto,ac16_datareferencia,ac16_datapublicacao,ac16_veiculodivulgacao,ac16_acordosituacao, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim,ac16_reajuste,ac16_criterioreajuste,ac16_datareajuste,ac16_periodoreajuste,ac16_indicereajuste,ac16_descricaoreajuste,ac16_descricaoindice,ac16_anousu", null, ""));
 
   db_fieldsmemory($result, 0);
 
@@ -748,6 +748,17 @@ if (isset($alterar)) {
                   </table>
                 </fieldset>
               </td>
+            </tr>
+
+            <tr>
+                <td nowrap title="Exercício do Contrato">
+                    <strong>Exercício:</strong>
+                </td>
+                <td>
+                    <?php
+                        db_input('ac16_anousu', 10, 1, true, 'text', 2, "");
+                    ?>
+                </td>
             </tr>
 
             <tr>

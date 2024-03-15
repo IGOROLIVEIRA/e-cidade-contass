@@ -53,12 +53,12 @@ if (isset($alterar)) {
   if ($l12_validacadfornecedor == "t") {
 
     if ($z01_telef == "") {
-      db_msgbox("Usuï¿½rio: Campo Email nï¿½o informado !");
+      db_msgbox("Usuário: Campo Email não informado !");
       $sqlerro = true;
     }
 
     if ($z01_email == "") {
-      db_msgbox("Usuï¿½rio: Campo Telefone nï¿½o informado !");
+      db_msgbox("Usuário: Campo Telefone não informado !");
       $sqlerro = true;
     }
 
@@ -68,7 +68,7 @@ if (isset($alterar)) {
     $rsContaBancaria = $clpcfornecon->sql_record($clpcfornecon->sql_query(null, "*", null, "pc63_numcgm={$pc60_numcgm}"));
     //db_criatabela($rsContaBancaria);exit;
     if (pg_numrows($rsContaBancaria) == 0) {
-      db_msgbox("Usuï¿½rio: E necessario cadastrar ao menos uma conta bancaria !");
+      db_msgbox("Usuário: E necessario cadastrar ao menos uma conta bancaria !");
       $sqlerro = true;
 
       echo "

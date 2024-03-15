@@ -73,6 +73,7 @@ require_once("classes/db_pcmater_classe.php");
 require_once("classes/db_matunid_classe.php");
 require_once("classes/db_acordoitem_classe.php");
 require_once("classes/db_historicomaterial_classe.php");
+require_once("classes/db_tipoanexo_classe.php");
 
 db_app::import("configuracao.DBDepartamento");
 
@@ -1677,10 +1678,9 @@ switch ($oParam->exec) {
             $oDocumentos      = new stdClass();
             $oDocumentos->iCodigo    = $aAcordoDocumento[$i]->getCodigo();
             $oDocumentos->iAcordo    = $aAcordoDocumento[$i]->getCodigoAcordo();
-            $oDocumentos->sDescricao = urlencode(utf8_encode($aAcordoDocumento[$i]->getDescricao()));
+            $oDocumentos->sDescricao = utf8_encode($aAcordoDocumento[$i]->getDescricao());
             $oRetorno->dados[] = $oDocumentos;
         }
-
         $oRetorno->detalhe    = "documentos";
         break;
 
@@ -1834,6 +1834,8 @@ switch ($oParam->exec) {
         $clContratoPNCP = new ContratoPNCP($oDadosContrato);
         $clacocontrolepncp = new cl_acocontratopncp();
         $clacoanexopncp = new cl_acoanexopncp();
+        $cltipoanexo = new cl_tipoanexo();
+
         $contTipoAnexos = 0;
 
         foreach ($oParam->aDocumentos as $Documentos) {
@@ -1848,6 +1850,10 @@ switch ($oParam->exec) {
                     $oRetorno->status  = 2;
                     break;
                 }
+
+                $sTipo = $oParam->aTipoDocumentos[$contTipoAnexos];
+                $rsTipo = $cltipoanexo->sql_record($cltipoanexo->sql_query(null,"*",null,"l213_descricao  = '$sTipo'"));
+                $dadosTipoAnexo = db_utils::fieldsMemory($rsTipo, 0);
 
                 $rsContrato = $clacocontrolepncp->sql_record($clacocontrolepncp->sql_query_file(null, " * ", null, "ac213_contrato = " . $oParam->iCodigoProcesso));
                 //validacao para enviar somente documentos de contratos que ja foram enviados para PNCP
@@ -1871,7 +1877,7 @@ switch ($oParam->exec) {
                 $oRetorno->nomearquivo = $sNomeArquivo;
 
                 $nomearquivo = $oRetorno->nomearquivo;
-                $rsApiPNCP = $clContratoPNCP->enviarArquivoContrato($dadospncp, $sNomeArquivo, $Documentos);
+                $rsApiPNCP = $clContratoPNCP->enviarArquivoContrato($dadospncp, $sNomeArquivo, $Documentos,$dadosTipoAnexo->l213_sequencial);
 
                 if ($rsApiPNCP[1] == "201") {
 

@@ -285,7 +285,7 @@ if (count($aParametrosEmpenho) > 0) {
             }
             gridNotas.renderRows();
         } else if (oResponse.status == 2) {
-            $('gridNotasstatus').innerHTML = "&nbsp;<b>Nï¿½o foram encontrados movimentos.</b>";
+            $('gridNotasstatus').innerHTML = "&nbsp;<b>Não foram encontrados movimentos.</b>";
         }
     }
 
@@ -374,8 +374,7 @@ if (count($aParametrosEmpenho) > 0) {
     }
 
     function js_objectToJson(oObject) {
-
-        var sJson = oObject.toSource();
+        var sJson = JSON.stringify(oObject);
         sJson = sJson.replace("(", "");
         sJson = sJson.replace(")", "");
         return sJson;
@@ -439,9 +438,9 @@ if (count($aParametrosEmpenho) > 0) {
         }
         /**
          * verificamos o parametro para controle de retencï¿½es em meses anteriores.
-         * caso seje 0 - nï¿½o faz nenhuma critica ao usuï¿½rio. apenas realiza o pagamento.
-         *           1 - Avisa ao usuï¿½rio e pede uma confirmaï¿½ï¿½o para realizar o pagamento.
-         *           2 - Avisa ao usuï¿½rio e cancela o pagamento do movimento
+         * caso seje 0 - não faz nenhuma critica ao usuário. apenas realiza o pagamento.
+         *           1 - Avisa ao usuário e pede uma confirmaï¿½ï¿½o para realizar o pagamento.
+         *           2 - Avisa ao usuário e cancela o pagamento do movimento
          */
         var sMsgConfirmaPagamento = "Deseja realmente efetuar pagamento para os movimentos selecionados?";
         if (iTipoControleRetencaoMesAnterior == 1) {

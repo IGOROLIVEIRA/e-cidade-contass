@@ -41,111 +41,114 @@ $clmatmater = new cl_matmater;
 $clfar_matersaude->rotulo->label("fa01_i_codigo");
 $clmatmater->rotulo->label("m60_descr");
 ?>
-<html>	
+<html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link href="estilos.css" rel="stylesheet" type="text/css">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link href="estilos.css" rel="stylesheet" type="text/css">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 </head>
+
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
-    <td height="63" align="center" valign="top">
+  <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
+    <tr>
+      <td height="63" align="center" valign="top">
         <table width="35%" border="0" align="center" cellspacing="0">
-	     <form name="form2" method="post" action="" >
-          <tr> 
-            <td width="4%" align="right" nowrap title="<?=$Tfa01_i_codigo?>">
-              <?=$Lfa01_i_codigo?>
-            </td>
-            <td width="96%" align="left" nowrap> 
-              <?
-		       db_input("fa01_i_codigo",5,$Ifa01_i_codigo,true,"text",4,"","chave_fa01_i_codigo");
-		       ?>
-            </td>
-          </tr>
-          <tr> 
-            <td width="4%" align="right" nowrap title="<?=$Tm60_descr?>">
-              <?=$Lm60_descr?>
-            </td>
-            <td width="96%" align="left" nowrap> 
-              <?
-		       db_input("m60_descr",20,@$Im60_descr,true,"text",4,"","chave_m60_descr");
-		       ?>
-            </td>
-          </tr>
-          <tr> 
-            <td colspan="2" align="center"> 
-              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
-              <input name="limpar" type="reset" id="limpar" value="Limpar" >
-              <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_far_matersaude.hide();">
-             </td>
-          </tr>
-        </form>
+          <form name="form2" method="post" action="">
+            <tr>
+              <td width="4%" align="right" nowrap title="<?= $Tfa01_i_codigo ?>">
+                <?= $Lfa01_i_codigo ?>
+              </td>
+              <td width="96%" align="left" nowrap>
+                <?
+                db_input("fa01_i_codigo", 5, $Ifa01_i_codigo, true, "text", 4, "", "chave_fa01_i_codigo");
+                ?>
+              </td>
+            </tr>
+            <tr>
+              <td width="4%" align="right" nowrap title="<?= $Tm60_descr ?>">
+                <?= $Lm60_descr ?>
+              </td>
+              <td width="96%" align="left" nowrap>
+                <?
+                db_input("m60_descr", 20, @$Im60_descr, true, "text", 4, "", "chave_m60_descr");
+                ?>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" align="center">
+                <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
+                <input name="limpar" type="reset" id="limpar" value="Limpar">
+                <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_far_matersaude.hide();">
+              </td>
+            </tr>
+          </form>
         </table>
       </td>
-  </tr>
-  <tr> 
-    <td align="center" valign="top"> 
-      <?
-      if(!isset($pesquisa_chave)){
-        if(isset($campos)==false){
-           if(file_exists("funcoes/db_func_far_matersaude.php")==true){
-             include("funcoes/db_func_far_matersaude.php");
-           }else{
-           $campos = "far_matersaude.*";
-           }
-        }
-        //Campo adicional
-        $campos.=",matmater.m60_descr";
-        if(isset($ativo)){
-			$ativo="";
-	        $sep="";
-		}else{
-		    $ativo=" m60_ativo='t' ";
-			$sep=" and ";
-		}
-        
-        if(isset($chave_fa01_i_codigo) && (trim($chave_fa01_i_codigo)!="") ){
-	         $sql = $clfar_matersaude_ext->sql_query($chave_fa01_i_codigo,$campos,"fa01_i_codmater","fa01_i_codigo=$chave_fa01_i_codigo and fa04_i_cgsund=$cgs $sep$ativo");
-        }else if(isset($chave_m60_descr) && (trim($chave_m60_descr)!="") ){
-	         $sql = $cl_matersaude_ext->sql_query("",$campos,"fa01_i_codmater"," m60_descr like '$chave_m60_descr%' and fa04_i_cgsund=$cgs $sep$ativo");
-        }else{
-           $sql = $clfar_matersaude_ext->sql_query("",$campos,"fa01_i_codmater"," fa04_i_cgsund=$cgs $sep$ativo");
-        }
-        $repassa = array();
-        if(isset($chave_fa01_i_codigo)){
-          $repassa = array("chave_fa01_i_codigo"=>$chave_fa01_i_codigo,"chave_m60_descr"=>$chave_m60_descr);
-        }
-        db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
-      }else{
-      	if($pesquisa_chave!=null && $pesquisa_chave!=""){
-      	  $sql=$clfar_matersaude_ext->sql_query($pesquisa_chave,"*","fa01_i_codmater"," fa01_i_codigo=$pesquisa_chave and fa04_i_cgsund=$cgs $sep$ativo");
-      	  $result = pg_query($sql);
-          $linhas=pg_numrows($result);
-          if($linhas!=0){
-          	db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$m60_descr',false);</script>";
-          }else{
-          	 echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") nÃ£o Encontrado',true);</script>";
+    </tr>
+    <tr>
+      <td align="center" valign="top">
+        <?
+        if (!isset($pesquisa_chave)) {
+          if (isset($campos) == false) {
+            if (file_exists("funcoes/db_func_far_matersaude.php") == true) {
+              include("funcoes/db_func_far_matersaude.php");
+            } else {
+              $campos = "far_matersaude.*";
+            }
           }
-        }else{
-	       echo "<script>".$funcao_js."('',false);</script>";
+          //Campo adicional
+          $campos .= ",matmater.m60_descr";
+          if (isset($ativo)) {
+            $ativo = "";
+            $sep = "";
+          } else {
+            $ativo = " m60_ativo='t' ";
+            $sep = " and ";
+          }
+
+          if (isset($chave_fa01_i_codigo) && (trim($chave_fa01_i_codigo) != "")) {
+            $sql = $clfar_matersaude_ext->sql_query($chave_fa01_i_codigo, $campos, "fa01_i_codmater", "fa01_i_codigo=$chave_fa01_i_codigo and fa04_i_cgsund=$cgs $sep$ativo");
+          } else if (isset($chave_m60_descr) && (trim($chave_m60_descr) != "")) {
+            $sql = $cl_matersaude_ext->sql_query("", $campos, "fa01_i_codmater", " m60_descr like '$chave_m60_descr%' and fa04_i_cgsund=$cgs $sep$ativo");
+          } else {
+            $sql = $clfar_matersaude_ext->sql_query("", $campos, "fa01_i_codmater", " fa04_i_cgsund=$cgs $sep$ativo");
+          }
+          $repassa = array();
+          if (isset($chave_fa01_i_codigo)) {
+            $repassa = array("chave_fa01_i_codigo" => $chave_fa01_i_codigo, "chave_m60_descr" => $chave_m60_descr);
+          }
+          db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
+        } else {
+          if ($pesquisa_chave != null && $pesquisa_chave != "") {
+            $sql = $clfar_matersaude_ext->sql_query($pesquisa_chave, "*", "fa01_i_codmater", " fa01_i_codigo=$pesquisa_chave and fa04_i_cgsund=$cgs $sep$ativo");
+            $result = pg_query($sql);
+            $linhas = pg_numrows($result);
+            if ($linhas != 0) {
+              db_fieldsmemory($result, 0);
+              echo "<script>" . $funcao_js . "('$m60_descr',false);</script>";
+            } else {
+              echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+            }
+          } else {
+            echo "<script>" . $funcao_js . "('',false);</script>";
+          }
         }
-      }
-      ?>
-     </td>
-   </tr>
-</table>
+        ?>
+      </td>
+    </tr>
+  </table>
 </body>
+
 </html>
 <?
-if(!isset($pesquisa_chave)){
-  ?>
+if (!isset($pesquisa_chave)) {
+?>
   <script>
   </script>
-  <?
+<?
 }
 ?>
 <script>
-js_tabulacaoforms("form2","chave_fa01_i_codigo",true,1,"chave_fa01_i_codigo",true);
+  js_tabulacaoforms("form2", "chave_fa01_i_codigo", true, 1, "chave_fa01_i_codigo", true);
 </script>

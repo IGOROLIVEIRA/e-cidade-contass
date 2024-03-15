@@ -1,4 +1,4 @@
-<?
+<?php
 function db_inicio_transacao() {
   //#00#//db_inicio_transacao
   //#10#//função para abrir uma transação
@@ -414,4 +414,3 @@ function db_planocontassaldo_matriz($anousu, $dataini, $datafim, $retsql = false
       }
       return $retorno;
     }
-    ?>

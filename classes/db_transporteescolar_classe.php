@@ -140,7 +140,7 @@ class cl_transporteescolar {
        $this->erro_sql = " Campo Quantidade de Dias nao Informado.";
        $this->erro_campo = "v200_diasrodados";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuï¿½rio: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
@@ -358,7 +358,7 @@ class cl_transporteescolar {
          $this->erro_sql = " Campo Quantidade de Dias nao Informado.";
          $this->erro_campo = "v200_diasrodados";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuï¿½rio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -603,4 +603,3 @@ class cl_transporteescolar {
      return $sql;
   }
 }
-?>
