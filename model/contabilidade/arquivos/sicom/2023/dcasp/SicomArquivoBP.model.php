@@ -238,20 +238,21 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $clbpdcasp10  = new cl_bpdcasp102023();
 
+      $vlativonaocircurlp = $oRetornoBP[10]->$sChave + $oRetornoBP[11]->$sChave + $oRetornoBP[12]->$sChave + $oRetornoBP[13]->$sChave;
+
       $clbpdcasp10->si208_ano                               = $iAnoUsu;
       $clbpdcasp10->si208_periodo                           = $iCodigoPeriodo;
       $clbpdcasp10->si208_institu                           = db_getsession("DB_instit");
       $clbpdcasp10->si208_tiporegistro                      = 10;
-      $clbpdcasp10->si208_exercicio                         = $iValorNumerico;
       $clbpdcasp10->si208_vlativocircucaixaequicaixa        = $oRetornoBP[2]->$sChave;
       $clbpdcasp10->si208_vlativocircucredicurtoprazo       = $oRetornoBP[3]->$sChave;
+      $clbpdcasp10->si208_vlativocircudemaiscredicurtoprazo = 0;
       $clbpdcasp10->si208_vlativocircuinvestapliccurtoprazo = $oRetornoBP[4]->$sChave;
       $clbpdcasp10->si208_vlativocircuestoques              = $oRetornoBP[5]->$sChave;
+      $clbpdcasp10->si208_vlativonaocircumantidovenda       = 0;
+      $clbpdcasp10->si208_vlativocircuativobio              = 0;
       $clbpdcasp10->si208_vlativocircuvpdantecipada         = $oRetornoBP[6]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircucredilongoprazo    = $oRetornoBP[10]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircuinvestemplongpraz  = $oRetornoBP[11]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircuestoques           = $oRetornoBP[12]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircuvpdantecipada      = $oRetornoBP[13]->$sChave;
+      $clbpdcasp10->si208_vlativonaocircurlp                = $vlativonaocircurlp;
       $clbpdcasp10->si208_vlativonaocircuinvestimentos      = $oRetornoBP[14]->$sChave;
       $clbpdcasp10->si208_vlativonaocircuimobilizado        = $oRetornoBP[15]->$sChave;
       $clbpdcasp10->si208_vlativonaocircuintagivel          = $oRetornoBP[16]->$sChave;
@@ -434,20 +435,34 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
        */
       $nContaCorrente = 103;
 
+      $sSqlGeral = "select codigo from db_config ";
+      $rsInstit = db_query($sSqlGeral);
+
+      for ($iCont = 0;$iCont < pg_num_rows($rsInstit); $iCont++) {
+        $oInstit = false;
+        if($this->getTipoGeracao() == 'ISOLADO'){
+            break;
+        }
+        $oInstit = db_utils::fieldsMemory($rsInstit,$iCont);
+      }    
+
       for ($iContfr = 0; $iContfr < pg_num_rows($rsSqlfr); $iContfr++) {
 
         $clbpdcasp71 = new cl_bpdcasp712023();
         $objContasfr = db_utils::fieldsMemory($rsSqlfr, $iContfr);
-        $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente(false,$objContasfr->o15_codigo)) ;
+        $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente($oInstit,$objContasfr->o15_codigo)) ;
         //db_criatabela($rsSaldoFontes);
         $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes,0);
         //echo "<pre>";print_r($oSaldoFontes);
-        $nHash = $objContasfr->o15_codtri;
+        $clDeParaFonte = new DeParaRecurso;
+        $iFonteNova = substr($clDeParaFonte->getDePara($objContasfr->o15_codtri),0,7);
+        $nHash = $iFonteNova;
+       
         $nSaldoFinal = ($oSaldoFontes->saldoanterior + $oSaldoFontes->debito - $oSaldoFontes->credito);
         if(!isset($aDadosSuperavitFontes[$nHash])){
           $oDadosSuperavitFonte = new stdClass();
           $oDadosSuperavitFonte->si215_exercicio = $iValorNumerico;
-          $oDadosSuperavitFonte->si215_codfontrecursos = $objContasfr->o15_codtri;
+          $oDadosSuperavitFonte->si215_codfontrecursos = $iFonteNova;
           if($iValorNumerico == 2){
             $oDadosSuperavitFonte->si215_vlsaldofonte = $oSaldoFontes->saldoanterior;
           }else{
@@ -466,15 +481,23 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $nVltotalsupdef =0;
       foreach($aDadosSuperavitFontes as $oDadosBP71) {
-        if($oDadosBP71->si215_vlsaldofonte != 0){
+
+        $clDeParaFonte = new DeParaRecurso;
+        $iFonteNova = substr($clDeParaFonte->getDePara($oDadosBP71->si215_codfontrecursos),0,7);
+        $iFonteNova24 = '';
+        if (substr($iFonteNova,1,7) == '704000') {
+          $iFonteNova24 = substr($iFonteNova,0,1).'720000';    
+        }
+        
+        if(number_format($oDadosBP71->si215_vlsaldofonte,2) != 0){
 
           $clbpdcasp71 = new cl_bpdcasp712023();
           $clbpdcasp71->si215_ano = $iAnoUsu;
           $clbpdcasp71->si215_periodo = $iCodigoPeriodo;
           $clbpdcasp71->si215_institu = db_getsession("DB_instit");
           $clbpdcasp71->si215_tiporegistro = 71;
-          $clbpdcasp71->si215_exercicio = $iValorNumerico;
-          $clbpdcasp71->si215_codfontrecursos = $oDadosBP71->si215_codfontrecursos;
+          $clbpdcasp71->si215_codfontrecursos = $iFonteNova;
+          $clbpdcasp71->si215_codfontrecursos24 = $iFonteNova24;
           $clbpdcasp71->si215_vlsaldofonte = $oDadosBP71->si215_vlsaldofonte*-1;
 
           $clbpdcasp71->incluir(null);
@@ -490,8 +513,8 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
             $clbpdcasp71->si215_periodo = $iCodigoPeriodo;
             $clbpdcasp71->si215_institu = db_getsession("DB_instit");
             $clbpdcasp71->si215_tiporegistro = 71;
-            $clbpdcasp71->si215_exercicio = $iValorNumerico;
-            $clbpdcasp71->si215_codfontrecursos = $oDadosBP71->si215_codfontrecursos;
+            $clbpdcasp71->si215_codfontrecursos = $iFonteNova;
+            $clbpdcasp71->si215_codfontrecursos24 = $iFonteNova24;
             $clbpdcasp71->si215_vlsaldofonte = 0;
 
             $clbpdcasp71->incluir(null);
@@ -510,14 +533,12 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbpdcasp70->si214_periodo       = $iCodigoPeriodo;
       $clbpdcasp70->si214_institu       = db_getsession("DB_instit");
       $clbpdcasp70->si214_tiporegistro  = 70;
-      $clbpdcasp70->si214_exercicio     =  $iValorNumerico;
       $clbpdcasp70->si214_vltotalsupdef = $nVltotalsupdef;
       $clbpdcasp70->incluir(null);
       if ($clbpdcasp70->erro_status == 0) {
         throw new Exception($clbpdcasp70->erro_msg);
       }
     } // $rsResult71
-
 
     db_fim_transacao();
 
