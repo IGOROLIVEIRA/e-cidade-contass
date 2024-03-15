@@ -12,24 +12,7 @@ include 'dbforms/db_funcoes.php';
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <?php
-    db_app::load('scripts.js,
-                  prototype.js,
-                  strings.js,
-                  arrays.js,
-                  windowAux.widget.js,
-                  datagrid.widget.js,
-                  dbmessageBoard.widget.js,
-                  dbcomboBox.widget.js,
-                  dbtextField.widget.js,
-                  dbtextFieldData.widget.js,
-                  DBInputHora.widget.js,
-                  datagrid/plugins/DBOrderRows.plugin.js,
-                  datagrid/plugins/DBHint.plugin.js');
-
-    db_app::load(
-        'estilos.css,
-    grid.style.css'
-    );
+    db_app::load('scripts.js,estilos.css,grid.style.css,datagrid.widget.js,prototype.js');
     ?>
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">

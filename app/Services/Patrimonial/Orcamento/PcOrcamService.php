@@ -7,6 +7,10 @@ use Exception;
 
 class PcOrcamService
 {
+
+    /**
+     * @var PcOrcamRepository
+     */
     private $pcOrcamRepository;
 
     public function __construct()
@@ -14,7 +18,14 @@ class PcOrcamService
         $this->pcOrcamRepository = new PcOrcamRepository();
     }
 
-    public function updateOrcamento($orcamento){
+    /**
+     *
+     * @param array $orcamento - dados do orçamento
+     * @return bool
+     */
+
+    public function updateOrcamento($orcamento)
+    {
 
         if($orcamento->pc20_dtate == ""){
             throw new Exception("Usuário: Campo Prazo limite para entrega do orçamento não Informado.");
@@ -32,7 +43,14 @@ class PcOrcamService
 
     }
 
-    public function getDadosManutencaoOrcamento($sequencial,$origem){
+    /**
+     *
+     * @param int $sequencial - Sequencial do Orçamento/Licitação/Processo de Compra
+     * @param string $origem - Origem do Orçamento
+     * @return array
+     */
+    public function getDadosManutencaoOrcamento($sequencial,$origem)
+    {
 
         $dadosOrcamento = $this->pcOrcamRepository->getDadosManutencaoOrcamento($sequencial,$origem);
 

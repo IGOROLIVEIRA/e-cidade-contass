@@ -1,7 +1,7 @@
 <?php
 
-use App\Services\Patrimonial\Orcamento\PcOrcamService;
 use App\Services\Patrimonial\Orcamento\ManutencaoOrcamentoService;
+use App\Services\Patrimonial\Orcamento\PcOrcamService;
 
 require_once 'libs/db_stdlib.php';
 require_once 'libs/JSON.php';
@@ -17,22 +17,20 @@ $oRetorno->erro = '';
 
 try {
     switch ($oParam->sExecuta) {
-
         case 'processar':
 
             $pcOrcamService = new PcOrcamService();
-            $oRetorno->dados = $pcOrcamService->getDadosManutencaoOrcamento($oParam->sequencial,$oParam->origemOrcamento);
+            $oRetorno->dados = $pcOrcamService->getDadosManutencaoOrcamento($oParam->sequencial, $oParam->origemOrcamento);
 
             break;
 
         case 'salvar':
 
             $manutencaoOrcamentoService = new ManutencaoOrcamentoService();
-            $manutencaoOrcamentoService->save($oParam->oPcOrcam,$oParam->aItens);
+            $manutencaoOrcamentoService->save($oParam->oPcOrcam, $oParam->aItens);
 
             break;
     }
-
 } catch (Exception $e) {
     $oRetorno->erro = urlencode($e->getMessage());
     $oRetorno->status = 2;

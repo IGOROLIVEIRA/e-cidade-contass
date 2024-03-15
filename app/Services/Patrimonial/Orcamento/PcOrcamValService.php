@@ -7,6 +7,10 @@ use Exception;
 
 class PcOrcamValService
 {
+
+    /**
+     * @var PcOrcamValRepository
+     */
     private $pcOrcamValRepository;
 
     public function __construct()
@@ -14,7 +18,13 @@ class PcOrcamValService
         $this->pcOrcamValRepository = new PcOrcamValRepository();
     }
 
-    public function updateOrcamVal($pcOrcamVal){
+    /**
+     *
+     * @param array $pcOrcamVal - dados do orçamento
+     * @return bool
+     */
+    public function updateOrcamVal($pcOrcamVal)
+    {
 
         if($pcOrcamVal['pc23_quant'] == ""){
             throw new Exception("Usuário: Campo Quantidade Orçada não Informado.");

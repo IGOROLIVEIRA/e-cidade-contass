@@ -1123,7 +1123,8 @@ function sql_query_valor_item_julgado_processocompra($pc20_codorc=null,$campos="
         return $sql;
     }
 
-    public function getManutencaoOrcamento($sequencial,$origemOrcamento){
+    public function getManutencaoOrcamento($sequencial,$origemOrcamento)
+    {
 
       $sSql = "";
   

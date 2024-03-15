@@ -21,6 +21,11 @@ class PcOrcamRepository
         $this->model = new PcOrcam();
     }
 
+    /**
+     *
+     * @param array $orcamento - dados do orçamento
+     * @return bool
+     */
     public function update($orcamento)
     {
        $pcOrcam = $this->model->find($orcamento->pc20_codorc);
@@ -34,7 +39,14 @@ class PcOrcamRepository
        return $pcOrcam->save();
     }
 
-    public function getDadosManutencaoOrcamento($sequencial,$origem){
+    /**
+     *
+     * @param int $sequencial - Sequencial do Orçamento/Licitação/Processo de Compra
+     * @param string $origem - Origem do Orçamento
+     * @return array
+     */
+    public function getDadosManutencaoOrcamento($sequencial,$origem)
+    {
         $clPcOrcam = new cl_pcorcam();
         $sql = $clPcOrcam->getManutencaoOrcamento($sequencial,$origem);
         return DB::select($sql);

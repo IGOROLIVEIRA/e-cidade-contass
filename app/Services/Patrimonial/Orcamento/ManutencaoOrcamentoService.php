@@ -10,8 +10,14 @@ use DBString;
 
 class ManutencaoOrcamentoService
 {
-
-    public function save($orcamento,$itens){
+    /**
+     *
+     * @param array $orcamento - dados do orçamento
+     * @param array $itens - itens do orçamento
+     * @return void
+     */
+    public function save($orcamento,$itens)
+    {
 
         try {
 

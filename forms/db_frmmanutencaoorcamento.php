@@ -35,7 +35,7 @@
                                     </td>
                                     <td style="display:none;">
                                         <?php
-                                            db_input('codigoorcamento', 12, 1, true, 'text', 1, "");
+                                            db_input('codigoorcamento', 12, 1, true, 'text', 1, '');
                                         ?>
                                     </td>
                                 </tr>
@@ -130,7 +130,6 @@
     oGridItensOrcamento.aHeaders[0].lDisplayed = false;
     oGridItensOrcamento.aHeaders[1].lDisplayed = false;
     oGridItensOrcamento.show($('gridItensOrcamento'));
-    oGridItensOrcamento.renderRows();
     
     var criterioAdjudicacao = "";
 
