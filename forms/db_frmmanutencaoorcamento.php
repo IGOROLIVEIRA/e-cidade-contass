@@ -303,7 +303,8 @@
     function retornoProcessamento(oAjax) {
 
         js_removeObj('msgBox');
-        let oRetorno = eval("(" + oAjax.responseText + ")");
+
+        let oRetorno = JSON.parse(oAjax.responseText);
 
         if(oRetorno.status == 2){
             limparCampos(oGridItensOrcamento);
@@ -323,7 +324,7 @@
             document.getElementById('pc20_prazoentrega').value = oRetorno.dados[0].prazoentrega;
             document.getElementById('pc20_validadeorcamento').value = oRetorno.dados[0].validade;
             document.getElementById('pc20_cotacaoprevia').value = oRetorno.dados[0].cotacaoprevia;
-            document.getElementById('pc20_obs').value = oRetorno.dados[0].obs;
+            document.getElementById('pc20_obs').value =  oRetorno.dados[0].obs;
 
             oRetorno.dados.each(function (oItem, iItem) {
                 let aLinha = [];
@@ -335,7 +336,7 @@
                 aLinha.push(`<input name="marca[]" type='text' title='${oItem.marca}' style='text-align: left;width:100%;' value='${oItem.marca}' /> `);
                 aLinha.push(`<input readonly type='text' style='text-align: center;width:100%;border: none;' value='${oItem.qtddsolicitada}' /> `);
                 aLinha.push(`<input name="qtddorcada[]" type='text' style='text-align: center;width:100%;' oninput="js_ValidaCampos(this,4,'Qtde. Orçada','','',event);" value='${oItem.qtddorcada}' /> `);
-                aLinha.push(`<input name="porcentagem[]" type='text' style='text-align: center;width:100%;' value='${oItem.porcentagem}' /> `);
+                aLinha.push(`<input name="porcentagem[]" type='text' oninput="js_ValidaCampos(this,4,'Qtde. Orçada','','',event);" style='text-align: center;width:100%;' value='${oItem.porcentagem}' /> `);
                 aLinha.push(`<input name="vlrun[]" type='text' oninput="js_ValidaCampos(this,4,'Qtde. Orçada','','',event);formataValor(event,4);" style='text-align: center;width:100%;' value='${oItem.vlrun}' /> `);
                 aLinha.push(`<input name="vlrtotal[]" type='text' style='text-align: center;width:100%;' oninput="js_ValidaCampos(this,4,'Qtde. Orçada','','',event);formataValor(event,2);" value='${oItem.vlrtotal}' /> `);
                 oGridItensOrcamento.addRow(aLinha);

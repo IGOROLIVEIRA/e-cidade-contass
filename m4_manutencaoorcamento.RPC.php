@@ -38,4 +38,4 @@ try {
     $oRetorno->status = 2;
 }
 
-echo $oJson->encode($oRetorno);
+echo $oJson->encode(DBString::utf8_encode_all($oRetorno));
