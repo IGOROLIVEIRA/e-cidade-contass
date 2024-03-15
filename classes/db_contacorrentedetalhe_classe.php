@@ -1200,4 +1200,88 @@ class cl_contacorrentedetalhe {
 
       return $aContaCorrenteDados;
     }
+
+    function detalhamentoPorFonteext($iAnoUsu,$c61_reduz, $aInstit, $iMes){
+      $sSql = "select 
+          c19_orctiporec as codtri,
+          round(substr(fc_saldocontacorrente, 43, 15)::float8, 2)::float8 AS saldo_anterior,
+          substr(fc_saldocontacorrente, 107, 1)::varchar(1)               AS sinal_anterior,
+          round(substr(fc_saldocontacorrente, 59, 15)::float8, 2)::float8 AS valor_debito,
+          round(substr(fc_saldocontacorrente, 75, 15)::float8, 2)::float8 AS valor_credito,
+          round(substr(fc_saldocontacorrente, 91, 15)::float8, 2)::float8 AS saldo_final,
+          substr(fc_saldocontacorrente, 111, 1)::varchar(1)               AS sinal_final                   
+          from
+          (
+          select
+              c19_sequencial,
+              c19_orctiporec,
+              fc_saldocontacorrente({$iAnoUsu}, c19_sequencial, 103, {$iMes}, c19_instit)
+          from
+              contabilidade.contacorrentedetalhe
+          inner join	conplanoreduz on c19_reduz = c61_reduz
+            	and c61_anousu = c19_conplanoreduzanousu
+          where
+              c19_instit in ({$aInstit})
+              and ( c19_reduz = {$c61_reduz} or c61_codtce = {$c61_reduz} )
+              and c19_conplanoreduzanousu = {$iAnoUsu}) as x
+              order by c19_orctiporec asc;";
+      $result = db_query($sSql);
+      $aContaCorrente = pg_fetch_all($result);
+      $aContaCorrenteDados = array();
+      $aTotalPorCodtri = array();
+
+      //Converte fontes antigas pra o codigo atual e soma as fontes iguais
+      foreach ($aContaCorrente as $aCC){
+            $clDeParaRecurso = new DeParaRecurso;
+            $codtri = substr($clDeParaRecurso->getDePara($aCC['codtri']), 0, -1);
+  
+        if (isset($aTotalPorCodtri[$codtri])){
+            $saldoAnterior = $aTotalPorCodtri[$codtri]['sinal_anterior'] == 'D' ? $aTotalPorCodtri[$codtri]['saldo_anterior'] * -1 : $aTotalPorCodtri[$codtri]['saldo_anterior'];
+            $aCCSaldoAnterior = $aCC['sinal_anterior'] == 'D' ? $aCC['saldo_anterior'] * -1 : $aCC['saldo_anterior'];
+            $saldoAnterior = $saldoAnterior + $aCCSaldoAnterior;
+
+            $saldoFinal = $aTotalPorCodtri[$codtri]['sinal_final'] == 'D' ? $aTotalPorCodtri[$codtri]['saldo_final'] * -1 : $aTotalPorCodtri[$codtri]['saldo_final'];
+            $aCCSaldoFinal = $aCC['sinal_final'] == 'D' ? $aCC['saldo_final'] * -1 : $aCC['saldo_final'];
+            $saldoFinal = $saldoFinal + $aCCSaldoFinal;
+
+            $valorDebito = $aTotalPorCodtri[$codtri]['valor_debito'] + $aCC['valor_debito'];
+            $valorCredito = $aTotalPorCodtri[$codtri]['valor_credito'] + $aCC['valor_credito'];
+
+            if ($saldoAnterior <= 0){
+                $aTotalPorCodtri[$codtri]['sinal_anterior'] = 'D';
+            }else{
+                $aTotalPorCodtri[$codtri]['sinal_anterior'] = 'C';
+            }
+            if ($saldoFinal <= 0){
+                $aTotalPorCodtri[$codtri]['sinal_final'] = 'D';
+            }else{
+                $aTotalPorCodtri[$codtri]['sinal_final'] = 'C';
+            }
+
+            $aTotalPorCodtri[$codtri]['codtri'] = $codtri;
+            $aTotalPorCodtri[$codtri]['saldo_anterior'] = abs($saldoAnterior);
+            $aTotalPorCodtri[$codtri]['valor_debito'] = $valorDebito;
+            $aTotalPorCodtri[$codtri]['valor_credito'] = $valorCredito;
+            $aTotalPorCodtri[$codtri]['saldo_final'] = abs($saldoFinal);
+        }else {   
+          $aCC['codtri'] = $codtri;
+          $aTotalPorCodtri[$codtri] = $aCC;
+        }
+      }
+
+      //Filtra fontes que não estejam zeradas
+      foreach($aTotalPorCodtri as $aCC){
+          if($aCC['saldo_anterior'] == 0 && $aCC['valor_debito'] == 0 && $aCC['valor_credito'] == 0 && $aCC['saldo_final'] == 0) {
+              continue;
+          }
+          $aContaCorrenteDados[] = $aCC;
+      }
+
+      //Ordena as fontes por ordem crescente
+      usort($aContaCorrenteDados, function ($ccA, $ccB) {
+          return strcmp($ccA['codtri'], $ccB['codtri']);
+      });
+
+      return $aContaCorrenteDados;
+    }
 }

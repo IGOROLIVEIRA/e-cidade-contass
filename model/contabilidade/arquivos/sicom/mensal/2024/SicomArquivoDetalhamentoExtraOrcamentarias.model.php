@@ -393,7 +393,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 							$cExt20->si165_tiporegistro = '20';
 							$cExt20->si165_codorgao = $oExt10Agrupado->si124_codorgao;
 							$cExt20->si165_codext = $oContasReg20->c61_codtce;
-							$cExt20->si165_codfontrecursos = substr($clDeParaFonte->getDePara($oContasReg20->fontemovimento),0,7);
+							$cExt20->si165_codfontrecursos = substr($clDeParaFonte->getDePara(strlen($oContasReg20->fontemovimento) == 7 ? $oContasReg20->fontemovimento."0" : $oContasReg20->fontemovimento), 0, 7);
 							$cExt20->si165_exerciciocompdevo = $oExtExercicioComDevo;
 							$cExt20->si165_vlsaldoanteriorfonte += $oContasReg20->saldoinicial;
 							$cExt20->si165_natsaldoanteriorfonte = $natsaldoanteriorfonte ;
