@@ -148,7 +148,6 @@ for($contas = 0; $contas < pg_numrows($res); $contas ++) {
   $conta_atual = $c61_reduz;
   $txt_where2  = $txt_where . " and conplanoreduz.c61_reduz = $c61_reduz  and conplanoreduz.c61_instit = " . db_getsession("DB_instit");
   $txt_where2 .= " and c69_data between '$data1' and '$data2'  and conplanoreduz.c61_instit = " . db_getsession("DB_instit");
-  $txt_where2 .= " and case when c19_reduz is not null then c19_reduz = {$c61_reduz} else 1=1 end";
 
   $sql_analitico = "
     select conplanoreduz.c61_codcon,
@@ -229,12 +228,9 @@ for($contas = 0; $contas < pg_numrows($res); $contas ++) {
            left join conlancamdig on c78_codlan = c69_codlan
            left join conlancamcompl on c72_codlan = c69_codlan
            left join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
-           left join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
      where conplanoreduz.c61_anousu = {$anousu} and {$txt_where2}
      order by conplano.c60_estrut, c69_data,c69_codlan,c69_sequen ";
-
   $reslista = db_query($sql_analitico);
-
   if (!$reslista) {
 
     echo "ERRO<br><br><br><br><br>";
