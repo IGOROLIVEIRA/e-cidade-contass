@@ -1,4 +1,5 @@
 <?php
+
 namespace ECidade\V3\Extension;
 
 use Exception;
@@ -7,7 +8,8 @@ use \ECidade\V3\Extension\RequestBag;
 /**
  * Constrole de sessao
  */
-class Session extends RequestBag {
+class Session extends RequestBag
+{
 
   /**
    * @const Sessao desabilidada
@@ -37,63 +39,68 @@ class Session extends RequestBag {
    * @var boolean
    */
   private $writeable = true;
-  
+
   /**
    * @param integer $id
    * @return integer | Session
    */
-  public function id($id = null) {
+  public function id($id = null)
+  {
 
     if (!is_null($id)) {
       session_id($id);
       return $this;
     }
-		return session_id();
+    return session_id();
   }
 
   /**
    * @param string $name
    * @return string | Session
    */
-  public function name($name = null) {
+  public function name($name = null)
+  {
 
     if (!is_null($name)) {
       session_name($name);
       return $this;
     }
-		return session_name();
+    return session_name();
   }
 
   /**
    * @return Session
    */
-	public function destroy() {
+  public function destroy()
+  {
 
     if ($this->writeable()) {
-	    session_destroy();
+      session_destroy();
     }
     return $this;
-	}
+  }
 
   /**
    * Fecha arquivo da sessao, para escrita no arquivo
    *  - modificacoes na sessao apos fechada, nao serao salvas
    * @return Session
    */
-	public function close() {
+  public function close()
+  {
 
     if ($this->writeable()) {
       session_write_close();
     }
     $this->status = Session::NONE;
     return $this;
-	}
+  }
 
   /**
    * @return array
    */
-  private function getCurrentSessionData() {
-  
+  private function getCurrentSessionData()
+  {
+
     $result = array();
     $path = session_save_path() . DS . 'sess_' . $this->id();
 
@@ -110,7 +117,7 @@ class Session extends RequestBag {
     $id = session_id();
 
     // Criamos uma sessão "fake"
-    // somente para utilizar o session_decode e restaurar os dados da sessão do usuário
+    // somente para utilizar o session_decode e restaurar os dados da sessão do usu�rio
     session_name('w' . (string) mt_rand());
     session_id(uniqid());
     session_start();
@@ -135,11 +142,12 @@ class Session extends RequestBag {
    * Inicia sessao
    * @return Session
    */
-  public function start() {
+  public function start()
+  {
 
     // read-only
     if (!$this->writeable() && $this->status === Session::NONE) {
-      
+
       $_SESSION = $this->getCurrentSessionData();
       $this->replace($_SESSION);
       $this->status = Session::ACTIVE;
@@ -154,7 +162,7 @@ class Session extends RequestBag {
       }
 
       session_start();
-      $this->data =& $_SESSION;
+      $this->data = &$_SESSION;
       $this->status = Session::ACTIVE;
     }
 
@@ -164,20 +172,22 @@ class Session extends RequestBag {
   /**
    * @return integer
    */
-  public function status() {
+  public function status()
+  {
     return $this->status;
   }
 
   /**
    * @return boolean
    */
-  public function writeable($writeable = null) {
+  public function writeable($writeable = null)
+  {
 
     if ($writeable === null) {
       return $this->writeable;
     }
 
-    $this->writeable = (boolean) $writeable;
+    $this->writeable = (bool) $writeable;
     return $this;
   }
 
@@ -188,7 +198,8 @@ class Session extends RequestBag {
    * @param  mixed $message Flash content
    * @return mixed          Flash content
    */
-  public function flash($message = null, $type = '') {
+  public function flash($message = null, $type = '')
+  {
 
     if (empty($message)) {
       $flash = $this->get('flash');
@@ -198,5 +209,4 @@ class Session extends RequestBag {
 
     return $this->set('flash', "<p class='flash $type'>" . $message . "</p>");
   }
-
 }

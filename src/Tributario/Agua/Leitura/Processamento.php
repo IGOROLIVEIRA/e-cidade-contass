@@ -35,7 +35,8 @@ use DBException;
 use ECidade\Tributario\Agua\Repository\Leitura as LeituraRepository;
 use ParameterException;
 
-class Processamento {
+class Processamento
+{
 
   /**
    * @var LeituraRepository
@@ -56,19 +57,23 @@ class Processamento {
   /**
    * @param LeituraRepository $oRepository
    */
-  public function __construct(LeituraRepository $oRepository) {
+  public function __construct(LeituraRepository $oRepository)
+  {
     $this->oRepository = $oRepository;
   }
 
-  public function setLogger(\DBLog $oLogger) {
+  public function setLogger(\DBLog $oLogger)
+  {
     $this->oLogger = $oLogger;
   }
 
-  public function getLogger() {
+  public function getLogger()
+  {
     return $this->oLogger;
   }
 
-  public function log($sMensagem) {
+  public function log($sMensagem)
+  {
 
     if ($this->oLogger) {
       $this->oLogger->escreverLog("Contrato: {$this->iCodigoContrato} Mês: {$this->iMesReferencia}/{$this->iAnoReferencia} - {$sMensagem}");
@@ -85,28 +90,29 @@ class Processamento {
    * @throws DBException
    * @throws ParameterException
    */
-  public function executar($iCodigoContrato, $iMesReferencia, $iAnoReferencia) {
+  public function executar($iCodigoContrato, $iMesReferencia, $iAnoReferencia)
+  {
 
     if (!db_utils::inTransaction()) {
       throw new DBException('Sem transação iniciada.');
     }
 
     if (!$iCodigoContrato) {
-      throw new ParameterException('Código do Contrato não foi imformado.');
+      throw new ParameterException('Código do Contrato n�o foi imformado.');
     }
 
     if (!$iMesReferencia) {
-      throw new ParameterException('Mês de referência não foi informado.');
+      throw new ParameterException('Mês de referência n�o foi informado.');
     }
 
     if (!$iAnoReferencia) {
-      throw new ParameterException('Mês de referência não foi informado.');
+      throw new ParameterException('Mês de referência n�o foi informado.');
     }
 
     /**
      *  Define nas propriedades da classe os parametros de execucao
      *  para utilizar no log
-    */
+     */
     $this->iCodigoContrato = $iCodigoContrato;
     $this->iMesReferencia  = $iMesReferencia;
     $this->iAnoReferencia  = $iAnoReferencia;
@@ -121,7 +127,7 @@ class Processamento {
     $oRegra = $oRegraFactory->create($aResumosMensais);
 
     if (!$oRegra) {
-      $this->log("Leitura: {$aLeituras[0]->getCodigo()} - Não se enquadra em regra de média / penalidade.");
+      $this->log("Leitura: {$aLeituras[0]->getCodigo()} - N�o se enquadra em regra de média / penalidade.");
       return false;
     }
 
@@ -170,7 +176,8 @@ class Processamento {
    * @param int $iMes
    * @param int $iAno
    */
-  public function cancelarLeituras($iCodigoContrato, $iMes, $iAno) {
+  public function cancelarLeituras($iCodigoContrato, $iMes, $iAno)
+  {
 
     $aLeituras = $this->oRepository->findByMesAno($iCodigoContrato, $iMes, $iAno);
 

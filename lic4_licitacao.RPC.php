@@ -733,7 +733,8 @@ switch ($oParam->exec) {
         $sSql = "
             SELECT DISTINCT l03_pctipocompratribunal,
                             l03_codcom,
-                            l20_objeto
+                            l20_objeto,
+                            l20_tipoprocesso
                     FROM liclicita
                     INNER JOIN db_usuarios ON db_usuarios.id_usuario = liclicita.l20_id_usucria
                     INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom

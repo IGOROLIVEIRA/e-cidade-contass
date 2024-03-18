@@ -53,36 +53,36 @@ class Oc21618 extends AbstractMigration
                 $aOrcamento = array($c60_codcon, $c60_anousu, $c60_estrut, $c60_descr, $c60_finali, $c60_codsis, $c60_codcla, $c60_consistemaconta, $c60_identificadorfinanceiro, $c60_naturezasaldo, $c60_funcao);
                 $this->insertOrcamento($aOrcamento);
 
-            }
+                if ($contasInserir->Tipo == 'Analitica') {
 
-            if ($contasInserir->Tipo == 'Analitica') {
+                    $aInstit = $this->getInstit();
 
-                $aInstit = $this->getInstit();
+                    foreach ($aInstit as $cliente) {
 
-                foreach ($aInstit as $cliente) {
+                        $c61_instit = $cliente['codigo'];
 
-                    $c61_instit = $cliente['codigo'];
-
-                    $sSqlVerificaReduz = "SELECT c61_reduz FROM conplanoorcamentoanalitica
+                        $sSqlVerificaReduz = "SELECT c61_reduz FROM conplanoorcamentoanalitica
                                           JOIN conplanoorcamento ON (c60_codcon, c60_anousu) = (c61_codcon, c61_anousu)
                                           WHERE c60_estrut LIKE '{$contasInserir->Estrutural}%'
                                             AND c61_instit = {$c61_instit}
                                             AND c61_anousu = 2024";
 
-                    $aReduzExiste = $this->fetchAll($sSqlVerificaReduz);
-                    $c61_reduz = intval(current($this->fetchRow("SELECT nextval('conplanoorcamentoanalitica_c61_reduz_seq')")));
+                        $aReduzExiste = $this->fetchAll($sSqlVerificaReduz);
+                        $c61_reduz = intval(current($this->fetchRow("SELECT nextval('conplanoorcamentoanalitica_c61_reduz_seq')")));
 
-                    if (empty($aReduzExiste)) {
+                        if (empty($aReduzExiste)) {
 
-                        $aReduzOrcamento = array($c60_codcon, 2024, $c61_reduz, $c61_instit, $contasInserir->Fonte);
+                            $aReduzOrcamento = array($c60_codcon, 2024, $c61_reduz, $c61_instit, $contasInserir->Fonte);
 
-                        $this->insertReduzOrcamento($aReduzOrcamento);
-                        $this->insertVinculo($c60_codcon, $contasInserir->VinculoPCASP, $c61_instit);
+                            $this->insertReduzOrcamento($aReduzOrcamento);
+                            $this->insertVinculo($c60_codcon, $contasInserir->VinculoPCASP, $c61_instit);
 
+                        }
                     }
-                }
 
+                }
             }
+
 
         }
     }

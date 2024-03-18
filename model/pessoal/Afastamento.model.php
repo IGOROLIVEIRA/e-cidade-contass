@@ -31,17 +31,18 @@
  * @package pessoal
  * @author Alberto <alberto@dbseller.com.br>
  */
-class Afastamento {
+class Afastamento
+{
 
-  const AFASTADO_DOENCA_MAIS_30_DIAS = 6;
-  const AFASTADO_DOENCA_MAIS_15_DIAS = 6;
-  const AFASTADO_SEM_REMUNERACAO = 7;
-  const LICENCA_SEM_VENCIMENTO = 7;
-  const AFASTADO_ACIDENTE_TRABALHO_MAIS_15_DIAS = 3;
-  const AFASTADO_SERVICO_MILITAR = 3;
-  const AFASTADO_LICENCA_GESTANTE = 3;
+	const AFASTADO_DOENCA_MAIS_30_DIAS = 6;
+	const AFASTADO_DOENCA_MAIS_15_DIAS = 6;
+	const AFASTADO_SEM_REMUNERACAO = 7;
+	const LICENCA_SEM_VENCIMENTO = 7;
+	const AFASTADO_ACIDENTE_TRABALHO_MAIS_15_DIAS = 3;
+	const AFASTADO_SERVICO_MILITAR = 3;
+	const AFASTADO_LICENCA_GESTANTE = 3;
 
-  
+
 	/**
 	 * Código Afastamento r69_codigo
 	 * @var integer 
@@ -55,7 +56,7 @@ class Afastamento {
 	private $iMatricula;
 
 	/**
-	 * Código do tipo de Afastamento -- Campo não utilizado
+	 * Código do tipo de Afastamento -- Campo n�o utilizado
 	 * @var integer
 	 *
 	 * private $iTipoAfastamento;
@@ -76,19 +77,19 @@ class Afastamento {
 	/**
 	 * Histórico do Afastamento
 	 * @var string
-	*private $sHistorico;
-	*/
+	 *private $sHistorico;
+	 */
 
 	/**
 	 * Código da portaria emitida
 	 * @var string
-	*private $sCodigoPortaria;
-*/
+	 *private $sCodigoPortaria;
+	 */
 	/**
 	 * Descrição do ato oficial
 	 * @var string
-	*private $sDescricaoAto;
-*/
+	 *private $sDescricaoAto;
+	 */
 	/**
 	 * Mês do afastamento r69_mesusu
 	 * @var integer	 
@@ -98,15 +99,15 @@ class Afastamento {
 	/**
 	 * Percentual concedido
 	 * @var number
-	*private $nPercentual;
-*/
+	 *private $nPercentual;
+	 */
 	/**
 	 * Segundo Histórico do Afastamento
 	 * @var string
-	*private $sSegundoHistorico;
- */
+	 *private $sSegundoHistorico;
+	 */
 	/**
-	 * Login do usuário que registrou o asssentamento/afastamento r69_login
+	 * Login do usu�rio que registrou o asssentamento/afastamento r69_login
 	 * @var string
 	 */
 	private $sLoginUsuario;
@@ -121,19 +122,19 @@ class Afastamento {
 	/**
 	 * Se registro foi convertido
 	 * @var boolean
-	*private $lConvertido;
-	*/
+	 *private $lConvertido;
+	 */
 	/**
 	 * Ano do afastamento r69_anousu
 	 * @var integer
 	 */
 	private $iAnoAfasta;
-	
+
 	/**
 	 * Obejeto contendo o valor e a quantidade para ser lancado na rubrica para pagamento
 	 * @var stdClass
-	*private $oValorQuantidade;
-	*/
+	 *private $oValorQuantidade;
+	 */
 	/**
 	 * Guarda mensagem de erro na execução de métodos
 	 * @var String
@@ -145,7 +146,8 @@ class Afastamento {
 	 * 
 	 * @param Integer $iCodigo
 	 */
-	public function __construct($iCodigo = null) {
+	public function __construct($iCodigo = null)
+	{
 
 		/*if ( empty($iCodigo) ) {
 			return;
@@ -184,14 +186,14 @@ class Afastamento {
 			$oDataRetorno = new DBDate($oAfastamento->h16_dtterm);
 		  $this->setDataTermino   ($oDataRetorno);
 		}*/
-
 	}
 
 	/**
 	 * Retorna o código do Afastamento
 	 * @return number
 	 */
-	public function getCodigo() {
+	public function getCodigo()
+	{
 		return $this->iCodigo;
 	}
 
@@ -199,7 +201,8 @@ class Afastamento {
 	 * Define o código do Afastamento
 	 * @param integer $iCodigo
 	 */
-	public function setCodigo($iCodigo) {
+	public function setCodigo($iCodigo)
+	{
 		$this->iCodigo = $iCodigo;
 	}
 
@@ -207,7 +210,8 @@ class Afastamento {
 	 * Retorna a matrícula do servidor do Afastamento
 	 * @return integer
 	 */
-	public function getMatricula() {
+	public function getMatricula()
+	{
 		return $this->iMatricula;
 	}
 
@@ -215,7 +219,8 @@ class Afastamento {
 	 * Define a matrícula do servidor do Afastamento
 	 * @param unknown $iMatricula
 	 */
-	public function setMatricula($iMatricula) {
+	public function setMatricula($iMatricula)
+	{
 		$this->iMatricula = $iMatricula;
 	}
 
@@ -223,7 +228,8 @@ class Afastamento {
 	 * Define o tipo de Afastamento
 	 * @return integer
 	 */
-	public function getTipoAfastamento() {
+	public function getTipoAfastamento()
+	{
 		return $this->iTipoAfastamento;
 	}
 
@@ -231,7 +237,8 @@ class Afastamento {
 	 * Define o tipo de assentamneto
 	 * @param integer $iTipoAfastamento
 	 */
-	public function setTipoAfastamento($iTipoAfastamento) {
+	public function setTipoAfastamento($iTipoAfastamento)
+	{
 		$this->iTipoAfastamento = $iTipoAfastamento;
 	}
 
@@ -239,7 +246,8 @@ class Afastamento {
 	 * Retorna a data de concessão do afastamento
 	 * @return DBDate
 	 */
-	public function getDataConcessao() {
+	public function getDataConcessao()
+	{
 		return $this->oDataAfasta;
 	}
 
@@ -247,7 +255,8 @@ class Afastamento {
 	 * Define a data de concessão do afastamento
 	 * @param DBDate $oDataAfasta
 	 */
-	public function setDataConcessao(DBDate $oDataAfasta) {
+	public function setDataConcessao(DBDate $oDataAfasta)
+	{
 		$this->oDataAfasta = $oDataAfasta;
 	}
 
@@ -255,7 +264,8 @@ class Afastamento {
 	 * Define o histórico do afastamento
 	 * @return string
 	 */
-	public function getHistorico() {
+	public function getHistorico()
+	{
 		return $this->sHistorico;
 	}
 
@@ -263,7 +273,8 @@ class Afastamento {
 	 * Define o histório do afastamento
 	 * @param unknown $sHistorico
 	 */
-	public function setHistorico($sHistorico) {
+	public function setHistorico($sHistorico)
+	{
 		$this->sHistorico = $sHistorico;
 	}
 
@@ -271,7 +282,8 @@ class Afastamento {
 	 * Retorna o código da portaria
 	 * @return string
 	 */
-	public function getCodigoPortaria() {
+	public function getCodigoPortaria()
+	{
 		return $this->sCodigoPortaria;
 	}
 
@@ -279,7 +291,8 @@ class Afastamento {
 	 * Define o código da portaria
 	 * @param unknown $sCodigoPortaria
 	 */
-	public function setCodigoPortaria($sCodigoPortaria) {
+	public function setCodigoPortaria($sCodigoPortaria)
+	{
 		$this->sCodigoPortaria = $sCodigoPortaria;
 	}
 
@@ -287,7 +300,8 @@ class Afastamento {
 	 * Retorna a descrição do ato
 	 * @return string
 	 */
-	public function getDescricaoAto() {
+	public function getDescricaoAto()
+	{
 		return $this->sDescricaoAto;
 	}
 
@@ -295,23 +309,26 @@ class Afastamento {
 	 * Define a descrição do ato
 	 * @param string $sDescricaoAto
 	 */
-	public function setDescricaoAto($sDescricaoAto) {
+	public function setDescricaoAto($sDescricaoAto)
+	{
 		$this->sDescricaoAto = $sDescricaoAto;
 	}
 
 	/**
-	 * Retorna o número de dias do afastametno
+	 * Retorna o n�mero de dias do afastametno
 	 * @return number
 	 */
-	public function getDias() {
+	public function getDias()
+	{
 		return $this->iMesAfasta;
 	}
 
 	/**
-	 * Define o número de dias do afastamento
+	 * Define o n�mero de dias do afastamento
 	 * @param integer $iMesAfasta
 	 */
-	public function setDias($iMesAfasta) {
+	public function setDias($iMesAfasta)
+	{
 		$this->iMesAfasta = $iMesAfasta;
 	}
 
@@ -319,7 +336,8 @@ class Afastamento {
 	 * Retorna o percentual do afastamento
 	 * @return number
 	 */
-	public function getPercentual() {
+	public function getPercentual()
+	{
 		return $this->nPercentual;
 	}
 
@@ -327,7 +345,8 @@ class Afastamento {
 	 * Define o percentual do afastamento
 	 * @param number $nPercentual
 	 */
-	public function setPercentual($nPercentual) {
+	public function setPercentual($nPercentual)
+	{
 		$this->nPercentual = $nPercentual;
 	}
 
@@ -335,7 +354,8 @@ class Afastamento {
 	 * Retorna uma instância do objeto DBDate com a data do afastamento
 	 * @return DBDate
 	 */
-	public function getDataTermino() {
+	public function getDataTermino()
+	{
 		return $this->oDataRetorno;
 	}
 
@@ -343,7 +363,8 @@ class Afastamento {
 	 * Define uma instância do objeto DBDate com a  data de termino do afastamento/Afastamento
 	 * @paramDBDate $oDataRetorno
 	 */
-	public function setDataTermino(DBDate $oDataRetorno) {
+	public function setDataTermino(DBDate $oDataRetorno)
+	{
 		$this->oDataRetorno = $oDataRetorno;
 	}
 
@@ -351,7 +372,8 @@ class Afastamento {
 	 * Retorna o segundo histórico do afastamento
 	 * @return string
 	 */
-	public function getSegundoHistorico() {
+	public function getSegundoHistorico()
+	{
 		return $this->sSegundoHistorico;
 	}
 
@@ -359,23 +381,26 @@ class Afastamento {
 	 * Define o segundo histórico do afastamento
 	 * @param string $sSegundoHistorico
 	 */
-	public function setSegundoHistorico($sSegundoHistorico) {
+	public function setSegundoHistorico($sSegundoHistorico)
+	{
 		$this->sSegundoHistorico = $sSegundoHistorico;
 	}
 
 	/**
-	 * Retorna o login do usuário
+	 * Retorna o login do usu�rio
 	 * @return string
 	 */
-	public function getLoginUsuario() {
+	public function getLoginUsuario()
+	{
 		return $this->sLoginUsuario;
 	}
 
 	/**
-	 * Define o login do usuário
+	 * Define o login do usu�rio
 	 * @param string $sLoginUsuario
 	 */
-	public function setLoginUsuario($sLoginUsuario) {
+	public function setLoginUsuario($sLoginUsuario)
+	{
 		$this->sLoginUsuario = $sLoginUsuario;
 	}
 
@@ -383,7 +408,8 @@ class Afastamento {
 	 * Retorna uma instância do objeto DBDate com a data de lançamento do afastamento / Afastamento
 	 * @return DBDate
 	 */
-	public function getDataLancamento() {
+	public function getDataLancamento()
+	{
 		return $this->oDataLancamento;
 	}
 
@@ -391,7 +417,8 @@ class Afastamento {
 	 * Define uma instância do objeto DBDate com a data de lançamento do afastamento / Afastamento
 	 * @param unknown $oDataLancamento
 	 */
-	public function setDataLancamento($oDataLancamento) {
+	public function setDataLancamento($oDataLancamento)
+	{
 		$this->oDataLancamento = $oDataLancamento;
 	}
 
@@ -399,7 +426,8 @@ class Afastamento {
 	 * Retorna se o afastamento foi convertido
 	 * @return boolean
 	 */
-	public function isConvertido() {
+	public function isConvertido()
+	{
 		return $this->lConvertido;
 	}
 
@@ -407,7 +435,8 @@ class Afastamento {
 	 * Define se o registro foi convertido
 	 * @param boolean $lConvertido
 	 */
-	public function setConvertido($lConvertido) {
+	public function setConvertido($lConvertido)
+	{
 		$this->lConvertido = $lConvertido;
 	}
 
@@ -415,7 +444,8 @@ class Afastamento {
 	 * Retorna o ano da portaria
 	 * @return number
 	 */
-	public function getAnoPortaria() {
+	public function getAnoPortaria()
+	{
 		return $this->iAnoAfasta;
 	}
 
@@ -423,7 +453,8 @@ class Afastamento {
 	 * Define o ano da portaria
 	 * @param integer $iAnoAfasta
 	 */
-	public function setAnoPortaria($iAnoAfasta) {
+	public function setAnoPortaria($iAnoAfasta)
+	{
 		$this->iAnoAfasta = $iAnoAfasta;
 	}
 
@@ -431,7 +462,8 @@ class Afastamento {
 	 * Retorna a mensagem de erro
 	 * @return String
 	 */
-	public function getErro() {
+	public function getErro()
+	{
 		return $this->sErro;
 	}
 
@@ -439,11 +471,12 @@ class Afastamento {
 	 * Persist na base um Afastamento
 	 * @return mixed true | String mensagem de erro
 	 */
-	public function persist() {
+	public function persist()
+	{
 
 		$classenta       = new cl_assenta();
 		$clafasta        = new cl_afasta();
-    $clAfastaAssenta = new cl_afastaassenta();
+		$clAfastaAssenta = new cl_afastaassenta();
 
 		$classenta->h16_regist  = $this->getMatricula();
 		$classenta->h16_assent  = $this->getTipoAfastamento();
@@ -460,13 +493,12 @@ class Afastamento {
 		$classenta->h16_conver  = $this->isConvertido();
 		$classenta->h16_anoato  = $this->getAnoPortaria();
 
-		if(empty($this->iCodigo)) {
+		if (empty($this->iCodigo)) {
 
 			if (!$classenta->incluir(null)) {
 				return $classenta->erro_msg;
 			}
 			$this->setCodigo($classenta->h16_codigo);
-
 		} else {
 
 			$classenta->h16_codigo = $this->getCodigo();
@@ -476,13 +508,13 @@ class Afastamento {
 		}
 
 		/**
-     * Incluimos na tabela assenta e criamos uma relação entre os Afastamentos do pessoal e do rh
-     * incluendo as chaves na tabela afastaassenta
-     */
-    $oInformacoesExternas = InformacoesExternasTipoAfastamento::getInstance(TipoAfastamentoRepository::getInstanciaPorCodigo($this->getTipoAfastamento()));
-		
-		if(!$oInformacoesExternas->getSefip()){
-			return true;	
+		 * Incluimos na tabela assenta e criamos uma relação entre os Afastamentos do pessoal e do rh
+		 * incluendo as chaves na tabela afastaassenta
+		 */
+		$oInformacoesExternas = InformacoesExternasTipoAfastamento::getInstance(TipoAfastamentoRepository::getInstanciaPorCodigo($this->getTipoAfastamento()));
+
+		if (!$oInformacoesExternas->getSefip()) {
+			return true;
 		}
 
 		/**
@@ -498,52 +530,52 @@ class Afastamento {
 			}
 
 			if (pg_num_rows($rsAfastaAssenta) > 0) {
-			  $iCodigoAfastamento = db_utils::fieldsMemory($rsAfastaAssenta, 0)->h81_afasta;
+				$iCodigoAfastamento = db_utils::fieldsMemory($rsAfastaAssenta, 0)->h81_afasta;
 			}
 		}
-		
+
 
 		$clafasta->r45_anousu = $oInformacoesExternas->getCompetencia()->getAno();
-    $clafasta->r45_mesusu = $oInformacoesExternas->getCompetencia()->getMes();
-    $clafasta->r45_regist = $this->getMatricula();
-    $clafasta->r45_dtafas = ($this->getDataConcessao() instanceof DBDate ? $this->getDataConcessao()->getDate() : $this->getDataConcessao());
-    $clafasta->r45_dtreto = ($this->getDataTermino() instanceof DBDate ? $this->getDataTermino()->getDate() : $this->getDataTermino());
-    $clafasta->r45_situac = $oInformacoesExternas->getSituacaoAfastamento();
-    $clafasta->r45_dtlanc = ($this->getDataLancamento() instanceof DBDate ? $this->getDataLancamento()->getDate() : $this->getDataLancamento());
-    $clafasta->r45_codafa = $oInformacoesExternas->getSefip();
-    $clafasta->r45_codret = $oInformacoesExternas->getCodigoRetorno();
-    $clafasta->r45_obs    = $this->getHistorico();
+		$clafasta->r45_mesusu = $oInformacoesExternas->getCompetencia()->getMes();
+		$clafasta->r45_regist = $this->getMatricula();
+		$clafasta->r45_dtafas = ($this->getDataConcessao() instanceof DBDate ? $this->getDataConcessao()->getDate() : $this->getDataConcessao());
+		$clafasta->r45_dtreto = ($this->getDataTermino() instanceof DBDate ? $this->getDataTermino()->getDate() : $this->getDataTermino());
+		$clafasta->r45_situac = $oInformacoesExternas->getSituacaoAfastamento();
+		$clafasta->r45_dtlanc = ($this->getDataLancamento() instanceof DBDate ? $this->getDataLancamento()->getDate() : $this->getDataLancamento());
+		$clafasta->r45_codafa = $oInformacoesExternas->getSefip();
+		$clafasta->r45_codret = $oInformacoesExternas->getCodigoRetorno();
+		$clafasta->r45_obs    = $this->getHistorico();
 
-    if (isset($iCodigoAfastamento)) {
+		if (isset($iCodigoAfastamento)) {
 
-    	$clafasta->r45_codigo = $iCodigoAfastamento;
-    	$clafasta->alterar($iCodigoAfastamento);
-    } else {
-    	$clafasta->incluir(null);
-    }
+			$clafasta->r45_codigo = $iCodigoAfastamento;
+			$clafasta->alterar($iCodigoAfastamento);
+		} else {
+			$clafasta->incluir(null);
+		}
 
-    if ($clafasta->erro_status == "0") {
-    	throw new DBException($clafasta->erro_msg);
-    }
+		if ($clafasta->erro_status == "0") {
+			throw new DBException($clafasta->erro_msg);
+		}
 
-    if (!isset($iCodigoAfastamento)) {
+		if (!isset($iCodigoAfastamento)) {
 
-	    $clAfastaAssenta->h81_assenta = $classenta->h16_codigo;
-	    $clAfastaAssenta->h81_afasta  = $clafasta->r45_codigo;
-	    $clAfastaAssenta->incluir();
+			$clAfastaAssenta->h81_assenta = $classenta->h16_codigo;
+			$clAfastaAssenta->h81_afasta  = $clafasta->r45_codigo;
+			$clAfastaAssenta->incluir();
 
-	    if ($clAfastaAssenta->erro_status == "0") {
-	    	throw new DBException($clAfastaAssenta->erro_msg);
-	    }
-	  }
+			if ($clAfastaAssenta->erro_status == "0") {
+				throw new DBException($clAfastaAssenta->erro_msg);
+			}
+		}
 
-	  /**
-	   * Realiza a proporcionalização no ponto
-	   */
-	  $oCompetencia = DBPessoal::getCompetenciaFolha(); 
-	  $oServidor    = ServidorRepository::getInstanciaByCodigo($this->getMatricula(), $oCompetencia->getAno(), $oCompetencia->getMes());
-	  $oProporcionalizacaoPontoSalario = new ProporcionalizacaoPontoSalario($oServidor->getPonto(Ponto::SALARIO), $oInformacoesExternas->getSituacaoAfastamento(), $this->getDataTermino());
-	  $oProporcionalizacaoPontoSalario->processar();
+		/**
+		 * Realiza a proporcionalização no ponto
+		 */
+		$oCompetencia = DBPessoal::getCompetenciaFolha();
+		$oServidor    = ServidorRepository::getInstanciaByCodigo($this->getMatricula(), $oCompetencia->getAno(), $oCompetencia->getMes());
+		$oProporcionalizacaoPontoSalario = new ProporcionalizacaoPontoSalario($oServidor->getPonto(Ponto::SALARIO), $oInformacoesExternas->getSituacaoAfastamento(), $this->getDataTermino());
+		$oProporcionalizacaoPontoSalario->processar();
 
 		return true;
 	}
@@ -552,18 +584,19 @@ class Afastamento {
 	 * Transforma o objeto em um formato JSON
 	 * @return JSON
 	 */
-  public function toJSON() {
+	public function toJSON()
+	{
 
-    $oServidor             = ServidorRepository::getInstanciaByCodigo( 
-      $this->getMatricula(), 
-      DBPessoal::getAnoFolha(), 
-      DBPessoal::getMesFolha() 
-    );
-    $aRetorno["codigo"]            = $this->getCodigo();
-    $aRetorno["tipo"]              = $this->getTipoAfastamento();
-    $aRetorno["natureza"]          = "padrao";
-    $aRetorno["cgm_servidor"]      = $oServidor->getCgm()->getCodigo();
-    $aRetorno["nome_servidor"]     = $oServidor->getCgm()->getNome();
+		$oServidor             = ServidorRepository::getInstanciaByCodigo(
+			$this->getMatricula(),
+			DBPessoal::getAnoFolha(),
+			DBPessoal::getMesFolha()
+		);
+		$aRetorno["codigo"]            = $this->getCodigo();
+		$aRetorno["tipo"]              = $this->getTipoAfastamento();
+		$aRetorno["natureza"]          = "padrao";
+		$aRetorno["cgm_servidor"]      = $oServidor->getCgm()->getCodigo();
+		$aRetorno["nome_servidor"]     = $oServidor->getCgm()->getNome();
 
 		$aRetorno["matricula"]         = $this->getMatricula();
 		$aRetorno["dataConcessao"]     = ($this->getDataConcessao() instanceof DBDate ? $this->getDataConcessao()->getDate(DBDate::DATA_PTBR) : $this->getDataConcessao());
@@ -579,117 +612,119 @@ class Afastamento {
 		$aRetorno["convertido"]        = (int)$this->isConvertido();
 		$aRetorno["anoPortaria"]       = $this->getAnoPortaria();
 
-    return json_encode((object)$aRetorno);
+		return json_encode((object)$aRetorno);
+	}
 
-  }
-
-  /**
-   * Seta o valor/quantidae para a formula executada
-   * 
-   * @param  String $sFormula
-   * 
-   * @return  void
-   */
-  private function setValorQuantidadePorFormula($sFormula = null) {
+	/**
+	 * Seta o valor/quantidae para a formula executada
+	 * 
+	 * @param  String $sFormula
+	 * 
+	 * @return  void
+	 */
+	private function setValorQuantidadePorFormula($sFormula = null)
+	{
 
 		$oTipoAfastamento = TipoAfastamentoRepository::getInstanciaPorCodigo($this->getTipoAfastamento());
-  	$oDbformula        = new DBFormulaAfastamento($this);
+		$oDbformula        = new DBFormulaAfastamento($this);
 
-  	if(empty($sFormula)) {
+		if (empty($sFormula)) {
 			$sFormula        = $oTipoAfastamento->getVariavelTipoAfastamentoFinanceiro();
-  	}
+		}
 
-  	$oStdValorQtde               = new stdClass();
+		$oStdValorQtde               = new stdClass();
 		$oStdValorQtde->valor        = 0;
 		$oStdValorQtde->quantidade   = 0;
 		$this->oValorQuantidade      = $oStdValorQtde;
 
-  	try {
+		try {
 
-  		if($sFormula === false) {
-  			throw new BusinessException("Não foi possível recuperar a fórmula.");
-  		}
+			if ($sFormula === false) {
+				throw new BusinessException("N�o foi possível recuperar a fórmula.");
+			}
 
-  		$sSqlValorQuantidade = $oDbformula->parse("SELECT [". $sFormula ."]");
-  		$rsValorQuantidade   = db_query($sSqlValorQuantidade);
+			$sSqlValorQuantidade = $oDbformula->parse("SELECT [" . $sFormula . "]");
+			$rsValorQuantidade   = db_query($sSqlValorQuantidade);
 
-  		if(!$rsValorQuantidade) {
-  			throw new DBException("Ocorreu um erro ao recuperar o valor/quantidade da formula.");
-  		}
+			if (!$rsValorQuantidade) {
+				throw new DBException("Ocorreu um erro ao recuperar o valor/quantidade da formula.");
+			}
 
-  		if(pg_num_rows($rsValorQuantidade) > 0) {
-  			$sFieldName       = pg_field_name($rsValorQuantidade, 0);
-  			$nValorQuantidade = pg_result($rsValorQuantidade, 0, $sFieldName);
-  		}
+			if (pg_num_rows($rsValorQuantidade) > 0) {
+				$sFieldName       = pg_field_name($rsValorQuantidade, 0);
+				$nValorQuantidade = pg_result($rsValorQuantidade, 0, $sFieldName);
+			}
 
-  		if($oTipoAfastamento->getTipoLancamentoTipoAfastamentoFinanceiro() != 1 && $oTipoAfastamento->getTipoLancamentoTipoAfastamentoFinanceiro() != 2) {
-  			throw new BusinessException("Não foi possível obter o tipo de lancamento da rubrica configurada para o Afastamento.");
-  		}
+			if ($oTipoAfastamento->getTipoLancamentoTipoAfastamentoFinanceiro() != 1 && $oTipoAfastamento->getTipoLancamentoTipoAfastamentoFinanceiro() != 2) {
+				throw new BusinessException("N�o foi possível obter o tipo de lancamento da rubrica configurada para o Afastamento.");
+			}
 
-  		if($oTipoAfastamento->getTipoLancamentoTipoAfastamentoFinanceiro() == 1) {
-  			$oStdValorQtde->valor      = $nValorQuantidade;
-  		}
+			if ($oTipoAfastamento->getTipoLancamentoTipoAfastamentoFinanceiro() == 1) {
+				$oStdValorQtde->valor      = $nValorQuantidade;
+			}
 
-  		if($oTipoAfastamento->getTipoLancamentoTipoAfastamentoFinanceiro() == 2) {
-  			$oStdValorQtde->quantidade = $nValorQuantidade;
-  		}
+			if ($oTipoAfastamento->getTipoLancamentoTipoAfastamentoFinanceiro() == 2) {
+				$oStdValorQtde->quantidade = $nValorQuantidade;
+			}
 
-  		$this->oValorQuantidade      = $oStdValorQtde;
-  		
-  	} catch (Exception $oErro) {  		
-  		$this->sErro = $oErro->getMessage();
-  	}
-  }
+			$this->oValorQuantidade      = $oStdValorQtde;
+		} catch (Exception $oErro) {
+			$this->sErro = $oErro->getMessage();
+		}
+	}
 
-  /**
-   * Retorna o valor para formula executada a ser lançado no ponto do servidor
-   * 
-   * @return Number
-   */
-  public function getValorPorFormula() {
+	/**
+	 * Retorna o valor para formula executada a ser lançado no ponto do servidor
+	 * 
+	 * @return Number
+	 */
+	public function getValorPorFormula()
+	{
 
-  	if(empty($this->oValorQuantidade)) {
-  		$this->setValorQuantidadePorFormula();
-  	}
+		if (empty($this->oValorQuantidade)) {
+			$this->setValorQuantidadePorFormula();
+		}
 
-  	return $this->oValorQuantidade->valor;
-  }
+		return $this->oValorQuantidade->valor;
+	}
 
-  /**
-   * Retorna a quantidade para formula executada a ser lançada no ponto do servidor
-   * 
-   * @return Number
-   */
-  public function getQuantidadePorFormula() {
+	/**
+	 * Retorna a quantidade para formula executada a ser lançada no ponto do servidor
+	 * 
+	 * @return Number
+	 */
+	public function getQuantidadePorFormula()
+	{
 
-  	if(empty($this->oValorQuantidade)) {
-  		$this->setValorQuantidadePorFormula();
-  	}
+		if (empty($this->oValorQuantidade)) {
+			$this->setValorQuantidadePorFormula();
+		}
 
-  	return $this->oValorQuantidade->quantidade;
-  }
+		return $this->oValorQuantidade->quantidade;
+	}
 
-  /**
-   * Retorna uma intância de LoteRegistroPonto caso o Afastamento esteja vinculado a um Lote.
-   *
-   * @return LoteRegistroPonto Lote no qual o Afastamento esta vinculado
-   */
-  public function getLote(){
+	/**
+	 * Retorna uma intância de LoteRegistroPonto caso o Afastamento esteja vinculado a um Lote.
+	 *
+	 * @return LoteRegistroPonto Lote no qual o Afastamento esta vinculado
+	 */
+	public function getLote()
+	{
 
-  	$oDaoAssentaloteregistroponto = new cl_assentaloteregistroponto();
-  	$sSqlAssentaloteregistroponto = $oDaoAssentaloteregistroponto->sql_query_file(null, "rh160_loteregistroponto", null, "rh160_Afastamento = {$this->getCodigo()}");
-  	$rsAssentaloteregistroponto   = db_query($sSqlAssentaloteregistroponto);
+		$oDaoAssentaloteregistroponto = new cl_assentaloteregistroponto();
+		$sSqlAssentaloteregistroponto = $oDaoAssentaloteregistroponto->sql_query_file(null, "rh160_loteregistroponto", null, "rh160_Afastamento = {$this->getCodigo()}");
+		$rsAssentaloteregistroponto   = db_query($sSqlAssentaloteregistroponto);
 
-  	if (!$rsAssentaloteregistroponto) {
-  		throw new DBException("Erro ao verificar se o Afastamento possui lote");
-  	}
+		if (!$rsAssentaloteregistroponto) {
+			throw new DBException("Erro ao verificar se o Afastamento possui lote");
+		}
 
-  	if (pg_num_rows($rsAssentaloteregistroponto) > 0) {
+		if (pg_num_rows($rsAssentaloteregistroponto) > 0) {
 
-	  	$iLoteRegistroPonto = db_utils::fieldsMemory($rsAssentaloteregistroponto, 0)->rh160_loteregistroponto;
-	  	return LoteRegistrosPontoRepository::getInstanceByCodigo($iLoteRegistroPonto);	
-	  }
+			$iLoteRegistroPonto = db_utils::fieldsMemory($rsAssentaloteregistroponto, 0)->rh160_loteregistroponto;
+			return LoteRegistrosPontoRepository::getInstanceByCodigo($iLoteRegistroPonto);
+		}
 
-  	return false;
-  }
+		return false;
+	}
 }

@@ -19,19 +19,19 @@ class GerarBO extends GerarAM
     $this->sArquivo = "BO";
     $this->abreArquivo();
 
-    $sSql = "select * from bodcasp102021 where si201_ano = {$this->iAno} AND si201_periodo = {$this->iPeriodo} AND si201_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bodcasp102023 where si201_ano = {$this->iAno} AND si201_periodo = {$this->iPeriodo} AND si201_institu = " . db_getsession("DB_instit");
     $rsBO10 = db_query($sSql);
 
-    $sSql = "select * from bodcasp202121 where si202_anousu = {$this->iAno} AND si202_periodo = {$this->iPeriodo} AND si202_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from bodcasp202023 where si202_anousu = {$this->iAno} AND si202_periodo = {$this->iPeriodo} AND si202_instit = " . db_getsession("DB_instit");
     $rsBO20 = db_query($sSql);
 
-    $sSql = "select * from bodcasp302021 where si203_anousu = {$this->iAno} AND si203_periodo = {$this->iPeriodo} AND si203_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from bodcasp302023 where si203_anousu = {$this->iAno} AND si203_periodo = {$this->iPeriodo} AND si203_instit = " . db_getsession("DB_instit");
     $rsBO30 = db_query($sSql);
 
-    $sSql = "select * from bodcasp402021 where si204_ano = {$this->iAno} AND si204_periodo = {$this->iPeriodo} AND si204_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bodcasp402023 where si204_ano = {$this->iAno} AND si204_periodo = {$this->iPeriodo} AND si204_institu = " . db_getsession("DB_instit");
     $rsBO40 = db_query($sSql);
 
-    $sSql = "select * from bodcasp502021 where si205_ano = {$this->iAno} AND si205_periodo = {$this->iPeriodo} AND si205_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bodcasp502023 where si205_ano = {$this->iAno} AND si205_periodo = {$this->iPeriodo} AND si205_institu = " . db_getsession("DB_instit");
     $rsBO50 = db_query($sSql);
 
     if (pg_num_rows($rsBO10) == 0
@@ -91,7 +91,7 @@ class GerarBO extends GerarAM
         $aCSVBO20['si202_tiporegistro']           = $this->padLeftZero($aBO20['si202_tiporegistro'], 2);
         $aCSVBO20['si202_faserecorcamentaria']    = $this->padLeftZero($aBO20['si202_faserecorcamentaria'], 1);
         $aCSVBO20['si202_vlsaldoexeantsupfin']    = $this->sicomNumberReal($aBO20['si202_vlsaldoexeantsupfin'], 2);
-        $aCSVBO20['si202_vlsaldoexeantrecredad']  = $this->sicomNumberReal($aBO20['si202_vlsaldoexeantrecredad'], 2);
+        // $aCSVBO20['si202_vlsaldoexeantrecredad']  = $this->sicomNumberReal($aBO20['si202_vlsaldoexeantrecredad'], 2);
         $aCSVBO20['si202_vltotalsaldoexeant']     = $this->sicomNumberReal($aBO20['si202_vltotalsaldoexeant'], 2);
 
         $this->sLinha = $aCSVBO20;
@@ -117,9 +117,9 @@ class GerarBO extends GerarAM
         $aCSVBO30['si203_vlreservacontingen']       = $this->sicomNumberReal($aBO30['si203_vlreservacontingen'], 2);
         $aCSVBO30['si203_vlreservarpps']            = $this->sicomNumberReal($aBO30['si203_vlreservarpps'], 2);
         $aCSVBO30['si203_vlamortizadiviintermob']   = $this->sicomNumberReal($aBO30['si203_vlamortizadiviintermob'], 2);
-        $aCSVBO30['si203_vlamortizaoutrasdivinter'] = $this->sicomNumberReal($aBO30['si203_vlamortizaoutrasdivinter'], 2);
+        $aCSVBO30['si203_vlamortizadividacontratualinternas'] = $this->sicomNumberReal($aBO30['si203_vlamortizadividacontratualinternas'], 2);
         $aCSVBO30['si203_vlamortizadivextmob']      = $this->sicomNumberReal($aBO30['si203_vlamortizadivextmob'], 2);
-        $aCSVBO30['si203_vlamortizaoutrasdivext']   = $this->sicomNumberReal($aBO30['si203_vlamortizaoutrasdivext'], 2);
+        $aCSVBO30['si203_vlamortizadividacontratualexternas'] = $this->sicomNumberReal($aBO30['si203_vlamortizadividacontratualexternas'], 2);
         $aCSVBO30['si203_vlsuperavit']              = $this->sicomNumberReal($aBO30['si203_vlsuperavit'], 2);
         $aCSVBO30['si203_vltotalquadrodespesa']     = $this->sicomNumberReal($aBO30['si203_vltotalquadrodespesa'], 2);
 

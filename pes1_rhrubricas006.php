@@ -112,7 +112,7 @@ if(isset($excluir)){
 	  }
   }
   if($sqlerro == true){
-    $erro_msg = "Usuï¿½rio:\\n\\nCï¿½lculos jï¿½ efetuados com esta rubrica.\\nExclusï¿½o abortada.\\n\\nAdministrador: ";
+    $erro_msg = "Usuário:\\n\\nCálculos já efetuados com esta rubrica.\\nExclusão abortada.\\n\\nAdministrador: ";
   }
 
   if($sqlerro == false){

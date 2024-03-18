@@ -463,4 +463,3 @@ class cl_liclicitaminuta {
      return $sql;
   }
 }
-?>

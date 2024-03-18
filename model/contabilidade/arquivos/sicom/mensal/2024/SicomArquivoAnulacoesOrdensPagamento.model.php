@@ -5,7 +5,6 @@ require_once("classes/db_aop102024_classe.php");
 require_once("classes/db_aop112024_classe.php");
 require_once("classes/db_aop122024_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarAOP.model.php");
-require_once("model/orcamento/ControleOrcamentario.model.php");
 require_once("model/orcamento/DeParaRecurso.model.php");
 
 /*
@@ -384,14 +383,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                 }
                 $oDadosAnulacaoFonte->si138_codfontrecursos = substr($this->oDeParaRecurso->getDePara($oDadosAnulacaoFonte->si138_codfontrecursos), 0, 7);
 
-                    $oControleOrcamentario = new ControleOrcamentario();
-                    $oControleOrcamentario->setTipoDespesa($oAnulacoes->e60_tipodespesa);
-                    $oControleOrcamentario->setFonte($oAnulacoes->o15_codigo);
-                    $oControleOrcamentario->setEmendaParlamentar($oAnulacoes->e60_emendaparlamentar);
-                    $oControleOrcamentario->setEsferaEmendaParlamentar($oAnulacoes->e60_esferaemendaparlamentar);
-                    $oControleOrcamentario->setDeParaFonteCompleta();
-
-                $oDadosAnulacaoFonte->si138_codco = $oControleOrcamentario->getCodigoParaEmpenho();
+                $oDadosAnulacaoFonte->si138_codco = $oAnulacoes->e60_codco;
                 $oDadosAnulacaoFonte->si138_valoranulacaofonte = $oAnulacoes->vlrordem;
                 $oDadosAnulacaoFonte->si138_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $oDadosAnulacaoFonte->si138_reg10 = 0;
