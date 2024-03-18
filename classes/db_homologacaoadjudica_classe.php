@@ -103,15 +103,6 @@ class cl_homologacaoadjudica
             $this->erro_status = "0";
             return false;
         }
-        if($this->l202_datareferencia == null ){
-          $this->erro_sql = " Campo Data de Referência nao Informado.";
-          $this->erro_campo = "l202_datareferencia";
-          $this->erro_banco = "";
-          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-          $this->erro_status = "0";
-          return false;
-        }
         if ($l202_sequencial == "" || $l202_sequencial == null) {
             $result = db_query("select nextval('homologacaoadjudica_l202_sequencial_seq')");
             if ($result == false) {
