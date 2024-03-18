@@ -245,15 +245,15 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
             }
 
             if($('tradesao').style.display == "" && $('oTxtAdesaoRegPrecoCod').value == ""){
-                return alert("Informe a Adesão");
+                return alert("Usuário: Selecione a Adesão de Registro de Preço.");
             }
 
             if($('trlicitacao').style.display == "" && $('oTxtLicitacaoCodigo').value == ""){
-                return alert("Informe a Licitação");
+                return alert("Usuário: Selecione a licitação.");
             }
 
             if($('trlicoutrosorgaos').style.display == "" && $('oTxtLicoutrosorgaosCod').value == ""){
-                return alert("Informe a Licitação de Outros Órgãos");
+                return alert("Usuário: Selecione a licitação de Outro Órgão.");
             }
 
             if ($F('oTxtCaractPeculiarCod') == "") {
