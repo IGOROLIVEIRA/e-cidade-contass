@@ -241,7 +241,7 @@ function js_janelaSolicitacao(oAjax) {
         aLinha[6]  = qtdeestoque;
         aLinha[7]  = qtdanulada;
         aLinha[8]  = qtdpendente;
-        aLinha[9]  =" <input "+lhabilitado+" name='atendido"+iInd+"' id='atendido"+iInd+"' value='"+(qtdpendente)+"'size=10 type='text' onblur='js_verificaQuantidade(this.value, \""+(qtdpendente)+"\",\"Quantidade maior que o saldo.\",\"Quantidade deve ser maior que zero.\")'>";
+        aLinha[9]  =" <input "+lhabilitado+" name='atendido"+iInd+"' id='atendido"+iInd+"' value='"+(qtdpendente)+"'size=10 type='text' onchange='js_verificaQuantidade(this.value, \""+(qtdpendente)+"\",\"Quantidade maior que o saldo.\",\"Quantidade não informada.\")'>";
         aLinha[10]  = m98_sequencial;
         oDBGridSolicitacao.addRow(aLinha);
         oDBGridSolicitacao.aRows[iInd].isSelected = true;
@@ -260,20 +260,19 @@ function js_janelaSolicitacao(oAjax) {
 
 function js_verificaQuantidade(nValor, nMaximo, sMsg, sMsg1){
 
-  if (nValor=="" || nValor==0) {
-
+  if (typeof nValor === "string" && nValor.length === 0) {
     alert(sMsg1);
-    return false;
 
+    return false;
   }
+
   if (parseFloat(nValor) > parseFloat(nMaximo)) {
-
     alert(sMsg);
+
     return false;
-
   }
-  return true;
 
+  return true;
 }
 
 function js_consultaSolicitacao(iSolicitacao) {
@@ -293,69 +292,65 @@ function js_consultaSolicitacao(iSolicitacao) {
 }
 
 function js_atendeSolicitacao() {
+    aItens= [];
+    let vVerif = true;
+    let sJsonItem = "";
+    let sVirgula = "";
 
-  if (confirm('Confirma Atendimento da Solicitação?')) {
+    for (let a = 0; a < document.form1.linha.value ; a++)  {
 
-    aItens= new Array();
-    vVerif = false;
-    for (var a=0; a < document.form1.linha.value ; a++)  {
-
-      aItens[a] =document.getElementById('chk'+a).checked;
-      if (aItens[a]==true) {
-        vVerif = true;
-      }
-
-    }
-    sJsonItem        = "";
-    if (vVerif == false) {
-
-      alert('Selecione um item para efetuar o atendimento');
-      return false;
-
-    }
-    js_divCarregando("Aguarde, efetuando atendimento","msgBox");
-    sVirgula = "";
-    for (var i = 0; i < aItens.length; i++) {
-
-      if (aItens[i]==true) {
-
-        var nTotalAtendido   = oDBGridSolicitacao.aRows[i].aCells[5].getValue();
-        var nTotalSolicitado = oDBGridSolicitacao.aRows[i].aCells[4].getValue() ;
-        var nTotalDigitado   = new Number($('atendido'+i).value);
-        var sItemDescr       = oDBGridSolicitacao.aRows[i].aCells[2].getValue();
-        var iCodMater        = oDBGridSolicitacao.aRows[i].aCells[1].getValue();
-        var nSaldo           = new Number(nTotalSolicitado-nTotalAtendido);
-        var iMatPedidoItem   = oDBGridSolicitacao.aRows[i].aCells[10].getValue();
-        var sMsg             = "Item ("+sItemDescr+") sem saldo para efetuar o atendimento.";
-        var sMsg1            = "Item ("+sItemDescr+") deve ter quantidade maior que zero.";
-        if (js_verificaQuantidade(nTotalDigitado,nSaldo,sMsg,sMsg1)) {
-
-          sJsonItem += sVirgula+"{'iMatPedidoItem':"+iMatPedidoItem+",'nQtde':"+nTotalDigitado+",";
-          sJsonItem += "'iCodMater':"+iCodMater+",'iCodDepto':"+$F('m91_depto')+",'iCodEstoque':"+$F('m97_coddepto')+"}";
-          sVirgula  = ",";
-
-        } else {
-
-          js_removeObj("msgBox");
-          return false;
-
+        aItens[a] =document.getElementById('chk'+a).checked;
+        if (aItens[a] === false) {
+            vVerif = false;
         }
-      }
+
     }
-    sParams    = "'$iCodSol':"+$F('m97_sequencial')+",'iTipo':5,'aItens':["+sJsonItem+"],'iCodEstoque':"+$F('m91_depto')+",'iCodDepto':"+$F('m97_coddepto');
-    var sJson  = "{'exec':'atendeSolicitacao','params':[{"+sParams+"}]}";
-    var url    = 'mat4_atendsolicitacaoRPC.php';
-    var oAjax   = new Ajax.Request(
-                                   url,
-                                  {
-                                    method: 'post',
-                                    parameters: 'json='+sJson,
-                                    onComplete: js_saidaAtendimento
-                                  }
-                                 );
 
-  }
+    if (vVerif === false) {
 
+        alert('É necessário selecionar todos os itens para efetuar o atendimento');
+        return;
+
+    }
+
+    if (confirm('Confirma Atendimento da Solicitação?')) {
+        js_divCarregando("Aguarde, efetuando atendimento","msgBox");
+
+        for (let i = 0; i < aItens.length; i++) {
+            if (aItens[i] === true) {
+                const nTotalAtendido = oDBGridSolicitacao.aRows[i].aCells[5].getValue();
+                const nTotalSolicitado = oDBGridSolicitacao.aRows[i].aCells[4].getValue();
+                const nTotalDigitado = Number($('atendido' + i).value);
+                const sItemDescr = oDBGridSolicitacao.aRows[i].aCells[2].getValue();
+                const iCodMater = oDBGridSolicitacao.aRows[i].aCells[1].getValue();
+                const nSaldo = Number(nTotalSolicitado - nTotalAtendido);
+                const iMatPedidoItem = oDBGridSolicitacao.aRows[i].aCells[10].getValue();
+                const nQtdePendente = oDBGridSolicitacao.aRows[i].aCells[8].getValue();
+                const sMsg = "Item (" + sItemDescr + ") sem saldo para efetuar o atendimento.";
+                const sMsg1 = "Quantidade do item (" + sItemDescr + ") não informada.";
+
+                if (js_verificaQuantidade(nTotalDigitado,nSaldo,sMsg,sMsg1)) {
+                  sJsonItem += sVirgula+"{'iMatPedidoItem':"+iMatPedidoItem+",'nQtde':"+nTotalDigitado+",";
+                  sJsonItem += "'iCodMater':"+iCodMater+",'iCodDepto':"+$F('m91_depto')+",'iCodEstoque':"+$F('m97_coddepto')+",";
+                  sJsonItem += "'nQtdePendente':"+nQtdePendente+"}";
+                  sVirgula  = ",";
+                } else {
+                    js_removeObj("msgBox");
+                    return;
+                }
+            }
+        }
+
+        const sParams  = "'$iCodSol':"+$F('m97_sequencial')+",'iTipo':5,'aItens':["+sJsonItem+"],'iCodEstoque':"+$F('m91_depto')+",'iCodDepto':"+$F('m97_coddepto');
+        let sJson = "{'exec':'atendeSolicitacao','params':[{"+sParams+"}]}";
+        let url = 'mat4_atendsolicitacaoRPC.php';
+
+        new Ajax.Request(url, {
+            method: "post",
+            parameters: "json=" + sJson,
+            onComplete: js_saidaAtendimento,
+        });
+    }
 }
 
 function js_saidaAtendimento(oAjax) {
