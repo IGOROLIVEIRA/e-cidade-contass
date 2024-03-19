@@ -15,14 +15,6 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 $where = "";
 
-if($ano){
-    $where = " AND t57_ano = $ano";
-}
-
-if($mes){
-    $where .= " AND t57_mes = $mes";
-}
-
 if($codigoDepartamento){
     $where .= " AND t52_depart = $codigoDepartamento";
 }
@@ -49,36 +41,61 @@ $resultTipobens = db_query($sqlTiposbens) or die(pg_last_error());
 $oResultTipos = db_utils::fieldsMemory($resultTipobens, 0);
 
 
-$sql = "SELECT DISTINCT t52_bem AS codigo,
-                t52_ident AS placa,
-                t52_descr AS descricao,
-                t52_obs AS observacao,
-                t52_valaqu AS valoraquisicao,
-                CASE
-                    WHEN t58_valoratual IS NULL THEN t44_valoratual+t44_valorresidual
-                    ELSE t58_valoratual+t44_valorresidual
-                END AS valoratual,
-                t52_dtaqu AS dtaquisicao,
-                descrdepto AS departamento,
-                t30_descr AS divisao,
-                t70_descr
-FROM bens
-JOIN bensdepreciacao ON t44_bens = t52_bem
-JOIN db_depart ON coddepto = t52_depart
-JOIN clabens ON t64_codcla=t52_codcla
-JOIN bemtipos ON t24_sequencial=t64_bemtipos
-JOIN histbem ON t56_codbem=t52_bem
-JOIN situabens ON t70_situac=t56_situac
-JOIN benshistoricocalculobem ON t58_bens=t52_bem
-JOIN benshistoricocalculo ON t57_sequencial=t58_benshistoricocalculo
-LEFT JOIN bensdiv ON t33_bem=t52_bem
-LEFT JOIN departdiv ON t30_codigo=t33_divisao
-LEFT JOIN bensbaix ON t55_codbem=t52_bem
-AND t30_depto=t52_depart
-WHERE t52_instit = ".db_getsession('DB_instit')."
+$sql = "
+        SELECT DISTINCT t52_bem AS codigo,
+                        t52_ident AS placa,
+                        t52_descr AS descricao,
+                        t52_obs AS observacao,
+                        t52_valaqu AS valoraquisicao,
+                        t58_valoratual+t44_valorresidual AS valoratual,
+                        t52_dtaqu AS dtaquisicao,
+                        descrdepto AS departamento,
+                        t30_descr AS divisao,
+                        t70_descr
+        FROM bens
+        JOIN bensdepreciacao ON t44_bens = t52_bem
+        JOIN db_depart ON coddepto = t52_depart
+        JOIN clabens ON t64_codcla=t52_codcla
+        JOIN bemtipos ON t24_sequencial=t64_bemtipos
+        JOIN histbem ON t56_codbem=t52_bem
+        JOIN situabens ON t70_situac=t56_situac
+        JOIN benshistoricocalculobem ON t58_bens=t52_bem
+        JOIN benshistoricocalculo ON t57_sequencial=t58_benshistoricocalculo
+        AND t57_ano = $ano
+        AND t57_mes = $mes
+        LEFT JOIN bensdiv ON t33_bem=t52_bem
+        LEFT JOIN departdiv ON t30_codigo=t33_divisao
+        LEFT JOIN bensbaix ON t55_codbem=t52_bem
+        AND t30_depto=t52_depart
+        WHERE t52_instit = ".db_getsession('DB_instit')."
         $where
-        $order";
-$resultBens = db_query($sql) or die(pg_last_error());
+        UNION
+        SELECT DISTINCT t52_bem AS codigo,
+                        t52_ident AS placa,
+                        t52_descr AS descricao,
+                        t52_obs AS observacao,
+                        t52_valaqu AS valoraquisicao,
+                        t44_valoratual+t44_valorresidual AS valoratual,
+                        t52_dtaqu AS dtaquisicao,
+                        descrdepto AS departamento,
+                        t30_descr AS divisao,
+                        t70_descr
+        FROM bens
+        JOIN bensdepreciacao ON t44_bens = t52_bem
+        JOIN db_depart ON coddepto = t52_depart
+        JOIN clabens ON t64_codcla=t52_codcla
+        JOIN bemtipos ON t24_sequencial=t64_bemtipos
+        JOIN histbem ON t56_codbem=t52_bem
+        JOIN situabens ON t70_situac=t56_situac
+        LEFT JOIN bensdiv ON t33_bem=t52_bem
+        LEFT JOIN departdiv ON t30_codigo=t33_divisao
+        LEFT JOIN bensbaix ON t55_codbem=t52_bem
+        AND t30_depto=t52_depart
+        WHERE t52_instit = ".db_getsession('DB_instit')."
+            $where
+            $order
+";
+$resultBens = db_query($sql);
 
 $pdf = new PDF('Landscape', 'mm', 'A4');
 $pdf->Open();
@@ -113,7 +130,7 @@ $pdf->cell(25   ,$alt  ,"Data Aquisição",1,0,"C",1);
 $pdf->cell(20   ,$alt  ,"Situação",1,0,"C",1);
 $pdf->cell(25   ,$alt  ,"Vlr. Aquisição",1,0,"C",1);
 $pdf->cell(20   ,$alt  ,"Vlr. Atual",1,1,"C",1);
-
+$iTotalRegistros = 0;
 for ($iCont = 0; $iCont < pg_num_rows($resultBens); $iCont++) {
         $oResult = db_utils::fieldsMemory($resultBens, $iCont);
         $descricao = $oResult->descricao.' '.$oResult->observacao;
@@ -177,13 +194,13 @@ for ($iCont = 0; $iCont < pg_num_rows($resultBens); $iCont++) {
 
         $totalAquisicao += $oResult->valoraquisicao;
         $totalAtual += $oResult->valoratual;
-
+        $iTotalRegistros += $iCont;
 }
 $pdf->SetFont('arial','B',10);
 $pdf->cell(40   ,$alt  ,"Total:",1,0,"C",1);
 $pdf->SetFont('arial','B',9);
 $pdf->cell(195, $alt, '', 1, 0, "R", 0);
 $pdf->cell(25, $alt, db_formatar($totalAquisicao,'f'), 1, 0, "R", 0);
-$pdf->cell(20, $alt, db_formatar($totalAtual,'f'), 1, 0, "R", 0);
-
+$pdf->cell(20, $alt, db_formatar($totalAtual,'f'), 1, 1, "R", 0);
+$pdf->cell(280,$alt  ,"TOTAL GERAL DE REGISTROS: ".$iTotalRegistros,0,0,"R",0);
 $pdf->Output();
