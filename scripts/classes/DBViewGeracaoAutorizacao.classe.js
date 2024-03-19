@@ -41,6 +41,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
     me.oCaractPeculiarCod  = '';
     me.oAdesaoRegPrecoCod  = '';
     me.oLicoutrosorgaosCod  = '';
+    me.oLicitacaoCodigo = '';
     me.oCaractPeculiarDesc = '';
     me.sArquivoOrigem      = '';
     me.iOrigemDados        = '';
@@ -117,6 +118,9 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
     me.oLicoutrosorgaosCod  = new DBTextField('oTxtLicoutrosorgaosCod' , me.sInstancia + '.oLicoutrosorgaosCod' , '', 5);
     me.oLicoutrosorgaosResp = new DBTextField('oTxtLicoutrosorgaosResp', me.sInstancia + '.oLicoutrosorgaosResp', '', 41);
 
+    me.oLicitacaoCodigo  = new DBTextField('oTxtLicitacaoCodigo' , me.sInstancia + '.oLicitacaoCodigo' , '', 5);
+    me.oLicitacaoObjeto = new DBTextField('oTxtLicitacaoObjeto', me.sInstancia + '.oLicitacaoObjeto', '', 41);
+
     me.oTipoCompra.onChange     = "; " + me.sInstancia + ".buscarTipoLicitacao(this.value);"+me.sInstancia+".js_verificatipotribunal(this.value);";
     me.oNumeroLicitacao.addEvent("onKeyPress", "return js_mask(event,\"0-9\")");
 
@@ -128,6 +132,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
     me.oCaractPeculiarDesc.setReadOnly(true);
     me.oAdesaoRegPrecoObj.setReadOnly(true);
+    me.oLicitacaoObjeto.setReadOnly(true);
     me.oLicoutrosorgaosResp.setReadOnly(true);
 
     this.show = function() {
@@ -160,12 +165,15 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
         sContentForm += "            <td id='td_licoutrosorgaos_"+me.sInstancia+"'>"+me.oLicoutrosorgaosCod.toInnerHtml()+"";
         sContentForm += "            "+me.oLicoutrosorgaosResp.toInnerHtml()+"</td>";
         sContentForm += "          </tr>";
-        // sContentForm += "          <tr>";
-        // sContentForm += "            <td nowrap='nowrap'><b>Tipo de Licitação:</b></td>";
-        // sContentForm += "            <td id='td_tipolicitacao_" + me.sInstancia + "'>" + me.oTipoLicitacao.toInnerHtml() + "</td>";
-        // sContentForm += "          </tr>";
+        sContentForm += "          <tr id ='trlicitacao' style='display:none'>";
+        sContentForm += "            <td nowrap='nowrap'>";
+        sContentForm += "              <b><a href='#' id='ancoralicitacao'>Licitação:</a></b>";
+        sContentForm += "            </td>";
+        sContentForm += "            <td id='td_licitacao_"+me.sInstancia+"'>"+me.oLicitacaoCodigo.toInnerHtml()+"";
+        sContentForm += "            "+me.oLicitacaoObjeto.toInnerHtml()+"</td>";
+        sContentForm += "          </tr>";
         sContentForm += "          <tr>";
-        sContentForm += "            <td nowrap='nowrap'><b>Número da Licitação:</b></td>";
+        sContentForm += "            <td nowrap='nowrap'><b>Número processo:</b></td>";
         sContentForm += "            <td id='td_numerolicitacao_" + me.sInstancia + "'>" + me.oNumeroLicitacao.toInnerHtml() + "</td>";
         sContentForm += "          </tr>";
         sContentForm += "          <tr>";
@@ -231,6 +239,23 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
          */
         $('btnItens').observe('click', function() {
 
+            if($('oTxtTipoCompra').value == 0){
+                alert("Informe o tipo de compra.");
+                return false;
+            }
+
+            if($('tradesao').style.display == "" && $('oTxtAdesaoRegPrecoCod').value == ""){
+                return alert("Usuário: Selecione a Adesão de Registro de Preço.");
+            }
+
+            if($('trlicitacao').style.display == "" && $('oTxtLicitacaoCodigo').value == ""){
+                return alert("Usuário: Selecione a licitação.");
+            }
+
+            if($('trlicoutrosorgaos').style.display == "" && $('oTxtLicoutrosorgaosCod').value == ""){
+                return alert("Usuário: Selecione a licitação de Outro Órgão.");
+            }
+
             if ($F('oTxtCaractPeculiarCod') == "") {
 
                 alert("Informe a característica peculiar.");
@@ -274,14 +299,58 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
         $('ancoralicoutrosorgaos').observe('click', function() {
 
-            var sOpenWindow = "func_liclicitaoutrosorgaos.php?funcao_js=parent.js_buscalicoutrosorgaos|lic211_sequencial|z01_nome|lic211_processo|lic211_numero|lic211_anousu";
+            let codigoTipoCompraTribunal = $('oTxtTipoCompra').value;
+            let tipolicitacaooutrosorgaos;
+
+            /* Verificando o tipo da licitação com base no código do tribunal*/
+            switch(codigoTipoCompraTribunal) {
+                case "19":
+                    tipolicitacaooutrosorgaos = 5;
+                    break;
+                case "20":
+                    tipolicitacaooutrosorgaos = 6;
+                    break;
+                case "21":
+                    tipolicitacaooutrosorgaos = 7;
+                    break;
+                case "22":
+                    tipolicitacaooutrosorgaos = 8;
+                    break;                
+                case "18":
+                    tipolicitacaooutrosorgaos = 9;
+                    break;
+            }
+
+            var sOpenWindow = "func_liclicitaoutrosorgaos.php?tipolicitacaooutrosorgaos=" + tipolicitacaooutrosorgaos + "&funcao_js=parent.js_buscalicoutrosorgaos|lic211_sequencial|z01_nome|lic211_processo|lic211_numero|lic211_anousu";
             js_OpenJanelaIframe('','db_iframe_liclicitaoutrosorgaos', sOpenWindow,'Licitação de Outros Órgãos',true);
             $('db_iframe_liclicitaoutrosorgaos').style.zIndex = '10000';
         });
 
         $('oTxtLicoutrosorgaosCod').observe('change', function() {
 
-            var sOpenWindow = "func_liclicitaoutrosorgaos.php?poo=true&pesquisa_chave="+$F('oTxtLicoutrosorgaosCod')+"&funcao_js=parent.js_mostrarlicoutroorgao";
+            let codigoTipoCompraTribunal = $('oTxtTipoCompra').value;
+            let tipolicitacaooutrosorgaos;
+
+            /* Verificando o tipo da licitação com base no código do tribunal*/
+            switch(codigoTipoCompraTribunal) {
+                case "19":
+                    tipolicitacaooutrosorgaos = 5;
+                    break;
+                case "20":
+                    tipolicitacaooutrosorgaos = 6;
+                    break;
+                case "21":
+                    tipolicitacaooutrosorgaos = 7;
+                    break;
+                case "22":
+                    tipolicitacaooutrosorgaos = 8;
+                    break;                
+                case "18":
+                    tipolicitacaooutrosorgaos = 9;
+                    break;
+            }
+
+            var sOpenWindow = "func_liclicitaoutrosorgaos.php?tipolicitacaooutrosorgaos=" + tipolicitacaooutrosorgaos + "&poo=true&pesquisa_chave="+$F('oTxtLicoutrosorgaosCod')+"&funcao_js=parent.js_mostrarlicoutroorgao";
             js_OpenJanelaIframe('','db_iframe_liclicitaoutrosorgaos', sOpenWindow, 'Licitação de Outros Órgãos',false);
             $('db_iframe_liclicitaoutrosorgaos').style.zIndex = '10000';
         });
@@ -292,7 +361,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
         $('ancoraadesao').observe('click', function() {
 
-            var sOpenWindow = "func_adesaoregprecos.php?funcao_js=parent.js_buscaadesaoregpreco|si06_sequencial|si06_objetoadesao|si06_numeroprc|si06_numlicitacao|si06_anoproc";
+            var sOpenWindow = "func_adesaoregprecos.php?funcao_js=parent.js_buscaadesaoregpreco|si06_sequencial|si06_objetoadesao|si06_numeroprc|si06_numeroadm|si06_anomodadm";
             js_OpenJanelaIframe('','db_iframe_adesaoregpreco', sOpenWindow,'Adesão de Registro de Preço',true);
             $('db_iframe_adesaoregpreco').style.zIndex = '10000';
         });
@@ -302,6 +371,27 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
             var sOpenWindow = "func_adesaoregprecos.php?par=true&pesquisa_chave="+$F('oTxtAdesaoRegPrecoCod')+"&funcao_js=parent.js_mostraradesao";
             js_OpenJanelaIframe('','db_iframe_adesaoregpreco', sOpenWindow, 'Adesão de Registro de Preço',false);
             $('db_iframe_adesaoregpreco').style.zIndex = '10000';
+        });
+
+        /**
+         *  Buscar dados da Licitação
+         */
+
+
+
+        $('ancoralicitacao').observe('click', function() {
+            let codigoTipoCompraTribunal = $('oTxtTipoCompra').value;
+            js_OpenJanelaIframe('', 'db_iframe_liclicita', 'func_liclicita.php?licitacaoemandamento='+true+'&codigotipocompratribunal=' + codigoTipoCompraTribunal + '&funcao_js=parent.js_buscaLicitacao|l20_codigo|l20_numero|l20_edital|l20_objeto|l20_anousu',
+            'Pesquisa Licitações', true);
+            $('db_iframe_liclicita').style.zIndex = '10000';
+
+        });
+        
+        $('oTxtLicitacaoCodigo').observe('change', function() {
+            let codigoTipoCompraTribunal = $('oTxtTipoCompra').value;        
+            js_OpenJanelaIframe('', 'db_iframe_liclicita', 'func_liclicita.php?licitacaoemandamento='+true+'codigotipocompratribunal=' + codigoTipoCompraTribunal + '&autoriza=true&pesquisa_chave=' +
+            $F('oTxtLicitacaoCodigo') + '&funcao_js=parent.js_mostraLicitacao','Pesquisa', false);
+
         });
 
         /**
@@ -323,6 +413,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
             {
                 method: 'post',
                 parameters:'json='+Object.toJSON(oParam),
+                asynchronous: false,
                 onComplete:me.preencheCampos
             }
         );
@@ -334,28 +425,24 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
     this.preencheCampos = function(oAjax) {
         var oRetorno = eval("("+oAjax.responseText+")");
 
-        if(oRetorno.licitacao == 't'){
-            $('oTxtNumeroLicitacao').value  = oRetorno.numerolicitacao;
-            $('oTxtModalidade').value       = oRetorno.l20_numero;
-        }
-
-        if(oRetorno.aDados[0].numerolicitacao != undefined){
-            $('oTxtNumeroLicitacao').value=oRetorno.aDados[0].numerolicitacao;
-            $('oTxtModalidade').value=oRetorno.aDados[0].l20_numero;
-        }
-        if(oRetorno.aDados[0].sequenciallicitacao != undefined){
-            $('oTxtTipoCompra').value=oRetorno.aDados[0].tipocompra;
-            me.buscarTipoLicitacao(oRetorno.aDados[0].tipocompra);
-        }
-        if(oRetorno.aDados[0].l20_usaregistropreco == 't'){
-
-            $('oTxtNumeroLicitacao').setAttribute('readonly',true);
+        if(oRetorno.vinculo == ""){
+            $('oTxtTipoCompra').value = "0";
+            $('oTxtNumeroLicitacao').disabled = true;
+            $('oTxtModalidade').disabled = true;
             $('oTxtNumeroLicitacao').style.backgroundColor = 'DEB887';
-
-            $('oCboTipoLicitacao').disabled = true;
-            $('oCboTipoEmpenho').disabled   = true;
-            //$('oTxtTipoCompra').disabled    = true;
+            $('oTxtModalidade').style.backgroundColor = 'DEB887';
+            return;
         }
+
+        $('oTxtTipoCompra').value = oRetorno.tipocompra;
+        $('oTxtNumeroLicitacao').value = oRetorno.numerolicitacao;
+        $('oTxtModalidade').value = oRetorno.numeromodalidade;
+        $('oTxtNumeroLicitacao').disabled = true;
+        $('oTxtModalidade').disabled = true;
+        $('oTxtTipoCompra').disabled = true;
+        $('oTxtNumeroLicitacao').style.backgroundColor = 'DEB887';
+        $('oTxtModalidade').style.backgroundColor = 'DEB887';
+        $('oTxtTipoCompra').style.backgroundColor = 'DEB887';
 
     }
 
@@ -374,6 +461,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
         new Ajax.Request("lic4_geraAutorizacoes.RPC.php",
             {method:'post',
                 parameters:'json='+Object.toJSON(oParamCompraEmpenho),
+                asynchronous: false,
                 onComplete: me.setProcessoAdministrativo
             }
         );
@@ -408,6 +496,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
         var oAjaxCompraEmpenho = new Ajax.Request("lic4_geraAutorizacoes.RPC.php",
             {method:'post',
                 parameters:'json='+Object.toJSON(oParamCompraEmpenho),
+                asynchronous: false,
                 onComplete: me.configTipoCompraEmpenho
             }
         );
@@ -445,6 +534,8 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
             var aTipoCompra = oRetorno.aPcTipoCompra;
 
             me.oObservacao = oRetorno.sResumo;
+
+            me.oTipoCompra.addItem("0","Selecione...");
 
             aTipoCompra.each(function (oRetTipoCompra) {
 
@@ -631,7 +722,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
              */
             if (me.aItens == null || me.aItens.length == 0) {
 
-                alert("Não existem itens para esta "+me.sTipoOrigem+".");
+                alert("Não existem itens para este "+me.sTipoOrigem+".");
                 me.setLocation();
                 return false;
             }
@@ -920,28 +1011,44 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
         var oRetorno = eval("("+oAjax.responseText+")");
 
-        if(oRetorno.tipocompratribunal == 105){
+        let aCodTribunalLicOutrosOrgaos = ["105","106","107","108","109"];
+        let aCodTribunalLicitacao = ["51","48","50","101","54","102","103","49","53","52","110","100"];
+        let codTribunalAdesao = "104";
+        let codTribunalDireta = "13";
+        let codigoTipoCompraTribunal = oRetorno.tipocompratribunal;
+
+        if(aCodTribunalLicOutrosOrgaos.includes(codigoTipoCompraTribunal)){
             document.getElementById('trlicoutrosorgaos').style.display = '';
             document.getElementById('tradesao').style.display = 'none';
-        }else if(oRetorno.tipocompratribunal == 106){
-            document.getElementById('trlicoutrosorgaos').style.display = '';
-            document.getElementById('tradesao').style.display = 'none';
-        }else if(oRetorno.tipocompratribunal == 107){
-            document.getElementById('trlicoutrosorgaos').style.display = '';
-            document.getElementById('tradesao').style.display = 'none';
-        }else if(oRetorno.tipocompratribunal == 108){
-            document.getElementById('trlicoutrosorgaos').style.display = '';
-            document.getElementById('tradesao').style.display = 'none';
-        }else if(oRetorno.tipocompratribunal == 109){
-            document.getElementById('trlicoutrosorgaos').style.display = '';
-            document.getElementById('tradesao').style.display = 'none';
-        }else if(oRetorno.tipocompratribunal == 104){
+            document.getElementById('trlicitacao').style.display = 'none';
+        }
+
+        if(codigoTipoCompraTribunal == codTribunalAdesao){
             document.getElementById('tradesao').style.display = '';
             document.getElementById('trlicoutrosorgaos').style.display = 'none';
-        }else{
+            document.getElementById('trlicitacao').style.display = 'none';
+        }
+
+        if(aCodTribunalLicitacao.includes(codigoTipoCompraTribunal)){
+            document.getElementById('trlicitacao').style.display = '';
             document.getElementById('trlicoutrosorgaos').style.display = 'none';
             document.getElementById('tradesao').style.display = 'none';
         }
+
+        if(codigoTipoCompraTribunal == codTribunalDireta){
+            document.getElementById('trlicitacao').style.display = 'none';
+            document.getElementById('trlicoutrosorgaos').style.display = 'none';
+            document.getElementById('tradesao').style.display = 'none';
+        }
+
+        $('oTxtNumeroLicitacao').value = "";
+        $('oTxtModalidade').value = "";
+        $('oTxtAdesaoRegPrecoObj').value = "";
+        $('oTxtAdesaoRegPrecoCod').value = "";
+        $('oTxtLicitacaoCodigo').value = "";
+        $('oTxtLicitacaoObjeto').value = "";
+        $('oTxtLicoutrosorgaosCod').value = "";
+        $('oTxtLicoutrosorgaosResp').value = "";
 
     }
     /**
@@ -1520,6 +1627,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
                 oAutorizacao.resumo            = encodeURIComponent(tagString($F('oTxtObservacoes')));
                 oAutorizacao.oLicoutrosorgaosCod = $F('oTxtLicoutrosorgaosCod');
                 oAutorizacao.oAdesaoRegPrecoCod = $F('oTxtAdesaoRegPrecoCod');
+                oAutorizacao.oLicitacaoCodigo = $F('oTxtLicitacaoCodigo');
                 oAutorizacao.sTelefone         = me.oTelefone.getValue();
                 oAutorizacao.sTipoLicitacao    = encodeURIComponent(tagString(me.oTipoLicitacao.getValue()));
                 oAutorizacao.iNumeroLicitacao  = $F('oTxtNumeroLicitacao');
