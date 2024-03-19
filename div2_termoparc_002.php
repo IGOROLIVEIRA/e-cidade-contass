@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Termoreparc;
+
 include("libs/db_sql.php");
 include("fpdf151/pdf1.php");
 include("libs/db_utils.php");
@@ -169,6 +171,9 @@ $vlrpar  = $v07_vlrpar;
 $vencpar = $v07_dtvenc;
 $pdf->SetFont('Arial','B',11);
 
+/**
+ * @todo verificar se essa tabela é usada
+ */
 $sqlrepar = " select retermo.*,
 k00_matric as matric,
 k00_inscr as inscr
@@ -357,6 +362,11 @@ if (pg_numrows($result_reparc) > 0) {
   $sql .= "        left  join	contrib	  	   on arrecontr.k00_contr     = contrib.d07_contri                        \n";
   $sql .= "        left  join	iptubase b	   on b.j01_matric            = contrib.d07_matric                        \n";
   $sql .= " where parcel = {$parcel}                                                                                \n";
+
+    $preResult = db_query($sql);
+    if (pg_num_rows($preResult) === 0) {
+        $sql = Termoreparc::getQueryOriginReInstalmentFromParentInstallment((int)$parcel, (int)db_getsession('DB_instit'));
+    }
 
   $sql2  = "  select v08_parcelorigem,          \n";
   $sql2 .= "         v01_exerc,                 \n";
@@ -628,8 +638,8 @@ if (pg_numrows($result_reparc) > 0) {
       $sql .= " where parcel = $parcel";
     }else {
 
-      if($situacao == 1){
-        
+      if($v07_situacao == 1){
+
         //consulta do termo Ativo
         $sql  = " select  distinct ";
         $sql .= "        coalesce(termodiv.vlrdesccor,0) + coalesce(termodiv.vlrdescjur,0) + coalesce(termodiv.vlrdescmul,0) + coalesce(desconto,0) as desconto,";
@@ -656,7 +666,7 @@ if (pg_numrows($result_reparc) > 0) {
         $sql .= "                            and v01_instit = ".db_getsession('DB_instit');
         $sql .= "        inner join  arreold   on v01_numpre = arreold.k00_numpre ";
         $sql .= "                            and v01_numpar = arreold.k00_numpar ";
-        $sql .= "                            and arreold.k00_valor > 0 ";      
+        $sql .= "                            and arreold.k00_valor > 0 ";
         $sql .= "        inner join arretipo  on arreold.k00_tipo = arretipo.k00_tipo";
         $sql .= "                            and arretipo.k00_instit = ".db_getsession('DB_instit');
         $sql .= "        inner join proced    on v01_proced = v03_codigo ";
@@ -670,7 +680,7 @@ if (pg_numrows($result_reparc) > 0) {
         $sql .= " where parcel = {$parcel} order by v01_dtvenc";
 
       }else{
-        
+
         //consulta do termo Anulado
         $sql  = " select  distinct ";
         $sql .= "        coalesce(termodiv.vlrdesccor,0) + coalesce(termodiv.vlrdescjur,0) + coalesce(termodiv.vlrdescmul,0) + coalesce(desconto,0) as desconto,";
@@ -697,7 +707,7 @@ if (pg_numrows($result_reparc) > 0) {
         $sql .= "                            and v01_instit = ".db_getsession('DB_instit');
         $sql .= "        left join arreold		on v01_numpre = arreold.k00_numpre ";
         $sql .= "                            and v01_numpar = arreold.k00_numpar ";
-        $sql .= "                            and arreold.k00_valor > 0 ";      
+        $sql .= "                            and arreold.k00_valor > 0 ";
         $sql .= "        left join arrecad   on v01_numpre = arrecad.k00_numpre ";
         $sql .= "                            and v01_numpar = arrecad.k00_numpar ";
         $sql .= "                            and arrecad.k00_valor > 0 ";
@@ -706,7 +716,7 @@ if (pg_numrows($result_reparc) > 0) {
         $sql .= "                            and arrecant.k00_valor > 0 ";
         $sql .= "        left join arresusp   on v01_numpre = arresusp.k00_numpre ";
         $sql .= "                            and v01_numpar = arresusp.k00_numpar ";
-        $sql .= "                            and arresusp.k00_valor > 0 ";        
+        $sql .= "                            and arresusp.k00_valor > 0 ";
         $sql .= "        inner join arretipo  on (arreold.k00_tipo = arretipo.k00_tipo or arrecad.k00_tipo = arretipo.k00_tipo or arrecant.k00_tipo = arretipo.k00_tipo or arresusp.k00_tipo = arretipo.k00_tipo) ";
         $sql .= "                            and arretipo.k00_instit = ".db_getsession('DB_instit');
         $sql .= "        inner join	proced		on v01_proced = v03_codigo ";
@@ -1180,7 +1190,7 @@ foreach ($parag as $chave ) {
     }
 
     $pdf->Cell(20,4,"",0,1,"C",0);
-        
+
     if($pdf->GetY() > ( $pdf->h - 40 )){
       $pdf->AddPage();
     }
@@ -1236,10 +1246,10 @@ foreach ($parag as $chave ) {
       $linhasdesc = pg_num_rows($resultdesc);
       if($linhasdesc > 0 and $cgc != "29131075000193"){
         db_fieldsmemory($resultdesc,0);
-        
+
         $honorarios = 0;
         db_sel_instit(null, "db21_honorarioadvocaticio");
-        
+
         if($db21_honorarioadvocaticio > 0){
           $honorarios = "  select sum(honorarios) as honorarios from ( ";
           $honorarios .= "    select sum(k00_valor) as honorarios from arrecad ";
@@ -1252,7 +1262,7 @@ foreach ($parag as $chave ) {
           db_fieldsmemory($resulthonorarios,0);
         }
 
-        if($desconto > 0){  
+        if($desconto > 0){
           //com desconto
           $entradades    = round($entrada -    (($entrada * $desconto)/100),2);
           $v07_ultpardes = round($v07_ultpar - (($v07_ultpar * $desconto)/100),2);
@@ -1291,8 +1301,8 @@ foreach ($parag as $chave ) {
           $pdf->Cell(45,4,db_formatar($vlrpar,'f'),1,1,"R",0);
           if($honorarios > 0){
             $pdf->Cell(50,4,'Valor dos Honorários ',1,0,"L",0);
-            $pdf->Cell(45,4,db_formatar($honorarios,'f'),1,1,"R",0);  
-          }          
+            $pdf->Cell(45,4,db_formatar($honorarios,'f'),1,1,"R",0);
+          }
           $pdf->ln(10);
           //tem q calcular o desconto para cada parcela
 
@@ -1318,4 +1328,3 @@ foreach ($parag as $chave ) {
 if(!defined('DB_BIBLIOT'))
 
 $pdf->Output();
-?>

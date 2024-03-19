@@ -62,6 +62,7 @@ $clempagemov    = new cl_empagemov;
 $clempautitem   = new cl_empautitem;
 $clempempitem   = new cl_empempitem;
 $clempresto     = new cl_empresto;
+$oCodigoAcompanhamento = new ControleOrcamentario();
 
 $clempempenho->rotulo->label();
 $clempempaut->rotulo->label();
@@ -249,14 +250,6 @@ if (isset($e60_numemp) and $e60_numemp != "") {
                 <td nowrap="nowrap" class='valores' colspan="3">
                     <?php echo $sRestosPagar;?>
                 </td>
-            </tr>
-            <tr>
-                <td nowrap="nowrap" width="160" align="left" nowrap title="Número do processo administrativo (P.A.)">
-                    <strong>Proc. Adminstravivo (P.A):</strong>
-                </td>
-                <td nowrap="nowrap" class='valores' colspan="3">
-                    <?php echo $sProcessoAdministrativo;?>
-                </td>
                 <td nowrap="nowrap" align="left" nowrap title="<?=$To15_descr?>">
                     <b>Recurso:</b>
                 </td>
@@ -268,6 +261,35 @@ if (isset($e60_numemp) and $e60_numemp != "") {
                 <td nowrap="nowrap" colspan=2 class='valores'  align="left" >
                     <?
                     echo $o15_descr;
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap" width="160" align="left" nowrap title="Número do processo administrativo (P.A.)">
+                    <strong>Proc. Adminstravivo (P.A):</strong>
+                </td>
+                <td nowrap="nowrap" class='valores' colspan="3">
+                    <?php echo $sProcessoAdministrativo;?>
+                </td>
+                <td nowrap="nowrap" align="left" nowrap title="<?=$To15_descr?>">
+                    <b>CO:</b>
+                </td>
+                <td nowrap="nowrap" colspan='1' align="right" width='15' class='valores'>
+                    <?
+                     if (!$e60_codco || $e60_codco == 0) {
+                        $e60_codco = '0000';
+                     }
+                     echo $e60_codco;
+                    ?>
+                </td>
+                <td nowrap="nowrap" colspan=2 class='valores'  align="left" >
+                    <?
+                     if (!$e60_codco || $e60_codco == 0) {
+                        $e60_codco = '0000';
+                     }
+                     $oCodigoAcompanhamento->setCodCO($e60_codco);
+                     $e60_codcodescr = $oCodigoAcompanhamento->getDescricaoCO();
+                     echo $e60_codcodescr;
                     ?>
                 </td>
                 <?
@@ -318,7 +340,7 @@ if (isset($e60_numemp) and $e60_numemp != "") {
                     echo $e64_codele;
                     ?>
                 </td>
-                <td class='valores'> <?=$o56_elemento?></td>
+                <td class='valores'> <?=substr($o56_elemento,1)?></td>
                 <td  class='valores'>
                     <?
                     echo $o56_descr;

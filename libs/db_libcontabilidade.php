@@ -278,9 +278,9 @@ class cl_receita_saldo_mes
         if ($this->anousu == null)
             $this->anousu = db_getsession("DB_anousu");
         if ($this->dtini == null)
-            db_msgbox('Data inicio nï¿½o informada.');
+            db_msgbox('Data inicio não informada.');
         if ($this->dtfim == null)
-            db_msgbox('Data final nï¿½o informada.');
+            db_msgbox('Data final não informada.');
 
         if ($this->instit == null) {
             if (db_getsession("DB_instit") == 1)
@@ -542,7 +542,7 @@ class cl_receita_saldo_mes
                         );
                     }
                     if (pg_numrows($result_estrut) == 0) {
-                        echo "Conta nï¿½o encontrada nas fontes de Receita Comando:"
+                        echo "Conta não encontrada nas fontes de Receita Comando:"
                             . "select o57_descr from orcfontes where o57_anousu = " . db_getsession("DB_anousu")
                             . " and o57_fonte = '$estrutural'";
                         exit;
@@ -1242,12 +1242,12 @@ class cl_translan extends cl_contranslan
         }
 
         /**
-         * Validamos o ano da sessï¿½o com o ano do empenho. Caso o ano nï¿½o seja o mesmo os lanï¿½amentos eram todos apagados,
+         * Validamos o ano da sessï¿½o com o ano do empenho. Caso o ano não seja o mesmo os lanï¿½amentos eram todos apagados,
          * com esta validaï¿½ï¿½o evitamos o erro.
          */
         if ($iAnoSessao != $anousu) {
 
-            $sMensagemErro  = "O ano [{$anousu}] nï¿½o ï¿½ igual ao ano da sessï¿½o [{$iAnoSessao}]. Verifique a data do ";
+            $sMensagemErro  = "O ano [{$anousu}] não ï¿½ igual ao ano da sessï¿½o [{$iAnoSessao}]. Verifique a data do ";
             $sMensagemErro .= "lanï¿½amento contï¿½bil do empenho referente a ao documento {$iCodigoDocumento}";
             $this->erro_msg = $sMensagemErro;
             $this->sqlerro  = true;
@@ -1863,7 +1863,7 @@ class cl_translan extends cl_contranslan
 
             $rsBuscaContasPagamento = db_query($sSqlBuscaContaPagamento);
             if (pg_num_rows($rsBuscaContasPagamento) == 0 || !$rsBuscaContasPagamento) {
-                throw new Exception("Nï¿½o foi possï¿½vel buscar a conta do pagamento.");
+                throw new Exception("Não foi possï¿½vel buscar a conta do pagamento.");
             }
 
             $oStdContaPagamento = db_utils::fieldsMemory($rsBuscaContasPagamento, 0);
@@ -1917,7 +1917,7 @@ class cl_translan extends cl_contranslan
      * do tipo "Restos ï¿½ Pagar", exercï¿½cio anterior
      *
      * @param integer $codcom - tipo de compra
-     * @param integer $codele - cï¿½digo do elemento do empenho
+     * @param integer $codele - código do elemento do empenho
      * @param integer $anousu - ano do empenho
      * @param integer $numemp - sequencial do empenho
      * @todo refatorar
@@ -1962,7 +1962,7 @@ class cl_translan extends cl_contranslan
         if ($oDaoEmpResto->erro_status == 0) {
 
             $this->sqlerro  = true;
-            $this->erro_msg = "Tipo de resto a pagar nï¿½o encontrado para o empenho {$numemp}. Contate suporte.";
+            $this->erro_msg = "Tipo de resto a pagar não encontrado para o empenho {$numemp}. Contate suporte.";
         }
 
         $e91_codtipo = db_utils::fieldsMemory($rsBuscaResto, 0)->e91_codtipo;
@@ -1972,7 +1972,7 @@ class cl_translan extends cl_contranslan
         $cont = 0;
         $arr_lans = array();
         /**
-         * Percorremos as contas encontradas e validamos se devemos lanï¿½ar nestas ou nï¿½o
+         * Percorremos as contas encontradas e validamos se devemos lanï¿½ar nestas ou não
          */
         for ($i = 0; $i < $this->numrows; $i++) {
 
@@ -2008,7 +2008,7 @@ class cl_translan extends cl_contranslan
         }
     }
 
-    //os parametros codcom e codele nï¿½o estam sendo utilizados ainda
+    //os parametros codcom e codele não estam sendo utilizados ainda
 
     public function db_trans_estorna_liquida_resto($codcom, $codele, $anousu, $numemp, $iCodigoDocumento = 34)
     {
@@ -2046,7 +2046,7 @@ class cl_translan extends cl_contranslan
         if ($oDaoEmpResto->erro_status == 0) {
 
             $this->sqlerro  = true;
-            $this->erro_msg = "Tipo de resto nï¿½o encontrado para o empenho {$numemp}. Contate o Suporte.";
+            $this->erro_msg = "Tipo de resto não encontrado para o empenho {$numemp}. Contate o Suporte.";
         }
 
         $e91_codtipo = db_utils::fieldsMemory($rsBuscaTipoResto, 0)->e91_codtipo;
@@ -2109,7 +2109,7 @@ class cl_translan extends cl_contranslan
             $e91_codtipo = @pg_result($result, 0, 0);
         } else {
             $this->sqlerro = true;
-            $this->erro_msg = "Resto a pagar nï¿½o encontrado na tabela empresto... Contate suporte.";
+            $this->erro_msg = "Resto a pagar não encontrado na tabela empresto... Contate suporte.";
         }
         //----------------------------------------------------------------------
 
@@ -2162,7 +2162,7 @@ class cl_translan extends cl_contranslan
                     if (pg_num_rows($rsBuscaContaCredito) == 0) {
 
                         $this->sqlerro  = true;
-                        $this->erro_msg = "Conta creditada na liquidaï¿½ï¿½o de RP nï¿½o encontrada. Contate o suporte.";
+                        $this->erro_msg = "Conta creditada na liquidaï¿½ï¿½o de RP não encontrada. Contate o suporte.";
                     }
                     $iContaCredito  =  db_utils::fieldsMemory($rsBuscaContaCredito, 0)->c69_credito;
                     $c47_debito     = $iContaCredito;
@@ -2222,7 +2222,7 @@ class cl_translan extends cl_contranslan
             $e91_codtipo = @pg_result($result, 0, 0);
         } else {
             $this->sqlerro = true;
-            $this->erro_msg = "Resto a pagar nï¿½o encotrado na tabela empresto... Contate suporte.";
+            $this->erro_msg = "Resto a pagar não encotrado na tabela empresto... Contate suporte.";
         }
 
         $cont = 0;
@@ -2266,7 +2266,7 @@ class cl_translan extends cl_contranslan
                     if (pg_num_rows($rsBuscaContaDebito) == 0) {
 
                         $this->sqlerro  = true;
-                        $this->erro_msg = "Conta debitada no estorno da liquidaï¿½ï¿½o de RP nï¿½o encontrada. Contate o suporte.";
+                        $this->erro_msg = "Conta debitada no estorno da liquidaï¿½ï¿½o de RP não encontrada. Contate o suporte.";
                     }
                     $iContaDebito =  db_utils::fieldsMemory($rsBuscaContaDebito, 0)->c69_debito;
                     $c47_credito  = $iContaDebito;
@@ -2312,7 +2312,7 @@ class cl_translan extends cl_contranslan
             $e91_codtipo = @pg_result($result, 0, 0);
         } else {
             $this->sqlerro = true;
-            $this->erro_msg = "Resto a pagar nï¿½o encotrado na tabela empresto... Contate suporte.";
+            $this->erro_msg = "Resto a pagar não encotrado na tabela empresto... Contate suporte.";
         }
 
         $cont = 0;
@@ -2358,7 +2358,7 @@ class cl_translan extends cl_contranslan
             $e91_codtipo = @pg_result($result, 0, 0);
         } else {
             $this->sqlerro = true;
-            $this->erro_msg = "Resto a pagar nï¿½o encotrado na tabela empresto... Contate suporte.";
+            $this->erro_msg = "Resto a pagar não encotrado na tabela empresto... Contate suporte.";
         }
 
         $cont = 0;
@@ -2418,7 +2418,7 @@ class cl_translan extends cl_contranslan
             $e91_codtipo = @pg_result($result, 0, 0);
         } else {
             $this->sqlerro = true;
-            $this->erro_msg = "Resto a pagar nï¿½o encotrado na tabela empresto... Contate suporte !";
+            $this->erro_msg = "Resto a pagar não encotrado na tabela empresto... Contate suporte !";
         }
 
         // seleciona os lanï¿½amentos
@@ -2472,7 +2472,7 @@ class cl_translan extends cl_contranslan
                     if ($c46_obrigatorio == 't' || $c46_obrigatorio == 'true') {
 
                         $this->sqlerro = true;
-                        $this->erro_msg = "Lanï¿½amento obrigatï¿½rio, porï¿½m nï¿½o retornou registros ! ";
+                        $this->erro_msg = "Lanï¿½amento obrigatï¿½rio, porï¿½m não retornou registros ! ";
                         break;
                     }
                 } // end if
@@ -2500,7 +2500,7 @@ class cl_translan extends cl_contranslan
             }
         } else {
             $this->sqlerro = true;
-            $this->erro_msg = "Bloco de lanï¿½amentos nï¿½o localizados ( documento $documento, Empenho $numemp )";
+            $this->erro_msg = "Bloco de lanï¿½amentos não localizados ( documento $documento, Empenho $numemp )";
         }
         /*
     echo "<br><br><br><br><br>";
@@ -2682,7 +2682,7 @@ class cl_translan extends cl_contranslan
                         break;
 
                     default:
-                        throw new Exception("Rotina nï¿½o preparada para executar o documento {$iCodigoDocumento}.");
+                        throw new Exception("Rotina não preparada para executar o documento {$iCodigoDocumento}.");
                 }
 
                 $this->arr_histori[$cont]    = $c46_codhist;
@@ -2716,7 +2716,7 @@ class cl_translan extends cl_contranslan
 
         /*
      * Alterada a funï¿½ï¿½o para passar o parï¿½metro da instituiï¿½ï¿½o
-     * Quando nï¿½o for informado nada no parï¿½metro, serï¿½ utilziada a instituiï¿½ï¿½o da sessï¿½o
+     * Quando não for informado nada no parï¿½metro, serï¿½ utilziada a instituiï¿½ï¿½o da sessï¿½o
      */
         if ($iInstit == null) {
             $iInstit = db_getsession("DB_instit");
@@ -2908,7 +2908,7 @@ class cl_translan extends cl_contranslan
                 ->sql_query_file(null, "c72_conplano", null, $sWhereTemVinculoPcasp);
             $rsTemVinculoPcasp = $oDaoConplanoConplanoOrcamento->sql_record($sSqlTemVinculoPcasp);
             if ($oDaoConplanoConplanoOrcamento->numrows == 0) {
-                $sMsgErro = "Conta de cï¿½digo {$iCodigoConta} nï¿½o possui vï¿½nculo com o PCASP.\n ";
+                $sMsgErro = "Conta de código {$iCodigoConta} não possui vï¿½nculo com o PCASP.\n ";
                 $sMsgErro .= "Favor realize vï¿½nculo com PCASP e tente novamente. ";
                 throw new Exception($sMsgErro);
             }
@@ -3030,7 +3030,7 @@ class cl_estrutura_sistema
 
         global ${$label}, ${$title}, ${$picture}, $mascara;
         if (!class_exists('cl_conparametro')) {
-            db_msgbox('Classe conparametro nï¿½o incluida!');
+            db_msgbox('Classe conparametro não incluida!');
             exit;
         }
         $result = $clconparametro->sql_record($clconparametro->sql_query_file("", "$picture as mascara"));
@@ -3038,7 +3038,7 @@ class cl_estrutura_sistema
             db_fieldsmemory($result, 0);
             $tamanho = strlen($mascara);
         } else {
-            db_msgbox('Configuraï¿½ï¿½o de Parametros nï¿½o encontrada ! Contate o suporte !');
+            db_msgbox('Configuraï¿½ï¿½o de Parametros não encontrada ! Contate o suporte !');
             exit;
         }
 
@@ -3796,7 +3796,7 @@ function db_planocontassaldo_matriz(
         } else {
             $key = false;
         }
-        if ($key === false) { // nï¿½o achou
+        if ($key === false) { // não achou
             $work_planomae[$seq] = $estrut_mae;
             $work_planoestrut[$seq] = $estrut;
             $work_plano[$seq] = array(
@@ -3819,7 +3819,7 @@ function db_planocontassaldo_matriz(
             $nivel = db_le_mae_conplano($estrutural, true);
 
             $key = array_search("$estrutural", $work_planomae);
-            if ($key === false) { // nï¿½o achou
+            if ($key === false) { // não achou
                 // busca no banco e inclui
                 $res = db_query(
                     "select c60_descr,c60_finali,c60_codcon, c60_identificadorfinanceiro
@@ -4102,7 +4102,7 @@ function db_planocontassaldo_desp_rec(
         $tot_anterior_credito = $saldo_anterior_credito;
         $tot_saldo_final = $saldo_final;
         $key = array_search("$estrut_mae", $work_planomae);
-        if ($key === false) { // nï¿½o achou
+        if ($key === false) { // não achou
             $work_planomae[$seq] = $estrut_mae;
             $work_planoestrut[$seq] = $estrut;
             $work_plano[$seq] = array(
@@ -4123,7 +4123,7 @@ function db_planocontassaldo_desp_rec(
             $nivel = db_le_mae_conplano($estrutural, true);
 
             $key = array_search("$estrutural", $work_planomae);
-            if ($key === false) { // nï¿½o achou
+            if ($key === false) { // não achou
                 // busca no banco e inclui
                 $res = db_query(
                     "select c60_descr,c60_finali,c60_codcon from conplano where c60_anousu=" . db_getsession("DB_anousu")
@@ -4654,9 +4654,9 @@ function grupoconta(
 ) {
     /*
        *Esta Funï¿½ï¿½o Agrupa as conta pela Seleï¿½ï¿½o do Relatï¿½rio 21(tabela - orcparamrel) Sequencias (tabela - orcparamseq), os elemente sï¿½o informados manualmente pelo usuario
-       *OBS 1 ha funï¿½ï¿½o pode retonar mais valores desde q tenha o cuidado de nï¿½o mudar os nomes dos campos, tb se deve ter o cuidado de trazer valores em todos os SQL
+       *OBS 1 ha funï¿½ï¿½o pode retonar mais valores desde q tenha o cuidado de não mudar os nomes dos campos, tb se deve ter o cuidado de trazer valores em todos os SQL
        *     devido no final a funï¿½ï¿½o sempre possuir um UNION SENDO ASSIM CUIDADO CUIDADO FAZER BACK TOMAR CUIDADO
-       * OBS 2 nï¿½o utilize mais funï¿½ï¿½es como db_planocontassaldo_completo ou db_dotacaosaldo, utilize as q ja existe, se criar novas vai deixar o sistema mais lento
+       * OBS 2 não utilize mais funï¿½ï¿½es como db_planocontassaldo_completo ou db_dotacaosaldo, utilize as q ja existe, se criar novas vai deixar o sistema mais lento
        *     entï¿½o grupe trabalhe SQL ï¿½ mais vantagem.
        * ********Parmetros**************
        * $anousu
@@ -4732,7 +4732,7 @@ function grupoconta(
             $valor2 = $saldo_anterior_debito;
             $valor3 = $saldo_anterior_credito;
             $valor4 = $saldo_final;
-            // nï¿½o coloque o dedo nesses valores adcione abaixo e nï¿½o esqueï¿½a de adiconar na tabela
+            // não coloque o dedo nesses valores adcione abaixo e não esqueï¿½a de adiconar na tabela
 
             $sql = "update work set valor1 = valor1+$valor1,valor2 = valor2+$valor2,valor3 = valor3+$valor3,valor4 = valor4+$valor4 where work.estrutural = '$estrutural'";
             $result = db_query($sql);
@@ -4754,7 +4754,7 @@ function grupoconta(
         //to listando todas as contas de despesas com valores
         $sql22 = "select * from work ";
 
-        //nesse SQL ï¿½ trabalhado novamente com a db_dotaï¿½ï¿½o saldo como eu disse na OBS 2, caso nï¿½o tenha lido recomento,
+        //nesse SQL ï¿½ trabalhado novamente com a db_dotaï¿½ï¿½o saldo como eu disse na OBS 2, caso não tenha lido recomento,
         // continuando eu agrupo as funï¿½ï¿½es, quando eu fiz isso era pq eu queria os valores das funï¿½oes para colocar no Relatï¿½rio BALANï¿½O FINANCEIRO
         $sql33 = "select " . "'F'||ddd.o58_funcao as estrutural, " . "ddd.o52_descr as c60_descr, "
             . "sum(ddd.saldo_anterior) as saldo_anterior, "
@@ -4764,7 +4764,7 @@ function grupoconta(
         // CUIDADO
         // CUIDADO
         //AREA DE UNION, aqui estou unindo todos os sqls para que eu tenha um unico para entï¿½o eu executar e tirar apenas os dados solicitados pelo usuario
-        //dados esse q foi comentado assim, leia os comentarios nï¿½o to gostando meu tempo ha atoa
+        //dados esse q foi comentado assim, leia os comentarios não to gostando meu tempo ha atoa
         $sql12 = $sql11 . " union " . $sql22;
         $sql = $sql12 . " union " . $sql33;
         $result = db_query($sql);
@@ -4800,7 +4800,7 @@ function grupoconta(
     } else { // caso queira ORï¿½AMENTARIA
 
         // vamos novamente para o SQL ja bem eu falei assim para cuidar bem dessas coisas ou seja tem um IF ha db_dotacaosaldo esta sendo utilizada uma vez e a receita tb
-        // eu ja disse pode adcionar valores, mas nï¿½o retire
+        // eu ja disse pode adcionar valores, mas não retire
         $sql1 = db_receitasaldo(11, 1, 3, true, $where_rec, $anousu, $dataini, $datafim, true);
         $grup_rec = "select ccc.o57_fonte as estrutural, " . "ccc.o57_descr as c60_descr, "
             . "sum(ccc.saldo_anterior) as anterior, "
@@ -4821,7 +4821,7 @@ function grupoconta(
             . "sum(ddd.empenhado)-sum(ddd.anulado) as executado " . "from ($sql2) as ddd "
             . "group by 'F'||ddd.o58_funcao,ddd.o52_descr ";
 
-        //crio a trabela temporaria, nesse momento eu me pergunto, copio o comentario acima e colï¿½ aqui ou mando o comum ler a cima, bom ï¿½ melhor copiar COMUM nï¿½o lï¿½
+        //crio a trabela temporaria, nesse momento eu me pergunto, copio o comentario acima e colï¿½ aqui ou mando o comum ler a cima, bom ï¿½ melhor copiar COMUM não lï¿½
         // Esta tabela ï¿½ criada para estruturar os valores de todos as contas de despesas,
         $creat_sql = "create temp table work as
           select o56_elemento||'00' as estrutural,o56_descr as c60_descr,0::float8 as valor1,0::float8 as valor2,0::float8 as valor3
@@ -4835,7 +4835,7 @@ function grupoconta(
         // Comeï¿½o da estruturaï¿½ï¿½o da tabela temporaria
         for ($i = 0; $i < pg_numrows($result_rec); $i++) {
             db_fieldsmemory($result_rec, $i);
-            // eu ja disse o que pode fazer aqui, se nï¿½o sei acima vai ler
+            // eu ja disse o que pode fazer aqui, se não sei acima vai ler
             $valor1 = $anterior;
             $valor2 = $inicial;
             $valor3 = $executado;
@@ -4874,7 +4874,7 @@ function grupoconta(
             for ($x = 0; $x < count($paramconta); $x++) {
                 if (in_array($estrutural, $paramconta[$x])) {
                     $g = $x;
-                    // troca por array ME ORGULHE eu nï¿½o tinha tempo
+                    // troca por array ME ORGULHE eu não tinha tempo
                     db_query(
                         "insert into work_grupconta values (' " . $g . " '," . "'" . $estrutural . "'," . "'" . pg_escape_string($c60_descr)
                             . "'," . "$anterior," . "$inicial," . "$executado )"
@@ -4883,7 +4883,7 @@ function grupoconta(
                 if (substr($estrutural, 0, 1) == 'F') {
                     $estrutural = substr($estrutural, 1);
                     $g = 'F';
-                    //troca por array ME ORGULHE eu nï¿½o tinha tempo
+                    //troca por array ME ORGULHE eu não tinha tempo
                     db_query(
                         "insert into work_grupconta values (' " . $g . " '," . "'" . $estrutural . "'," . "'" . pg_escape_string($c60_descr)
                             . "'," . "$anterior," . "$inicial," . "$executado )"
@@ -5938,7 +5938,8 @@ function getSaldoDespesaSentenca($o58_elemento = null, $campos = "*", $ordem = n
  * @return array|stdClass[]
  */
 
-function getSaldoDesdobramento($where, $aAnousu, $instit, $dtIni, $dtFim, $fonte="", $group) {
+function getSaldoDesdobramento($where, $aAnousu, $instit, $dtIni, $dtFim, $fonte = "", $group)
+{
     $aDatas = array();
     $dt_inicial = "";
     $dt_final   = "";
@@ -5971,7 +5972,7 @@ function getSaldoDesdobramento($where, $aAnousu, $instit, $dtIni, $dtFim, $fonte
                         INNER JOIN conlancamemp ON c70_codlan = c75_codlan
                         INNER JOIN empempenho ON e60_numemp = c75_numemp ";
 
-    if($fonte!="") {
+    if ($fonte != "") {
         $sql .= " INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu ";
     }
 
@@ -5982,24 +5983,22 @@ function getSaldoDesdobramento($where, $aAnousu, $instit, $dtIni, $dtFim, $fonte
     $sql .= " AND c53_tipo IN (10, 11, 20, 21)";
     $sql .= " AND (";
     $i = 1;
-    foreach($aAnousu as $anousu) {
+    foreach ($aAnousu as $anousu) {
 
         if (count($aAnousu) == 2) {
 
-          $dt_inicial = explode("a", $aDatas[$anousu]);
-          $dt_final = explode("a", $aDatas[$anousu]);
-          $sql .= "(c70_data BETWEEN '{$dt_inicial[0]}' AND '{$dt_final[1]}') ";
-          if ($i < count($aAnousu)) {
-              $sql .= " OR ";
-          }
-          $i++;
-
+            $dt_inicial = explode("a", $aDatas[$anousu]);
+            $dt_final = explode("a", $aDatas[$anousu]);
+            $sql .= "(c70_data BETWEEN '{$dt_inicial[0]}' AND '{$dt_final[1]}') ";
+            if ($i < count($aAnousu)) {
+                $sql .= " OR ";
+            }
+            $i++;
         } else {
 
-          $sql .= "(c70_data BETWEEN '{$dtIni}' AND '{$dtFim}') ";
-
+            $sql .= "(c70_data BETWEEN '{$dtIni}' AND '{$dtFim}') ";
         }
-      }
+    }
 
     $sql .= ")";
     if ($fonte != "" && !is_bool($fonte)) {
@@ -6057,16 +6056,16 @@ function getSaldoArrecadadoEmendaParlamentar($dtIni, $dtFim, $emenda = NULL)
 function getSaldoArrecadadoEmendaParlamentarRelatorioReceita($dtIni, $dtFim, $emenda = NULL, $fontes = false, $execoes = NULL)
 {
     $sql = "SELECT ";
-    if($fontes){
+    if ($fontes) {
         $sql .= " O57_FONTE ";
-    }else{
+    } else {
         $sql .= " SUM(
             CASE
                 WHEN ( C53_TIPO = 100 AND K81_EMPARLAMENTAR IN (1,2) ) THEN ROUND(C70_VALOR,2)::FLOAT8
                 WHEN ( C53_TIPO = 101 AND K81_EMPARLAMENTAR IN (1,2) ) THEN ROUND(C70_VALOR*-1,2)::FLOAT8
             ELSE 0::FLOAT8 END) AS ARRECADADO_EMENDA_PARLAMENTAR ";
     }
-    $sql .=" FROM CONLANCAMREC
+    $sql .= " FROM CONLANCAMREC
                     INNER JOIN CONLANCAM ON C74_CODLAN = C70_CODLAN
                     INNER JOIN CONLANCAMDOC ON C71_CODLAN = C74_CODLAN
                     INNER JOIN CONHISTDOC ON C53_CODDOC = C71_CODDOC
@@ -6078,12 +6077,12 @@ function getSaldoArrecadadoEmendaParlamentarRelatorioReceita($dtIni, $dtFim, $em
                     INNER JOIN ORCFONTES ON (O70_CODFON, O70_ANOUSU) = (O57_CODFON, O57_ANOUSU)
                 WHERE C74_DATA BETWEEN '{$dtIni}' AND '{$dtFim}'";
 
-    if ($emenda){
+    if ($emenda) {
         $sql .= " AND k81_emparlamentar IN (" . implode(",", $emenda) . ") AND O57_FONTE LIKE '4171%'";
-    }else{
+    } else {
         $sql .= " AND O57_FONTE LIKE '4171%' ";
     }
-    if ($execoes){
+    if ($execoes) {
         $sql .= " AND o70_codigo NOT IN (" . implode(",", $execoes) . ") ";
     }
     return pg_fetch_array(db_query($sql));
@@ -6234,7 +6233,7 @@ function getRCL(DBDate $oDataFim, $instits)
 }
 
 /**
- * Busca total do valor pago dos RP nï¿½o processados
+ * Busca total do valor pago dos RP não processados
  * @param $instits
  * @param $dtini
  * @param $dtfim
@@ -6269,26 +6268,28 @@ function getSaldoRP($instits, $dtini, $dtfim, $sFuncao, $aSubFuncao, $aFonte)
 }
 
 // para uso dos anexos da educaï¿½ï¿½o e saude
-function getSaldoPlanoContaFonte($sFonte, $dtIni, $dtFim, $aInstits){
+function getSaldoPlanoContaFonte($sFonte, $dtIni, $dtFim, $aInstits)
+{
     db_inicio_transacao();
 
-    $where = " c61_instit in ({$aInstits})" ;
-    if(db_getsession("DB_anousu") > 2022)
+    $where = " c61_instit in ({$aInstits})";
+    if (db_getsession("DB_anousu") > 2022)
         $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ($sFonte) ) ";
-    else 
-        $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($sFonte) ) ";   
+    else
+        $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($sFonte) ) ";
     $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
     $nTotalFinal = 0;
-    for($x = 0; $x < pg_numrows($result); $x++){
+    for ($x = 0; $x < pg_numrows($result); $x++) {
         $oPlanoConta = db_utils::fieldsMemory($result, $x);
-        if( ( $oPlanoConta->movimento == "S" )
-            && ( ( $oPlanoConta->saldo_anterior + $oPlanoConta->saldo_anterior_debito + $oPlanoConta->saldo_anterior_credito) == 0 ) ) {
+        if (($oPlanoConta->movimento == "S")
+            && (($oPlanoConta->saldo_anterior + $oPlanoConta->saldo_anterior_debito + $oPlanoConta->saldo_anterior_credito) == 0)
+        ) {
             continue;
         }
-        if(substr($oPlanoConta->estrutural,1,14) == '00000000000000'){
-            if($oPlanoConta->saldo_final == "C"){
+        if (substr($oPlanoConta->estrutural, 1, 14) == '00000000000000') {
+            if ($oPlanoConta->saldo_final == "C") {
                 $nTotalFinal -= $oPlanoConta->saldo_final;
-            }else {
+            } else {
                 $nTotalFinal += $oPlanoConta->saldo_final;
             }
         }
@@ -6299,7 +6300,8 @@ function getSaldoPlanoContaFonte($sFonte, $dtIni, $dtFim, $aInstits){
 }
 
 // para uso dos anexos da educaï¿½ï¿½o e saude
-function getRestosSemDisponilibidade($sFontes, $dtIni, $dtFim, $aInstits) {
+function getRestosSemDisponilibidade($sFontes, $dtIni, $dtFim, $aInstits)
+{
     db_inicio_transacao();
     db_query("drop table if exists work_pl");
     $clEmpResto = new cl_empresto();
@@ -6309,33 +6311,34 @@ function getRestosSemDisponilibidade($sFontes, $dtIni, $dtFim, $aInstits) {
     $aEmpRestos = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
 
     $nValorRpPago = 0;
-    foreach($aEmpRestos as $oEmpResto){
+    foreach ($aEmpRestos as $oEmpResto) {
         $nValorRpPago += $oEmpResto->pagorpp + $oEmpResto->pagorpnp;
     }
 
-    $dtIni = db_getsession("DB_anousu")."-01-01";
-    $where = " c61_instit in ({$aInstits})" ;
+    $dtIni = db_getsession("DB_anousu") . "-01-01";
+    $where = " c61_instit in ({$aInstits})";
     $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($sFontes) ) ";
     $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
     $nTotalAnterior = 0;
-    for($x = 0; $x < pg_numrows($result); $x++){
+    for ($x = 0; $x < pg_numrows($result); $x++) {
         $oPlanoConta = db_utils::fieldsMemory($result, $x);
-        if( ( $oPlanoConta->movimento == "S" )
-            && ( ( $oPlanoConta->saldo_anterior + $oPlanoConta->saldo_anterior_debito + $oPlanoConta->saldo_anterior_credito) == 0 ) ) {
+        if (($oPlanoConta->movimento == "S")
+            && (($oPlanoConta->saldo_anterior + $oPlanoConta->saldo_anterior_debito + $oPlanoConta->saldo_anterior_credito) == 0)
+        ) {
             continue;
         }
-        if(substr($oPlanoConta->estrutural,1,14) == '00000000000000'){
-            if($oPlanoConta->sinal_anterior == "C"){
+        if (substr($oPlanoConta->estrutural, 1, 14) == '00000000000000') {
+            if ($oPlanoConta->sinal_anterior == "C") {
                 $nTotalAnterior -= $oPlanoConta->saldo_anterior;
-            }else {
+            } else {
                 $nTotalAnterior += $oPlanoConta->saldo_anterior;
             }
         }
     }
 
     $iSaldoRestosAPagarSemDisponibilidade = 0;
-    if($nValorRpPago > $nTotalAnterior){
-        $iSaldoRestosAPagarSemDisponibilidade = $nValorRpPago - $nTotalAnterior ;
+    if ($nValorRpPago > $nTotalAnterior) {
+        $iSaldoRestosAPagarSemDisponibilidade = $nValorRpPago - $nTotalAnterior;
     }
     db_query("drop table if exists work_pl");
     db_fim_transacao();
@@ -6351,22 +6354,22 @@ function getRestosSemDisponilibidade($sFontes, $dtIni, $dtFim, $aInstits) {
  * @param $anousu
  * @return int
  */
-function getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu)
+function getTotalAnexoIIEducacao($instits, $dtini, $dtfim, $anousu)
 {
     db_inicio_transacao();
     $sWhereDespesa      = " o58_instit in({$instits})";
-    criaWorkDotacao($sWhereDespesa,array($anousu),$dtini,$dtfim);
+    criaWorkDotacao($sWhereDespesa, array($anousu), $dtini, $dtfim);
     $sWhereReceita      = "o70_instit in ({$instits})";
     criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
     $fSubTotal = 0;
-    $aSubFuncoes = array(122,272,271,361,365,366,367,843);
+    $aSubFuncoes = array(122, 272, 271, 361, 365, 366, 367, 843);
     $sFuncao     = "12";
     $aFonte      = array("'101','1101','15000001'");
 
     foreach ($aSubFuncoes as $iSubFuncao) {
-        $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
-        if($anousu > 2022)
-            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codigo in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
+        $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (" . implode(",", $aFonte) . ") and o58_instit in ($instits) group by 1,2");
+        if ($anousu > 2022)
+            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codigo in (" . implode(",", $aFonte) . ") and o58_instit in ($instits) group by 1,2");
         if (count($aDespesasProgramas) > 0) {
             foreach ($aDespesasProgramas as $oDespesaPrograma) {
                 $fSubTotal += $oDespesaPrograma->pago;
@@ -6391,14 +6394,15 @@ function getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu)
  * @param $anousu
  * @return int
  */
-function getTotalAnexoIIEducacaoNovo($instits,$dtini,$dtfim,$anousu){
+function getTotalAnexoIIEducacaoNovo($instits, $dtini, $dtfim, $anousu)
+{
     db_inicio_transacao();
     db_query("drop table if exists work_pl");
     db_query("drop table if exists work_dotacao");
     db_query("drop table if exists work_receita");
     $nRPExercicioAnteriorSemSaldo = getRestosSemDisponilibidade("'101','15000001'", $dtini, $dtfim, $instits);
     $sWhereDespesa      = " o58_instit in({$instits})";
-    criaWorkDotacao($sWhereDespesa,array($anousu),$dtini,$dtfim);
+    criaWorkDotacao($sWhereDespesa, array($anousu), $dtini, $dtfim);
     $sWhereReceita      = "o70_instit in ({$instits})";
     criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
     $fSubTotal = 0;
@@ -6407,19 +6411,19 @@ function getTotalAnexoIIEducacaoNovo($instits,$dtini,$dtfim,$anousu){
     $aFonte      = array("'101','15000001'");
     $fTotalRPExercicio = 0;
     foreach ($aSubFuncoes as $iSubFuncao) {
-        $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(atual_a_pagar+atual_a_pagar_liquidado),0) as apagar", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
-        if($anousu > 2022)
-            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(atual_a_pagar+atual_a_pagar_liquidado),0) as apagar", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codigo in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
+        $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(atual_a_pagar+atual_a_pagar_liquidado),0) as apagar", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (" . implode(",", $aFonte) . ") and o58_instit in ($instits) group by 1,2");
+        if ($anousu > 2022)
+            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(atual_a_pagar+atual_a_pagar_liquidado),0) as apagar", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codigo in (" . implode(",", $aFonte) . ") and o58_instit in ($instits) group by 1,2");
         if (count($aDespesasProgramas) > 0) {
             foreach ($aDespesasProgramas as $oDespesaPrograma) {
                 $fSubTotal += $oDespesaPrograma->pago;
-                if($dtfim == db_getsession("DB_anousu")."-12-31" ){
+                if ($dtfim == db_getsession("DB_anousu") . "-12-31") {
                     $fTotalRPExercicio += $oDespesaPrograma->apagar;
                 }
             }
         }
     }
-    $aDadoDeducao = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '495%'");
+    $aDadoDeducao = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '495%'");
     $nSaldoFinalFonte = getSaldoPlanoContaFonte("'101','15000001'", $dtini, $dtfim, $instits);
     db_query("drop table if exists work_pl");
     db_query("drop table if exists work_dotacao");
@@ -6427,7 +6431,7 @@ function getTotalAnexoIIEducacaoNovo($instits,$dtini,$dtfim,$anousu){
     db_fim_transacao();
 
     $nRPExercicioSemSaldo = $fTotalRPExercicio - $nSaldoFinalFonte;
-    if($nRPExercicioSemSaldo < 0){
+    if ($nRPExercicioSemSaldo < 0) {
         $nRPExercicioSemSaldo = 0;
     }
     $nValorAplicado = $fSubTotal + abs($aDadoDeducao[0]->saldo_arrecadado_acumulado) + $fTotalRPExercicio  + $nRPExercicioAnteriorSemSaldo -  $nRPExercicioSemSaldo;
@@ -6443,20 +6447,20 @@ function getTotalAnexoIIEducacaoNovo($instits,$dtini,$dtfim,$anousu){
  * @param $anousu
  * @return int
  */
-function getTotalAnexoIISaude($instits,$dtini,$dtfim,$anousu)
+function getTotalAnexoIISaude($instits, $dtini, $dtfim, $anousu)
 {
     db_inicio_transacao();
     $sWhereDespesa      = " o58_instit in({$instits})";
-    criaWorkDotacao($sWhereDespesa,array($anousu),$dtini,$dtfim);
+    criaWorkDotacao($sWhereDespesa, array($anousu), $dtini, $dtfim);
     $fSubTotal = 0;
-    $aSubFuncoes = array(122,272,271,301,302,303,304,305,306);
+    $aSubFuncoes = array(122, 272, 271, 301, 302, 303, 304, 305, 306);
     $sFuncao     = "10";
     $aFonte      = array("'102','15000002'");
 
     foreach ($aSubFuncoes as $iSubFuncao) {
-        $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
-        if($anousu > 2022)
-            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codigo in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
+        $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (" . implode(",", $aFonte) . ") and o58_instit in ($instits) group by 1,2");
+        if ($anousu > 2022)
+            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codigo in (" . implode(",", $aFonte) . ") and o58_instit in ($instits) group by 1,2");
         if (count($aDespesasProgramas) > 0) {
             foreach ($aDespesasProgramas as $oDespesaPrograma) {
                 $fSubTotal += $oDespesaPrograma->pago;
@@ -6763,12 +6767,12 @@ function getSaldoAPagarRPFonte($sFontes, $dtIni, $dtFim, $aInstits)
     $sSqlOrder = "";
     $sCampos = " o15_codtri, sum(e91_vlremp) as vlremp, sum(e91_vlranu) as vlranu, sum(e91_vlrpag) as vlrpag ";
     $sSqlWhere = " o15_codtri in ($sFontes) group by 1 ";
-    if(db_getsession("DB_anousu") > 2022)
+    if (db_getsession("DB_anousu") > 2022)
         $sSqlWhere = " o15_codigo in ($sFontes) group by 1 ";
     $aEmpRestos = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
 
     $nValorARpPagar = 0;
-    foreach($aEmpRestos as $oEmpResto){
+    foreach ($aEmpRestos as $oEmpResto) {
         $nValorARpPagar += $oEmpResto->vlremp - $oEmpResto->vlranu - $oEmpResto->vlrpag;
     }
     return  $nValorARpPagar;

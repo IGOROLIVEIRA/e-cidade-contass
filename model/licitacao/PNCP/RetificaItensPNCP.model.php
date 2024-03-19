@@ -43,7 +43,7 @@ class RetificaitensPNCP extends ModeloBasePNCP
 
         //DISPENSA E INEXIGIBILIDADE
         if($oDado[0]->modalidadeid == "8" || $oDado[0]->modalidadeid == "9"){
-            $oDadosAPI->situacaoCompraItemId        = $oDado[0]->pc23_vlrun > 0 ? 2 : 4;
+            $oDadosAPI->situacaoCompraItemId        = $oDado[0]->pc23_orcamforne ? 2 : 4;
             $oDadosAPI->criterioJulgamentoId        = 7;
         }
 
@@ -91,14 +91,14 @@ class RetificaitensPNCP extends ModeloBasePNCP
         $header['errmsg']  = $errmsg;
         $header['header']  = $contentpncp;
         echo "<pre>";
-        print_r($header);
-        exit;*/
+        print_r($header);*/
+
         $retorno = explode(':', $contentpncp);
 
         if (substr($retorno[0], 7, 3) == '200') {
             return array(201, "Enviado com Sucesso!");
         } else {
-            return array(422, "Retificacao do Item Erro:".$retorno[22]);
+            return array(422, "Retificacao do Item Erro:".$retorno[17].' - '.$retorno[22]);
         }
     }
 }

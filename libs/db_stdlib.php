@@ -1043,6 +1043,8 @@ function db_formatar($str, $tipo, $caracter = " ", $quantidade = 0, $TipoDePreen
             return substr($str, 0, 1) . "." . substr($str, 1, 1) . "." . substr($str, 2, 1) . "." . substr($str, 3, 1) . "." . substr($str, 4, 1) . "." . substr($str, 5, 2) . "." . substr($str, 7, 2) . "." . substr($str, 9, 2) . "." . substr($str, 11, 2);
         case "elemento":
             return substr($str, 1, 1) . "." . substr($str, 2, 1) . "." . substr($str, 3, 1) . "." . substr($str, 4, 1) . "." . substr($str, 5, 2) . "." . substr($str, 7, 2) . "." . substr($str, 9, 2) . "." . substr($str, 11, 2);
+        case "elemento_alt":
+            return substr($str, 1, 1) . "." . substr($str, 2, 1) . "." . substr($str, 3, 1) . "" . substr($str, 4, 1) . "." . substr($str, 5, 2) . "." . substr($str, 7, 2);
         case "recurso":
             return str_pad($str, 4, "0", STR_PAD_LEFT);
         case "atividade":
@@ -1489,6 +1491,12 @@ function db_redireciona($url = "0")
     exit;
 }
 
+
+function db_gettipoinstit($instit){
+    $sqltipo = db_query("select si09_tipoinstit from infocomplementaresinstit where si09_instit = " . $instit);
+    return db_utils::fieldsMemory($sqltipo, 0)->si09_tipoinstit;
+}
+
 //retorna uma variável de sessðo
 /*
  function db_getsession($var) {
@@ -1651,7 +1659,7 @@ function db_indexOf($str, $proc)
  *                                    </pre>
  * @return mixed                      HTML com a estrutura do datagrid
  */
-function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_self", $campos_layer = "", $NomeForm = "NoMe", $variaveis_repassa = array (), $automatico = true, $totalizacao = array(), $marcar = false) 
+function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_self", $campos_layer = "", $NomeForm = "NoMe", $variaveis_repassa = array (), $automatico = true, $totalizacao = array(), $marcar = false)
 {
     global $BrowSe;
     //cor do cabecalho

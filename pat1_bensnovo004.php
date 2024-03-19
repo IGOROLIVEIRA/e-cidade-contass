@@ -65,8 +65,8 @@ if (isset($oGet->iCodigoEmpNotaItem) && !empty($oGet->iCodigoEmpNotaItem)) {
 //Saber se possui integraÁ„o patrimonial
 require_once "classes/db_parametrointegracaopatrimonial_classe.php";
 $clBens = new cl_parametrointegracaopatrimonial;
-$rsBem = $clBens->sql_record($clBens->sql_query_file(null, '*', null, " c01_modulo = 1"));     
-$oBemIntegracao= db_utils::fieldsMemory($rsBem, 0);
+$rsBem = $clBens->sql_record($clBens->sql_query_file(null, '*', null, " c01_modulo = 1"));
+$oBemIntegracao = db_utils::fieldsMemory($rsBem, 0);
 $integracao = $oBemIntegracao->c01_modulo;
 
 ?>
@@ -217,16 +217,16 @@ $integracao = $oBemIntegracao->c01_modulo;
 <script>
   lMostraViewNotasPendentes = <?php echo $lMostraViewNotasPendentes; ?>;
   var integracao = "<?php print $integracao; ?>";
-  if(!integracao)  {
-      $("contabilizado").style.display = 'none';
-      document.getElementById("contabilizador").style.display = 'none';
-      $("contabilizado").value = 'nao';
-  }    
+  if (!integracao) {
+    $("contabilizado").style.display = 'none';
+    document.getElementById("contabilizador").style.display = 'none';
+    $("contabilizado").value = 'nao';
+  }
 
   if (lMostraViewNotasPendentes == true) {
 
     /**
-     * Direciona o usu√°rio para a inclus√£o de bens Individual ou Global, dependendo
+     * Direciona o usu·rio para a inclus√£o de bens Individual ou Global, dependendo
      * da quantidade do item.
      */
     function loadDadosBem(oDadosLinha) {

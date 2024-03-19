@@ -77,6 +77,7 @@ class cl_empparametro
     var $e30_empordemcron = 'f';
     var $e30_liquidacaodataanterior = 'f';
     var $e30_obrigadiarias = 't';
+    var $e30_modeloop = 2;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  e39_anousu = int4 = Exercício
@@ -110,6 +111,7 @@ class cl_empparametro
                  e30_liquidacaodataanterior = bool = Liquidação c/ data anterior a última
                  e30_modeloautempenho = int8 = Controla o modelo de autorização de emepnho
                  e30_obrigadiarias = bool = Obriga Informar Diárias na Liquidação
+                 e30_modeloop = int4 = Modelo da Ordem de Pagamento
                  ";
 
     //funcao construtor da classe
@@ -170,6 +172,7 @@ class cl_empparametro
             $this->e30_empordemcron = ($this->e30_empordemcron == "f" ? @$GLOBALS["HTTP_POST_VARS"]["e30_empordemcron"] : $this->e30_empordemcron);
             $this->e30_liquidacaodataanterior = ($this->e30_liquidacaodataanterior == "f"?@$GLOBALS["HTTP_POST_VARS"]["e30_liquidacaodataanterior"]:$this->e30_liquidacaodataanterior);
             $this->e30_obrigadiarias = ($this->e30_obrigadiarias == "t"?@$GLOBALS["HTTP_POST_VARS"]["e30_obrigadiarias"]:$this->e30_obrigadiarias);
+            $this->e30_modeloop = ($this->e30_modeloop == "t"?@$GLOBALS["HTTP_POST_VARS"]["e30_modeloop"]:$this->e30_modeloop);
         } else {
         }
     }
@@ -469,6 +472,7 @@ class cl_empparametro
                                       ,e30_liquidacaodataanterior
                                       ,e30_modeloautempenho
                                       ,e30_obrigadiarias
+                                      ,e30_modeloop
                        )
                 values (
                                 $this->e39_anousu
@@ -501,6 +505,7 @@ class cl_empparametro
                                ,$this->e30_liquidacaodataanterior
                                ,$this->e30_modeloautempenho
                                ,$this->e30_obrigadiarias
+                               ,$this->e30_modeloop
                       )";
 
         $result = db_query($sql);
@@ -954,6 +959,19 @@ class cl_empparametro
             if(trim($this->e30_obrigadiarias) == null ){
                 $this->erro_sql = " Campo Obriga Informar Diárias na Liquidação nao Informado.";
                 $this->erro_campo = "e30_obrigadiarias";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if(trim($this->e30_modeloop)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e30_modeloop"])){
+            $sql  .= $virgula." e30_modeloop = '$this->e30_modeloop' ";
+            $virgula = ",";
+            if(trim($this->e30_modeloop) == null ){
+                $this->erro_sql = " Campo Obriga Informar Diárias na Liquidação nao Informado.";
+                $this->erro_campo = "e30_modeloop";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

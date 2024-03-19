@@ -165,10 +165,12 @@ for($contas = 0; $contas < pg_numrows($res); $contas ++) {
            c69_credito,
 			     credplano.c60_descr as credito_descr,
            c69_valor,
-           case when c69_debito = conplanoreduz.c61_reduz
+           case when c71_coddoc = 980
+             then c28_tipo
+            else (case when c69_debito = conplanoreduz.c61_reduz
              then 'D'
                else 'C'
-           end  as tipo,
+           end) end as tipo,
 					 c50_codhist,
            c50_descr,
            c74_codrec,
@@ -225,11 +227,10 @@ for($contas = 0; $contas < pg_numrows($res); $contas ++) {
            left join cgm on z01_numcgm = c76_numcgm
            left join conlancamdig on c78_codlan = c69_codlan
            left join conlancamcompl on c72_codlan = c69_codlan
+           left join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
      where conplanoreduz.c61_anousu = {$anousu} and {$txt_where2}
      order by conplano.c60_estrut, c69_data,c69_codlan,c69_sequen ";
-
   $reslista = db_query($sql_analitico);
-
   if (!$reslista) {
 
     echo "ERRO<br><br><br><br><br>";

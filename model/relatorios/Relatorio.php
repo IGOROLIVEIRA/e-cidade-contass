@@ -1,14 +1,14 @@
 <?php
 
 set_time_limit(0);
-if(!defined('DB_BIBLIOT')){
+if (!defined('DB_BIBLIOT')) {
 
   session_cache_limiter('none');
-  if ( !isset($_SESSION) ) {
+  if (!isset($_SESSION)) {
     session_start();
   }
 
-  if ( !function_exists("db_menu") ) {
+  if (!function_exists("db_menu")) {
 
     require_once "libs/db_stdlib.php";
     require_once "libs/db_conecta.php";
@@ -17,7 +17,6 @@ if(!defined('DB_BIBLIOT')){
   }
   db_postmemory($_POST);
   db_postmemory($_SERVER);
-
 }
 
 require_once 'vendor/mpdf/mpdf/mpdf.php';
@@ -61,14 +60,28 @@ class Relatorio extends mPDF
 
 
   public function __construct(
-    $mode = 'BLANK', $format = 'A4', $default_font_size = 0, $default_font = '',
-    $margin_left = 7, $margin_right = 7, $margin_top = 40, $margin_bottom = 14,
-    $margin_header = 6, $margin_footer = 0
+    $mode = 'BLANK',
+    $format = 'A4',
+    $default_font_size = 0,
+    $default_font = '',
+    $margin_left = 7,
+    $margin_right = 7,
+    $margin_top = 40,
+    $margin_bottom = 14,
+    $margin_header = 6,
+    $margin_footer = 0
   ) {
     parent::__construct(
-      $mode, $format, $default_font_size, $default_font,
-      $margin_left, $margin_right, $margin_top, $margin_bottom,
-      $margin_header, $margin_footer
+      $mode,
+      $format,
+      $default_font_size,
+      $default_font,
+      $margin_left,
+      $margin_right,
+      $margin_top,
+      $margin_bottom,
+      $margin_header,
+      $margin_footer
     );
 
     /*----------- Footer -----------*/
@@ -90,7 +103,6 @@ class Relatorio extends mPDF
         $this->WriteHTML(file_get_contents('estilos/relatorios/rodape-portrait.style.css'), 1);
         break;
     }
-
   }
 
 
@@ -131,24 +143,24 @@ class Relatorio extends mPDF
         trim(ender)||',
         '||trim(cast(numero as text)) as ender,
         trim(ender) as rua, munic, numero, uf, cgc, telef, email, url, logo
-        FROM db_config WHERE codigo = ".db_getsession("DB_instit")
+        FROM db_config WHERE codigo = " . db_getsession("DB_instit")
     );
 
-    $sUrl   = @pg_result($oDados,0,"url");
-    $sLogo  = @pg_result($oDados,0,"logo");
+    $sUrl   = @pg_result($oDados, 0, "url");
+    $sLogo  = @pg_result($oDados, 0, "logo");
 
-    $sNome = pg_result($oDados,0,"nomeinst");
+    $sNome = pg_result($oDados, 0, "nomeinst");
     global $sNomeInst;
-    $sNomeInst = pg_result($oDados,0,"nomeinst");
+    $sNomeInst = pg_result($oDados, 0, "nomeinst");
 
-    $sComplento = substr(trim(pg_result($oDados,0,"db21_compl")), 0, 20);
+    $sComplento = substr(trim(pg_result($oDados, 0, "db21_compl")), 0, 20);
     if (!empty($sComplento)) {
-      $sComplento = ', ' . substr(trim(pg_result($oDados,0,"db21_compl")), 0, 20);
+      $sComplento = ', ' . substr(trim(pg_result($oDados, 0, "db21_compl")), 0, 20);
     }
-    $sLogradouro  = trim(pg_result($oDados,0,"rua")) . ', ' . trim(pg_result($oDados,0,"numero")) . $sComplento;
-    $sCidadeUF    = trim(pg_result($oDados,0,"munic")) . ' - ' . pg_result($oDados,0,"uf");
-    $sTelefone    = trim(pg_result($oDados,0,"telef")) . ' - CNPJ: ' .db_formatar(pg_result($oDados,0,"cgc"),"cnpj");
-    $sEmail       = trim(pg_result($oDados,0,"email"));
+    $sLogradouro  = trim(pg_result($oDados, 0, "rua")) . ', ' . trim(pg_result($oDados, 0, "numero")) . $sComplento;
+    $sCidadeUF    = trim(pg_result($oDados, 0, "munic")) . ' - ' . pg_result($oDados, 0, "uf");
+    $sTelefone    = trim(pg_result($oDados, 0, "telef")) . ' - CNPJ: ' . db_formatar(pg_result($oDados, 0, "cgc"), "cnpj");
+    $sEmail       = trim(pg_result($oDados, 0, "email"));
 
 
     /*---------- Informações ----------*/
@@ -180,7 +192,6 @@ HEADER;
 
     $this->sHeaderHTML = $header;
     return $this->sHeaderHTML;
-
   }
 
 
@@ -215,17 +226,17 @@ HEADER;
       WHERE id_item_filho = {$sDB_itemmenu_acessado} AND modulo = {$sDB_modulo}
     ";
 
-    $rsMenuAcess  = db_query($conn,$sSqlMenuAcess);
+    $rsMenuAcess  = db_query($conn, $sSqlMenuAcess);
     $sMenuAcess   = substr(pg_result($rsMenuAcess, 0, "menu"), 0, 50);
     $sDB_NBASE    = db_getsession("DB_NBASE");
     $sDB_usuario  = db_getsession("DB_id_usuario");
 
     $sNome = @$GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"];
-    $sNome = substr($sNome, strrpos($sNome,"/")+1);
+    $sNome = substr($sNome, strrpos($sNome, "/") + 1);
     $rsNomeUsu = db_query($conn, "SELECT nome AS nomeusu FROM db_usuarios WHERE id_usuario = {$sDB_usuario}");
 
-    if (pg_numrows($rsNomeUsu)>0) {
-      $sNomeUsu = pg_result($rsNomeUsu,0,0);
+    if (pg_numrows($rsNomeUsu) > 0) {
+      $sNomeUsu = pg_result($rsNomeUsu, 0, 0);
     }
 
     if (isset($sNomeUsu) && !empty($sNomeUsu)) {
@@ -235,16 +246,16 @@ HEADER;
     }
 
     $sInfo  = $sMenuAcess
-            . "  "
-            . $sNome
-            . ' | Emissor: '
-            . substr(ucwords(strtolower($sEmissor)), 0, 30)
-            . ' | Exerc: '
-            . db_getsession("DB_anousu")
-            . ' | Data: '
-            . date("d-m-Y", db_getsession("DB_datausu"))
-            . " - "
-            . date("H:i:s");
+      . "  "
+      . $sNome
+      . ' | Emissor: '
+      . substr(ucwords(strtolower($sEmissor)), 0, 30)
+      . ' | Exerc: '
+      . db_getsession("DB_anousu")
+      . ' | Data: '
+      . date("d-m-Y", db_getsession("DB_datausu"))
+      . " - "
+      . date("H:i:s");
 
     $footer = <<<FOOTER
       <footer class='rodape'>
@@ -266,7 +277,6 @@ FOOTER;
 
     $this->sFooterHTML = $footer;
     return $this->sFooterHTML;
-
   }
 
 
@@ -310,7 +320,7 @@ FOOTER;
 
 
   /**
-   * Altera a exibição ou não do rodapé
+   * Altera a exibição ou n�o do rodapé
    *
    * @param boolean $lMostra
    * @return object $this
@@ -338,7 +348,6 @@ FOOTER;
 
       $item = empty($item) ? '&nbsp;' : htmlentities($item, ENT_QUOTES, 'ISO-8859-1');
       return $str . "<p>{$item}</p>\n";
-
     }, '');
   }
 
@@ -359,7 +368,6 @@ FOOTER;
       $iPosicao = $key >= 0 ? $key : $iQtdInfo;
       $this->aInformacoes[$iPosicao] = $value;
       ksort($this->aInformacoes);
-
     }
 
     $this->setCabecalho();

@@ -621,64 +621,62 @@ class cl_orcprograma {
    * 
    * Busca dados para gerar arquivo de Programa de Orçamento 
    * @param String $campos
-   * @param String $campos2 // Campo Agregador
-   * @param String $ordem
+   * @param String|null $campos2 // Campo Agregador
+   * @param String|null $ordem
    * @param String $dbwhere
    * @param String $sGroupBy
    * @return string
    */
-  function sql_query_programaOrcamento($campos="*", $campos2=null, $ordem=null, $dbwhere="", $sGroupBy="*" ) {
-    $sql = "select ";
-    if($campos != "*" ) {
-      
-      $campos_sql = explode("#",$campos);
-      $virgula = "";
-      for($i=0;$i<sizeof($campos_sql);$i++) {
-        
-        $sql .= $virgula.$campos_sql[$i];
-        $virgula = ",";
-      }
-    } else {
-      $sql .= $campos;
-    }
-    if ($campos2 != null) {
-      $sql .= $campos2;
-    }
-    
-    $sql .= "  from orcprograma ";
-    $sql .= " inner join orcdotacao on orcdotacao.o58_anousu   = orcprograma.o54_anousu ";
-    $sql .= "											 and orcdotacao.o58_programa = orcprograma.o54_programa ";
-    $sql2 = "";
-    if($dbwhere != "") {
-        $sql2 = " where $dbwhere";
-    }
-    $sql .= $sql2;
-    if($ordem != null ) {
-      
-      $sql .= " order by ";
-      $campos_sql = explode("#",$ordem);
-      $virgula = "";
-      for($i=0;$i<sizeof($campos_sql);$i++) {
-        
-        $sql .= $virgula.$campos_sql[$i];
-        $virgula = ",";
-      }
-    }
-    $sql .= " group by ";
-    if($campos != "*" ) {
-      
-      $campos_sql = explode("#",$campos);
-      $virgula = "";
-      for($i=0;$i<sizeof($campos_sql);$i++) {
-        
-        $sql .= $virgula.$campos_sql[$i];
-        $virgula = ",";
-      }
-    } else {
-      $sql .= $campos;
-    }    
+    function sql_programaOrcamento(string $campos = "*", string $campos2 = null, string $ordem = null, string $dbwhere = "", string $sGroupBy = "*"): string
+    {
+        $sql = "SELECT ";
+        if ($campos != "*") {
+
+            $campos_sql = explode("#", $campos);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        } else {
+            $sql .= $campos;
+        }
+        if ($campos2 != null) {
+            $sql .= $campos2;
+        }
+
+        $sql .= " FROM orcprograma ";
+        $sql .= " JOIN orcdotacao ON (o58_anousu, o58_programa) = (o54_anousu, o54_programa) ";
+        $sql2 = "";
+        if ($dbwhere != "") {
+            $sql2 = " WHERE $dbwhere";
+        }
+        $sql .= $sql2;
+        if ($sGroupBy != null) {
+
+            $sql .= " GROUP BY ";
+            $campos_sql = explode("#", $sGroupBy);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        if ($ordem != null) {
+
+            $sql .= " ORDER BY ";
+            $campos_sql = explode("#", $ordem);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        }
         return $sql;
-  }
+    }
   
 }
 ?>

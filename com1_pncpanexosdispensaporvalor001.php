@@ -88,14 +88,14 @@ $oRotulo->label("pc80_resumo");
 
                             $tipo = array();
                             $tipo[0] = "Selecione";
-                            $result_tipo = $cltipoanexo->sql_record($cltipoanexo->sql_query(null, "*", "l213_sequencial", "l213_sequencial in (1,3,4,7,10,16)"));
+                            $result_tipo = $cltipoanexo->sql_record($cltipoanexo->sql_query(null, "*", "l213_sequencial", "l213_sequencial in (5,6,8,9,10,16,20)"));
 
 
                             for ($iIndiceTipo = 0; $iIndiceTipo < $cltipoanexo->numrows; $iIndiceTipo++) {
 
                                 $oTipo = db_utils::fieldsMemory($result_tipo, $iIndiceTipo);
 
-                                $tipo[$oTipo->l213_sequencial] = $oTipo->l213_descricao;
+                                $tipo[$oTipo->l213_sequencial] = utf8_decode($oTipo->l213_descricao);
                             }
 
                             if ($cltipoanexo->numrows == 0) {
@@ -411,8 +411,10 @@ $oRotulo->label("pc80_resumo");
 
         var oParametros = new Object();
 
+        const iCodigoProcesso = $('pc80_codproc').value;
         oParametros.exec = 'excluir';
         oParametros.iCodigoDocumento = iCodigoDocumento;
+        oParametros.iCodigoProcesso = iCodigoProcesso;
 
         var oAjax = new Ajax.Request(
             sUrlRpc, {
@@ -893,7 +895,7 @@ $oRotulo->label("pc80_resumo");
                 asynchronous: false,
 
                 /**
-                 * 
+                 *
                  * Retorno do RPC
                  */
                 onComplete: function(oAjax) {
@@ -958,7 +960,7 @@ $oRotulo->label("pc80_resumo");
                 asynchronous: false,
 
                 /**
-                 * 
+                 *
                  * Retorno do RPC
                  */
                 onComplete: function(oAjax) {

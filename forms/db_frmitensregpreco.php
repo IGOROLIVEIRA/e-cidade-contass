@@ -56,10 +56,13 @@ $clrotulo->label("pc01_descrmater");
 
   $whereDescontoTabela = "";
 
-  if ($iDescontoTabela == 1) $whereDescontoTabela = " AND pc01_tabela = 't'";
+  if ($iCriterioAdjudicacao == 1) $whereDescontoTabela = " AND pc01_tabela = 't'";
+  if ($iCriterioAdjudicacao == 2) $whereDescontoTabela = " AND pc01_taxa = 't'";
+  
 
   $sSQL = "
     SELECT DISTINCT pc01_codmater,
+                    pc11_seq,
                     pc81_codprocitem,
                     pc01_descrmater,
                     si06_sequencial,
@@ -67,7 +70,11 @@ $clrotulo->label("pc01_descrmater");
                     m61_codmatunid,
                     pc11_quant,
                     z01_nome,
-                    itensregpreco.*
+                    itensregpreco.*,
+                    case
+                    when si07_percentual is null then si02_mediapercentual
+                       else si07_percentual
+                       end as percentual
     FROM pcproc
       INNER JOIN adesaoregprecos ON si06_processocompra = pc80_codproc
       INNER JOIN precoreferencia ON si01_processocompra = pc80_codproc
@@ -79,32 +86,13 @@ $clrotulo->label("pc01_descrmater");
       INNER JOIN pcmater ON pc01_codmater = pc16_codmater
       LEFT JOIN itensregpreco ON si07_item = pc01_codmater AND si07_sequencialadesao = si06_sequencial
       LEFT JOIN cgm ON z01_numcgm = si07_fornecedor
-
-    WHERE si06_sequencial = {$codigoAdesao} AND si06_processocompra = {$iProcessoCompra} $whereDescontoTabela
-    order by pc01_codmater;
+      INNER JOIN pcorcamitemproc on pc31_pcprocitem = pc81_codprocitem
+      INNER JOIN itemprecoreferencia on si02_itemproccompra = pc31_orcamitem
+    WHERE si06_sequencial = {$codigoAdesao} AND si06_processocompra = {$iProcessoCompra} $whereDescontoTabela order by pc11_seq;
   ";
 
   $rsItensProcComp = db_query($sSQL);
 
-  /* SQL para busca dos valores percentuais dos itens */
-
-  $sSQL = "
-  select *
-  from
-  itemprecoreferencia
-  inner join precoreferencia on si01_sequencial = si02_precoreferencia
-  inner join pcmater on si02_coditem = pc01_codmater
-  where
-  si02_precoreferencia = (
-  select
-      si01_sequencial
-  from
-      precoreferencia
-  where
-      si01_processocompra = {$iProcessoCompra}) $whereDescontoTabela order by si02_coditem;
-  ";
-
-  $rsItensPrecoReferencia = db_query($sSQL);
   ?>
 
   <form action="" name="form1" method="post" onsubmit="return validaForm(this);">
@@ -150,7 +138,7 @@ $clrotulo->label("pc01_descrmater");
 
       <?php
       $aItensProcComp = db_utils::getCollectionByRecord($rsItensProcComp);
-      $aItensPrecoReferencia = db_utils::getCollectionByRecord($rsItensPrecoReferencia);
+      //$aItensPrecoReferencia = db_utils::getCollectionByRecord($rsItensPrecoReferencia);
 
       $iTotalItens = 0;
       $indice = 0;
@@ -211,8 +199,7 @@ $clrotulo->label("pc01_descrmater");
             <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][descricaoLote]" value="<?= $oItem->si07_descricaolote ?>" <?= $iProcessoLote == 2 ? ' readonly class="input-inativo"' : '' ?>>
           </td>
           <td class="linhagrid coluna_percentual">
-            <?php if ($oItem->si07_percentual == null) $oItem->si07_percentual = $aItensPrecoReferencia[$indice]->si02_mediapercentual; ?>
-            <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][percentual]" onkeypress="mascaraPrecoUnitario(event,this)" value="<?= $oItem->si07_percentual; ?>">
+            <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][percentual]" onkeypress="mascaraPrecoUnitario(event,this)" value="<?= $oItem->percentual; ?>">
           </td>
           <td class="linhagrid">
             <?php if (!empty($oItem->si07_sequencial)) : ?>

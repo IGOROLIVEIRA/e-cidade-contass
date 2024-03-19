@@ -340,8 +340,8 @@ try {
          * @description:
          * Funcionalidade adaptada para a geração do SICOM Balancete
          * Descrição da alteração:
-         * 1. Quando o sTipoImplantacao for crédito e o nValor for negativo, devemos implantar na contacorrentesaldo como débito, se não será crédito.
-         * 2. Quando o sTipoImplantacao for débito e o nValor for negativo, devemos implantar na contacorrentesaldo como crédito, se não será débito.
+         * 1. Quando o sTipoImplantacao for crédito e o nValor for negativo, devemos implantar na contacorrentesaldo como débito, se n�o será crédito.
+         * 2. Quando o sTipoImplantacao for débito e o nValor for negativo, devemos implantar na contacorrentesaldo como crédito, se n�o será débito.
          * @author: rodrigo@contass e igor@contass
          */
         case "implantarSaldoContaCorrente" :
@@ -408,7 +408,7 @@ try {
                  * modificação para reajustar valores, basicamente devemos verificar se
                  * ja foi feita implantação na contacorrentesaldo pelo detalhe em questão
                  * se retornar registro, para o detalhe, ano e mes = 0, significa que devemos altera-lo
-                 * se não retornar significa que é a primeira vez que está sendo implantado e logo devemos incluir registro na
+                 * se n�o retornar significa que é a primeira vez que está sendo implantado e logo devemos incluir registro na
                  * contacorrentesaldo
                  */
                 $sWhereImplantacao = "     c29_contacorrentedetalhe = {$oValores->iSequencial} ";
@@ -621,7 +621,7 @@ try {
                 if (!$oPlanoContaPCASP->getContaCorrente() instanceof ContaCorrente) {
 
                     $sDescricaoConta = $oPlanoContaPCASP->getDescricao();
-                    $sMsgErro = "A conta {$iReduzido} - {$sDescricaoConta} não está vinculada a nenhuma conta ";
+                    $sMsgErro = "A conta {$iReduzido} - {$sDescricaoConta} n�o está vinculada a nenhuma conta ";
                     $sMsgErro .= "corrente.\n\nVerifique o cadastro.";
                     throw new BusinessException(urlencode($sMsgErro));
                 }
@@ -667,4 +667,3 @@ try {
 }
 
 echo json_encode($oRetorno);
-?>   

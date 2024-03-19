@@ -2,8 +2,10 @@
 
 use App\Models\Arretipo;
 use App\Models\Numpref;
+use App\Services\Tributario\Arrecadacao\GenerateFebrabanBarCodeService;
 use App\Services\Tributario\Arrecadacao\GeneratePixWithQRCodeService;
 use App\Services\Tributario\Arrecadacao\ResolvePixProviderService;
+use App\Support\String\StringHelper;
 
 /**
  * Classe responsável pela manutenção de recibos do sistema
@@ -158,6 +160,8 @@ class Recibo
 
   private bool $isReciboRetencao;
 
+  private bool $isReciboCredito;
+
   /**
    * Cria um novo recibo
    *
@@ -166,9 +170,17 @@ class Recibo
    * @param integer
    *
    */
-  public function __construct($iTipoEmissao = null, $iNumCgm = null, $iTipo = 1, $iNumnov = null, $reciboRetencao = false) {
+    public function __construct($iTipoEmissao = null,
+                                $iNumCgm = null,
+                                $iTipo = 1,
+                                $iNumnov = null,
+                                $reciboRetencao = false,
+                                $isReciboCredito = false
+    )
+    {
 
     $this->isReciboRetencao = $reciboRetencao;
+    $this->isReciboCredito = $isReciboCredito;
 
   	if ($iNumnov != null) {
 
@@ -814,15 +826,30 @@ class Recibo
       /**
        * Não gera qrcode para recibos de retencao
        */
-      if (!$settings->k03_ativo_integracao_pix || $this->isReciboRetencao) {
+      if (!$settings->k03_ativo_integracao_pix || $this->isReciboRetencao || $this->isReciboCredito) {
           return true;
       }
 
       $providerConfig = (new ResolvePixProviderService())->execute($settings);
+      $valor = $this->getTotalReciboComTaxaExpediente();
+      $sValorCodigoBarras = StringHelper::barCodeAmountFormart($valor);
+      $ip = db_getsession("DB_ip");
+      $dataOperacao = (new DateTime(date("Y-m-d", db_getsession("DB_datausu"))));
+      $dataVencimento = (new DateTime($this->getDataVencimentoRecibo()));
 
-      $body['codigoGuiaRecebimento'] = $this->getNumpreRecibo();
+      $generateFebrabanBarCodeService = new GenerateFebrabanBarCodeService(
+          $valor,
+          $sValorCodigoBarras,
+          $this->getNumpreRecibo(),
+          (int) db_getsession("DB_instit"),
+          $dataOperacao,
+          $dataVencimento,
+          $ip
+      );
+
+      $body['codigoGuiaRecebimento'] = $generateFebrabanBarCodeService->execute();
       $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
-      $body['valorOriginalSolicitacao'] = $this->getTotalReciboComTaxaExpediente();
+      $body['valorOriginalSolicitacao'] = $valor;
       $body['k00_numnov'] = $this->getNumpreRecibo();
       $body['k00_dtvenc'] = $this->getDataVencimentoRecibo();
       $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
@@ -1052,6 +1079,11 @@ class Recibo
     {
         $totalRecibo = (float) $this->getTotalRecibo();
         $debitos = current($this->getDebitosRecibo());
+
+        if(!$debitos) {
+            return $totalRecibo;
+        }
+
         $arretipo = Arretipo::query()->where('k00_tipo', $debitos->k00_tipo)->firstOrFail();
         $valorTaxaExpediente = (float) $arretipo->k00_txban;
         return $totalRecibo + $valorTaxaExpediente;

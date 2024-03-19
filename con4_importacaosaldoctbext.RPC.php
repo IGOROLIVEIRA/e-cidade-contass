@@ -243,7 +243,7 @@ try {
               $iInstituicao = db_getsession("DB_instit");
               $iAnoUsu = db_getsession("DB_anousu");
 
-              $iTipoReceita = $oSaldoCtb->si96_codfontrecursos;// si96_codfontrecursos
+              $iTipoReceita = strlen($oSaldoCtb->si96_codfontrecursos) == 7 ? $oSaldoCtb->si96_codfontrecursos."0" : $oSaldoCtb->si96_codfontrecursos;// si96_codfontrecursos
               $iConcarPeculiar = null; // null
               $iContaBancaria = null; // null
               $iEmpenho = null; // null
@@ -375,7 +375,8 @@ try {
               	$iReduzido 		= $oConta->reduzido;
 				$iContaCorrente = 103;
 				$iInstituicao 	= db_getsession("DB_instit");
-				$iTipoReceita 	= $oConta->fonte;
+				$iTipoReceita 	= strlen($oConta->fonte) == 7 ? $oConta->fonte."0" : $oConta->fonte;
+
 
 				$sWhereVerificacao =  "     c19_contacorrente       = {$iContaCorrente}    ";
 				$sWhereVerificacao .= " and c19_orctiporec          = {$iTipoReceita}      ";
@@ -445,7 +446,7 @@ function salvarSaldoSICOMAM( $oSaldoCtb ){
       $clconextsaldo = new cl_conextsaldo;
       $clconextsaldo->ces01_codcon  = $oSaldoCtb->codcon;
       $clconextsaldo->ces01_reduz = $oSaldoCtb->icodigoreduzido;
-      $clconextsaldo->ces01_fonte = $oSaldoCtb->si96_codfontrecursos;
+      $clconextsaldo->ces01_fonte = strlen($oSaldoCtb->si96_codfontrecursos) == 7 ? $oSaldoCtb->si96_codfontrecursos."0" : $oSaldoCtb->si96_codfontrecursos;
       $clconextsaldo->ces01_valor = $oSaldoCtb->si96_vlsaldofinalfonte;
       $clconextsaldo->ces01_anousu = db_getsession('DB_anousu');
       $clconextsaldo->ces01_inst = db_getsession('DB_instit');
@@ -482,7 +483,7 @@ function salvarSaldoSICOMAM( $oSaldoCtb ){
       $clconctbsaldo = new cl_conctbsaldo;
       $clconctbsaldo->ces02_codcon  = $oSaldoCtb->codcon;
       $clconctbsaldo->ces02_reduz = $oSaldoCtb->icodigoreduzido;
-      $clconctbsaldo->ces02_fonte = $oSaldoCtb->si96_codfontrecursos;
+      $clconctbsaldo->ces02_fonte = strlen($oSaldoCtb->si96_codfontrecursos) == 7 ? $oSaldoCtb->si96_codfontrecursos."0" : $oSaldoCtb->si96_codfontrecursos;
       $clconctbsaldo->ces02_valor = $oSaldoCtb->si96_vlsaldofinalfonte;
       $clconctbsaldo->ces02_anousu = db_getsession('DB_anousu');
       $clconctbsaldo->ces02_inst = db_getsession('DB_instit');

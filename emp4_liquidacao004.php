@@ -431,6 +431,9 @@ switch ($objJson->method) {
             if (date("Y-m-d", strtotime($dDataLiquidacao)) < date("Y-m-d", strtotime($dtultimaliquidacao))) {
                 $chave = false;
                 $objEmpenho->sMsgErro = "Não é permitido liquidar com data anterior ao último lançamento de liquidação.";
+                $retorno = array("erro" => 2, "mensagem" => urlencode($objEmpenho->sMsgErro), "e50_codord" => null);
+                echo $json->encode($retorno);
+                break;
             }
         }
 

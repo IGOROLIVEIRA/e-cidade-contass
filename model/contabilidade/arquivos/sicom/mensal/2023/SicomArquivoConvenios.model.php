@@ -281,6 +281,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
         $sSql = " 	SELECT  o57_fonte,
 							o57_descr,
 							o70_codigo,
+              o15_codtri,
 							o70_valor,
 							o70_codrec,
 							c229_vlprevisto,
@@ -289,7 +290,8 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 					FROM
 						(SELECT o57_fonte,
 								o57_descr,
-								o70_codigo,
+                o70_codigo,
+								o15_codtri,
 								o70_valor,
 								o70_codrec,
 								COALESCE(SUM(c229_vlprevisto),0) c229_vlprevisto,
@@ -301,11 +303,12 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 						FROM orcfontes
 							LEFT JOIN orcreceita ON o57_codfon = o70_codfon AND o57_anousu = o70_anousu
 							LEFT JOIN prevconvenioreceita ON c229_anousu = o70_anousu AND c229_fonte = o70_codrec
+              INNER JOIN orctiporec on o15_codigo = o70_codigo
 						WHERE o70_codigo IN ('15700000', '16310000', '17000000', '16650000', '17130070','15710000','15720000','15750000','16320000','16330000','16360000','17010000','17020000','17030000')
 							AND o70_anousu = {$iAnoUsu}
 							AND o70_instit = {$iInstit}
 							AND o70_valor > 0
-						GROUP BY 1,2,3,4,5) AS x";
+						GROUP BY 1,2,3,4,5,6) AS x";
 
         $rsResult30 = db_query($sSql);
 
@@ -318,7 +321,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
             $clconv30->si203_codreceita = $oDados30->o70_codrec;
             $clconv30->si203_codorgao = $sCodorgao;
             $clconv30->si203_naturezareceita = $oDados30->o57_fonte;
-            $clconv30->si203_codfontrecursos = $oDados30->o70_codigo;
+            $clconv30->si203_codfontrecursos = $oDados30->o15_codtri;
             $clconv30->si203_vlprevisao = $oDados30->o70_valor;
             $clconv30->si203_mes = 12;
             $clconv30->si203_instit = db_getsession("DB_instit");

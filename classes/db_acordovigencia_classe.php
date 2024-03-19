@@ -122,7 +122,7 @@ class cl_acordovigencia {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }
+     }/*
      if($this->ac18_datafim == null ){ 
        $this->erro_sql = " Campo Data Final nao Informado.";
        $this->erro_campo = "ac18_datafim_dia";
@@ -131,7 +131,7 @@ class cl_acordovigencia {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }
+     }*/
      if($this->ac18_ativo == null ){ 
        $this->erro_sql = " Campo Ativo nao Informado.";
        $this->erro_campo = "ac18_ativo";

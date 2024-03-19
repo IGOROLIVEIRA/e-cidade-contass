@@ -477,5 +477,29 @@ class cl_empord {
 	  return $sSql;
 	}
 
+  public function verificaOpAuxiliar($e50_codord){
+    $sSql = "select * from empenho.empord e
+    left join empenho.empagenotasordem e2 on e.e82_codmov = e2.e43_empagemov
+    where e82_codord = {$e50_codord} and e43_empagemov is not null";    
+    $result = $this->sql_record($sSql);
+    if($this->numrows > 0){
+      $sNumOp = '';
+      $virgula = '';
+      $aResult = pg_fetch_all($result);
+      foreach ($aResult as $linha){
+        if(strpos($sNumOp, $linha['e43_ordempagamento']) === false){
+          $sNumOp .= $virgula.$linha['e43_ordempagamento'];
+          $virgula = ', ';
+        }
+      }
+      if($this->numrows == 1){
+        return "Não foi possível realizar o desconto. Remova a Ordem de Pagamento da OP auxiliar nº ".$sNumOp." (Tesouraria > Procedimentos > Agenda > Autorização de Pagamento) e tente novamente!";
+      }else{
+        return "Não foi possível realizar o desconto. Remova a Ordem de Pagamento das OPs auxiliares nº ".$sNumOp." (Tesouraria > Procedimentos > Agenda > Autorização de Pagamento) e tente novamente!";
+      }
+    }else{
+      return false;
+    }
+  }
 }
 ?>

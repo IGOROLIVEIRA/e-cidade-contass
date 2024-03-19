@@ -1,4 +1,3 @@
-
 <?php
 //ini_set('display_errors','on');
 /*
@@ -35,6 +34,8 @@ require_once "dbforms/db_funcoes.php";
 require_once("libs/JSON.php");
 require_once("classes/db_condataconf_classe.php");
 
+use  App\Services\Patrimonial\Aditamento\AditamentoService;
+
 $oJson             = new services_json();
 
 //$oParam            = json_decode(str_replace("\\", "", $_POST["json"]));
@@ -65,6 +66,7 @@ try {
             $oRetorno->datafinal         = $oContrato->getDataFinal();
             $oRetorno->valores           = $oContrato->getValoresItens();
             $oRetorno->seqaditivo        = $oContrato->getProximoNumeroAditivo($oParam->iAcordo);
+            $oRetorno->vigenciaindeterminada = $oContrato->getVigenciaIndeterminada();
             $oAditivo = db_utils::getDao('acordoposicaoaditamento');
             $oResult = $oAditivo->sql_query(null, "*", null, "ac16_sequencial={$oParam->iAcordo}");
             //echo $oResult;
@@ -158,55 +160,12 @@ try {
             }
 
             $oRetorno->itens = $aItens;
-            //print_r($oRetorno);
+
             break;
 
         case "processarAditamento":
-            $clcondataconf = new cl_condataconf;
-
             if ($sqlerro == false) {
-                $anousu = db_getsession('DB_anousu');
-
-                $sSQL = "select to_char(c99_datapat,'YYYY') c99_datapat
-                        from condataconf
-                          where c99_instit = " . db_getsession('DB_instit') . "
-                            order by c99_anousu desc limit 1";
-
-                $rsResult       = db_query($sSQL);
-                $maxC99_datapat = db_utils::fieldsMemory($rsResult, 0)->c99_datapat;
-
-                $sNSQL = "";
-                if ($anousu > $maxC99_datapat) {
-                    $sNSQL = $clcondataconf->sql_query_file($maxC99_datapat, db_getsession('DB_instit'), 'c99_datapat');
-                } else {
-                    $sNSQL = $clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit'), 'c99_datapat');
-                }
-
-                $result = db_query($sNSQL);
-                $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
-                $datareferencia = implode("-", array_reverse(explode("/", $oParam->datareferencia)));
-
-
-
-                if ($oParam->datareferencia != "") {
-
-                    if (substr($c99_datapat, 0, 4) == substr($datareferencia, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferencia, 5, 2)) {
-                        throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
-                    }
-
-                    if ($c99_datapat != "" && $datareferencia <= $c99_datapat) {
-                        throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
-                    }
-                }
-
-                $dateassinatura = implode("-", array_reverse(explode("/", $oParam->dataassinatura)));
-
-                if ($dateassinatura != "" && $oParam->datareferencia == "") {
-                    if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
-                        $oRetorno->datareferencia = true;
-                        throw new Exception(' O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.');
-                    }
-                }
+                validaPeriodoSicom($oParam, $oRetorno);
             }
 
             $oAditivo = db_utils::getDao('acordoposicaoaditamento');
@@ -219,7 +178,7 @@ try {
             }
 
             $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo); //var_dump($oParam->sVigenciaalterada);
-            $oContrato->aditar($oParam->aItens, $oParam->tipoaditamento, $oParam->datainicial, $oParam->datafinal, $oParam->sNumeroAditamento, $oParam->dataassinatura, $oParam->datapublicacao, $oParam->descricaoalteracao, $oParam->veiculodivulgacao, $oParam->justificativa, $oParam->tipoalteracaoaditivo, $oParam->aSelecionados, $oParam->sVigenciaalterada, $oParam->lProvidencia, $oParam->datareferencia, $oParam->percentualreajuste, $oParam->indicereajuste, $oParam->descricaoindice);
+            $oContrato->aditar($oParam->aItens, $oParam->tipoaditamento, $oParam->datainicial, $oParam->datafinal, $oParam->sNumeroAditamento, $oParam->dataassinatura, $oParam->datapublicacao, $oParam->descricaoalteracao, $oParam->veiculodivulgacao, $oParam->justificativa, $oParam->tipoalteracaoaditivo, $oParam->aSelecionados, $oParam->sVigenciaalterada, $oParam->lProvidencia, $oParam->datareferencia, $oParam->percentualreajuste, $oParam->indicereajuste, $oParam->descricaoindice,$oParam->descricaoreajuste,$oParam->criterioreajuste);
 
             break;
 
@@ -241,14 +200,14 @@ try {
             $oRetorno->itens = $aUnidades;
             break;
         case "getleilicitacao":
-            $sSQL = "select l20_leidalicitacao  from liclicita 
+            $sSQL = "select l20_leidalicitacao  from liclicita
             inner join acordo on
                 acordo.ac16_licitacao = liclicita.l20_codigo
             where
             acordo.ac16_origem = 2
             and acordo.ac16_sequencial = $oParam->licitacao";
-            
-            
+
+
             $rsResult       = db_query($sSQL);
             $leilicitacao = db_utils::fieldsMemory($rsResult, 0);
 
@@ -327,6 +286,37 @@ try {
 
 
             break;
+        case 'getAcordoAditvoAlteracao':
+
+            $service = new AditamentoService();
+            $result = $service->getDadosAditamento((int)$oParam->ac16Sequencial);
+
+            if (!$result['status']) {
+                throw new Exception($result['message']);
+                break;
+            }
+
+            $oRetorno->aditamento = $result['aditamento'];
+            break;
+
+        case 'processarAlteracaoAditivo':
+            validaPeriodoSicom($oParam->aditamento, $oRetorno);
+
+            $service = new AditamentoService();
+
+            $result = $service->updateAditamento($oParam->aditamento);
+
+
+            if ($result['status'] === false) {
+                throw new Exception($result['message']);
+            }
+
+            $oRetorno->status = $result['status'];
+            $oRetorno->message = $result['message'];
+            break;
+        case 'validarPeriodoSicom':
+            validaPeriodoSicom($oParam->aditamento, $oRetorno);
+            break;
     }
 
     db_fim_transacao(false);
@@ -336,5 +326,52 @@ try {
     $oRetorno->erro  = true;
     $oRetorno->message = urlencode($eErro->getMessage());
 }
+
+function validaPeriodoSicom($aditamento, $oRetorno)
+{
+    $clcondataconf = new cl_condataconf;
+
+    $anousu = db_getsession('DB_anousu');
+
+    $sSQL = "select to_char(c99_datapat,'YYYY') c99_datapat
+             from condataconf
+               where c99_instit = " . db_getsession('DB_instit') . "
+                 order by c99_anousu desc limit 1";
+
+    $rsResult       = db_query($sSQL);
+    $maxC99_datapat = db_utils::fieldsMemory($rsResult, 0)->c99_datapat;
+
+    $sNSQL = "";
+    if ($anousu > $maxC99_datapat) {
+        $sNSQL = $clcondataconf->sql_query_file($maxC99_datapat, db_getsession('DB_instit'), 'c99_datapat');
+    } else {
+        $sNSQL = $clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit'), 'c99_datapat');
+    }
+
+    $result = db_query($sNSQL);
+    $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
+    $datareferencia = implode("-", array_reverse(explode("/", $aditamento->datareferencia)));
+
+    if ($aditamento->datareferencia != "") {
+        if (substr($c99_datapat, 0, 4) == substr($datareferencia, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferencia, 5, 2)) {
+            throw new Exception('Usurio: A data de referncia dever ser no ms posterior ao ms da data inserida.');
+        }
+
+        if ($c99_datapat != "" && $datareferencia <= $c99_datapat) {
+
+            throw new Exception(' O perodo j foi encerrado para envio do SICOM. Verifique os dados do lanamento e entre em contato com o suporte.');
+        }
+    }
+
+    $dateassinatura = implode("-", array_reverse(explode("/", $aditamento->dataassinatura)));
+
+    if ($dateassinatura != "" && $aditamento->datareferencia == "") {
+        if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
+
+            $oRetorno->datareferencia = true;
+            throw new Exception(' O perodo j foi encerrado para envio do SICOM. Preencha o campo Data de Referncia com uma data no ms subsequente.');
+        }
+    }
+}
 echo $oJson->encode($oRetorno);
-//echo json_encode($oRetorno);
+

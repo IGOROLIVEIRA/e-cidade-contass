@@ -127,10 +127,9 @@ if ($numrows_1 == 0) {
      if ($numrows_manual > 0) {
           // NDA
      } else {
-          db_redireciona('db_erros.php?fechar=true&db_erro=NÃ£o existem registros  cadastrados.');
+          db_redireciona('db_erros.php?fechar=true&db_erro=Não existem registros  cadastrados.');
      }	  
 }
 
 // die('Stoping');
 $pdf->Output();
-?>

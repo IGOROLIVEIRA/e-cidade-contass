@@ -87,26 +87,37 @@ $db_botao = true;
             <fieldset style="border:0px;">
 
               <table border="0">
-                <? if (!in_array($tipo_tribunal, array(100, 101, 102, 103, 104, 106))) : ?>
-                  <tr>
-                    <td title="Edital">
-                      <b>Edital:</b>
+                <tr>
+                    <td>
+                        <b>Licitação:</b>
                     </td>
                     <td>
-                      <?
-                      db_input('numero_edital', 10, '', true, 'text', 3, "");
-                      db_input('codigolicitacao', 10, '', true, 'hidden', 3);
-                      db_input('naturezaobjeto', 10, '', true, 'hidden', 3);
-                      ?>
+                        <div style="display: flex;">
+                            <div style="width: 50%;">
+                                <?php db_input('codigolicitacao', 10, '', true, 'text', 3, ""); ?>
+                            </div>
+
+                            <?php if (!in_array($tipo_tribunal, array(100, 101, 102, 103, 104, 106))) : ?>
+
+                            <div style="text-align: end; width: 50%;">
+
+                            <strong>Edital:</strong>
+                                <?php
+                                db_input('numero_edital', 10, '', true, 'text', 3, "");
+                                db_input('codigolicitacao', 10, '', true, 'hidden', 3);
+                                db_input('naturezaobjeto', 10, '', true, 'hidden', 3);
+                                ?>
+                            </div>
+                        <?php endif; ?>
+                        </div>
                     </td>
-                  </tr>
-                <? endif; ?>
+                </tr>
                 <tr>
                   <td nowrap title="Processo">
                     <b>Processo:</b>
                   </td>
                   <td>
-                    <?
+                    <?php
                     db_input('edital', 10, '', true, 'text', 3, "");
                     db_input('objeto', 45, '', true, 'text', 3, "");
                     ?>
@@ -117,15 +128,15 @@ $db_botao = true;
                     <b>Modalidade:</b>
                   </td>
                   <td>
-                    <?
-                    db_input('tipo_tribunal', 10, '', true, 'text', 3, "");
+                    <?php
+                    db_input('codigoModalidade', 10, '', true, 'text', 3, "");
                     db_input('descr_tribunal', 45, '', true, 'text', 3, "");
                     ?>
                   </td>
                 </tr>
 
                 <?php if (!in_array($tipo_tribunal, array(100, 101, 102, 103, 104))) : ?>
-                  <tr style="display: <?= in_array($natureza_objeto, array(1, 7)) ? '' : 'none' ?>;">
+                  <tr>
                     <td nowrap title="Origem do recurso">
                       <b>Origem do recurso:</b>
                     </td>
@@ -148,13 +159,23 @@ $db_botao = true;
                     ?>
                   </td>
                 </tr>
+                <tr id="email">
+                  <td class="label-email" nowrap title="Descrição do recurso">
+                    <b>Email:</b>
+                  </td>
+                  <td>
+                    <?php
+                        db_input('email', 58, '', true, 'text', 1, "oninput = limparInput(this);","","","",200);
+                    ?>
+                  </td>
+                </tr>
                 <tr>
                   <td class="label-textarea" nowrap title="Links da publicação">
                     <b>Links da publicação:</b>
                   </td>
                   <td>
                     <?
-                    db_textarea('links', 4, 56, '', true, 'text', 1, '', '', '', 200);
+                    db_textarea('links', 4, 58, '', true, 'text', 1, "", '', '', 200);
                     ?>
                   </td>
                 </tr>
@@ -217,6 +238,10 @@ $db_botao = true;
   anoLicitacao = "<?= $anoLicitacao ?>";
   tipoJulgamento = "<?= $iTipoJulgamento ?>"
 
+  function limparInput(input) {
+    input.value = input.value.replace(/[;\*\\\:\"\']/gm, '');
+  }
+
   function js_mostraDescricao(valor) {
     if (valor != 9) {
       document.getElementById('tr_desc_recurso').style.display = 'none';
@@ -276,6 +301,7 @@ $db_botao = true;
   function js_salvarEdital() {
     let descricao = document.getElementById('descricao_recurso').value;
     let origem_recurso = document.getElementById('origem_recurso').value;
+    let email = document.getElementById('email').value;
 
   }
 
@@ -300,7 +326,6 @@ $db_botao = true;
       oDadosLotesPendentes.show();
 
     } else {
-
       oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '', incluir,
         codigoLicitacao, "<?= $natureza_objeto ?>", iSequencial, '');
       oDadosComplementares.setObjetoRetorno($('idObra'));
@@ -417,7 +442,6 @@ $db_botao = true;
 
     let oRetorno = eval("(" + oAjax.responseText + ")");
 
-    console.log(oRetorno.dadoscomplementares);
     oRetorno.dadoscomplementares.forEach((dado) => {
 
       let descMunicipio = dado.descrmunicipio.urlDecode();
@@ -549,5 +573,7 @@ $db_botao = true;
       document.getElementById('links').value = valor.replace(/;/g, ',');
       alert('Caractere ponto e vírgula não é permitido e será substituído por vírgula.');
     }
+    document.getElementById('links').value = valor.replace(/\r|\n/, ' ');
   });
+
 </script>

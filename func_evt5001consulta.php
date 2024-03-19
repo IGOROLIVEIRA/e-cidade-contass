@@ -43,10 +43,10 @@ $clevt5001consulta->rotulo->label("rh218_regist");
 $clevt5001consulta->rotulo->label("rh218_numcgm");
 $clcgm->rotulo->label("z01_cgccpf");
 if (!isset($chave_rh218_perapurano)) {
-  $chave_rh218_perapurano = db_getsession("DB_anousu");
+    $chave_rh218_perapurano = db_getsession("DB_anousu");
 }
 if (!isset($chave_rh218_perapurmes)) {
-  $chave_rh218_perapurmes = date("m", db_getsession("DB_datausu"));
+    $chave_rh218_perapurmes = date("m", db_getsession("DB_datausu"));
 }
 ?>
 <html xmlns="http://www.w3.org/1999/html">
@@ -71,8 +71,8 @@ if (!isset($chave_rh218_perapurmes)) {
                                 </td>
                                 <td width="96%" align="left" nowrap>
                                     <?
-                  db_input("rh218_perapurano", 5, $Irh218_perapurano, true, "text", 4, "", "chave_rh218_perapurano");
-                  ?>
+                                    db_input("rh218_perapurano", 5, $Irh218_perapurano, true, "text", 4, "", "chave_rh218_perapurano");
+                                    ?>
                                 </td>
                             </tr>
                             <tr>
@@ -81,8 +81,8 @@ if (!isset($chave_rh218_perapurmes)) {
                                 </td>
                                 <td width="96%" align="left" nowrap>
                                     <?
-                  db_input("rh218_perapurmes", 5, $Irh218_perapurmes, true, "text", 4, "", "chave_rh218_perapurmes");
-                  ?>
+                                    db_input("rh218_perapurmes", 5, $Irh218_perapurmes, true, "text", 4, "", "chave_rh218_perapurmes");
+                                    ?>
                                 </td>
                             </tr>
                             <tr>
@@ -91,8 +91,8 @@ if (!isset($chave_rh218_perapurmes)) {
                                 </td>
                                 <td width="96%" align="left" nowrap>
                                     <?
-                  db_input("rh218_regist", 5, $Irh218_regist, true, "text", 4, "", "chave_rh218_regist");
-                  ?>
+                                    db_input("rh218_regist", 5, $Irh218_regist, true, "text", 4, "", "chave_rh218_regist");
+                                    ?>
                                 </td>
                             </tr>
                             <tr>
@@ -101,8 +101,8 @@ if (!isset($chave_rh218_perapurmes)) {
                                 </td>
                                 <td width="96%" align="left" nowrap>
                                     <?
-                  db_input("z01_cgccpf", 40, 1, true, "text", 4, "", "chave_z01_cgccpf");
-                  ?>
+                                    db_input("z01_cgccpf", 40, 1, true, "text", 4, "", "chave_z01_cgccpf");
+                                    ?>
                                 </td>
                             </tr>
                             <tr>
@@ -111,8 +111,8 @@ if (!isset($chave_rh218_perapurmes)) {
                                 </td>
                                 <td width="96%" align="left" nowrap>
                                     <?
-                  db_input("rh218_numcgm", 5, $Irh218_numcgm, true, "text", 4, "", "chave_rh218_numcgm");
-                  ?>
+                                    db_input("rh218_numcgm", 5, $Irh218_numcgm, true, "text", 4, "", "chave_rh218_numcgm");
+                                    ?>
                                 </td>
                             </tr>
                         </table>
@@ -122,8 +122,7 @@ if (!isset($chave_rh218_perapurmes)) {
                             <td colspan="2" align="center">
                                 <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
                                 <input name="limpar" type="reset" id="limpar" value="Limpar">
-                                <input name="Fechar" type="button" id="fechar" value="Fechar"
-                                    onClick="parent.db_iframe_evt5001consulta.hide();">
+                                <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_evt5001consulta.hide();">
                             </td>
                         </tr>
                         <tr>
@@ -146,10 +145,10 @@ if (!isset($chave_rh218_perapurmes)) {
                 <fieldset>
                     <legend>Resultado da Pesquisa</legend>
                     <?
-          $where = " rh218_instit = " . db_getsession("DB_instit");
-          if (!isset($pesquisa_chave)) {
+                    $where = " rh218_instit = " . db_getsession("DB_instit");
+                    if (!isset($pesquisa_chave)) {
 
-            $campos = "rh218_sequencial,
+                        $campos = "rh218_sequencial,
                     case when z01_cgccpf is null then (select z01_cgccpf from cgm where z01_numcgm = rh218_numcgm)
                     else z01_cgccpf end as z01_cgccpf,
                     case when z01_nome is null then (select z01_nome from cgm where z01_numcgm = rh218_numcgm)
@@ -162,38 +161,41 @@ if (!isset($chave_rh218_perapurmes)) {
                     rh218_vrcpseg, 
                     (rh218_vrdescseg - rh218_vrcpseg) as dl_Diferença";
 
-            if (isset($chave_rh218_regist) && (trim($chave_rh218_regist) != "")) {
-              $where .= " and rh218_regist = $chave_rh218_regist ";
-            }
-            if (isset($chave_z01_cgccpf) && (trim($chave_z01_cgccpf) != "")) {
-              $where .= " and z01_cgccpf = '$chave_z01_cgccpf' ";
-            }
-            if (isset($chave_rh218_numcgm) && (trim($chave_rh218_numcgm) != "")) {
-              $where .= " and rh218_numcgm = '$chave_rh218_numcgm' ";
-            }
-            if (isset($chave_rh218_perapurano) && (trim($chave_rh218_perapurano) != "")) {
-              $where .= " and rh218_perapurano = $chave_rh218_perapurano ";
-            }
-            if (isset($chave_rh218_perapurmes) && (trim($chave_rh218_perapurmes) != "")) {
-              $where .= " and rh218_perapurmes = $chave_rh218_perapurmes ";
-            }
-            $sql = $clevt5001consulta->sql_query(null, $campos, "rh218_sequencial desc", $where);
-            db_lovrot($sql, 15, "()", "", $funcao_js);
-          } else {
-            if ($pesquisa_chave != null && $pesquisa_chave != "") {
-              echo $clevt5001consulta->sql_query($pesquisa_chave, db_getsession("DB_instit"));
-              $result = $clevt5001consulta->sql_record($clevt5001consulta->sql_query($pesquisa_chave, db_getsession("DB_instit"), 'rh218_sequencial desc'));
-              if ($clevt5001consulta->numrows != 0) {
-                db_fieldsmemory($result, 0);
-                echo "<script>" . $funcao_js . "('$rh218_sequencial',false);</script>";
-              } else {
-                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
-              }
-            } else {
-              echo "<script>" . $funcao_js . "('',false);</script>";
-            }
-          }
-          ?>
+                        if (isset($chave_rh218_regist) && (trim($chave_rh218_regist) != "")) {
+                            $where .= " and rh218_regist = $chave_rh218_regist ";
+                        }
+                        if (isset($chave_z01_cgccpf) && (trim($chave_z01_cgccpf) != "")) {
+                            $where .= " and z01_cgccpf = '$chave_z01_cgccpf' ";
+                        }
+                        if (isset($chave_rh218_numcgm) && (trim($chave_rh218_numcgm) != "")) {
+                            $where .= " and rh218_numcgm = '$chave_rh218_numcgm' ";
+                        }
+                        if (isset($chave_rh218_perapurano) && (trim($chave_rh218_perapurano) != "")) {
+                            $where .= " and rh218_perapurano = $chave_rh218_perapurano ";
+                        }
+                        if (isset($chave_rh218_perapurmes) && (trim($chave_rh218_perapurmes) != "")) {
+                            $where .= " and rh218_perapurmes = $chave_rh218_perapurmes ";
+                        }
+                        if (!empty($chave_rh218_perapurano) && empty($chave_rh218_perapurmes)) {
+                            $where .= " and rh218_perapurmes is null ";
+                        }
+                        $sql = $clevt5001consulta->sql_query(null, $campos, "rh218_sequencial desc", $where);
+                        db_lovrot($sql, 15, "()", "", $funcao_js);
+                    } else {
+                        if ($pesquisa_chave != null && $pesquisa_chave != "") {
+                            echo $clevt5001consulta->sql_query($pesquisa_chave, db_getsession("DB_instit"));
+                            $result = $clevt5001consulta->sql_record($clevt5001consulta->sql_query($pesquisa_chave, db_getsession("DB_instit"), 'rh218_sequencial desc'));
+                            if ($clevt5001consulta->numrows != 0) {
+                                db_fieldsmemory($result, 0);
+                                echo "<script>" . $funcao_js . "('$rh218_sequencial',false);</script>";
+                            } else {
+                                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+                            }
+                        } else {
+                            echo "<script>" . $funcao_js . "('',false);</script>";
+                        }
+                    }
+                    ?>
                 </fieldset>
             </td>
         </tr>
@@ -204,17 +206,17 @@ if (!isset($chave_rh218_perapurmes)) {
 <?
 if (!isset($pesquisa_chave)) {
 ?>
-<script>
-function js_imprimir() {
-    jan = window.open('eso2_evt5001consulta002.php?rh218_perapurmes='+document.form2.chave_rh218_perapurmes.value+'&rh218_perapurano='+document.form2.chave_rh218_perapurano.value+'&z01_cgccpf='+document.form2.chave_z01_cgccpf.value+'&rh218_regist='+document.form2.chave_rh218_regist.value+'&rh218_numcgm='+document.form2.chave_rh218_numcgm.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-    jan.moveTo(0,0);
-}
+    <script>
+        function js_imprimir() {
+            jan = window.open('eso2_evt5001consulta002.php?rh218_perapurmes=' + document.form2.chave_rh218_perapurmes.value + '&rh218_perapurano=' + document.form2.chave_rh218_perapurano.value + '&z01_cgccpf=' + document.form2.chave_z01_cgccpf.value + '&rh218_regist=' + document.form2.chave_rh218_regist.value + '&rh218_numcgm=' + document.form2.chave_rh218_numcgm.value, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+            jan.moveTo(0, 0);
+        }
 
-function js_imprimirCsv() {
-    jan = window.open('eso2_evt5001consultacsv002.php?rh218_perapurmes='+document.form2.chave_rh218_perapurmes.value+'&rh218_perapurano='+document.form2.chave_rh218_perapurano.value+'&z01_cgccpf='+document.form2.chave_z01_cgccpf.value+'&rh218_regist='+document.form2.chave_rh218_regist.value+'&rh218_numcgm='+document.form2.chave_rh218_numcgm.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-    jan.moveTo(0,0);
-}
-</script>
+        function js_imprimirCsv() {
+            jan = window.open('eso2_evt5001consultacsv002.php?rh218_perapurmes=' + document.form2.chave_rh218_perapurmes.value + '&rh218_perapurano=' + document.form2.chave_rh218_perapurano.value + '&z01_cgccpf=' + document.form2.chave_z01_cgccpf.value + '&rh218_regist=' + document.form2.chave_rh218_regist.value + '&rh218_numcgm=' + document.form2.chave_rh218_numcgm.value, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+            jan.moveTo(0, 0);
+        }
+    </script>
 <?
 }
 ?>

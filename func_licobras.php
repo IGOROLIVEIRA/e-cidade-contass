@@ -116,6 +116,10 @@ $cllicobras = new cl_licobras;
                    THEN obr08_acordo
                    ELSE ac16_sequencial
                   END                         AS ac16_sequencial,
+                  CASE WHEN obr08_acordo IS NULL
+                   THEN null
+                   ELSE ac16_dataassinatura
+                  END AS ac16_dataassinatura,
                   CASE WHEN l20_objeto IS NOT NULL
                     THEN l20_objeto 
                     ELSE obr07_objeto

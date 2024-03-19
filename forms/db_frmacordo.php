@@ -128,10 +128,9 @@ db_app::load("dbtextFieldData.widget.js");
         width: 49px;
     }
 
-    #ac16_tipounidtempoperiodo,
     #ac16_datainicio,
     #ac16_datafim {
-        width: 90px;
+        width: 112px;
     }
 
     #ac16_formafornecimento {
@@ -227,7 +226,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                         $aValores,
                                                         true,
                                                         $db_opcao,
-                                                        "onchange='js_exibeBotaoJulgamento();js_validaCampoValor();js_verificaorigem();'"
+                                                        "onchange='js_exibeBotaoJulgamento();js_validaCampoValor();js_verificaorigem();exibicaoVigenciaIndeterminada();'"
                                                     );
 
                                                     ?>
@@ -251,7 +250,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                         8 => '8 - Licitação realizada por consorcio público',
                                                         9 => '9 - Licitação realizada por outro ente da federação',
                                                     );
-                                                    db_select('ac16_tipoorigem', $aValores, true, $db_opcao, "onchange='js_verificatipoorigem()'", "");
+                                                    db_select('ac16_tipoorigem', $aValores, true, $db_opcao, "onchange='js_verificatipoorigem();exibicaoVigenciaIndeterminada();'", "");
 
                                                     ?>
                                                 </td>
@@ -681,6 +680,16 @@ db_app::load("dbtextFieldData.widget.js");
                                             <b>Vigência</b>
                                         </legend>
                                         <table cellpadding="0" border="0" width="100%" class="table-vigencia">
+                                            <tr id="tr_vigenciaindeterminada" style="display:none;">
+                                                <td colspan="2">
+                                                    <b>Vigência Indeterminada:</b>
+
+                                                    <?
+                                                    $aVigencias = array("f" => "Não","t" => "Sim");
+                                                    db_select('ac16_vigenciaindeterminada', $aVigencias, true, $db_opcao, "onchange='js_alteracaoVigencia(this.value)';", "");
+                                                    ?>
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <td width="1%">
                                                     <b>Inicio:</b>
@@ -708,10 +717,10 @@ db_app::load("dbtextFieldData.widget.js");
                                                     );
                                                     ?>
                                                 </td>
-                                                <td>
+                                                <td class="vigencia_final">
                                                     <b>Fim:</b>
                                                 </td>
-                                                <td>
+                                                <td class="vigencia_final">
                                                     <?
 
                                                     db_inputdata(
@@ -783,6 +792,9 @@ db_app::load("dbtextFieldData.widget.js");
                                     </fieldset>
                                 </td>
                             </tr>
+                            <?
+                            db_input('leidalicitacao', 50, 3, true, 'text', $db_opcao,"style='display:none'");
+                            ?>
                         </table>
                     </fieldset>
                 </td>
@@ -821,7 +833,10 @@ db_app::load("dbtextFieldData.widget.js");
             $('trperiodoreajuste').style.display = '';
             $('trdescricaoreajuste').style.display = '';
             $('tdindicereajuste').style.display = 'none';
-            $('trdescricaoindicereajuste').style.display = '';";
+            $('trdescricaoindicereajuste').style.display = '';
+            $('tr_vigenciaindeterminada').style.display = ''
+            $('ac16_vigenciaindeterminada').disabled = ''";
+            
     } else {
         echo "$('tdcriterioreajuste').style.display = 'none';
             $('trdatareajuste').style.display = 'none';
@@ -1989,5 +2004,44 @@ db_app::load("dbtextFieldData.widget.js");
         if (erro == true) {
             document.form1.si06_objetoadesao.focus();
         }
+    }
+
+    <?php
+        if ($db_opcao != 1) {
+            echo "js_alteracaoVigencia($('ac16_vigenciaindeterminada').value);";
+            echo "document.getElementById('ac16_vigenciaindeterminada').setAttribute('disabled','disabled');";
+        } 
+    ?>
+
+    function js_alteracaoVigencia(vigenciaIndeterminada){
+
+        if(vigenciaIndeterminada == "t"){
+            document.getElementsByClassName('vigencia_final')[0].style.display = 'none';
+            document.getElementsByClassName('vigencia_final')[1].style.display = 'none';
+            document.getElementById('ac16_datafim').value = '';
+            return;
+        }
+        document.getElementsByClassName('vigencia_final')[0].style.display = '';
+        document.getElementsByClassName('vigencia_final')[1].style.display = '';
+       
+    }
+
+    function exibicaoVigenciaIndeterminada(){
+        let origensValidas = ["2","3"];
+        let tipoOrigem = $('ac16_tipoorigem').value;
+        let origem = $('ac16_origem').value;
+        let leiLicitacao = $('leidalicitacao').value;
+
+        js_alteracaoVigencia($('ac16_vigenciaindeterminada').value);
+
+        if(origem == "2" && origensValidas.includes(tipoOrigem) && leiLicitacao == "1"){
+            document.getElementById('tr_vigenciaindeterminada').style.display = '';
+            return;
+        }
+
+        document.getElementById('tr_vigenciaindeterminada').style.display = 'none';
+        document.getElementsByClassName('vigencia_final')[0].style.display = '';
+        document.getElementsByClassName('vigencia_final')[1].style.display = '';
+        
     }
 </script>

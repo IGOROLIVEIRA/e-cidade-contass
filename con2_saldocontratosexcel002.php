@@ -83,7 +83,14 @@ function montagemCabecalhoAcordo($sheet, $oItem, &$iCelula)
   $iCelula++;
 
   $sheet->setCellValue("A" . $iCelula, mb_convert_encoding("Nº Contrato: ", 'UTF-8') . $oItem->ac16_numero . "/" . $oItem->ac16_anousu);
-  $sheet->setCellValue("B" . $iCelula, mb_convert_encoding("Vigência: ", 'UTF-8') . date("d/m/Y", strtotime($oItem->datainicio)) . ' a ' . date("d/m/Y", strtotime($oItem->datafim)));
+
+  $oItem->datainicio = date("d/m/Y", strtotime($oItem->datainicio));
+  $oItem->datafim = date("d/m/Y", strtotime($oItem->datafim));
+
+  $tituloVigencia = $oItem->ac16_vigenciaindeterminada == "t" ? mb_convert_encoding("Vigência Inicial: ", 'UTF-8') : mb_convert_encoding("Período de Vigência: ", 'UTF-8');
+  $dataVigencia = $oItem->ac16_vigenciaindeterminada == "t" ? $oItem->datainicio : $oItem->datainicio . mb_convert_encoding(" Até: ", 'UTF-8') . $oItem->datafim;
+
+  $sheet->setCellValue("B" . $iCelula, $tituloVigencia . $dataVigencia);
   $sheet->setCellValue("C" . $iCelula, "Natureza: $oItem->natureza");
 
   $iCelula++;

@@ -178,7 +178,7 @@
            campo_api='' 
            name="c95_excluir" 
            conteudo="bool" 
-           description="Indica se é para excluir ou não a conta." 
+           description="Indica se é para excluir ou n�o a conta." 
            inivalue="f" 
            label="Excluir" 
            size="1" 

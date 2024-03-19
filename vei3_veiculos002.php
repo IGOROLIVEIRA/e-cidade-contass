@@ -85,6 +85,7 @@ $rsBuscaVeiculo   = $clveiculos->sql_record($sSqlBuscaVeiculo);
 $oVeiculo         = db_utils::fieldsMemory($rsBuscaVeiculo, false);
 ?>
 <html>
+
 <head>
     <title>Dados do Cadastro de Veículos</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -92,261 +93,218 @@ $oVeiculo         = db_utils::fieldsMemory($rsBuscaVeiculo, false);
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <link href="estilos/tab.style.css" rel="stylesheet" type="text/css">
     <style type='text/css'>
-        .valores {background-color:#FFFFFF}
+        .valores {
+            background-color: #FFFFFF
+        }
     </style>
 </head>
 
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 
-<fieldset>
+    <fieldset>
 
-    <legend>
-        <strong>Dados Cadastrais:</strong>
-    </legend>
+        <legend>
+            <strong>Dados Cadastrais:</strong>
+        </legend>
 
-    <table>
-        <tr>
-
-            <td>
-                <?=@$Lve01_codigo?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve01_codigo?>
-            </td>
-
-            <td>
-                <?=@$Lve01_placa?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve01_placa ? $oVeiculo->ve01_placa : ' - '?>
-            </td>
-
-            <td>
-                <?=@$Lve02_numcgm?>
-            </td>
-            <td class="valores">
-                <?= (isset($oVeiculo->z01_nome) && $oVeiculo->z01_nome != '') ? $oVeiculo->z01_nome : 'NENHUM'?>
-            </td>
-
-        </tr>
-        <tr>
-
-            <td >
-                <?=@$Lve01_veiccadmarca?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve21_descr?>
-            </td>
-
-            <td>
-                <?=@$Lve01_veiccadmodelo?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve22_descr?>
-            </td>
-
-            <td>
-                <?=@$Lve01_veiccadcor?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve23_descr ? $oVeiculo->ve23_descr : ' - '?>
-            </td>
-
-        </tr>
-        <tr>
-
-        </tr>
-        <tr>
-
-            <td>
-                <?=@$Lve01_chassi?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve01_chassi ? $oVeiculo->ve01_chassi : ' - ' ?>
-            </td>
-
-            <td>
-                <?=@$Lve01_ranavam?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve01_ranavam ? $oVeiculo->ve01_ranavam : ' - '?>
-            </td>
-
-        </tr>
-        <tr>
-
-            <td>
-                <?=@$Lve01_certif?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve01_certif ? $oVeiculo->ve01_certif : ' - '?>
-            </td>
-
-            <td>
-                <?=@$Lve01_veiccadpotencia?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve31_descrcompleta ? $oVeiculo->ve31_descrcompleta : ' - '?>
-            </td>
-
-        </tr>
-        <tr>
-
-            <td>
-                <?=@$Lve01_medidaini?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve01_medidaini.' '.$oVeiculo->ve07_sigla?>
-            </td>
-
-            <td>
-                <?=@$Lve01_veiccadtipocapacidade?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve24_descr ? $oVeiculo->ve24_descr : ' - '?>
-            </td>
-
-        </tr>
-        <tr>
-
-            <td>
-                <?=@$Lve01_dtaquis?>
-            </td>
-            <td class="valores">
-                <?=db_formatar($oVeiculo->ve01_dtaquis, 'd')?>
-            </td>
-
-            <td>
-                <?=@$Lve06_veiccadcomb?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->lista_combustivel ? $oVeiculo->lista_combustivel : ' - ' ?>
-            </td>
-
-            <td>
-                <?=@$Lve01_veiccadcategcnh?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve30_descr ? $oVeiculo->ve30_descr : ' - '?>
-            </td>
-
-        </tr>
-        <tr>
-
-            <td>
-                <?=@$Lve01_anofab?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve01_anofab?>
-            </td>
-
-            <td>
-                <?=@$Lve01_anomod?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve01_anomod?>
-            </td>
-
-            <td>
-                <?=@$Lve01_ceplocalidades?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->cp05_localidades?>
-            </td>
-
-        </tr>
-        <tr>
-
-            <td>
-                <?=@$Lve40_veiccadcentral?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->descr_central?>
-            </td>
-
-            <td>
-                <?=@$Lve03_bem?>
-            </td>
-            <td class="valores">
-                <?=($oVeiculo->ve03_bem) ? $oVeiculo->t52_descr : 'SEM LIGAÇÃO COM O PATRIMONIO'?>
-            </td>
-
-        </tr>
-
-    </table>
-
-</fieldset>
-
-<fieldset>
-
-    <legend>
-        <strong>Dados da Baixa:</strong>
-    </legend>
-
-    <table>
-
-        <? if ($oVeiculo->ve04_codigo) { ?>
+        <table>
             <tr>
 
                 <td>
-                    <b>Data da Baixa:</b>
+                    <?= @$Lve01_codigo ?>
                 </td>
                 <td class="valores">
-                    <?=db_formatar($oVeiculo->ve04_data, 'd')?>
+                    <?= $oVeiculo->ve01_codigo ?>
                 </td>
 
                 <td>
-                    <b>Horário da Baixa:</b>
+                    <?= @$Lve01_placa ?>
                 </td>
                 <td class="valores">
-                    <?=$oVeiculo->ve04_hora?>
+                    <?= $oVeiculo->ve01_placa ? $oVeiculo->ve01_placa : ' - ' ?>
+                </td>
+
+                <td>
+                    <?= @$Lve02_numcgm ?>
+                </td>
+                <td class="valores">
+                    <?= (isset($oVeiculo->z01_nome) && $oVeiculo->z01_nome != '') ? $oVeiculo->z01_nome : 'NENHUM' ?>
+                </td>
+
+            </tr>
+            <tr>
+
+                <td>
+                    <?= @$Lve01_veiccadmarca ?>
+                </td>
+                <td class="valores">
+                    <?= $oVeiculo->ve21_descr ?>
+                </td>
+
+                <td>
+                    <?= @$Lve01_veiccadmodelo ?>
+                </td>
+                <td class="valores">
+                    <?= $oVeiculo->ve22_descr ?>
+                </td>
+
+                <td>
+                    <?= @$Lve01_veiccadcor ?>
+                </td>
+                <td class="valores">
+                    <?= $oVeiculo->ve23_descr ? $oVeiculo->ve23_descr : ' - ' ?>
+                </td>
+            </tr>
+            <tr>
+
+            </tr>
+            <tr>
+
+                <td>
+                    <?= @$Lve01_chassi ?>
+                </td>
+                <td class="valores">
+                    <?= $oVeiculo->ve01_chassi ? $oVeiculo->ve01_chassi : ' - ' ?>
+                </td>
+
+                <td>
+                    <?= @$Lve01_ranavam ?>
+                </td>
+                <td class="valores">
+                    <?= $oVeiculo->ve01_ranavam ? $oVeiculo->ve01_ranavam : ' - ' ?>
+                </td>
+
+                <td>
+                    <strong>Status</strong>
+                </td>
+                <td class="valores">
+                    <?= $oVeiculo->ve01_ativo ? 'ATIVO' : '<span style="color: red; font-weight: bold;">BAIXADO</span>' ?>
+                </td>
+
+            </tr>
+            <tr>
+
+                <td>
+                    <?= @$Lve01_certif ?>
+                </td>
+                <td class="valores">
+                    <?= $oVeiculo->ve01_certif ? $oVeiculo->ve01_certif : ' - ' ?>
+                </td>
+
+                <td>
+                    <?= @$Lve01_veiccadpotencia ?>
+                </td>
+                <td class="valores">
+                    <?= $oVeiculo->ve31_descrcompleta ? $oVeiculo->ve31_descrcompleta : ' - ' ?>
+                </td>
+
+            </tr>
+            <tr>
+
+                <td>
+                    <?= @$Lve01_medidaini ?>
+                </td>
+                <td class="valores">
+                    <?= $oVeiculo->ve01_medidaini . ' ' . $oVeiculo->ve07_sigla ?>
+                </td>
+
+                <td>
+                    <?= @$Lve01_veiccadtipocapacidade ?>
+                </td>
+                <td class="valores">
+                    <?= $oVeiculo->ve24_descr ? $oVeiculo->ve24_descr : ' - ' ?>
+                </td>
+
+            </tr>
+            <tr>
+
+                <td>
+                    <?= @$Lve01_dtaquis ?>
+                </td>
+                <td class="valores">
+                    <?= db_formatar($oVeiculo->ve01_dtaquis, 'd') ?>
+                </td>
+
+                <td>
+                    <?= @$Lve06_veiccadcomb ?>
+                </td>
+                <td class="valores">
+                    <?= $oVeiculo->lista_combustivel ? $oVeiculo->lista_combustivel : ' - ' ?>
+                </td>
+
+                <td>
+                    <?= @$Lve01_veiccadcategcnh ?>
+                </td>
+                <td class="valores">
+                    <?= $oVeiculo->ve30_descr ? $oVeiculo->ve30_descr : ' - ' ?>
+                </td>
+
+            </tr>
+            <tr>
+
+                <td>
+                    <?= @$Lve01_anofab ?>
+                </td>
+                <td class="valores">
+                    <?= $oVeiculo->ve01_anofab ?>
+                </td>
+
+                <td>
+                    <?= @$Lve01_anomod ?>
+                </td>
+                <td class="valores">
+                    <?= $oVeiculo->ve01_anomod ?>
+                </td>
+
+                <td>
+                    <?= @$Lve01_ceplocalidades ?>
+                </td>
+                <td class="valores">
+                    <?= $oVeiculo->cp05_localidades ?>
+                </td>
+
+            </tr>
+            <tr>
+
+                <td>
+                    <?= @$Lve40_veiccadcentral ?>
+                </td>
+                <td class="valores">
+                    <?= $oVeiculo->descr_central ?>
+                </td>
+
+                <td>
+                    <?= @$Lve03_bem ?>
+                </td>
+                <td class="valores">
+                    <?= ($oVeiculo->ve03_bem) ? $oVeiculo->t52_descr : 'SEM LIGAÇÃO COM O PATRIMONIO' ?>
                 </td>
 
             </tr>
 
-            <tr>
+        </table>
 
-                <td>
-                    <b>Usuário Responsável:</b>
-                </td>
-                <td class="valores">
-                    <?=$oVeiculo->nome ? $oVeiculo->nome : ' - '?>
-                </td>
+    </fieldset>
 
-                <td>
-                    <b>Motivo:</b>
-                </td>
-                <td class="valores">
-                    <?=$oVeiculo->ve04_motivo?>
-                </td>
+    <fieldset>
+        <legend>
+            <strong>Detalhamento do veículo:</strong>
+        </legend>
 
-            </tr>
-        <? } else { ?>
-            <tr>
-                <td>
-                    <b>VEICULO NÃO BAIXADO</b>
-                </td>
-            </tr>
-        <? } ?>
-    </table>
-</fieldset>
-<fieldset>
-    <legend>
-        <strong>Detalhamento do veículo:</strong>
-    </legend>
+        <?
+        $oTabDetalhes = new verticalTab('detalhesVeiculo', 300);
 
-    <?
-    $oTabDetalhes = new verticalTab('detalhesVeiculo', 300);
-
-    $sGetUrl = "?veiculo={$oVeiculo->ve01_codigo}";
-    $oTabDetalhes->add('retiradas'             , 'Retiradas'            , "func_detalhamentoretiradasveiculos.php{$sGetUrl}");
-    $oTabDetalhes->add('abastecimento'         , 'Abastecimentos'       , "func_detalhamentoabastecimentosveiculos.php{$sGetUrl}");
-    $oTabDetalhes->add('manutencao'            , 'Manutenções'          , "func_detalhamentomanutencaoveiculos.php{$sGetUrl}");
-    $oTabDetalhes->add('manutenção de medidas' , 'Manutenções de Medida', "func_detalhamentomanutencaomedida.php{$sGetUrl}");
-    $oTabDetalhes->add('Impressão'             , 'Impressão'            , "func_impressaofichaveiculo.php{$sGetUrl}");
-    $oTabDetalhes->add('Transferências'        , 'Transferencia'        , "func_transferenciasveiculo.php{$sGetUrl}");
-    $oTabDetalhes->show();
-    ?>
-</fieldset>
+        $sGetUrl = "?veiculo={$oVeiculo->ve01_codigo}";
+        $oTabDetalhes->add('retiradas', 'Retiradas', "func_detalhamentoretiradasveiculos.php{$sGetUrl}");
+        $oTabDetalhes->add('abastecimento', 'Abastecimentos', "func_detalhamentoabastecimentosveiculos.php{$sGetUrl}");
+        $oTabDetalhes->add('manutencao', 'Manutenções', "func_detalhamentomanutencaoveiculos.php{$sGetUrl}");
+        $oTabDetalhes->add('manutenção de medidas', 'Manutenções de Medida', "func_detalhamentomanutencaomedida.php{$sGetUrl}");
+        $oTabDetalhes->add('Impressão', 'Impressão', "func_impressaofichaveiculo.php{$sGetUrl}");
+        $oTabDetalhes->add('Histórico de Movimentações', 'Histórico de Movimentações', "func_historicodemovimentacoes.php{$sGetUrl}");
+        $oTabDetalhes->add('Placa', 'Placa', "func_detalhamentoalteracoesplaca.php{$sGetUrl}");
+        $oTabDetalhes->show();
+        ?>
+    </fieldset>
 </body>
+
 </html>

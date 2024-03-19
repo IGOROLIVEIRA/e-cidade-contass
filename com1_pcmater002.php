@@ -65,22 +65,16 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
     $sqlerro  = true;
     db_msgbox($erro_msg);
   }
-  $result_pesquisa_material = $clpcmater->sql_record($clpcmater->sql_query(null, "pc01_descrmater as pc01_descrmateranterior,pc01_justificativa as pc01_justificativaanterior, pc01_complmater as pc01_complmateranterior", null, "pc01_codmater = $pc01_codmater"));
+  $result_pesquisa_material = $clpcmater->sql_record($clpcmater->sql_query(null, "pc01_descrmater as pc01_descrmateranterior, pc01_complmater as pc01_complmateranterior", null, "pc01_codmater = $pc01_codmater"));
   db_fieldsmemory($result_pesquisa_material, 0);
 
-  if ($pc01_complmateranterior != $pc01_complmater) {
-
-    if ($pc01_justificativa == "") {
-      $erro_justificativa = true;
-    }
+  if ($pc01_complmateranterior != $pc01_complmater && $pc01_justificativa == "") {
+    $erro_justificativa = true;
   }
 
-  if ($pc01_descrmateranterior != $pc01_descrmater) {
+  if ($pc01_descrmateranterior != $pc01_descrmater && $pc01_justificativa == "") {
 
-    if ($pc01_justificativa == "") {
-      $erro_justificativa = true;
-    }
-
+    $erro_justificativa = true;
     $dt_session = date("Y-m-d", db_getsession("DB_datausu"));
     $anousu = db_getsession('DB_anousu');
     $instituicao = db_getsession('DB_instit');
@@ -99,6 +93,50 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
     $sqlerro  = true;
     db_msgbox($erro_msg);
   }
+
+    //Salva o item na tabela historicomaterial para gerar no sicom OC20960
+    $clhistoricomaterial = new cl_historicomaterial;
+
+    $rsHistoricoMaterial = $clhistoricomaterial->sql_record($clhistoricomaterial->sql_query(null,"db150_sequencial",null,"db150_pcmater =$pc01_codmater and db150_tipocadastro = 2"));
+
+    for($iMaterialTipo2 = 0; $iMaterialTipo2 < pg_num_rows($rsHistoricoMaterial); $iMaterialTipo2++ ){
+        db_fieldsmemory($rsHistoricoMaterial, $iMaterialTipo2);
+
+        $clhistoricomaterial->db150_sequencial                = $db150_sequencial;
+        $clhistoricomaterial->db150_justificativaalteracao    = $pc01_justificativa;
+        $clhistoricomaterial->db150_data                      = date("Y-m-d", db_getsession("DB_datausu"));
+        $clhistoricomaterial->db150_mes                       = date("m", db_getsession("DB_datausu"));
+        $clhistoricomaterial->db150_instit                    = db_getsession('DB_instit');
+        $clhistoricomaterial->alterar($db150_sequencial);
+
+        if ($clhistoricomaterial->erro_status == 0) {
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode($clhistoricomaterial->erro_msg);
+        }
+    }
+
+    $rsHistoricoMaterialTipo1 = $clhistoricomaterial->sql_record($clhistoricomaterial->sql_query(null,"*",null,"db150_pcmater =$pc01_codmater and db150_tipocadastro = 1 and db150_coditem not in (select db150_coditem from historicomaterial where db150_pcmater = $pc01_codmater and db150_tipocadastro = 2)"));
+
+    for($iMaterialTipo1 = 0; $iMaterialTipo1 < pg_num_rows($rsHistoricoMaterialTipo1); $iMaterialTipo1++ ){
+        db_fieldsmemory($rsHistoricoMaterialTipo1, $iMaterialTipo1);
+
+        $clhistoricomaterial->db150_tiporegistro              = 10;
+        $clhistoricomaterial->db150_coditem                   = $db150_coditem;
+        $clhistoricomaterial->db150_pcmater                   = $db150_pcmater;
+        $clhistoricomaterial->db150_dscitem                   = $db150_dscitem;
+        $clhistoricomaterial->db150_unidademedida             = $db150_unidademedida;
+        $clhistoricomaterial->db150_tipocadastro              = 2;
+        $clhistoricomaterial->db150_justificativaalteracao    = $pc01_justificativa;
+        $clhistoricomaterial->db150_data                      = date("Y-m-d", db_getsession("DB_datausu"));
+        $clhistoricomaterial->db150_mes                       = date("m", db_getsession("DB_datausu"));
+        $clhistoricomaterial->db150_instit                    = db_getsession('DB_instit');
+        $clhistoricomaterial->incluir(null);
+
+        if ($clhistoricomaterial->erro_status == 0) {
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode($clhistoricomaterial->erro_msg);
+        }
+    }
 
   if (!$sqlerro) {
     $clpcmater->pc01_dataalteracao = date("Y-m-d", db_getsession("DB_datausu"));

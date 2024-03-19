@@ -95,6 +95,18 @@ if ($db_opcao == 2) {
                     </td>
                 </tr>
                 <tr>
+                    <td nowrap title="Dedicação Exclusiva"><b>Dedicação Exclusiva: </b></td>
+                    <td>
+                        <?
+                        $aDedica = array(
+                            "f" => "Não",
+                            "t" => "Sim"
+                        );
+                        db_select('rh37_dedicacaoexc',$aDedica, true, $db_opcao);
+                        ?>
+                    </td>
+                </tr>
+                <tr>
                     <td nowrap title="Requisito do Cargo"><b>Requisito do Cargo: </b></td>
                     <td>
                         <?
@@ -158,7 +170,7 @@ if ($db_opcao == 2) {
         </fieldset>
     </center>
     <br />
-    <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>" >
+    <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
     <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
 </form>
 

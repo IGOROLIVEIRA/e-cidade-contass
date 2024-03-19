@@ -49,6 +49,16 @@ if(isset($uploadfile)) {
   // Nome do arquivo temporário gerado no /tmp
   $nometmp = $_FILES["uploadfile"]["tmp_name"];
 
+    $size = $_FILES["uploadfile"]["size"];
+
+    //31,457,280 referente a 30mb tamanho maximo permitido pelo PNCP
+    if ($size > 31457280) {
+        db_msgbox("Arquivo inválido! Tamanho maximo permitido pelo PNCP e 30MB");
+        unlink($nometmp);
+        $lFail = true;
+        return false;
+    }
+
   $diretorio = "tmp/";
 
   // Seta o nome do arquivo destino do upload

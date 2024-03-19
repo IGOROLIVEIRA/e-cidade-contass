@@ -17,7 +17,7 @@
  *  detalhes.
  *
  *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
+ *  junto com este programa; se não, escreva para a Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
  *  02111-1307, USA.
  *
@@ -66,19 +66,19 @@ class cl_rhpesrescisao
     public $rh05_motivo = null;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
-                 rh05_seqpes = int4 = Sequï¿½ncia
-                 rh05_recis = date = Data da Rescisï¿½o
-                 rh05_causa = int4 = Causa da Rescisï¿½o
-                 rh05_caub = varchar(2) = Sub causa de rescisï¿½o
-                 rh05_aviso = date = Data de Aviso Prï¿½vio
+                 rh05_seqpes = int4 = Sequência
+                 rh05_recis = date = Data da Rescisão
+                 rh05_causa = int4 = Causa da Rescisão
+                 rh05_caub = varchar(2) = Sub causa de rescisão
+                 rh05_aviso = date = Data de Aviso Prévio
                  rh05_taviso = int4 = Tipo de Aviso
-                 rh05_mremun = float8 = Maior Remuneraï¿½ï¿½o
-                 rh05_empenhado = bool = Rescisï¿½o Empenhada
+                 rh05_mremun = float8 = Maior Remuneração
+                 rh05_empenhado = bool = Rescisão Empenhada
                  rh05_trct = varchar(200) = TRCT
-                 rh05_codigoseguranca = varchar(200) = Cï¿½digo de seguranï¿½a
-                 rh05_feriasavos = int4 = Avos de fï¿½rias
-                 rh05_feriasvencidas = int4 = Fï¿½rias vencidas
-                 rh05_13salarioavos = int4 = Avos de 13ï¿½ salï¿½rio
+                 rh05_codigoseguranca = varchar(200) = Código de segurança
+                 rh05_feriasavos = int4 = Avos de férias
+                 rh05_feriasvencidas = int4 = Férias vencidas
+                 rh05_13salarioavos = int4 = Avos de 13º salário
                  rh05_saldofgts = float8 = Saldo FGTS
                  rh05_motivo = int4 = Motivo
                  ";
@@ -141,19 +141,19 @@ class cl_rhpesrescisao
     {
         $this->atualizacampos();
         if ($this->rh05_recis == null) {
-            $this->erro_sql = " Campo Data da Rescisï¿½o nao Informado.";
+            $this->erro_sql = " Campo Data da Rescisão não Informado.";
             $this->erro_campo = "rh05_recis_dia";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh05_causa == null) {
-            $this->erro_sql = " Campo Causa da Rescisï¿½o nao Informado.";
+            $this->erro_sql = " Campo Causa da Rescisão não Informado.";
             $this->erro_campo = "rh05_causa";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -162,19 +162,19 @@ class cl_rhpesrescisao
             $this->rh05_aviso = "null";
         }
         if ($this->rh05_taviso == null) {
-            $this->erro_sql = " Campo Tipo de Aviso nao Informado.";
+            $this->erro_sql = " Campo Tipo de Aviso não Informado.";
             $this->erro_campo = "rh05_taviso";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh05_mremun == null) {
-            $this->erro_sql = " Campo Maior Remuneraï¿½ï¿½o nao Informado.";
+            $this->erro_sql = " Campo Maior Remuneração não Informado.";
             $this->erro_campo = "rh05_mremun";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -197,9 +197,9 @@ class cl_rhpesrescisao
 
         $this->rh05_seqpes = $rh05_seqpes;
         if (($this->rh05_seqpes == null) || ($this->rh05_seqpes == "")) {
-            $this->erro_sql = " Campo rh05_seqpes nao declarado.";
+            $this->erro_sql = " Campo rh05_seqpes não declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
-            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -242,13 +242,13 @@ class cl_rhpesrescisao
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-                $this->erro_sql   = "Funcionï¿½rios em rescisï¿½o ($this->rh05_seqpes) nao Incluï¿½do. Inclusao Abortada.";
-                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_banco = "Funcionï¿½rios em rescisï¿½o jï¿½ Cadastrado";
+                $this->erro_sql   = "Funcionários em rescisão ($this->rh05_seqpes) não Incluído. Inclusao Abortada.";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_banco = "Funcionários em rescisão já Cadastrado";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             } else {
-                $this->erro_sql   = "Funcionï¿½rios em rescisï¿½o ($this->rh05_seqpes) nao Incluï¿½do. Inclusao Abortada.";
-                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_sql   = "Funcionários em rescisão ($this->rh05_seqpes) não Incluído. Inclusao Abortada.";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             }
             $this->erro_status = "0";
@@ -258,7 +258,7 @@ class cl_rhpesrescisao
         $this->erro_banco = "";
         $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $this->rh05_seqpes;
-        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_incluir = pg_affected_rows($result);
@@ -294,10 +294,10 @@ class cl_rhpesrescisao
             $sql  .= $virgula . " rh05_seqpes = $this->rh05_seqpes ";
             $virgula = ",";
             if (trim($this->rh05_seqpes) == null) {
-                $this->erro_sql = " Campo Sequï¿½ncia nao Informado.";
+                $this->erro_sql = " Campo Sequência não Informado.";
                 $this->erro_campo = "rh05_seqpes";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -307,10 +307,10 @@ class cl_rhpesrescisao
             $sql  .= $virgula . " rh05_recis = '$this->rh05_recis' ";
             $virgula = ",";
             if (trim($this->rh05_recis) == null) {
-                $this->erro_sql = " Campo Data da Rescisï¿½o nao Informado.";
+                $this->erro_sql = " Campo Data da Rescisão não Informado.";
                 $this->erro_campo = "rh05_recis_dia";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -320,10 +320,10 @@ class cl_rhpesrescisao
                 $sql  .= $virgula . " rh05_recis = null ";
                 $virgula = ",";
                 if (trim($this->rh05_recis) == null) {
-                    $this->erro_sql = " Campo Data da Rescisï¿½o nao Informado.";
+                    $this->erro_sql = " Campo Data da Rescisão não Informado.";
                     $this->erro_campo = "rh05_recis_dia";
                     $this->erro_banco = "";
-                    $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                     $this->erro_status = "0";
                     return false;
@@ -334,10 +334,10 @@ class cl_rhpesrescisao
             $sql  .= $virgula . " rh05_causa = $this->rh05_causa ";
             $virgula = ",";
             if (trim($this->rh05_causa) == null) {
-                $this->erro_sql = " Campo Causa da Rescisï¿½o nao Informado.";
+                $this->erro_sql = " Campo Causa da Rescisão não Informado.";
                 $this->erro_campo = "rh05_causa";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -360,10 +360,10 @@ class cl_rhpesrescisao
             $sql  .= $virgula . " rh05_taviso = $this->rh05_taviso ";
             $virgula = ",";
             if (trim($this->rh05_taviso) == null) {
-                $this->erro_sql = " Campo Tipo de Aviso nao Informado.";
+                $this->erro_sql = " Campo Tipo de Aviso não Informado.";
                 $this->erro_campo = "rh05_taviso";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -373,10 +373,10 @@ class cl_rhpesrescisao
             $sql  .= $virgula . " rh05_mremun = $this->rh05_mremun ";
             $virgula = ",";
             if (trim($this->rh05_mremun) == null) {
-                $this->erro_sql = " Campo Maior Remuneraï¿½ï¿½o nao Informado.";
+                $this->erro_sql = " Campo Maior Remuneração não Informado.";
                 $this->erro_campo = "rh05_mremun";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -484,9 +484,9 @@ class cl_rhpesrescisao
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "Funcionï¿½rios em rescisï¿½o nao Alterado. Alteracao Abortada.\\n";
+            $this->erro_sql   = "Funcionários em rescisão não Alterado. Alteracao Abortada.\\n";
             $this->erro_sql .= "Valores : " . $this->rh05_seqpes;
-            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_alterar = 0;
@@ -494,18 +494,18 @@ class cl_rhpesrescisao
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "Funcionï¿½rios em rescisï¿½o nao foi Alterado. Alteracao Executada.\\n";
+                $this->erro_sql = "Funcionários em rescisão não foi Alterado. Alteracao Executada.\\n";
                 $this->erro_sql .= "Valores : " . $this->rh05_seqpes;
-                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = 0;
                 return true;
             } else {
                 $this->erro_banco = "";
-                $this->erro_sql = "Alteraï¿½ï¿½o efetuada com Sucesso\\n";
+                $this->erro_sql = "Alteração efetuada com Sucesso\\n";
                 $this->erro_sql .= "Valores : " . $this->rh05_seqpes;
-                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = pg_affected_rows($result);
@@ -558,9 +558,9 @@ class cl_rhpesrescisao
         $result = db_query($sql . $sql2);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "Funcionï¿½rios em rescisï¿½o nao Excluï¿½do. Exclusï¿½o Abortada.\\n";
+            $this->erro_sql   = "Funcionários em rescisão não Excluído. Exclusão Abortada.\\n";
             $this->erro_sql .= "Valores : " . $rh05_seqpes;
-            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_excluir = 0;
@@ -568,18 +568,18 @@ class cl_rhpesrescisao
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "Funcionï¿½rios em rescisï¿½o nao Encontrado. Exclusï¿½o nï¿½o Efetuada.\\n";
+                $this->erro_sql = "Funcionários em rescisão não Encontrado. Exclusão não Efetuada.\\n";
                 $this->erro_sql .= "Valores : " . $rh05_seqpes;
-                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = 0;
                 return true;
             } else {
                 $this->erro_banco = "";
-                $this->erro_sql = "Exclusï¿½o efetuada com Sucesso\\n";
+                $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
                 $this->erro_sql .= "Valores : " . $rh05_seqpes;
-                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = pg_affected_rows($result);
@@ -595,7 +595,7 @@ class cl_rhpesrescisao
             $this->numrows    = 0;
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Erro ao selecionar os registros.";
-            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -604,7 +604,7 @@ class cl_rhpesrescisao
         if ($this->numrows == 0) {
             $this->erro_banco = "";
             $this->erro_sql   = "Record Vazio na Tabela:rhpesrescisao";
-            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -939,17 +939,17 @@ class cl_rhpesrescisao
 
         $sSql .= "where ";
         $sSql .= " case";
-        $sSql .= "     when gerfres.r20_regist IS NOT NULL and r20_anousu = $iAno and  r20_mesusu = $iMes";/* Caso tenha cï¿½lculo */
+        $sSql .= "     when gerfres.r20_regist IS NOT NULL and r20_anousu = $iAno and  r20_mesusu = $iMes";/* Caso tenha cálculo */
         $sSql .= "       then (rhpessoalmov.rh02_anousu = $iAno and rhpessoalmov.rh02_mesusu = $iMes)";
-        $sSql .= "     else (extract(year from rhpesrescisao.rh05_recis) = $iAno and extract(month from rhpesrescisao.rh05_recis) = $iMes)"; /* Caso nï¿½o tenha calculo*/
+        $sSql .= "     else (extract(year from rhpesrescisao.rh05_recis) = $iAno and extract(month from rhpesrescisao.rh05_recis) = $iMes)"; /* Caso não tenha calculo*/
         $sSql .= " end";
 
         $sSql .= "    and rhpessoalmov.rh02_instit                     = $iInstit                                                                                     \n";
         $sSql .= "    and rhpesrescisao.rh05_seqpes is not null                                                                                                       \n";
         $sSql .= "    and case                                                                                                                                        \n";
-        $sSql .= "          when gerfres.r20_regist is null                                       /* Caso nï¿½o tenha cï¿½lculo                              */           \n";
-        $sSql .= "          then (afasta.r45_regist is not null and rhcadregime.rh52_regime <> 2) /* Valida se tem afastamento e se o servidor nï¿½o ï¿½ CLT */           \n";
-        $sSql .= "          else true                                                             /* no caso de haver cï¿½lculo retorna semrpre            */           \n";
+        $sSql .= "          when gerfres.r20_regist is null                                       /* Caso não tenha cálculo                              */           \n";
+        $sSql .= "          then (afasta.r45_regist is not null and rhcadregime.rh52_regime <> 2) /* Valida se tem afastamento e se o servidor não é CLT */           \n";
+        $sSql .= "          else true                                                             /* no caso de haver cálculo retorna semrpre            */           \n";
         $sSql .= "        end                                                                                                                                         \n";
         $sSql .= "                                  $dbwhere                                                                                                           \n";
         $sSql .= "  order by rh01_regist                                                                                                                              \n";

@@ -35,6 +35,9 @@ require_once("model/retencaoNota.model.php");
 require_once("classes/db_empautitem_classe.php");
 require_once("classes/db_empagetipo_classe.php");
 require_once("classes/db_emite_nota_liq.php");
+require_once("classes/db_empdiaria_classe.php");
+require_once("classes/db_rhpessoal_classe.php");
+require_once("model/orcamento/ControleOrcamentario.model.php");
 
 /*
  * Configurações GED
@@ -49,6 +52,8 @@ $clpagordemele  = new cl_pagordemele;
 $clempautitem   = new cl_empautitem;
 $clempagetipo   = new cl_empagetipo;
 $clemite_nota_liq = new cl_emite_nota_liq;
+$clDiaria = new cl_empdiaria;
+$clRhpessoal = new cl_rhpessoal;
 
 $sFornecedor = null;
 if ( isset($oGet) && !empty($oGet) ) {
@@ -86,7 +91,7 @@ $dbwhere = "";
 $iAnoUso = db_getsession('DB_anousu');
 
 if(isset($e60_codemp_ini) && $e60_codemp_ini != "") {
-  $codemp  = explode("/",$e60_codemp_ini);
+  // $codemp  = explode("/",$e60_codemp_ini);
 
   if (isset($e60_codemp_fim) && $e60_codemp_fim != "") {
      $str = " e60_codemp::integer between ".$e60_codemp_ini." and ".$e60_codemp_fim." and e60_anousu = {$iAnoUso} ";
@@ -97,6 +102,9 @@ if(isset($e60_codemp_ini) && $e60_codemp_ini != "") {
          $str = " e60_codemp = '".$codemp[0]."' and e60_anousu = ".$codemp[1]." ";
        } else {
          $str = " e60_codemp = '".$e60_codemp_ini."' and e60_anousu = {$iAnoUso} ";
+       }
+       if(isset($e50_numliquidacao) && $e50_numliquidacao != ''){
+        $str .= " and e50_numliquidacao = $e50_numliquidacao ";
        }
     }
 
@@ -154,6 +162,9 @@ if (isset($e60_numemp) && $e60_numemp != '') {
 	  $dbwhere .= " and ";
   }
   $dbwhere .= " e60_numemp=$e60_numemp ";
+  if(isset($e50_numliquidacao) && $e50_numliquidacao != ''){
+    $dbwhere .= " and e50_numliquidacao = $e50_numliquidacao ";
+  }
 }
 
 if ( !empty($sFornecedor) ) {
@@ -164,12 +175,20 @@ if ( !empty($sFornecedor) ) {
   $dbwhere .= " z01_numcgm in ({$sFornecedor}) ";
 }
 
+$result2 = db_query("select * from empparametro where e39_anousu = ".db_getsession("DB_anousu"));
+
+if(pg_numrows($result2)>0){
+  $oParametros = db_utils::fieldsMemory($result2,0);
+  
+  $modelo = $oParametros->e30_modeloop == 2 ? '7_alt' : '7';
+}
+
 $pdf = new scpdf();
 $pdf->Open();
-$pdf1 = new db_impcarne($pdf,'7');
+$pdf1 = new db_impcarne($pdf, $modelo);
 $pdf1->objpdf->SetTextColor(0,0,0);
 
-$sSqlPagordem = $clpagordem->sql_query_notaliquidacao('',' e50_codord,e71_codnota,e60_numerol,pc50_descr ',' e50_codord ', $dbwhere);
+$sSqlPagordem = $clpagordem->sql_query_notaliquidacao('',' e50_codord,e71_codnota,e60_numerol,pc50_descr,e50_numliquidacao',' e50_codord ', $dbwhere);
 $result = $clpagordem->sql_record($sSqlPagordem);
 
 if($clpagordem->numrows>0){
@@ -178,11 +197,8 @@ if($clpagordem->numrows>0){
   db_redireciona('db_erros.php?fechar=true&db_erro=Não a Ordem de Pagamento No. '.$codordem.'. Verifique!');
 }
 
-$result2 = db_query("select * from empparametro where e39_anousu = ".db_getsession("DB_anousu"));
-
-if(pg_numrows($result2)>0){
-  db_fieldsmemory($result2,0);
-  $pdf1->nvias= $e30_nroviaord;
+if(isset($oParametros)){
+  $pdf1->nvias= $oParametros->e30_nroviaord;
 }
 
 /*
@@ -192,6 +208,7 @@ if(pg_numrows($result2)>0){
 for($i = 0;$i < $clpagordem->numrows;$i++){
 
   db_fieldsmemory($result,$i);
+  // var_dump($e50_codord);
   $oRetencaoNota = new retencaoNota($e71_codnota);
   $oRetencaoNota->setINotaLiquidacao($e50_codord);
 
@@ -230,6 +247,27 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 
    }
 
+   $sqlDiaria = $clDiaria->sql_query(null,'empdiaria.*,e60_numcgm',null,' e140_codord = '.$e50_codord);
+   $resultDiaria   = db_query($sqlDiaria);
+   if(pg_num_rows($resultDiaria) > 0){
+    $diaria = db_utils::fieldsMemory($resultDiaria,0);
+    
+    $diaria->matricula = $diaria->e140_matricula;
+    $diaria->cargo = $diaria->e140_cargo;
+
+    $separador = '/ *-/';
+    $diaria->origem = preg_split($separador, $diaria->e140_origem);
+    $diaria->destino = preg_split($separador, $diaria->e140_destino);
+
+    $diaria->e140_dtautorizacao = $diaria->e140_dtautorizacao == null ? '' : date('d/m/Y', strtotime($diaria->e140_dtautorizacao));
+    $diaria->e140_dtinicial = $diaria->e140_dtinicial == null ? '' : date('d/m/Y', strtotime($diaria->e140_dtinicial));
+    $diaria->e140_dtfinal = $diaria->e140_dtfinal == null ? '' : date('d/m/Y', strtotime($diaria->e140_dtfinal));
+
+    $pdf1->diaria = $diaria;
+  } else {
+    $pdf1->diaria = null;
+  }
+
    $sSqlFuncaoOrdenaPagamento = $clemite_nota_liq->get_sql_funcao_ordena_pagamento($cgmpaga);
    $pdf1->cargoordenapagamento = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenaPagamento),0)->cargoordenapagamento;
 
@@ -251,6 +289,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $pdf1->crccontador     =  $crc;
    $pdf1->controleinterno =  $controleinterno;
 
+   $pdf1->numliquidacao    = $e50_numliquidacao;
    $pdf1->numeronota       = $e69_numero;
    $pdf1->datanota         = $e69_dtnota;
    $pdf1->valor_ordem      = '';
@@ -296,6 +335,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $pdf1->saldo_ant        = $e60_salant;
    $pdf1->empenhado        = $e60_vlremp;
    $pdf1->empenho_anulado  = $e60_vlranu;
+   $pdf1->codemp           = $e60_codemp;
    $pdf1->numemp           = $e60_codemp.'/'.$e60_anousu;
    $pdf1->orgao            = $o58_orgao;
    $pdf1->descr_orgao      = $o40_descr;
@@ -319,6 +359,13 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 
    $pdf1->telef            = $z01_telef;
    $pdf1->fax              = $z01_numero;
+
+
+   $clControleOrc = new ControleOrcamentario;
+   $e60_codco = $e60_codco == null ? '0000' : $e60_codco;
+   $clControleOrc->setCodCO($e60_codco);
+   
+   $pdf1->codco  = $e60_codco.' - '.$clControleOrc->getDescricaoResumoCO();
 
 
    /**
@@ -377,6 +424,10 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
             $pdf1->conta_pagadora_conta     = "{$c63_conta}-{$c63_dvconta} {$e83_descr}";
 
         }
+    } else {
+      $pdf1->conta_pagadora_reduz   = null;
+      $pdf1->conta_pagadora_agencia = null;
+      $pdf1->conta_pagadora_conta   = null;
     }
 
    $pdf1->imprime();

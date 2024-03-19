@@ -29,7 +29,8 @@ namespace ECidade\Tributario\Agua\Coletor\Importacao;
 
 use ECidade\Tributario\Agua\Coletor\Exportacao\Exportacao;
 
-class Importacao {
+class Importacao
+{
 
   const CODIGO_LAYOUT = 276;
 
@@ -51,21 +52,24 @@ class Importacao {
   /**
    * @param int $iCodigoUsuario
    */
-  public function setCodigoUsuario($iCodigoUsuario) {
+  public function setCodigoUsuario($iCodigoUsuario)
+  {
     $this->iCodigoUsuario = $iCodigoUsuario;
   }
 
   /**
    * @param int $iCodigoExportacao
    */
-  public function setCodigoExportacao($iCodigoExportacao) {
+  public function setCodigoExportacao($iCodigoExportacao)
+  {
     $this->iCodigoExportacao = $iCodigoExportacao;
   }
 
   /**
    * @param string $sCaminhoArquivo
    */
-  public function setCaminhoArquivo($sCaminhoArquivo) {
+  public function setCaminhoArquivo($sCaminhoArquivo)
+  {
     $this->sCaminhoArquivo = $sCaminhoArquivo;
   }
 
@@ -74,14 +78,15 @@ class Importacao {
    * @throws \DBException
    * @throws \ParameterException
    */
-  public function processar() {
+  public function processar()
+  {
 
     if (!$this->iCodigoExportacao) {
-      throw new \ParameterException('Código da exportação não informado.');
+      throw new \ParameterException('Código da exportação n�o informado.');
     }
 
     if (!$this->iCodigoUsuario) {
-      throw new \ParameterException('Código do usuário não informado.');
+      throw new \ParameterException('Código do usu�rio n�o informado.');
     }
 
     if (!\db_utils::inTransaction()) {
@@ -94,10 +99,10 @@ class Importacao {
     $sSqlContagemLinhas   = $oDaoColetorExportaDados->sql_query_file(null, 'x50_sequencial', null, $sWhereContagemLinhas);
     $rsContagemLinhas     = db_query($sSqlContagemLinhas);
     if (!$rsContagemLinhas) {
-      throw new \DBException('Não foi possível consultar as informações da exportação.');
+      throw new \DBException('N�o foi possível consultar as informações da exportação.');
     }
 
-    $fRegistro = function($aRegistro) {
+    $fRegistro = function ($aRegistro) {
       return (int) $aRegistro['x50_sequencial'];
     };
     $aLinhasExportacao = array_map($fRegistro, pg_fetch_all($rsContagemLinhas));
@@ -109,7 +114,7 @@ class Importacao {
       $rsExportacaoDado   = db_query($sSqlExportacaoDado);
 
       if (!$rsExportacaoDado || pg_num_rows($rsExportacaoDado) === 0) {
-        throw new \DBException("Não foi possível buscar os dados da exportação.");
+        throw new \DBException("N�o foi possível buscar os dados da exportação.");
       }
 
       $oColetorExportaDados = pg_fetch_object($rsExportacaoDado, 0, 'cl_aguacoletorexportadados');
@@ -133,17 +138,17 @@ class Importacao {
       $oColetorExportaDados->incluir(null);
 
       if ($oColetorExportaDados->erro_status == '0') {
-        throw new \DBException('Não foi possível salvar os dados da importação.');
+        throw new \DBException('N�o foi possível salvar os dados da importação.');
       }
 
-      $aLinhasArquivo[] = (integer) $iCodigoLinhaExportacao;
+      $aLinhasArquivo[] = (int) $iCodigoLinhaExportacao;
       $this->atualizarLeitura($oLinha, $oColetorExportaDados);
     }
 
     $aDiff = array_diff($aLinhasArquivo, $aLinhasExportacao);
     if (count($aLinhasArquivo) !== count($aLinhasExportacao) || !empty($aDiff)) {
 
-      $sMensagem = 'Quantidade ou valores de registros no arquivo não conferem com os registros da exportação.';
+      $sMensagem = 'Quantidade ou valores de registros no arquivo n�o conferem com os registros da exportação.';
       throw new \DBException($sMensagem);
     }
 
@@ -151,7 +156,8 @@ class Importacao {
     $this->inserirSituacaoExportacao('Importação de dados do coletor.');
   }
 
-  private function atualizarLeitura($oLinha, $oColetorExportaDados) {
+  private function atualizarLeitura($oLinha, $oColetorExportaDados)
+  {
 
     /**
      * @todo: Reescrever query removendo os joins desnecessários.
@@ -163,7 +169,7 @@ class Importacao {
     $rsAguaLeituraExportacao   = db_query($sSqlAguaLeituraExportacao);
 
     if (!$rsAguaLeituraExportacao || pg_num_rows($rsAguaLeituraExportacao) === 0) {
-      throw new \DBException('Não foi possível buscar os dados da leitura');
+      throw new \DBException('N�o foi possível buscar os dados da leitura');
     }
 
     $sStatusLeitura = Exportacao::LEITURA_STATUS_ATIVO;
@@ -182,7 +188,7 @@ class Importacao {
     $oAguaLeitura->alterar($oAguaLeitura->x21_codleitura);
 
     if ($oAguaLeitura->erro_status == '0') {
-      throw new \DBException('Não foi possível alterar a leitura.');
+      throw new \DBException('N�o foi possível alterar a leitura.');
     }
 
     return true;
@@ -193,14 +199,15 @@ class Importacao {
    * @throws \ParameterException
    * @return bool
    */
-  private function atualizarExportacao() {
+  private function atualizarExportacao()
+  {
 
     $oDaoAguaExportacao = new \cl_aguacoletorexporta;
     $sSqlAguaExportacao = $oDaoAguaExportacao->sql_query_file($this->iCodigoExportacao);
     $rsAguaExportacao   = db_query($sSqlAguaExportacao);
 
     if (!$rsAguaExportacao || pg_num_rows($rsAguaExportacao) == 0) {
-      throw new \DBException('Não foi possível encontrar a exportação.');
+      throw new \DBException('N�o foi possível encontrar a exportação.');
     }
 
     $oAguaExportacao = pg_fetch_object($rsAguaExportacao, 0, 'cl_aguacoletorexporta');
@@ -208,7 +215,7 @@ class Importacao {
     $oAguaExportacao->alterar($oAguaExportacao->x49_sequencial);
 
     if ($oAguaExportacao->erro_status == '0') {
-      throw new \DBException('Não foi possível salvar as inforamções de exportação.');
+      throw new \DBException('N�o foi possível salvar as inforamções de exportação.');
     }
 
     return true;
@@ -219,7 +226,8 @@ class Importacao {
    * @throws \DBException
    * @return bool
    */
-  private function inserirSituacaoExportacao($sDescricao) {
+  private function inserirSituacaoExportacao($sDescricao)
+  {
 
     $oDaoAguaSituacaoExportacao = new \cl_aguacoletorexportasituacao;
     $oDataAtual = new \DateTime();
@@ -233,10 +241,9 @@ class Importacao {
     $oDaoAguaSituacaoExportacao->incluir(null);
 
     if ($oDaoAguaSituacaoExportacao->erro_status == '0') {
-      throw new \DBException('Não foi possível salvar as informações de situação de exportação.');
+      throw new \DBException('N�o foi possível salvar as informações de situação de exportação.');
     }
 
     return true;
   }
-
 }
