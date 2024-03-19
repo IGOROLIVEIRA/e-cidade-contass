@@ -150,7 +150,7 @@ for($contas = 0; $contas < pg_numrows($res); $contas ++) {
   $txt_where2 .= " and c69_data between '$data1' and '$data2'  and conplanoreduz.c61_instit = " . db_getsession("DB_instit");
 
   $sql_analitico = "
-    select conplanoreduz.c61_codcon,
+    select distinct conplanoreduz.c61_codcon,
            conplanoreduz.c61_reduz,
 		       conplano.c60_estrut,
            conplano.c60_descr as conta_descr,

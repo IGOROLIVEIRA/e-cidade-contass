@@ -121,10 +121,9 @@ if (isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"] == "Altera
       $sWhereVerificacao .= " and c19_instit = {$iInstituicao}";
       $sWhereVerificacao .= " and c19_reduz = {$iReduzido}";
       $sWhereVerificacao .= " and c19_conplanoreduzanousu = {$iAnoUsu}";
-      $sWhereVerificacao .= " and c69_codlan = {$c70_codlan}";
-      $sWhereVerificacao .= " and c28_tipo = 'D'";
+      $sWhereVerificacao .= " and c19_orctiporec          = {$iTipoRec}";
 
-      $rsVerificacao = $oDaoVerificaDetalhe->sql_record($oDaoVerificaDetalhe->sql_query_lancamentos(null, "c19_sequencial", null, $sWhereVerificacao));
+      $rsVerificacao = $oDaoVerificaDetalhe->sql_record($oDaoVerificaDetalhe->sql_query_file(null, "c19_sequencial", null, $sWhereVerificacao));
       $oDaoContaCorrenteDetalhe->c19_contacorrente = $iContaCorrente;
       $oDaoContaCorrenteDetalhe->c19_orctiporec = $iTipoRec;
       $oDaoContaCorrenteDetalhe->c19_instit = $iInstituicao;
@@ -137,9 +136,6 @@ if (isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"] == "Altera
           db_msgbox("Não foi possível alterar o lançamento. Procedimento abortado." . $oDaoContaCorrenteDetalhe->erro_msg);
           $erro = true;
         }
-      } else {
-        $oDaoContaCorrenteDetalhe->c19_sequencial = db_utils::fieldsMemory($rsVerificacao, 0)->c19_sequencial;
-        $oDaoContaCorrenteDetalhe->alterar(db_utils::fieldsMemory($rsVerificacao, 0)->c19_sequencial);
       }
       $seqContaCorrenteDetalheDebito = $oDaoContaCorrenteDetalhe->c19_sequencial != '' ? $oDaoContaCorrenteDetalhe->c19_sequencial : db_utils::fieldsMemory($rsVerificacao, 0)->c19_sequencial;
     }
@@ -161,10 +157,9 @@ if (isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"] == "Altera
       $sWhereVerificacao .= " and c19_instit              = {$iInstituicao}   ";
       $sWhereVerificacao .= " and c19_reduz               = {$iReduzido}      ";
       $sWhereVerificacao .= " and c19_conplanoreduzanousu = {$iAnoUsu}        ";
-      $sWhereVerificacao .= " and c69_codlan              = {$c70_codlan}     ";
-      $sWhereVerificacao .= " and c28_tipo = 'C'                              ";
+      $sWhereVerificacao .= " and c19_orctiporec          = {$iTipoRec}        ";
 
-      $rsVerificacao = $oDaoVerificaDetalhe->sql_record($oDaoVerificaDetalhe->sql_query_lancamentos(null, "c19_sequencial", null, $sWhereVerificacao));
+      $rsVerificacao = $oDaoVerificaDetalhe->sql_record($oDaoVerificaDetalhe->sql_query_file(null, "c19_sequencial", null, $sWhereVerificacao));
 
       $oDaoContaCorrenteDetalhe->c19_contacorrente = $iContaCorrente;
       $oDaoContaCorrenteDetalhe->c19_orctiporec = $iTipoRec;
@@ -178,9 +173,6 @@ if (isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"] == "Altera
           db_msgbox("Não foi possível alterar o lançamento. Procedimento abortado." . $oDaoContaCorrenteDetalhe->erro_msg);
           $erro = true;
         }
-      } else {
-        $oDaoContaCorrenteDetalhe->c19_sequencial = db_utils::fieldsMemory($rsVerificacao, 0)->c19_sequencial;
-        $oDaoContaCorrenteDetalhe->alterar(db_utils::fieldsMemory($rsVerificacao, 0)->c19_sequencial);
       }
       $seqContaCorrenteDetalheCredito = $oDaoContaCorrenteDetalhe->c19_sequencial != '' ? $oDaoContaCorrenteDetalhe->c19_sequencial : db_utils::fieldsMemory($rsVerificacao, 0)->c19_sequencial;
     }
