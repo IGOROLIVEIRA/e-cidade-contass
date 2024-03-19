@@ -168,6 +168,16 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 </html>
 <script>
 
+    document.getElementById('ano').addEventListener('input', function(event) {
+        // Remove caracteres não numéricos
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
+    document.getElementById('mes').addEventListener('input', function(event) {
+        // Remove caracteres não numéricos
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
     function js_emite() {
         let query = "";
 
@@ -191,10 +201,19 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 
         inputMes.value !== '0' ? query += 'mes=' + inputMes.value + '&' : query += '';
 
+        if (inputMes.value.trim() === '') {
+            alert("Campo Mês não Informado.");
+            return false
+        }
+
         const inputAno = document.getElementById('ano');
 
         inputAno.value !== '0' ? query += 'ano=' + inputAno.value + '&' : query += '';
 
+        if (inputAno.value.trim() === '') {
+            alert("Campo Ano não Informado.");
+            return false
+        }
         const inputExibir = document.getElementById('iExibir');
 
         inputExibir.value !== '0' ? query += 'exibir=' + inputExibir.value + '&' : query += '';
@@ -212,6 +231,11 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
         const inputClassificacao = document.getElementById('t64_class').value;
 
         const inputDivisao = document.getElementById('t30_codigo').value;
+
+        if (inputDepartamento.trim() === '' && inputClassificacao.trim() === '' && inputDivisao.trim() === '') {
+            alert("E necessário preencher um dos campos Departamento,Classificacao ou Divisão");
+            return false
+        }
 
         if(inputClassificacao){
             var arquivoRelatorio = 'pat2_bensporvalorclassificacao002.php?';

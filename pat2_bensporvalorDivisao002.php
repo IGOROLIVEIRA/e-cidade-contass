@@ -93,12 +93,20 @@ $alt = 5;
 $totalAtual = 0;
 $totalAquisicao = 0;
 $pdf->addpage();
-
+$pdf->setfont('arial', 'b', 9);
+$pdf->text(215, 10, 'Relatorio Bens Por Valor');
+$pdf->text(215, 15, 'Mês:');
+$pdf->setfont('arial', '', 9);
+$pdf->text(223, 15, $mes);
+$pdf->setfont('arial', 'b', 9);
+$pdf->text(215, 20, 'Ano:');
+$pdf->setfont('arial', '', 9);
+$pdf->text(223, 20, $ano);
 $pdf->SetFont('arial','B',9);
 $pdf->cell(40 ,$alt  ,"Tipo do Bem:",1,0,"L",1);
 $pdf->cell(240,$alt  ,$oResultTipos->t24_descricao,1,1,"L",1);
 $pdf->cell(40 ,$alt  ,"Divisão:",1,0,"L",1);
-$pdf->cell(240,$alt  ,$oResultDivisao->t24_descricao,1,1,"L",1);
+$pdf->cell(240,$alt  ,$oResultDivisao->t30_descr,1,1,"L",1);
 $pdf->cell(20 ,$alt  ,"Código",1,0,"C",1);
 $pdf->cell(20 ,$alt  ,"Placa",1,0,"C",1);
 $pdf->cell(150,$alt  ,"Descrição",1,0,"L",1);
@@ -119,6 +127,15 @@ for ($iCont = 0; $iCont < pg_num_rows($resultBens); $iCont++) {
     $valoratual = db_formatar($oResult->valoratual,'f');
     if ($pdf->getY() > $pdf->h - 67) {
         $pdf->addpage();
+        $pdf->setfont('arial', 'b', 9);
+        $pdf->text(215, 10, 'Relatorio Bens Por Valor');
+        $pdf->text(215, 15, 'Mês:');
+        $pdf->setfont('arial', '', 9);
+        $pdf->text(223, 15, $mes);
+        $pdf->setfont('arial', 'b', 9);
+        $pdf->text(215, 20, 'Ano:');
+        $pdf->setfont('arial', '', 9);
+        $pdf->text(223, 20, $ano);
         $pdf->SetFont('arial','B',9);
         $pdf->cell(40   ,$alt  ,"Tipo do Bem:",1,0,"L",1);
         $pdf->cell(240  ,$alt ,$oResultTipos->t24_descricao,1,1,"L",1);
@@ -151,7 +168,7 @@ for ($iCont = 0; $iCont < pg_num_rows($resultBens); $iCont++) {
         $pdf->SetFont('arial', '', 7);
         $pdf->multicell(150, $alt, mb_strtoupper(str_replace("\n", "", $descricao)), "T", "J", 0);
         $pdf->SetFont('arial', '', 9);
-        $pdf->sety($old_y);
+        $pdf->sety($old_y+0.4);
         $pdf->setx(200);
         $pdf->cell(25, $alt + $addalt, $dtaquisicao, 1, 0, "C", 0);
         $pdf->cell(20, $alt + $addalt, $oResult->t70_descr, 1, 0, "C", 0);
