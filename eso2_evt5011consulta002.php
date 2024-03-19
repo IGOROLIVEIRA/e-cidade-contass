@@ -43,6 +43,9 @@ if (!empty($rh219_perapurano)) {
 if (!empty($rh219_perapurmes)) {
   $sWhere .= " and rh219_perapurmes = $rh219_perapurmes ";
 }
+if (!empty($rh219_perapurano) && empty($rh219_perapurmes)) {
+  $sWhere .= " and rh219_perapurmes is null ";
+}
 
 $oEvt5011Consulta = db_utils::getDao('evt5011consulta');
 
@@ -158,5 +161,3 @@ for ($iCont = 0; $iCont < pg_num_rows($rsDados); $iCont++) {
 }
 
 $pdf->Output();
-
-?>

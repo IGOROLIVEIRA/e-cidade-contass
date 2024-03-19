@@ -77,7 +77,9 @@ if (isset($incluir) || isset($juntar)) {
     db_inicio_transacao();
 
     if ($pc80_numdispensa != "") {
-      $sql = "select pc80_numdispensa as numerodispensa,pc80_codproc as codigoprocesso from pcproc where pc80_numdispensa={$pc80_numdispensa} and pc80_numdispensa > 0";
+      $sql = "select pc80_numdispensa as numerodispensa,pc80_codproc as codigoprocesso from pcproc
+                inner join db_depart on coddepto = pc80_depto
+              where pc80_numdispensa={$pc80_numdispensa} AND db_depart.instit = ". db_getsession('DB_instit') . " and pc80_numdispensa > 0";
       $rsPccompra = db_query($sql);
 
       $dispensacadastrada = db_utils::getColectionByRecord($rsPccompra);
@@ -109,6 +111,7 @@ if (isset($incluir) || isset($juntar)) {
       $clpcproc->pc80_amparolegal           = $pc80_amparolegal;
       $clpcproc->pc80_categoriaprocesso     = $pc80_categoriaprocesso;
       $clpcproc->pc80_modalidadecontratacao = $pc80_modalidadecontratacao;
+      $clpcproc->pc80_criteriojulgamento    = $pc80_criteriojulgamento;
 
       /*OC3770*/
       $clpcproc->pc80_criterioadjudicacao   = $pc80_criterioadjudicacao;
@@ -305,7 +308,7 @@ if (isset($incluir) || isset($juntar)) {
 
         if ($pc30_contrandsol == 't') {
           $sqltran = "select distinct x.p62_codtran
-                
+
             from ( select distinct p62_codtran,
                              p62_dttran,
                              p63_codproc,
@@ -318,7 +321,7 @@ if (isset($incluir) || isset($juntar)) {
                              e55_autori,
                              e54_anulad
                   from proctransferproc
-   
+
                        inner join solicitemprot        on pc49_protprocesso                   = proctransferproc.p63_codproc
                        inner join solicitem            on pc49_solicitem                      = pc11_codigo
                        inner join proctransfer         on p63_codtran                         = p62_codtran

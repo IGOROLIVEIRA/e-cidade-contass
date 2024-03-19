@@ -62,6 +62,8 @@ class cl_pcproc
   var $pc80_amparolegal = null;
   var $pc80_categoriaprocesso = null;
   var $pc80_modalidadecontratacao = null;
+
+  var $pc80_criteriojulgamento = null;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  pc80_codproc = int8 = Código do Processo de Compras
@@ -80,6 +82,7 @@ class cl_pcproc
                  pc80_amparolegal = amparo legal
                  pc80_categoriaprocesso = categoria do processo
                  pc80_modalidadecontratacao = int4 = modalidade de contratacao
+                 pc80_criteriojulgamento = int4 = criterio de julgamento
                  ";
   //funcao construtor da classe
   function cl_pcproc()
@@ -125,6 +128,7 @@ class cl_pcproc
       $this->pc80_amparolegal = ($this->pc80_amparolegal == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_amparolegal"] : $this->pc80_amparolegal);
       $this->pc80_categoriaprocesso = ($this->pc80_categoriaprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_categoriaprocesso"] : $this->pc80_categoriaprocesso);
       $this->pc80_modalidadecontratacao = ($this->pc80_modalidadecontratacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_modalidadecontratacao"] : $this->pc80_modalidadecontratacao);
+      $this->pc80_criteriojulgamento = ($this->pc80_criteriojulgamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_criteriojulgamento"] : $this->pc80_criteriojulgamento);
     } else {
       $this->pc80_codproc = ($this->pc80_codproc == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_codproc"] : $this->pc80_codproc);
     }
@@ -225,6 +229,11 @@ class cl_pcproc
         $this->pc80_modalidadecontratacao = "null";
     }
 
+    if ($this->pc80_criteriojulgamento == null) {
+        $this->pc80_criteriojulgamento = "null";
+    }
+
+
     if ($pc80_codproc == "" || $pc80_codproc == null) {
       $result = db_query("select nextval('pcproc_pc80_codproc_seq')");
       if ($result == false) {
@@ -274,6 +283,7 @@ class cl_pcproc
                                       ,pc80_amparolegal
                                       ,pc80_categoriaprocesso
                                       ,pc80_modalidadecontratacao
+                                      ,pc80_criteriojulgamento
                        )
                 values (
                                 $this->pc80_codproc
@@ -292,6 +302,7 @@ class cl_pcproc
                                ,$this->pc80_amparolegal
                                ,$this->pc80_categoriaprocesso
                                ,$this->pc80_modalidadecontratacao
+                               ,$this->pc80_criteriojulgamento
                       )";
     $result = db_query($sql);
 
@@ -497,6 +508,11 @@ class cl_pcproc
     if (trim($this->pc80_categoriaprocesso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["pc80_categoriaprocesso"])) {
       $sql  .= $virgula . " pc80_categoriaprocesso = '$this->pc80_categoriaprocesso' ";
       $virgula = ",";
+    }
+
+    if (trim($this->pc80_criteriojulgamento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["pc80_criteriojulgamento"])) {
+        $sql  .= $virgula . " pc80_criteriojulgamento = $this->pc80_criteriojulgamento";
+        $virgula = ",";
     }
 
     $sql .= " where ";
@@ -1440,7 +1456,7 @@ class cl_pcproc
       3 AS tipoInstrumentoConvocatorioId,
       pcproc.pc80_modalidadecontratacao AS modalidadeId,
       5 AS modoDisputaId,
-      pcproc.pc80_tipoprocesso AS criterioJulgamentoId,
+      pcproc.pc80_criteriojulgamento AS criterioJulgamentoId,
       pcproc.pc80_numdispensa AS numeroCompra,
       EXTRACT(YEAR FROM pcproc.pc80_data) AS anoCompra,
       pcproc.pc80_numdispensa||'/'||EXTRACT(YEAR FROM pcproc.pc80_data) AS numeroProcesso,
@@ -1482,7 +1498,7 @@ class cl_pcproc
                             pcmater.pc01_descrmater AS descricao,
                             matunid.m61_descr AS unidadeMedida,
                             solicitem.pc11_vlrun AS valorUnitarioEstimado,
-                            pcproc.pc80_tipoprocesso AS criterioJulgamentoId,
+                            pcproc.pc80_criteriojulgamento AS criterioJulgamentoId,
                             pcmater.pc01_codmater,
                             solicitem.pc11_numero,
                             solicitem.pc11_reservado,
@@ -1549,7 +1565,13 @@ class cl_pcproc
     LEFT JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
     LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
     LEFT JOIN liccontrolepncp on l213_processodecompras = pc80_codproc
-    WHERE pc80_dispvalor='t' and db_depart.instit = " . db_getsession('DB_instit') . "
+    WHERE pc80_dispvalor='t'
+          AND pc80_codproc NOT IN
+        (SELECT DISTINCT pc81_codproc
+         FROM liclicitem
+         INNER JOIN pcprocitem ON pc81_codprocitem = l21_codpcprocitem
+         WHERE pc81_codproc = pc80_codproc)
+      and db_depart.instit = " . db_getsession('DB_instit') . "
     ORDER BY pc80_codproc desc";
     return $sql;
   }

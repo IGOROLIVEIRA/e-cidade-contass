@@ -9,7 +9,7 @@ INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rot
 INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES (2828, (select codcam from db_syscampo where nomecam = 'ac16_formapagamento'), 1, 0);
 
 alter table acordo add column ac16_cpfsignatariocontratante varchar(11);
-INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'ac16_cpfsignatariocontratante', 'varchar(11)', 'Número do CPF do signatário da contratante.', '0', 'CPF do signatário', 11, false, false, false, 1, 'text', 'CPF do signatário');
+INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'ac16_cpfsignatariocontratante', 'varchar(11)', 'N�mero do CPF do signatário da contratante.', '0', 'CPF do signatário', 11, false, false, false, 1, 'text', 'CPF do signatário');
 INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES (2828, (select codcam from db_syscampo where nomecam = 'ac16_cpfsignatariocontratante'), 1, 0);
 
 alter table acordo add column ac16_datapublicacao date;

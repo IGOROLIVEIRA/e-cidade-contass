@@ -239,7 +239,7 @@ try {
              */
 
             db_inicio_transacao();
-            $result = $clliclicita->sql_record($clliclicita->sql_query_file(null, "l20_codtipocom,l20_datacria", null, "l20_codigo = $oParam->licitacao"));
+            $result = $clliclicita->sql_record($clliclicita->sql_query_file(null, "l20_codtipocom,l20_datacria,l20_tipoprocesso", null, "l20_codigo = $oParam->licitacao"));
             $rsCredenciamento = $clcredenciamento->sql_record($clcredenciamento->sql_query(null, "max(l205_datacred) as l205_datacred", null, "l205_licitacao = $oParam->licitacao"));
 
             $l20_datacria = implode("/", (array_reverse(explode("-", db_utils::fieldsMemory($result, 0)->l20_datacria))));
@@ -430,7 +430,7 @@ try {
              * busco o codtipocom
              */
 
-            $rsResult = $clliclicita->sql_record($clliclicita->sql_query_file(null, "l20_codtipocom,l20_datacria", null, "l20_codigo = $oParam->licitacao"));
+            $rsResult = $clliclicita->sql_record($clliclicita->sql_query_file(null, "l20_codtipocom,l20_datacria,l20_tipoprocesso", null, "l20_codigo = $oParam->licitacao"));
             db_fieldsmemory($rsResult, 0);
 
             $l20_datacria = implode("/", (array_reverse(explode("-", $l20_datacria))));
@@ -485,7 +485,7 @@ try {
 
             $clliclicita->l20_codtipocom = $l20_codtipocom;
             $clliclicita->l20_codigo = $oParam->licitacao;
-            $clliclicita->l20_tipoprocesso = $oParam->l20_tipoprocesso;
+            $clliclicita->l20_tipoprocesso = $l20_tipoprocesso;
             $clliclicita->l20_dtpubratificacao = $oParam->l20_dtpubratificacao;
             $clliclicita->l20_dtlimitecredenciamento = $oParam->l20_dtlimitecredenciamento;
             $clliclicita->l20_veicdivulgacao = $oParam->l20_veicdivulgacao;

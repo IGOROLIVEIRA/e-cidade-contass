@@ -49,24 +49,29 @@ $this->objpdf->AliasNbPages();
 		$this->objpdf->line($xcol+15,$xlin+14,$xcol+15,$xlin+96);
 
 		$this->objpdf->Setfont('Arial','',6);
-		$this->objpdf->text($xcol+2,$xlin+3,'Código:');
+		$this->objpdf->text($xcol+2,$xlin+3,'Mátricula:');
 		$this->objpdf->Setfont('Arial','B',7);
     $this->objpdf->text($xcol+12,$xlin+3,$this->registro);
 
-		$this->objpdf->Setfont('Arial','',6);
-		$this->objpdf->text($xcol+21,$xlin+3,'Nome:');
-		$this->objpdf->Setfont('Arial','B',7);
-    $this->objpdf->text($xcol+31,$xlin+3,$this->nome);
+        $this->objpdf->Setfont('Arial','',6);
+        $this->objpdf->text($xcol+22,$xlin+3,'CGM:');
+        $this->objpdf->Setfont('Arial','B',7);
+    $this->objpdf->text($xcol+28,$xlin+3,$this->codcgm);
 
 		$this->objpdf->Setfont('Arial','',6);
-		$this->objpdf->text($xcol+100,$xlin+3,'Função:');
+		$this->objpdf->text($xcol+39,$xlin+3,'Nome:');
 		$this->objpdf->Setfont('Arial','B',7);
-		$this->objpdf->text($xcol+110,$xlin+3,$this->descr_funcao);
+    $this->objpdf->text($xcol+46,$xlin+3,$this->nome);
 
 		$this->objpdf->Setfont('Arial','',6);
-		$this->objpdf->text($xcol+170,$xlin+3,'Padrão:');
+		$this->objpdf->text($xcol+112,$xlin+3,'Função:');
 		$this->objpdf->Setfont('Arial','B',7);
-		$this->objpdf->text($xcol+180,$xlin+3,$this->padrao);
+		$this->objpdf->text($xcol+121,$xlin+3,$this->descr_funcao);
+
+		$this->objpdf->Setfont('Arial','',6);
+		$this->objpdf->text($xcol+175,$xlin+3,'Padrão:');
+		$this->objpdf->Setfont('Arial','B',7);
+		$this->objpdf->text($xcol+184,$xlin+3,$this->padrao);
 
     $this->objpdf->Setfont('Arial','',6);
 		$this->objpdf->text($xcol+2,$xlin+7,'Lotação:');

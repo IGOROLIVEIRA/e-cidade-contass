@@ -99,13 +99,13 @@ if (isset($alterar) || isset($novasrubricas)) {
         for ($i = 0; $i < count($arr_codigos); $i++) {
             $rubricainclui = $arr_codigos[$i];
             if ($i == 0) {
-                $varsubstr = $rh27_descr . " S/ Fï¿½RIAS";
+                $varsubstr = $rh27_descr . " S/ FÉRIAS";
                 $descricinclui = substr($varsubstr, 0, 30);
             } else if ($i == 1) {
-                $varsubstr = $rh27_descr . " S/ 13o SALï¿½RIO";
+                $varsubstr = $rh27_descr . " S/ 13o SALÁRIO";
                 $descricinclui = substr($varsubstr, 0, 30);
             } else if ($i == 2) {
-                $varsubstr = $rh27_descr . " S/ RESCISï¿½O";
+                $varsubstr = $rh27_descr . " S/ RESCISÃO";
                 $descricinclui = substr($varsubstr, 0, 30);
             }
 
@@ -153,7 +153,7 @@ if (isset($alterar) || isset($novasrubricas)) {
 
         if (!$rsFundamentacao) {
             $sqlerro = true;
-            $erro_msg = 'Nï¿½o foi possï¿½vel consultar a fundamentaï¿½ï¿½o legal informada.';
+            $erro_msg = 'Não foi possível consultar a fundamentação legal informada.';
         }
 
         if (pg_num_rows($rsFundamentacao) == 0) {
@@ -248,7 +248,7 @@ if (isset($alterar) || isset($novasrubricas)) {
         }
     }
     // }else if(isset($chavepesquisa)){
-    // Separei este "IF" para que nï¿½o fique aparecendo contra-barras nos campos text e textarea
+    // Separei este "IF" para que não fique aparecendo contra-barras nos campos text e textarea
 } else if (isset($chavepesquisa)) {
     $db_opcao = 2;
     $db_botao = true;
@@ -405,7 +405,7 @@ if (isset($alterar) || isset($novasrubricas)) {
         $dvirgulas = "";
         if ($calc1 != "") {
             $ccalculos .= $cvirgulas . $calc1;
-            $dcalculos .= $dvirgulas . $calc1 . " - (" . $rh27_descr . " S/ Fï¿½RIAS)";
+            $dcalculos .= $dvirgulas . $calc1 . " - (" . $rh27_descr . " S/ FÉRIAS)";
             $cvirgulas = ",";
             if ($calc2 != "" && $calc3 != "") {
                 $dvirgulas = ", ";
@@ -418,7 +418,7 @@ if (isset($alterar) || isset($novasrubricas)) {
         }
         if ($calc2 != "") {
             $ccalculos .= $cvirgulas . $calc2;
-            $dcalculos .= $dvirgulas . $calc2 . " - (" . $rh27_descr . " S/ 13o SALï¿½RIO)";
+            $dcalculos .= $dvirgulas . $calc2 . " - (" . $rh27_descr . " S/ 13o SALÁRIO)";
             $cvirgulas = ",";
             $dvirgulas = " e ";
         } else {
@@ -427,14 +427,14 @@ if (isset($alterar) || isset($novasrubricas)) {
         }
         if ($calc3 != "") {
             $ccalculos .= $cvirgulas . $calc3;
-            $dcalculos .= $dvirgulas . $calc3 . " - (" . $rh27_descr . " S/ RESCISï¿½O)";
+            $dcalculos .= $dvirgulas . $calc3 . " - (" . $rh27_descr . " S/ RESCISÃO)";
         } else {
             $ccalculos .= $cvirgulas . "0";
             $cvirgulas = ",";
         }
         echo "
           <script>
-            alert('Serï¿½(ï¿½o) gerada(s) a(s) rubrica(s) " . $dcalculos . ", nï¿½o esqueï¿½a de configurar suas bases.');
+            alert('Será(ão) gerada(s) a(s) rubrica(s) " . $dcalculos . ", não esqueça de configurar suas bases.');
             obj=document.createElement('input');
             obj.setAttribute('name','novasrubricas');
             obj.setAttribute('type','hidden');

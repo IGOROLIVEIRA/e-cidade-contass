@@ -31,10 +31,9 @@ $db_botao = true;
   </style>
   <?
   db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js");
-  db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js");
+  db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js, tinymce.min.js");
   db_app::load("estilos.css, grid.style.css");
   ?>
-  <script src="https://cdn.tiny.cloud/1/kcd8n7brt444oarrbdfk633ydzmb80qomjucnpdzlhsvfa1y/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
   <script type="text/javascript">
     tinymce.init({
       selector: "#rel_corpo",

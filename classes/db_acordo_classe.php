@@ -86,6 +86,7 @@ class cl_acordo
     var $ac16_indicereajuste = null;
     var $ac16_descricaoreajuste = null;
     var $ac16_descricaoindice = null;
+    var $ac16_vigenciaindeterminada = null;
     /**
      * A descrição do status do campo ac16_providencia podem ser checados na tabela providencia
      */
@@ -142,6 +143,7 @@ class cl_acordo
     ac16_indicereajuste = ;
     ac16_descricaoreajuste = ;
     ac16_descricaoindice = ;
+    ac16_vigenciaindeterminada = bool = Vigência Indeterminada;
     ";
     //funcao construtor da classe
     function cl_acordo()
@@ -222,7 +224,7 @@ class cl_acordo
             $this->ac16_origem = ($this->ac16_origem == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_origem"] : $this->ac16_origem);
             $this->ac16_reajuste = ($this->ac16_reajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_reajuste"] : $this->ac16_reajuste);
             $this->ac16_criterioreajuste = ($this->ac16_criterioreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_criterioreajuste"] : $this->ac16_criterioreajuste);
-            $this->ac16_periodoreajust = ($this->ac16_periodoreajust == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_periodoreajust"] : $this->ac16_periodoreajust);
+            $this->ac16_periodoreajuste = ($this->ac16_periodoreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_periodoreajuste"] : $this->ac16_periodoreajuste);
             $this->ac16_indicereajuste = ($this->ac16_indicereajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_indicereajuste"] : $this->ac16_indicereajuste);
             $this->ac16_descricaoreajuste = ($this->ac16_descricaoreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_descricaoreajuste"] : $this->ac16_descricaoreajuste);
             $this->ac16_descricaoindice = ($this->ac16_descricaoindice == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_descricaoindice"] : $this->ac16_descricaoindice);
@@ -257,6 +259,7 @@ class cl_acordo
             $this->ac16_tipocadastro = ($this->ac16_tipocadastro === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_tipocadastro"] : $this->ac16_tipocadastro);
             $this->ac16_providencia = ($this->ac16_providencia === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_providencia"] : $this->ac16_providencia);
             $this->ac16_datareferencia = ($this->ac16_datareferencia === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_datareferencia"] : $this->ac16_datareferencia);
+            $this->ac16_vigenciaindeterminada = ($this->ac16_vigenciaindeterminada === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_vigenciaindeterminada"] : $this->ac16_vigenciaindeterminada);
         } else {
             $this->ac16_sequencial = ($this->ac16_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_sequencial"] : $this->ac16_sequencial);
         }
@@ -346,7 +349,7 @@ class cl_acordo
             $this->erro_status = "0";
             return false;
         }
-        if ($this->ac16_datafim == null) {
+        if ($this->ac16_datafim == null && $this->ac16_vigenciaindeterminada != "t") {
             $this->erro_sql = " Campo Data de Fim não informado.";
             $this->erro_campo = "ac16_datafim_dia";
             $this->erro_banco = "";
@@ -574,6 +577,7 @@ class cl_acordo
      ,ac16_periodoreajuste
      ,ac16_descricaoreajuste
      ,ac16_descricaoindice
+     ,ac16_vigenciaindeterminada
      )
      values (
      $this->ac16_sequencial
@@ -619,6 +623,7 @@ class cl_acordo
      ," . ($this->ac16_periodoreajuste == "null" || $this->ac16_periodoreajuste == "" ? "''" : "'" . $this->ac16_periodoreajuste . "'") . "
      ," . ($this->ac16_descricaoreajuste == "null" || $this->ac16_descricaoreajuste == "" ? 'null' : "'" . $this->ac16_descricaoreajuste . "'") . "
      ," . ($this->ac16_descricaoindice == "null" || $this->ac16_descricaoindice == "" ? 'null' : "'" . $this->ac16_descricaoindice . "'") . "
+     ,".($this->ac16_vigenciaindeterminada == "null" || $this->ac16_vigenciaindeterminada == ""?"'false'":"'".$this->ac16_vigenciaindeterminada."'")."
      )";
 
         $result = db_query($sql);
@@ -1083,7 +1088,7 @@ class cl_acordo
             $sql  .= $virgula . " ac16_veiculodivulgacao = '$this->ac16_veiculodivulgacao' ";
             $virgula = ",";
             if (trim($this->ac16_veiculodivulgacao) == null) {
-                $this->erro_sql = " Campo Forma de pagamento do Contrato não informado.";
+                $this->erro_sql = " Campo Veiculo de Divulgacao não informado.";
                 $this->erro_campo = "ac16_veiculodivulgacao";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -1144,7 +1149,13 @@ class cl_acordo
         if (trim($this->ac16_providencia) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_providencia"])) {
             $sql .= $virgula . " ac16_providencia = $this->ac16_providencia ";
         }
-
+        //echo $this->ac16_vigenciaindeterminada;
+        if (trim($this->ac16_vigenciaindeterminada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_vigenciaindeterminada"])) {
+            if($this->ac16_vigenciaindeterminada != "null"){
+                $sql .= $virgula . " ac16_vigenciaindeterminada = '$this->ac16_vigenciaindeterminada' ";
+            }
+        }
+        
         $sql .= " where ";
         if ($ac16_sequencial != null) {
             $sql .= " ac16_sequencial = $this->ac16_sequencial";
@@ -3060,6 +3071,75 @@ class cl_acordo
         ";
 
         db_query($sSql);
+    }
+
+    public function queryAcordosComAditamento($filtros = []): string
+    {
+        $sql = "
+        SELECT DISTINCT acordo.ac16_sequencial,
+            CASE
+                WHEN ac16_semvigencia='t' THEN ('-')::varchar
+                ELSE (ac16_numeroacordo || '/' || ac16_anousu)::varchar
+            END dl_Nº_Acordo,
+            ac17_descricao AS dl_Situação,
+            acordo.ac16_contratado,
+            cgm.z01_nome,
+            acordo.ac16_resumoobjeto::text,
+            acordo.ac16_valor,
+            acordo.ac16_dataassinatura,
+            CASE
+                WHEN ac16_semvigencia='t' THEN NULL
+                ELSE ac16_datainicio
+            END ac16_datainicio,
+            CASE
+                WHEN ac16_semvigencia='t' THEN NULL
+                ELSE ac16_datafim
+            END ac16_datafim,
+            CASE
+                WHEN acordo.ac16_origem = 1 THEN 'Processo de Compras'
+                WHEN acordo.ac16_origem = 2 THEN 'Licitação'
+                ELSE 'Manual'
+            END ac16_origem,
+            db_depart.descrdepto AS dl_Dpto_de_Inclusao,
+            responsavel.descrdepto AS dl_Dpto_Responsavel
+        FROM acordo
+        INNER JOIN cgm ON cgm.z01_numcgm = acordo.ac16_contratado
+        INNER JOIN db_depart ON db_depart.coddepto = acordo.ac16_coddepto
+        INNER JOIN db_depart AS responsavel ON responsavel.coddepto = acordo.ac16_deptoresponsavel
+        INNER JOIN acordogrupo ON acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo
+        INNER JOIN acordosituacao ON acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
+        LEFT JOIN acordocomissao ON acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao
+        INNER JOIN db_config ON db_config.codigo = db_depart.instit
+        INNER JOIN acordonatureza ON acordonatureza.ac01_sequencial = acordogrupo.ac02_acordonatureza
+        INNER JOIN acordotipo ON acordotipo.ac04_sequencial = acordogrupo.ac02_acordotipo
+        INNER JOIN acordoposicao ON acordoposicao.ac26_acordo = acordo.ac16_sequencial
+        INNER JOIN acordoitem ON acordoitem.ac20_acordoposicao = acordoposicao.ac26_sequencial
+        LEFT JOIN acordoorigem ON acordoorigem.ac28_sequencial = acordo.ac16_origem
+        LEFT JOIN acordomovimentacao ON acordomovimentacao.ac10_acordo = acordo.ac16_sequencial
+        WHERE ac16_acordosituacao IN (4)
+            AND ac16_acordosituacao = 4
+            AND ac16_instit = 1
+            AND ac26_acordoposicaotipo in (2,5,6,7,8,9,10,11,12,13,14)
+            AND ac26_numeroaditamento IS NOT NULL
+            --and para mostrar somente acordos em que a ultima possicao nao tenha autorizacao
+            AND ac26_acordo NOT IN
+            (SELECT ac26_acordo
+             FROM acordoposicao
+             INNER JOIN acordoitem ON ac20_acordoposicao= ac26_sequencial
+             INNER JOIN acordoitemexecutado ON ac29_acordoitem = ac20_sequencial
+             INNER JOIN acordoitemexecutadoempautitem ON ac19_acordoitemexecutado = ac29_sequencial
+             WHERE ac26_sequencial IN
+                     (SELECT max(ac26_sequencial)
+                      FROM acordoposicao
+                      WHERE ac26_acordo = ac16_sequencial)) ";
+
+        foreach ($filtros as $key => $filtro) {
+            $sql .= " AND {$key} = {$filtro} ";
+        }
+
+        $sql .= " ORDER BY ac16_sequencial DESC";
+
+        return $sql;
     }
 
     public function queryAcordosAssinadosHomologados(int $ac10Sequencial = null)

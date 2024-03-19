@@ -3,7 +3,7 @@ FROM ubuntu:22.04
 LABEL maintainer="igor@contassconsultoria.com.br.com.br"
 ENV GIT_SSH_COMMAND "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
-# Habilita modo não interativo na instalação de pacotes
+# Habilita modo n�o interativo na instalação de pacotes
 ENV DEBIAN_FRONTEND noninteractive
 
 # Desabilita o cache do gerenciador de pacote
@@ -15,6 +15,8 @@ RUN apt-get update
 # Instala as dependências deste container
 RUN apt-get install -y --no-install-recommends tzdata \
   locales \
+  ca-certificates \
+  sudo \
   software-properties-common \
   curl \
   unzip \
@@ -31,6 +33,7 @@ RUN apt-get install -y --no-install-recommends tzdata \
   wportuguese \
   ghostscript \
   git \
+  gnupg \
   gpg-agent \
   ssh \
   file \
@@ -101,8 +104,14 @@ RUN apt-get install -y --no-install-recommends \
   php7.4-xdebug
 
 # Habilita o xdebug no PHP
-RUN echo "xdebug.remote_enable=on" >> /etc/php/7.4/mods-available/xdebug.ini && \
-  echo "xdebug.remote_autostart=off" >> /etc/php/7.4/mods-available/xdebug.ini
+RUN echo "xdebug.mode=develop,coverage,debug" >> /etc/php/7.4/mods-available/xdebug.ini && \
+    echo "xdebug.remote_autostart=on" >> /etc/php/7.4/mods-available/xdebug.ini && \
+    echo "xdebug.client_port=9003" >> /etc/php/7.4/mods-available/xdebug.ini && \
+    echo "xdebug.log_level=0" >> /etc/php/7.4/mods-available/xdebug.ini && \
+    echo "xdebug.idekey=PHPSTORM" >> /etc/php/7.4/mods-available/xdebug.ini && \
+    echo "xdebug.client_host=host.docker.internal" >> /etc/php/7.4/mods-available/xdebug.ini && \
+    echo "xdebug.log=/dev/stdout" >> /etc/php/7.4/mods-available/xdebug.ini
+#    echo "xdebug.remote_handler=dbgp" >> /etc/php/7.4/mods-available/xdebug.ini
 
 # Ajusta a permissão do imagick
 RUN sed -i "s|<policy domain=\"coder\" rights=\"none\" pattern=\"PDF\" />|<policy domain=\"coder\" rights=\"read\|write\" pattern=\"PDF\" />|" /etc/ImageMagick-6/policy.xml
@@ -127,11 +136,14 @@ RUN curl -sS https://getcomposer.org/installer -o composer-setup.php && \
   rm composer-setup.php
 
 # Instala o node.js para suporte a módulos compilados com o NPM
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
-  apt-get install -y gcc g++ make nodejs
+#RUN curl -sS https://deb.nodesource.com/gpgkey/nodesource-repo.gpg
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+ENV NODE_MAJOR 20
+RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+RUN apt-get install -y gcc g++ make nodejs
 
 # Exporta variável que permite a execução do composer como root sem emitir avisos
-ENV PATH=$PATH:/root/composer/vendor/bin COMPOSER_ALLOW_SUPERUSER=1
+#ENV PATH=$PATH:/root/composer/vendor/bin COMPOSER_ALLOW_SUPERUSER=1
 
 # Adiciona vhosts
 ADD apache2/ecidade.conf /etc/apache2/sites-available/
@@ -153,7 +165,14 @@ RUN mkdir -p /run/php/
 COPY supervisord/supervisord.conf /etc/supervisor/supervisord.conf
 COPY supervisord/conf.d/ /etc/supervisor/conf.d/
 
-RUN useradd -d /home/contass -g www-data -G sudo,adm,cdrom,dip,plugdev -k /etc/skel -m -s /bin/bash contass
+#RUN useradd -d /home/contass -g www-data -G sudo,adm,cdrom,dip,plugdev -k /etc/skel -m -s /bin/bash contass
+RUN adduser --uid 1000 --disabled-password --gecos "" contass
+RUN usermod -g www-data contass
+#RUN  sed -i /etc/sudoers -re 's/^%sudo.*/%sudo all=(all:all) nopasswd: all/g' && \
+#     sed -i /etc/sudoers -re 's/^root.*/root all=(all:all) nopasswd: all/g' && \
+#     sed -i /etc/sudoers -re 's/^#includedir.*/## **removed the include directive** ##"/g' && \
+
+RUN echo 'contass ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 # Limpa os temporários
 RUN apt-get clean && \
@@ -167,10 +186,12 @@ EXPOSE 80
 
 WORKDIR /var/www/html
 
-RUN chmod -R 775 /var/www/html/*
+#RUN chmod -R 775 /var/www/html/*
+
+USER contass
 
 #RUN chmod -R 777 /var/www/html/tmp/
 #
 #RUN /var/www/html/composer install
 
-CMD ["/bin/bash", "/iniciar.sh"]
+#CMD ["/bin/bash", "/iniciar.sh"]

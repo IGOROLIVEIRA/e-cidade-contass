@@ -242,23 +242,22 @@ contrato = function () {
 
         }
 
-    this.verificacredenciamentotermo = function() {
-        var oParam     = new Object();
-        oParam.exec    = "verificaCredenciamentoTermo";
-        aItensSelecionados.each(function(oLinha, id) {
-            oParam.iLicitacao = oLinha.aCells[1].getContent();;
-        });
+        this.verificacredenciamentotermo = function() {
+            var oParam     = new Object();
+            oParam.exec    = "verificaCredenciamentoTermo";
+            aItensSelecionados.each(function(oLinha, id) {
+                oParam.iLicitacao = oLinha.aCells[1].getContent();;
+            });
 
-        var oAjax   = new Ajax.Request(
-            sURL,
-            {
-                method    : 'post',
-                parameters: 'json='+Object.toJSON(oParam),
-                onComplete: me.retornoVerificaTermoCredenciamento
-            }
-        );
-    }
-//cntDados
+            var oAjax   = new Ajax.Request(
+                sURL,
+                {
+                    method    : 'post',
+                    parameters: 'json='+Object.toJSON(oParam),
+                    onComplete: me.retornoVerificaTermoCredenciamento
+                }
+            );
+        }
 
         var oParam     = new Object();
         oParam.exec    = "setDadosSelecao";
@@ -290,6 +289,19 @@ contrato = function () {
         if (oRetorno.status == 1) {
 
             oJanela.destroy();
+
+            let origensValidas = ["2","3"];
+            let tipoOrigem = $('ac16_tipoorigem').value;
+
+            if($('ac16_origem').value == "2" && origensValidas.includes(tipoOrigem)){
+                let aLicitacaoSelecionada = oGridDados.getSelection("object");
+                $('ac16_licitacao').value = aLicitacaoSelecionada[0].aCells[1].content;
+                me.getLeiLicitacao();
+            } else {
+                document.getElementById('tr_vigenciaindeterminada').style.display = 'none';
+                $('leidalicitacao').value = oRetorno.leiLicitacao;
+            }
+
             $('ac16_deptoresponsavel').focus();
 
         } else {
@@ -408,6 +420,14 @@ contrato = function () {
         var iIndicereajuste           = $F('ac16_indicereajuste');
         var sDescricaoreajuste        = $F('ac16_descricaoreajuste');
         var sDescricaoindice          = $F('ac16_descricaoindice');
+        var iVigenciaIndeterminada    = $F('ac16_vigenciaindeterminada');
+
+        vigenciaIsVisible = document.getElementById('tr_vigenciaindeterminada').style.display;
+
+        iVigenciaIndeterminada =
+                    document.getElementById('tr_vigenciaindeterminada').style.display == ""
+                    ? iVigenciaIndeterminada
+                    : "null";
 
         /* Novas validaï¿½ï¿½es para atender o SICOM */
 
@@ -456,7 +476,7 @@ contrato = function () {
         }
         if(iOrigem == '3') {
             if ((iTipoOrigem == '2' || iTipoOrigem == '3') && !iLicitacao) {
-                alert('Informe uma Licitaï¿½ï¿½o.');
+                alert('Informe uma Licitação.');
                 $('ac16_licitacao').focus();
                 return false;
             }
@@ -528,7 +548,7 @@ contrato = function () {
             return false;
         }
 
-        if (dtTermino == "") {
+        if (dtTermino == "" && iVigenciaIndeterminada == "f") {
 
             alert('Informe a data de termino do Contrato.');
             $('ac16_datafim').focus();
@@ -624,6 +644,7 @@ contrato = function () {
         oParam.contrato.sDescricaoreajuste        = encodeURIComponent(tagString(sDescricaoreajuste));
         oParam.contrato.sDescricaoindice          = encodeURIComponent(tagString(sDescricaoindice));
         oParam.contrato.sPeriodoreajuste          = sPeriodoreajuste;
+        oParam.contrato.iVigenciaIndeterminada    = iVigenciaIndeterminada;
         js_divCarregando('Aguarde, salvando dados do contrato','msgbox');
         var oAjax   = new Ajax.Request(
             sURL,
@@ -798,8 +819,9 @@ contrato = function () {
             $('ac16_indicereajuste').value            = oRetorno.contrato.iIndicereajuste;
             $('ac16_descricaoreajuste').value            = oRetorno.contrato.sDescricaoreajuste.urlDecode();
             $('ac16_descricaoindice').value            = oRetorno.contrato.sDescricaoindice.urlDecode();
-            //$('ac16_acordoclassificacao').value   = oRetorno.contrato.iClassificacao;
             $('ac16_valor').value                 = js_formatar(oRetorno.contrato.nValorContrato, 'f');
+            $('ac16_vigenciaindeterminada').value                = oRetorno.contrato.iVigenciaIndeterminada;
+            js_alteracaoVigencia($('ac16_vigenciaindeterminada').value);
             if($('ac16_reajuste').value == 2){
                 $('tdcriterioreajuste').style.display = 'none';
                 $('trdatareajuste').style.display = 'none';
@@ -852,7 +874,7 @@ contrato = function () {
     };
 
     /**
-     * Verifica se deve mostrar o valor para alteraï¿½ï¿½o ou nï¿½o
+     * Verifica se deve mostrar o valor para alteração ou não
      */
     this.mostraValorAcordo = function() {
 
@@ -860,6 +882,34 @@ contrato = function () {
             $('trValorAcordo').style.display = 'table-row';
             $('ac16_valor').readOnly         = false;
         }
+    };
+
+    this.getLeiLicitacao = function() {
+        var oParam = new Object();
+        oParam.exec = "getLeiLicitacao";
+        oParam.iLicitacao = $('ac16_licitacao').value;
+        var oAjax = new Ajax.Request(
+            sURL,{
+                method :'post',
+                parameters: 'json='+Object.toJSON(oParam),
+                asynchronous: false,
+                onComplete: function(oAjax) {
+                    var oRetorno = eval("(" + oAjax.responseText.urlDecode() + ")");
+                    
+                    $('leidalicitacao').value = oRetorno.leiLicitacao;
+                    js_alteracaoVigencia($('ac16_vigenciaindeterminada').value);
+
+                    if(oRetorno.leiLicitacao == "1"){
+                        document.getElementById('tr_vigenciaindeterminada').style.display = '';
+                        return;
+                    }
+
+                    document.getElementById('tr_vigenciaindeterminada').style.display = 'none';
+                    document.getElementsByClassName('vigencia_final')[0].style.display = '';
+                    document.getElementsByClassName('vigencia_final')[1].style.display = '';
+                }
+            }
+        );
     };
 
 }

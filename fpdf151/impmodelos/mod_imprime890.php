@@ -67,7 +67,7 @@ if ($iPag_a==true && $iPag_b==true){
 
 
 }else{
-  //14 itens por folha se não conter observação em nenhum item
+  //14 itens por folha se n�o conter observação em nenhum item
     $quant_itens = 20;
     $qReg=$this->linhasdositens;
     for ($i=0; $i < $qReg; $i++){
@@ -268,4 +268,3 @@ for ($i = 0;$i < $iVias;$i++){
           else
             $xlin = 20;
   }
-?>

@@ -30,7 +30,7 @@
   //|10|//                      - emissor;
   //|10|//                      - exercício;
   //|10|//                      - data e hora da emissão;
-  //|10|//                      - número da página.
+  //|10|//                      - n�mero da página.
 
 
    // ################################# Initialization
@@ -681,4 +681,3 @@ $ru) ? " e " : "").$ru;
 
 }
 //|XX|//
-?>

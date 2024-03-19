@@ -8,6 +8,7 @@ require_once("libs/JSON.php");
 require_once("std/db_stdClass.php");
 require_once("dbforms/db_funcoes.php");
 require_once("libs/db_sessoes.php");
+require_once('model/orcamento/ControleOrcamentario.model.php');
 include("classes/db_orctiporec_classe.php");
 include("classes/db_despesasinscritasRP_classe.php");
 include("classes/db_disponibilidadecaixa_classe.php");
@@ -45,8 +46,6 @@ try {
       $aFonte = array();
 
       $result = $cldisponibilidadedecaixa->sql_record($cldisponibilidadedecaixa->sql_query("null", "*", null, "c224_instit = {$instit} and c224_anousu = {$anousu}"));
-      // echo $cldisponibilidadedecaixa->sql_query("null","*",null,"c224_instit = {$instit} and c224_anousu = {$anousu}");
-      //die($cldisponibilidadedecaixa->sql_query("null","*",null,"c224_instit = {$instit} and c224_anousu = {$anousu}"));
       for ($i = 0; $i < pg_num_rows($result); $i++) {
         $oFonte = db_utils::fieldsMemory($result, $i);
         $aFonte[] = $oFonte;
@@ -529,12 +528,22 @@ try {
         }
       }
 
-      $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
+      $ctrOrcamentario = new ControleOrcamentario();
+      $ctrOrcamentario->setDeParaFonte8digitos();
+
+      // $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
       foreach ($vlRspExerciciosAnteriores as $fonte => $oDados) {
 
-        if (in_array($fonte, $aFontesEncerradas)) {
-          $fonte = substr($fonte, 0, 1) . '59';
+        // if (in_array($fonte, $aFontesEncerradas)) {
+        //   $fonte = substr($fonte, 0, 1) . '59';
+        // }
+
+        $ctrOrcamentario->setFonte($fonte);
+        $fonteControleOrcamentario = $ctrOrcamentario->getFonte3ParaFonte8();
+
+        if($fonteControleOrcamentario != '0000'){
+          $fonte = substr($fonteControleOrcamentario, 0, 7);
         }
 
         $vlrDisponibilidade[$fonte]->VlrDisponibilidade -= round($oDados->vlRspExeAnt, 2);

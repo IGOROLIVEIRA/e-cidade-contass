@@ -163,14 +163,15 @@ if (pg_num_rows($this->rsLotes) > 0) {
         JOIN precoreferencia ON si02_precoreferencia = si01_sequencial
         JOIN pcorcamval ON pc23_orcamitem=pc22_orcamitem
         JOIN pcorcamforne ON pc21_orcamforne=pc23_orcamforne
-        JOIN pcorcamjulg ON pc24_orcamforne=pc21_orcamforne
+        LEFT JOIN pcorcamjulg ON pc24_orcamforne=pc21_orcamforne
         LEFT JOIN solicitaprotprocesso ON pc90_solicita = pc10_numero
         LEFT JOIN processocompraloteitem ON pc69_pcprocitem = pcprocitem.pc81_codprocitem
         WHERE pc81_codproc={$this->codpreco} and pc69_processocompralote = $oLotes->pc68_sequencial
-            AND pc24_pontuacao=1 order by pc11_seq;
+            order by pc11_seq;
         ";
 
         $rsResult = db_query($sSql) or die(pg_last_error());
+
         $oResult = db_utils::fieldsMemory($rsResult, 0);
         $linhas = ceil(strlen($oResult->pc01_descrmater) / 115);
         $addalt = $linhas * 4;
@@ -431,7 +432,6 @@ if (pg_num_rows($this->rsLotes) > 0) {
         $cabecalho[$oLotes->pc68_sequencial] = $oLotes->pc68_sequencial;
     }
 } else {
-
 
     if ($this->pc80_criterioadjudicacao == 2 || $this->pc80_criterioadjudicacao == 1) {
         $this->objpdf->setfont('arial', 'B', 7);

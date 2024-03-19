@@ -38,7 +38,7 @@ $id_modulo = db_getsession("DB_modulo");
 $result = $cldb_modulos->sql_record($cldb_modulos->sql_query_file($id_modulo));
 
 if($result==false || $cldb_modulos->numrows ==0){
-  echo "Módulo não definido. Contate Suporte";
+  echo "Módulo n�o definido. Contate Suporte";
   exit;
 }
 db_fieldsmemory($result,0,0);
@@ -69,4 +69,3 @@ if( file_exists("manuais/".strtolower($nome_manual)."/index.php") ){
   //include("manuais/index.php");
 
 }
-?>

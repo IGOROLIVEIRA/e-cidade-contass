@@ -482,7 +482,9 @@ class AcordoItem
             $rsDotacoes            = $oDaoAcordoItemDotacao->sql_record($sSqlDotacoes);
             $this->aDotacoes  = db_utils::getCollectionByRecord($rsDotacoes);
         }
-
+        // var_dump($sSqlDotacoes);
+        // var_dump($this->aDotacoes);
+        // die();
         return $this->aDotacoes;
     }
 
@@ -2269,6 +2271,7 @@ order by
           and  extract(year from ac36_datainicial) =  {$iAnoInicial})"
                 );
                 $rsAcordoPosicao    = $oDaoAcordoPosicao->sql_record($sSqlAcordoPosicao);
+                throw new Exception($sSqlAcordoPosicao);
 
 
 

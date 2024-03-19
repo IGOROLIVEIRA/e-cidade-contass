@@ -46,39 +46,52 @@ $clrotulo->label("l20_codigo");
 
     <script>
         function js_emite(){
-            var gerar = document.getElementById("gerar").value;
-            var imprimir = document.getElementById("tipoImprimir").value;
-            var nome = "";
+            let ilicita = document.getElementById("l202_licitacao").value;
+            let iadjudicacao = document.getElementById("l202_licitacao1").value
+            const isCampoVazio = (campo) => (!campo?.length);
+            const nome = "";
+            const tipoRelatorio = document.getElementById("tipoRelatorio").value;
+            const tipoImpressao = document.getElementById("tipoImpressao").value;
 
-            if(gerar==1){
-                var ilicita = document.getElementById("l202_licitacao").value;
+            if (tipoRelatorio === '0') {
+                alert('Selecione o relatório desejado!');
+                return;
+            }
+
+            if (tipoRelatorio === '1' && isCampoVazio(ilicita)) {
+                alert('Selecione o Processo Licitátório - âncora "Licitação"!');
+                return;
+            }
+
+            if (isCampoVazio(iadjudicacao) && tipoRelatorio === '2') {
+                alert('Selecione o Processo Licitátório - âncora "Licitação"!');
+                return;
+            }
+
+            if(tipoRelatorio==1){
                 var data = document.getElementById("dataHom").value;
                 var sequencial = document.getElementById("sequencial").value;
                 var valor = "";
 
-                if(imprimir==1){
-                    jan = window.open('lic1_homologacaoadjudica004.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&nome='+nome+'&sequencial='+sequencial+'&data='+data+'&valor='+valor+'&quant_casas=2&tipoprecoreferencia=',
+                if(tipoImpressao==1){
+                    window.open('lic1_homologacaoadjudica004.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&nome='+nome+'&sequencial='+sequencial+'&data='+data+'&valor='+valor+'&quant_casas=2&tipoprecoreferencia=',
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-	            jan.moveTo(0,0);
-                }else if(imprimir==2){
-                    jan = window.open('lic1_homologacaoadjudica005.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&nome='+nome+'&sequencial='+sequencial+'&data='+data+'&valor='+valor+'&quant_casas=2&tipoprecoreferencia=',
+                }else if(tipoImpressao==2){
+                    window.open('lic1_homologacaoadjudica005.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&nome='+nome+'&sequencial='+sequencial+'&data='+data+'&valor='+valor+'&quant_casas=2&tipoprecoreferencia=',
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-	                jan.moveTo(0,0);
                 }
-            }else if(gerar==2){
-                var ilicita = document.getElementById("l202_licitacao1").value;
+            }else if(tipoRelatorio==2){
+                ilicita = document.getElementById("l202_licitacao1").value;
                 var data = document.getElementById("dataAdju").value;
 
-                if(imprimir==1){
-                    jan = window.open('lic1_adjudicacaolicitacao004.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&nome='+nome+'&data='+data+'&quant_casas=2&tipoprecoreferencia=',
+                if(tipoImpressao==1){
+                    window.open('lic1_adjudicacaolicitacao004.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&nome='+nome+'&data='+data+'&quant_casas=2&tipoprecoreferencia=',
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-                     jan.moveTo(0,0);
                 }
 
-                if(imprimir==2){
-                    jan = window.open('lic1_adjudicacaolicitacao005.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&nome='+nome+'&quant_casas=2&tipoprecoreferencia=',
+                if(tipoImpressao==2){
+                    window.open('lic1_adjudicacaolicitacao005.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&nome='+nome+'&quant_casas=2&tipoprecoreferencia=',
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-	                jan.moveTo(0,0);
                 }
             }
         }
@@ -118,7 +131,7 @@ $clrotulo->label("l20_codigo");
                     1 => 'Homologação',
                     2 => 'Adjudicação',
                 );
-                db_select('gerar', $aValores1, true, $db_opcao,"onchange='js_liberar_Ancora()';");
+                db_select('tipoRelatorio', $aValores1, true, $db_opcao,"onchange='js_liberar_Ancora()';");
                 ?>
 
                 </td>
@@ -167,7 +180,7 @@ $clrotulo->label("l20_codigo");
                     1 => 'PDF',
                     2 => 'WORD',
                 );
-                db_select('tipoImprimir', $aValores, true, $db_opcao,"");
+                db_select('tipoImpressao', $aValores, true, $db_opcao,"");
                 ?>
 
                 </td>
@@ -197,7 +210,11 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 <script>
 
     function js_liberar_Ancora(){
-        var op = document.getElementById("gerar").value;
+        document.getElementById("tipoImpressao").value = 1;
+        document.getElementById("l202_licitacao").value = '';
+        document.getElementById("l202_licitacao1").value = '';
+
+        var op = document.getElementById("tipoRelatorio").value;
         if(op==1){
             document.getElementById("homolo").style.display = "table-row";
             document.getElementById("adjudi").style.display = "none";

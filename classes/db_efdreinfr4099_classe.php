@@ -25,10 +25,10 @@ class cl_efdreinfr4099
     public $efd01_ambiente         = null;
     public $efd01_instit           = 0;
     public $efd01_protocolo        = 0;
-    public $efd01_status           = 0; 
+    public $efd01_status           = 0;
     public $efd01_descResposta     = 0;
     public $efd01_dscResp          = 0;
-    public $efd01_dataenvio        = 0; 
+    public $efd01_dataenvio        = 0;
 
     // cria propriedade com as variaveis do arquivo 
     public $campos = "
@@ -72,7 +72,7 @@ class cl_efdreinfr4099
         if ($exclusao == false) {
             $this->efd01_sequencial = ($this->efd01_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd01_sequencial"] : $this->efd01_sequencial);
             $this->efd01_mescompetencia = ($this->efd01_mescompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd01_licitacao"] : $this->efd01_mescompetencia);
-            
+
             $this->efd01_cgm = ($this->efd01_cgm == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd01_cgm"] : $this->efd01_cgm);
             $this->efd01_tipo = ($this->efd01_tipo == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd01_tipo"] : $this->efd01_tipo);
             $this->efd01_ambiente = ($this->efd01_ambiente == "" ? @$GLOBALS["HTTP_POST_VARS"]["efd01_ambiente"] : $this->efd01_ambiente);
@@ -90,7 +90,7 @@ class cl_efdreinfr4099
     // funcao para inclusao
     function incluir()
     {
-        
+
         $this->atualizacampos();
 
         if ($this->efd01_mescompetencia == null) {
@@ -111,8 +111,8 @@ class cl_efdreinfr4099
             $this->erro_status = "0";
             return false;
         }
-        
-        
+
+
         if ($this->efd01_cgm == null) {
             $this->erro_sql = " Campo efd01_cgm não informado.";
             $this->erro_campo = "efd01_cgm";
@@ -149,44 +149,11 @@ class cl_efdreinfr4099
             $this->erro_status = "0";
             return false;
         }
-        if ($this->efd01_protocolo == null) {
-            $this->erro_sql = " Campo efd01_protocolo não informado.";
-            $this->erro_campo = "efd01_protocolo";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
         if ($this->efd01_status == null) {
-            $this->erro_sql = " Campo efd01_status não informado.";
-            $this->erro_campo = "efd01_status";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if ($this->efd01_descResposta == null) {
-            $this->erro_sql = " Campo efd01_descResposta não informado.";
-            $this->erro_campo = "efd01_descResposta";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
+            $this->efd01_status = 'null';
         }
         if ($this->efd01_dscResp == null) {
             $this->efd01_dscResp = "";
-        }
-        if ($this->efd01_dataenvio == null) {
-            $this->erro_sql = " Campo efd01_dataenvio não informado.";
-            $this->erro_campo = "efd01_dataenvio";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
         }
         if ($this->efd01_sequencial == "" || $this->efd01_sequencial == null) {
             $result = db_query("select nextval('efdreinfr4099_efd01_sequencial_seq')");
@@ -203,7 +170,7 @@ class cl_efdreinfr4099
             $result = db_query("select last_value from efdreinfr4099_efd01_sequencial_seq");
             if (($result != false) && (pg_result($result, 0, 0) < $this->efd01_sequencial)) {
                 $this->erro_sql = " Campo efd01_sequencial maior que ultimo número da sequencia.";
-                $this->erro_banco = "Sequencia menor que este nï¿½mero.";
+                $this->erro_banco = "Sequencia menor que este número.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
@@ -220,7 +187,7 @@ class cl_efdreinfr4099
             $this->erro_status = "0";
             return false;
         }
-        
+
         $sql = "insert into efdreinfr4099(
                                        efd01_sequencial 
                                       ,efd01_mescompetencia
@@ -325,8 +292,8 @@ class cl_efdreinfr4099
                 return false;
             }
         }
-      
-       
+
+
         if (trim($this->efd01_cgm) != "" || isset($GLOBALS["HTTP_POST_VARS"]["efd01_cgm"])) {
             $sql  .= $virgula . " efd01_cgm = $this->efd01_cgm ";
             $virgula = ",";
@@ -470,7 +437,7 @@ class cl_efdreinfr4099
         $result = db_query($sql . $sql2);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "efdreinfr4099 nao Excluï¿½do. Exclusï¿½o Abortada.\\n";
+            $this->erro_sql   = "efdreinfr4099 nao Excluído. Exclusão Abortada.\\n";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -479,7 +446,7 @@ class cl_efdreinfr4099
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "efdreinfr4099 nao Encontrado. Exclusï¿½o não Efetuada.\\n";
+                $this->erro_sql = "efdreinfr4099 nao Encontrado. Exclusão não Efetuada.\\n";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -487,7 +454,7 @@ class cl_efdreinfr4099
                 return true;
             } else {
                 $this->erro_banco = "";
-                $this->erro_sql = "Exclusï¿½o efetuada com Sucesso\\n";
+                $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";

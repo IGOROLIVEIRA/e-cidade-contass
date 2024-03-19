@@ -83,6 +83,7 @@ class cl_ctb202023
   function incluir($si96_sequencial)
   {
     $this->atualizacampos();
+    
     if ($this->si96_tiporegistro == null) {
       $this->erro_sql = " Campo Tipo do  registro nao Informado.";
       $this->erro_campo = "si96_tiporegistro";
@@ -100,13 +101,20 @@ class cl_ctb202023
       $this->si96_codfontrecursos = "0";
     }
     if ($this->si96_saldocec == null) {
-      $this->si96_saldocec = "0";
+       $this->si96_saldocec = "0";
+    } else {
+      $this->si96_saldocec = (float) str_replace(',', '.', $this->si96_saldocec);
     }
+
     if ($this->si96_vlsaldoinicialfonte == null) {
       $this->si96_vlsaldoinicialfonte = "0";
+    }else {
+      $this->si96_vlsaldoinicialfonte = (float) str_replace(',', '.', $this->si96_vlsaldoinicialfonte);
     }
     if ($this->si96_vlsaldofinalfonte == null) {
       $this->si96_vlsaldofinalfonte = "0";
+    }else {
+      $this->si96_vlsaldofinalfonte = (float) str_replace(',', '.', $this->si96_vlsaldofinalfonte);
     }
     if ($this->si96_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
@@ -330,7 +338,7 @@ class cl_ctb202023
     }
     $sql .= " where ";
     if ($si96_sequencial != null) {
-      $sql .= " si96_sequencial = $this->si96_sequencial";
+      $sql .= " si96_sequencial = $si96_sequencial";
     }
 //    $resaco = $this->sql_record($this->sql_query_file($this->si96_sequencial));
 //    if ($this->numrows > 0) {
@@ -586,7 +594,44 @@ class cl_ctb202023
 
     return $sql;
   }
-
+  function sql_query_fonte8digitos($si96_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
+  {
+    $sql = "select ";
+    if ($campos != "*") {
+      $campos_sql = split("#", $campos);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+      $sql .= $campos;
+    }
+    $sql .= " from ctb202023 ";
+    $sql .= " INNER JOIN orctiporec ON o15_codtri::int = si96_codfontrecursos ";
+    $sql2 = "";
+    if ($dbwhere == "") {
+      if ($si96_sequencial != null) {
+        $sql2 .= " where ctb202023.si96_sequencial = $si96_sequencial ";
+      }
+    } else {
+      if ($dbwhere != "") {
+        $sql2 = " where $dbwhere";
+      }
+    }
+    $sql .= $sql2;
+    if ($ordem != null) {
+      $sql .= " order by ";
+      $campos_sql = split("#", $ordem);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+  
+    return $sql;
+  }
   public function sql_Reg20Fonte($codctb, $ano, $mes)
   {
     $sqlReg20Fonte = "SELECT DISTINCT codctb, fontemovimento

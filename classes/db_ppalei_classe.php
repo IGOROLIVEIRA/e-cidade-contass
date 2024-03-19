@@ -46,7 +46,10 @@ class cl_ppalei {
    var $o01_anoinicio = 0; 
    var $o01_anofinal = 0; 
    var $o01_descricao = null; 
-   var $o01_numerolei = null; 
+   var $o01_numerolei = null;
+   var $o01_numeroleiano2 = null; 
+   var $o01_numeroleiano3 = null; 
+   var $o01_numeroleiano4 = null;  
    var $o01_instit = 0; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
@@ -55,6 +58,9 @@ class cl_ppalei {
                  o01_anofinal = int4 = Ano Final 
                  o01_descricao = varchar(10) = Descrição 
                  o01_numerolei = varchar(10) = Número da Lei 
+                 o01_numeroleiano2 = varchar(10) = Número da Lei 
+                 o01_numeroleiano3 = varchar(10) = Número da Lei 
+                 o01_numeroleiano4 = varchar(10) = Número da Lei 
                  o01_instit = int4 = Instituição 
                  ";
    //funcao construtor da classe 
@@ -80,6 +86,9 @@ class cl_ppalei {
        $this->o01_anofinal = ($this->o01_anofinal == ""?@$GLOBALS["HTTP_POST_VARS"]["o01_anofinal"]:$this->o01_anofinal);
        $this->o01_descricao = ($this->o01_descricao == ""?@$GLOBALS["HTTP_POST_VARS"]["o01_descricao"]:$this->o01_descricao);
        $this->o01_numerolei = ($this->o01_numerolei == ""?@$GLOBALS["HTTP_POST_VARS"]["o01_numerolei"]:$this->o01_numerolei);
+       $this->o01_numeroleiano2 = ($this->o01_numeroleiano2 == ""?@$GLOBALS["HTTP_POST_VARS"]["o01_numeroleiano2"]:$this->o01_numeroleiano2);
+       $this->o01_numeroleiano3 = ($this->o01_numeroleiano3 == ""?@$GLOBALS["HTTP_POST_VARS"]["o01_numeroleiano3"]:$this->o01_numeroleiano3);
+       $this->o01_numeroleiano4 = ($this->o01_numeroleiano4 == ""?@$GLOBALS["HTTP_POST_VARS"]["o01_numeroleiano4"]:$this->o01_numeroleiano4);
        $this->o01_instit = ($this->o01_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["o01_instit"]:$this->o01_instit);
      }else{
        $this->o01_sequencial = ($this->o01_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["o01_sequencial"]:$this->o01_sequencial);
@@ -171,6 +180,9 @@ class cl_ppalei {
                                       ,o01_anofinal 
                                       ,o01_descricao 
                                       ,o01_numerolei 
+                                      ,o01_numeroleiano2
+                                      ,o01_numeroleiano3
+                                      ,o01_numeroleiano4
                                       ,o01_instit 
                        )
                 values (
@@ -179,6 +191,9 @@ class cl_ppalei {
                                ,$this->o01_anofinal 
                                ,'$this->o01_descricao' 
                                ,'$this->o01_numerolei' 
+                               ,'$this->o01_numeroleiano2'
+                               ,'$this->o01_numeroleiano3'
+                               ,'$this->o01_numeroleiano4'
                                ,$this->o01_instit 
                       )";
      $result = db_query($sql); 
@@ -216,6 +231,9 @@ class cl_ppalei {
        $resac = db_query("insert into db_acount values($acount,2376,13555,'','".AddSlashes(pg_result($resaco,0,'o01_anofinal'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2376,13556,'','".AddSlashes(pg_result($resaco,0,'o01_descricao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2376,13557,'','".AddSlashes(pg_result($resaco,0,'o01_numerolei'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,2376,13558,'','".AddSlashes(pg_result($resaco,0,'o01_numeroleiano2'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,2376,13559,'','".AddSlashes(pg_result($resaco,0,'o01_numeroleiano3'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,2376,13560,'','".AddSlashes(pg_result($resaco,0,'o01_numeroleiano4'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2376,13620,'','".AddSlashes(pg_result($resaco,0,'o01_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
@@ -290,7 +308,19 @@ class cl_ppalei {
          return false;
        }
      }
-     if(trim($this->o01_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o01_instit"])){ 
+     if(trim($this->o01_numeroleiano2)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o01_numeroleiano2"])){ 
+      $sql  .= $virgula." o01_numeroleiano2 = '$this->o01_numeroleiano2' ";
+      $virgula = ","; 
+    }
+    if(trim($this->o01_numeroleiano3)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o01_numeroleiano3"])){ 
+      $sql  .= $virgula." o01_numeroleiano3 = '$this->o01_numeroleiano3' ";
+      $virgula = ",";
+    }
+    if(trim($this->o01_numeroleiano4)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o01_numeroleiano4"])){ 
+      $sql  .= $virgula." o01_numeroleiano4 = '$this->o01_numeroleiano4' ";
+      $virgula = ",";
+    }
+    if(trim($this->o01_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o01_instit"])){ 
        $sql  .= $virgula." o01_instit = $this->o01_instit ";
        $virgula = ",";
        if(trim($this->o01_instit) == null ){ 
@@ -519,5 +549,12 @@ class cl_ppalei {
      }
      return $sql;
   }
+
+    public function sql_ppaleiIP($codigoPespectiva): string
+    {
+        return "SELECT ppalei.* FROM ppalei
+                 JOIN ppaversao ON o119_ppalei = o01_sequencial
+                 WHERE o119_sequencial = {$codigoPespectiva}";
+    }
 }
 ?>

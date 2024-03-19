@@ -12,7 +12,7 @@
  * @param {string} sName nome e id do objeto
  * @param {string} sNameInstance nome da instancia do objeto --- Não Utilizado
  * @param {string} [sWidth]  Tamanho Padrao do Objeto
- * @param {integer} sSize    quantos mostra na tela (define a aparencia de lista);
+ * @param {string} sSize    quantos mostra na tela (define a aparencia de lista);
  * @return void
  */
 DBComboBox = function (sName, sNameInstance, aItens, sWidth, sSize) {
@@ -265,7 +265,7 @@ DBComboBox.prototype.addStyle = function (sPropertie, sValor) {
  * @param htmlNODE oNo conteiner HTML
  * @return void
  */
-DBComboBox.prototype.show = function (oNo, lAdiciona) {
+DBComboBox.prototype.show = function (oNo, lAdiciona = false) {
 
   this.make();
   if ( !!lAdiciona ) {

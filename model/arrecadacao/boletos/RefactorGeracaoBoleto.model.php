@@ -28,6 +28,11 @@
 /**
  * Dependencias
  */
+
+use App\Models\Numpref;
+use App\Services\Tributario\Arrecadacao\GeneratePixWithQRCodeService;
+use App\Services\Tributario\Arrecadacao\ResolvePixProviderService;
+
 db_app::import('DBDate');
 db_app::import('recibo');
 
@@ -131,13 +136,15 @@ class RefactorGeracaoBoleto {
     return true;
   }
 
-  /**
-   * processar
-   *
-   * @access public
-   * @return void
-   */
-  public function processar() {
+    /**
+     * processar
+     *
+     * @access public
+     * @return stdClass
+     * @throws Exception
+     */
+  public function processar(): stdClass
+  {
 
     $oRetorno = new stdClass();
 
@@ -859,6 +866,18 @@ class RefactorGeracaoBoleto {
                   $oArretipo->k00_tercdigrecnormal
                 );
 
+                /**
+                 * @var Numpref $settings
+                 */
+                $settings = Numpref::query()
+                    ->where('k03_anousu', db_getsession("DB_anousu"))
+                    ->where('k03_instit', db_getsession("DB_instit"))
+                    ->first();
+
+                if ($settings->k03_ativo_integracao_pix) {
+                    $this->generatePix($settings, $oConvenio, $sValorCodigoBarras, $oRecibo);
+                }
+
             } catch ( Exception $eException ) {
               throw new Exception($eException->getMessage());
             }
@@ -1366,4 +1385,30 @@ class RefactorGeracaoBoleto {
 
   }
 
+    /**
+     * @param Numpref $settings
+     * @param convenio $oConvenio
+     * @param string $sValorCodigoBarras
+     * @param Recibo $oRecibo
+     * @return void
+     * @throws BusinessException
+     */
+    public function generatePix(Numpref $settings, convenio $oConvenio, string $sValorCodigoBarras, Recibo $oRecibo): void
+    {
+        $providerConfig = (new ResolvePixProviderService())->execute($settings);
+        $body['codigoGuiaRecebimento'] = $oConvenio->getCodigoBarra();
+        $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
+        $body['valorOriginalSolicitacao'] = $sValorCodigoBarras;
+        $body['k00_numnov'] = $oRecibo->getNumpreRecibo();
+        $body['k00_dtvenc'] = $oRecibo->getDataVencimentoRecibo();
+        $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
+
+        $service = new GeneratePixWithQRCodeService($providerConfig);
+
+        try {
+            $service->execute($body);
+        } catch (Exception $e) {
+            throw new BusinessException('Erro ao gerar QRCode: ' . $e->getMessage());
+        }
+    }
 }

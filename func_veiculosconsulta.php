@@ -33,6 +33,7 @@ include("dbforms/db_funcoes.php");
 include("classes/db_veiculos_classe.php");
 include("classes/db_veiccadcentraldepart_classe.php");
 include("classes/db_veiccadcentral_classe.php");
+include "classes/db_veiculosplaca_classe.php";
 
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
@@ -142,7 +143,24 @@ $iInstituicao = db_getsession("DB_instit");
           if (isset($chave_ve01_codigo) && (trim($chave_ve01_codigo) != "")) {
             $sql = $clveiculos->sql_query($chave_ve01_codigo, $campos, "ve01_codigo", "ve01_codigo=$chave_ve01_codigo and instit = {$iInstituicao} ");
           } else if (isset($chave_ve01_placa) && (trim($chave_ve01_placa) != "")) {
-            $sql = $clveiculos->sql_query("", $campos, "ve01_placa", " trim(ve01_placa) like '$chave_ve01_placa%' and instit = {$iInstituicao} ");
+
+            // Busca o veiculo por placa nas alterações de placa
+            $clveiculosplaca  = new cl_veiculosplaca;
+            $sqlBuscaVeiculo = $clveiculosplaca->sql_query(null, "distinct ve76_veiculo", "", "trim(ve76_placaanterior) like '$chave_ve01_placa%'");
+            $resultBuscaVeiculo = $clveiculosplaca->sql_record($sqlBuscaVeiculo);
+
+            $alterarplaca = null;
+            if ($resultBuscaVeiculo != false && $clveiculosplaca->numrows > 0) {
+              if ($clveiculosplaca->numrows == 1) {
+                $alterarplaca = db_utils::getCollectionByRecord($resultBuscaVeiculo)[0];
+              }
+            }
+
+            if (!empty($alterarplaca)) {
+              $sql = $clveiculos->sql_query($chave_ve01_codigo, $campos, "ve01_codigo", "ve01_codigo=$alterarplaca->ve76_veiculo and instit = {$iInstituicao} ");
+            } else {
+              $sql = $clveiculos->sql_query("", $campos, "ve01_placa", " trim(ve01_placa) like '$chave_ve01_placa%' and instit = {$iInstituicao} ");
+            }
           } else {
             $sql = $clveiculos->sql_query("", $campos, "ve01_codigo", "instit = {$iInstituicao} $where");
           }

@@ -40,13 +40,13 @@ $clevt5011consulta->rotulo->label("rh219_perapurano");
 $clevt5011consulta->rotulo->label("rh219_perapurmes");
 $clevt5011consulta->rotulo->label("rh219_indapuracao");
 if (!isset($chave_rh219_perapurano)) {
-  $chave_rh219_perapurano = db_getsession("DB_anousu");
+    $chave_rh219_perapurano = db_getsession("DB_anousu");
 }
 if (!isset($chave_rh219_perapurmes)) {
-  $chave_rh219_perapurmes = date("m", db_getsession("DB_datausu"));
+    $chave_rh219_perapurmes = date("m", db_getsession("DB_datausu"));
 }
 if (!isset($chave_rh219_indapuracao)) {
-  $chave_rh219_indapuracao = 1;
+    $chave_rh219_indapuracao = 1;
 }
 ?>
 <html xmlns="http://www.w3.org/1999/html">
@@ -71,8 +71,8 @@ if (!isset($chave_rh219_indapuracao)) {
                                 </td>
                                 <td width="96%" align="left" nowrap>
                                     <?
-                  db_input("rh219_perapurano", 5, $Irh219_perapurano, true, "text", 4, "", "chave_rh219_perapurano");
-                  ?>
+                                    db_input("rh219_perapurano", 5, $Irh219_perapurano, true, "text", 4, "", "chave_rh219_perapurano");
+                                    ?>
                                 </td>
                             </tr>
                             <tr>
@@ -81,8 +81,8 @@ if (!isset($chave_rh219_indapuracao)) {
                                 </td>
                                 <td width="96%" align="left" nowrap>
                                     <?
-                  db_input("rh219_perapurmes", 5, $Irh219_perapurmes, true, "text", 4, "", "chave_rh219_perapurmes");
-                  ?>
+                                    db_input("rh219_perapurmes", 5, $Irh219_perapurmes, true, "text", 4, "", "chave_rh219_perapurmes");
+                                    ?>
                                 </td>
                             </tr>
                             <tr>
@@ -91,8 +91,8 @@ if (!isset($chave_rh219_indapuracao)) {
                                 </td>
                                 <td width="96%" align="left" nowrap>
                                     <?
-                                      $arr_indapuracao = array(1 => 'Mensal', 2 => 'Anual (13° salário)', '' => 'Sem Filtro');
-                                      db_select("rh219_indapuracao", $arr_indapuracao, true, $db_opcao, "", "chave_rh219_indapuracao");
+                                    $arr_indapuracao = array(1 => 'Mensal', 2 => 'Anual (13° salário)', '' => 'Sem Filtro');
+                                    db_select("rh219_indapuracao", $arr_indapuracao, true, $db_opcao, "", "chave_rh219_indapuracao");
                                     ?>
                                 </td>
                             </tr>
@@ -103,8 +103,7 @@ if (!isset($chave_rh219_indapuracao)) {
                             <td colspan="2" align="center">
                                 <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
                                 <input name="limpar" type="reset" id="limpar" value="Limpar">
-                                <input name="Fechar" type="button" id="fechar" value="Fechar"
-                                    onClick="parent.db_iframe_evt5001consulta.hide();">
+                                <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_evt5001consulta.hide();">
                             </td>
                         </tr>
                         <tr>
@@ -126,10 +125,10 @@ if (!isset($chave_rh219_indapuracao)) {
                 <fieldset>
                     <legend>Resultado da Pesquisa</legend>
                     <?
-          $where = " rh219_instit = " . db_getsession("DB_instit");
-          if (!isset($pesquisa_chave)) {
+                    $where = " rh219_instit = " . db_getsession("DB_instit");
+                    if (!isset($pesquisa_chave)) {
 
-            $campos = "  
+                        $campos = "  
             rh219_sequencial    
             ,rh219_perapurano
             ,rh219_perapurmes
@@ -153,32 +152,35 @@ if (!isset($chave_rh219_indapuracao)) {
             as dl_Valor_Devido_à_Previdência      
             ";
 
-            if (isset($chave_rh219_perapurano) && (trim($chave_rh219_perapurano) != "")) {
-              $where .= " and rh219_perapurano = $chave_rh219_perapurano ";
-            }
-            if (isset($chave_rh219_perapurmes) && (trim($chave_rh219_perapurmes) != "")) {
-              $where .= " and rh219_perapurmes = $chave_rh219_perapurmes ";
-            }
-            if (isset($chave_rh219_indapuracao) && (trim($chave_rh219_indapuracao) != "")) {
-              $where .= " and rh219_indapuracao = $chave_rh219_indapuracao ";
-            }
-            $sql = $clevt5011consulta->sql_query(null, $campos, "rh219_sequencial desc", $where);
-            db_lovrot($sql, 15, "()", "", $funcao_js);
-          } else {
-            if ($pesquisa_chave != null && $pesquisa_chave != "") {
-              echo $clevt5011consulta->sql_query($pesquisa_chave, db_getsession("DB_instit"));
-              $result = $clevt5011consulta->sql_record($clevt5011consulta->sql_query($pesquisa_chave, db_getsession("DB_instit"), 'rh219_sequencial desc'));
-              if ($clevt5011consulta->numrows != 0) {
-                db_fieldsmemory($result, 0);
-                echo "<script>" . $funcao_js . "('$rh219_sequencial',false);</script>";
-              } else {
-                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
-              }
-            } else {
-              echo "<script>" . $funcao_js . "('',false);</script>";
-            }
-          }
-          ?>
+                        if (isset($chave_rh219_perapurano) && (trim($chave_rh219_perapurano) != "")) {
+                            $where .= " and rh219_perapurano = $chave_rh219_perapurano ";
+                        }
+                        if (isset($chave_rh219_perapurmes) && (trim($chave_rh219_perapurmes) != "")) {
+                            $where .= " and rh219_perapurmes = $chave_rh219_perapurmes ";
+                        }
+                        if (isset($chave_rh219_indapuracao) && (trim($chave_rh219_indapuracao) != "")) {
+                            $where .= " and rh219_indapuracao = $chave_rh219_indapuracao ";
+                        }
+                        if (!empty($chave_rh219_perapurano) && empty($chave_rh219_perapurmes)) {
+                            $where .= " and rh219_perapurmes is null ";
+                        }
+                        $sql = $clevt5011consulta->sql_query(null, $campos, "rh219_sequencial desc", $where);
+                        db_lovrot($sql, 15, "()", "", $funcao_js);
+                    } else {
+                        if ($pesquisa_chave != null && $pesquisa_chave != "") {
+                            echo $clevt5011consulta->sql_query($pesquisa_chave, db_getsession("DB_instit"));
+                            $result = $clevt5011consulta->sql_record($clevt5011consulta->sql_query($pesquisa_chave, db_getsession("DB_instit"), 'rh219_sequencial desc'));
+                            if ($clevt5011consulta->numrows != 0) {
+                                db_fieldsmemory($result, 0);
+                                echo "<script>" . $funcao_js . "('$rh219_sequencial',false);</script>";
+                            } else {
+                                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+                            }
+                        } else {
+                            echo "<script>" . $funcao_js . "('',false);</script>";
+                        }
+                    }
+                    ?>
                 </fieldset>
             </td>
         </tr>
@@ -189,12 +191,12 @@ if (!isset($chave_rh219_indapuracao)) {
 <?
 if (!isset($pesquisa_chave)) {
 ?>
-<script>
-function js_imprimir() {
-    jan = window.open('eso2_evt5011consulta002.php?rh219_perapurmes='+document.form2.chave_rh219_perapurmes.value+'&rh219_perapurano='+document.form2.chave_rh219_perapurano.value+'&rh219_indapuracao='+document.form2.rh219_indapuracao.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-    jan.moveTo(0,0);
-}
-</script>
+    <script>
+        function js_imprimir() {
+            jan = window.open('eso2_evt5011consulta002.php?rh219_perapurmes=' + document.form2.chave_rh219_perapurmes.value + '&rh219_perapurano=' + document.form2.chave_rh219_perapurano.value + '&rh219_indapuracao=' + document.form2.rh219_indapuracao.value, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+            jan.moveTo(0, 0);
+        }
+    </script>
 <?
 }
 ?>

@@ -422,8 +422,8 @@ if (isset($incluir)) {
 				$sqlerro = true;
 			}
 		}
-		
-		//VALIDAÇOES DE DATAS 
+
+		//VALIDAÇOES DE DATAS
 		$dataaber = DateTime::createFromFormat('d/m/Y', $l20_dataaber);
 		$datacria = DateTime::createFromFormat('d/m/Y', $l20_datacria);
 		$dataaberproposta = DateTime::createFromFormat('d/m/Y', $l20_dataaberproposta);
@@ -447,6 +447,19 @@ if (isset($incluir)) {
 				$nomeCampo = "l20_dataaberproposta";
 				$sqlerro = true;
 			}
+		}
+
+		if(in_array($modalidade_tribunal, $aMod) && $l20_leidalicitacao == 1){
+			if($l20_tipoprocesso == "5" || $l20_tipoprocesso == "6"){
+				$l20_criterioadjudicacao = $criterioadjudicao_dispensainexibilidade;
+			}
+			else {
+				$l20_criterioadjudicacao = "null";
+			}
+		}
+
+		if($l20_tipoprocesso == "5" || $l20_tipoprocesso == "6"){
+			$clliclicita->l20_usaregistropreco = "t";
 		}
 
 		if ($sqlerro == false) {
@@ -475,6 +488,8 @@ if (isset($incluir)) {
 			$clliclicita->l20_datacria = $l20_datacria;
 			$clliclicita->l20_recdocumentacao = $l20_dataaberproposta;
 			$clliclicita->l20_dataaberproposta = $l20_dataaberproposta;
+            $clliclicita->l20_horaaberturaprop = $l20_horaaberturaprop;
+            $clliclicita->l20_horaencerramentoprop = $l20_horaencerramentoprop;
 			$clliclicita->incluir(null, null);
 
 			if ($clliclicita->erro_status == "0") {
@@ -482,7 +497,7 @@ if (isset($incluir)) {
 				$sqlerro = true;
 			}
 		}
-		
+
 		if (!$sqlerro && $lprocsis == 's') {
 
 			$clliclicitaproc->l34_liclicita    = $clliclicita->l20_codigo;

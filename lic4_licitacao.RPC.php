@@ -186,6 +186,7 @@ switch ($oParam->exec) {
         $sSqlRegistro .= "       inner join pcorcamitem    on pc26_orcamitem   = pc22_orcamitem  ";
         $sSqlRegistro .= " where cast('{$dtDia}' as date) between pc54_datainicio and pc54_datatermino ";
         $sSqlRegistro .= "   and l20_licsituacao = 10";
+        $sSqlRegistro .= "   and l20_instit = ".db_getsession('DB_instit');
         $sSqlRegistro .= " order by l21_codliclicita";
         $rsRegistro    = db_query($sSqlRegistro);
 
@@ -696,6 +697,7 @@ switch ($oParam->exec) {
                 liclicita.l20_cadinicial,
                 liclancedital.l47_linkpub,
                 liclancedital.l47_descrecurso,
+                liclancedital.l47_email,
                 liclancedital.l47_dataenvio,
                 (CASE
                      WHEN pc50_pctipocompratribunal IN (48,
@@ -731,7 +733,8 @@ switch ($oParam->exec) {
         $sSql = "
             SELECT DISTINCT l03_pctipocompratribunal,
                             l03_codcom,
-                            l20_objeto
+                            l20_objeto,
+                            l20_tipoprocesso
                     FROM liclicita
                     INNER JOIN db_usuarios ON db_usuarios.id_usuario = liclicita.l20_id_usucria
                     INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
@@ -1528,7 +1531,7 @@ switch ($oParam->exec) {
                                 }
                             }
                             /**
-                             * Tipo de julgamento por lote 
+                             * Tipo de julgamento por lote
                              */
                             if ($oParam->tipojulg == 3) {
                                 $clliclicitemlote->l04_descricao = $pc68_nome;
@@ -1547,7 +1550,7 @@ switch ($oParam->exec) {
                                 if($clliclicitemlote->l04_seq == 1){
                                     $clliclicitemlote->l04_numerolote = null;
                                 }
-                                
+
                                 $clliclicitemlote->incluir(null);
 
                                 if ($clliclicitemlote->erro_status == 0) {
@@ -1783,6 +1786,26 @@ switch ($oParam->exec) {
             $oRetorno->redireciona_edital = false;
         }
 
+
+        break;
+
+    case 'itensSemLoteCount':
+        // Retorna a quantidade de itens sem lote
+        $sqlItensSemLote = "
+            SELECT
+                COUNT(li.l21_codigo) AS itensSemLotCount
+            FROM
+                liclicitem li
+            LEFT JOIN
+                liclicitemlote lil ON li.l21_codigo = lil.l04_liclicitem
+            WHERE
+                li.l21_codliclicita = $oParam->licitacao
+                AND lil.l04_liclicitem IS NULL;
+        ";
+
+        $rsItensSemLote = db_query($sqlItensSemLote);
+        $itensSemLote = db_utils::fieldsMemory($rsItensSemLote, 0);
+        $oRetorno->itenssemlotcount = $itensSemLote->itenssemlotcount;
 
         break;
 }

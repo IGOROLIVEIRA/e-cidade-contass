@@ -150,8 +150,8 @@ $rotulo->label("z01_cgccpf");
           empempaut.e61_autori,
           empempenho.e60_numcgm,
           case when ac16_numeroacordo is null then si172_nrocontrato::varchar else (ac16_numeroacordo || '/' || ac16_anousu)::varchar end as si172_nrocontrato,
-          case when (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) is null then si172_datafinalvigencia else (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) end as si172_datafinalvigencia,
-          case when ac16_datafim is null then si174_novadatatermino else ac16_datafim end as si174_novadatatermino,
+          CASE WHEN ac16_vigenciaindeterminada='t' then null else (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) end as si172_datafinalvigencia,
+          case when ac16_datafim is null then si174_novadatatermino when ac16_vigenciaindeterminada='t' then null else ac16_datafim end as si174_novadatatermino,
           empempenho.e60_emiss as DB_e60_emiss,
           cgm.z01_nome,
           cgm.z01_cgccpf,
@@ -264,7 +264,7 @@ $rotulo->label("z01_cgccpf");
             $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "$dbwhere and z01_nome like '$chave_z01_nome%'", $filtroempelemento);
           } elseif (isset($chave_z01_cgccpf) && !empty($chave_z01_cgccpf)) {
             $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "$dbwhere and z01_cgccpf like '$chave_z01_cgccpf%'", $filtroempelemento);
-          } elseif($pesquisa_geral == 1){  
+          } elseif (count($_POST) > 0){  
             $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "{$dbwhere}", $filtroempelemento);
           }
 

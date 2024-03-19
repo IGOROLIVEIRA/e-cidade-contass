@@ -50,9 +50,9 @@ $db_opcao = 2;
 
 if (!isset($alterar)) {
   $sWhere = "
-    AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
+    AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54)
                                     AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
-                                    WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106) 
+                                    WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106)
                                     AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
                               END) >= 2020
   ";
@@ -63,10 +63,12 @@ if (!isset($alterar)) {
   $numero_edital = $oDados->l20_nroedital;
   $objeto = $oDados->l20_objeto;
   $edital = $oDados->l20_edital;
+  $codigoModalidade = $oDados->l20_numero;
   $tipo_tribunal = $oDados->l44_sequencial;
   $descr_tribunal = strtoupper($oDados->l44_descricao);
   $origem_recurso = $oDados->l47_origemrecurso;
   $descricao_recurso = $oDados->l47_descrecurso;
+  $email = $oDados->l47_email;
   $links = $oDados->l47_linkpub;
   $data_referencia = join('/', array_reverse(explode('-', $oDados->l47_dataenvio)));
   $natureza_objeto = $oDados->l20_naturezaobjeto;
@@ -80,7 +82,6 @@ if (!isset($alterar)) {
 }
 
 if (isset($alterar)) {
-
   $sqlEdital = $clliclancedital->sql_query_completo('', 'l20_codigo, l47_sequencial, l20_naturezaobjeto, l48_tipo', '', 'l20_codigo = ' . $licitacao);
   $rsEdital = $clliclancedital->sql_record($sqlEdital);
   $oDadosEdital = db_utils::fieldsMemory($rsEdital, 0);
@@ -146,6 +147,7 @@ if (isset($alterar)) {
       $clliclancedital->l47_descrecurso = $descricao_recurso;
       $clliclancedital->l47_dataenvio = $data_formatada;
       $clliclancedital->l47_liclicita = $oDadosEdital->l20_codigo;
+      $clliclancedital->l47_email = $email;
 
       $clliclancedital->alterar($oDadosEdital->l47_sequencial);
       $erro_msg = $clliclancedital->erro_sql;
