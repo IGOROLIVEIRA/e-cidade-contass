@@ -1924,7 +1924,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
           aLinha[8] = oInputQtAditada.toInnerHtml();
 
           if(oItem.novo == true){
-              aLinha[8] =js_formatar(nQuantidade, 'f', 3);
+              aLinha[8] =js_formatar(nQuantidade, 'f', 4);
           }
 
 
