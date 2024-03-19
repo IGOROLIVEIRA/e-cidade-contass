@@ -1540,7 +1540,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
     oTxtQuantidade = new DBTextField('oTxtQuantidade', 'oTxtQuantidade', '', 10);
     oTxtQuantidade.addEvent("onFocus", "this.value = js_strToFloat(this.value)");
-    oTxtQuantidade.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3)");
+    oTxtQuantidade.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 4)");
     oTxtQuantidade.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, '')");
     oTxtQuantidade.setValue("0,000");
     oTxtQuantidade.setClassName("text-right");
@@ -1548,7 +1548,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
     oTxtVlrUnitario = new DBTextField('oTxtVlrUnitario', 'oTxtVlrUnitario', '', 10);
     oTxtVlrUnitario.addEvent("onFocus", "this.value = js_strToFloat(this.value)");
-    oTxtVlrUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3)");
+    oTxtVlrUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 4)");
     oTxtVlrUnitario.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, '')");
     oTxtVlrUnitario.setValue("0,000");
     oTxtVlrUnitario.setClassName("text-right");
@@ -1814,7 +1814,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
         nUnitario = oItem.novounitario || oItem.valorunitario;
 
 
-      oInputQuantidade = new DBTextField('quantidade' + iSeq, 'quantidade' + iSeq, js_formatar(nQuantidade, 'f', 3));
+      oInputQuantidade = new DBTextField('quantidade' + iSeq, 'quantidade' + iSeq, js_formatar(nQuantidade, 'f', 4));
       oInputQuantidade.addStyle("width", "100%");
       oInputQuantidade.setClassName("text-right");
       oInputQuantidade.setReadOnly(iTipoAditamento == 6);
@@ -1823,7 +1823,7 @@ function dbViewAlteracaoAditamentoContrato(iTipoAditamento, sNomeInstance, oNode
 
 
         oInputQuantidade.addEvent("onFocus", "this.value = js_strToFloat(this.value);" + me.sInstance + ".js_bloqueivalorunt(" + iSeq + "," + $('oCboTipoAditivo').value + ")");
-        oInputQuantidade.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); ");
+        oInputQuantidade.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 4); ");
         oInputQuantidade.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, '');" + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
       }
 
