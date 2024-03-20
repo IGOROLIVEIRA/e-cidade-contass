@@ -50,8 +50,7 @@ $sql = "
                         t58_valoratual+t44_valorresidual AS valoratual,
                         t52_dtaqu AS dtaquisicao,
                         descrdepto AS departamento,
-                        t30_descr AS divisao,
-                        t70_descr
+                        t30_descr AS divisao
         FROM bens
         JOIN bensdepreciacao ON t44_bens = t52_bem
         JOIN db_depart ON coddepto = t52_depart
@@ -78,19 +77,15 @@ $sql = "
                         t44_valoratual+t44_valorresidual AS valoratual,
                         t52_dtaqu AS dtaquisicao,
                         descrdepto AS departamento,
-                        t30_descr AS divisao,
-                        t70_descr
+                        t30_descr AS divisao
         FROM bens
         JOIN bensdepreciacao ON t44_bens = t52_bem
         JOIN db_depart ON coddepto = t52_depart
         JOIN clabens ON t64_codcla=t52_codcla
         JOIN bemtipos ON t24_sequencial=t64_bemtipos
-        JOIN histbem ON t56_codbem=t52_bem
-        JOIN situabens ON t70_situac=t56_situac
         LEFT JOIN bensdiv ON t33_bem=t52_bem
         LEFT JOIN departdiv ON t30_codigo=t33_divisao
         LEFT JOIN bensbaix ON t55_codbem=t52_bem
-        AND t30_depto=t52_depart
         WHERE t52_instit = ".db_getsession('DB_instit')."
             $where
             $order
@@ -130,9 +125,13 @@ $pdf->cell(25   ,$alt  ,"Data Aquisição",1,0,"C",1);
 $pdf->cell(20   ,$alt  ,"Situação",1,0,"C",1);
 $pdf->cell(25   ,$alt  ,"Vlr. Aquisição",1,0,"C",1);
 $pdf->cell(20   ,$alt  ,"Vlr. Atual",1,1,"C",1);
-$iTotalRegistros = 0;
+
 for ($iCont = 0; $iCont < pg_num_rows($resultBens); $iCont++) {
     $oResult = db_utils::fieldsMemory($resultBens, $iCont);
+
+    $rsSituacaobem = db_query("SELECT * FROM histbem JOIN situabens ON t70_situac=t56_situac WHERE t56_codbem = $oResult->codigo ORDER BY t56_histbem desc limit 1");
+    $oResultSituacao = db_utils::fieldsMemory($rsSituacaobem, 0);
+
     $descricao = $oResult->descricao.' '.$oResult->observacao;
     $old_y = $pdf->gety();
     $descricao = substr(str_replace("\n", "", $descricao), 0, 1000);
@@ -173,7 +172,7 @@ for ($iCont = 0; $iCont < pg_num_rows($resultBens); $iCont++) {
         $pdf->sety(50);
         $pdf->setx(200);
         $pdf->cell(25, $alt + $addalt, $dtaquisicao, 1, 0, "C", 0);
-        $pdf->cell(20, $alt + $addalt, $oResult->t70_descr, 1, 0, "C", 0);
+        $pdf->cell(20, $alt + $addalt, $oResultSituacao->t70_descr, 1, 0, "C", 0);
         $pdf->cell(25, $alt + $addalt, $valoraquisicao, 1, 0, "R", 0);
         $pdf->cell(20, $alt + $addalt, $valoratual, 1, 1, "R", 0);
         $pdf->multicell(200, 0, '', "T", "J", 0);
@@ -187,7 +186,7 @@ for ($iCont = 0; $iCont < pg_num_rows($resultBens); $iCont++) {
         $pdf->sety($old_y+0.4);
         $pdf->setx(200);
         $pdf->cell(25, $alt + $addalt, $dtaquisicao, 1, 0, "C", 0);
-        $pdf->cell(20, $alt + $addalt, $oResult->t70_descr, 1, 0, "C", 0);
+        $pdf->cell(20, $alt + $addalt, $oResultSituacao->t70_descr, 1, 0, "C", 0);
         $pdf->cell(25, $alt + $addalt, $valoraquisicao, 1, 0, "R", 0);
         $pdf->cell(20, $alt + $addalt, $valoratual, 1, 1, "R", 0);
         $pdf->multicell(200, 0, '', "T", "J", 0);
@@ -202,6 +201,6 @@ $pdf->cell(60   ,$alt  ,"Total:",1,0,"C",1);
 $pdf->SetFont('arial','B',9);
 $pdf->cell(195, $alt, '', 1, 0, "R", 0);
 $pdf->cell(25, $alt, db_formatar($totalAquisicao,'f'), 1, 1, "R", 0);
-$pdf->cell(280,$alt  ,"TOTAL GERAL DE REGISTROS: ".$iTotalRegistros,0,0,"R",0);
+$pdf->cell(280,$alt  ,"TOTAL GERAL DE REGISTROS: ".$iCont,0,0,"R",0);
 
 $pdf->Output();
