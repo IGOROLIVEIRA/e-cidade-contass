@@ -99,11 +99,16 @@ switch ($oParam->exec) {
     case 'excluirAnexo':
         try {
             db_inicio_transacao();
+            $clcontroleanexostermospncp = new cl_controleanexostermospncp();
+            $rsAnexosPNCP = $clcontroleanexostermospncp->sql_record($clcontroleanexostermospncp->sql_query(null,"*",null, "ac57_sequencialarquivo = $oParam->codAnexo"));
 
-            $cl_anexotermospncp->excluir($oParam->codAnexo);
-
-            if ($cllicobrasanexo->erro_status == '0') {
-                throw new Exception($cllicobrasanexo->erro_msg);
+            if(pg_num_rows($rsAnexosPNCP)){
+                $oRetorno->sMensagem = urlencode('Anexo já enviado ao PNCP, para excluí-lo é necessário que seja primeiro EXCLUÍDO no PNCP.');
+            }else {
+                $cl_anexotermospncp->excluir($oParam->codAnexo);
+                if ($cllicobrasanexo->erro_status == '0') {
+                    throw new Exception($cllicobrasanexo->erro_msg);
+                }
             }
 
             db_fim_transacao();
