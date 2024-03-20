@@ -54,7 +54,7 @@ class PcOrcamService
 
         $dadosOrcamento = $this->pcOrcamRepository->getDadosManutencaoOrcamento($sequencial,$origem);
 
-        if ($dadosOrcamento[0]->situacao != '0') {
+        if ($dadosOrcamento[0]->situacao != '0' && $dadosOrcamento[0]->situacao != null) {
             throw new Exception('Carregamento de dados abortado, o orçamento selecionado possui Processo Licitatório vinculado que não está com o status Em andamento.');
         }
 
