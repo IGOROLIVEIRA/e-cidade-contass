@@ -208,8 +208,8 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
               INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
               LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
               WHERE obr01_instit = ".db_getsession("DB_instit")."
-              AND DATE_PART('YEAR',licobrasituacao.obr02_dtsituacao)=  " . db_getsession("DB_anousu") . "
-              AND DATE_PART('MONTH',licobrasituacao.obr02_dtsituacao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+              AND DATE_PART('YEAR',licobrasituacao.obr02_dtlancamento)=  " . db_getsession("DB_anousu") . "
+              AND DATE_PART('MONTH',licobrasituacao.obr02_dtlancamento)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $rsResult20 = db_query($sql);
 
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
@@ -244,8 +244,8 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
               LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
               WHERE obr02_situacao IN (3,4)
                   AND obr01_instit = ".db_getsession("DB_instit")."
-                  AND DATE_PART('YEAR',licobrasituacao.obr02_dtsituacao)=  " . db_getsession("DB_anousu") . "
-                  AND DATE_PART('MONTH',licobrasituacao.obr02_dtsituacao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                  AND DATE_PART('YEAR',licobrasituacao.obr02_dtlancamento)=  " . db_getsession("DB_anousu") . "
+                  AND DATE_PART('MONTH',licobrasituacao.obr02_dtlancamento)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $rsResult21 = db_query($sql);//db_criatabela($rsResult21);die($sql);
 
     for ($iCont21 = 0; $iCont21 < pg_num_rows($rsResult21); $iCont21++) {
@@ -279,8 +279,8 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
               INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
               LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
               WHERE obr01_instit = ".db_getsession("DB_instit")."
-                  AND DATE_PART('YEAR',licobrasmedicao.obr03_dtentregamedicao)=  " . db_getsession("DB_anousu") . "
-                  AND DATE_PART('MONTH',licobrasmedicao.obr03_dtentregamedicao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                  AND DATE_PART('YEAR',licobrasmedicao.obr03_dtlancamento)=  " . db_getsession("DB_anousu") . "
+                  AND DATE_PART('MONTH',licobrasmedicao.obr03_dtlancamento)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $rsResult30 = db_query($sql);//echo $sql; db_criatabela($rsResult30);die();
 
     for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {

@@ -684,6 +684,7 @@ if ($x->consultarDataDoSistema == true) {
             oItem.dotacoes.each(function(oDotItem) {
                 let vTotal = 0
                 if (oItem.dotacoes.length == 1) {
+                    console.log(oItem.dotacoes);
                     oDotItem.quantidade -= js_round(oDotItem.executado / oItem.valorunitario, 2);
                     oDotItem.quantdot = oItem.saldos.quantidadeautorizar.toFixed(4);
                     vTotal = js_round(oItem.valorunitario * oItem.saldos.quantidadeautorizar, 2);

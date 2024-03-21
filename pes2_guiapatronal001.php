@@ -144,7 +144,7 @@ function js_emite(){
         </td>
         <td align="left" >
           <?
-          db_input('campoextra',4,'',true,'text',2,'');
+          db_input('campoextra',4,4,true,'text',2,'');
           ?>
         </td>
       </tr>
