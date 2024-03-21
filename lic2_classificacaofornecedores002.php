@@ -90,22 +90,19 @@ $muda        = 0;
 $mostraAndam = $mostramov;
 $oInfoLog    = array();
 
-function quebrar_texto($texto, $tamanho)
-{
-
-    $aTexto = explode(" ", $texto);
-    $string_atual = "";
-    foreach ($aTexto as $word) {
-        $string_ant = $string_atual;
-        $string_atual .= " " . $word;
-        if (strlen($string_atual) > $tamanho) {
-            $aTextoNovo[] = $string_ant;
-            $string_ant = "";
-            $string_atual = $word;
-        }
-    }
-    $aTextoNovo[] = $string_atual;
-    return $aTextoNovo;
+function limitarTexto($texto, $limite = 1000) {
+  if (strlen($texto) > $limite) {
+      $posicao_espaco = strpos($texto, ' ', $limite); // Encontra a posição do próximo espaço após o limite
+      if ($posicao_espaco !== false) {
+          $texto_cortado = substr($texto, 0, $posicao_espaco); // Obtém a parte da string até o próximo espaço
+      } else {
+          $texto_cortado = substr($texto, 0, $limite); // Se não houver espaço após o limite, corta na posição do limite
+      }
+      $texto_cortado .= '...'; // Adiciona reticências para indicar texto cortado
+  } else {
+      $texto_cortado = $texto; // Se a string for menor que o limite, não é necessário cortar
+  }
+  return $texto_cortado;
 }
 
 for ($i = 0; $i < $numrows; $i++) {
@@ -196,7 +193,7 @@ for ($i = 0; $i < $numrows; $i++) {
           pc23_quant,
           pc23_vlrun,
           pc23_valor,
-          z01_nome|| '-' ||z01_cgccpf as fornecedor,
+          z01_nome|| ' - ' ||z01_cgccpf as fornecedor,
           l21_ordem,
           pc24_pontuacao
         FROM liclicitem
@@ -243,10 +240,50 @@ for ($i = 0; $i < $numrows; $i++) {
         $pdf->cell(280, $alt*2, "", 0, 1, "L", 0);
 
         $pdf->setfont('arial', 'b', 8);
-        $pdf->cell(20, $alt, "Item: ", 1, 0, "L", 1);
-        $pdf->setfont('arial', '', 7);
-        $pdf->cell(260, $alt, $codigo, 1, 1, "L", 0);
 
+        // Ajusta o texto e pega o tamanho para quebra de linhas
+        $text = str_replace(array("\n", "\r"), ' ', $descricao);
+        $text = limitarTexto($text);
+        $text = mb_convert_encoding($text, 'UTF-8', 'ISO-8859-1');
+        $text = mb_strtolower($text, 'UTF-8');
+        $text = mb_convert_encoding($text, 'ISO-8859-1', 'UTF-8');
+        $text = ucfirst($text);
+        $pdf->setfont('arial', '', 7);
+        
+        $textWidth = $pdf->GetStringWidth($text) * 1.0339;
+        $tamanho  = $textWidth > 235 ? ceil($textWidth / 235) : 1;
+        
+        $pdf->setfont('arial', 'b', 8);
+
+        $pdf->cell(20, $alt, "ITEM", 1, 0, "C", 0);
+        $pdf->cell(235, $alt, 'DESCRIÇÃO ', 1, 0, "C", 0);
+        $pdf->cell(25, $alt, 'UNIDADE', 1, 1, "C", 0);
+
+        
+        
+        $pdf->setfont('arial', '', 7);
+        $pdf->cell(20, $alt*$tamanho, $codigo, 1, 0, "C", 0);
+
+        // Pega o x e y antes do multicell
+        $x = $pdf->GetX();
+        $y = $pdf->GetY();
+
+        $pdf->MultiCell(235, $alt, $text, 0, "J", 0);
+
+        // Reseta o x e o y adiciona o tamanho do multicell ao y
+        $pdf->SetXY($x + 235,$y);
+        $pdf->cell(25, $alt*$tamanho, ucfirst(strtolower($m61_descr)), 1, 1, "C", 0);
+
+        // Adiciona segundo header
+        $pdf->setfont('arial', 'b', 8);
+        $pdf->cell(20, $alt, 'COLOCAÇÃO', 1, 0, "C", 0);
+        $pdf->cell(195, $alt, 'FORNECEDOR', 1, 0, "L", 0);
+        $pdf->cell(15, $alt, 'QTDD', 1, 0, "L", 0);
+        $pdf->cell(25, $alt, 'VLR UNIT.', 1, 0, "L", 0);
+        $pdf->cell(25, $alt, 'VLR TOTAL', 1, 1, "L", 0);
+
+
+        /*
         $pdf->setfont('arial', 'b', 8);
         $pdf->cell(20, $alt, 'Unidade: ', 1, 0, "L", 1);
         $pdf->setfont('arial', '', 7);
@@ -257,18 +294,7 @@ for ($i = 0; $i < $numrows; $i++) {
         $pdf->setfont('arial', '', 7);
         $pdf->cell(260, $alt, $pc23_quant, 1, 1, "L", 0);
 
-        $text = substr($descricao, 0, 1000);
-        $text = mb_convert_encoding($text, 'UTF-8', 'ISO-8859-1');
-        $text = mb_strtolower($text, 'UTF-8');
-        $text = mb_convert_encoding($text, 'ISO-8859-1', 'UTF-8');
-        $text = ucfirst($text);
-
-        $tamanho = count(quebrar_texto($text, 232));
-
-        $text = strlen($descricao) > 1000 ? $text . '...' : $text;
-
-        $pdf->setfont('arial', 'b', 8);
-        $pdf->cell(20, $alt*$tamanho, 'Descrição: ', 1, 0, "L", 1);
+        
         $pdf->setfont('arial', '', 7);
         $pdf->MultiCell(260, $alt, $text, 1, "L", 0);    
 
@@ -278,15 +304,18 @@ for ($i = 0; $i < $numrows; $i++) {
         $pdf->cell(210, $alt, 'Fornecedor', 1, 0, "L", 1);
         $pdf->cell(25, $alt, 'Vlr Unit.', 1, 0, "C", 1);
         $pdf->cell(25, $alt, 'Vlr Total', 1, 1, "C", 1);
+        */
         $troca = 0;
         $p     = 0;
       }
 
       $pdf->setfont('arial', '', 7);
       $pdf->cell(20, $alt, $pc24_pontuacao, 1, 0, "C", $p);
-      $pdf->cell(210, $alt, $fornecedor, 1, 0, "J", $p);
+      $pdf->cell(195, $alt, $fornecedor, 1, 0, "L", $p);
+      $pdf->cell(15, $alt, $pc23_quant, 1, 0, "C", 0);
       $pdf->cell(25, $alt, 'R$ ' .db_formatar($pc23_vlrun, "f"), 1, 0, "C", $p);
       $pdf->cell(25, $alt, 'R$ ' .db_formatar($pc23_valor, "f"), 1, 1, "C", $p);
+      
 
       $ordem = $l21_ordem;
       $troca = 0;
