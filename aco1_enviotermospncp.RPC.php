@@ -37,9 +37,7 @@ switch ($oParam->exec) {
             }else{
                 $oItemTermo->numeroAditamento = $oTermo->getNumeroAditamento();
             }
-            if($oAcordo->getSituacao() == "2"){
-                $oItemTermo->numtermopncp = $oAcordo->getNumeroTermoPNCP($oParam->iContrato,$oTermo->getCodigo());
-            }
+            $oItemTermo->numtermopncp = $oAcordo->getNumeroTermoPNCP($oParam->iContrato,$oTermo->getCodigo());
             $oItemTermo->situacao = urlencode($oTermo->getDescricaoTipo());
             $oItemTermo->data = $oTermo->getData();
             $oItemTermo->Justificativa = urlencode($oTermo->getJusitificativa());
