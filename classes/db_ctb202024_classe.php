@@ -1,4 +1,4 @@
-<?
+<?php
 //MODULO: sicom
 //CLASSE DA ENTIDADE ctb202024
 class cl_ctb202024
@@ -597,21 +597,21 @@ class cl_ctb202024
                        c61_codtce,
                        c61_codcon,
                        c61_codigo,
-                       o15_codtri,
+                       o15_codigo,
                        c61_instit,
                        fc_saldocontacorrente($ano, c19_sequencial, 103, $mes, c61_instit)
                 FROM conplanoexe
                 INNER JOIN conplanoreduz ON c61_anousu = c62_anousu AND c61_reduz = c62_reduz
-                INNER JOIN conplano ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
+                INNER JOIN conplano ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu AND c60_codsis = 6
                 INNER JOIN contacorrentedetalhe ON c19_conplanoreduzanousu = c61_anousu AND c19_reduz = c61_reduz
                 LEFT JOIN orctiporec ON c19_orctiporec = o15_codigo
                 WHERE c61_instit = $instit
-                  AND c61_reduz = $codctb
                   AND c62_anousu = $ano
+                  AND (c61_reduz = $codctb OR c61_codtce = $codctb)
                 ORDER BY c60_estrut
             )
             SELECT c19_sequencial,
-                   o15_codtri                                                      AS fontemovimento,
+                   o15_codigo                                                      AS fontemovimento,
                    round(substr(fc_saldocontacorrente, 43, 15)::float8, 2)::float8 AS saldoinicial,
                    substr(fc_saldocontacorrente, 107, 1)::varchar(1)               AS nat_vlr_si,
                    round(substr(fc_saldocontacorrente, 59, 15)::float8, 2)::float8 AS debito,
@@ -648,13 +648,11 @@ class cl_ctb202024
                           c61_codigo,
                           c61_instit,
                           fc_planosaldonovo(2024, c61_reduz, '$sDataInicial', '$sDataFinal', false)
-                  FROM conplanoexe
-                  INNER JOIN conplanoreduz ON c61_anousu = c62_anousu AND c61_reduz = c62_reduz
-                  INNER JOIN conplano p ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
-                  WHERE c62_anousu = $iAnoUsu
-                    AND c61_instit = $instituicao
-                    AND c61_reduz = $oConta->codctb) AS x";
+                   FROM conplanoexe
+                   INNER JOIN conplanoreduz ON c61_anousu = c62_anousu AND c61_reduz = c62_reduz
+                   INNER JOIN conplano p ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu AND c60_codsis = 6
+                   WHERE c62_anousu = $iAnoUsu
+                     AND c61_instit = $instituicao
+                     AND (c61_reduz = $oConta->codctb OR c61_codtce = $oConta->codctb)) AS x";
   }
 }
-
-?>
