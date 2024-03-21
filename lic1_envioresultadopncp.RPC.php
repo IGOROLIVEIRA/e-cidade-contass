@@ -85,7 +85,7 @@ switch ($oParam->exec) {
                 $rsPNCP = $clliccontrolepncpitens->sql_record($clliccontrolepncpitens->sql_query(null, "*", null, "l214_ordem = $item->l21_ordem and l214_licitacao=$oParam->iLicitacao and l214_fornecedor = $item->z01_numcgm"));
 
                 if (pg_num_rows($rsPNCP)) {
-                    throw new Exception('Rusultado deste Fornecedor ja foi enviado ao PNCP para esse Item seq: ' . $item->l21_ordem);
+                    throw new Exception('Resultado deste Fornecedor ja foi enviado ao PNCP para esse Item seq: ' . $item->l21_ordem);
                 }
 
                 $aItensLicitacao = array();
@@ -106,17 +106,18 @@ switch ($oParam->exec) {
 
                     $aResultadoItem = explode('/',$rsApiPNCP[0]);
                     $l214_sequencialresultado = preg_replace("/[^0-9]/", "", $aResultadoItem[13]);
-                    $clliccontrolepncpitens->l214_numeroresultado = 1;
-                    $clliccontrolepncpitens->l214_numerocompra = $oDadosAvisoPNCP->l213_numerocompra;
-                    $clliccontrolepncpitens->l214_anousu = $oDadosAvisoPNCP->l213_anousu;
-                    $clliccontrolepncpitens->l214_licitacao = $oParam->iLicitacao;
-                    $clliccontrolepncpitens->l214_ordem = $item->l21_ordem;
-                    $clliccontrolepncpitens->l214_fornecedor = $item->z01_numcgm;
-                    $clliccontrolepncpitens->l214_sequencialresultado = $l214_sequencialresultado;
-                    $clliccontrolepncpitens->incluir();
+                    $clLiccontroleItens = new cl_liccontrolepncpitens();
+                    $clLiccontroleItens->l214_numeroresultado = 1;
+                    $clLiccontroleItens->l214_numerocompra = $oDadosAvisoPNCP->l213_numerocompra;
+                    $clLiccontroleItens->l214_anousu = $oDadosAvisoPNCP->l213_anousu;
+                    $clLiccontroleItens->l214_licitacao = $oParam->iLicitacao;
+                    $clLiccontroleItens->l214_ordem = $item->l21_ordem;
+                    $clLiccontroleItens->l214_fornecedor = $item->z01_numcgm;
+                    $clLiccontroleItens->l214_sequencialresultado = $l214_sequencialresultado;
+                    $clLiccontroleItens->incluir();
 
-                    if($clliccontrolepncpitens->erro_status == 0){
-                        throw new Exception(utf8_decode($clliccontrolepncpitens->erro_msg));
+                    if($clLiccontroleItens->erro_status == 0){
+                        throw new Exception(utf8_decode($clLiccontroleItens->erro_msg));
                     }
 
                     $oRetorno->status  = 1;

@@ -66,7 +66,7 @@ switch ($oParam->exec) {
                     $rsPNCP = $clliccontrolepncpitens->sql_record($clliccontrolepncpitens->sql_query(null, "*", null, "l214_ordem = $item->pc11_seq and l214_pcproc=$oParam->iPcproc and l214_fornecedor = $item->z01_numcgm"));
 
                     if (pg_num_rows($rsPNCP)) {
-                        throw new Exception('Rusultado deste Fornecedor ja foi enviado ao PNCP para esse Item seq: ' . $item->pc11_seq);
+                        throw new Exception('Resultado deste Fornecedor ja foi enviado ao PNCP para esse Item seq: ' . $item->pc11_seq);
                     }
 
                     $aItensProcessoResultado = array();
