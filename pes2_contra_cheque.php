@@ -114,7 +114,7 @@ if ( $oParametros->iTipoRelatorio <> TIPO_RELATORIO_GERAL ) {
 $wherepes = $sWhere;
 if($selecao != ''){
   $result_sel = db_query("select r44_where , r44_descr from selecao where r44_selec = ".$selecao);
-  if(pg_numrows($result_sel) > 0){
+  if(pg_num_rows($result_sel) > 0){
     db_fieldsmemory($result_sel, 0, 1);
     $wherepes .= " and ".$r44_where;
     $head5 = $r44_descr;
@@ -246,7 +246,7 @@ if($ordem == "L"){
 // ------------- busca url do site do cliente ----------------------
 $sqlDbConfig = " select url from db_config where prefeitura = true ";
 $rsDbConfig  = db_query($sqlDbConfig);
-$iDbConfig   = pg_numrows($rsDbConfig);
+$iDbConfig   = pg_num_rows($rsDbConfig);
 
 if ($iDbConfig > 0) {
 	$oDbConfig = db_utils::fieldsMemory($rsDbConfig, 0);
@@ -257,7 +257,7 @@ if ($iDbConfig > 0) {
 //------------------------------------------------------------------
  //echo $sql;exit;
 $res = db_query($sql);
-$num = pg_numrows($res);
+$num = pg_num_rows($res);
 if ($num == 0){
    db_redireciona('db_erros.php?fechar=true&db_erro=Não existe Cálculo no período de '.$mes.' / '.$ano);
 }
@@ -273,10 +273,10 @@ if ($num == 0){
   $pdf1->municpref        = $munic;
   $pdf1->telefpref        = $telef;
   $pdf1->emailpref        = $email;
-  $pdf1->ano        	    = $ano;
+  $pdf1->ano        	  = $ano;
   $pdf1->mes          	  = $mes;
   $pdf1->mensagem         = $msg;
-  $pdf1->qualarquivo     = $qualarquivo;
+  $pdf1->qualarquivo      = $qualarquivo;
  
   $lin = 1;
   
@@ -343,7 +343,7 @@ for($i=0;$i<$num;$i++){
 
   $res_env = db_query($sql);
   //modificado 
-  $pdf1->registro	        = $rh01_regist;
+  $pdf1->registro	      = $rh01_regist;
   $pdf1->nome		      = substr($z01_nome, 0, 40);
   $pdf1->descr_funcao	  = substr($rh37_descr, 0, 37);
   $pdf1->descr_lota       = $estrut.'-'.$r70_descr;
@@ -352,13 +352,13 @@ for($i=0;$i<$num;$i++){
   $pdf1->banco         	  = $rh44_codban;
   $pdf1->agencia       	  = trim($rh44_agencia).'-'.trim($rh44_dvagencia);
   $pdf1->conta         	  = trim($rh44_conta).'-'.trim($rh44_dvconta);
-  $pdf1->lotacao	        = $estrut;
+  $pdf1->lotacao	      = $estrut;
   $pdf1->recordenvelope   = $res_env;
-  $pdf1->linhasenvelope	  = pg_numrows($res_env);
-  $pdf1->valor		        = 'valor';
+  $pdf1->linhasenvelope	  = pg_num_rows($res_env);
+  $pdf1->valor		      = 'valor';
   $pdf1->quantidade	      = 'quant';
-  $pdf1->tipo		          = 'provdesc';
-  $pdf1->rubrica	        = 'rubrica';
+  $pdf1->tipo		      = 'provdesc';
+  $pdf1->rubrica	      = 'rubrica';
   $pdf1->descr_rub	      = 'rh27_descr';
   $pdf1->numero	  	      = $i+1;
   $pdf1->total	  	      = $num;
@@ -369,6 +369,7 @@ for($i=0;$i<$num;$i++){
   $pdf1->cgm           	  = $z01_cgccpf;
   $pdf1->vinculo       	  = $rh30_regime.'-'.$rh30_descr;
   $pdf1->pis	       	  = $rh16_pis;
+  $pdf1->codcgm           = $rh01_numcgm;
   
   
   $pdf1->imprime();

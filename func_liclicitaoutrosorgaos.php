@@ -121,6 +121,10 @@ $clliclicitaoutrosorgaos->rotulo->label("lic211_numero");
                         END AS lic211_tipo,";
         }
 
+        $where = "";
+        if(isset($tipolicitacaooutrosorgaos)){
+            $where .= " lic211_tipo = $tipolicitacaooutrosorgaos";
+        }
 
         if (isset($chave_lic211_sequencial) && (trim($chave_lic211_sequencial) != "")) {
             $sql = $clliclicitaoutrosorgaos->sql_query(null, $campos . $camposCgm, "lic211_sequencial", " lic211_sequencial = $chave_lic211_sequencial");
@@ -132,7 +136,7 @@ $clliclicitaoutrosorgaos->rotulo->label("lic211_numero");
         } else if (isset($chave_lic211_anousu) && (trim($chave_lic211_anousu) != "")) {
             $sql = $clliclicitaoutrosorgaos->sql_query(null, $campos . $camposCgm, "lic211_sequencial", " and lic211_anousu = {$chave_lic211_anousu}");
         } else {
-            $sql = $clliclicitaoutrosorgaos->sql_query('', $campos . $camposCgm);
+            $sql = $clliclicitaoutrosorgaos->sql_query('', $campos . $camposCgm,'',$where);
         }
 
         $repassa = array();
@@ -144,8 +148,12 @@ $clliclicitaoutrosorgaos->rotulo->label("lic211_numero");
         echo '</div>';
     } else {
         if ($pesquisa_chave != null && $pesquisa_chave != "") {
+            $where = "";
+            if(isset($tipolicitacaooutrosorgaos)){
+                $where .= " and lic211_tipo = $tipolicitacaooutrosorgaos";
+            }
             if (isset($poo) && $poo = true) {
-                $sSQL = "select z01_nome,lic211_tipo,lic211_processo,lic211_numero,lic211_anousu from liclicitaoutrosorgaos inner join cgm on z01_numcgm = lic211_orgao where lic211_sequencial = {$pesquisa_chave}";
+                $sSQL = "select z01_nome,lic211_tipo,lic211_processo,lic211_numero,lic211_anousu from liclicitaoutrosorgaos inner join cgm on z01_numcgm = lic211_orgao where lic211_sequencial = {$pesquisa_chave} $where";
                 $result = $clliclicitaoutrosorgaos->sql_record($sSQL);
             } else {
                 $result = $clliclicitaoutrosorgaos->sql_record($clliclicitaoutrosorgaos->sql_query($pesquisa_chave));
