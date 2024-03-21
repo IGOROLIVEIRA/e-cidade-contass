@@ -57,7 +57,7 @@ if ($l03_codigo != "") {
   $sWhere .= $sAnd . " l20_codtipocom=$l03_codigo ";
   $sAnd = " and ";
   if ($l03_descr != "") {
-    $info2 = "Modalidade: " . $l03_codigo . " - " . $l03_descr;
+    $info2 = "Modalidade: " . $l03_codigo . " - " . mb_convert_encoding($l03_descr, 'ISO-8859-1', 'UTF-8');;
   }
 }
 
@@ -89,6 +89,25 @@ $valortot    = 0;
 $muda        = 0;
 $mostraAndam = $mostramov;
 $oInfoLog    = array();
+
+function quebrar_texto($texto, $tamanho)
+{
+
+    $aTexto = explode(" ", $texto);
+    $string_atual = "";
+    foreach ($aTexto as $word) {
+        $string_ant = $string_atual;
+        $string_atual .= " " . $word;
+        if (strlen($string_atual) > $tamanho) {
+            $aTextoNovo[] = $string_ant;
+            $string_ant = "";
+            $string_atual = $word;
+        }
+    }
+    $aTextoNovo[] = $string_atual;
+    return $aTextoNovo;
+}
+
 for ($i = 0; $i < $numrows; $i++) {
 
   db_fieldsmemory($result, $i);
@@ -167,11 +186,12 @@ for ($i = 0; $i < $numrows; $i++) {
   }
 
   $sSql = "SELECT DISTINCT
-          pc01_codmater as codigo,
+          l21_ordem as codigo,
           case
             when pc01_descrmater=pc01_complmater or pc01_complmater is null then pc01_descrmater
             else pc01_descrmater || '. ' || pc01_complmater
           end as descricao,
+          --pc01_descrmater as descricao,
           matunid.m61_descr,
           pc23_quant,
           pc23_vlrun,
@@ -219,29 +239,54 @@ for ($i = 0; $i < $numrows; $i++) {
         if ($pdf->gety() > $pdf->h - 30) {
           $pdf->addpage();
         }
+        
+        $pdf->cell(280, $alt*2, "", 0, 1, "L", 0);
+
         $pdf->setfont('arial', 'b', 8);
-        $pdf->cell(280, $alt, "", 0, 1, "L", 0);
-        $pdf->cell(10, $alt, "Item", 1, 0, "C", 1);
-        $pdf->cell(110, $alt, 'Descrição', 1, 0, "J", 1);
-        $pdf->cell(15, $alt, 'Unidade', 1, 0, "C", 1);
-        $pdf->cell(10, $alt, 'Qtdd.', 1, 0, "C", 1);
-        $pdf->cell(15, $alt, 'Vlr Unit.', 1, 0, "C", 1);
-        $pdf->cell(20, $alt, 'Vlr Total', 1, 0, "C", 1);
-        $pdf->cell(80, $alt, 'Fornecedor', 1, 0, "C", 1);
-        $pdf->cell(20, $alt, 'Colocação', 1, 1, "C", 1);
+        $pdf->cell(20, $alt, "Item: ", 1, 0, "L", 1);
+        $pdf->setfont('arial', '', 7);
+        $pdf->cell(260, $alt, $codigo, 1, 1, "L", 0);
+
+        $pdf->setfont('arial', 'b', 8);
+        $pdf->cell(20, $alt, 'Unidade: ', 1, 0, "L", 1);
+        $pdf->setfont('arial', '', 7);
+        $pdf->cell(260, $alt, ucfirst(strtolower($m61_descr)), 1, 1, "L", 0);
+
+        $pdf->setfont('arial', 'b', 8);
+        $pdf->cell(20, $alt, 'Qtdd.: ', 1, 0, "L", 1);
+        $pdf->setfont('arial', '', 7);
+        $pdf->cell(260, $alt, $pc23_quant, 1, 1, "L", 0);
+
+        $text = substr($descricao, 0, 1000);
+        $text = mb_convert_encoding($text, 'UTF-8', 'ISO-8859-1');
+        $text = mb_strtolower($text, 'UTF-8');
+        $text = mb_convert_encoding($text, 'ISO-8859-1', 'UTF-8');
+        $text = ucfirst($text);
+
+        $tamanho = count(quebrar_texto($text, 232));
+
+        $text = strlen($descricao) > 1000 ? $text . '...' : $text;
+
+        $pdf->setfont('arial', 'b', 8);
+        $pdf->cell(20, $alt*$tamanho, 'Descrição: ', 1, 0, "L", 1);
+        $pdf->setfont('arial', '', 7);
+        $pdf->MultiCell(260, $alt, $text, 1, "L", 0);    
+
+        $pdf->cell(280, 2, "", 0, 1, "L", 0);
+        $pdf->setfont('arial', 'b', 8);
+        $pdf->cell(20, $alt, 'Colocação', 1, 0, "L", 1);
+        $pdf->cell(210, $alt, 'Fornecedor', 1, 0, "L", 1);
+        $pdf->cell(25, $alt, 'Vlr Unit.', 1, 0, "C", 1);
+        $pdf->cell(25, $alt, 'Vlr Total', 1, 1, "C", 1);
         $troca = 0;
         $p     = 0;
       }
 
       $pdf->setfont('arial', '', 7);
-      $pdf->cell(10, $alt, $codigo, 0, 0, "C", $p);
-      $pdf->cell(110, $alt, substr($descricao, 0, 70), 0, "J", $p);
-      $pdf->cell(15, $alt, ucfirst(strtolower($m61_descr)), 0, 0, "C", $p);
-      $pdf->cell(10, $alt, $pc23_quant, 0, 0, "C", $p);
-      $pdf->cell(15, $alt, db_formatar($pc23_vlrun, "f"), 0, 0, "C", $p);
-      $pdf->cell(20, $alt, db_formatar(($pc23_valor), "f"), 0, 0, "C", $p);
-      $pdf->cell(80, $alt, $fornecedor, 0, 0, "J", $p);
-      $pdf->cell(20, $alt, $pc24_pontuacao, 0, 1, "C", $p);
+      $pdf->cell(20, $alt, $pc24_pontuacao, 1, 0, "C", $p);
+      $pdf->cell(210, $alt, $fornecedor, 1, 0, "J", $p);
+      $pdf->cell(25, $alt, 'R$ ' .db_formatar($pc23_vlrun, "f"), 1, 0, "C", $p);
+      $pdf->cell(25, $alt, 'R$ ' .db_formatar($pc23_valor, "f"), 1, 1, "C", $p);
 
       $ordem = $l21_ordem;
       $troca = 0;
