@@ -4,6 +4,7 @@ require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once("classes/db_rpsd102023_classe.php");
 require_once("classes/db_rpsd112023_classe.php");
 require_once("model/contabilidade/arquivos/sicom/2023/dcasp/geradores/GerarRPSD.model.php");
+require_once("model/orcamento/DeParaRecurso.model.php");
 
 
 
@@ -108,7 +109,8 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                                 sum(CASE
                                         WHEN c53_tipo = 31 THEN c70_valor * -1 
                                         ELSE c70_valor 
-                                    END) AS vlpagofontersp
+                                    END) AS vlpagofontersp,
+                                e60_codco    
                         FROM empempenho 
                         INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu
                         INNER JOIN orcprojativ ON o58_anousu = o55_anousu AND o58_projativ = o55_projativ
@@ -174,10 +176,15 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                   if ($clrpsd10->erro_status == 0) {
                       throw new Exception($clrpsd10->erro_msg);
                   }
+
+                  $clDeParaFonte = new DeParaRecurso;
+                  $iFonteAlterada = substr($clDeParaFonte->getDePara(strlen($iFonteAlterada) == 7 ? $iFonteAlterada."0" : $iFonteAlterada),0,7);
+        
                   $clrpsd11 = new cl_rpsd112023();
                   $clrpsd11->si190_tiporegistro = 11;
                   $clrpsd11->si190_codreduzidorsp = $oDadosRPSD->codreduzidorsp;
                   $clrpsd11->si190_codfontrecursos = $iFonteAlterada;
+                  $clrpsd11->si190_codco = $oDadosRPSD->e60_codco ? $oDadosRPSD->e60_codco : "0000";
                   $clrpsd11->si190_vlpagofontersp = $oDadosRPSD->vlpagofontersp;
                   $clrpsd11->si190_reg10 = $clrpsd10->si189_sequencial;
                   $clrpsd11->si190_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];

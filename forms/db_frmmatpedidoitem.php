@@ -81,10 +81,10 @@ if (!empty($m97_sequencial)&&$m97_sequencial!=""){
   }
 
 }
-if (!empty($m98_matmater)&&$db_opcao==1&&!empty($incluir)){
+if (!empty($m98_matmater) && $db_opcao == 1 && !empty($incluir)) {
   $result_mat = $clmatpedidoitem->sql_record($clmatpedidoitem->sql_query(null,'*',null,"m98_matpedido = $m97_sequencial and m98_matmater = $m98_matmater "));
   if ($clmatpedidoitem->numrows>0){
-    db_msgbox("Material já incluido nesta solicitação!!");
+    //db_msgbox("Material já incluido nesta solicitação!!");
     $m98_matmater = "";
     $m60_descr = "";
   }
@@ -223,7 +223,7 @@ if (!empty($m98_matmater)&&$db_opcao==1&&!empty($incluir)){
         }
         ?>
         <?db_input('m91_depto',10,@$m91_depto,true,'hidden',3,"");?>
-        <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> <?=(($db_opcao==1||$db_opcao==2||$db_opcao==22)&&$testquan=='f'?"onclick='return js_testaquant();'":"")?>  >
+        <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> <?=(($db_opcao==1||$db_opcao==2||$db_opcao==22)?"onclick='return js_testaquant();'":"")?>  >
         <?if ($db_opcao==1||$db_opcao==2){ ?>
           <input name='pesquisar' type='button' id='emite' value='Emite Solicitação' onclick='js_abre();' <?=($db_botao==false?"disabled":"")?>>
         <?}?>
@@ -272,7 +272,6 @@ if (!empty($m98_matmater)&&$db_opcao==1&&!empty($incluir)){
   </table>
 </form>
 <script>
-
   // Autocomplete do medicamento
   oAutoComplete = new dbAutoComplete(document.form1.m60_descr, 'mat4_autonome.RPC.php?iCodigo=1');
   oAutoComplete.setTxtFieldId(document.getElementById('m98_matmater'));
@@ -300,6 +299,7 @@ if (!empty($m98_matmater)&&$db_opcao==1&&!empty($incluir)){
     jan = window.open('mat2_matpedido001.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jan.moveTo(0,0);
   }
+
   function js_pesquisa_codmater(mostra){
     if (mostra==true){
       js_OpenJanelaIframe('','db_iframe_mater','func_matmater.php?funcao_js=parent.js_mostra1|m60_codmater|m60_descr','Pesquisa',true);
@@ -311,6 +311,7 @@ if (!empty($m98_matmater)&&$db_opcao==1&&!empty($incluir)){
       }
     }
   }
+
   function js_mostra(chave,erro){
     document.form1.m60_descr.value = chave;
     if (erro==true){
@@ -321,34 +322,45 @@ if (!empty($m98_matmater)&&$db_opcao==1&&!empty($incluir)){
       document.form1.submit();
     }
   }
+
   function js_mostra1(chave1,chave2){
     document.form1.m98_matmater.value = chave1;
     document.form1.m60_descr.value = chave2;
     db_iframe_mater.hide();
     document.form1.submit();
   }
-  function js_testaquant(){
-    <?
-    if ($oParam->m90_validarsaldosolictransf == 2) { // não valida o saldo disponível
-      echo 'return true;';
-    }
-    ?>
-    m98_quant=new Number(document.form1.m98_quant.value );
-    quant_disp= new Number(document.form1.quant_disp.value );
 
-    if ( quant_disp == 0 ) {
-      alert('Quantidade disponível igual a zero!');
-      return false;
-    } else {
-      if (m98_quant<=quant_disp){
-        return true;
-      } else {
-        alert('Informe uma Quantidade Válida!!');
-        document.form1.m98_quant.value="";
-        document.form1.m98_quant.focus();
-        return false;
+  function js_testaquant() {
+      const quantidade = document.getElementById("m98_quant");
+      const quantidadeDisponivel = document.getElementById("quant_disp");
+
+      if (quantidadeDisponivel != null) {
+          if (typeof quantidadeDisponivel.value === "string" && quantidadeDisponivel.value === '0') {
+              alert('Quantidade disponível igual a zero!');
+              return false;
+          }
+
+          if (typeof quantidade.value === "string" && quantidade.value.length === 0) {
+              alert('Quantidade não informada!');
+              return false;
+          }
+
+          if (typeof quantidade.value === "string" && quantidade.value === '0') {
+              alert('Quantidade não pode ser igual a zero!');
+              return false;
+          }
+
+          if (Number(quantidade.value) > Number(quantidadeDisponivel.value)) {
+              alert('Quantidade informada é maior que disponível!');
+              return false;
+          }
+
+          if (Number(quantidade.value) < 0) {
+              alert('Quantidade informada não pode ser menor que zero!');
+              return false;
+          }
       }
-    }
 
+      return true;
   }
 </script>
