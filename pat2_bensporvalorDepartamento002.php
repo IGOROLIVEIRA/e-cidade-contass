@@ -88,6 +88,13 @@ $sql = "
         LEFT JOIN bensbaix ON t55_codbem=t52_bem
         WHERE t52_instit = ".db_getsession('DB_instit')."
             $where
+            AND t52_bem NOT IN
+        (SELECT t58_bens
+         FROM benshistoricocalculobem
+         JOIN benshistoricocalculo ON t57_sequencial=t58_benshistoricocalculo
+         WHERE t58_bens= t52_bem
+             AND t57_ano = $ano
+             AND t57_mes = $mes)
             $order
 ";
 $resultBens = db_query($sql);

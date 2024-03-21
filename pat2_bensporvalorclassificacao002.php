@@ -88,6 +88,13 @@ $sql = "
         LEFT JOIN bensbaix ON t55_codbem=t52_bem
         WHERE t52_instit = ".db_getsession('DB_instit')."
             $where
+                AND t52_bem NOT IN
+        (SELECT t58_bens
+         FROM benshistoricocalculobem
+         JOIN benshistoricocalculo ON t57_sequencial=t58_benshistoricocalculo
+         WHERE t58_bens= t52_bem
+             AND t57_ano = $ano
+             AND t57_mes = $mes)
             $order
 ";
 $resultBens = db_query($sql);
@@ -197,10 +204,11 @@ for ($iCont = 0; $iCont < pg_num_rows($resultBens); $iCont++) {
     $iTotalRegistros += $iCont;
 }
 $pdf->SetFont('arial','B',10);
-$pdf->cell(60   ,$alt  ,"Total:",1,0,"C",1);
+$pdf->cell(40   ,$alt  ,"Total:",1,0,"C",1);
 $pdf->SetFont('arial','B',9);
 $pdf->cell(195, $alt, '', 1, 0, "R", 0);
-$pdf->cell(25, $alt, db_formatar($totalAquisicao,'f'), 1, 1, "R", 0);
+$pdf->cell(25, $alt, db_formatar($totalAquisicao,'f'), 1, 0, "R", 0);
+$pdf->cell(20, $alt, db_formatar($totalAtual,'f'), 1, 1, "R", 0);
 $pdf->cell(280,$alt  ,"TOTAL GERAL DE REGISTROS: ".$iCont,0,0,"R",0);
 
 $pdf->Output();
