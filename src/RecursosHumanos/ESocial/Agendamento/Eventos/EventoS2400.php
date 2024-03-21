@@ -38,39 +38,37 @@ class EventoS2400 extends EventoBase
         foreach ($this->dados as $oDados) {
 
             $oDadosAPI                                   = new \stdClass;
-            $oDadosAPI->evtCdBenPrRP                    = new \stdClass;
-            $oDadosAPI->evtCdBenPrRP->sequencial = $iSequencial;
-            $oDadosAPI->evtCdBenPrRP->indretif   = 1;
-            $oDadosAPI->evtCdBenPrRP->nrrecibo   = null;
-            $oDadosAPI->evtCdBenPrRP->cpfbenef = $oDados->cpfbenef;
-            $oDadosAPI->evtCdBenPrRP->nmbenefic = $oDados->nmbenefic;
-            $oDadosAPI->evtCdBenPrRP->dtnascto = $oDados->dtnascto;
-            $oDadosAPI->evtCdBenPrRP->dtinicio = $oDados->dtinicio;
-            $oDadosAPI->evtCdBenPrRP->sexo = $oDados->sexo;
-            $oDadosAPI->evtCdBenPrRP->racacor = $oDados->racacor;
-            $oDadosAPI->evtCdBenPrRP->estciv = $oDados->estciv;
-            $oDadosAPI->evtCdBenPrRP->incfismen = $oDados->incfismen;
-            $oDadosAPI->evtCdBenPrRP->dtincfismen = $oDados->incfismen == 'S' ? $oDados->dtincfismen : null;
+            $oDadosAPI->evtCdBenefIn                    = new \stdClass;
+            $oDadosAPI->evtCdBenefIn->sequencial = $iSequencial;
+            $oDadosAPI->evtCdBenefIn->indretif   = 1;
+            $oDadosAPI->evtCdBenefIn->nrrecibo   = null;
+            $oDadosAPI->evtCdBenefIn->cpfbenef = $oDados->cpfbenef;
+            $oDadosAPI->evtCdBenefIn->nmbenefic = $oDados->nmbenefic;
+            $oDadosAPI->evtCdBenefIn->dtnascto = $oDados->dtnascto;
+            $oDadosAPI->evtCdBenefIn->dtinicio = $oDados->dtinicio;
+            $oDadosAPI->evtCdBenefIn->sexo = $oDados->sexo;
+            $oDadosAPI->evtCdBenefIn->racacor = $oDados->racacor;
+            $oDadosAPI->evtCdBenefIn->estciv = $oDados->estciv;
+            $oDadosAPI->evtCdBenefIn->incfismen = $oDados->incfismen;
+            $oDadosAPI->evtCdBenefIn->dtincfismen = $oDados->incfismen == 'S' ? $oDados->dtincfismen : null;
 
-            $oDadosAPI->evtCdBenPrRP->endereco->brasil->tplograd = $oDados->tplograd;
-            $oDadosAPI->evtCdBenPrRP->endereco->brasil->dsclograd = $oDados->dsclograd;
-            $oDadosAPI->evtCdBenPrRP->endereco->brasil->nrlograd = $oDados->nrlograd ?: 0;
-            $oDadosAPI->evtCdBenPrRP->endereco->brasil->bairro = $oDados->bairro;
-            $oDadosAPI->evtCdBenPrRP->endereco->brasil->cep = $oDados->cep;
-            $oDadosAPI->evtCdBenPrRP->endereco->brasil->codMunic = $oDados->codmunic;
-            $oDadosAPI->evtCdBenPrRP->endereco->brasil->uf = $oDados->uf;
-            $oDadosAPI->evtCdBenPrRP->endereco->brasil->complemento = empty($oDados->complemento) ? null : $oDados->complemento;
-            $oDadosAPI->evtCdBenPrRP->endereco->brasil->tpLograd = empty($oDados->tplograd) ? null : $oDados->tplograd;
+            $oDadosAPI->evtCdBenefIn->endereco->brasil->tplograd = $oDados->tplograd;
+            $oDadosAPI->evtCdBenefIn->endereco->brasil->dsclograd = $oDados->dsclograd;
+            $oDadosAPI->evtCdBenefIn->endereco->brasil->nrlograd = $oDados->nrlograd ?: 0;
+            $oDadosAPI->evtCdBenefIn->endereco->brasil->bairro = $oDados->bairro;
+            $oDadosAPI->evtCdBenefIn->endereco->brasil->cep = $oDados->cep;
+            $oDadosAPI->evtCdBenefIn->endereco->brasil->codMunic = $oDados->codmunic;
+            $oDadosAPI->evtCdBenefIn->endereco->brasil->uf = $oDados->uf;
+            $oDadosAPI->evtCdBenefIn->endereco->brasil->complemento = empty($oDados->complemento) ? null : $oDados->complemento;
+            $oDadosAPI->evtCdBenefIn->endereco->brasil->tpLograd = empty($oDados->tplograd) ? null : $oDados->tplograd;
 
-            $oDadosAPI->evtCdBenPrRP->endereco->exterior = null;
+            $oDadosAPI->evtCdBenefIn->endereco->exterior = null;
 
-            $oDadosAPI->evtCdBenPrRP->dependente = $this->buscarDependentes($oDados->cpfbenef);
+            $oDadosAPI->evtCdBenefIn->dependente = $this->buscarDependentes($oDados->cpfbenef);
 
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;
         }
-        // var_dump($aDadosAPI);
-        // exit;
         return $aDadosAPI;
     }
 
@@ -83,7 +81,7 @@ class EventoS2400 extends EventoBase
     {
 
         $oDaorhdepend = \db_utils::getDao("rhdepend");
-        $sqlDependentes = $oDaorhdepend->sql_query(null, "*", "rh31_codigo", "z01_cgccpf = '{$cpf}' and rh02_instit = ".db_getsession("DB_instit"));
+        $sqlDependentes = $oDaorhdepend->sql_query(null, "*", "rh31_codigo", "z01_cgccpf = '{$cpf}' and rh02_instit = " . db_getsession("DB_instit"));
 
         $rsDependentes = db_query($sqlDependentes);
 
@@ -117,6 +115,6 @@ class EventoS2400 extends EventoBase
 
             $aDependentes[] = $oDependFormatado;
         }
-        return $aDependentes;
+        return empty($aDependentes) ? null : $aDependentes;
     }
 }

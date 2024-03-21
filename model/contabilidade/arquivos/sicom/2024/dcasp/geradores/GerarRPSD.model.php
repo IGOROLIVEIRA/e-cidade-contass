@@ -64,6 +64,7 @@ class GerarRPSD extends GerarAM
             $aCSVRPSD11['si190_tiporegistro']    = $this->padLeftZero($aRPSD11['si190_tiporegistro'], 2);
             $aCSVRPSD11['si190_codreduzidorsp']  = substr($aRPSD11['si190_codreduzidorsp'], 0, 15);
             $aCSVRPSD11['si190_codfontrecursos'] = $this->padLeftZero($aRPSD11['si190_codfontrecursos'], 3);
+            $aCSVRPSD11['si190_codco']           = $aRPSD11['si190_codco'];
             $aCSVRPSD11['si190_vlpagofontersp']  = $this->sicomNumberReal($aRPSD11['si190_vlpagofontersp'], 2);
 
             $this->sLinha = $aCSVRPSD11;

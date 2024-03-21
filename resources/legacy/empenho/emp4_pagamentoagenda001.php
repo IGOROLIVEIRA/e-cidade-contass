@@ -375,7 +375,7 @@ if (count($aParametrosEmpenho) > 0) {
 
     function js_objectToJson(oObject) {
 
-        var sJson = JSON.stringify(oObject);
+        var sJson = oObject.toSource();
         sJson = sJson.replace("(", "");
         sJson = sJson.replace(")", "");
         return sJson;

@@ -249,6 +249,7 @@ switch ($oParam->exec) {
     break;
 
   case "getDados":
+    
     $oDaoLicLicita       = db_utils::getDao('liclicita');
     $sSqlDadoslicitacao = $oDaoLicLicita->sql_query_file($oParam->iCodigo, "l20_numero,l20_edital as numerolicitacao,l20_anousu,l20_codtipocom as tipocompra");
     $rsResult   = $oDaoLicLicita->sql_record($sSqlDadoslicitacao);

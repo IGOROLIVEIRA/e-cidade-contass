@@ -159,20 +159,37 @@ switch ($oParam->exec) {
 
 
   case "getDados":
-    
-    try {
-      
-      $oProcessoCompra  = new ProcessoCompras($oParam->iCodigo);
 
-      $oRetorno->aDados = $oProcessoCompra->getDadosAutorizacao();
+    $oProcessoCompra  = new ProcessoCompras($oParam->iCodigo);
+    $dadosAutorizacao = $oProcessoCompra->getDadosAutorizacao()[0];
 
-    } catch (Exception $eErro) {
-      
-      $oRetorno->status = 2;
-      $oRetorno->message = urlencode($eErro->getMessage());
+    /* Verificando se processo de compra está vinculado a licitação. */
+
+    if($dadosAutorizacao->l20_codigo != null){
+      $oRetorno->vinculo = "licitacao";
+      $oRetorno->tipocompra = $dadosAutorizacao->l03_codcom;
+      $oRetorno->numerolicitacao = $dadosAutorizacao->l20_edital . "/" . $dadosAutorizacao->l20_anousu;
+      $oRetorno->numeromodalidade = $dadosAutorizacao->l20_numero;
+      break;
     }
 
-  break;
+    /* Verificando se processo de compra está vinculado a Adesão de Registro de Preço. */
+
+    if($dadosAutorizacao->si06_sequencial != null){
+      $oRetorno->vinculo = "adesao";
+      $rsTipoCompra = db_query("select pc50_codcom from pctipocompra where pc50_pctipocompratribunal = 104;");
+      $oRetorno->tipocompra = db_utils::fieldsMemory($rsTipoCompra, 0)->pc50_codcom;
+      $oRetorno->numerolicitacao = $dadosAutorizacao->si06_numeroadm . "/" . $dadosAutorizacao->si06_anomodadm;
+      $oRetorno->numeromodalidade = $dadosAutorizacao->si06_nummodadm;
+      break;
+    }
+
+    $oRetorno->vinculo = "";
+    $oRetorno->tipocompra = "";
+    $oRetorno->numerolicitacao = "";
+    $oRetorno->numeromodalidade = "";
+
+    break;
 }
 
 

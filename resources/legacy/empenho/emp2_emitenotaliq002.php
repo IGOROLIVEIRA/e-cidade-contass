@@ -424,6 +424,10 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
             $pdf1->conta_pagadora_conta     = "{$c63_conta}-{$c63_dvconta} {$e83_descr}";
 
         }
+    } else {
+      $pdf1->conta_pagadora_reduz   = null;
+      $pdf1->conta_pagadora_agencia = null;
+      $pdf1->conta_pagadora_conta   = null;
     }
 
    $pdf1->imprime();
