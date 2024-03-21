@@ -96,7 +96,7 @@ $clpcorcam->rotulo->label("pc20_dtate");
         }else if(isset($chave_pc20_dtate) && (trim($chave_pc20_dtate)!="") ){
 	         $sql = $clpcorcam->sql_query("",$campos,"pc20_dtate"," pc20_dtate like '$chave_pc20_dtate%' ");
         }else{
-           $sql = $clpcorcam->sql_query("",$campos,"pc20_dtate desc","");
+           $sql = $clpcorcam->sql_query("",$campos,"pc20_codorc desc","");
         }
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
