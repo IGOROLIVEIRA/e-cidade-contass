@@ -920,6 +920,5 @@ function sql_query_fornec ( $pc23_orcamforne=null,$pc23_orcamitem=null,$campos="
     return $sSql;
 
   }
- 
-
+  
 }
