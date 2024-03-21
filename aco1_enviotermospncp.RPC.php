@@ -47,8 +47,6 @@ switch ($oParam->exec) {
 
         if($oAcordo->getSituacao() == "2"){
 
-
-
             $aDadosTermosRescisao = new stdClass();
             $aDadosTermosRescisao->codigo = $oTermo->getCodigo();
             $aDadosTermosRescisao->vigencia = urlencode($oTermo->getVigenciaInicial() . " até " . $oTermo->getVigenciaFinal());
@@ -65,13 +63,23 @@ switch ($oParam->exec) {
 
         $clacocontrolepncp = new cl_acocontratopncp;
         $oAcordo = new Acordo($oParam->iContrato);
+        $cl_acocontroletermospncp = new cl_acocontroletermospncp();
 
         //Buscos Chave do Contrato do PNCP
         $rsAvisoPNCP = $clacocontrolepncp->sql_record($clacocontrolepncp->sql_query(null, "ac213_numerocontrolepncp,ac213_contrato,ac213_sequencialpncp,ac213_ano", null, "ac213_contrato = $oParam->iContrato limit 1"));
         $oDadosAvisoPNCP = db_utils::fieldsMemory($rsAvisoPNCP, 0);
 
+
+
         try {
             foreach ($oParam->aTermo as $termo) {
+
+                //Verifica se ja existe lancamento de termo de recisao no PNCP
+                $rsTermoPNCP = $cl_acocontroletermospncp->sql_record($cl_acocontroletermospncp->sql_query(null,"*",null,"l214_acordo = $oParam->iContrato and l214_tipotermocontratoid = 1"));
+
+                if(pg_num_rows($rsTermoPNCP)){
+                    throw new Exception(utf8_decode("Contrato já possui termo de rescisão publicado no pncp."));
+                }
 
                 $aDadosTermos = $oAcordo->getDadosTermosPncp($termo->codigo,$termo->numeroaditamento);
 
@@ -98,6 +106,8 @@ switch ($oParam->exec) {
                     $cl_acocontroletermospncp->l214_numeroaditamento = $termo->numeroaditamento;
                     $cl_acocontroletermospncp->l214_acordoposicao = $termo->codigo;
                     $cl_acocontroletermospncp->l214_instit = db_getsession('DB_instit');
+                    $cl_acocontroletermospncp->l214_tipotermocontratoid = $aDadosTermos[0]->tipotermocontratoid;
+
                     $cl_acocontroletermospncp->incluir();
 
                     $oRetorno->status  = 1;
