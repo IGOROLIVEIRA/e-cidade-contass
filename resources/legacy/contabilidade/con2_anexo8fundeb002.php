@@ -41,6 +41,9 @@ require_once("classes/db_dadosexercicioanterior_classe.php");
 require_once("classes/db_infocomplementaresinstit_classe.php");
 include("libs/db_sql.php");
 
+use \Mpdf\Mpdf;
+use \Mpdf\MpdfException;
+
 $clselorcdotacao = new cl_selorcdotacao();
 $clinfocomplementaresinstit = new cl_infocomplementaresinstit();
 $cldadosexecicioanterior = new cl_dadosexercicioanterior();
@@ -65,8 +68,7 @@ db_inicio_transacao();
 /**
  * pego todas as instituições;
  */
-// ini_set('display_errors', 'On');
-// error_reporting(E_ALL);
+
 $rsInstits = $clinfocomplementaresinstit->sql_record($clinfocomplementaresinstit->sql_query(null, "si09_instit, si09_tipoinstit", null, null));
 
 $ainstitunticoes = array();

@@ -29,6 +29,7 @@ require_once "libs/db_stdlib.php";
 require_once "libs/db_conecta.php";
 include_once "libs/db_sessoes.php";
 include_once "libs/db_usuariosonline.php";
+include("vendor/mpdf/mpdf/mpdf.php");
 include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
@@ -66,18 +67,17 @@ if(count($aInstits) > 1){
  * Nenhum dos parâmetros é obrigatório
  */
 
-try {
-    $mPDF = new Mpdf([
-        'mode' => '',
-        'format' => 'A4',
-        'orientation' => 'L',
-        'margin_left' => 15,
-        'margin_right' => 15,
-        'margin_top' => 20,
-        'margin_bottom' => 15,
-        'margin_header' => 5,
-        'margin_footer' => 11,
-    ]);
+$mPDF = new Mpdf([
+    'mode' => '',
+    'format' => 'A4-L',
+    'orientation' => 'L',
+    'margin_left' => 15,
+    'margin_right' => 15,
+    'margin_top' => 20,
+    'margin_bottom' => 10,
+    'margin_header' => 5,
+    'margin_footer' => 11,
+]);
 
 $header = <<<HEADER
 <header>
@@ -110,103 +110,103 @@ ob_start();
 
 ?>
 
-  <html>
-  <head>
+    <html>
+    <head>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <style type="text/css">
-      .ritz .waffle a { color : inherit; }
-      .ritz .waffle .s3 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 10pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s4 { background-color : #ffffff; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s5 { background-color : #d8d8d8; border-bottom : none; border-right : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s2 { background-color : #ffffff; border-bottom : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-style : italic; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s16 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s18 { background-color : #ffffff; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s6 { background-color : #d8d8d8; border-bottom : none; border-right : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s9 { background-color : #ffffff; border-bottom : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s10 { background-color : #ffffff; border-bottom : none; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s11 { background-color : #d8d8d8; border-bottom : 1px SOLID #000000; border-right : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s14 { background-color : #ffffff; border-bottom : none; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s1 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 12pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s17 { background-color : #ffffff; border-bottom : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s12 { background-color : #d8d8d8; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s0 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 14pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s7 { background-color : #d8d8d8; border-bottom : none; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s13 { background-color : #ffffff; border-bottom : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s15 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s8 { background-color : #ffffff; border-bottom : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
-    </style>
-  </head>
-  <body>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <style type="text/css">
+            .ritz .waffle a { color : inherit; }
+            .ritz .waffle .s3 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 10pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s4 { background-color : #ffffff; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s5 { background-color : #d8d8d8; border-bottom : none; border-right : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s2 { background-color : #ffffff; border-bottom : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-style : italic; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s16 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s18 { background-color : #ffffff; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s6 { background-color : #d8d8d8; border-bottom : none; border-right : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s9 { background-color : #ffffff; border-bottom : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s10 { background-color : #ffffff; border-bottom : none; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s11 { background-color : #d8d8d8; border-bottom : 1px SOLID #000000; border-right : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s14 { background-color : #ffffff; border-bottom : none; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s1 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 12pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s17 { background-color : #ffffff; border-bottom : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s12 { background-color : #d8d8d8; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s0 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 14pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s7 { background-color : #d8d8d8; border-bottom : none; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s13 { background-color : #ffffff; border-bottom : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s15 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+            .ritz .waffle .s8 { background-color : #ffffff; border-bottom : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
+        </style>
+    </head>
+    <body>
 
-  <div class="ritz grid-container" dir="ltr">
-    <table class="waffle" cellspacing="0" cellpadding="0">
-      <thead>
-      <tr>
-        <th id="0C0" style="width:118px" class="column-headers-background">&nbsp;</th>
-        <th id="0C1" style="width:93px" class="column-headers-background">&nbsp;</th>
-        <th id="0C2" style="width:401px" class="column-headers-background">&nbsp;</th>
-        <th id="0C3" style="width:134px" class="column-headers-background">&nbsp;</th>
-        <th id="0C4" style="width:138px" class="column-headers-background">&nbsp;</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft"></td>
-        <td class="s4" colspan="4">BANCOS</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s4 bdleft">Data</td>
-        <td class="s4">Red.</td>
-        <td class="s4">Conta/Descrição</td>
-        <td class="s4">Retiradas</td>
-        <td class="s4">Depositos</td>
-      </tr>
-      <?php
-      $bFil = false;
-      $sBackGround = "style='background-color: #d8d8d8;'";
-      $oDadosAgrupados = getDados($dtini, $dtfim, $aInstits, $anousu,$contas,$o15_codigo);
-      $fTotalGeralR = 0;
-      $fTotalGeralD = 0;
-      foreach ($oDadosAgrupados as $oDadosRelatorio) {
-          $fSubTotalR = 0;
-          $fSubTotalD = 0;
-          foreach ($oDadosRelatorio as $oValores) {
-              $bFil = $bFil ? false : true;
-              $sBackGround = $bFil ? "style='background-color: #d8d8d8;'" : "";
-              ?>
-              <tr style='height:20px;'>
-                  <td <?= $sBackGround ?> class="s8 bdleft"><?=db_formatar($oValores->sData,'d')?></td>
-                  <td <?= $sBackGround ?> class="s8"><?=$oValores->iReduz."-".$oValores->iFonte?></td>
-                  <td <?= $sBackGround ?> class="s9"><?=$oValores->sDescr?></td>
-                  <td <?= $sBackGround ?> class="s10"><?=db_formatar($oValores->fValorRetirada,'f')?></td>
-                  <td <?= $sBackGround ?> class="s10"><?=db_formatar($oValores->fValorDeposito,'f')?></td>
-              </tr>
-              <?php
-              $fSubTotalR += $oValores->fValorRetirada;
-              $fSubTotalD += $oValores->fValorDeposito;
-          }
-          $fTotalGeralR += $fSubTotalR;
-          $fTotalGeralD += $fSubTotalD;
-          ?>
-          <tr style='height:20px;'>
-              <td class="s13 bdleft" colspan="3">SubTotal=</td>
-              <td class="s14"><?=db_formatar($fSubTotalR,'f')?> </td>
-              <td class="s14"><?=db_formatar($fSubTotalD,'f')?> </td>
-          </tr>
-          <?php
-      }
-      ?>
-      <tr style='height:20px;'>
-          <td class="s17 bdleft" colspan="3">TOTAL GERAL =</td>
-          <td class="s18"><?=db_formatar($fTotalGeralR,'f')?> </td>
-          <td class="s18"><?=db_formatar($fTotalGeralD,'f')?> </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  </body>
-  </html>
+    <div class="ritz grid-container" dir="ltr">
+        <table class="waffle" cellspacing="0" cellpadding="0">
+            <thead>
+            <tr>
+                <th id="0C0" style="width:118px" class="column-headers-background">&nbsp;</th>
+                <th id="0C1" style="width:93px" class="column-headers-background">&nbsp;</th>
+                <th id="0C2" style="width:401px" class="column-headers-background">&nbsp;</th>
+                <th id="0C3" style="width:134px" class="column-headers-background">&nbsp;</th>
+                <th id="0C4" style="width:138px" class="column-headers-background">&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr style='height:20px;'>
+                <td class="s3 bdleft"></td>
+                <td class="s4" colspan="4">BANCOS</td>
+            </tr>
+            <tr style='height:20px;'>
+                <td class="s4 bdleft">Data</td>
+                <td class="s4">Red.</td>
+                <td class="s4">Conta/Descrição</td>
+                <td class="s4">Retiradas</td>
+                <td class="s4">Depositos</td>
+            </tr>
+            <?php
+            $bFil = false;
+            $sBackGround = "style='background-color: #d8d8d8;'";
+            $oDadosAgrupados = getDados($dtini, $dtfim, $aInstits, $anousu,$contas,$o15_codigo);
+            $fTotalGeralR = 0;
+            $fTotalGeralD = 0;
+            foreach ($oDadosAgrupados as $oDadosRelatorio) {
+                $fSubTotalR = 0;
+                $fSubTotalD = 0;
+                foreach ($oDadosRelatorio as $oValores) {
+                    $bFil = $bFil ? false : true;
+                    $sBackGround = $bFil ? "style='background-color: #d8d8d8;'" : "";
+                    ?>
+                    <tr style='height:20px;'>
+                        <td <?= $sBackGround ?> class="s8 bdleft"><?=db_formatar($oValores->sData,'d')?></td>
+                        <td <?= $sBackGround ?> class="s8"><?=$oValores->iReduz."-".$oValores->iFonte?></td>
+                        <td <?= $sBackGround ?> class="s9"><?=$oValores->sDescr?></td>
+                        <td <?= $sBackGround ?> class="s10"><?=db_formatar($oValores->fValorRetirada,'f')?></td>
+                        <td <?= $sBackGround ?> class="s10"><?=db_formatar($oValores->fValorDeposito,'f')?></td>
+                    </tr>
+                    <?php
+                    $fSubTotalR += $oValores->fValorRetirada;
+                    $fSubTotalD += $oValores->fValorDeposito;
+                }
+                $fTotalGeralR += $fSubTotalR;
+                $fTotalGeralD += $fSubTotalD;
+                ?>
+                <tr style='height:20px;'>
+                    <td class="s13 bdleft" colspan="3">SubTotal=</td>
+                    <td class="s14"><?=db_formatar($fSubTotalR,'f')?> </td>
+                    <td class="s14"><?=db_formatar($fSubTotalD,'f')?> </td>
+                </tr>
+                <?php
+            }
+            ?>
+            <tr style='height:20px;'>
+                <td class="s17 bdleft" colspan="3">TOTAL GERAL =</td>
+                <td class="s18"><?=db_formatar($fTotalGeralR,'f')?> </td>
+                <td class="s18"><?=db_formatar($fTotalGeralD,'f')?> </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    </body>
+    </html>
 
 <?php
 
@@ -297,8 +297,6 @@ ob_end_clean();
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
 //echo $html;
-} catch (MpdfException $e) {
-    db_redireciona('db_erros.php?fechar=true&db_erro='.$e->getMessage());
-}
+
 
 ?>
