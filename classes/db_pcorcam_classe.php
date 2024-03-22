@@ -1246,6 +1246,7 @@ function sql_query_valor_item_julgado_processocompra($pc20_codorc=null,$campos="
         case "processocompra":
   
             $sSql = "select
+            DISTINCT pc23_orcamforne,pc23_orcamitem,
             to_char(pc20_dtate,
             'DD/MM/YYYY') as dataorcamento,
             pc20_codorc as codigoorcamento,
