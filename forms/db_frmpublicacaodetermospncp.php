@@ -131,7 +131,11 @@ db_app::load("estilos.css, grid.style.css");
                 aLinha[2] = oLinha.numeroAditamento;
                 aLinha[3] = oLinha.situacao.urlDecode();
                 aLinha[4] = oLinha.data;
-                aLinha[5] = Number(oLinha.numtermopncp);
+                if(oLinha.numtermopncp){
+                    aLinha[5] = Number(oLinha.numtermopncp);
+                }else{
+                    aLinha[5] = '';
+                }
                 aLinha[6] = oLinha.Justificativa.urlDecode();
                 oGridItens.addRow(aLinha);
 
@@ -182,6 +186,7 @@ db_app::load("estilos.css, grid.style.css");
                 with(aTermo[i]) {
                     var iTermos = new Object();
                     iTermos.codigo = Number(aCells[1].getValue());
+                    iTermos.numeroaditamento = Number(aCells[3].getValue());
                     oParam.aTermo.push(iTermos);
                 }
             }

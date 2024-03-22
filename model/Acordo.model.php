@@ -410,7 +410,7 @@ class Acordo
     protected $iCriterioreajuste;
 
     /**
-     *  Data Reajuste 
+     *  Data Reajuste
      */
     protected $dtReajuste;
 
@@ -2186,15 +2186,32 @@ class Acordo
         return $this->aPosicoes;
     }
 
+    function getSeqTermoRecisaopncp($iAcordo,$iNumeroAditamento){
+        $oDaoAcoControlePNCP = db_utils::getDao("acocontroletermospncp");
+        $sql = $oDaoAcoControlePNCP->sql_query_file(null, "l214_numerotermo", null, "l214_acordo = $iAcordo and l214_numeroaditamento = $iNumeroAditamento");
+        $rsSequencialpncptermorecisao = $oDaoAcoControlePNCP->sql_record($sql);
+
+        return db_utils::fieldsMemory($rsSequencialpncptermorecisao, 0)->l214_numerotermo;
+    }
+
     /**
      * retorna dados para envio do PNCP termo de Aditamentos
      * @return AcordoPosicao[]
      */
-    function getDadosTermosPncp($iCodigoPosicao)
+    function getDadosTermosPncp($iCodigoPosicao,$iNumeroAditamento)
     {
         $oDaoAcordoPosicao = db_utils::getDao("acordoposicao");
-        $sSqlPosicao       = $oDaoAcordoPosicao->getTermoContrato($iCodigoPosicao);
+        $sSqlPosicao       = $oDaoAcordoPosicao->getTermoContrato($iCodigoPosicao,$iNumeroAditamento);
         $rsPosicao = $oDaoAcordoPosicao->sql_record($sSqlPosicao);
+
+
+        //RECISAO de contrato
+        if(!pg_num_rows($rsPosicao)){
+            $oDaoAcordoPosicao = db_utils::getDao("acordoposicao");
+            $sSqlPosicao       = $oDaoAcordoPosicao->getTermoContratoRecisao($iCodigoPosicao);
+            $rsPosicao = $oDaoAcordoPosicao->sql_record($sSqlPosicao);
+        }
+
         $oDadosRetornoPNPC = array();
 
         for ($i = 0; $i < pg_num_rows($rsPosicao); $i++) {
@@ -2710,15 +2727,15 @@ class Acordo
         if (!db_utils::inTransaction()) {
             throw new Exception("Nenhuma transação com o banco de dados aberta.\nProcessamento cancelado.");
         }
-        $sql = "select distinct       
-        ac20_acordoposicao  from acordoposicao        
-        inner join acordoitem          on ac20_acordoposicao = ac26_sequencial        
-        inner join acordoitemexecutado on ac20_sequencial    = ac29_acordoitem        
-        inner join acordoitemexecutadoempautitem on ac29_sequencial = ac19_acordoitemexecutado        
-        inner join empautitem on e55_sequen = ac19_sequen and ac19_autori = e55_autori        
-        inner join empautoriza on e54_autori = e55_autori        
-        inner join empautidot on e56_autori = e54_autori  
-        where ac26_acordo = {$this->getCodigoAcordo()}     
+        $sql = "select distinct
+        ac20_acordoposicao  from acordoposicao
+        inner join acordoitem          on ac20_acordoposicao = ac26_sequencial
+        inner join acordoitemexecutado on ac20_sequencial    = ac29_acordoitem
+        inner join acordoitemexecutadoempautitem on ac29_sequencial = ac19_acordoitemexecutado
+        inner join empautitem on e55_sequen = ac19_sequen and ac19_autori = e55_autori
+        inner join empautoriza on e54_autori = e55_autori
+        inner join empautidot on e56_autori = e54_autori
+        where ac26_acordo = {$this->getCodigoAcordo()}
         and e54_autori = {$iAutorizacao}";
 
 
@@ -2727,8 +2744,8 @@ class Acordo
 
 
         $sql2 = "select max(ac20_acordoposicao) as codigoposicao
-        from acordoposicao 
-        inner join acordoitem on ac20_acordoposicao = ac26_sequencial 
+        from acordoposicao
+        inner join acordoitem on ac20_acordoposicao = ac26_sequencial
         where ac26_acordo = {$this->getCodigoAcordo()}";
 
 
