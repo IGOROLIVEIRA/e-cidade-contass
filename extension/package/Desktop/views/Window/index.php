@@ -42,8 +42,8 @@
     }
 
     .alertify-log-alert {
-      background: #ffffcc !important;
-      color: #545454 !important;
+      background: #ffff00 !important;
+      color: #ff0000 !important;
       text-shadow: none !important;
     }
   </style>
