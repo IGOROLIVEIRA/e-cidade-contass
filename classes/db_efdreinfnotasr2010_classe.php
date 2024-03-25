@@ -25,13 +25,13 @@ class cl_efdreinfnotasr2010
     public $efd06_ambiente         = null;
     public $efd06_instit           = 0;
     public $efd06_protocolo        = 0;
-    public $efd06_serie            = 0; 
+    public $efd06_serie            = 0;
     public $efd06_numDocto         = 0;
     public $efd06_numeroop         = 0;
-    public $efd06_dtEmissaoNF      = 0; 
+    public $efd06_dtEmissaoNF      = 0;
     public $efd06_vlrBruto         = 0;
     public $efd06_vlrBase          = 0;
-    public $efd06_vlrRetido        = 0; 
+    public $efd06_vlrRetido        = 0;
 
     // cria propriedade com as variaveis do arquivo 
     public $campos = "
@@ -98,7 +98,7 @@ class cl_efdreinfnotasr2010
     // funcao para inclusao
     function incluir()
     {
-        
+
         $this->atualizacampos();
 
         if ($this->efd06_mescompetencia == null) {
@@ -180,7 +180,7 @@ class cl_efdreinfnotasr2010
             $result = db_query("select last_value from efdreinfnotasr2010_efd06_sequencial_seq");
             if (($result != false) && (pg_result($result, 0, 0) < $this->efd06_sequencial)) {
                 $this->erro_sql = " Campo efd06_sequencial maior que ultimo número da sequencia.";
-                $this->erro_banco = "Sequencia menor que este nï¿½mero.";
+                $this->erro_banco = "Sequencia menor que este número.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
@@ -197,7 +197,7 @@ class cl_efdreinfnotasr2010
             $this->erro_status = "0";
             return false;
         }
-        
+
         $sql = "insert into efdreinfnotasr2010(
                                        efd06_sequencial 
                                       ,efd06_mescompetencia
@@ -231,7 +231,7 @@ class cl_efdreinfnotasr2010
                                ,$this->efd06_vlrBruto
                                ,$this->efd06_vlrBase
                                ,$this->efd06_vlrRetido
-                      )"; 
+                      )";
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -308,8 +308,8 @@ class cl_efdreinfnotasr2010
                 return false;
             }
         }
-      
-       
+
+
         if (trim($this->efd06_cnpjprestador) != "" || isset($GLOBALS["HTTP_POST_VARS"]["efd06_cnpjprestador"])) {
             $sql  .= $virgula . " efd06_cnpjprestador = '$this->efd06_cnpjprestador'";
             $virgula = ",";
@@ -492,7 +492,7 @@ class cl_efdreinfnotasr2010
         $result = db_query($sql . $sql2);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "efdreinfnotasr2010 nao Excluï¿½do. Exclusï¿½o Abortada.\\n";
+            $this->erro_sql   = "efdreinfnotasr2010 nao Excluído. Exclusão Abortada.\\n";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -501,7 +501,7 @@ class cl_efdreinfnotasr2010
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "efdreinfnotasr2010 nao Encontrado. Exclusï¿½o não Efetuada.\\n";
+                $this->erro_sql = "efdreinfnotasr2010 nao Encontrado. Exclusão não Efetuada.\\n";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -509,7 +509,7 @@ class cl_efdreinfnotasr2010
                 return true;
             } else {
                 $this->erro_banco = "";
-                $this->erro_sql = "Exclusï¿½o efetuada com Sucesso\\n";
+                $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";

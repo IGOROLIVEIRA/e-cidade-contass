@@ -77,7 +77,7 @@ elseif($oParam->exec == 'getProcedimento') {
   if(empty($oTmp)) {
      
     $oRetorno->iStatus = 2;
-    $oRetorno->sDescrProcedimento = "Chave($oParam->sProcedimento) nÃ£o Encontrado";
+    $oRetorno->sDescrProcedimento = "Chave($oParam->sProcedimento) não Encontrado";
     $oRetorno->iCodProcedimento = '';
     $oRetorno->sProcedimento = '';
 
@@ -103,7 +103,7 @@ elseif($oParam->exec == 'getEspecialidadeMedico' || $oParam->exec == 'getEspecia
   if(empty($oTmp)) {
  
     $oRetorno->iStatus = 2;
-    $oRetorno->sDescrEspecialidade = "Chave($oParam->sEspecialidade) nÃ£o Encontrado";
+    $oRetorno->sDescrEspecialidade = "Chave($oParam->sEspecialidade) não Encontrado";
     $oRetorno->iCodEspecialidade = '';
     $oRetorno->sEspecialidade = '';
 
@@ -142,4 +142,3 @@ elseif($oParam->exec == 'alteraProcedimentosDoEncaminhamento') {
 }
 
 echo $oJson->encode($oRetorno);
-?>

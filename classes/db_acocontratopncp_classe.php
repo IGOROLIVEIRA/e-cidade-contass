@@ -177,8 +177,8 @@ class cl_acocontratopncp
         } else {
             $result = db_query("select last_value from acocontratopncp_ac213_sequencial_seq");
             if (($result != false) && (pg_result($result, 0, 0) < $this->ac213_sequencial)) {
-                $this->erro_sql = " Campo ac213_sequencial maior que ï¿½ltimo nï¿½mero da sequencia.";
-                $this->erro_banco = "Sequencia menor que este nï¿½mero.";
+                $this->erro_sql = " Campo ac213_sequencial maior que último número da sequencia.";
+                $this->erro_banco = "Sequencia menor que este número.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
@@ -226,7 +226,7 @@ class cl_acocontratopncp
             if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
                 $this->erro_sql   = "acocontratopncp () nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_banco = "acocontratopncp jï¿½ Cadastrado";
+                $this->erro_banco = "acocontratopncp já Cadastrado";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             } else {
                 $this->erro_sql   = "acocontratopncp () nao Incluído. Inclusao Abortada.";
@@ -422,7 +422,7 @@ class cl_acocontratopncp
         $result = db_query($sql . $sql2);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "acocontratopncp nao Excluï¿½do. Exclusï¿½o Abortada.\\n";
+            $this->erro_sql   = "acocontratopncp nao Excluído. Exclusão Abortada.\\n";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -431,7 +431,7 @@ class cl_acocontratopncp
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "acocontratopncp nao Encontrado. Exclusï¿½o não Efetuada.\\n";
+                $this->erro_sql = "acocontratopncp nao Encontrado. Exclusão não Efetuada.\\n";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -439,7 +439,7 @@ class cl_acocontratopncp
                 return true;
             } else {
                 $this->erro_banco = "";
-                $this->erro_sql = "Exclusï¿½o efetuada com Sucesso\\n";
+                $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";

@@ -5,9 +5,9 @@ use Classes\PostgresMigration;
 class Oc18009FcParcelamento extends PostgresMigration
 {
 
-    public function up()
-    {
-        $sql = <<<SQL
+  public function up()
+  {
+    $sql = <<<SQL
 
         BEGIN;
         SELECT fc_startsession();
@@ -237,17 +237,17 @@ declare
 
     iInstit := cast(fc_getsession('DB_instit') as integer);
     if iInstit is null then
-       raise exception 'Variavel de sessão [DB_instit] não encontrada.';
+       raise exception 'Variavel de sessão [DB_instit] n�o encontrada.';
     end if;
 
     iAnousu := cast(fc_getsession('DB_anousu') as integer);
     if iAnousu is null then
-       raise exception 'Variavel de sessão [DB_anousu] não encontrada.';
+       raise exception 'Variavel de sessão [DB_anousu] n�o encontrada.';
     end if;
 
     dDataUsu := cast(fc_getsession('DB_datausu') as date);
     if dDataUsu is null then
-       raise exception 'Variavel de sessão [DB_datausu] não encontrada.';
+       raise exception 'Variavel de sessão [DB_datausu] n�o encontrada.';
     end if;
 
     select k03_separajurmulparc
@@ -371,7 +371,7 @@ declare
                                      then processoparcel.v71_processoforo
                                    else processoinicial.v71_processoforo end) > 1;
           if found then
-            return '[2] - Não é possível parcelar iniciais com processos do foro diferentes para um mesmo parcelamento! [Utilização de Partilha Ativada]';
+            return '[2] - N�o é possível parcelar iniciais com processos do foro diferentes para um mesmo parcelamento! [Utilização de Partilha Ativada]';
           end if;
 
        end if;
@@ -427,7 +427,7 @@ declare
     end if;
 
 
-    -- Desativado parâmetro para que não seja gerado registros na incorporação tributária
+    -- Desativado parâmetro para que n�o seja gerado registros na incorporação tributária
     perform fc_putsession('DB_utiliza_incorporacao','false');
 
     -- funcao que corrige o arrecad no caso de encontrar registros duplicados(numpre,numpar,receit)
@@ -1384,7 +1384,7 @@ declare
     loop
 
       if v_record_recpar.tipo_origem is null then
-         return '[6] - Não encontrados registros na tabela Divida para um dos debitos que esta sendo parcelado.';
+         return '[6] - N�o encontrados registros na tabela Divida para um dos debitos que esta sendo parcelado.';
       end if;
 
       if v_record_recpar.receita is null then
@@ -2373,7 +2373,7 @@ declare
 
               --
               -- Caso seja encontrada diferenca na composicao do débito com o total parcelado
-              -- Realizamos os ajustes necessarios nos valores onde existem diferenca, se o valor da diferenca existir e não for maior que 1.
+              -- Realizamos os ajustes necessarios nos valores onde existem diferenca, se o valor da diferenca existir e n�o for maior que 1.
               --
               if abs(nVlrDiferencaComposicaoTotal) between 0.01 and 1.00 then
 
@@ -2950,11 +2950,11 @@ declare
 
        --
        -- Jogamos a diferença do percentual na Arreinscr quando:
-       --  - Não existir vinculo com matricula
+       --  - N�o existir vinculo com matricula
        --  - O percentual da inscrição for menor que o percentual da matricula
        --
        -- Jogamos a difença do percentual na Arrematric quando:
-       -- - Não existir vinculo com a inscrição
+       -- - N�o existir vinculo com a inscrição
        -- - O Percentual da matricula for menor que o percentual da inscrição
        --
       if lRaise then
@@ -3033,7 +3033,7 @@ declare
 
         --
         -- Verificamos se o problema é devido estar no parcelamento débitos que pertencem a matricula/inscrição e débitos sem vinculo com matricula/inscricao
-        -- Se for encontrado um numpre que não esteja vinculado a matricula e a inscrição na origem, mostramos uma mensagem de erro diferenciada para facilitar a
+        -- Se for encontrado um numpre que n�o esteja vinculado a matricula e a inscrição na origem, mostramos uma mensagem de erro diferenciada para facilitar a
         -- correção do caso. Geralmente a correção é realizada vinculando o numpre a uma matricula ou inscrição.
         --
         select array_to_string(array_accum( distinct arrecad_parc_rec.numpre),',')
@@ -3044,7 +3044,7 @@ declare
          where arrematric.k00_numpre is null
            and arreinscr.k00_numpre  is null;
         if sNumpreSemVinculoMatricInsc <> '' then
-          return '[15] - Inconsistencia no percentual do débito gerado após o processamento do parcelamento - numpre: '||v_numpre||'. - Encontrados numpres que não possuem vinculo com Matricula/Inscrição. Numpres ['||sNumpreSemVinculoMatricInsc||']';
+          return '[15] - Inconsistencia no percentual do débito gerado após o processamento do parcelamento - numpre: '||v_numpre||'. - Encontrados numpres que n�o possuem vinculo com Matricula/Inscrição. Numpres ['||sNumpreSemVinculoMatricInsc||']';
         else
           return '[15] - Inconsistencia no percentual do débito gerado após o processamento do parcelamento - numpre: '||v_numpre;
         end if;
@@ -3640,7 +3640,6 @@ declare
         COMMIT;        
 
 SQL;
-        $this->execute($sql);
-    }
-
+    $this->execute($sql);
+  }
 }

@@ -482,7 +482,9 @@ class AcordoItem
             $rsDotacoes            = $oDaoAcordoItemDotacao->sql_record($sSqlDotacoes);
             $this->aDotacoes  = db_utils::getCollectionByRecord($rsDotacoes);
         }
-
+        // var_dump($sSqlDotacoes);
+        // var_dump($this->aDotacoes);
+        // die();
         return $this->aDotacoes;
     }
 

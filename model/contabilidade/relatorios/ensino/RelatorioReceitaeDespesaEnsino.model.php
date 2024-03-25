@@ -214,8 +214,8 @@ class RelatorioReceitaeDespesaEnsino
             db_inicio_transacao();
             $clEmpResto = new cl_empresto();
             $sSqlOrder = "";
-            $sCampos = " o15_codtri, sum(vlrpag) as pagorpp, sum(vlrpagnproc) as pagorpnp  ";
-            $sSqlWhere = db_getsession('DB_anousu') > 2022 ? " o15_codigo in ($sFonte) group by 1 " : " o15_codtri in ($sFonte) group by 1 ";
+            $sCampos = " o15_codtri, o15_codigo, sum(vlrpag) as pagorpp, sum(vlrpagnproc) as pagorpnp  ";
+            $sSqlWhere = db_getsession('DB_anousu') > 2022 ? " o15_codigo in ($sFonte) group by o15_codtri, o15_codigo " : " o15_codtri in ($sFonte) group by o15_codtri, o15_codigo ";
             $aEmpRestos = $clEmpResto->getRestosPagarInscritosComDisponibilidadeFin(db_getsession("DB_anousu"), $this->dtini, $this->dtfim, $this->aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
             $nValorRpPago = 0;
             foreach ($aEmpRestos as $oEmpResto) {
@@ -264,8 +264,8 @@ class RelatorioReceitaeDespesaEnsino
         $clempresto = new cl_empresto();
         $sSqlOrder = "";
         $sSqlWhere = "";
-        $sCampos = " o15_codtri, sum(vlranu) as vlranu ";
-        $sSqlWhere = db_getsession('DB_anousu') > 2022 ? " o15_codigo in (" . implode(",", $aFontes) . ") group by 1 " : " o15_codtri in (" . implode(",", $aFontes) . ") group by 1 ";
+        $sCampos = " o15_codtri, o15_codigo, sum(vlranu) as vlranu ";
+        $sSqlWhere = db_getsession('DB_anousu') > 2022 ? " o15_codigo in (" . implode(",", $aFontes) . ") group by o15_codtri, o15_codigo " : " o15_codtri in (" . implode(",", $aFontes) . ") group by o15_codtri, o15_codigo ";
         $aEmpRestos = $clempresto->getRestosPagarInscritosComDisponibilidadeFin(db_getsession("DB_anousu"), $dtini, $dtfim, $instits, $sCampos, $sSqlWhere, $sSqlOrder);
         $valorRpAnulado = 0;
         foreach ($aEmpRestos as $oEmpResto) {
@@ -281,8 +281,8 @@ class RelatorioReceitaeDespesaEnsino
             db_inicio_transacao();
             $clEmpResto = new cl_empresto();
             $sSqlOrder = "";
-            $sCampos = " o15_codtri, sum(vlrpag) as pagorpp, sum(vlrpagnproc) as pagorpnp, sum(vlrpag) as vlrpago, sum(vlrliq) as vlrliq, 	sum((round(round(e91_vlremp, 2) - (round(e91_vlranu, 2) + round(vlranu, 2)), 2)) - ( round(e91_vlrpag, 2) + round(vlrpag, 2) + round(vlrpagnproc,2) )) as saldoapagargeral";
-            $sSqlWhere = db_getsession('DB_anousu') > 2022 ? " o15_codigo in ($sFonte) group by 1 " : " o15_codtri in ($sFonte) group by 1 ";
+            $sCampos = " o15_codtri, o15_codigo, sum(vlrpag) as pagorpp, sum(vlrpagnproc) as pagorpnp, sum(vlrpag) as vlrpago, sum(vlrliq) as vlrliq, 	sum((round(round(e91_vlremp, 2) - (round(e91_vlranu, 2) + round(vlranu, 2)), 2)) - ( round(e91_vlrpag, 2) + round(vlrpag, 2) + round(vlrpagnproc,2) )) as saldoapagargeral";
+            $sSqlWhere = db_getsession('DB_anousu') > 2022 ? " o15_codigo in ($sFonte) group by o15_codigo,o15_codtri " : " o15_codtri in ($sFonte) group by o15_codigo,o15_codtri ";
             $aEmpRestos = $clEmpResto->getRestosPagarInscritosComDisponibilidadeFin(db_getsession("DB_anousu"), $this->dtini, $this->dtfim, $this->instits, $sCampos, $sSqlWhere, $sSqlOrder);
             $nValorRpPago = 0;
 
@@ -297,11 +297,12 @@ class RelatorioReceitaeDespesaEnsino
     public function getLinha1FuncaoeSubfuncao()
     {
         $sDescrSubfuncao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$this->iSubFuncao}'"), 0)->o53_descr;
-        $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$this->sFuncao} and o58_subfuncao in ({$this->iSubFuncao}) and o15_codtri in (" . implode(",", $this->aFontes) . ") and o58_instit in ({$this->instits}) group by 1,2");
-        $aDespesasSubFuncao = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$this->sFuncao} and o58_subfuncao in ({$this->iSubFuncao}) and o15_codtri in (" . implode(",", $this->aFontes) . ") and o58_instit in ({$this->instits}) group by 1,2");
         if ($this->anousu > 2022) {
-            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$this->sFuncao} and o58_subfuncao in ({$this->iSubFuncao}) and o15_codigo in (" . implode(",", $this->aFontes) . ") and o58_instit in ({$this->instits}) group by 1,2");
-            $aDespesasSubFuncao = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$this->sFuncao} and o58_subfuncao in ({$this->iSubFuncao}) and o15_codigo in (" . implode(",", $this->aFontes) . ") and o58_instit in ({$this->instits}) group by 1,2");
+            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao in ({$this->sFuncao}) and o58_subfuncao in ({$this->iSubFuncao}) and o15_codigo in (" . implode(",", $this->aFontes) . ") and o58_instit in ({$this->instits}) group by 1,2");
+            $aDespesasSubFuncao = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao in ({$this->sFuncao}) and o58_subfuncao in ({$this->iSubFuncao}) and o15_codigo in (" . implode(",", $this->aFontes) . ") and o58_instit in ({$this->instits}) group by 1,2");
+        } else {
+            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$this->sFuncao} and o58_subfuncao in ({$this->iSubFuncao}) and o15_codtri in (" . implode(",", $this->aFontes) . ") and o58_instit in ({$this->instits}) group by 1,2");
+            $aDespesasSubFuncao = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$this->sFuncao} and o58_subfuncao in ({$this->iSubFuncao}) and o15_codtri in (" . implode(",", $this->aFontes) . ") and o58_instit in ({$this->instits}) group by 1,2");
         }
         $nValorPagoSubFuncao = $aDespesasSubFuncao[0]->pago;
         $nValorEmpenhadoENaoLiquidadoSubFuncao = $aDespesasSubFuncao[0]->empenhado - $aDespesasSubFuncao[0]->anulado - $aDespesasSubFuncao[0]->liquidado;
@@ -332,8 +333,8 @@ class RelatorioReceitaeDespesaEnsino
     {
         $sDescrSubfuncao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$this->iSubFuncao}'"), 0)->o53_descr;
         if (db_getsession("DB_anousu") > 2022) {
-            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$this->sFuncao} and o58_subfuncao in ({$this->iSubFuncao}) and o15_codigo in (" . implode(",", $this->aFonteFundeb) . ") and o58_instit in ({$this->instits}) group by 1,2");
-            $aDespesasSubFuncao = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$this->sFuncao} and o58_subfuncao in ({$this->iSubFuncao}) and o15_codigo in (" . implode(",", $this->aFonteFundeb) . ") and o58_instit in ({$this->instits}) group by 1,2");
+            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao in ({$this->sFuncao}) and o58_subfuncao in ({$this->iSubFuncao}) and o15_codigo in (" . implode(",", $this->aFonteFundeb) . ") and o58_instit in ({$this->instits}) group by 1,2");
+            $aDespesasSubFuncao = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao in ({$this->sFuncao}) and o58_subfuncao in ({$this->iSubFuncao}) and o15_codigo in (" . implode(",", $this->aFonteFundeb) . ") and o58_instit in ({$this->instits}) group by 1,2");
         } else {
             $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$this->sFuncao} and o58_subfuncao in ({$this->iSubFuncao}) and o15_codtri in (" . implode(",", $this->aFonteFundeb) . ") and o58_instit in ({$this->instits}) group by 1,2");
             $aDespesasSubFuncao = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$this->sFuncao} and o58_subfuncao in ({$this->iSubFuncao}) and o15_codtri in (" . implode(",", $this->aFonteFundeb) . ") and o58_instit in ({$this->instits}) group by 1,2");
@@ -363,7 +364,17 @@ class RelatorioReceitaeDespesaEnsino
     /*Calcula a linha 7 - DESPESAS CUSTEADAS COM SUPERÁVIT DO FUNDEB ATÉ O PRIMEIRO QUADRIMESTRE - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS, das Despesa de Ensino */
     public function getLinha7DespesasCusteadaSuperavitDoFundeb()
     {
-        $nValorCusteadoSuperavit = self::getDespesasCusteadosComSuperavit(array("'218','219','25400007','25400000'"), $this->dtini, $this->dtfim, $this->instits);
+        $oDadosExercicioAnterior = new cl_dadosexercicioanterior;
+        $rsDadosExercicioAnterior = $oDadosExercicioAnterior->sql_record($oDadosExercicioAnterior->sql_query_file(null, '*', null, 'c235_anousu = '. db_getsession("DB_anousu")));        
+        if ($oDadosExercicioAnterior->numrows > 0) {            
+            $iSuperavitFundebPermitido = db_utils::fieldsMemory($rsDadosExercicioAnterior,0)->c235_naoaplicfundebimposttransf;
+            $nValorCusteadoSuperavit = self::getDespesasCusteadosComSuperavit(array("'218','219','25400007','25400000'"), $this->dtini, $this->dtfim, $this->instits);
+            if ($nValorCusteadoSuperavit > $iSuperavitFundebPermitido){
+                $nValorCusteadoSuperavit = $iSuperavitFundebPermitido;
+            }
+        } else {
+            $nValorCusteadoSuperavit = 0;
+        }
         return $nValorCusteadoSuperavit;
     }
 
@@ -374,13 +385,23 @@ class RelatorioReceitaeDespesaEnsino
         $nLiqAPagarNaoPrecessado = 0;
         $dtfimExercicio = db_getsession("DB_anousu") . "-12-31";
         if ($this->dtfim == $dtfimExercicio) {
-            $this->setFontes(array("'101','15000001','201','25000001'"));
-            $this->setTipo('ambos');
-            $nLiqAPagarPrecessado = self::getEmpenhosAPagar();
-            $this->setFontes(array("'118','119','1118','1119','15400007','15400000'"));
-            $nLiqAPagarNaoPrecessado = self::getEmpenhosAPagar();
-            $this->setFontes(array("'136','17180000'"));
-            $nLiqAPagar136 = self::getEmpenhosAPagar();
+            if (db_getsession("DB_anousu") > 2022) {
+                $this->setFontes(array("'15000001','25000001'"));
+                $this->setTipo('ambos');
+                $nLiqAPagarPrecessado = self::getEmpenhosAPagar();
+                $this->setFontes(array("'15020001','15400000'"));
+                $nLiqAPagarNaoPrecessado = self::getEmpenhosAPagar();
+                $this->setFontes(array("'17180000'"));
+                $nLiqAPagar136 = self::getEmpenhosAPagar();
+            } else {
+                $this->setFontes(array("'101','15000001','201','25000001'"));
+                $this->setTipo('ambos');
+                $nLiqAPagarPrecessado = self::getEmpenhosAPagar();
+                $this->setFontes(array("'118','119','1118','1119','15400007','15400000'"));
+                $nLiqAPagarNaoPrecessado = self::getEmpenhosAPagar();
+                $this->setFontes(array("'136','17180000'"));
+                $nLiqAPagar136 = self::getEmpenhosAPagar();
+            }
         }
         return $nLiqAPagarPrecessado + $nLiqAPagarNaoPrecessado + $nLiqAPagar136;
     }
@@ -390,11 +411,15 @@ class RelatorioReceitaeDespesaEnsino
     {
         $dtfimExercicio = db_getsession("DB_anousu") . "-12-31";
         if ($this->dtfim == $dtfimExercicio) {
-            $this->setFontes(array("'101','15000001','201','25000001'"));
+            $this->setFontes(array("'101', '1101','15000001','201', '2101','25000001'"));
             $nSaldoApagarGeral101 = self::getSaldoApagarGeral();
-            $this->setFontes(array("'136','17180000'"));
+            $this->setFontes(array("'136','17180000','236','27180000'"));
             $nSaldoApagarGeral136 = self::getSaldoApagarGeral();
-            $this->setFontes(array("'118','119','1118','1119','15400007','15400000'"));
+            if (db_getsession("DB_anousu") > 2022) {
+                $this->setFontes(array("'15020001', 25020001"));
+            } else {
+                $this->setFontes(array("'118','119','1118','1119','15400007','15400000'"));
+            }
             $nSaldoApagarGeral118_119 = self::getSaldoApagarGeral();
         }
         $nSaldoFonteAno101 = getSaldoPlanoContaFonte("'101','15000001','201','25000001'", $this->dtini, $this->dtfim, $this->instits);
@@ -424,7 +449,7 @@ class RelatorioReceitaeDespesaEnsino
             }
         }
         $nRPIncritosSemDesponibilidade136 = 0;
-        $this->setFontes(array("'136','17180000'"));
+        $this->setFontes(array("'136','17180000','236','27180000'"));
         $this->setTipo('lqd');
         $nLiqAPagar136 = self::getEmpenhosAPagar();
         $this->setTipo('');
@@ -432,7 +457,7 @@ class RelatorioReceitaeDespesaEnsino
         $aTotalPago136 = $nLiqAPagar136 + $nNaoLiqAPagar136;
 
         if ($this->dtfim == $dtfimExercicio) {
-            $nSaldoFonteAno136 = getSaldoPlanoContaFonte("'136','17180000'", $this->dtini, $this->dtfim, $this->instits);
+            $nSaldoFonteAno136 = getSaldoPlanoContaFonte("'136','17180000', '236','27180000'", $this->dtini, $this->dtfim, $this->instits);
             $dtfimExercicio = db_getsession("DB_anousu") . "-12-31";
             $nRPSemDesponibilidade136 = $nSaldoFonteAno136 - $nSaldoApagarGeral136;
 
@@ -448,7 +473,11 @@ class RelatorioReceitaeDespesaEnsino
             }
         }
         $nRPIncritosSemDesponibilidade118_119 = 0;
-        $this->setFontes(array("'118','119','1118','1119','15400007','15400000'"));
+        if (db_getsession("DB_anousu") > 2022) {
+            $this->setFontes(array("'15020001', 25020001"));
+        } else {
+            $this->setFontes(array("'118','119','1118','1119','15400007','15400000'"));
+        }
         $this->setTipo('lqd');
         $nLiqAPagar118_119 = self::getEmpenhosAPagar();
         $this->setTipo('');
@@ -456,7 +485,11 @@ class RelatorioReceitaeDespesaEnsino
         $aTotalPago118_119 = $nLiqAPagar118_119 + $nNaoLiqAPagar118_119;
 
         if ($this->dtfim == $dtfimExercicio) {
-            $nSaldoFonteAno118_119 = getSaldoPlanoContaFonte("'118','119','1118','1119','15400007','15400000'", $this->dtini, $this->dtfim, $this->instits);
+            if (db_getsession("DB_anousu") > 2022) {
+                $nSaldoFonteAno118_119 = getSaldoPlanoContaFonte("'15020001', 25020001", $this->dtini, $this->dtfim, $this->instits);
+            } else {
+                $nSaldoFonteAno118_119 = getSaldoPlanoContaFonte("'118','119','1118','1119','15400007','15400000'", $this->dtini, $this->dtfim, $this->instits);
+            }
             $dtfimExercicio = db_getsession("DB_anousu") . "-12-31";
             $nRPSemDesponibilidade118_119 = $nSaldoFonteAno118_119 - $nSaldoApagarGeral118_119;
 
@@ -477,7 +510,11 @@ class RelatorioReceitaeDespesaEnsino
     /*Calcula a linha 10 - RESTOS A PAGAR DE EXERCÍCIOS ANTERIORES SEM DISPONIBILIDADE FINANCEIRA PAGOS NO EXERCÍCIO ATUAL (CONSULTA 932.736), das Despesa de Ensino */
     public function getLinha10RestoaPagarSemDis()
     {
-        return $nValorRecursoTotal = self::getRestosSemDisponilibidadeFundeb(array("'101','15000001','1101'", "'201','25000001'", "'118','119','1118','1119','15400007','15400000'", "'218','219','25400007','25400000'"), $this->dtini, $this->dtfim, $this->instits);
+        if (db_getsession('DB_anousu') > 2022) {
+            return $nValorRecursoTotal = self::getRestosSemDisponilibidadeFundeb(array("'101','15000001','15020001','1101'", "'201','25000001','25020001'"), $this->dtini, $this->dtfim, $this->instits);
+        } else {
+            return $nValorRecursoTotal = self::getRestosSemDisponilibidadeFundeb(array("'101','15000001','1101'", "'201','25000001'", "'118','119','1118','1119','15400007','15400000'", "'218','219','25400007','25400000'"), $this->dtini, $this->dtfim, $this->instits);
+        }
     }
 
     /*Calcula a linha 11 - CANCELAMENTO, NO EXERCÍCIO, DE RESTOS A PAGAR INSCRITOS COM DISPONIBILIDADE FINANCEIRA, das Despesa de Ensino */
@@ -486,12 +523,15 @@ class RelatorioReceitaeDespesaEnsino
         $valorDescontos101 = self::getSaldoPlanoContaFonteFundeb("'101','1101','201','15000001','25000001'", $this->dtini, $this->dtfim, $this->instits);
         $valorDescontos136 = self::getSaldoPlanoContaFonteFundeb("'136','236','17180000','27180000'", $this->dtini, $this->dtfim, $this->instits) - $valorDescontos101;
         $valorDescontos118 = self::getSaldoPlanoContaFonteFundeb("'118','119','1118','1119','218','219','15400007','15400000','25400007','25400000'", $this->dtini, $this->dtfim, $this->instits);
+        $valorDescontos1502 = self::getSaldoPlanoContaFonteFundeb("'15020001','25020001'", $this->dtini, $this->dtfim, $this->instits);
         $nValorRecursoTotal101 = self::getCancelamentoRestosComDisponilibidade(array("'101','1101','201','15000001','25000001'"), $this->dtini, $this->dtfim, $this->instits);
         $nValorRecursoTotal136 = self::getCancelamentoRestosComDisponilibidade(array("'136','236','17180000','27180000'"), $this->dtini, $this->dtfim, $this->instits);
         $nValorRecursoTotal118 = self::getCancelamentoRestosComDisponilibidade(array("'118','119','1118','1119','218','219','15400007','15400000','25400007','25400000'"), $this->dtini, $this->dtfim, $this->instits);
+        $nValorRecursoTotal1502 = self::getCancelamentoRestosComDisponilibidade(array("'15020001','25020001'"), $this->dtini, $this->dtfim, $this->instits);
         $nValorRecursoTotal101 = $nValorRecursoTotal101 > $valorDescontos101 ? $nValorRecursoTotal101 - $valorDescontos101 : $nValorRecursoTotal101;
         $nValorRecursoTotal136 = $nValorRecursoTotal136 > $valorDescontos136 ? $nValorRecursoTotal136 - $valorDescontos136 : $nValorRecursoTotal136;
         $nValorRecursoTotal118 = $nValorRecursoTotal118 > $valorDescontos118 ? $nValorRecursoTotal118 - $valorDescontos118 : $nValorRecursoTotal118;
-        return array($nValorRecursoTotal101, $nValorRecursoTotal136, $nValorRecursoTotal118);
+        $nValorRecursoTotal1502 = $nValorRecursoTotal1502 > $valorDescontos1502 ? $nValorRecursoTotal1502 - $valorDescontos1502 : $nValorRecursoTotal1502;
+        return array($nValorRecursoTotal101, $nValorRecursoTotal136, $nValorRecursoTotal118, $nValorRecursoTotal1502);
     }
 }

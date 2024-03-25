@@ -1474,6 +1474,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                             $bRPaPagar                       = in_array(substr($oContas10->si177_contacontaabil, 0, 4), $aContasTransfereSaldoRP) ;
                             $bTransfereRPAnterior            = $bFonteEncerrada && $bRPaPagar && $oReg14->anoinscricao <= 2022 && $nMes == '01' && !$bRPaPagarNaoTransfere;
 
+
+                            $iFonte = strlen($iFonte) == 7 ? $iFonte."0" : $iFonte; 
                             if ($bFonteEncerrada) {
                                 $iFonte = substr($clDeParaFonte->getDePara($iFonte), 0, 7);
                             }
@@ -1508,13 +1510,14 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     $obalancete14->si181_idsubacao = ($aDotacaoRpSicom[0]->si177_idsubacao == 0 ? "" : $aDotacaoRpSicom[0]->si177_idsubacao);
                                     $obalancete14->si181_naturezadespesa = substr($aDotacaoRpSicom[0]->si177_naturezadespesa,0,6);
                                     $obalancete14->si181_subelemento = $aDotacaoRpSicom[0]->si177_subelemento;
-                                    $obalancete14->si181_codfontrecursos   = $aDotacaoRpSicom[0]->si177_codfontrecursos;
+                                    $obalancete14->si181_codfontrecursos   = substr($aDotacaoRpSicom[0]->si177_codfontrecursos,0,7);
                                    
                                     if (in_array($aDotacaoRpSicom[0]->si177_codfontrecursos, $this->aFontesEncerradas2020)) {
                                         $obalancete14->si181_codfontrecursos = substr($aDotacaoRpSicom[0]->si177_codfontrecursos, 0, 1) . '59';
                                     }
                                     if (in_array($obalancete14->si181_codfontrecursos, $this->aFontesEncerradas)) {
                                         $clDeParaFonte = new DeParaRecurso;
+                                        $obalancete14->si181_codfontrecursos = strlen($obalancete14->si181_codfontrecursos) == 7 ? $obalancete14->si181_codfontrecursos."0" : $obalancete14->si181_codfontrecursos; 
                                         $obalancete14->si181_codfontrecursos = substr($clDeParaFonte->getDePara($obalancete14->si181_codfontrecursos), 0, 7);
                                     }
 
@@ -1531,7 +1534,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     $obalancete14->si181_idsubacao = $oReg14->idsubacao;
                                     $obalancete14->si181_naturezadespesa = $sElemento;
                                     $obalancete14->si181_subelemento = $sSubElemento;
-                                    $obalancete14->si181_codfontrecursos = $iFonte;
+                                    $obalancete14->si181_codfontrecursos = substr($iFonte,0,7);
 
                                 }
 
@@ -1658,7 +1661,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                  * PEGA TODAS AS CONTAS CAIXA DA INSTIUICAO
                  */
 
-                $sSqlFonteReg16  = " SELECT c60_codcon,c61_reduz,c60_descr,si09_codorgaotce,o15_codtri codfontrecursos, o15_codigo from ";
+                $sSqlFonteReg16  = " SELECT c60_codcon,c61_reduz,c60_descr,si09_codorgaotce,o15_codtri codfontrecursos, o15_codigo,c60_identificadorfinanceiro from ";
                 $sSqlFonteReg16 .= " conplano join conplanoreduz on c60_codcon = c61_codcon ";
                 $sSqlFonteReg16 .= "		 left join  infocomplementaresinstit on c61_instit = si09_instit ";
                 $sSqlFonteReg16 .= "		 join orctiporec on o15_codigo = c61_codigo ";
@@ -1678,154 +1681,70 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                      *
                      */
 
-                    $sSqlReg16saldos = "SELECT
-                                               round(substr(fc_planosaldonovo,3,14)::float8,2)::float8 AS saldoanterior,
-                                               round(substr(fc_planosaldonovo,17,14)::float8,2)::float8 AS debitos,
-                                               round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
-                                               round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
-                                               substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialctb,
-                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb,
-                                               identificadorfinanceiro
-                                        FROM
-                                          (SELECT p.c60_estrut AS estrut_mae,
-                                                  p.c60_estrut AS estrut,
-                                                  c61_reduz,
-                                                  c61_codcon,
-                                                  c61_codigo,
-                                                  p.c60_descr,
-                                                  p.c60_finali,
-                                                  r.c61_instit,
-                                                  fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',$sEncerramento),
-                                                  p.c60_identificadorfinanceiro as identificadorfinanceiro,
-                                                  c60_consistemaconta
-                                           FROM conplanoexe e
-                                           INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu
-                                           AND r.c61_reduz = c62_reduz
-                                           INNER JOIN conplano p ON r.c61_codcon = c60_codcon
-                                           AND r.c61_anousu = c60_anousu
-                                           LEFT OUTER JOIN consistema ON c60_codsis = c52_codsis
-                                           WHERE c62_anousu = " . db_getsession('DB_anousu') . "
-                                             AND c61_instit IN (" . db_getsession('DB_instit') . ")
-                                             AND c61_reduz = {$oReg16Font->c61_reduz}) as x";
-
-                    $rsReg16saldos = db_query($sSqlReg16saldos) or die($sSqlReg16saldos);
-
-                    for ($iContSaldo16 = 0; $iContSaldo16 < pg_num_rows($rsReg16saldos); $iContSaldo16++) {
-
-
-                        $oReg16Saldo = db_utils::fieldsMemory($rsReg16saldos, $iContSaldo16);
-
-
-                        if (!(($oReg16Saldo->saldoanterior == "" || $oReg16Saldo->saldoanterior == 0) && $oReg16Saldo->debitos == "" && $oReg16Saldo->creditos == "")) {
+                    $clContaCorrente = new cl_contacorrentedetalhe;
+                    $rsReg16saldos = $clContaCorrente->detalhamentoPorFonte(db_getsession("DB_anousu"),$oReg16Font->c61_reduz, db_getsession("DB_instit"), $nMes);
+                  
+                    foreach ($rsReg16saldos as $oReg16Saldo) {
+                    
+                        $oReg16Saldo['identificadorfinanceiro'] = $oReg16Font->c60_identificadorfinanceiro;
+                        
+                        if (!(($oReg16Saldo['saldo_anterior'] == "" || $oReg16Saldo['saldo_anterior'] == 0) && $oReg16Saldo['valor_debito'] == "" && $oReg16Saldo['valor_credito'] == "")) {
 
                             /**
                              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 16
                              * Controle por Fonte de Recursos e Atributo SF
                              */
                             if ($oContas10->nregobrig == 16) {
-                                $bCorrecaoFonte   = false;
 
-                                if ($oReg16Saldo->identificadorfinanceiro == 'F') {
-                                    $sHash16 = '16' . $oContas10->si177_contacontaabil . $oReg16Saldo->identificadorfinanceiro . $oReg16Font->codfontrecursos;
-                                    $bCorrecaoFonte = $nMes == '01' && db_getsession("DB_anousu") == 2023 && $oReg16Saldo->saldoanterior != 0;
+                                if ($oReg16Saldo['identificadorfinanceiro'] == 'F') {
+                                    $sHash16 = '16' . $oContas10->si177_contacontaabil . $oReg16Saldo['identificadorfinanceiro'] . $oReg16Saldo['codtri'];    
                                 } else {
-                                    $sHash16 = '16' . $oContas10->si177_contacontaabil . $oReg16Saldo->identificadorfinanceiro;
+                                    $sHash16 = '16' . $oContas10->si177_contacontaabil . $oReg16Saldo['identificadorfinanceiro'];
                                 }
 
                                 if (!isset($aContasReg10[$reg10Hash]->reg16[$sHash16])) {
-
                                     $obalancete16 = new stdClass();
 
                                     $obalancete16->si183_tiporegistro               = 16;
                                     $obalancete16->si183_contacontabil              = $oContas10->si177_contacontaabil;
                                     $obalancete16->si183_codfundo                   = $sCodFundo;
-                                    $obalancete16->si183_atributosf                 = $oReg16Saldo->identificadorfinanceiro;
-                                    $obalancete16->si183_codfontrecursos            = ($oReg16Saldo->identificadorfinanceiro == 'F') ? $oReg16Font->codfontrecursos : 0;
-                                    $obalancete16->si183_saldoinicialfontsf         = $bCorrecaoFonte ? 0 : ($oReg16Saldo->naturezasaldoinicialctb == 'C' ? $oReg16Saldo->saldoanterior * -1 : $oReg16Saldo->saldoanterior);
-                                    $obalancete16->si183_codco                      = 0;
-                                    $obalancete16->si183_naturezasaldoinicialfontsf = $oReg16Saldo->naturezasaldoinicialctb;
-                                    $obalancete16->si183_totaldebitosfontsf         = $bCorrecaoFonte && $oReg16Saldo->naturezasaldoinicialctb == 'D' ? $oReg16Saldo->saldoanterior + $oReg16Saldo->debitos : $oReg16Saldo->debitos;
-                                    $obalancete16->si183_totalcreditosfontsf        = $bCorrecaoFonte && $oReg16Saldo->naturezasaldoinicialctb == 'C' ? $oReg16Saldo->saldoanterior + $oReg16Saldo->creditos : $oReg16Saldo->creditos;
-                                    $obalancete16->si183_saldofinalfontsf           = ($obalancete16->si183_saldoinicialfontsf + $oReg16Saldo->debitos - $oReg16Saldo->creditos) == '' ? 0 : ($obalancete16->si183_saldoinicialfontsf + $oReg16Saldo->debitos - $oReg16Saldo->creditos);
-                                    $obalancete16->si183_naturezasaldofinalfontsf   = $oReg16Saldo->naturezasaldofinalctb;
+                                    $obalancete16->si183_atributosf                 = $oReg16Saldo['identificadorfinanceiro'] ;
+                                    $obalancete16->si183_codfontrecursos            = ($oReg16Saldo['identificadorfinanceiro'] == 'F') ?  $oReg16Saldo['codtri'] : 0;
+                                    $obalancete16->si183_saldoinicialfontsf         = ($oReg16Saldo['sinal_anterior'] == 'C' ? $oReg16Saldo['saldo_anterior'] * -1 : $oReg16Saldo['saldo_anterior']);
+                                    $obalancete16->si183_codco                      = substr($oReg16Saldo['codtri'],1,7) == '706000' ? '3110' : 0;
+                                    $obalancete16->si183_naturezasaldoinicialfontsf = $oReg16Saldo['sinal_anterior'];
+                                    $obalancete16->si183_totaldebitosfontsf         = $oReg16Saldo['valor_debito'];
+                                    $obalancete16->si183_totalcreditosfontsf        = $oReg16Saldo['valor_credito'];
+                                    $obalancete16->si183_saldofinalfontsf           = ($obalancete16->si183_saldoinicialfontsf + $oReg16Saldo['valor_debito'] - $oReg16Saldo['valor_credito']) == '' ? 0 : ($obalancete16->si183_saldoinicialfontsf + $oReg16Saldo['valor_debito'] - $oReg16Saldo['valor_credito']);
+                                    $obalancete16->si183_naturezasaldofinalfontsf   = $oReg16Saldo['sinal_final'];
                                     $obalancete16->si183_instit                     = db_getsession("DB_instit");
                                     $obalancete16->si183_mes                        = $nMes;
 
                                     $aContasReg10[$reg10Hash]->reg16[$sHash16] = $obalancete16;
-                                    $saldoAnterior = $oReg16Saldo->naturezasaldoinicialctb == 'C' ? $oReg16Saldo->saldoanterior * -1 : $oReg16Saldo->saldoanterior;
+                                    $saldoAnterior = $oReg16Saldo['sinal_anterior'] == 'C' ? $oReg16Saldo['saldo_anterior'] * -1 : $oReg16Saldo['saldo_anterior'];
                                     $aContasReg10[$reg10Hash]->si177_totaldebitos  += $bCorrecaoFonte && $saldoAnterior > 0 ? abs($saldoAnterior) : 0;
                                     $aContasReg10[$reg10Hash]->si177_totalcreditos += $bCorrecaoFonte && $saldoAnterior < 0 ? abs($saldoAnterior) : 0;
 
                                 } else {
-                                    $si183_saldoinicialfontsf = ($oReg16Saldo->naturezasaldoinicialctb == 'C' ? $oReg16Saldo->saldoanterior * -1 : $oReg16Saldo->saldoanterior);
+                                    $si183_saldoinicialfontsf = ($oReg16Saldo['sinal_anterior'] == 'C' ? $oReg16Saldo['saldo_anterior'] * -1 : $oReg16Saldo['saldo_anterior']);
                                     $aContasReg10[$reg10Hash]->reg16[$sHash16]->si183_saldoinicialfontsf         += $bCorrecaoFonte ? 0 : $si183_saldoinicialfontsf;
-                                    $aContasReg10[$reg10Hash]->reg16[$sHash16]->si183_totaldebitosfontsf         += $bCorrecaoFonte && $oReg16Saldo->naturezasaldoinicialctb == 'D' ? $oReg16Saldo->saldoanterior + $oReg16Saldo->debitos : $oReg16Saldo->debitos;
-                                    $aContasReg10[$reg10Hash]->reg16[$sHash16]->si183_totalcreditosfontsf        += $bCorrecaoFonte && $oReg16Saldo->naturezasaldoinicialctb == 'C' ? $oReg16Saldo->saldoanterior + $oReg16Saldo->creditos : $oReg16Saldo->creditos;
-                                    $aContasReg10[$reg10Hash]->reg16[$sHash16]->si183_saldofinalfontsf           += ($si183_saldoinicialfontsf + $oReg16Saldo->debitos - $oReg16Saldo->creditos) == '' ? 0 : ($si183_saldoinicialfontsf + $oReg16Saldo->debitos - $oReg16Saldo->creditos);
-                                    $aContasReg10[$reg10Hash]->reg16[$sHash16]->si183_naturezasaldoinicialfontsf  = $oReg16Saldo->naturezasaldoinicialctb;
-                                    $aContasReg10[$reg10Hash]->reg16[$sHash16]->si183_naturezasaldofinalfontsf    = $oReg16Saldo->naturezasaldofinalctb;
+                                    $aContasReg10[$reg10Hash]->reg16[$sHash16]->si183_totaldebitosfontsf         += $bCorrecaoFonte && $oReg16Saldo['sinal_anterior'] == 'D' ? $oReg16Saldo['saldo_anterior'] + $oReg16Saldo['valor_debito'] : $oReg16Saldo['valor_debito'];
+                                    $aContasReg10[$reg10Hash]->reg16[$sHash16]->si183_totalcreditosfontsf        += $bCorrecaoFonte && $oReg16Saldo['sinal_anterior'] == 'C' ? $oReg16Saldo['saldo_anterior'] + $oReg16Saldo['valor_credito'] : $oReg16Saldo['valor_credito'];
+                                    $aContasReg10[$reg10Hash]->reg16[$sHash16]->si183_saldofinalfontsf           += ($si183_saldoinicialfontsf + $oReg16Saldo['valor_debito'] - $oReg16Saldo['valor_credito']) == '' ? 0 : ($si183_saldoinicialfontsf + $oReg16Saldo['valor_debito'] - $oReg16Saldo['valor_credito']);
+                                    $aContasReg10[$reg10Hash]->reg16[$sHash16]->si183_naturezasaldoinicialfontsf  = $oReg16Saldo['sinal_anterior'];
+                                    $aContasReg10[$reg10Hash]->reg16[$sHash16]->si183_naturezasaldofinalfontsf    = $oReg16Saldo['sinal_final'];
 
                                     $aContasReg10[$reg10Hash]->si177_totaldebitos  += $bCorrecaoFonte && $si183_saldoinicialfontsf > 0 ? abs($si183_saldoinicialfontsf) : 0;
                                     $aContasReg10[$reg10Hash]->si177_totalcreditos += $bCorrecaoFonte && $si183_saldoinicialfontsf < 0 ? abs($si183_saldoinicialfontsf) : 0;
-                                }
-
-                                if($bCorrecaoFonte){
-
-                                    $clDeParaFonte       = new DeParaRecurso();
-                                    $iFonte = $clDeParaFonte->getDeParaAnterior($oReg16Font->o15_codigo);
-
-                                    if ($oReg16Saldo->identificadorfinanceiro == 'F') {
-                                        $sHash16 = '16' . $oContas10->si177_contacontaabil . $oReg16Saldo->identificadorfinanceiro . $iFonte;
-                                    } else {
-                                        $sHash16 = '16' . $oContas10->si177_contacontaabil . $oReg16Saldo->identificadorfinanceiro;
-                                    }
-
-                                    if (!isset($aContasReg10[$reg10Hash]->reg16[$sHash16])) {
-
-                                        $obalancete16 = new stdClass();
-
-                                        $obalancete16->si183_tiporegistro               = 16;
-                                        $obalancete16->si183_contacontabil              = $oContas10->si177_contacontaabil;
-                                        $obalancete16->si183_codfundo                   = $sCodFundo;
-                                        $obalancete16->si183_atributosf                 = $oReg16Saldo->identificadorfinanceiro;
-                                        $obalancete16->si183_codfontrecursos            = ($oReg16Saldo->identificadorfinanceiro == 'F') ?  $iFonte : 0;
-                                        $obalancete16->si183_saldoinicialfontsf         = ($oReg16Saldo->naturezasaldoinicialctb == 'C' ? $oReg16Saldo->saldoanterior * -1 : $oReg16Saldo->saldoanterior);
-                                        $obalancete16->si183_codco                      = 0;
-                                        $obalancete16->si183_naturezasaldoinicialfontsf = $oReg16Saldo->naturezasaldoinicialctb;
-                                        $obalancete16->si183_totaldebitosfontsf         = $oReg16Saldo->naturezasaldoinicialctb == 'D' ? 0 : $oReg16Saldo->saldoanterior;
-                                        $obalancete16->si183_totalcreditosfontsf        = $oReg16Saldo->naturezasaldoinicialctb == 'C' ? 0 : $oReg16Saldo->saldoanterior;
-                                        $obalancete16->si183_saldofinalfontsf           = 0;
-                                        $obalancete16->si183_naturezasaldofinalfontsf   = $oReg16Saldo->naturezasaldoinicialctb;
-                                        $obalancete16->si183_instit                     = db_getsession("DB_instit");
-                                        $obalancete16->si183_mes                        = $nMes;
-
-                                        $aContasReg10[$reg10Hash]->reg16[$sHash16] = $obalancete16;
-                                        $saldoAnterior = $oReg16Saldo->naturezasaldoinicialctb == 'C' ? $oReg16Saldo->saldoanterior * -1 : $oReg16Saldo->saldoanterior;
-                                        $aContasReg10[$reg10Hash]->si177_totaldebitos  += $saldoAnterior < 0 ? abs($saldoAnterior) : 0;
-                                        $aContasReg10[$reg10Hash]->si177_totalcreditos += $saldoAnterior > 0 ? abs($saldoAnterior) : 0;
-
-                                    } else {
-                                        $si183_saldoinicialfontsf = ($oReg16Saldo->naturezasaldoinicialctb == 'C' ? $oReg16Saldo->saldoanterior * -1 : $oReg16Saldo->saldoanterior);
-                                        $aContasReg10[$reg10Hash]->reg16[$sHash16]->si183_saldoinicialfontsf         += $si183_saldoinicialfontsf;
-                                        $aContasReg10[$reg10Hash]->reg16[$sHash16]->si183_totaldebitosfontsf         += $oReg16Saldo->naturezasaldoinicialctb == 'D' ? 0 : $oReg16Saldo->saldoanterior;
-                                        $aContasReg10[$reg10Hash]->reg16[$sHash16]->si183_totalcreditosfontsf        += $oReg16Saldo->naturezasaldoinicialctb == 'C' ? 0 : $oReg16Saldo->saldoanterior;
-                                        $aContasReg10[$reg10Hash]->reg16[$sHash16]->si183_saldofinalfontsf           += 0;
-                                        $aContasReg10[$reg10Hash]->reg16[$sHash16]->si183_naturezasaldoinicialfontsf  = $oReg16Saldo->naturezasaldoinicialctb;
-                                        $aContasReg10[$reg10Hash]->reg16[$sHash16]->si183_naturezasaldofinalfontsf    = $oReg16Saldo->naturezasaldoinicialctb;
-
-                                        $aContasReg10[$reg10Hash]->si177_totaldebitos  += $si183_saldoinicialfontsf < 0 ? abs($si183_saldoinicialfontsf) : 0;
-                                        $aContasReg10[$reg10Hash]->si177_totalcreditos += $si183_saldoinicialfontsf > 0 ? abs($si183_saldoinicialfontsf) : 0;
-                                    }
-                                }
-
+                                  }
                             } else {
-
+                               
                                 /**
                                  * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 29
                                  * Controle por Fonte de Recursos, Atributo SF e D?vida Consolidada
                                  */
-
-                                $sHash29 = '29' . $oContas10->si177_contacontaabil . $oReg16Saldo->identificadorfinanceiro;
+ 
+                                $sHash29 = '29' . $oContas10->si177_contacontaabil . $oReg16Saldo['identificadorfinanceiro']. $oReg16Saldo['codtri'] ;
 
                                 if (!isset($aContasReg10[$reg10Hash]->reg29[$sHash29])) {
 
@@ -1834,25 +1753,25 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     $obalancete29->si241_tiporegistro = 29;
                                     $obalancete29->si241_contacontabil = $oContas10->si177_contacontaabil;
                                     $obalancete29->si241_codfundo = $sCodFundo;
-                                    $obalancete29->si241_atributosf = $oReg16Saldo->identificadorfinanceiro;
-                                    $obalancete29->si241_codfontrecursos = ($oReg16Saldo->identificadorfinanceiro == 'F') ? $oReg16Font->codfontrecursos : 0;
+                                    $obalancete29->si241_atributosf = $oReg16Saldo['identificadorfinanceiro'];
+                                    $obalancete29->si241_codfontrecursos = ($oReg16Saldo['identificadorfinanceiro'] == 'F') ? $oReg16Saldo['codtri'] : 0;
                                     $obalancete29->si241_dividaconsolidada = substr($oContas10->si177_contacontaabil, 0, 2) == '22' ? 1 : 2;
-                                    $obalancete29->si241_saldoinicialfontsf = $oReg16Saldo->naturezasaldoinicialctb == 'C' ? $oReg16Saldo->saldoanterior * -1 : $oReg16Saldo->saldoanterior;
-                                    $obalancete29->si241_naturezasaldoinicialfontsf = $oReg16Saldo->saldoanterior >= 0 ? 'D' : 'C';
-                                    $obalancete29->si241_totaldebitosfontsf = $oReg16Saldo->debitos;
-                                    $obalancete29->si241_totalcreditosfontsf = $oReg16Saldo->creditos;
-                                    $obalancete29->si241_saldofinalfontsf = ($oReg16Saldo->saldoanterior + $oReg16Saldo->debitos - $oReg16Saldo->creditos) == '' ? 0 : ($oReg16Saldo->saldoanterior + $oReg16Saldo->debitos - $oReg16Saldo->creditos);
-                                    $obalancete29->si241_naturezasaldofinalfontsf = ($oReg16Saldo->saldoanterior + $oReg16Saldo->debitos - $oReg16Saldo->creditos) >= 0 ? 'D' : 'C';
+                                    $obalancete29->si241_saldoinicialfontsf = $oReg16Saldo['sinal_anterior'] == 'C' ? $oReg16Saldo['saldo_anterior'] * -1 : $oReg16Saldo['saldo_anterior'];
+                                    $obalancete29->si241_naturezasaldoinicialfontsf = $oReg16Saldo['saldo_anterior'] >= 0 ? 'D' : 'C';
+                                    $obalancete29->si241_totaldebitosfontsf = $oReg16Saldo['valor_debito'];
+                                    $obalancete29->si241_totalcreditosfontsf = $oReg16Saldo['valor_credito'];
+                                    $obalancete29->si241_saldofinalfontsf = ($oReg16Saldo['saldo_anterior'] + $oReg16Saldo['valor_debito']- $oReg16Saldo['valor_credito']) == '' ? 0 : ($oReg16Saldo['saldo_anterior'] + $oReg16Saldo['valor_debito']- $oReg16Saldo['valor_credito']);
+                                    $obalancete29->si241_naturezasaldofinalfontsf = ($oReg16Saldo['saldo_anterior'] + $oReg16Saldo['valor_debito']- $oReg16Saldo['valor_credito']) >= 0 ? 'D' : 'C';
                                     $obalancete29->si241_instit = db_getsession("DB_instit");
                                     $obalancete29->si241_mes = $nMes;
 
                                     $aContasReg10[$reg10Hash]->reg29[$sHash29] = $obalancete29;
                                 } else {
 
-                                    $aContasReg10[$reg10Hash]->reg29[$sHash29]->si241_saldoinicialfontsf += $oReg16Saldo->naturezasaldoinicialctb == 'C' ? $oReg16Saldo->saldoanterior * -1 : $oReg16Saldo->saldoanterior;
-                                    $aContasReg10[$reg10Hash]->reg29[$sHash29]->si241_totaldebitosfontsf += $oReg16Saldo->debitos;
-                                    $aContasReg10[$reg10Hash]->reg29[$sHash29]->si241_totalcreditosfontsf += $oReg16Saldo->creditos;
-                                    $aContasReg10[$reg10Hash]->reg29[$sHash29]->si241_saldofinalfontsf += ($oReg16Saldo->saldoanterior + $oReg16Saldo->debitos - $oReg16Saldo->creditos) == '' ? 0 : ($oReg16Saldo->saldoanterior + $oReg16Saldo->debitos - $oReg16Saldo->creditos);
+                                    $aContasReg10[$reg10Hash]->reg29[$sHash29]->si241_saldoinicialfontsf += $oReg16Saldo['sinal_anterior'] == 'C' ? $oReg16Saldo['saldo_anterior'] * -1 : $oReg16Saldo['saldo_anterior'];
+                                    $aContasReg10[$reg10Hash]->reg29[$sHash29]->si241_totaldebitosfontsf += $oReg16Saldo['valor_debito'];
+                                    $aContasReg10[$reg10Hash]->reg29[$sHash29]->si241_totalcreditosfontsf += $oReg16Saldo['valor_credito'];
+                                    $aContasReg10[$reg10Hash]->reg29[$sHash29]->si241_saldofinalfontsf += ($oReg16Saldo['saldo_anterior'] + $oReg16Saldo['valor_debito']- $oReg16Saldo['valor_credito']) == '' ? 0 : ($oReg16Saldo['saldo_anterior'] + $oReg16Saldo['valor_debito']- $oReg16Saldo['valor_credito']);
                                     $aContasReg10[$reg10Hash]->reg29[$sHash29]->si241_naturezasaldofinalfontsf = $aContasReg10[$reg10Hash]->reg29[$sHash29]->si241_saldofinalfontsf >= 0 ? 'D' : 'C';
                                     $aContasReg10[$reg10Hash]->reg29[$sHash29]->si241_naturezasaldoinicialfontsf = $aContasReg10[$reg10Hash]->reg29[$sHash29]->si241_saldoinicialfontsf >= 0 ? 'D' : 'C';
                                 }
@@ -2934,16 +2853,29 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 $rsVinculoContaOrcamento = db_query($sSqlVinculoContaOrcamento) or die($sSqlVinculoContaOrcamento);
                  //Constante da contacorrente or?ament?ria
                 $nContaCorrente = 100;
+                $cont = 0 ;
 
                 for ($iContVinculo = 0; $iContVinculo < pg_num_rows($rsVinculoContaOrcamento); $iContVinculo++) {
 
                     $objContas = db_utils::fieldsMemory($rsVinculoContaOrcamento, $iContVinculo);
+                    $objContasprox = db_utils::fieldsMemory($rsVinculoContaOrcamento, $iContVinculo + 1);
+                    $objContasant = db_utils::fieldsMemory($rsVinculoContaOrcamento, $iContVinculo - 1);
 
                     $clBalancete31 = new cl_balancete312024();
                     $whereEmenda = " AND c19_emparlamentar is null ";
-                    if($objContas->c19_emparlamentar != 0){
+                    if ($objContas->c19_emparlamentar != 0) {
                         $whereEmenda = " AND c19_emparlamentar = {$objContas->c19_emparlamentar} ";
                     }
+
+                        if (($objContas->c60_estrut.$objContas->o15_codtri.$objContas->c19_emparlamentar == $objContasprox->c60_estrut.$objContasprox->o15_codtri.$objContasprox->c19_emparlamentar) || ($objContas->c60_estrut.$objContas->o15_codtri.$objContas->c19_emparlamentar == $objContasant->c60_estrut.$objContasant->o15_codtri.$objContasant->c19_emparlamentar)) {
+                            $sSqlVinculoContaOrcamentoaux = $clBalancete31->sql_query_vinculo_conta_orcamentoop($oContas10->contas, $nContaCorrente, $objContas->c60_estrut, $nMes, $sWhereEncerramento, $whereEmenda);
+                            $rsVinculoContaOrcamentoaux = db_query($sSqlVinculoContaOrcamentoaux) or die($sSqlVinculoContaOrcamentoaux);
+                            $objContasaux = db_utils::fieldsMemory($rsVinculoContaOrcamentoaux, $cont);
+                            $cont++;
+                        } else {
+                            $cont = 0;
+                        }
+                                  
                     $sSqlReg31saldos = $clBalancete31->sql_query_reg31_saldos($oContas10->contas, $nContaCorrente, $objContas->c60_estrut, $nMes, $sWhereEncerramento, $whereEmenda);
                     $rsReg31saldos = db_query($sSqlReg31saldos) or die($sSqlReg31saldos);
 
@@ -2976,7 +2908,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 31
                                 */
                             $codCo                      = $this->getCodcoByFonteRegistro31($objContas->o15_codtri, $obalancete31->si243_naturezareceita, $objContas->c19_emparlamentar);
-                            $sHash31 = '31' . $oContas10->si177_contacontaabil . $sNaturezaReceita . $objContas->o15_codtri. $codCo;
+                            $sHash31 = '31' . $oContas10->si177_contacontaabil . $sNaturezaReceita . $objContas->o15_codtri. $codCo.$objContas->op01_numerocontratoopc;
 
                             if (!isset($aContasReg10[$reg10Hash]->reg31[$sHash31])) {
 
@@ -2991,10 +2923,12 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 $obalancete31->si243_dataassinaturacontratoop   = "$objContas->op01_dataassinaturacop";
                                 $obalancete31->si243_saldoinicialcre            = $oReg31Saldo->saldoanterior;
                                 $obalancete31->si243_naturezasaldoinicialcre    = $oReg31Saldo->saldoanterior >= 0 ? 'D' : 'C';
-                                $obalancete31->si243_totaldebitoscre            = $oReg31Saldo->debitos;
-                                $obalancete31->si243_totalcreditoscre           = $oReg31Saldo->creditos;
-                                $obalancete31->si243_saldofinalcre              = ($oReg31Saldo->saldoanterior + $oReg31Saldo->debitos - $oReg31Saldo->creditos) == '' ? 0 : ($oReg31Saldo->saldoanterior + $oReg31Saldo->debitos - $oReg31Saldo->creditos);
-                                $obalancete31->si243_naturezasaldofinalcre      = ($oReg31Saldo->saldoanterior + $oReg31Saldo->debitos - $oReg31Saldo->creditos) >= 0 ? 'D' : 'C';
+                                $obalancete31->si243_totaldebitoscre            = $cont > 0 && $objContasaux->c69_valor && $objContasaux->c28_tipo == 'D' ? $objContasaux->c69_valor : $oReg31Saldo->debitos;
+                                $obalancete31->si243_totalcreditoscre           = $cont > 0 && $objContasaux->c69_valor && $objContasaux->c28_tipo == 'C' ? $objContasaux->c69_valor : $oReg31Saldo->creditos;
+                                $saldofinalcredito                              = $cont > 0 && $objContasaux->c69_valor && $objContasaux->c28_tipo == 'C' ? $objContasaux->c69_valor : $oReg31Saldo->creditos;
+                                $saldofinaldebito                               = $cont > 0 && $objContasaux->c69_valor && $objContasaux->c28_tipo == 'D' ? $objContasaux->c69_valor : $oReg31Saldo->debitos;
+                                $obalancete31->si243_saldofinalcre              = ($oReg31Saldo->saldoanterior + $saldofinaldebito - $saldofinalcredito ) == '' ? 0 : ($oReg31Saldo->saldoanterior + $saldofinaldebito - $saldofinalcredito);
+                                $obalancete31->si243_naturezasaldofinalcre      = ($oReg31Saldo->saldoanterior + $saldofinaldebito - $saldofinalcredito) >= 0 ? 'D' : 'C';
                                 $obalancete31->si243_instit                     = db_getsession("DB_instit");
                                 $obalancete31->si243_mes                        = $nMes;
 
@@ -3006,7 +2940,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 $aContasReg10[$reg10Hash]->reg31[$sHash31]->si243_saldofinalcre += ($oReg31Saldo->saldoanterior + $oReg31Saldo->debitos - $oReg31Saldo->creditos) == '' ? 0 : ($oReg31Saldo->saldoanterior + $oReg31Saldo->debitos - $oReg31Saldo->creditos);
                                 $aContasReg10[$reg10Hash]->reg31[$sHash31]->si243_naturezasaldofinalcre = $aContasReg10[$reg10Hash]->reg31[$sHash31]->si243_saldofinalcre >= 0 ? 'D' : 'C';
                                 $aContasReg10[$reg10Hash]->reg31[$sHash31]->si243_naturezasaldoinicialcre = $aContasReg10[$reg10Hash]->reg31[$sHash31]->si243_saldoinicialcre >= 0 ? 'D' : 'C';
-                            }
+                         }
 
                                     }
                     }
@@ -3253,16 +3187,16 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 $obalreg16->si183_atributosf                 = $reg16->si183_atributosf;
                 $obalreg16->si183_codfontrecursos            = $reg16->si183_codfontrecursos;
                 $obalreg16->si183_codco                      = $reg16->si183_codco;
-                $obalreg16->si183_saldoinicialfontsf = number_format(abs($reg16->si183_saldoinicialfontsf == '' ? 0 : $reg16->si183_saldoinicialfontsf), 2, ".", "");
+                $obalreg16->si183_saldoinicialfontsf         = number_format(abs($reg16->si183_saldoinicialfontsf == '' ? 0 : $reg16->si183_saldoinicialfontsf), 2, ".", "");
                 $obalreg16->si183_naturezasaldoinicialfontsf = $reg16->si183_saldoinicialfontsf == 0 ? $oDado10->naturezasaldo : ($reg16->si183_saldoinicialfontsf > 0 ? 'D' : 'C');
-                $obalreg16->si183_totaldebitosfontsf = number_format(abs($reg16->si183_totaldebitosfontsf), 2, ".", "");
-                $obalreg16->si183_totalcreditosfontsf = number_format(abs($reg16->si183_totalcreditosfontsf), 2, ".", "");
+                $obalreg16->si183_totaldebitosfontsf         = number_format(abs($reg16->si183_totaldebitosfontsf), 2, ".", "");
+                $obalreg16->si183_totalcreditosfontsf        = number_format(abs($reg16->si183_totalcreditosfontsf), 2, ".", "");
                 $saldoFinal = ($reg16->si183_saldoinicialfontsf + $reg16->si183_totaldebitosfontsf - $reg16->si183_totalcreditosfontsf) == '' ? 0 : ($reg16->si183_saldoinicialfontsf + $reg16->si183_totaldebitosfontsf - $reg16->si183_totalcreditosfontsf);
-                $obalreg16->si183_saldofinalfontsf = number_format(abs($saldoFinal), 2, ".", "");
-                $obalreg16->si183_naturezasaldofinalfontsf = $saldoFinal == 0 ? $obalreg16->si183_naturezasaldoinicialfontsf : ($saldoFinal > 0 ? 'D' : 'C');
-                $obalreg16->si183_instit = $reg16->si183_instit;
-                $obalreg16->si183_mes = $reg16->si183_mes;
-                $obalreg16->si183_reg10 = $obalancete10->si177_sequencial;
+                $obalreg16->si183_saldofinalfontsf           = number_format(abs($saldoFinal), 2, ".", "");
+                $obalreg16->si183_naturezasaldofinalfontsf   = $saldoFinal == 0 ? $obalreg16->si183_naturezasaldoinicialfontsf : ($saldoFinal > 0 ? 'D' : 'C');
+                $obalreg16->si183_instit                     = $reg16->si183_instit;
+                $obalreg16->si183_mes                        = $reg16->si183_mes;
+                $obalreg16->si183_reg10                      = $obalancete10->si177_sequencial;
 
                 $obalreg16->incluir(null);
 
@@ -3702,7 +3636,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             }
 
             foreach ($oDado10->reg31 as $reg31) {
-
+                
                 $obalreg31 = new cl_balancete312024();
 
                 $obalreg31->si243_tiporegistro = $reg31->si243_tiporegistro;

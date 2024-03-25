@@ -429,6 +429,16 @@ if (isset($alterar)) {
                     ?>
                 </td>
             </tr>
+            <tr>
+                <td nowrap title="Exercício da Licitação">
+                    <strong>Exercício:</strong>
+                </td>
+                <td>
+                    <?php
+                        db_input('l20_anousu', 10, 1, true, 'text', 2, "");
+                    ?>
+                </td>
+            </tr>
                 <tr>
                     <td nowrap title="Processo Licitatório">
                         <strong>Processo Licitatório:</strong>

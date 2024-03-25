@@ -1,30 +1,4 @@
-<?
-/*
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2009  DBselller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
-
+<?php
 set_time_limit(0);
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
@@ -111,9 +85,10 @@ MM_reloadPage(true);
     $campos    .= "          nome, ";
     $campos    .= "          v09_data, ";
     $campos    .= "          v09_hora, ";
-    $campos    .= "          v09_motivo ";
+    $campos    .= "          v09_motivo, ";
+    $campos    .= "          arrepaga.k00_numpar, ";
+    $campos    .= "          arrepaga.k00_dtpaga";
 
-    //                               echo($cltermoanu->sqlQueryTermoOrigem (null,$campos,null,"termo.v07_instit = ".db_getsession('DB_instit')." ".$where));
     $rsTermoAnu = $cltermoanu->sql_record($cltermoanu->sqlQueryTermoOrigem (null,$campos,null,"termo.v07_instit = ".db_getsession('DB_instit')." ".$where));
 
     if ($cltermoanu->numrows == 0) {
@@ -131,9 +106,11 @@ MM_reloadPage(true);
     echo "      <th class='borda' style='font-size:12px' nowrap> Data Parcelamento    </th> ";
     echo "      <th class='borda' style='font-size:12px' nowrap> Tipo                 </th> ";
     echo "      <th class='borda' style='font-size:12px' nowrap> Valor Total          </th> ";
-    echo "      <th class='borda' style='font-size:12px' nowrap> Anulado por          </th> ";
-    echo "      <th class='borda' style='font-size:12px' nowrap> Data anulação        </th> ";
-    echo "      <th class='borda' style='font-size:12px' nowrap> Hora anulação        </th> ";
+    echo "      <th class='borda' style='font-size:12px' nowrap> Revogado por          </th> ";
+    echo "      <th class='borda' style='font-size:12px' nowrap> Data Revogação        </th> ";
+    echo "      <th class='borda' style='font-size:12px' nowrap> Hora Revogação        </th> ";
+    echo "      <th class='borda' style='font-size:12px' nowrap> Última Parc.Paga      </th> ";
+    echo "      <th class='borda' style='font-size:12px' nowrap> Data Pagamento        </th> ";
     echo "      <th class='borda' style='font-size:12px' wrap> Motivo               </th> ";
     echo "    </tr> ";
 
@@ -161,6 +138,8 @@ MM_reloadPage(true);
       echo "    <td align='left'   style='font-size:12px' nowrap bgcolor='$cor'> ".$objParcelamentos->nome."                        </td> ";
       echo "    <td align='center' style='font-size:12px' nowrap bgcolor='$cor'> ".db_formatar($objParcelamentos->v09_data,'d')."   </td> ";
       echo "    <td align='center' style='font-size:12px' nowrap bgcolor='$cor'> ".$objParcelamentos->v09_hora."                    </td> ";
+      echo "    <td align='center' style='font-size:12px' nowrap bgcolor='$cor'> ".$objParcelamentos->k00_numpar."                  </td> ";
+      echo "    <td align='center' style='font-size:12px' nowrap bgcolor='$cor'> ".db_formatar($objParcelamentos->k00_dtpaga,'d')." </td> ";
       echo "    <td align='left'   style='font-size:12px' nowrap bgcolor='$cor'> ".$objParcelamentos->v09_motivo."     </td> ";
       echo "  </tr> ";
 

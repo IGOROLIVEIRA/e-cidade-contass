@@ -175,6 +175,9 @@ $sWhereContratos = " and 1 = 1 ";
                $dbwhere   = "l08_altera is true and";
              }*/
 
+                if(isset($codigotipocompratribunal)){
+                    $dbwhere .= "l03_codcom = $codigotipocompratribunal and";
+                }
 
                 if (isset($pncp) && trim($pncp) == 1) {
                     $dbwhere .= " ";
@@ -195,6 +198,10 @@ $sWhereContratos = " and 1 = 1 ";
 
                 if (isset($lei) && $lei == '1') {
                     $dbwhere .= " l20_leidalicitacao = 1 AND ";
+                }
+
+                if(isset($licitacaoemandamento) && $licitacaoemandamento){
+                    $dbwhere .= " l20_licsituacao = 0 AND ";
                 }
 
                 if (isset($tiponatu) && $tiponatu == '2') {
@@ -495,7 +502,7 @@ $sWhereContratos = " and 1 = 1 ";
                                 db_fieldsmemory($result, 0);
                                 echo "<script>" . $funcao_js . "('$l20_objeto',false);</script>";
                             } else {
-                                echo "<script>" . $funcao_js . "('','Chave(" . $pesquisa_chave . ") n√£o Encontrado',true);</script>";
+                                echo "<script>" . $funcao_js . "('','Chave(" . $pesquisa_chave . ") n„o Encontrado',true);</script>";
                             }
                         } else if (isset($criterioadjudicacao) && $criterioadjudicacao == true) {
                             $sql = "
@@ -535,6 +542,12 @@ $sWhereContratos = " and 1 = 1 ";
                                 echo "<script>" . $funcao_js . "('$l20_edital','$l20_anousu','$l03_codcom',false);</script>";
                             }
                         } else if ($autoriza == true) {
+
+                            $where;
+                            if(isset($codigotipocompratribunal)){
+                                $where .= " and l03_codcom = $codigotipocompratribunal ";
+                            }
+
                             $sql = "
               SELECT DISTINCT liclicita.l20_numero,
               liclicita.l20_edital,
@@ -562,7 +575,7 @@ $sWhereContratos = " and 1 = 1 ";
                   LEFT JOIN pcprocitem             ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
                   LEFT JOIN pcproc                 ON pcproc.pc80_codproc         = pcprocitem.pc81_codproc
                     WHERE l20_instit = " . db_getsession("DB_instit") . "
-                      AND liclicita.l20_codigo = {$pesquisa_chave}
+                      AND liclicita.l20_codigo = {$pesquisa_chave} $where
               ";
 
                             $result = $clliclicita->sql_record($sql);
@@ -570,6 +583,8 @@ $sWhereContratos = " and 1 = 1 ";
                             if ($clliclicita->numrows != 0) {
                                 db_fieldsmemory($result, 0);
                                 echo "<script>" . $funcao_js . "('$l20_objeto','$l20_numero','$l20_edital','$l20_anousu','$l03_codcom','$l03_pctipocompratribunal',false);</script>";
+                            }else {
+                                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n„o Encontrado',true);</script>";
                             }
                         } else if ($credenciamentotermo == "true") {
                             $result = $clliclicita->sql_record($clliclicita->sql_query_file(null, "*", null, "l20_codigo = $pesquisa_chave"));
@@ -578,7 +593,7 @@ $sWhereContratos = " and 1 = 1 ";
                                 db_fieldsmemory($result, 0);
                                 echo "<script>" . $funcao_js . "('$l20_dtpubratificacao','$l20_veicdivulgacao',false);</script>";
                             } else {
-                                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n√£o Encontrado',true);</script>";
+                                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n„o Encontrado',true);</script>";
                             }
                         } else {
                             if ($obras == "true") {
@@ -589,7 +604,7 @@ $sWhereContratos = " and 1 = 1 ";
                                         db_fieldsmemory($result, 0);
                                         echo "<script>" . $funcao_js . "('$l20_objeto','$l20_numero','$l03_descr',false,'$l20_tipojulg','$l20_codigo');</script>";
                                     } else {
-                                        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n√£o Encontrado','Chave(" . $pesquisa_chave . ") n√£o Encontrado','Chave(" . $pesquisa_chave . ") n√£o Encontrado',true);</script>";
+                                        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n„o Encontrado','Chave(" . $pesquisa_chave . ") n„o Encontrado','Chave(" . $pesquisa_chave . ") n„o Encontrado',true);</script>";
                                     }
                                 } else {
                                     $result = $cllicobraslicitacao->sql_record($cllicobraslicitacao->sql_query($pesquisa_chave));
@@ -597,7 +612,7 @@ $sWhereContratos = " and 1 = 1 ";
                                         db_fieldsmemory($result, 0);
                                         echo "<script>" . $funcao_js . "('$l44_descricao','$obr07_objeto','$l20_numero',$false);</script>";
                                     } else {
-                                        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n√£o Encontrado',true);</script>";
+                                        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n„o Encontrado',true);</script>";
                                     }
                                 }
                             } else {
@@ -610,7 +625,7 @@ $sWhereContratos = " and 1 = 1 ";
                                         echo "<script>" . $funcao_js . "('$l20_objeto',false);</script>";
                                     }
                                 } else {
-                                    echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n√£o Encontrado',true);</script>";
+                                    echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n„o Encontrado',true);</script>";
                                 }
                             }
                         }

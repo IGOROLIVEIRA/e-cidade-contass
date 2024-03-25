@@ -1,4 +1,4 @@
-<?
+<?php
 //MODULO: sicom
 //CLASSE DA ENTIDADE ctb212024
 class cl_ctb212024 {
@@ -648,11 +648,13 @@ class cl_ctb212024 {
    * @param integer $mes
    * @param integer $codctb
    * @param integer $fonte
-   * @return $sSqlReg21
+   * @param $clDeParaFonte
+   * @return bool|resource|null $rsMovi21
    */
-  public function sql_Reg21($dataFinal, $ano, $mes, $codctb, $fonte)
+  public function sql_Reg21($dataFinal, $ano, $mes, $codctb, $fonte, $clDeParaFonte, $instit)
   {
-    return "WITH lancamentos_saida AS
+    $sql21 = "CREATE TEMP TABLE tabela_temporaria AS
+            WITH lancamentos_saida AS
                 (SELECT DISTINCT '21' AS tiporegistro,
                         c71_codlan AS codreduzido,
                         contacredito.c61_reduz AS codctb,
@@ -752,7 +754,7 @@ class cl_ctb212024 {
                         END AS saldocectransf,
                         c71_coddoc,
                         c71_codlan,
-                        contacorrentefonte.o15_codtri AS fontemovimento,
+                        contacorrentefonte.o15_codigo AS fontemovimento,
                         CASE
                             WHEN c72_complem ILIKE 'Referente%' AND c71_coddoc IN (5, 35, 37, 6, 36, 38) THEN 1
                             ELSE 0
@@ -763,8 +765,8 @@ class cl_ctb212024 {
                  INNER JOIN conplanoreduz contadebito ON contadebito.c61_reduz = conlancamval.c69_debito AND contadebito.c61_anousu = conlancamval.c69_anousu
                  LEFT JOIN conplanoconta bancodebito ON (bancodebito.c63_codcon, bancodebito.c63_anousu) = (contadebito.c61_codcon, contadebito.c61_anousu) AND contadebito.c61_reduz = conlancamval.c69_debito
                  INNER JOIN conplanoreduz contacredito ON contacredito.c61_reduz = conlancamval.c69_credito AND contacredito.c61_anousu = conlancamval.c69_anousu
-                 INNER JOIN conplano conplanocredito ON contacredito.c61_codcon = conplanocredito.c60_codcon AND contacredito.c61_anousu = conplanocredito.c60_anousu
-                 INNER JOIN conplano conplanodebito ON contacredito.c61_codcon = conplanodebito.c60_codcon AND contacredito.c61_anousu = conplanodebito.c60_anousu
+                 INNER JOIN conplano conplanocredito ON contacredito.c61_codcon = conplanocredito.c60_codcon AND contacredito.c61_anousu = conplanocredito.c60_anousu AND conplanocredito.c60_codsis = 6
+                 INNER JOIN conplano conplanodebito ON contacredito.c61_codcon = conplanodebito.c60_codcon AND contacredito.c61_anousu = conplanodebito.c60_anousu 
                  
                  LEFT JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
                  LEFT JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
@@ -786,6 +788,7 @@ class cl_ctb212024 {
                  LEFT JOIN slipconcarpeculiar ON k131_slip=c84_slip AND k131_tipo=2
                  WHERE DATE_PART('YEAR',conlancamdoc.c71_data) = {$ano}
                    AND DATE_PART('MONTH',conlancamdoc.c71_data) = '{$mes}'
+                   AND contacredito.c61_instit = {$instit}
                    AND (contacredito.c61_reduz = {$codctb} OR contacredito.c61_codtce = {$codctb})),
             
                  lancamentos_entrada AS
@@ -843,7 +846,7 @@ class cl_ctb212024 {
                         END AS saldocectransf,
                         c71_coddoc,
                         c71_codlan,
-                        contacorrentefonte.o15_codtri AS fontemovimento,
+                        contacorrentefonte.o15_codigo AS fontemovimento,
                         CASE
                             WHEN c72_complem ILIKE 'Referente%'
                                  AND c71_coddoc IN (5, 35, 37, 6, 36, 38) THEN 1
@@ -854,7 +857,7 @@ class cl_ctb212024 {
                  INNER JOIN conlancamval ON conlancamval.c69_codlan = conlancamdoc.c71_codlan
                  INNER JOIN conplanoreduz contadebito ON contadebito.c61_reduz = conlancamval.c69_debito AND contadebito.c61_anousu = conlancamval.c69_anousu
                  INNER JOIN conplano conplanocredito ON contadebito.c61_codcon = conplanocredito.c60_codcon AND contadebito.c61_anousu = conplanocredito.c60_anousu
-                 INNER JOIN conplano conplanodebito ON contadebito.c61_codcon = conplanodebito.c60_codcon AND contadebito.c61_anousu = conplanodebito.c60_anousu
+                 INNER JOIN conplano conplanodebito ON contadebito.c61_codcon = conplanodebito.c60_codcon AND contadebito.c61_anousu = conplanodebito.c60_anousu AND conplanodebito.c60_codsis = 6
                  LEFT JOIN conplanoconta bancodebito ON (bancodebito.c63_codcon, bancodebito.c63_anousu) = (contadebito.c61_codcon, contadebito.c61_anousu) AND contadebito.c61_reduz = conlancamval.c69_debito
                  INNER JOIN conplanoreduz contacredito ON contacredito.c61_reduz = conlancamval.c69_credito AND contacredito.c61_anousu = conlancamval.c69_anousu
             
@@ -878,12 +881,37 @@ class cl_ctb212024 {
                  LEFT JOIN conlancamcompl ON c72_codlan = c71_codlan 
                  WHERE DATE_PART('YEAR',conlancamdoc.c71_data) = {$ano}
                    AND DATE_PART('MONTH',conlancamdoc.c71_data) = '{$mes}'
+                   AND contadebito.c61_instit = {$instit}
                    AND (contadebito.c61_reduz = {$codctb} OR contadebito.c61_codtce = {$codctb}))
             SELECT * FROM
                 (SELECT * FROM lancamentos_saida
                  UNION ALL 
-                 SELECT * FROM lancamentos_entrada) AS xx
-            WHERE fontemovimento::integer = {$fonte}";
+                 SELECT * FROM lancamentos_entrada) AS xx";
+
+    db_query ($sql21);
+
+    $result = db_query("SELECT * FROM tabela_temporaria");
+
+    $tabelaTemporaria = pg_fetch_all($result);
+
+    foreach ($tabelaTemporaria as $movimento) {
+
+      $fonteMovimento = $movimento['fontemovimento'];
+      $iFonte = substr($clDeParaFonte->getDePara($fonteMovimento), 0, 7);
+
+      if ($fonteMovimento != $iFonte){
+        $codreduzidoMov = $movimento['codreduzido'];
+        db_query("UPDATE tabela_temporaria SET fontemovimento = {$iFonte} WHERE codreduzido = {$codreduzidoMov}");
+      }
+
+    }
+
+    $sql1 = "SELECT * FROM tabela_temporaria WHERE fontemovimento::integer = {$fonte}";
+    $rsMovi21 = db_query($sql1);
+
+    db_query("DROP TABLE tabela_temporaria");
+
+    return $rsMovi21;
   }
 
   /**
@@ -945,4 +973,3 @@ class cl_ctb212024 {
     return $sSql;
   }
 }
-?>
