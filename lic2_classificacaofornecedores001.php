@@ -97,21 +97,13 @@ $clrotulo->label("l03_descr");
         </td>
       </tr>
       <tr>
-        <td nowrap align="right"><b>Relatório:</b></td>
-        <td>
-          <?   
-            $tipo = 1;
-            db_select("tipo", array("1"=> "Classificação Geral", "2" => "Primeiro Colocado"), $tipo, 1); 
-          ?>
-        </td>
-      </tr>
-      <tr>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
       </tr>
       <tr>
         <td colspan="2" align="center">
-          <input name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();">
+          <input name="emite2" id="emite2" type="button" value="Emitir PDF" onclick="js_emite();">
+          <input name="emite1" id="emite1" type="button" value="Emitir Word" onclick="js_emite();">
         </td>
       </tr>
 
@@ -130,7 +122,17 @@ $clrotulo->label("l03_descr");
     query += '&l03_codigo='+document.form1.l03_codigo.value+'&l03_descr='+document.form1.l03_descr.value;
     query += '&data='+document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value;
     query += '&data1='+document.form1.data2_ano.value+'-'+document.form1.data2_mes.value+'-'+document.form1.data2_dia.value;
-    query += '&tipo='+document.form1.tipo.value
+    query += '&tipo=PDF'
+    jan = window.open('lic2_classificacaofornecedores002.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    jan.moveTo(0,0);
+  }
+
+  function js_emite_word(){
+    query = 'l20_codigo='+document.form1.l20_codigo.value+'&l20_numero='+document.form1.l20_numero.value;
+    query += '&l03_codigo='+document.form1.l03_codigo.value+'&l03_descr='+document.form1.l03_descr.value;
+    query += '&data='+document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value;
+    query += '&data1='+document.form1.data2_ano.value+'-'+document.form1.data2_mes.value+'-'+document.form1.data2_dia.value;
+    query += '&tipo=WORD'
     jan = window.open('lic2_classificacaofornecedores002.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jan.moveTo(0,0);
   }

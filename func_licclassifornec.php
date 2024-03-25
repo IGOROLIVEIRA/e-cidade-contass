@@ -155,7 +155,7 @@ $iAnoSessao = db_getsession("DB_anousu");
           $campos .= ", l03_pctipocompratribunal as tipocomtribunal";
           $campos .= ', l08_descr as dl_Situacao';
 
-          $sql = $clliclicita->sql_queryContratos("", $campos, "l20_codigo, l20_objeto", "$dbwhere");
+          $sql = $clliclicita->sql_queryContratos("", $campos, "l20_codigo", "$dbwhere");
 
           $aRepassa = array();
 

@@ -197,7 +197,7 @@ for ($i = 0; $i < $numrows; $i++) {
           l21_ordem,
           pc24_pontuacao
         FROM liclicitem
-          INNER JOIN liclicitemlote on l04_liclicitem=l21_codigo
+          --INNER JOIN liclicitemlote on l04_liclicitem=l21_codigo
           INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
           INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
           INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
@@ -243,11 +243,10 @@ for ($i = 0; $i < $numrows; $i++) {
 
         // Ajusta o texto e pega o tamanho para quebra de linhas
         $text = str_replace(array("\n", "\r"), ' ', $descricao);
-        $text = limitarTexto($text);
+        //$text = limitarTexto($text);
         $text = mb_convert_encoding($text, 'UTF-8', 'ISO-8859-1');
-        $text = mb_strtolower($text, 'UTF-8');
+        $text = mb_strtoupper($text, 'UTF-8');
         $text = mb_convert_encoding($text, 'ISO-8859-1', 'UTF-8');
-        $text = ucfirst($text);
         $pdf->setfont('arial', '', 7);
         
         $textWidth = $pdf->GetStringWidth($text) * 1.0339;
@@ -272,39 +271,16 @@ for ($i = 0; $i < $numrows; $i++) {
 
         // Reseta o x e o y adiciona o tamanho do multicell ao y
         $pdf->SetXY($x + 235,$y);
-        $pdf->cell(25, $alt*$tamanho, ucfirst(strtolower($m61_descr)), 1, 1, "C", 0);
+        $pdf->cell(25, $alt*$tamanho, strtoupper($m61_descr), 1, 1, "C", 0);
 
         // Adiciona segundo header
         $pdf->setfont('arial', 'b', 8);
         $pdf->cell(20, $alt, 'COLOCAÇÃO', 1, 0, "C", 0);
         $pdf->cell(195, $alt, 'FORNECEDOR', 1, 0, "L", 0);
-        $pdf->cell(15, $alt, 'QTDD', 1, 0, "L", 0);
-        $pdf->cell(25, $alt, 'VLR UNIT.', 1, 0, "L", 0);
-        $pdf->cell(25, $alt, 'VLR TOTAL', 1, 1, "L", 0);
+        $pdf->cell(15, $alt, 'QTDD', 1, 0, "C", 0);
+        $pdf->cell(25, $alt, 'VLR UNIT.', 1, 0, "C", 0);
+        $pdf->cell(25, $alt, 'VLR TOTAL', 1, 1, "C", 0);
 
-
-        /*
-        $pdf->setfont('arial', 'b', 8);
-        $pdf->cell(20, $alt, 'Unidade: ', 1, 0, "L", 1);
-        $pdf->setfont('arial', '', 7);
-        $pdf->cell(260, $alt, ucfirst(strtolower($m61_descr)), 1, 1, "L", 0);
-
-        $pdf->setfont('arial', 'b', 8);
-        $pdf->cell(20, $alt, 'Qtdd.: ', 1, 0, "L", 1);
-        $pdf->setfont('arial', '', 7);
-        $pdf->cell(260, $alt, $pc23_quant, 1, 1, "L", 0);
-
-        
-        $pdf->setfont('arial', '', 7);
-        $pdf->MultiCell(260, $alt, $text, 1, "L", 0);    
-
-        $pdf->cell(280, 2, "", 0, 1, "L", 0);
-        $pdf->setfont('arial', 'b', 8);
-        $pdf->cell(20, $alt, 'Colocação', 1, 0, "L", 1);
-        $pdf->cell(210, $alt, 'Fornecedor', 1, 0, "L", 1);
-        $pdf->cell(25, $alt, 'Vlr Unit.', 1, 0, "C", 1);
-        $pdf->cell(25, $alt, 'Vlr Total', 1, 1, "C", 1);
-        */
         $troca = 0;
         $p     = 0;
       }
