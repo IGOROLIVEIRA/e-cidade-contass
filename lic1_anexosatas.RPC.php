@@ -102,7 +102,7 @@ switch ($oParam->exec) {
             $rsAnexosPNCP = $clcontroleanexosataspncp->sql_record($clcontroleanexosataspncp->sql_query(null,"*",null,"l217_sequencialarquivo = $oParam->codAnexo"));
 
             if(pg_num_rows($rsAnexosPNCP)){
-                $oRetorno->sMensagem = urlencode('Anexo já enviado ao PNCP, para excluí-lo é necessário que seja primeiro EXCLUÍDO no PNCP.');
+                throw new Exception(urlencode('Anexo já enviado ao PNCP, para excluí-lo é necessário que seja primeiro EXCLUÍDO no PNCP.'));
             }else {
                 $cl_licanexoataspncp->excluir($oParam->codAnexo);
                 if ($cllicobrasanexo->erro_status == '0') {
