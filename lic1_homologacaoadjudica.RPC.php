@@ -580,10 +580,8 @@ switch ($oParam->exec) {
             $aPcmater = $clliclicita->getPcmaterObras($l202_licitacao);
             $aPcmaterverificado = array();
 
-            if ($l20_naturezaobjeto == "1") {
-                if ($l20_cadinicial != "3" && $l20_cadinicial != "4") {
-                    throw new Exception("Usuário: Edital não cadastrado ou com o status de Aguardando envio. Gentileza verificar!");
-                }
+            if ($l20_cadinicial == "1" || $l20_cadinicial == "2") {
+                throw new Exception("Usuário: O envio do edital desta licitação se encontra com o status de <br>PENDENTE/AGUARDANDO ENVIO, gentileza verificar se o envio foi realizado e alterar o status para ENVIADO para que seja possível inserir a homologação.");
             }
 
             foreach ($aPcmater as $item) {
