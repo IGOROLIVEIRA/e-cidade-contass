@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -55,25 +55,18 @@ $sFonteRel = "con2_anexoXVI_002_2011.php";
 <script>
 function js_emite() {
 
-  <?
-    if (!file_exists('con2_anexoXVI_002_2011.php')) {
-      
-      echo "alert('Relatório não disponível para o exercício $iAnoUsu');";
-      echo "return false;";
-    }
-  ?>
 
   var sFonte     = 'con2_anexoXVI_002_2011.php';
   var oDocument  = document.form1;
   var iSelInstit = new Number(oDocument.db_selinstit.value);
   if (iSelInstit == 0) {
-  
+
     alert('Você não escolheu nenhuma Instituição. Verifique!');
     return false;
   }
-  
+
   if ($('o116_periodo').value == 0) {
-  
+
     alert('Você não escolheu nenhum período. Verifique!');
     return false;
   }
@@ -84,7 +77,7 @@ function js_emite() {
                               ',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <link href="estilos/grid.style.css" rel="stylesheet" type="text/css">
 </head>
@@ -98,7 +91,7 @@ function js_emite() {
 	    <td colspan=3  class='table_header'>
 	     <b>Anexo XVI - Dívida Fundada Interna</b>
 	    </td>
-	   </tr>  
+	   </tr>
 	   <tr>
 	    <td>
 	      <fieldset>
@@ -112,16 +105,16 @@ function js_emite() {
             <tr>
               <td colspan=2 nowrap>
                 <b>Período:&nbsp;</b>
-                <?      
+                <?
                  if ($iAnoUsu < 2010 ) {
-              
+
                    $aListaPeriodos = array("1B" => "1 º Bimestre",
                                            "2B" => "2 º Bimestre",
                                            "3B" => "3 º Bimestre",
                                            "4B" => "4 º Bimestre",
                                            "5B" => "5 º Bimestre",
                                            "6B" => "6 º Bimestre");
-                  } else {            
+                  } else {
 
                      $aPeriodos         = $oRelatorio->getPeriodos();
                      $aListaPeriodos    = array();
@@ -130,26 +123,26 @@ function js_emite() {
                        $aListaPeriodos[$oPeriodo->o114_sequencial] = $oPeriodo->o114_descricao;
                      }
                   }
-                  
+
                   db_select("o116_periodo", $aListaPeriodos, true, 1);
                 ?>
-              </td> 
-            </tr> 
-			    </table>	       
+              </td>
+            </tr>
+			    </table>
 	      </fieldset>
 	      <table align="center">
 	        <tr>
-            <td>&nbsp;</td>	       
+            <td>&nbsp;</td>
 	        </tr>
           <tr>
             <td align="center" colspan="2">
                <input  name="emite" id="emite" type="button" value="Imprimir" onclick="js_emite();">
             </td>
-          </tr>	      
+          </tr>
 	      </table>
 	    </td>
 	   </tr>
-	  </table> 
+	  </table>
   </form>
 </body>
 </html>

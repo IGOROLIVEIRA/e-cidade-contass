@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("fpdf151/pdf.php");
@@ -66,8 +66,8 @@ if ($iNumRows == 0){
  */
 $sWhere           = "codigo in({$sInstituicoes})";
 $sSqlDbConfig     = $cldb_config->sql_query_file(null, "nomeinst, nomeinstabrev", 'codigo', $sWhere);
-$rsSqlDbConfig    = $cldb_config->sql_record($sSqlDbConfig); 
-$iNumRowsDbConfig = $cldb_config->numrows; 
+$rsSqlDbConfig    = $cldb_config->sql_record($sSqlDbConfig);
+$iNumRowsDbConfig = $cldb_config->numrows;
 if ($iNumRowsDbConfig == 0) {
   db_redireciona('db_erros.php?fechar=true&db_erro=Instituição não informada.');
 }
@@ -76,8 +76,8 @@ $sNomeInstAbrev = "";
 $sVirgula       = "";
 $lFlagInstit    = false;
 for ($iInd = 0; $iInd < $iNumRowsDbConfig; $iInd++) {
-  
-  $oMunicipio = db_utils::fieldsMemory($rsSqlDbConfig, $iInd);  
+
+  $oMunicipio = db_utils::fieldsMemory($rsSqlDbConfig, $iInd);
   if (strlen(trim($oMunicipio->nomeinstabrev)) > 0) {
 
     $sNomeInstAbrev .= $sVirgula.$oMunicipio->nomeinstabrev;
@@ -85,12 +85,12 @@ for ($iInd = 0; $iInd < $iNumRowsDbConfig; $iInd++) {
   } else {
     $sNomeInstAbrev .= $sVirgula.$oMunicipio->nomeinst;
   }
-  
+
   $sVirgula        = ", ";
 }
 
 if ($lFlagInstit == false) {
-  
+
   if (strlen($sNomeInstAbrev) > 42) {
     $sNomeInstAbrev = substr($sNomeInstAbrev, 0, 150);
   }
@@ -102,7 +102,7 @@ if ($lFlagInstit == false) {
 $sDescricaoPeriodo = "";
 $aPeriodos         = $oReltorioContabil->getPeriodos();
 foreach ($aPeriodos as $oPeriodo) {
-  
+
   if ($oPeriodo->o114_sequencial == $oGet->periodo) {
     $sDescricaoPeriodo = $oPeriodo->o114_descricao;
   }
@@ -113,9 +113,9 @@ $head3  = "EXERCÍCIO {$iAnousu}";
 $head5  = "INSTITUIÇÕES: {$sNomeInstAbrev}";
 $head6  = "ANEXO 16 - PERÍODO: {$sDescricaoPeriodo}";
 
-$oPdf = new PDF("L"); 
-$oPdf->Open(); 
-$oPdf->AliasNbPages(); 
+$oPdf = new PDF("L");
+$oPdf->Open();
+$oPdf->AliasNbPages();
 $oPdf->SetAutoPageBreak(false);
 $oPdf->AddPage();
 $oPdf->setfillcolor(235);
@@ -134,13 +134,13 @@ $iRegistro                 = 0;
 
 
 foreach ($aNotas as $oLinhaNota) {
-  
+
   $iTotValoremissao          = $iTotValoremissao          + $aNotas[$iRegistro]->valoremissao;
   $iTotSaldoanterior         = $iTotSaldoanterior         + $aNotas[$iRegistro]->saldoanterior;
   $iTotCorrecaomonetaria     = $iTotCorrecaomonetaria     + $aNotas[$iRegistro]->correcaomonetaria;
   $iTotResgate               = $iTotResgate               + $aNotas[$iRegistro]->resgate;
-  $iTotValorproximoexercicio = $iTotValorproximoexercicio + $aNotas[$iRegistro]->valorproximoexercicio; 
-  
+  $iTotValorproximoexercicio = $iTotValorproximoexercicio + $aNotas[$iRegistro]->valorproximoexercicio;
+
   $oPdf->setfont('arial','',8);
   $oPdf->cell(70, $iAlturalinha, $oLinhaNota->lei,                                          "TBR", 0,"L", 0);
   $oPdf->cell(40, $iAlturalinha, $oLinhaNota->quantidadedata,                               "TBR", 0,"C", 0);
@@ -179,18 +179,18 @@ $oPdf->Output();
 
 
 function imprimirCabecalho($oPdf, $iAlturalinha, $lImprime) {
-  
+
   if ( $oPdf->GetY() > $oPdf->h - 25 || $lImprime ) {
-    
+
     $oPdf->SetFont('arial', 'b', 6);
     if ( !$lImprime ) {
-      
+
       $oPdf->AddPage("L");
       imprimeInfoProxPagina($oPdf, $iAlturalinha, true);
     }
     /*
      * Cabeçalho a ser Repetido nas paginas
-     */  
+     */
      $oPdf->setfont('arial','b',8);
      $oPdf->cell(140, $iAlturalinha, "AUTORIZAÇÕES",             "TBR",  0, "C", 0);
      $oPdf->cell(30,  $iAlturalinha, "SALDO ANTERIOR",            "T",   0, "C", 0);
@@ -203,7 +203,7 @@ function imprimirCabecalho($oPdf, $iAlturalinha, $lImprime) {
      $oPdf->cell(30,  $iAlturalinha, "CORR. MONETÁRIA",           "LBR", 0, "C", 0);
      $oPdf->cell(30,  $iAlturalinha, "RESGATE/BAIXA",             "LBR", 0, "C", 0);
      $oPdf->cell(10,  $iAlturalinha, "QTDE",                      "LBR", 0, "C", 0);
-     $oPdf->cell(40,  $iAlturalinha, "VALOR",                     "LTB", 1, "C", 0);  
+     $oPdf->cell(40,  $iAlturalinha, "VALOR",                     "LTB", 1, "C", 0);
   }
 }
 
@@ -215,14 +215,14 @@ function imprimirCabecalho($oPdf, $iAlturalinha, $lImprime) {
  * @param Boolean type $lInicio
  */
 function imprimeInfoProxPagina($oPdf, $iAlturalinha, $lImprime) {
-  
+
   if ( $oPdf->GetY() > $oPdf->h - 38 || $lImprime ) {
-    
+
     $oPdf->SetFont('arial', '', 6);
     if ( $lImprime ) {
       $oPdf->Cell(280, ($iAlturalinha*2), 'Continuação '.($oPdf->PageNo())."/{nb}",          'T', 1, "R", 0);
     } else {
-      
+
       $oPdf->Cell(280, ($iAlturalinha*3), 'Continua na página '.($oPdf->PageNo()+1)."/{nb}", 'T', 1, "R", 0);
       imprimirCabecalho($oPdf, $iAlturalinha, false,'');
     }
