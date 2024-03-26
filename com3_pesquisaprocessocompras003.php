@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -43,21 +43,21 @@ db_postmemory($HTTP_POST_VARS);
 $oProcessoCompras = new ProcessoCompras($oGet->pc80_codproc);
 $sSituacaoProcesso = '';
 switch ($oProcessoCompras->getSituacao()) {
-  
+
   case 1:
-    
+
     $sSituacaoProcesso = 'EM ANÁLISE';
     break;
-    
+
   case 2:
-    
+
     $sSituacaoProcesso = 'AUTORIZADO';
     break;
 
   case 3:
-    
+
     $sSituacaoProcesso = 'NÃO AUTORIZADO';
-    break;  
+    break;
 }
 
 $cllicitaparam = new cl_licitaparam;
@@ -84,17 +84,17 @@ $l12_pncp = db_utils::fieldsMemory($rsParametroPncp,0)->l12_pncp;
        width: 200px;
      }
      td.label {
-     
+
        width: 100px;
        white-space: nowrap;
-     } 
+     }
     </style>
   </head>
   <body background="#cccccc">
-  
+
   <fieldset>
     <legend>
-      <b>Dados do Processo de Compras</b> 
+      <b>Dados do Processo de Compras</b>
     </legend>
     <table class='valores' cellpadding="2" cellspacing="1">
        <tr>
@@ -109,9 +109,9 @@ $l12_pncp = db_utils::fieldsMemory($rsParametroPncp,0)->l12_pncp;
           <td class="label"><?=$Lpc80_depto ?> </td>
           <td colspan="3" class="valores">
             <?=$oProcessoCompras->getCodigoDepartamento()." - ".$oProcessoCompras->getDescricaoDepartamento()?>
-          </td>  
+          </td>
           <td class="label"> <b> Critério de Adjudicação: </b> </td>
-          <td class="valores"> 
+          <td class="valores">
             <?
               $aCriterioAdjudicacao = array(1=>"Desconto sobre tabela", 2=>"Menor taxa ou percentual", 3=>"Outros");
               echo $aCriterioAdjudicacao[$oProcessoCompras->getCriterioAdjudicacao()];
@@ -122,7 +122,7 @@ $l12_pncp = db_utils::fieldsMemory($rsParametroPncp,0)->l12_pncp;
           <td class="label"><?=$Lpc80_usuario ?> </td>
           <td colspan="3" class="valores">
             <?=$oProcessoCompras->getUsuario()." - ".$oProcessoCompras->getNomeUsuario()?>
-          </td>  
+          </td>
           <td class="label"> <b> Contratação Direta: </b> </td>
           <td class="valores"> <?=$oProcessoCompras->getDispensaPorValor() == "t" ? "Sim" : "Não"?></td>
        </tr>
@@ -130,7 +130,7 @@ $l12_pncp = db_utils::fieldsMemory($rsParametroPncp,0)->l12_pncp;
           <td class="label"><?=$Lpc80_situacao ?> </td>
           <td colspan="3" class="valores">
             <?=$oProcessoCompras->getSituacao(). " - {$sSituacaoProcesso}"?>
-          </td>  
+          </td>
           <td class="label"> <b> Nº Dispensa: </b> </td>
           <td class="valores"> <?=$oProcessoCompras->getNumerodispensa()?></td>
        </tr>
@@ -138,7 +138,7 @@ $l12_pncp = db_utils::fieldsMemory($rsParametroPncp,0)->l12_pncp;
           <td class="label"><?=$Lpc80_resumo ?> </td>
           <td colspan="3" class="valores">
             <?=nl2br($oProcessoCompras->getResumo())?>
-          </td>  
+          </td>
           <td class="label"> <b> ID PNCP: </b> </td>
           <td>
           <?
@@ -156,8 +156,8 @@ $l12_pncp = db_utils::fieldsMemory($rsParametroPncp,0)->l12_pncp;
     </legend>
     <?
     $oTabDetalhes = new verticalTab("detalhesProcessoCompras",300);
-    
-    $oTabDetalhes->add("processoItens", "Itens", 
+
+    $oTabDetalhes->add("processoItens", "Itens",
                        "com3_pesquisaprocessocomprasitens.php?iProcesso={$oGet->pc80_codproc}");
 
     $rsSolicitacao = db_query("select pc11_numero from pcproc
@@ -166,33 +166,34 @@ $l12_pncp = db_utils::fieldsMemory($rsParametroPncp,0)->l12_pncp;
     where pc80_codproc = {$oGet->pc80_codproc} limit 1");
 
     $solicitacao = db_utils::fieldsMemory($rsSolicitacao)->pc11_numero;
-    
-    $oTabDetalhes->add("processoOrcamento", "Orçamento", 
+
+    $oTabDetalhes->add("processoOrcamento", "Orçamento",
                        "com3_consultaitens001.php?solicitacao=4&numero=$solicitacao");
-    
-    $oTabDetalhes->add("processoPrecoReferencia", "Preço de Referência", 
+
+    $oTabDetalhes->add("processoPrecoReferencia", "Preço de Referência",
                        "com3_pesquisaprocessocomprasprecoreferencia.php?iProcesso={$oGet->pc80_codproc}");
-    
+
     $oTabDetalhes->add("processoLicitacoes", "Licitações",
                        "com3_pesquisaprocessocompraslicitacao.php?iProcesso={$oGet->pc80_codproc}");
-    
-    $oTabDetalhes->add("processoAutorizacoes", "Autorizações de Empenho", 
+
+    $oTabDetalhes->add("processoAutorizacoes", "Autorizações de Empenho",
                        "com3_pesquisaprocessocompraautorizacoes.php?iProcesso={$oGet->pc80_codproc}");
-    
+
     $oTabDetalhes->add("processoEmpenho", "Empenhos",
                        "com3_pesquisaprocessocompraempenho.php?iProcesso={$oGet->pc80_codproc}");
-    
+
     $oTabDetalhes->add("processoContratos", "Acordos",
         "com3_pesquisaprocessocompracontrato.php?iProcesso={$oGet->pc80_codproc}");
-    
+
     $oTabDetalhes->add("processoContratos", "Registro de Preço",
         "com3_pesquisaregistropreco.php?iProcesso={$oGet->pc80_codproc}");
 
     $oTabDetalhes->add("processoAdesao", "Adesão de Registro de Preço",
         "com3_pesquisarAdesaoregpreco.php?iProcesso={$oGet->pc80_codproc}");
 
-    
-    
+//    $oTabDetalhes->add("processoAdesao", "Dados PNCP",
+//        "com3_pesquisarDadosPNCP.php?iProcesso={$oGet->pc80_codproc}");
+
     $oTabDetalhes->show();
     ?>
   </fieldset>
