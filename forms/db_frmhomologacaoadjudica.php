@@ -90,6 +90,16 @@ db_app::load("estilos.css, grid.style.css");
                 <input type="hidden" id="valor">
             </td>
         </tr>
+        <tr  id="trdatareferencia" style="display:none;">
+            <td nowrap title="<?= @$Tl202_datareferencia ?>">
+                <?= @$Ll202_datareferencia ?>
+            </td>
+            <td>
+                <?
+                db_inputdata('l202_datareferencia', @$l202_datareferencia_dia, @$l202_datareferencia_mes, @$l202_datareferencia_ano, true, 'text', $db_opcao, "")
+                ?>
+            </td>
+        </tr>
     </table>
     <br>
     <div>
@@ -411,6 +421,9 @@ db_app::load("estilos.css, grid.style.css");
         oParam.dtHomologacao = $F('l202_datahomologacao');
         oParam.iHomologacao = $F('l202_sequencial');
         oParam.respHomologcodigo = $F('respHomologcodigo');
+        oParam.dataReferencia = $F('l202_datareferencia');
+
+        oParam.possuiDataReferencia = document.getElementById('trdatareferencia').style.display == "none" ? false : true;
 
         if (oParam.respHomologcodigo == "") {
             alert('Campo Responsável pela Homologação não informado');
@@ -475,6 +488,10 @@ db_app::load("estilos.css, grid.style.css");
             
         } 
 
+        if (oRetorno.periodosicomencerrado) {
+            document.getElementById('trdatareferencia').style.display = '';
+        }
+
         alert(oRetorno.message.urlDecode());
         return;
         
@@ -486,6 +503,9 @@ db_app::load("estilos.css, grid.style.css");
         oParam.dtHomologacao = $F('l202_datahomologacao');
         oParam.iHomologacao = $F('l202_sequencial');
         oParam.respHomologcodigo = $F('respHomologcodigo');
+        oParam.dataReferencia = $F('l202_datareferencia');
+        oParam.possuiDataReferencia = document.getElementById('trdatareferencia').style.display == "none" ? false : true;
+        
         if (oParam.respHomologcodigo == "") {
             alert('Campo Responsável pela Homologação não informado');
             return false;
@@ -513,9 +533,16 @@ db_app::load("estilos.css, grid.style.css");
             document.getElementById('l202_sequencial').value = '';
             document.getElementById('respHomologcodigo').value = '';
             document.getElementById('respHomolognome').value = '';
-        } else {
-            alert(oRetorno.message.urlDecode());
+            return;
+        } 
+
+
+        if (oRetorno.periodosicomencerrado) {
+            document.getElementById('trdatareferencia').style.display = '';
         }
+
+        alert(oRetorno.message.urlDecode());
+        
     }
 
     function js_excluirHomologacao() {
