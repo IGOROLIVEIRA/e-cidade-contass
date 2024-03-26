@@ -103,7 +103,7 @@ $clrotulo->label("l03_descr");
       <tr>
         <td colspan="2" align="center">
           <input name="emite2" id="emite2" type="button" value="Emitir PDF" onclick="js_emite();">
-          <input name="emite1" id="emite1" type="button" value="Emitir Word" onclick="js_emite();">
+          <input name="emite1" id="emite1" type="button" value="Emitir Word" onclick="js_emite_word();">
         </td>
       </tr>
 
