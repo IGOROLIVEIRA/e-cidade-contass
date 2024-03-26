@@ -394,11 +394,13 @@ if (!empty($oProcessoProtocolo)) {
         "com3_pesquisaresponsaveis.php?{$sGetUrl}"
     );
 
-    $oVerticalTab->add(
-        'dadosComissao',
-        'Comissão de Licitação',
-        "com3_pesquisacomissao.php?{$sGetUrl}"
-    );
+    if (!in_array($tipoTribunal, array('100', '101', '102', '103'))){
+        $oVerticalTab->add(
+            'dadosComissao',
+            'Comissão de Licitação',
+            "com3_pesquisacomissao.php?{$sGetUrl}"
+        );
+    }
 
     $oVerticalTab->add(
         'dadosParecer',
