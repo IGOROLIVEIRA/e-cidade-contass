@@ -599,6 +599,9 @@ ob_start();
                     $nTotalAplicadoSaida   = 0;
                     $nValorTotalPago       = 0;
                     $aFontes      = array("'101','1101','15000001','201','25000001'");
+                    if ($anousu > 2022) {
+                        $sFuncao = "12, 28";
+                    }
                     foreach ($aSubFuncao as $iSubFuncao) {
                         $oReceitaeDespesaEnsino->setAnousu($anousu);
                         $oReceitaeDespesaEnsino->setSubFuncao($iSubFuncao);
@@ -642,7 +645,11 @@ ob_start();
                             }
                         }
                    }
-                   $aFonteFundeb      = array("'118','119','1118','1119','15400007','15400000'");
+                   if ($anousu > 2022) {
+                       $aFonteFundeb = array("'15020001'");
+                   } else {
+                       $aFonteFundeb = array("'118','119','1118','1119','15400007','15400000'");
+                   }
                    $aSubFuncoes = array(122,272,271,361,365,366,367,843);
                    foreach ($aSubFuncoes as $iSubFuncao) {
                         $oReceitaeDespesaEnsino->setSubFuncao($iSubFuncao);
@@ -689,7 +696,7 @@ ob_start();
 
                    $nTotalReceitasRecebidasFundeb = abs($nDevolucaoRecursoFundeb) + abs($nTransferenciaRecebidaFundeb);
                    $nResulatadoLiquidoTransfFundeb = $nTotalReceitasRecebidasFundeb-abs($nTotalContribuicaoFundeb);
-                   $nTotalAplicadoSaida = $nResulatadoLiquidoTransfFundeb;
+                   $nTotalAplicadoSaida = $nTotalContribuicaoFundeb;
 
                    $dadosLinha9 = $oReceitaeDespesaEnsino->getLinha9RestosaPagarInscritoSemDis();
                    $nRPIncritosSemDesponibilidade101     = $dadosLinha9['0'];
@@ -697,11 +704,33 @@ ob_start();
                    $nRPIncritosSemDesponibilidade118_119 = $dadosLinha9['2'];
                    $nTotalAplicadoSaida = $nTotalAplicadoSaida + $nRPIncritosSemDesponibilidade101 + $nRPIncritosSemDesponibilidade136 + $nRPIncritosSemDesponibilidade118_119;
 
+                   $nTotalDespesaLiquidaFundeb = 0;
+                   foreach ($aSubFuncoes as $iSubFuncao) {
+                       $oReceitaeDespesaEnsino->setSubFuncao($iSubFuncao);
+                       $oReceitaeDespesaEnsino->setFuncao($sFuncao);
+                       $oReceitaeDespesaEnsino->setFonteFundeb(array("'15400007', '15400000'"));
+                       $oReceitaeDespesaEnsino->setInstits($instits);
+                       $dadoslinha3 =  $oReceitaeDespesaEnsino->getLinha1FuncaoFundeb();
+                       $aDespesasProgramas = $dadoslinha3['1'];
+                       if (count($aDespesasProgramas) > 0) {
+                           $nTotalDespesaLiquidaFundeb += $dadoslinha3['5'];
+                       }
+                   }
+                   $nFundebNaoUtilizadasExercicio = ($nTotalReceitasRecebidasFundeb * 0.1) - ($nTotalReceitasRecebidasFundeb - $nTotalDespesaLiquidaFundeb);
+                   if ($nFundebNaoUtilizadasExercicio < 0 ) {
+                       $nFundebNaoUtilizadasExercicio = abs($nFundebNaoUtilizadasExercicio);
+                   } else {
+                       $nFundebNaoUtilizadasExercicio = 0;
+                   }
+
+                   $nTotalAplicadoSaida += $nFundebNaoUtilizadasExercicio;
+
                    $dadosLinha11 = $oReceitaeDespesaEnsino->getLinha11CancelamentodeRestoaPagar();
                    $nValorRecursoTotal101 = $dadosLinha11['0'];
                    $nValorRecursoTotal136 = $dadosLinha11['1'];
                    $nValorRecursoTotal118 = $dadosLinha11['2'];
-                   $nTotalAplicadoSaida = $nTotalAplicadoSaida + $nValorRecursoTotal101 + $nValorRecursoTotal136 + $nValorRecursoTotal118;
+                   $nValorRecursoTotal1502 = $dadosLinha12['3'];
+                   $nTotalAplicadoSaida = $nTotalAplicadoSaida + $nValorRecursoTotal101 + $nValorRecursoTotal136 + $nValorRecursoTotal118 + $nValorRecursoTotal1502;
 
                    $nValorAplicado =  $nTotalAplicadoEntrada + ($nTotalAplicadoSaida * -1);
                    $valorAplicacaoDevida = ($nTotalReceitaTransferencia + $nTotalReceitaImpostos)*0.25 ;
