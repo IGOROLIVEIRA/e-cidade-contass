@@ -1350,6 +1350,7 @@ $order
         $sSql .= " from (                                                                                                                                                   ";
         $sSql .= "   select                                                                                                                                                 ";
         $sSql .= "        o15_codtri,                                                                                                                                       ";                                                                                                                                               
+        $sSql .= "        o15_codigo,                                                                                                                                       ";                                                                                                                                               
         $sSql .= "        e91_numemp,                                                                                                                                       ";
         $sSql .= "        e91_anousu,                                                                                                                                       ";
         $sSql .= "        e91_codtipo,                                                                                                                                      ";
@@ -1398,12 +1399,16 @@ $order
         $sSql .= "      inner join orcsubfuncao on o53_subfuncao = orcdotacao.o58_subfuncao                                                                                 ";
         $sSql .= "      inner join orcprograma  on o54_programa  = o58_programa and o54_anousu = orcdotacao.o58_anousu                                                      ";
         $sSql .= "      inner join orcprojativ  on o55_projativ  = o58_projativ and o55_anousu = orcdotacao.o58_anousu                                                      ";
-        $sSql .= "      inner join orcelemento  on o58_codele    = o56_codele and o58_anousu   = o56_anousu and 1 = 1  and $sWhere                                          ";
-                                                                                                                                   
+        $sSql .= "      inner join orcelemento  on o58_codele    = o56_codele and o58_anousu   = o56_anousu                                                                 ";
+        
+        if (!empty($sWhere)) {
+          $sSql .= " where {$sWhere} ";
+        }
+
         if (!empty($sOrder)) {
           $sSql .= " order by {$sOrder} ";
         }
-        
+
         return db_utils::getColectionByRecord(db_query($sSql));
       }
 }
