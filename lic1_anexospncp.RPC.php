@@ -33,6 +33,7 @@ require_once("libs/db_sessoes.php");
 require_once("libs/JSON.php");
 require_once("std/db_stdClass.php");
 require_once("dbforms/db_funcoes.php");
+require_once("classes/db_licacontrolenexospncp_classe.php");
 
 define("URL_MENSAGEM_LIC1ANEXOSPNCP", "patrimonial.licitacao.lic1_anexospncp.");
 const PATH_ANEXO_LICITACAO = 'model/licitacao/PNCP/anexoslicitacao/';
@@ -109,9 +110,16 @@ try {
 
     case "excluir":
 
-      $oProcessoDocumento = new LicitacaoDocumento($oParam->iCodigoDocumento);
-      $oProcessoDocumento->excluir();
-      $oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
+      $clliccontroleanexopncp = new cl_liccontroleanexopncp();
+      $rsAnexosPNCP = $clliccontroleanexopncp->sql_record($clliccontroleanexopncp->sql_query(null,"*",null, "l218_sequencialarquivo = $oParam->iCodigoDocumento"));
+
+        if(pg_num_rows($rsAnexosPNCP)){
+            $oRetorno->sMensagem = urlencode('Anexo já enviado ao PNCP, para excluí-lo é necessário que seja primeiro EXCLUÍDO no PNCP.');
+        }else {
+            $oProcessoDocumento = new LicitacaoDocumento($oParam->iCodigoDocumento);
+            $oProcessoDocumento->excluir();
+            $oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
+        }
       break;
 
     case "alterardocumento":
