@@ -28,7 +28,12 @@ class TermodeContrato extends ModeloBasePNCP
 
         $oDadosAPI                                          = new \stdClass;
         $oDadosAPI->tipoTermoContratoId                     = $oDado[0]->tipotermocontratoid;
-        $oDadosAPI->numeroTermoContrato                     = $oDado[0]->numerotermocontrato;
+        //aqui eu precisei criar um novo numero de termo quando o tipo for recisao pois nao existe uma posicao no acordo.
+        if($oDado[0]->tipotermocontratoid == "1"){
+            $oDadosAPI->numeroTermoContrato                     = $oDado[0]->numerotermocontrato + 1;
+        }else{
+            $oDadosAPI->numeroTermoContrato                     = $oDado[0]->numerotermocontrato;
+        }
         $oDadosAPI->objetoTermoContrato                     = utf8_encode($oDado[0]->objetotermocontrato);
         $oDadosAPI->qualificacaoAcrescimoSupressao          = $oDado[0]->qualificacaoacrescimosupressao == 'f' ? 'false' : 'true';
         $oDadosAPI->qualificacaoVigencia                    = $oDado[0]->qualificacaovigencia == 'f' ? 'false' : 'true';

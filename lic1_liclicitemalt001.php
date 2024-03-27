@@ -98,8 +98,7 @@ if (!$sqlerro && $codprocesso) {
         '',
         "pc81_codproc = " . $codprocesso . " and pc11_reservado = 't'"
     );
-    // echo $sSqlSolicitem;
-    // exit;
+
     $rsSolicitem = db_query($sSqlSolicitem);
     db_inicio_transacao();
     for ($count = 0; $count < pg_numrows($rsSolicitem); $count++) {
@@ -115,11 +114,6 @@ if (!$sqlerro && $codprocesso) {
 
 
         $oItemOrigem = db_utils::fieldsMemory($rsOrigem, 0);
-        // $nova_quantidade = floatval($oItemOrigem->pc11_quant) + floatval($oSolicitemReservado->pc11_quant);
-
-        // print_r($oItemOrigem);
-        // echo $nova_quantidade . ' ';
-        // echo $oSolicitemReservado->pc11_quant;
 
         $result = $clliclicita->sql_record($clliclicita->sql_query($licitacao, "l08_altera, l20_usaregistropreco, l20_nroedital, l20_naturezaobjeto"));
         if ($clliclicita->numrows > 0) {
@@ -132,7 +126,9 @@ if (!$sqlerro && $codprocesso) {
                 $lRegistroPreco = true;
             }
         }
+
         $oDaoSolicitemControle = db_utils::getDao('solicitem');
+
         if ($l20_usaregistropreco == "t") {
 
             $rsSolicitemControle = $oDaoSolicitemControle->sql_record("select distinct
@@ -158,23 +154,19 @@ if (!$sqlerro && $codprocesso) {
             $oItemControle = db_utils::fieldsMemory($rsSolicitemControle, 0);
         }
 
-        $rsSolicitemControle2 = $oDaoSolicitemControle->sql_record("select pc11_codigo,pc11_reservado,pc11_quant,
-          pc16_codmater,pc11_seq
-        from solicitem
-        join solicitempcmater on pc16_solicitem = pc11_codigo
-        where
-          pc11_numero = $oSolicitemReservado->pc11_numero
-          and pc16_codmater = $oSolicitemReservado->pc16_codmater order by pc11_reservado desc");
-        // echo "select pc11_codigo,pc11_reservado,pc11_quant,
-        //     pc16_codmater,pc11_seq
-        //   from solicitem
-        //   join solicitempcmater on pc16_solicitem = pc11_codigo
-        //   where
-        //     pc11_numero = $oSolicitemReservado->pc11_numero
-        //     and pc16_codmater = $oSolicitemReservado->pc16_codmater order by pc11_reservado desc ";
+        $rsSolicitemControle2 = $oDaoSolicitemControle->sql_record("SELECT pc11_codigo,
+                                                                           pc11_reservado,
+                                                                           pc11_quant,
+                                                                           pc16_codmater,
+                                                                           pc11_seq
+                                                                    FROM solicitem
+                                                                    JOIN solicitempcmater ON pc16_solicitem = pc11_codigo
+                                                                    WHERE pc11_numero = $oSolicitemReservado->pc11_numero
+                                                                        AND pc16_codmater = $oSolicitemReservado->pc16_codmater
+                                                                    ORDER BY pc11_reservado DESC");
 
         $nova_quantidade2 = db_utils::fieldsMemory($rsSolicitemControle2, 0)->pc11_quant + db_utils::fieldsMemory($rsSolicitemControle2, 1)->pc11_quant;
-        //db_criatabela($rsSolicitemControle2);
+
         if (db_utils::fieldsMemory($rsSolicitemControle2, 0)->pc11_reservado == 't') {
             $codReservado     = db_utils::fieldsMemory($rsSolicitemControle2, 0)->pc11_codigo;
         } else {
@@ -186,10 +178,6 @@ if (!$sqlerro && $codprocesso) {
         } else {
             $codNReservado     = db_utils::fieldsMemory($rsSolicitemControle2, 1)->pc11_codigo;
         }
-        // echo 'CodReservado: ' . $codReservado;
-        // echo 'CodNReservado: ' . $codNReservado;
-        // exit;
-
 
         if ($l20_usaregistropreco == 't') {
 
@@ -220,38 +208,26 @@ if (!$sqlerro && $codprocesso) {
         if ($l20_usaregistropreco != 't') {
 
             $oDaoPcDotacOrigem = db_utils::getDao('pcdotac');
-            //$oDaoPcDotacOrigem->pc13_quant = $nova_quantidade2;
-            $rsDotacaoItemOrigem = db_query('SELECT pc13_sequencial from pcdotac where pc13_codigo = ' . $oItemOrigem->pc11_codigo);
-            $oDotacaoItemOrigem = db_utils::fieldsMemory($rsDotacaoItemOrigem, 0);
 
-            /**
-             * Altera a quantidade da dotação do item origem
-             */
-            $oDaoPcDotacOrigem->pc13_sequencial = $oDotacaoItemOrigem->pc13_sequencial;
-            $oDaoPcDotacOrigem->pc13_quant = $nova_quantidade2;
-            $oDaoPcDotacOrigem->alterar($oDotacaoItemOrigem->pc13_sequencial);
+            if($oItemOrigem->pc11_codigo) {
+                $rsDotacaoItemOrigem = db_query('SELECT pc13_sequencial from pcdotac where pc13_codigo = ' . $oItemOrigem->pc11_codigo);
+                $oDotacaoItemOrigem = db_utils::fieldsMemory($rsDotacaoItemOrigem, 0);
 
-            if ($oDaoPcDotacOrigem->erro_status == '0') {
-                $erro_msg = $oDaoPcDotacOrigem->erro_msg;
-                $sqlerro = true;
+                /**
+                 * Altera a quantidade da dotação do item origem
+                 */
+                if (pg_num_rows($rsDotacaoItemOrigem)) {
+                    $oDaoPcDotacOrigem->pc13_sequencial = $oDotacaoItemOrigem->pc13_sequencial;
+                    $oDaoPcDotacOrigem->pc13_quant = $nova_quantidade2;
+                    $oDaoPcDotacOrigem->alterar($oDotacaoItemOrigem->pc13_sequencial);
+
+                    if ($oDaoPcDotacOrigem->erro_status == '0') {
+                        $erro_msg = $oDaoPcDotacOrigem->erro_msg;
+                        $sqlerro = true;
+                    }
+                }
             }
         }
-
-        // if (!$sqlerro && $l20_usaregistropreco == "t") {
-
-        //     /**
-        //      * Altera a quantidade do item origem na solicitemunid
-        //      */
-        //     $oDaoSolicitemUnidOrigem = db_utils::getDao('solicitemunid');
-        //     $oDaoSolicitemUnidOrigem->pc17_quant = $nova_quantidade2;
-        //     $oDaoSolicitemUnidOrigem->pc17_codigo = $oItemOrigem->pc11_codigo;
-        //     $oDaoSolicitemUnidOrigem->alterar($oItemOrigem->pc11_codigo);
-
-        //     if ($oDaoSolicitemUnidOrigem->erro_status == '0') {
-        //         $erro_msg = $oDaoSolicitemUnidOrigem->erro_msg;
-        //         $sqlerro = true;
-        //     }
-        // }
 
 
         /**
@@ -270,14 +246,13 @@ if (!$sqlerro && $codprocesso) {
                 $oDaoDotac = db_utils::getDao('pcdotac');
                 $rsDotacaoReservado = db_query('SELECT pc13_sequencial from pcdotac where pc13_codigo = ' . $oSolicitemReservado->pc11_codigo);
                 $oItemReservado = db_utils::fieldsMemory($rsDotacaoReservado, 0);
-                $oDaoDotac->excluir($oItemReservado->pc13_sequencial);
-                $sqlerro = $oDaoDotac->erro_status == '0' ? true : false;
-                if ($sqlerro)
-                    $erro_msg = $oDaoDotac->erro_msg;
-
-                //if ($sqlerro) {
-                //  echo pg_last_error();exit;
-                //}
+                if(pg_num_rows($rsDotacaoReservado)){
+                    $oDaoDotac->excluir($oItemReservado->pc13_sequencial);
+                    $sqlerro = $oDaoDotac->erro_status == '0' ? true : false;
+                    if ($sqlerro){
+                        $erro_msg = $oDaoDotac->erro_msg;
+                    }
+                }
             }
 
             if ($l20_usaregistropreco == 't') {
@@ -357,26 +332,24 @@ if (!$sqlerro && $codprocesso) {
             }
         }
 
-
         if (!$sqlerro) {
             $oDaoSolicitemEle = db_utils::getDao('solicitemele');
-            $oDaoSolicitemEle->excluir($oSolicitemReservado->pc11_codigo);
-            $sqlerro = $oDaoSolicitemEle->erro_status == '0' ? true : false;
-            if ($sqlerro)
-                $erro_msg = $oDaoSolicitemEle->erro_msg;
-
-            //if ($sqlerro) {
-            //  echo pg_last_error();exit;
-            //}
+            if($oSolicitemReservado->pc11_codigo){
+                $oDaoSolicitemEle->excluir($oSolicitemReservado->pc11_codigo);
+                $sqlerro = $oDaoSolicitemEle->erro_status == '0' ? true : false;
+                if ($sqlerro){
+                     $erro_msg = $oDaoSolicitemEle->erro_msg;
+                }
+            }
         }
-
 
         if (!$sqlerro) {
             $oDaoSolicitemPcMater = db_utils::getDao('solicitempcmater');
             $oDaoSolicitemPcMater->excluir($oSolicitemReservado->pc16_codmater, $codReservado);
             $sqlerro = $oDaoSolicitemPcMater->erro_status == '0' ? true : false;
-            if ($sqlerro)
+            if ($sqlerro){
                 $erro_msg = $oDaoSolicitemPcMater->erro_msg;
+            }
 
             // if ($sqlerro) {
             //     echo pg_last_error();
@@ -488,10 +461,6 @@ if (!$sqlerro && $codprocesso) {
             if ($sqlerro)
                 $erro_msg = $oDaoPcProcItem->erro_msg;
         }
-        // if ($sqlerro) {
-        //     echo pg_last_error();
-        //     exit;
-        // }
 
         if ($l20_usaregistropreco == 't') {
 
@@ -515,19 +484,7 @@ if (!$sqlerro && $codprocesso) {
                 if ($sqlerro)
                     $erro_msg = $oDaoVinculo->erro_msg;
             }
-
-
-            //abertura
-            // if (!$sqlerro) {
-            //   $oDaoVinculo = db_utils::getDao('solicitemvinculo');
-            //   $oDaoVinculo->excluir(null, "pc55_solicitemfilho = $oItemControle->itemdaabertura");
-            //   $sqlerro = $oDaoVinculo->erro_status == '0' ? true : false;
-            // }
         }
-        // if ($sqlerro) {
-        //     echo pg_last_error();
-        //     exit;
-        // }
 
         if (!$sqlerro) {
             //compilação
@@ -549,28 +506,6 @@ if (!$sqlerro && $codprocesso) {
             $sqlerro = $oDaoReservado->erro_status == '0' ? true : false;
             if ($sqlerro)
                 $erro_msg = $oDaoReservado->erro_msg;
-
-            // if ($sqlerro) {
-            //     echo 'tst2 ';
-            //     echo 'msg: ' . $erro_msg . ' ';
-            //     //echo ' codReservado ' . $codReservado . ' ';
-            //     echo 'pcmater 1: ' . $oSolicitemReservado->pc16_codmater . ' ' . $codReservado . ' ';
-            //     echo 'pcmater 2: ' . $oSolicitemReservado->pc16_codmater . ' ' . $oItemControle->itemdaestimativa . ' ';
-            //     echo 'pcmater 3: ' . $oSolicitemReservado->pc16_codmater . ' ' . $oItemControle->itemdaabertura . ' ';
-            //     echo '$oSolicitemReservado->pc11_codigo ' . $oSolicitemReservado->pc11_codigo . ' ';
-            //     echo ' codReservado2 ' . $codReservado2 . ' ';
-            //     echo ' $oItemControle->itemdaabertura' . $oItemControle->itemdaabertura . ' ';
-
-            //     echo pg_last_error();
-            //     exit;
-            // }
-
-            // echo 'pcmater 1: ' . $oSolicitemReservado->pc16_codmater . ' ' . $codReservado . ' ';
-            // echo 'pcmater 2: ' . $oSolicitemReservado->pc16_codmater . ' ' . $oItemControle->itemdaestimativa . ' ';
-            // echo 'pcmater 3: ' . $oSolicitemReservado->pc16_codmater . ' ' . $oItemControle->itemdaabertura . ' ';
-            // echo 'nova quantidade 2 ' . $nova_quantidade2 . ' ';
-            // echo 'nova quantidade 3 ' . $nova_quantidade3 . ' ';
-            // echo '$codNReservado2 ' . $codNReservado2 . ' ';
 
             if ($l20_usaregistropreco == "t") {
                 //estimativa
@@ -650,6 +585,7 @@ if (!$sqlerro && $codprocesso) {
             }
         }
     }
+
     db_fim_transacao($sqlerro);
 }
 

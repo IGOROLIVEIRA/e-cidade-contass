@@ -211,6 +211,7 @@ if ($leiaute == 1) {
     l20_nroedital as edital,
     l20_exercicioedital as exercicioedital,
     l20_edital as numprocesso,
+    l20_numero,
     nomeinst as orgao,
     l20_usaregistropreco,
     12 as mesesvigencia
@@ -231,6 +232,7 @@ if ($leiaute == 1) {
     l20_liclocal as localentrega,
     l20_localentrega as localdeentrega,
     l20_prazoentrega as datadeentrega,
+    l20_numero,
     0 as garantia /*gerar em branco*/
     from liclicita
     join liclicitem on l21_codliclicita=l20_codigo
@@ -246,6 +248,7 @@ if ($leiaute == 1) {
     3 as tiporegistro,
     pc16_codmater,
     l20_nroedital as edital,
+    l20_numero,
     l20_exercicioedital as exercicioedital,
     l04_descricao as  descricaolote,
     l04_codigo as numerodolote,
@@ -292,14 +295,7 @@ if ($leiaute == 1) {
 
 
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro1, $w, "tiporegistro") . "|");
-
-            if (pg_result($resultRegistro1, $w, "edital") == "") {
-                $numeroprocesso = pg_result($resultRegistro1, $w, "numprocesso");
-                fputs($clabre_arquivo->arquivo, $numeroprocesso . "|");
-            } else {
-                fputs($clabre_arquivo->arquivo, pg_result($resultRegistro1, $w, "edital") . "|");
-            }
-
+            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro1, $w, "l20_numero") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro1, $w, "exercicioedital") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro1, $w, "numprocesso") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro1, $w, "orgao") . "|");
@@ -333,11 +329,7 @@ if ($leiaute == 1) {
 
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "tiporegistro") . "|");
 
-            if (pg_result($resultRegistro2, $w, "edital") == "") {
-                fputs($clabre_arquivo->arquivo, $numeroprocesso . "|");
-            } else {
-                fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "edital") . "|");
-            }
+            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "l20_numero") . "|");
 
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "exercicioedital") . "|");
             fputs($clabre_arquivo->arquivo, $sequencialLote[pg_result($resultRegistro2, $w, "numerodolote")] . "|");
@@ -368,11 +360,8 @@ if ($leiaute == 1) {
 
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "tiporegistro") . "|");
 
-            if (pg_result($resultRegistro3, $w, "edital") == "") {
-                fputs($clabre_arquivo->arquivo, $numeroprocesso . "|");
-            } else {
-                fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "edital") . "|");
-            }
+            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "l20_numero") . "|");
+
 
             if ($descricaoLote != pg_result($resultRegistro3, $w, "descricaolote")) {
                 $sequencial++;
