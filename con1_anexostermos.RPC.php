@@ -103,7 +103,7 @@ switch ($oParam->exec) {
             $rsAnexosPNCP = $clcontroleanexostermospncp->sql_record($clcontroleanexostermospncp->sql_query(null,"*",null, "ac57_sequencialarquivo = $oParam->codAnexo"));
 
             if(pg_num_rows($rsAnexosPNCP)){
-                $oRetorno->sMensagem = urlencode('Anexo já enviado ao PNCP, para excluí-lo é necessário que seja primeiro EXCLUÍDO no PNCP.');
+                throw new Exception('Anexo já enviado ao PNCP, para excluí-lo é necessário que seja primeiro EXCLUÍDO no PNCP.');
             }else {
                 $cl_anexotermospncp->excluir($oParam->codAnexo);
                 if ($cllicobrasanexo->erro_status == '0') {
@@ -114,7 +114,7 @@ switch ($oParam->exec) {
             db_fim_transacao();
         } catch (Exception $eErro) {
             $oRetorno->status = 2;
-            $oRetorno->message = urlencode($eErro->getMessage());
+            $oRetorno->message = utf8_encode($eErro->getMessage());
         }
 
     break;
