@@ -125,17 +125,6 @@ if (isset($incluir)) {
       $clcgm->alterar($pc60_numcgm);
     }
 
-    /**
-     * controle de encerramento peri. Patrimonial
-     */
-    $clcondataconf = new cl_condataconf;
-    $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit'), 'c99_datapat'));
-    db_fieldsmemory($resultControle, 0);
-
-    if ($dtsession <= $c99_datapat) {
-      db_msgbox("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
-      $sqlerro = true;
-    }
   }
   if ($sqlerro == false) {
     $clpcforne->pc60_usuario = db_getsession("DB_id_usuario");
