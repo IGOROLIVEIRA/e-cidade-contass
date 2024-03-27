@@ -171,6 +171,12 @@ if (isset($alterar)) {
         $clveiculos->erro_campo = "si04_tipoveiculo";
     }
 
+    $validacaoNumeroSerie = $clveiculos->validacaoNumeroSerie($ve01_nroserie,$si04_especificacao,$ve01_codigo,"alteracao");
+    if($validacaoNumeroSerie == false){
+        $sqlerro = true;
+        $erro_msg = "Campo Nº de Série já cadastrado para o tipo de especificação informado.";
+    }
+
     if ($sqlerro == false) {
         $clveiculos->alterar($ve01_codigo, $si04_tipoveiculo);
         $erro_msg = $clveiculos->erro_msg;
