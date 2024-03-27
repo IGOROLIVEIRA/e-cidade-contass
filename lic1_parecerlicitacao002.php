@@ -123,19 +123,6 @@ if (isset($alterar)) {
         db_redireciona('lic1_parecerlicitacao001.php');
     }
 
-    /**
-     * controle de encerramento peri. Patrimonial
-     */
-    $clcondataconf = new cl_condataconf;
-    $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat'));
-    db_fieldsmemory($resultControle,0);
-
-    if($dtsession <= $c99_datapat){
-        $msg_erro = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
-        echo "<script>alert('{$msg_erro}');</script>";
-        db_redireciona('lic1_parecerlicitacao001.php');
-    }
-
     $rsResult = db_query("select l20_codtipocom from liclicita where l20_codigo = $l200_licitacao");
   $codtipocom = db_utils::fieldsMemory($rsResult, 0)->l20_codtipocom;
   $count = 1;
