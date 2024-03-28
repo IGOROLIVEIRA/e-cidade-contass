@@ -502,7 +502,7 @@ include("dbforms/db_funcoes.php");
     function js_processar() {
 
         var aArquivosSelecionados = new Array();
-        var tipoGeracao = 'COSOLIDADO';
+        var tipoGeracao = 'CONSOLIDADO';
         var aArquivos = $$(".consolidado");
 
 //    var aArquivos             = $$("input[type='file']");

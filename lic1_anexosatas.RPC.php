@@ -10,6 +10,7 @@ require_once("libs/db_sessoes.php");
 require_once("std/DBTime.php");
 require_once("std/DBDate.php");
 require_once("classes/db_anexosataspncp_classe.php");
+require_once("classes/db_controleanexosataspncp_classe.php");
 
 db_app::import("configuracao.DBDepartamento");
 
@@ -97,17 +98,22 @@ switch ($oParam->exec) {
     case 'excluirAnexo':
         try {
             db_inicio_transacao();
+            $clcontroleanexosataspncp = new cl_controleanexosataspncp();
+            $rsAnexosPNCP = $clcontroleanexosataspncp->sql_record($clcontroleanexosataspncp->sql_query(null,"*",null,"l217_sequencialarquivo = $oParam->codAnexo"));
 
-            $cl_licanexoataspncp->excluir($oParam->codAnexo);
-
-            if ($cllicobrasanexo->erro_status == '0') {
-                throw new Exception($cllicobrasanexo->erro_msg);
+            if(pg_num_rows($rsAnexosPNCP)){
+                throw new Exception('Anexo já enviado ao PNCP, para excluí-lo é necessário que seja primeiro EXCLUÍDO no PNCP.');
+            }else {
+                $cl_licanexoataspncp->excluir($oParam->codAnexo);
+                if ($cllicobrasanexo->erro_status == '0') {
+                    throw new Exception($cllicobrasanexo->erro_msg);
+                }
             }
 
             db_fim_transacao();
         } catch (Exception $eErro) {
             $oRetorno->status = 2;
-            $oRetorno->message = urlencode($eErro->getMessage());
+            $oRetorno->message = utf8_encode($eErro->getMessage());
         }
 
         break;
