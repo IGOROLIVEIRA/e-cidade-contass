@@ -104,16 +104,6 @@ foreach ($resultadoClsituabens as $resSiBens) {
                 </td>
             </tr>
             <tr>
-                <td align="right"  nowrap title="Classificação">
-                    <?php db_ancora("Classificação:","pesquisaClassificacao(true);",$db_opcao); ?>
-                </td>
-                <td>
-                    <?php db_input('t64_codcla',50,$It64_codcla,true,'hidden',3); ?>
-                    <?php db_input('t64_class',10,$It64_class,true,'text',$db_opcao," onchange='pesquisaClassificacao(false);'") ?>
-                    <?php db_input('t64_descr',50,$It64_descr,true,'text',3); ?>
-                </td>
-            </tr>
-            <tr>
                 <td align="right" nowrap title="<?= $Tcoddepto ?>">
                     <?php db_ancora(@$Lcoddepto, "js_pesquisa_depart(true);", $db_opcao); ?>
                 </td>
@@ -125,28 +115,11 @@ foreach ($resultadoClsituabens as $resSiBens) {
                 </td>
             </tr>
             <tr>
-                <td align="right"  nowrap title="Divisão">
-                    <?php db_ancora("Divisão","pesquisaCodigoDivisao(true);",$db_opcao); ?>
-                </td>
-                <td>
-                    <?php db_input('t30_codigo',10,$It30_codigo,true,'text',$db_opcao," onchange='pesquisaCodigoDivisao(false);'") ?>
-                    <?php db_input('t30_descr',50,'',true,'text',3); ?>
-                </td>
-            </tr>
-            <tr>
                 <td><b>Tipo bens:</b></td>
                 <td nowrap>
                     <?php
                     $aTipobens = ['1' => 'Móveis','2' => 'Imóveis','3' => 'Semoventes'];
                     db_select("iTipobens", $aTipobens, true, 1); ?>
-                </td>
-            </tr>
-            <tr>
-                <td><b>Ordenar por:</b></td>
-                <td nowrap>
-                    <?php
-                    $aExibir = ['1' => 'Código do bem','2' => 'Placa do bem','3' => 'Descrição do bem'];
-                    db_select("iOrdenar", $aExibir, true, 1); ?>
                 </td>
             </tr>
             <tr>
@@ -181,73 +154,36 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
     function js_emite() {
         let query = "";
 
-        $F('coddepto').trim() === ''
-            ? query += "codigoDepartamento=" + 0 + '&'
-            : query += "codigoDepartamento=" + document.form1.coddepto.value + '&'
-                + "descricaoDepartamento=" + document.form1.descrdepto.value + '&';
+        let departamento = document.getElementById('coddepto').value;
 
-        $F('t30_codigo').trim() === ''
-            ? query += ''
-            : query += "codigoDivisao=" + document.form1.t30_codigo.value + '&'
-                + "descricaoDivisao=" + document.form1.t30_descr.value + '&';
+        query += 'codigoDepartamento=' + departamento;
 
-        $F('t64_class').trim() === ''
-            ? query += ''
-            : query += "codigoClassificacao=" + document.form1.t64_codcla.value + '&'
-                +  "classificacao=" + document.form1.t64_class.value + '&'
-                + "descricaoClassificacao=" + document.form1.t64_descr.value + '&';
+        let mes = document.getElementById('mes').value;
 
-        const inputMes = document.getElementById('mes');
-
-        inputMes.value !== '0' ? query += 'mes=' + inputMes.value + '&' : query += '';
-
-        if (inputMes.value.trim() === '') {
+        if (mes.trim() === '') {
             alert("Campo Mês não Informado.");
             return false
         }
 
-        const inputAno = document.getElementById('ano');
+        query += '&mes=' + mes
 
-        inputAno.value !== '0' ? query += 'ano=' + inputAno.value + '&' : query += '';
+        let ano = document.getElementById('ano').value;
 
-        if (inputAno.value.trim() === '') {
+        if (ano.value === '') {
             alert("Campo Ano não Informado.");
             return false
         }
-        const inputExibir = document.getElementById('iExibir');
+        query += '&ano=' + ano
 
-        inputExibir.value !== '0' ? query += 'exibir=' + inputExibir.value + '&' : query += '';
+        let exibir = document.getElementById('iExibir').value;
 
-        const inputOrdenarPor = document.getElementById('iOrdenar');
+        query += '&exibir=' + exibir;
 
-        inputOrdenarPor.value !== '0' ? query += 'ordenar=' + inputOrdenarPor.value + '&' : query += '';
+        let tipobens = document.getElementById('iTipobens').value;
 
-        const inputTipoBens = document.getElementById('iTipobens');
+        query += '&itipobens=' + tipobens;
 
-        inputTipoBens.value !== '0' ? query += 'itipobens=' + inputTipoBens.value + '&' : query += '';
-
-        const inputDepartamento = document.getElementById('coddepto').value;
-
-        const inputClassificacao = document.getElementById('t64_class').value;
-
-        const inputDivisao = document.getElementById('t30_codigo').value;
-
-        if (inputDepartamento.trim() === '' && inputClassificacao.trim() === '' && inputDivisao.trim() === '') {
-            alert("E necessário preencher um dos campos Departamento,Classificacao ou Divisão");
-            return false
-        }
-
-        if(inputClassificacao){
-            var arquivoRelatorio = 'pat2_bensporvalorclassificacao002.php?';
-        }
-
-        if(inputDepartamento){
-            var arquivoRelatorio = 'pat2_bensporvalorDepartamento002.php?';
-        }
-
-        if(inputDivisao){
-            var arquivoRelatorio = 'pat2_bensporvalorDivisao002.php?';
-        }
+        var arquivoRelatorio = 'pat2_bensporvalorDepartamento002.php?';
 
         jan = window.open( arquivoRelatorio + query, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
         jan.moveTo(0, 0);
@@ -268,10 +204,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 
     function js_mostradepart(chave, erro) {
         document.form1.descrdepto.value = chave;
-        document.form1.t64_descr.value = '';
-        document.form1.t64_class.value = '';
-        document.form1.t30_codigo.value = '';
-        document.form1.t30_descr.value = '';
+
         if (erro == true) {
             document.form1.coddepto.focus();
             document.form1.coddepto.value = '';
@@ -283,88 +216,8 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
     function js_mostradepart1(chave1, chave2) {
         document.form1.coddepto.value = chave1;
         document.form1.descrdepto.value = chave2;
-        document.form1.t64_descr.value = '';
-        document.form1.t64_class.value = '';
-        document.form1.t30_codigo.value = '';
-        document.form1.t30_descr.value = '';
         db_iframe_db_depart.hide();
         document.form1.submit();
     }
 
-    function pesquisaCodigoDivisao(mostra) {
-        if (typeof mostra === 'boolean' && mostra === true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_departdiv', 'func_departdiv.php?funcao_js=parent.escondeIframePesquisaDivisao|t30_codigo|t30_descr', 'Pesquisa', true);
-        } else {
-            if (document.form1.t04_sequencial.value !== '') {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_departdiv', 'func_departdiv.php?pesquisa_chave=' + document.form1.t30_codigo.value + '&funcao_js=parent.mostraIframePesquisaDivisao', 'Pesquisa', false);
-            } else {
-                document.form1.t30_descr.value = '';
-                document.form1.submit();
-            }
-        }
-    }
-
-    function mostraIframePesquisaDivisao(chave, erro) {
-        document.form1.t30_descr.value = chave;
-        document.form1.t64_descr.value = '';
-        document.form1.t64_class.value = '';
-        document.form1.coddepto.value = '';
-        document.form1.descrdepto.value = '';
-        if (typeof erro === 'boolean' && erro === true) {
-            document.form1.t30_codigo.focus();
-            document.form1.t30_codigo.value = '';
-        } else {
-            document.form1.submit();
-        }
-    }
-
-    function escondeIframePesquisaDivisao(chave1, chave2) {
-        document.form1.t30_codigo.value = chave1;
-        document.form1.t30_descr.value = chave2;
-        document.form1.t64_descr.value = '';
-        document.form1.t64_class.value = '';
-        document.form1.coddepto.value = '';
-        document.form1.descrdepto.value = '';
-        db_iframe_departdiv.hide();
-        document.form1.submit();
-    }
-
-    function pesquisaClassificacao(mostra) {
-        if (typeof mostra === 'boolean' && mostra === true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_clabens', 'func_clabens.php?funcao_js=parent.escondeIframePesquisaClassificacao|t64_class|t64_descr|t64_codcla', 'Pesquisa', true);
-        } else {
-            if (document.form1.t64_class.value !== '') {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_clabens', 'func_clabens.php?pesquisa_chave=' + document.form1.t64_class.value + '&funcao_js=parent.mostraIframePesquisaClassificacao', 'Pesquisa', false);
-            } else {
-                document.form1.t64_descr.value = '';
-                document.form1.submit();
-            }
-        }
-    }
-
-    function mostraIframePesquisaClassificacao(chave, erro) {
-        document.form1.t64_descr.value = chave;
-        document.form1.t30_codigo.value = '';
-        document.form1.t30_descr.value = '';
-        document.form1.coddepto.value = '';
-        document.form1.descrdepto.value = '';
-        if (typeof erro === 'boolean' && erro === true) {
-            document.form1.t64_class.focus();
-            document.form1.t64_class.value = '';
-        } else {
-            document.form1.submit();
-        }
-    }
-
-    function escondeIframePesquisaClassificacao(chave1, chave2, chave3) {
-        document.form1.t64_class.value = chave1;
-        document.form1.t64_descr.value = chave2;
-        document.form1.t64_codcla.value = chave3;
-        document.form1.t30_codigo.value = '';
-        document.form1.t30_descr.value = '';
-        document.form1.coddepto.value = '';
-        document.form1.descrdepto.value = '';
-        db_iframe_clabens.hide();
-        document.form1.submit();
-    }
 </script>

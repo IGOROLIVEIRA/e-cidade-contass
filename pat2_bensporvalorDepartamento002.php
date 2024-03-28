@@ -16,9 +16,13 @@ $clsituabens = new cl_situabens;
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 $where = "";
-
 if($codigoDepartamento){
+
     $where .= " AND t52_depart = $codigoDepartamento";
+
+    $sqlDepartamento = "select descrdepto from db_depart where coddepto = ".$codigoDepartamento;
+    $resultDepart = db_query($sqlDepartamento) or die(pg_last_error());
+    $oResultDepart = db_utils::fieldsMemory($resultDepart, 0);
 }
 
 if($exibir){
@@ -28,14 +32,6 @@ if($exibir){
 if($itipobens){
     $where .= " AND t24_sequencial = $itipobens";
 }
-
-if($ordenar){
-    $order = "order by $ordenar";
-}
-
-$sqlDepartamento = "select descrdepto from db_depart where coddepto = ".$codigoDepartamento;
-$resultDepart = db_query($sqlDepartamento) or die(pg_last_error());
-$oResultDepart = db_utils::fieldsMemory($resultDepart, 0);
 
 
 $sqlTiposbens = "select t24_descricao from bemtipos where t24_sequencial = ".$itipobens;
@@ -47,12 +43,13 @@ $sql = "
         SELECT DISTINCT t52_bem AS codigo,
                         t52_ident AS placa,
                         t52_descr AS descricao,
-                        t52_obs AS observacao,
                         t52_valaqu AS valoraquisicao,
                         t58_valoratual+t44_valorresidual AS valoratual,
                         t52_dtaqu AS dtaquisicao,
                         descrdepto AS departamento,
-                        t30_descr AS divisao
+                        t33_divisao,
+                        t30_descr AS divisao,
+                        t64_descr as classificacao
         FROM bens
         JOIN bensdepreciacao ON t44_bens = t52_bem
         JOIN db_depart ON coddepto = t52_depart
@@ -72,12 +69,13 @@ $sql = "
         SELECT DISTINCT t52_bem AS codigo,
                         t52_ident AS placa,
                         t52_descr AS descricao,
-                        t52_obs AS observacao,
                         t52_valaqu AS valoraquisicao,
                         t44_valoratual+t44_valorresidual AS valoratual,
                         t52_dtaqu AS dtaquisicao,
                         descrdepto AS departamento,
-                        t30_descr AS divisao
+                        t33_divisao,
+                        t30_descr AS divisao,
+                        t64_descr as classificacao
         FROM bens
         JOIN bensdepreciacao ON t44_bens = t52_bem
         JOIN db_depart ON coddepto = t52_depart
@@ -95,10 +93,10 @@ $sql = "
          WHERE t58_bens= t52_bem
              AND t57_ano = $ano
              AND t57_mes = $mes)
-            $order
+             order by placa
 ";
-$resultBens = db_query($sql);
 
+$resultBens = db_query($sql);
 $pdf = new PDF('Landscape', 'mm', 'A4');
 $pdf->Open();
 $pdf->AliasNbPages();
@@ -106,8 +104,6 @@ $alt = 5;
 $pdf->setfillcolor(235);
 $pdf->setfont('arial', 'b', 10);
 
-$contadorLinhas = 0;
-$alt = 5;
 $totalAtual = 0;
 $totalAquisicao = 0;
 $pdf->addpage();
@@ -123,30 +119,43 @@ $pdf->text(223, 20, $ano);
 $pdf->SetFont('arial','B',9);
 $pdf->cell(40   ,$alt  ,"Tipo do Bem:",1,0,"L",1);
 $pdf->cell(240  ,$alt ,$oResultTipos->t24_descricao,1,1,"L",1);
-$pdf->cell(40   ,$alt  ,"Departamento:",1,0,"L",1);
-$pdf->cell(240  ,$alt ,$oResultDepart->descrdepto,1,1,"L",1);
-$pdf->cell(20   ,$alt  ,"Código",1,0,"C",1);
-$pdf->cell(20   ,$alt  ,"Placa",1,0,"C",1);
-$pdf->cell(150  ,$alt ,"Descrição",1,0,"L",1);
+if($oResultDepart->descrdepto){
+    $pdf->cell(40   ,$alt  ,"Departamento:",1,0,"L",1);
+    $pdf->cell(240  ,$alt ,$oResultDepart->descrdepto,1,1,"L",1);
+}
+$pdf->cell(12   ,$alt  ,"Código",1,0,"C",1);
+$pdf->cell(12   ,$alt  ,"Placa",1,0,"C",1);
+$pdf->cell(100  ,$alt ,"Descrição",1,0,"L",1);
 $pdf->cell(25   ,$alt  ,"Data Aquisição",1,0,"C",1);
-$pdf->cell(20   ,$alt  ,"Situação",1,0,"C",1);
+$pdf->cell(15   ,$alt  ,"Situação",1,0,"C",1);
 $pdf->cell(25   ,$alt  ,"Vlr. Aquisição",1,0,"C",1);
-$pdf->cell(20   ,$alt  ,"Vlr. Atual",1,1,"C",1);
+$pdf->cell(20   ,$alt  ,"Vlr. Atual",1,0,"C",1);
+$pdf->cell(71   ,$alt  ,"Classificação",1,1,"C",1);
 
+$aDadosRelatoriogruppordivisao = array();
 for ($iCont = 0; $iCont < pg_num_rows($resultBens); $iCont++) {
 
     $oResult = db_utils::fieldsMemory($resultBens, $iCont);
-        $rsSituacaobem = db_query("SELECT * FROM histbem JOIN situabens ON t70_situac=t56_situac WHERE t56_codbem = $oResult->codigo ORDER BY t56_histbem desc limit 1");
-        $oResultSituacao = db_utils::fieldsMemory($rsSituacaobem, 0);
+    $aDadosRelatoriogruppordivisao[$oResult->divisao][] = $oResult;
+}
 
-        $descricao = $oResult->descricao.' '.$oResult->observacao;
-        $old_y = $pdf->gety();
-        $descricao = substr(str_replace("\n", "", $descricao), 0, 1000);
-        $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
-        $addalt = $linhas * 6;
-        $dtaquisicao = implode('/',array_reverse(explode('-',$oResult->dtaquisicao)));
+foreach ($aDadosRelatoriogruppordivisao as $key => $aDadosRelatorio) {
+    $passouDiv[] = array($key);
+    $descricaodisao = $key;
 
-        if ($pdf->getY() > $pdf->h - 67) {
+    if(!in_array($key,$passouDiv)){
+        $pdf->SetFont('arial','B',9);
+        if($descricaodisao){
+            $pdf->cell(280, $alt, "Divisão: " . $descricaodisao , 1, 1, "L", 0);
+        }else{
+            $pdf->cell(280, $alt, "Divisão: Sem Divisão", 1, 1, "L", 0);
+        }
+    }
+    $totalDivisaoAquisicao = 0;
+    $totalDivisao = 0;
+    foreach ($aDadosRelatorio as $oDados){
+
+        if ($pdf->getY()  > $pdf->h - 45) {
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 9);
             $pdf->text(215, 10, 'Relatorio Bens Por Valor');
@@ -157,49 +166,34 @@ for ($iCont = 0; $iCont < pg_num_rows($resultBens); $iCont++) {
             $pdf->text(215, 20, 'Ano:');
             $pdf->setfont('arial', '', 9);
             $pdf->text(223, 20, $ano);
-            $pdf->SetFont('arial','B',9);
-            $pdf->cell(40   ,$alt  ,"Tipo do Bem:",1,0,"L",1);
-            $pdf->cell(240  ,$alt ,$oResultTipos->t24_descricao,1,1,"L",1);
-            $pdf->cell(40   ,$alt  ,"Departamento:",1,0,"L",1);
-            $pdf->cell(240  ,$alt ,$oResultDepart->descrdepto,1,1,"L",1);
-            $pdf->cell(20   ,$alt  ,"Código",1,0,"C",1);
-            $pdf->cell(20   ,$alt  ,"Placa",1,0,"C",1);
-            $pdf->cell(150  ,$alt ,"Descrição",1,0,"L",1);
-            $pdf->cell(25   ,$alt  ,"Data Aquisição",1,0,"C",1);
-            $pdf->cell(20   ,$alt  ,"Situação",1,0,"C",1);
-            $pdf->cell(25   ,$alt  ,"Vlr. Aquisição",1,0,"C",1);
-            $pdf->cell(20   ,$alt  ,"Vlr. Atual",1,1,"C",1);
-            $pdf->SetFont('arial','',9);
-            $pdf->cell(20, $alt + $addalt, $oResult->codigo, 1, 0, "C", 0);
-            $pdf->cell(20, $alt + $addalt, $oResult->placa, 1, 0, "C", 0);
-            $pdf->SetFont('arial', '', 7);
-            $pdf->multicell(150, $alt, mb_strtoupper(str_replace("\n", "", $descricao)), "T", "J", 0);
-            $pdf->SetFont('arial', '', 9);
-            $pdf->sety(50);
-            $pdf->setx(200);
-            $pdf->cell(25, $alt + $addalt, $dtaquisicao, 1, 0, "C", 0);
-            $pdf->cell(20, $alt + $addalt, $oResultSituacao->t70_descr, 1, 0, "C", 0);
-            $pdf->cell(25, $alt + $addalt, db_formatar($oResult->valoraquisicao,'f'), 1, 0, "L", 0);
-            $pdf->cell(20, $alt + $addalt, db_formatar($oResult->valoratual,'f'), 1, 1, "L", 0);
-            $pdf->multicell(200, 0, '', "T", "J", 0);
-        }else{
-            $pdf->SetFont('arial', '', 9);
-            $pdf->cell(20, $alt + $addalt, $oResult->codigo, 1, 0, "C", 0);
-            $pdf->cell(20, $alt + $addalt, $oResult->placa, 1, 0, "C", 0);
-            $pdf->SetFont('arial', '', 7);
-            $pdf->multicell(150, $alt, mb_strtoupper(str_replace("\n", "", $descricao)), "T", "J", 0);
-            $pdf->SetFont('arial', '', 9);
-            $pdf->sety($old_y+0.4);
-            $pdf->setx(200);
-            $pdf->cell(25, $alt + $addalt, $dtaquisicao, 1, 0, "C", 0);
-            $pdf->cell(20, $alt + $addalt, $oResultSituacao->t70_descr, 1, 0, "C", 0);
-            $pdf->cell(25, $alt + $addalt, db_formatar($oResult->valoraquisicao,'f'), 1, 0, "L", 0);
-            $pdf->cell(20, $alt + $addalt, db_formatar($oResult->valoratual,'f'), 1, 1, "L", 0);
-            $pdf->multicell(200, 0, '', "T", "J", 0);
         }
 
-        $totalAquisicao += $oResult->valoraquisicao;
-        $totalAtual += $oResult->valoratual;
+        $rsSituacaobem = db_query("SELECT * FROM histbem JOIN situabens ON t70_situac=t56_situac WHERE t56_codbem = $oDados->codigo ORDER BY t56_histbem desc limit 1");
+        $oResultSituacao = db_utils::fieldsMemory($rsSituacaobem, 0);
+        $dtaquisicao = implode('/', array_reverse(explode('-', $oDados->dtaquisicao)));
+
+        $pdf->SetFont('arial', '', 7);
+        $pdf->cell(12, $alt, $oDados->codigo, 0, 0, "C", 0);
+        $pdf->cell(12, $alt, $oDados->placa, 0, 0, "C", 0);
+        $pdf->cell(100, $alt, substr($oDados->descricao,0,70), 0, 0, "L", 0);
+        $pdf->cell(25, $alt, $dtaquisicao, 0, 0, "C", 0);
+        $pdf->cell(15, $alt, $oResultSituacao->t70_descr, 0, 0, "C", 0);
+        $pdf->cell(25, $alt, db_formatar($oDados->valoraquisicao,'f'), 0, 0, "C", 0);
+        $pdf->cell(20, $alt, db_formatar($oDados->valoratual,'f'), 0, 0, "C", 0);
+        $pdf->SetFont('arial', '', 6);
+        $pdf->cell(71, $alt, $oDados->classificacao, 0, 1, "L", 0);
+        $pdf->SetFont('arial', '', 7);
+        $totalDivisao += $oDados->valoratual;
+        $totalDivisaoAquisicao += $oDados->valoraquisicao;
+        $totalAquisicao += $oDados->valoraquisicao;
+        $totalAtual += $oDados->valoratual;
+    }
+    $pdf->SetFont('arial','B',9);
+    $pdf->cell(168, $alt,"Total Divisão:", 0, 0, "L", 0);
+    $pdf->cell(25, $alt,db_formatar($totalDivisaoAquisicao,'f'), 0, 0, "L", 0);
+    $pdf->cell(20, $alt,db_formatar($totalDivisao,'f'), 0, 1, "L", 0);
+    $pdf->SetFont('arial', '', 7);
+
 }
 $pdf->SetFont('arial','B',10);
 $pdf->cell(40   ,$alt  ,"Total:",1,0,"C",1);
