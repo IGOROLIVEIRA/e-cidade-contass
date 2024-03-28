@@ -231,6 +231,8 @@ switch ($oParam->exec) {
 
                 if ($rsApiPNCP->compraUri == null) {
                     //monto o codigo da compra no pncp
+                    $clliccontrolepncp = new cl_liccontrolepncp();
+
                     $l213_numerocontrolepncp = $aLicitacao->numerocontrole;
                     if ($oDadosLicitacao->tipoinstrumentoconvocatorioid == "3") {
                         $clliccontrolepncp->l213_processodecompras = $aProcesso->codigo;
