@@ -94,7 +94,7 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
                 throw new Exception($clideedital->erro_msg);
             }
         }
-
+        echo pg_num_rows($rsResult);
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
             $clideedital = new cl_ideedital2024();
@@ -117,12 +117,15 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
 
 			$sSqlSeq = "SELECT (Row_Number() Over (Partition BY TRUE
                            ORDER BY tabela.l47_dataenvio ASC)) AS sequencial,
-			   				tabela.l47_dataenvio
+			   				tabela.l47_dataenvio,
+                            l20_instit
 							FROM
-							(SELECT DISTINCT l47_dataenvio
+							(SELECT DISTINCT on(l47_dataenvio)l47_dataenvio,l20_instit
 				 				FROM liclancedital
+                                 inner join liclicita on l47_liclicita = l20_codigo
 				 					WHERE extract(YEAR FROM l47_dataenvio) = ".db_getsession("DB_anousu")."
                                     AND extract(MONTH FROM l47_dataenvio) = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
+                                    and l20_instit = ".db_getsession("DB_instit")."
 				 		ORDER BY l47_dataenvio) AS tabela";
 			$rsSqlSeq = db_query($sSqlSeq);
 
