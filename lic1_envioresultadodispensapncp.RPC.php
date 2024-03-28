@@ -52,7 +52,6 @@ switch ($oParam->exec) {
     case 'enviarResultado':
 
             $clliccontrolepncp     = new cl_liccontrolepncp();
-            $clliccontrolepncpitens     = new cl_liccontrolepncpitens();
             $clpcproc              = new cl_pcproc();
 
             //Buscos Chave da compra no PNCP
@@ -61,6 +60,14 @@ switch ($oParam->exec) {
             $oDadosAvisoPNCP = db_utils::fieldsMemory($rsAvisoPNCP, 0);
             try {
                 foreach ($oParam->aItensLicitacao as $item) {
+                    $clliccontrolepncpitens     = new cl_liccontrolepncpitens();
+
+                    //verifica se ja foi enviado resultado do item
+                    $rsPNCP = $clliccontrolepncpitens->sql_record($clliccontrolepncpitens->sql_query(null, "*", null, "l214_ordem = $item->pc11_seq and l214_pcproc=$oParam->iPcproc and l214_fornecedor = $item->z01_numcgm"));
+
+                    if (pg_num_rows($rsPNCP)) {
+                        throw new Exception('Resultado deste Fornecedor ja foi enviado ao PNCP para esse Item seq: ' . $item->pc11_seq);
+                    }
 
                     $aItensProcessoResultado = array();
                     //busco resultado dos itens do processo
@@ -79,12 +86,24 @@ switch ($oParam->exec) {
                     $rsApiPNCP = $clResultadoItensPNCP->enviarResultado($odadosResultado, $oDadosAvisoPNCP->l213_numerocompra, $oDadosAvisoPNCP->l213_anousu, $item->pc11_seq);
 
                     if ($rsApiPNCP[1] == '201') {
+
+                        $aResultadoItem = explode('/',$rsApiPNCP[0]);
+                        $l214_sequencialresultado = preg_replace("/[^0-9]/", "", $aResultadoItem[13]);
+
                         $clliccontrolepncpitens->l214_numeroresultado = 1;
                         $clliccontrolepncpitens->l214_numerocompra = $oDadosAvisoPNCP->l213_numerocompra;
                         $clliccontrolepncpitens->l214_anousu = $oDadosAvisoPNCP->l213_anousu;
                         $clliccontrolepncpitens->l214_licitacao = $oParam->iPcproc;
+                        $clliccontrolepncpitens->l214_pcproc = $oParam->iPcproc;
                         $clliccontrolepncpitens->l214_ordem = $item->pc11_seq;
+                        $clliccontrolepncpitens->l214_fornecedor = $item->z01_numcgm;
+                        $clliccontrolepncpitens->l214_sequencialresultado = $l214_sequencialresultado;
                         $clliccontrolepncpitens->incluir();
+
+                        if($clliccontrolepncpitens->erro_status == 0){
+                            $erro = $clliccontrolepncpitens->erro_msg;
+                            throw new Exception($erro);
+                        }
 
                         $oRetorno->status  = 1;
                         $oRetorno->message = "Enviado com Sucesso !";

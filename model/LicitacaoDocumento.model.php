@@ -1,44 +1,44 @@
 <?php
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
 require_once('std/DBLargeObject.php');
 
 /**
- * Caminho das mensagens json do documento 
+ * Caminho das mensagens json do documento
  */
 define('URL_MENSAGEM_PROCESSO_DOCUMENTO', 'patrimonial.licitacao.LicitacaoDocumento.');
 
 /**
  * Model para documentos anexados ao processo do protocolo
- * 
+ *
  * @package Protocolo
  * @version $Revision: 1.17 $
- * @author Jeferson Belmiro <jeferson.belmiro@dbseller.com.br> 
+ * @author Jeferson Belmiro <jeferson.belmiro@dbseller.com.br>
  */
 class LicitacaoDocumento
 {
@@ -46,7 +46,7 @@ class LicitacaoDocumento
   /**
    * Codigo do documento
    * - campo p01_sequencial
-   * 
+   *
    * @var int
    * @access private
    */
@@ -54,8 +54,8 @@ class LicitacaoDocumento
 
   /**
    * Processo do protocolo
-   * - campo p01_protprocesso 
-   * 
+   * - campo p01_protprocesso
+   *
    * @var LicitacaoAnexo
    * @access private
    */
@@ -65,7 +65,7 @@ class LicitacaoDocumento
   /**
    * OID do documento anexado ao processo
    * - campo p01_documento
-   * 
+   *
    * @var int
    * @access private
    */
@@ -75,7 +75,7 @@ class LicitacaoDocumento
   /**
    * Tamanho limite do arquivo em bytes
    * - Limite 30mb
-   * 
+   *
    * @var int
    * @access private
    */
@@ -83,7 +83,7 @@ class LicitacaoDocumento
 
   /**
    * Extensões não permitidas para os documentos
-   * 
+   *
    * @var array
    * @access private
    */
@@ -92,7 +92,7 @@ class LicitacaoDocumento
   /**
    * Caminho completo do arquivo
    * - Usado para salvar ou exportar do banco
-   * 
+   *
    * @var string
    * @access private
    */
@@ -109,7 +109,7 @@ class LicitacaoDocumento
   {
 
     /**
-     * Documento nao inforamdo, contrutor nao fara nada 
+     * Documento nao inforamdo, contrutor nao fara nada
      */
     if (empty($iCodigo)) {
       return false;
@@ -230,7 +230,7 @@ class LicitacaoDocumento
     return $this->sCaminhoArquivo;
   }
 
-  /** 
+  /**
    * Retorna o nome do documento
    * @access public
    * @return string
@@ -258,7 +258,7 @@ class LicitacaoDocumento
   }
 
 
-  /** 
+  /**
    * Retorna o tipo do documento
    * @access public
    * @return string
@@ -283,7 +283,7 @@ class LicitacaoDocumento
     $oStdMensagemErro->sCaminhoArquivo = $this->sCaminhoArquivo;
     $oStdMensagemErro->iLimiteTamanho  = $this->iLimiteTamanho;
 
-    /** filesize($this->sCaminhoArquivo) > $this->iLimiteTamanho 
+    /** filesize($this->sCaminhoArquivo) > $this->iLimiteTamanho
      * Arquivo nao encontrado
      */
     if (!file_exists($this->sCaminhoArquivo)) {
@@ -293,7 +293,7 @@ class LicitacaoDocumento
     $aInformacoesArquivo = pathinfo($this->sCaminhoArquivo);
 
     /**
-     * Arquivo maior que o permitido 
+     * Arquivo maior que o permitido
      */
     if (filesize($this->sCaminhoArquivo) > $this->iLimiteTamanho) {
       throw new BusinessException('Tamanho maior que 30mb');
@@ -326,7 +326,7 @@ class LicitacaoDocumento
 
 
     /**
-     * Valida arquivo, tamanho e extensao 
+     * Valida arquivo, tamanho e extensao
      */
     $this->validarArquivo();
 
@@ -393,7 +393,7 @@ class LicitacaoDocumento
   }
 
   /**
-   * Download documento 
+   * Download documento
    * - retorna o caminho do arquivo para download
    *
    * @access public
@@ -431,26 +431,22 @@ class LicitacaoDocumento
     if (empty($this->iCodigo)) {
       throw new Exception('Documento não especificado.');
     }
+
     $oDaoLicanexopncpdocumento = db_utils::getDao('licanexopncpdocumento');
+
     $oDaoLicanexopncpdocumento->excluir($this->iCodigo);
 
     if ($oDaoLicanexopncpdocumento->erro_status  == "0") {
       throw new Exception('Erro ao excluir o Arquivo.');
     }
 
-    $oDaolicanexopncp = db_utils::getDao('licanexopncp');
-    $oDaolicanexopncp->excluir($this->oLicitacaoAnexo);
+//    $oDaolicanexopncp = db_utils::getDao('licanexopncp');
+//    $oDaolicanexopncp->excluir($this->oLicitacaoAnexo);
+//
+//    if ($oDaolicanexopncp->erro_status  == "0") {
+//      throw new Exception('Erro ao excluir o Arquivo.'.$oDaolicanexopncp->erro_msg);
+//    }
 
-    /*
-    *$lExclusao = DBLargeObject::exclusao($this->iOid);
-
-    
-     * Erro ao excluir documento do banco
-     
-    if ( !$lExclusao ) {
-      throw new Exception( 'Erro ao excluir aquivo no banco');
-    }
-*/
     return true;
   }
 

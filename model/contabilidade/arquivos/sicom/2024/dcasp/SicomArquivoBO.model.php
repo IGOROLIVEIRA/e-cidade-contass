@@ -2,6 +2,7 @@
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
+// require_once('model/contabilidade/relatorios/RelatoriosLegaisBase.model.php');
 require_once('model/contabilidade/relatorios/dcasp/BalancoOrcamentarioDCASP2015.model.php');
 require_once('libs/db_stdlib.php');
 require_once('libs/db_conecta.php');
@@ -267,7 +268,6 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbodcasp20->si202_tiporegistro          = 20;
       $clbodcasp20->si202_faserecorcamentaria   = $iValorNumerico;
       $clbodcasp20->si202_vlsaldoexeantsupfin   = $oRetornoBO[29]->$sChave;
-      $clbodcasp20->si202_vlsaldoexeantrecredad = $oRetornoBO[30]->$sChave;
       $clbodcasp20->si202_vltotalsaldoexeant    = ($oRetornoBO[29]->$sChave + $oRetornoBO[30]->$sChave);
 
       $clbodcasp20->incluir(null);
@@ -308,9 +308,9 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbodcasp30->si203_vlreservacontingen        = $oRetornoBO[39]->$sChave;
       $clbodcasp30->si203_vlreservarpps             = $oRetornoBO[40]->$sChave;
       $clbodcasp30->si203_vlamortizadiviintermob    = $oRetornoBO[44]->$sChave;
-      $clbodcasp30->si203_vlamortizaoutrasdivinter  = $oRetornoBO[45]->$sChave;
+      $clbodcasp30->si203_vlamortizadividacontratualinternas  = $oRetornoBO[45]->$sChave;
       $clbodcasp30->si203_vlamortizadivextmob       = $oRetornoBO[47]->$sChave;
-      $clbodcasp30->si203_vlamortizaoutrasdivext    = $oRetornoBO[48]->$sChave;
+      $clbodcasp30->si203_vlamortizadividacontratualexternas  = $oRetornoBO[48]->$sChave;
       $clbodcasp30->si203_vlsuperavit               = $oRetornoBO[50]->$sChave;
       $clbodcasp30->si203_vltotalquadrodespesa      = $oRetornoBO[51]->$sChave;
 

@@ -23,10 +23,10 @@ class GerarRPSD extends GerarAM
     $this->sArquivo = "RPSD";
     $this->abreArquivo();
 
-    $sSql = "select * from rpsd102021 where si189_mes = " . $this->iMes . " and si189_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from rpsd102023 where si189_mes = " . $this->iMes . " and si189_instit = " . db_getsession("DB_instit");
     $rsRPSD10 = db_query($sSql);
 
-    $sSql2 = "select * from rpsd112021 where si190_mes = " . $this->iMes . " and si190_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from rpsd112023 where si190_mes = " . $this->iMes . " and si190_instit = " . db_getsession("DB_instit");
     $rsRPSD11 = db_query($sSql2);
 
     if (pg_num_rows($rsRPSD10) == 0) {
@@ -64,6 +64,7 @@ class GerarRPSD extends GerarAM
             $aCSVRPSD11['si190_tiporegistro']    = $this->padLeftZero($aRPSD11['si190_tiporegistro'], 2);
             $aCSVRPSD11['si190_codreduzidorsp']  = substr($aRPSD11['si190_codreduzidorsp'], 0, 15);
             $aCSVRPSD11['si190_codfontrecursos'] = $this->padLeftZero($aRPSD11['si190_codfontrecursos'], 3);
+            $aCSVRPSD11['si190_codco']           = $aRPSD11['si190_codco'];
             $aCSVRPSD11['si190_vlpagofontersp']  = $this->sicomNumberReal($aRPSD11['si190_vlpagofontersp'], 2);
 
             $this->sLinha = $aCSVRPSD11;

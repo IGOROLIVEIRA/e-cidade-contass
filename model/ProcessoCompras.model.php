@@ -1091,16 +1091,6 @@ class ProcessoCompras
                 $aItemSolcitem[] = $oItem->solicitem;
             }
 
-            $oDadosRegistroPreco = $this->getDadosAutorizacao();
-
-            if ($oDados->oAdesaoRegPrecoCod != "") {
-                $oDadosAdesao = $this->getDadosAdesaoRegpreco($oDados->oAdesaoRegPrecoCod);
-            }
-
-            if ($oDados->oLicoutrosorgaosCod != "") {
-                $oDadosLicOutrosOrgaos = $this->getLicoutrosOrgaos($oDados->oLicoutrosorgaosCod);
-            }
-
             $oAutorizacao->setDestino($oDados->destino);
             $oAutorizacao->setContato($oDados->sContato);
             $oAutorizacao->setResumo(addslashes($sResumo));
@@ -1108,34 +1098,16 @@ class ProcessoCompras
             $oAutorizacao->setTipoCompra($oDados->tipocompra);
             $oAutorizacao->setPrazoEntrega($oDados->prazoentrega);
             $oAutorizacao->setDataAutorizacao(date('Y-m-d',db_getsession('DB_datausu')));
+            $oAutorizacao->setNumeroLicitacao($oDados->iNumeroLicitacao);
+            $oAutorizacao->setModalidade($oDados->iModalidade);
+            $oAutorizacao->setOutrasCondicoes($oDados->sOutrasCondicoes);
+            $oAutorizacao->setCondicaoPagamento($oDados->condicaopagamento);
+            $oAutorizacao->setSTipoautorizacao($this->getTipoAutorizacao($oDados->tipocompra));
+            $oAutorizacao->setSTipoorigem($this->getTipoOrigemAutorizacao($oDados->tipocompra));
+            $oAutorizacao->setSAdesaoregpreco($oDados->oAdesaoRegPrecoCod);
+            $oAutorizacao->setCodigoLicitacao($oDados->oLicitacaoCodigo);
+            $oAutorizacao->setSLicoutrosorgaos($oDados->oLicoutrosorgaosCod);
 
-            if ($oDadosRegistroPreco[0]->l20_usaregistropreco == 't') {
-                $oAutorizacao->setNumeroLicitacao($oDadosRegistroPreco[0]->l20_edital . '/' . $oDadosRegistroPreco[0]->l20_anousu);
-                $oAutorizacao->setModalidade($oDadosRegistroPreco[0]->l20_numero);
-                $oAutorizacao->setTipoCompra($oDadosRegistroPreco[0]->tipocompra);
-                $oAutorizacao->setCodigoLicitacao($oDadosRegistroPreco[0]->sequenciallicitacao);
-                $oAutorizacao->setSTipoorigem(2);
-                $oAutorizacao->setSTipoautorizacao(3);
-            } else if ($oDados->oAdesaoRegPrecoCod != null || $oDados->oAdesaoRegPrecoCod != "") {
-                $oAutorizacao->setNumeroLicitacao($oDadosAdesao[0]->si06_numeroprc . '/' . $oDadosAdesao[0]->si06_anoproc);
-                $oAutorizacao->setModalidade($oDadosAdesao[0]->si06_numlicitacao);
-                $oAutorizacao->setTipoCompra($oDados->tipocompra);
-                $oAutorizacao->setSTipoorigem(2);
-                $oAutorizacao->setSTipoautorizacao(4);
-            } else if ($oDados->oLicoutrosorgaosCod != null || $oDados->oLicoutrosorgaosCod != "") {
-                $oAutorizacao->setNumeroLicitacao($oDadosLicOutrosOrgaos[0]->lic211_processo . '/' . $oDadosLicOutrosOrgaos[0]->lic211_anousu);
-                $oAutorizacao->setModalidade($oDadosLicOutrosOrgaos[0]->lic211_numero);
-                $oAutorizacao->setTipoCompra($oDados->tipocompra);
-                $oAutorizacao->setSTipoorigem(2);
-                $oAutorizacao->setSTipoautorizacao(2);
-            } else {
-                $oAutorizacao->setNumeroLicitacao($oDados->iNumeroLicitacao);
-                $oAutorizacao->setModalidade($oDados->iModalidade);
-                $oAutorizacao->setOutrasCondicoes($oDados->sOutrasCondicoes);
-                $oAutorizacao->setCondicaoPagamento($oDados->condicaopagamento);
-                $oAutorizacao->setSTipoorigem(1);
-                $oAutorizacao->setSTipoautorizacao(1);
-            }
             $oAutorizacao->salvar();
 
             $sProcessoAdministrativo = null;
@@ -1420,38 +1392,13 @@ class ProcessoCompras
     {
 
         $oDaoPcProc = new cl_pcproc();
-        $sWhere          = "pc80_codproc = {$this->getCodigo()}";
-
-        $sSql            = "select distinct
-    l03_descr as TipoLicitacao,
-    pc50_codcom as tipocompra,
-    l20_edital||'/'||l20_anousu as numerolicitacao,
-    l20_codigo as sequenciallicitacao,
-    l20_usaregistropreco,
-    l20_numero,
-    l20_edital,
-    l20_anousu
-    from pcproc
-    inner join pcprocitem on pc81_codproc=pc80_codproc
-    inner join solicitem filho on filho.pc11_codigo=pc81_solicitem
-    inner join solicita solicitaf on solicitaf.pc10_numero=filho.pc11_numero
-    inner join solicitavinculo on pc53_solicitafilho=solicitaf.pc10_numero
-    inner join solicita on solicita.pc10_numero=pc53_solicitapai
-    inner join solicitem on solicitem.pc11_numero=solicita.pc10_numero
-    inner join pcprocitem pcprociteml on pcprociteml.pc81_solicitem=solicitem.pc11_codigo
-    inner join liclicitem on l21_codpcprocitem=pcprociteml.pc81_codprocitem
-    inner join liclicita on l20_codigo=l21_codliclicita
-    inner join cflicita on l03_codigo=l20_codtipocom
-    inner join pctipocompratribunal on l03_pctipocompratribunal=l44_sequencial
-    inner join pctipocompra on pc50_pctipocompratribunal=l44_sequencial and l03_pctipocompratribunal=pc50_pctipocompratribunal
-    where pc80_codproc={$this->getCodigo()}";
-
+        $sSql = $oDaoPcProc->queryDadosAutorizacao($this->getCodigo());
         $rsDados         = $oDaoPcProc->sql_record($sSql);
-
         $oDados = db_utils::fieldsMemory($rsDados, 0);
         $aDados[] = $oDados;
 
         return $aDados;
+
     }
 
     public function getDadosAdesaoRegpreco($sequencial)
@@ -1478,5 +1425,76 @@ class ProcessoCompras
         $oDadoslicarray[] = $oDadoslic;
 
         return $oDadoslicarray;
+    }
+
+    /**
+    * @return int retorna o tipo da autorização
+    */
+    public function getTipoAutorizacao($tipoCompra){
+
+        $rsTipoCompraTribunal = db_query("select pc50_pctipocompratribunal from pctipocompra where pc50_codcom = " . $tipoCompra);
+        $tipoCompraTribunal = db_utils::fieldsMemory($rsTipoCompraTribunal, 0)->pc50_pctipocompratribunal;
+        
+        $aCodTribunalLicOutrosOrgaos = ["105","106","107","108","109"];
+        $aCodTribunalLicitacao = ["51","48","50","101","54","102","103","49","53","52","110","100"];
+        $codTribunalAdesao = "104";
+        $codTribunalDireta = "13";
+                     
+        if ($tipoCompraTribunal == $codTribunalDireta){
+            return 1;
+        } 
+                
+        if (in_array($tipoCompraTribunal, $aCodTribunalLicitacao)){
+            return 2;
+        } 
+               
+        if (in_array($tipoCompraTribunal, $aCodTribunalLicOutrosOrgaos)){
+            return 3;
+        } 
+                
+        if ($tipoCompraTribunal == $codTribunalAdesao){
+            return 4;
+        } 
+        
+    }
+
+    /**
+    * @return int retorna o tipo de origem
+    */
+    public function getTipoOrigemAutorizacao($tipoCompra){
+
+        $rsTipoCompraTribunal = db_query("select pc50_pctipocompratribunal from pctipocompra where pc50_codcom = " . $tipoCompra);
+        $tipoCompraTribunal = db_utils::fieldsMemory($rsTipoCompraTribunal, 0)->pc50_pctipocompratribunal;
+        
+        $aCodTribunalLicOutrosOrgaos = ["105","106","107","108","109"];
+        $aCodTribunalLicitacao = ["51","48","50","54","49","53","52","110"];
+        $aCodTribunalDispensaInexibilidade = ["103","102","101","100"];
+        $codTribunalAdesao = "104";
+        $codTribunalDireta = "13";
+                     
+        if ($tipoCompraTribunal == $codTribunalDireta){
+            return 1;
+        } 
+                
+        if (in_array($tipoCompraTribunal, $aCodTribunalLicitacao)){
+            return 2;
+        } 
+               
+        if (in_array($tipoCompraTribunal, $aCodTribunalDispensaInexibilidade)){
+            return 3;
+        } 
+                
+        if ($tipoCompraTribunal == $codTribunalAdesao){
+            return 4;
+        } 
+
+        if (in_array($tipoCompraTribunal, $aCodTribunalLicOutrosOrgaos)){
+            if($tipoCompraTribunal == "105") return 5;
+            if($tipoCompraTribunal == "106") return 6;
+            if($tipoCompraTribunal == "107") return 7;
+            if($tipoCompraTribunal == "108") return 8;
+            if($tipoCompraTribunal == "109") return 9;
+        } 
+        
     }
 }

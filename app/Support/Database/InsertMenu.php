@@ -4,9 +4,12 @@ namespace App\Support\Database;
 
 trait InsertMenu
 {
-    public function getItemIdByDescr($descricao): array
+    public function getItemIdByDescr($descricao, $helper = null): array
     {
         $sql = "SELECT id_item FROM db_itensmenu WHERE descricao = '$descricao'";
+        if ($helper != null){
+            $sql .= " AND help = '$helper'";
+        }
         return $this->fetchRow($sql);
     }
 
@@ -22,20 +25,35 @@ trait InsertMenu
         return $this->fetchRow($sql);
     }
 
+    public function getNextSeqMenuId($idPrincipalMenu): ?string
+    {
+        $sql = "SELECT max(menusequencia) + 1 AS codmenu FROM db_menu WHERE id_item = {$idPrincipalMenu}";
+        $result = $this->fetchRow($sql);
+
+        if ($result && isset($result['codmenu'])) {
+            return (string) $result['codmenu'];
+        }
+        return 0;
+    }
+
     public function insertItemMenu($descricao, $link, $titulo, $status = 't')
     {
         $id = intval(implode(" ", $this->getLastInsertedId()));
 
-        $sql = "INSERT INTO db_itensmenu VALUES ($id, '$descricao', '$descricao', '$link', 1, 1, '$titulo', '$status')";
+        $sql = "INSERT INTO db_itensmenu VALUES ($id, '$descricao', '$titulo', '$link', 1, 1, '$titulo', '$status')";
         $this->executeQuery($sql);
     }
 
-    public function insertMenu($descricao, $menusequencia, $status = 1)
+    public function insertMenu($descricaoItemPai, $menusequencia = null, $idModulo = 1, $helperItemPai = null)
     {
-        $id_item_pai = intval(implode(" ", $this->getItemIdByDescr($descricao)));
-        $id_item_filho = intval(implode(" ", $this->getMaxMenuId()));
+        $idItemPai = intval(implode(" ", $this->getItemIdByDescr($descricaoItemPai,$helperItemPai)));
+        $idItemFilho = intval(implode(" ", $this->getMaxMenuId()));
 
-        $sql = "INSERT INTO db_menu VALUES ($id_item_pai, $id_item_filho, $menusequencia, $status)";
+        if ($menusequencia == null){
+            $menusequencia = $this->getNextSeqMenuId($idItemPai);
+        }
+
+        $sql = "INSERT INTO db_menu VALUES ($idItemPai, $idItemFilho, $menusequencia, $idModulo)";
         $this->executeQuery($sql);
     }
 

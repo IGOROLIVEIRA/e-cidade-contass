@@ -3,7 +3,7 @@
 //CLASSE DA ENTIDADE acocontroletermospncp
 class cl_acocontroletermospncp
 {
-    // cria variaveis de erro 
+    // cria variaveis de erro
     public $rotulo     = null;
     public $query_sql  = null;
     public $numrows    = 0;
@@ -16,7 +16,7 @@ class cl_acocontroletermospncp
     public $erro_msg   = null;
     public $erro_campo = null;
     public $pagina_retorno = null;
-    // cria variaveis do arquivo 
+    // cria variaveis do arquivo
     public $l214_sequencial = 0;
     public $l214_numerotermo = 0;
     public $l214_numcontratopncp = null;
@@ -27,21 +27,25 @@ class cl_acocontroletermospncp
     public $l214_numeroaditamento = 0;
     public $l214_acordoposicao = null;
     public $l214_instit = null;
-    // cria propriedade com as variaveis do arquivo 
+
+    public $l214_tipotermocontratoid = null;
+
+    // cria propriedade com as variaveis do arquivo
     public $campos = "
-                 l214_sequencial = int8 = l214_sequencial 
-                 l214_numerotermo = int8 = l214_numerotermo 
+                 l214_sequencial = int8 = l214_sequencial
+                 l214_numerotermo = int8 = l214_numerotermo
                  l214_numcontratopncp = int8 = codigo contrato pncp
                  l213_usuario = int8 = usuario
                  l213_dtlancamento = date = data de envio
                  l214_anousu = int8 = ano da compra
-                 l214_acordo = int8 = l214_acordo 
+                 l214_acordo = int8 = l214_acordo
                  l214_numeroaditamento = int8 = numero do aditamento no ecidade
                  l214_acordoposicao = int8 = acordoposicao
                  l214_instit = int8 = l214_instit
+                 l214_tipotermocontratoid = int4 = tipo de termo
                  ";
 
-    //funcao construtor da classe 
+    //funcao construtor da classe
     function __construct()
     {
         //classes dos rotulos dos campos
@@ -49,7 +53,7 @@ class cl_acocontroletermospncp
         $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
     }
 
-    //funcao erro 
+    //funcao erro
     function erro($mostra, $retorna)
     {
         if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
@@ -74,6 +78,7 @@ class cl_acocontroletermospncp
             $this->l214_numeroaditamento = ($this->l214_numeroaditamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_numeroaditamento"] : $this->l214_numeroaditamento);
             $this->l214_acordoposicao = ($this->l214_acordoposicao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_acordoposicao"] : $this->l214_acordoposicao);
             $this->l214_instit = ($this->l214_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_instit"] : $this->l214_instit);
+            $this->l214_tipotermocontratoid = ($this->l214_tipotermocontratoid == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_tipotermocontratoid"] : $this->l214_tipotermocontratoid);
         }
     }
 
@@ -156,20 +161,21 @@ class cl_acocontroletermospncp
             return false;
         }
         $sql = "insert into acocontroletermospncp(
-                                       l214_sequencial 
-                                      ,l214_numerotermo 
-                                      ,l214_numcontratopncp 
-                                      ,l213_usuario 
+                                       l214_sequencial
+                                      ,l214_numerotermo
+                                      ,l214_numcontratopncp
+                                      ,l213_usuario
                                       ,l213_dtlancamento
-                                      ,l214_anousu 
+                                      ,l214_anousu
                                       ,l214_acordo
                                       ,l214_numeroaditamento
                                       ,l214_acordoposicao
                                       ,l214_instit
+                                      ,l214_tipotermocontratoid
                        )
                 values (
-                                $this->l214_sequencial 
-                               ,$this->l214_numerotermo 
+                                $this->l214_sequencial
+                               ,$this->l214_numerotermo
                                ,$this->l214_numcontratopncp
                                ,$this->l213_usuario
                                ,'$this->l213_dtlancamento'
@@ -177,7 +183,8 @@ class cl_acocontroletermospncp
                                ,$this->l214_acordo
                                ,$this->l214_numeroaditamento
                                ,$this->l214_acordoposicao
-                               ,$this->l214_instit 
+                               ,$this->l214_instit
+                               ,$this->l214_tipotermocontratoid
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -286,7 +293,7 @@ class cl_acocontroletermospncp
         }
     }
 
-    // funcao para exclusao 
+    // funcao para exclusao
     function excluir($l214_sequencial = null, $dbwhere = null)
     {
 
@@ -328,7 +335,7 @@ class cl_acocontroletermospncp
         }
     }
 
-    // funcao do recordset 
+    // funcao do recordset
     function sql_record($sql)
     {
         $result = db_query($sql);
@@ -353,7 +360,7 @@ class cl_acocontroletermospncp
         return $result;
     }
 
-    // funcao do sql 
+    // funcao do sql
     function sql_query($l214_sequencial = null, $campos = "acocontroletermospncp.l214_sequencial,*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
@@ -391,7 +398,7 @@ class cl_acocontroletermospncp
         return $sql;
     }
 
-    // funcao do sql 
+    // funcao do sql
     function sql_query_file($l214_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
