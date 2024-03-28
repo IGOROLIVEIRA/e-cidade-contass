@@ -2077,13 +2077,36 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         document.form1.l20_equipepregao.value = iCodigoProcesso;
         db_iframe_proc.hide();
 
-        let modalidade = document.form1.modalidade_tribunal.value;
+        let codigoModalidade = document.form1.modalidade_tribunal.value;
+        let aModalidades = {
+            52 : "pregao",
+            53 : "pregao",
+            48 : "outros",
+            49 : "outros",
+            50 : "outros"
+        };
+        let descricaoModalidade = aModalidades[codigoModalidade];
+        let lei = document.form1.l20_leidalicitacao.value;
 
-        if (modalidade == 52 || modalidade == 53) {
-            verificaMembrosModalidade("pregao");
-        } else if (modalidade == 48 || modalidade == 49 || modalidade == 50) {
-            verificaMembrosModalidade("outros");
+        if(lei == "1"){
+
+            resultadoValidacao = verificaMembrosModalidadeParaLei1(descricaoModalidade);  
+            if(resultadoValidacao == false && descricaoModalidade == "pregao"){
+                document.getElementById("l20_equipepregao").value = "";
+                return alert("Para as modalidades Pregão presencial e Pregão eletrônico é necessário\nque a Comissão de Licitação tenha no mínimo um integrante do tipo Pregoeiro");
+            }
+
+            if(resultadoValidacao == false && descricaoModalidade == "outros"){
+                document.getElementById("l20_equipepregao").value = "";
+                return alert("Para as modalidades Tomada de Preços, Concorrência e Convite é necessário\nque a Comissão de Licitação um integrante do tipo Agente de contratação ou um integrante do tipo Comissão de Contratação");
+            }
+
+            return;
+
         }
+
+
+        verificaMembrosModalidade(descricaoModalidade);
 
     }
 
@@ -2437,6 +2460,26 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }
         document.getElementById('l20_usaregistropreco').value = "f";
         document.getElementById('tr_criterioadjudicao_dispensainexigibilidade').style.display = "none";
+    }
+
+    function verificaMembrosModalidadeParaLei1(modalidade){
+        var oParametro = new Object();
+        oParametro.exec = 'VerificaMembrosModalidadeParaLei1',
+        oParametro.comissao = document.getElementById('l20_equipepregao').value;
+        oParametro.modalidade = modalidade;
+        let validacao;
+        var oAjax = new Ajax.Request('lic4_licitacao.RPC.php', {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParametro),
+            asynchronous: false,
+            onComplete: function(oAjax) {
+                var oRetorno = eval("(" + oAjax.responseText + ")");
+                validacao = oRetorno.validacao;
+            }
+        });
+
+        return validacao;
+        
     }
 
 </script>
