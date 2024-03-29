@@ -787,13 +787,6 @@ class MSCEncerramento {
                             WHEN db21_tipoinstit IN (2) THEN 20231
                             ELSE 10131
                         END AS po,
-                        -- CASE
-                        --     WHEN o15_codtri = '124' THEN
-                        --         CASE
-                        --             WHEN substr(natreceita,1,6) = '172810' OR substr(natreceita,1,6) = '242810' THEN 15200000
-                        --             ELSE 15100000 END
-                        --     ELSE o15_codstnnovo
-                        -- END AS fr,
                         o15_codstnnovo AS fr,
                         natreceita AS nr,
                         round(substr(fc_saldocontacorrente,113,15)::float8,2)::float8 AS saldoinicial,
@@ -1279,7 +1272,7 @@ class MSCEncerramento {
 
         $rsResult = db_query($sSQL);
 
-        $aCampos  = array("conta", "po", "fs", "fr", "nd", "co", "es", "ai", "cf", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+        $aCampos  = array("conta", "po", "fs", "fr", "nd", "co", "ai", "es", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
         if ($rsResult) {
             return $this->getDadosIC(9, $aCampos, $rsResult);
@@ -1410,7 +1403,7 @@ class MSCEncerramento {
 
         $rsResult = db_query($sSQL);
 
-        $aCampos  = array("conta", "po", "fs", "fr", "nd", "co","es", "ai", "cf", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+        $aCampos  = array("conta", "po", "fs", "fr", "nd", "co", "ai", "es", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
         if ($rsResult) {
             return $this->getDadosIC(9, $aCampos, $rsResult);
