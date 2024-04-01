@@ -121,6 +121,10 @@ if ($oInstit->db21_usasisagua == "t") {
      height: 50px;
    }
 
+   #k81_dataestorno {
+     width:14%;
+     height: 50px;
+   }
 
 
 </style>
@@ -166,7 +170,22 @@ if ($oInstit->db21_usasisagua == "t") {
              <? db_input('k144_numeroprocesso', 10, null, true, 'text', 3, null,null,null,null,15);?>
           </td>
         </tr>
-
+        <tr>
+              <td nowrap title="<?= @$Tk81_datareceb ?>"><b>Data do Estorno:</b></td>
+              
+              <td><?
+                  db_inputdata('k81_dataestorno', @$k81_dataestorno_dia, @$k81_dataestorno_mes, @$k81_dataestorno_ano, true, 'text', $db_opcao,"")
+                  ?>
+              </td>
+         </tr>
+         <tr style="display:none;">
+              <td nowrap title="<?= @$Tk80_dtautenticacao ?>"><b>Data da Autenticação:</b></td>
+              
+              <td><?
+                  db_inputdata('k80_dtautenticacao', @$k80_dtautenticacao_dia, @$k80_dtautenticacao_mes, @$k80_dtautenticacao_ano, true, 'text', $db_opcao,"")
+                  ?>
+              </td>
+         </tr>
   </table>
   </fieldset>
 
@@ -275,12 +294,13 @@ function js_renderizarGrid() {
 function js_pesquisaPlanilha() {
 
   js_limpaGrid();
-  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_placaixa','func_placaixa.php?lAutenticada=true&funcao_js=parent.js_getPlanilha|k80_codpla','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_placaixa','func_placaixa.php?lAutenticada=true&funcao_js=parent.js_getPlanilha|k80_codpla|k80_dtaut','Pesquisa',true);
 }
 
 
-function js_getPlanilha(iCodigoPlanilha) {
+function js_getPlanilha(iCodigoPlanilha,iDataAutenticacao) {
 
+  $('k80_dtautenticacao').value = ordenarData(iDataAutenticacao);
   db_iframe_placaixa.hide();
   js_divCarregando("Aguarde, importando dados da planilha...", "msgBox");
 
@@ -351,6 +371,43 @@ function js_estornarPlanilha() {
     alert("Informe o código de uma planilha.")
   }
 
+  if ($F('k81_dataestorno') == '') {
+
+    alert("Informe a data do estorno.");
+    $('k81_dataestorno').focus();
+    return false;
+  }
+  var valorCampoAutenticacao = $F('k80_dtautenticacao');
+  var valorCampoEstorno      = $F('k81_dataestorno');
+  var valorCampoData         = $F('k80_data');
+
+  var dataAutenticacao = converterParaData(valorCampoAutenticacao);
+  var dataEstorno      = converterParaData(valorCampoEstorno);
+  var data             = converterParaData(valorCampoData);
+
+  if (dataEstorno < dataAutenticacao) {
+    alert("A data do estorno não pode ser menor que a data da autenticação ("+ valorCampoAutenticacao+") .");
+    $('k80_dtautenticacao').focus();
+    return false;
+  }
+
+  if (dataEstorno < data) {
+    alert("A data do estorno não pode ser menor que a data da planilha.");
+    $('k81_dataestorno').focus();
+    return false;
+  }
+
+  anoDataEstorno = $F('k81_dataestorno');
+  var partesDataEstorno = anoDataEstorno.split('/');
+
+  anoData        = $F('k80_data');
+  var partesData = anoData.split('/');
+  if (partesData[2] != partesDataEstorno[2]) {
+    alert("O ano do estorno, não pode ser diferente do ano da planilha.");
+    $('k81_dataestorno').focus();
+    return false;
+  } 
+    
   if (!confirm("Confirma a estorno da planilha "+$F('k80_codpla')+"?")) {
     return false;
   }
@@ -358,7 +415,7 @@ function js_estornarPlanilha() {
   var oParam       = new Object();
   oParam.iPlanilha =  $F('k80_codpla');
   oParam.exec      = 'estornarPlanilha';
-
+  oParam.dataestorno = $F('k81_dataestorno');  
   js_divCarregando("Aguarde, estornando planilha...", "msgBox");
 
   var oAjax        = new Ajax.Request(sRPC,
@@ -382,6 +439,17 @@ function js_completaEstorno(oAjax) {
   }
   js_pesquisaPlanilha();
 }
+
+function converterParaData(dataString) {
+    var partesData = dataString.split('/');
+    return new Date(partesData[2], partesData[1] - 1, partesData[0]);
+}
+
+function ordenarData(dataString) {
+    var partesData = dataString.split('-');
+    return partesData[2]+"/"+partesData[1]+"/"+partesData[0];
+}
+
 
 
 js_gridReceitas();
