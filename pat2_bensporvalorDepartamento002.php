@@ -44,7 +44,14 @@ $sql = "
                         t52_ident AS placa,
                         t52_descr AS descricao,
                         t52_valaqu AS valoraquisicao,
-                        t58_valoratual+t44_valorresidual AS valoratual,
+                        (SELECT t58_valoratual
+     FROM benshistoricocalculobem
+     JOIN benshistoricocalculo ON t57_sequencial=t58_benshistoricocalculo
+     WHERE t57_ano = $ano
+         AND t58_bens = t52_bem
+         AND t57_mes = $mes
+     ORDER BY t58_sequencial DESC
+     LIMIT 1)+t44_valorresidual AS valoratual,
                         t52_dtaqu AS dtaquisicao,
                         descrdepto AS departamento,
                         t33_divisao,
@@ -55,10 +62,6 @@ $sql = "
         JOIN db_depart ON coddepto = t52_depart
         JOIN clabens ON t64_codcla=t52_codcla
         JOIN bemtipos ON t24_sequencial=t64_bemtipos
-        JOIN benshistoricocalculobem ON t58_bens=t52_bem
-        JOIN benshistoricocalculo ON t57_sequencial=t58_benshistoricocalculo
-        AND t57_ano = $ano
-        AND t57_mes = $mes
         LEFT JOIN bensdiv ON t33_bem=t52_bem
         LEFT JOIN departdiv ON t30_codigo=t33_divisao
         LEFT JOIN bensbaix ON t55_codbem=t52_bem
