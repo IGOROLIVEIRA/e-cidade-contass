@@ -24,9 +24,12 @@ if($codigoDepartamento){
     $resultDepart = db_query($sqlDepartamento) or die(pg_last_error());
     $oResultDepart = db_utils::fieldsMemory($resultDepart, 0);
 }
+if($exibir == "1"){
+    $where .= " AND t52_bem NOT IN (select t55_codbem from bensbaix)";
+}
 
-if($exibir){
-    $where .= " AND t55_codbem IS NULL";
+if($exibir == "3"){
+    $where .= " AND t52_bem in (select t55_codbem from bensbaix)";
 }
 
 if($itipobens){
@@ -39,8 +42,7 @@ $resultTipobens = db_query($sqlTiposbens) or die(pg_last_error());
 $oResultTipos = db_utils::fieldsMemory($resultTipobens, 0);
 
 
-$sql = "
-        SELECT DISTINCT t52_bem AS codigo,
+$sql = "SELECT DISTINCT t52_bem AS codigo,
                         t52_ident AS placa,
                         t52_descr AS descricao,
                         t52_valaqu AS valoraquisicao,
@@ -62,6 +64,10 @@ $sql = "
         JOIN db_depart ON coddepto = t52_depart
         JOIN clabens ON t64_codcla=t52_codcla
         JOIN bemtipos ON t24_sequencial=t64_bemtipos
+        JOIN benshistoricocalculobem ON t58_bens=t52_bem
+        JOIN benshistoricocalculo ON t57_sequencial=t58_benshistoricocalculo
+        AND t57_ano = $ano
+        AND t57_mes = $mes
         LEFT JOIN bensdiv ON t33_bem=t52_bem
         LEFT JOIN departdiv ON t30_codigo=t33_divisao
         LEFT JOIN bensbaix ON t55_codbem=t52_bem
@@ -98,7 +104,6 @@ $sql = "
              AND t57_mes = $mes)
              order by placa
 ";
-
 $resultBens = db_query($sql);
 $pdf = new PDF('Landscape', 'mm', 'A4');
 $pdf->Open();
@@ -201,8 +206,8 @@ foreach ($aDadosRelatoriogruppordivisao as $key => $aDadosRelatorio) {
 $pdf->SetFont('arial','B',10);
 $pdf->cell(40   ,$alt  ,"Total:",1,0,"C",1);
 $pdf->SetFont('arial','B',9);
-$pdf->cell(195, $alt, '', 1, 0, "R", 0);
-$pdf->cell(25, $alt, db_formatar($totalAquisicao,'f'), 1, 0, "R", 0);
-$pdf->cell(20, $alt, db_formatar($totalAtual,'f'), 1, 1, "R", 0);
-$pdf->cell(280,$alt  ,"TOTAL GERAL DE REGISTROS: ".$iCont,0,0,"R",0);
+$pdf->cell(175, $alt, '', 1, 0, "R", 0);
+$pdf->cell(35, $alt, db_formatar($totalAquisicao,'f'), 1, 0, "R", 0);
+$pdf->cell(30, $alt, db_formatar($totalAtual,'f'), 1, 1, "R", 0);
+$pdf->cell(260,$alt  ,"TOTAL GERAL DE REGISTROS: ".$iCont,0,0,"R",0);
 $pdf->Output();
