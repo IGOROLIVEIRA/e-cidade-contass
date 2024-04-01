@@ -8,7 +8,7 @@ use DBPessoal;
 use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
 
 /**
- * Classe responsï¿½vel por montar as informaï¿½ï¿½es do evento S1200 Esocial
+ * Classe responsável por montar as informações do evento S1200 Esocial
  *
  * @package  ECidade\RecursosHumanos\ESocial\Agendamento\Eventos
  * @author   Marcelo Hernane
