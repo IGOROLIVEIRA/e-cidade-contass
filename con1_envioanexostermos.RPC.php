@@ -87,10 +87,12 @@ switch ($oParam->exec) {
 
                     $oRetorno->status  = 1;
                     $oRetorno->message = "Enviado com Sucesso !";
+                }else {
+                    throw new Exception(utf8_decode($rsApiPNCP[1]));
                 }
-            } catch (Exception $oErro) {
 
-                $oRetorno->message = $oErro->getMessage();
+            } catch (Exception $oErro) {
+                $oRetorno->message = urlencode($oErro->getMessage());
                 $oRetorno->status  = 2;
             }
         }
