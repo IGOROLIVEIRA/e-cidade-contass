@@ -8,7 +8,7 @@ use DBPessoal;
 use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
 
 /**
- * Classe responsável por montar as informações do evento S1200 Esocial
+ * Classe responsï¿½vel por montar as informaï¿½ï¿½es do evento S1200 Esocial
  *
  * @package  ECidade\RecursosHumanos\ESocial\Agendamento\Eventos
  * @author   Marcelo Hernane
@@ -298,6 +298,7 @@ class EventoS1200 extends EventoBase
     {
         $iAnoUsu = date("Y", db_getsession("DB_datausu"));
         $iMesusu = date("m", db_getsession("DB_datausu"));
+
         if ($rh30_regime == 1 || $rh30_regime == 3) {
             $aPontos = array('13salario');
             if ($this->indapuracao != 2)
@@ -305,7 +306,7 @@ class EventoS1200 extends EventoBase
         } else {
             $aPontos = array('13salario');
             if ($this->indapuracao != 2)
-                $aPontos = array('salario', 'complementar');
+                $aPontos = array('salario', 'complementar', 'rescisao');
         }
 
         foreach ($aPontos as $opcao) {
