@@ -298,6 +298,7 @@ class EventoS1200 extends EventoBase
     {
         $iAnoUsu = date("Y", db_getsession("DB_datausu"));
         $iMesusu = date("m", db_getsession("DB_datausu"));
+
         if ($rh30_regime == 1 || $rh30_regime == 3) {
             $aPontos = array('13salario');
             if ($this->indapuracao != 2)
@@ -305,7 +306,7 @@ class EventoS1200 extends EventoBase
         } else {
             $aPontos = array('13salario');
             if ($this->indapuracao != 2)
-                $aPontos = array('salario', 'complementar');
+                $aPontos = array('salario', 'complementar', 'rescisao');
         }
 
         foreach ($aPontos as $opcao) {
