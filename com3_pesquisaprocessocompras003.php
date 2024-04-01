@@ -191,8 +191,11 @@ $l12_pncp = db_utils::fieldsMemory($rsParametroPncp,0)->l12_pncp;
     $oTabDetalhes->add("processoAdesao", "Adesão de Registro de Preço",
         "com3_pesquisarAdesaoregpreco.php?iProcesso={$oGet->pc80_codproc}");
 
-    $oTabDetalhes->add("processoAdesao", "Dados PNCP",
+    $oTabDetalhes->add("DadosPncp", "Dados PNCP",
         "com3_pesquisarDadosPNCP.php?iProcesso={$oGet->pc80_codproc}");
+
+    $oTabDetalhes->add("AnexosPncp", "Anexos PNCP",
+        "com3_pesquisarAnexosPNCP.php?pc80_codproc={$oGet->pc80_codproc}");
 
     $oTabDetalhes->show();
     ?>

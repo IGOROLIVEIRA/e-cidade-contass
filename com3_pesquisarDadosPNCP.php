@@ -14,9 +14,9 @@ $sqlPNPC = "SELECT 3 AS tipoInstrumentoConvocatorioId,
        pc80_orcsigiloso,
        5 AS modoDisputaId,
        pc80_criteriojulgamento,
-       pcproc.pc80_data as dataAberturaProposta,
-       pcproc.pc80_data as dataEncerramentoProposta,
-       l212_lei as amparoLegalId
+       pcproc.pc80_data,
+       pcproc.pc80_data,
+       l212_lei
 FROM pcproc
 INNER JOIN liccontrolepncp ON l213_processodecompras = pc80_codproc
 inner join amparolegal on l212_codigo = pc80_amparolegal
