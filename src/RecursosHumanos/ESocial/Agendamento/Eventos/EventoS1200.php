@@ -306,7 +306,7 @@ class EventoS1200 extends EventoBase
         } else {
             $aPontos = array('13salario');
             if ($this->indapuracao != 2)
-                $aPontos = array('salario', 'complementar', 'rescisao');
+                $aPontos = array('salario', 'complementar');
         }
 
         foreach ($aPontos as $opcao) {
