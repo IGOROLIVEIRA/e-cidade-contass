@@ -68,18 +68,33 @@ class AtaRegistroprecoPNCP extends ModeloBasePNCP
             'Authorization: ' . $token
         );
 
-        $optionspncp  = $this->getParancurl('POST',$oDadosAta,$headers,false,false);
+        $optionspncp  = $this->getParancurl('POST',$oDadosAta,$headers,false,true);
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
+        /*$err     = curl_errno($chpncp);
+        $errmsg  = curl_error($chpncp);
+        $header  = curl_getinfo($chpncp);
+        $header['errno']   = $err;
+        $header['errmsg']  = $errmsg;
+        $header['header']  = $contentpncp;
+        echo "<pre>";
+        print_r($header);
+        exit;*/
         curl_close($chpncp);
 
         $retorno = explode(':', $contentpncp);
 
+        if(substr($retorno[0], 7, 3) != 201 && $retorno[17]){
+            return array($retorno[17], substr($retorno[0], 7, 3));
+        }
+
         if (substr($retorno[0], 7, 3) == 201) {
             return array($retorno[5] . $retorno[6], substr($retorno[0], 7, 3));
-        } else {
-            return array($retorno[17], substr($retorno[0], 7, 3));
+        }
+
+        if(substr($retorno[8], 1, 3) == "422"){
+            return array($retorno[2],"422");
         }
     }
 
@@ -184,20 +199,11 @@ class AtaRegistroprecoPNCP extends ModeloBasePNCP
             'Tipo-Documento: ' . $iTipoAnexo
         );
 
-        $optionspncp = $this->getParancurl('POST',$post_data,$headers,false,false);
+        $optionspncp = $this->getParancurl('POST',$post_data,$headers,false,true);
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
         curl_close($chpncp);
-        /*$err     = curl_errno($chpncp);
-        $errmsg  = curl_error($chpncp);
-        $header  = curl_getinfo($chpncp);
-        $header['errno']   = $err;
-        $header['errmsg']  = $errmsg;
-        $header['header']  = $contentpncp;
-        echo "<pre>";
-        print_r($header);
-        exit;*/
         $retorno = explode(':', $contentpncp);
 
         if ($retorno[5] == ' https') {
