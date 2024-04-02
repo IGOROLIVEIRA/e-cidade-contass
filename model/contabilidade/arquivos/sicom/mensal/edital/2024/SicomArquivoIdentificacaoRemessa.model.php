@@ -94,7 +94,6 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
                 throw new Exception($clideedital->erro_msg);
             }
         }
-        echo pg_num_rows($rsResult);
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
             $clideedital = new cl_ideedital2024();
