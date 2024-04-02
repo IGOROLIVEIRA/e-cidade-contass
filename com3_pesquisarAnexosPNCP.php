@@ -83,8 +83,8 @@ $oRotulo->label("pc80_resumo");
 
     oGridDocumentos.nameInstance = "oGridDocumentos";
     oGridDocumentos.setCheckbox(0);
-    oGridDocumentos.setCellAlign(new Array("center", "center", "center"));
-    oGridDocumentos.setCellWidth(["30%", "30%", "30%"]);
+    oGridDocumentos.setCellAlign(new Array("center", "center", "center", "center"));
+    oGridDocumentos.setCellWidth(["2%", "15%", "80%", "30%"]);
     oGridDocumentos.setHeader(new Array("Seq", "Código", "Tipo"));
     oGridDocumentos.aHeaders[1].lDisplayed = false;
     oGridDocumentos.allowSelectColumns(true);

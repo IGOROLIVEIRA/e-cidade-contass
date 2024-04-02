@@ -12,15 +12,15 @@ $sqlPNPC = "SELECT 3 AS tipoInstrumentoConvocatorioId,
        l213_dtlancamento,
        db_usuarios.nome,
        pc80_orcsigiloso,
-       5 AS modoDisputaId,
+       5 AS mododisputaid,
        pc80_criteriojulgamento,
        pcproc.pc80_data,
        pcproc.pc80_data,
        l212_lei
 FROM pcproc
-INNER JOIN liccontrolepncp ON l213_processodecompras = pc80_codproc
-inner join amparolegal on l212_codigo = pc80_amparolegal
-inner join db_usuarios on id_usuario = l213_usuario
+left JOIN liccontrolepncp ON l213_processodecompras = pc80_codproc
+left join amparolegal on l212_codigo = pc80_amparolegal
+left join db_usuarios on id_usuario = l213_usuario
 WHERE pc80_codproc = $iProcesso
 ";
 ?>
