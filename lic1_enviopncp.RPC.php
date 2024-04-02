@@ -324,6 +324,7 @@ switch ($oParam->exec) {
         $oRetorno->licitacoes = $itens;
         break;
     case 'enviarAtaRP':
+
         $clLicitacao  = db_utils::getDao("liclicita");
         $cllicanexopncp = db_utils::getDao("licanexopncp");
         try {
@@ -331,6 +332,10 @@ switch ($oParam->exec) {
 
                 //licitacao
                 $rsDadosEnvioAta = $clLicitacao->sql_record($clLicitacao->sql_query_ata_pncp($aLicitacao->codigo));
+
+                if(!pg_num_rows($rsDadosEnvioAta)){
+                    throw new Exception("Dados de envio não localizado para ATA.");
+                }
 
                 for ($licAta = 0; $licAta < pg_num_rows($rsDadosEnvioAta); $licAta++) {
                     $oDadosLicitacao = db_utils::fieldsMemory($rsDadosEnvioAta, $licAta);
@@ -349,7 +354,7 @@ switch ($oParam->exec) {
                             $l215_ata = substr($urlResutltado[0],85);
                         }else{
                             //Ambiente de Producao
-                            $l215_ata = substr($urlResutltado[0],79);
+                            $l215_ata = substr($urlResutltado[0],78);
                         }
                         $l215_numerocontrolepncp = db_utils::getCnpj() . '-1-' . substr($aLicitacao->numerocontrole, 17, -5) . '/' . substr($aLicitacao->numerocontrole, 24) . '-' . str_pad($l215_ata, 6, '0', STR_PAD_LEFT);
                         $clliccontroleatarppncp->l215_licitacao = $aLicitacao->codigo;

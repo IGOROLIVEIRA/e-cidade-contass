@@ -168,8 +168,8 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 	        INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
 			LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
             LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
-			WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao)= " . db_getsession("DB_anousu") . "
-			AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+			WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND DATE_PART('YEAR',homologacaoadjudica.l202_datareferencia)= " . db_getsession("DB_anousu") . "
+			AND DATE_PART('MONTH',homologacaoadjudica.l202_datareferencia)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
 			AND pctipocompratribunal.l44_sequencial IN ('48',
 		                                                  '49',
 		                                                  '50',
@@ -287,9 +287,7 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 				licpregao.l45_validade as finalVigencia,
 				cgm.z01_cgccpf as cpfMembroComissao,
 				licpregaocgm.l46_tipo as codAtribuicao,
-				case when l46_tipo = 1 then 'Leiloeiro' when l46_tipo = 2 then 'Membro/Equipe de Apoio'
-	 when l46_tipo = 3 then 'Presidente' when l46_tipo = 4 then 'Secretário' when l46_tipo = 5 then 'Servidor Designado'
-	 when l46_tipo = 6 then 'Pregoeiro' end as cargo,
+                l46_cargo as cargo,
 				l46_naturezacargo as naturezaCargo,
                 liclicita.l20_leidalicitacao as leidalicitacao,
                 manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
@@ -332,7 +330,7 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
             $clresplic20->si56_finalvigencia = $oDados20->finalvigencia;
             $clresplic20->si56_cpfmembrocomissao = $oDados20->cpfmembrocomissao;
             $clresplic20->si56_codatribuicao = $oDados20->codatribuicao;
-            $clresplic20->si56_cargo = $oDados20->cargo;
+            $clresplic20->si56_cargo = $this->removeCaracteres($oDados20->cargo);
             $clresplic20->si56_naturezacargo = $oDados20->naturezacargo;
             $clresplic20->si56_instit = db_getsession("DB_instit");
             $clresplic20->si56_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];

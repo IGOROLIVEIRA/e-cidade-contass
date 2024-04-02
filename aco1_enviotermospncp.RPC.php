@@ -34,39 +34,63 @@ switch ($oParam->exec) {
 
             if($oTermo->getTipo() == '15' || $oTermo->getTipo() == '16' || $oTermo->getTipo() == '17'){
                 $oItemTermo->numeroAditamento = $oTermo->getNumeroApostilamento();
-                $oItemTermo->numtermopncp = $oAcordo->getNumeroTermoPNCP($oParam->iContrato,$oTermo->getCodigo());
             }else{
                 $oItemTermo->numeroAditamento = $oTermo->getNumeroAditamento();
-                $oItemTermo->numtermopncp = $oAcordo->getNumeroTermoPNCP($oParam->iContrato,$oTermo->getCodigo());
             }
+            $oItemTermo->numtermopncp = $oAcordo->getNumeroTermoPNCP($oParam->iContrato,$oTermo->getCodigo());
             $oItemTermo->situacao = urlencode($oTermo->getDescricaoTipo());
             $oItemTermo->data = $oTermo->getData();
             $oItemTermo->Justificativa = urlencode($oTermo->getJusitificativa());
             $oRetorno->dados[] = $oItemTermo;
+            $numeroAditamento = $oTermo->getNumeroAditamento();
         }
+
+        if($oAcordo->getSituacao() == "2"){
+
+            $aDadosTermosRescisao = new stdClass();
+            $aDadosTermosRescisao->codigo = $oTermo->getCodigo();
+            $aDadosTermosRescisao->vigencia = urlencode($oTermo->getVigenciaInicial() . " até " . $oTermo->getVigenciaFinal());
+            $aDadosTermosRescisao->numeroAditamento = $numeroAditamento + 1;
+            $aDadosTermosRescisao->numtermopncp = $oAcordo->getSeqTermoRecisaopncp($oAcordo->getCodigo(),$aDadosTermosRescisao->numeroAditamento);
+            $aDadosTermosRescisao->situacao = urlencode($oAcordo->getRecisoes()[0]->ac09_descricao);
+            $aDadosTermosRescisao->data = implode("/",array_reverse(explode("-",$oAcordo->getRecisoes()[0]->ac10_datamovimento)));
+            $aDadosTermosRescisao->Justificativa = $oAcordo->getRecisoes()[0]->ac10_justificativa;
+            $oRetorno->dados[] = $aDadosTermosRescisao;
+        }
+
         break;
     case 'enviarTermo':
 
         $clacocontrolepncp = new cl_acocontratopncp;
         $oAcordo = new Acordo($oParam->iContrato);
+        $cl_acocontroletermospncp = new cl_acocontroletermospncp();
 
         //Buscos Chave do Contrato do PNCP
         $rsAvisoPNCP = $clacocontrolepncp->sql_record($clacocontrolepncp->sql_query(null, "ac213_numerocontrolepncp,ac213_contrato,ac213_sequencialpncp,ac213_ano", null, "ac213_contrato = $oParam->iContrato limit 1"));
         $oDadosAvisoPNCP = db_utils::fieldsMemory($rsAvisoPNCP, 0);
 
+
+
         try {
             foreach ($oParam->aTermo as $termo) {
-                
-                $aDadosTermos = $oAcordo->getDadosTermosPncp($termo->codigo);
-                
+
+                //Verifica se ja existe lancamento de termo de recisao no PNCP
+                $rsTermoPNCP = $cl_acocontroletermospncp->sql_record($cl_acocontroletermospncp->sql_query(null,"*",null,"l214_acordo = $oParam->iContrato and l214_tipotermocontratoid = 1"));
+
+                if(pg_num_rows($rsTermoPNCP)){
+                    throw new Exception(utf8_decode("Contrato já possui termo de rescisão publicado no pncp."));
+                }
+
+                $aDadosTermos = $oAcordo->getDadosTermosPncp($termo->codigo,$termo->numeroaditamento);
+
                 //classe modelo
                 $clTermodeContrato = new TermodeContrato($aDadosTermos);
                 //monta o json com os dados da licitacao
                 $oDadosTermo = $clTermodeContrato->montarDados();
-                
+
                 //envia para pncp
                 $rsApiPNCP = $clTermodeContrato->enviarTermo($oDadosTermo, $oDadosAvisoPNCP->ac213_sequencialpncp, $oDadosAvisoPNCP->ac213_ano);
-                
+
                 if ($rsApiPNCP[1] == 201) {
                     $l214_numerotermo = explode('x-content-type-options', $rsApiPNCP[0]);
                     $l214_numerotermo = preg_replace('#\s+#', '', $l214_numerotermo);
@@ -79,9 +103,11 @@ switch ($oParam->exec) {
                     $cl_acocontroletermospncp->l213_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));
                     $cl_acocontroletermospncp->l214_anousu = $oDadosAvisoPNCP->ac213_ano;
                     $cl_acocontroletermospncp->l214_acordo = $oParam->iContrato;
-                    $cl_acocontroletermospncp->l214_numeroaditamento = $aDadosTermos[0]->numerotermocontrato;
+                    $cl_acocontroletermospncp->l214_numeroaditamento = $termo->numeroaditamento;
                     $cl_acocontroletermospncp->l214_acordoposicao = $termo->codigo;
                     $cl_acocontroletermospncp->l214_instit = db_getsession('DB_instit');
+                    $cl_acocontroletermospncp->l214_tipotermocontratoid = $aDadosTermos[0]->tipotermocontratoid;
+
                     $cl_acocontroletermospncp->incluir();
 
                     $oRetorno->status  = 1;
