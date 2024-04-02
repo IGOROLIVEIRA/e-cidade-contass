@@ -706,9 +706,9 @@ if ($x->consultarDataDoSistema == true) {
 
             aLinha[1] = oItem.codigomaterial;
             // Descrição
-            aLinha[2] = oItem.material.urlDecode().substring(0, 32);
+            aLinha[2] = oItem.material.urlDecode();
 
-            aLinha[3] = oItem.unidade;
+            aLinha[3] = oItem.unidade.urlDecode();
 
 
             // Quantidade
