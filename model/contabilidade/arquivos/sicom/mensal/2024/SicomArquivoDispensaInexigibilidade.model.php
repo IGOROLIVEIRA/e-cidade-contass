@@ -1159,9 +1159,6 @@ ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1
 	pcorcamval.pc23_quant as quantidade,
   manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
 	FROM liclicita
-	INNER JOIN habilitacaoforn on (liclicita.l20_codigo=habilitacaoforn.l206_licitacao)
-	INNER JOIN pcforne on (habilitacaoforn.l206_fornecedor=pcforne.pc60_numcgm)
-	INNER JOIN cgm on (pcforne.pc60_numcgm=cgm.z01_numcgm)
 	INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
 	INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
 	INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita)
@@ -1177,7 +1174,9 @@ inner join pcorcamforne on
 inner join pcorcamjulg on
 	(pcorcamitem.pc22_orcamitem = pcorcamjulg.pc24_orcamitem
 	and pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne)
-
+  INNER JOIN habilitacaoforn on (pcorcamforne.pc21_numcgm=habilitacaoforn.l206_fornecedor and liclicita.l20_codigo=habilitacaoforn.l206_licitacao)
+  INNER JOIN pcforne on (habilitacaoforn.l206_fornecedor=pcforne.pc60_numcgm)
+	INNER JOIN cgm on (pcforne.pc60_numcgm=cgm.z01_numcgm)
   INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
 	INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
 	INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)

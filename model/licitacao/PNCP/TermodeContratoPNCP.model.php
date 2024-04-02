@@ -184,7 +184,7 @@ class TermodeContrato extends ModeloBasePNCP
             'Tipo-Documento-Id: ' . $iTipoAnexo
         );
 
-        $optionspncp = $this->getParancurl('POST',$post_data,$headers,false,false);
+        $optionspncp = $this->getParancurl('POST',$post_data,$headers,false,true);
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
@@ -202,8 +202,10 @@ class TermodeContrato extends ModeloBasePNCP
 
         if ($retorno[5] == ' https') {
             return array(201, $retorno[6]);
-        } else {
-            return array(422, "Erro ao enviar anexo");
+        }
+
+        if (substr($retorno[8],1,3) == "422") {
+            return array(422, $retorno[2]);
         }
     }
 

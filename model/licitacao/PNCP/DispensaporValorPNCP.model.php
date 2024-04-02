@@ -85,7 +85,7 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
         $oDadosAPI->numeroCompra                    = $oDado->numerocompra;
         $oDadosAPI->anoCompra                       = $oDado->anocompra;
         $oDadosAPI->numeroProcesso                  = $oDado->numeroprocesso;
-        $oDadosAPI->objetoCompra                    = $this->formatText($oDado->objetocompra);
+        $oDadosAPI->objetoCompra                    = utf8_encode($oDado->objetocompra);
         $oDadosAPI->informacaoComplementar          = $oDado->informacaocomplementar;
         $oDadosAPI->srp                             = $oDado->srp == 'f' ? 'false' : 'true';
         $oDadosAPI->orcamentoSigiloso               = $oDado->orcamentosigiloso == 'f' ? 'false' : 'true';

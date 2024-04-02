@@ -33,8 +33,7 @@ class GerarEXT extends GerarAM
                   si165_codorgao,
                   si165_codext,
                   si165_codfontrecursos,
-                  sum (case when si165_natsaldoanteriorfonte = 'D' then (si165_vlsaldoanteriorfonte) *-1
-                  else  (si165_vlsaldoanteriorfonte)  end) as si165_vlsaldoanteriorfonte,
+                  sum(si165_vlsaldoanteriorfonte) as si165_vlsaldoanteriorfonte,
                   sum(si165_totaldebitos) as si165_totaldebitos,
                   sum(si165_totalcreditos) as si165_totalcreditos ,
                   sum(si165_vlsaldoatualfonte) as si165_vlsaldoatualfonte,
