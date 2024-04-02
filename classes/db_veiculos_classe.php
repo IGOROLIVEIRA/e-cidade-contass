@@ -1741,4 +1741,54 @@ class cl_veiculos
 
     return $sql;
   }
+
+  /**
+  *
+  * @param string $ve01_nroserie - Número de Série
+  * @param int $si04_especificacao - Especificação
+  * @param int $ve01_codigo - Código do veiculo
+  * @param string $opcao - "inclusao/alteracao"
+  * @return bool
+  */
+  public function validacaoNumeroSerie($ve01_nroserie,$si04_especificacao,$ve01_codigo,$opcao){
+
+    if($opcao == "inclusao"){
+
+      $rsValidacaoNumeroSerie = db_query("
+      select
+      *
+      from
+        veiculos
+      inner join tipoveiculos on
+        si04_veiculos = ve01_codigo
+      where
+        ve01_nroserie = '$ve01_nroserie' and si04_especificacao = $si04_especificacao;");
+  
+      if(pg_num_rows($rsValidacaoNumeroSerie) > 0){
+          return false;
+      }
+
+      return true;
+
+    }
+
+    $rsValidacaoNumeroSerie = db_query("
+    select
+      *
+    from
+      veiculos
+    inner join tipoveiculos on
+      si04_veiculos = ve01_codigo
+    where
+      ve01_nroserie = '$ve01_nroserie'
+      and si04_especificacao = $si04_especificacao
+      and ve01_codigo != $ve01_codigo;");
+
+    if(pg_num_rows($rsValidacaoNumeroSerie) > 0){
+        return false;
+    }
+
+    return true;
+
+  }
 }
