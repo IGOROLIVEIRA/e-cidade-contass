@@ -18,7 +18,7 @@ $modalidade = "Dispença sem Disputa";
 if ($oPcproc->getModalidadeContratacao() == "9"){
     $modalidade = "Inexigibilidade";
 }
-
+$dadoscomplementares = utf8_decode($oPcproc->getDadosComplementares());
 $pdf = new SCPDF();
 $pdf->Open();
 $pdf->AliasNbPages();
@@ -36,14 +36,23 @@ $pdf->MultiCell(0,4,"{$ender} No {$numero} {$bairro}",0,"C",0);
 $pdf->Ln(32);
 $pdf->SetFont('Arial','B',14);
 $pdf->SetFillColor(235);
-$pdf->MultiCell(0,8,"Processo de Compra:" . $oPcproc->getDataEmissao(),"TLR","C",0);
-$pdf->MultiCell(0,8,"$modalidade Nº:".$oPcproc->getNumerodispensa()."/".$ano,"BLR","C",0);
-$pdf->Ln(12);
+$pdf->roundedrect(10, 80, 190, 35, 2, 'df', 1234);
+$pdf->MultiCell(0,8,"Processo de Compra:" . $oPcproc->getCodigo(),"","C",0);
+$pdf->MultiCell(0,8,"$modalidade Nº:".$oPcproc->getNumerodispensa()."/".$ano,"","C",0);
+$pdf->Ln(14);
+$pdf->roundedrect(10, 110, 190, 5, 2, 'DF', 12);
+$pdf->sety(109);
+$pdf->SetFont('Arial','b',12);
+$pdf->cell(180, 8, 'Objeto', 0, 1, "C");
 $pdf->SetFont('Arial','',12);
-$pdf->MultiCell(0,4,"Resumo do Processo: {$oPcproc->getResumo()}",0,"C",0);
-$pdf->Ln(7);
-if($oPcproc->getDadosComplementares()){
-$pdf->MultiCell(0,4,"Dados Complementares:{$oPcproc->getDadosComplementares()}",0,"C",0);
-}
+$pdf->MultiCell(0,4,"{$oPcproc->getResumo()}",0,"L",0);
+$pdf->roundedrect(10, 110, 190, 35, 2, 'df', 1234);
+$pdf->sety(144);
+$pdf->roundedrect(10, 145, 190, 5, 2, 'DF', 12);
+$pdf->SetFont('Arial','b',12);
+$pdf->cell(180, 8, 'Dados Complementares', 0, 1, "C");
+$pdf->roundedrect(10, 145, 190, 35, 2, 'df', 1234);
+$pdf->SetFont('Arial','',12);
+$pdf->MultiCell(0,4,$dadoscomplementares,0,"L",0);
 $pdf->Output();
 ?>
