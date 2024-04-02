@@ -1,31 +1,4 @@
 <?php
-/*
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2012  DBselller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
-
-use App\Models\Socio;
 
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
@@ -331,7 +304,7 @@ db_app::load("strings.js");
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad='js_atualiza_abainscr();'>
 <center>
     <table width="790" border="0" cellspacing="0" cellpadding="0">
         <tr>
@@ -347,6 +320,12 @@ db_app::load("strings.js");
 </center>
 </body>
 </html>
+<script>
+    function js_atualiza_abainscr() {
+        parent.iframe_issbase.document.form1.submit();
+    }
+
+</script>
 <?php
 if (isset($incluir) || isset($alterar) || isset($excluir)) {
 
@@ -369,137 +348,3 @@ if (isset($incluir) || isset($alterar) || isset($excluir)) {
     }
 }
 ?>
-
-<script>
-    (function () {
-
-        const options = <?=Socio::getAssociateLabelOptions()?>;
-
-        const q95_tipo = $("q95_tipo");
-        q95_tipo.addEventListener('change', js_mostraValr_capital());
-
-        // função verifica se q95_cgmpri e q95_numcgm são diferentes
-        function jc_VerificaCgmCpfIgual() {
-
-            const iEmpresa = $F('q95_cgmpri');
-            const iSocio = $F('q95_numcgm');
-            if (iEmpresa !== iSocio) {
-                return true;
-            }
-
-            alert('Não será possível fazer a inclusão do cgm da própria inscrição como sócio');
-            iSocio.value = '';
-            iSocio.focus();
-            return false;
-        }
-
-        function js_atualiza_abainscr() {
-            parent.iframe_issbase.document.form1.submit();
-        }
-
-        // função que valida o tipo de pessoa, fisica ou juridica, se for fisica, não habilitara a opção sócio no select q95_tipo
-        function js_tipoPessoa() {
-
-            q95_tipo.options = Object.keys(options).map((index, label) => new Option(label, index));
-            q95_tipo.options.unshift(new Option('Selecione...', ''));
-        }
-
-        // função que disponibiliza o campo q95_tipo se o tipo de socio for 1 : socio
-        function js_mostraValr_capital() {
-            console.log('aqui');
-            const iTipo = $F('q95_tipo');
-            if (iTipo === 1 || iTipo === '1') {
-                $('valor_capital').show();
-                jc_VerificaCgmCpfIgual();
-            } else {
-                $('valor_capital').hide();
-                $('q95_perc').value = '';
-            }
-        }
-
-        function js_verificatipo() {
-
-            const iTipo = $F('q95_tipo');
-            if (iTipo !== 1) {
-                $('q95_perc').value = 0;
-            }
-            if (iTipo === 0 || iTipo === '0') {
-                alert('Selecione o tipo de sócio.');
-
-                return false;
-            } else {
-                return true;
-            }
-
-        }
-
-        function js_cancelar() {
-
-            <?php
-            if (isset($q95_cgmpri)) {
-                echo "location.href=\"iss1_socios004.php?q95_cgmpri={$q95_cgmpri}&z01_nome={$z01_nome}\";\n";
-            }
-            ?>
-        }
-
-        function js_pesquisaq95_numcgm(mostra) {
-            if (mostra === true) {
-                js_OpenJanelaIframe('CurrentWindow.corpo.iframe_socios', 'db_iframe_cgm', 'func_nome.php?filtro=3&testanome=true&funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome|z01_ender|z01_cgccpf', 'Pesquisa', true, 0);
-            } else {
-                js_OpenJanelaIframe('CurrentWindow.corpo.iframe_socios', 'db_iframe_cgm', 'func_nome.php?filtro=3&testanome=true&pesquisa_chave=' + document.form1.q95_numcgm.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false, 0);
-            }
-        }
-
-        function js_mostracgm(erro, chave, chave2) {
-
-            if (chave2 === '') {
-                alert('Contribuinte com o CGM desatualizado');
-                document.form1.fisico_juridico.value = '';
-                document.form1.q95_numcgm.value = '';
-                document.form1.z01_nome_socio.value = 'Contribuinte com o CGM desatualizado';
-                js_tipoPessoa();
-                return false;
-            }
-
-            document.form1.z01_nome_socio.value = chave;
-            document.form1.fisico_juridico.value = chave2;
-            js_tipoPessoa();
-            if (erro === true) {
-                document.form1.q95_numcgm.focus();
-                document.form1.q95_numcgm.value = '';
-            }
-        }
-
-        function js_mostracgm1(chave1, chave2, chave3, chave4) {
-            if (chave3 === '' || chave4 === '') {
-                alert('Contribuinte com o CGM desatualizado');
-                document.form1.fisico_juridico.value = '';
-                document.form1.q95_numcgm.value = '';
-                document.form1.z01_nome_socio.value = 'Contribuinte com o CGM desatualizado';
-
-            } else {
-                document.form1.fisico_juridico.value = chave4;
-                document.form1.q95_numcgm.value = chave1;
-                document.form1.z01_nome_socio.value = chave2;
-            }
-            js_tipoPessoa();
-            db_iframe_cgm.hide();
-        }
-
-        function js_pesquisa() {
-            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_socios', 'db_iframe_socios', 'func_socios.php?funcao_js=parent.js_preenchepesquisa|q95_numcgm|1', 'Pesquisa', true, 0);
-        }
-
-        function js_preenchepesquisa(chave, chave1) {
-            db_iframe_socios.hide();
-            <?php
-            if ($db_opcao != 1) {
-                echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave;";
-            }
-            ?>
-        }
-
-        js_mostraValr_capital();
-        js_atualiza_abainscr();
-    })();
-</script>
