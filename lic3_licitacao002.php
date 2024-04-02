@@ -425,6 +425,16 @@ if (!empty($oProcessoProtocolo)) {
             "lic3_infolicedital002.php?{$sGetUrl}"
         );
     }
+    $oVerticalTab->add(
+        'dadosPncp',
+        'Dados PNCP',
+        "lic3_dadospcnp.php?{$sGetUrl}"
+    );
+    $oVerticalTab->add(
+        'AnexosPncp',
+        'Anexos PNCP',
+        "lic3_anexospncp.php?{$sGetUrl}"
+    );
     $oVerticalTab->show();
     ?>
 
