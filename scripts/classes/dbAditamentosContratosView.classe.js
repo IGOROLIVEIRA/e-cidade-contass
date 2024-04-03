@@ -1166,6 +1166,15 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
           return alert("obrigatório informar a data de Referência.");
       }
 
+      if (me.oTxtDataInicial.getValue() == "") {
+        return alert("obrigatrio informar a data de vigencia inicial.");
+      }
+
+      if (me.oTxtDataFinal.getValue() == "") {
+        return alert("obrigatrio informar a data de vigencia final.");
+      }
+
+
       if (me.oCboTipoAditivo.getValue() == 5) {
           if(me.oPercentualReajuste.getValue()=="" || me.oPercentualReajuste.getValue()==null){
               return alert("obrigatório informar o Percentual de Reajuste.");
@@ -1186,9 +1195,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
           if(criterios.includes(criterioreajuste) && descricaoindice == ""){
               return alert("obrigatório informar a Descrição do Índice.");
           }
-
       }
-
 
       var dataAssinatura = me.oTxtDataAssinatura.getValue().split("/");
       var dtAssinatura   =  dataAssinatura[2] + "-" + dataAssinatura[1] + "-" + dataAssinatura[0];
@@ -1224,6 +1231,11 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
       if (datafim1 == datafim2) {
           vigenciaalterada = 'n';
       }
+
+      if (me.oCboTipoAditivo.getValue() == 6 && datafim1 == datafim2) {
+        return alert('Vigencia final deve ser alterada');
+      }
+
       var oParam = {
           exec: "processarAditamento",
           iAcordo: me.oTxtCodigoAcordo.getValue(),

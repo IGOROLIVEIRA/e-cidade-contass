@@ -340,7 +340,7 @@ function js_retornoGetDocumento(oAjax) {
     var aLinha = new Array();
     aLinha[0]  = oDocumento.iCodigo;
     aLinha[1]  = oDocumento.iAcordo;
-    aLinha[2]  = decodeURIComponent(escape(oDocumento.sDescricao));;
+    aLinha[2]  = decodeURIComponent(oDocumento.sDescricao);
     aLinha[3]  = '<input type="button" value="Alterar" onclick="js_alterarDocumento(' +oDocumento.iCodigo+ ');" >  ';
     aLinha[3]  += '<input type="button" value="Excluir" onclick="js_excluirDocumento(' +oDocumento.iCodigo+ ')" />  ';
 
