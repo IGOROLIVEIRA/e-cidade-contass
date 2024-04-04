@@ -8,12 +8,10 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 $oGet                = db_utils::postMemory($_GET);
 
-$sqlPNCP = "SELECT 3 AS tipoInstrumentoConvocatorioId,
-                       pc80_modalidadecontratacao,
+$sqlPNCP = "SELECT     pc80_modalidadecontratacao,
                        l213_dtlancamento,
                        db_usuarios.nome,
                        pc80_orcsigiloso,
-                       5 AS mododisputaid,
                        pc80_criteriojulgamento,
                        pcproc.pc80_data,
                        l212_lei
@@ -24,6 +22,17 @@ $sqlPNCP = "SELECT 3 AS tipoInstrumentoConvocatorioId,
                 WHERE pc80_codproc = $iProcesso
 ";
 $rsResultDados =  db_query($sqlPNCP);
+$oDadosPNCP = db_utils::fieldsMemory($rsResultDados,0);
+
+if($oDadosPNCP->pc80_modalidadecontratacao == "9"){
+    $modalidade = "INEXIGIBILIDADE";
+}
+
+if($oDadosPNCP->pc80_modalidadecontratacao == "8"){
+    $modalidade = "DISPENSA SEM DISPUTA";
+}
+
+$pc80_data = implode('/',array_reverse(explode('-',$oDadosPNCP->pc80_data)));
 
 ?>
 <html>
@@ -34,6 +43,11 @@ $rsResultDados =  db_query($sqlPNCP);
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
+    <style>
+        .background {
+            background-color: #FFFFFF;
+        }
+    </style>
 </head>
 <body bgcolor="#cccccc" onload="">
 <center>
@@ -41,69 +55,69 @@ $rsResultDados =  db_query($sqlPNCP);
         <div style="display: table;">
             <fieldset>
                 <legend><b>Dados PNCP:</b></legend>
-                <table style="border: 1px solid black">
+                <table>
                     <tr>
                         <td>
                             <strong>Tipo de Instrumento Convocatorio:</strong>
                         </td>
-                        <td>
-                            teste
+                        <td class="background">
+                            Ato que autoriza a Contratação Direta
                         </td>
                         <td>
                             <strong>Usuário:</strong>
                         </td>
-                        <td>
-                            mario junior
+                        <td class="background">
+                            <?= $oDadosPNCP->nome ?>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <strong>Modalidade de Contratação:</strong>
                         </td>
-                        <td>
-                            teste2
+                        <td class="background">
+                            <?=$modalidade?>
                         </td>
                         <td>
                             <strong>Modo disputa:</strong>
                         </td>
-                        <td>
-                            mododisputateste
+                        <td class="background">
+                            Não se aplica
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <strong>Data de lançamento:</strong>
                         </td>
-                        <td>
-                            teste3
+                        <td class="background">
+                            <?= $oDadosPNCP->l213_dtlancamento ?>
                         </td>
                         <td>
                             <strong>Critério de Julgamento:</strong>
                         </td>
-                        <td>
-                            criterio de julgamento
+                        <td class="background">
+                            <?=$oDadosPNCP->pc80_criteriojulgamento?>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <strong>Orçamento Sigiloso:</strong>
                         </td>
-                        <td>
-                            orcamento testeorcamento testeorcamento testeorcamento teste
+                        <td class="background">
+                            <?= $oDadosPNCP->pc80_orcsigiloso == 't' ? 'Sim' : 'Não' ?>
                         </td>
                         <td>
                             <strong>Data:</strong>
                         </td>
-                        <td>
-                            data do processo
+                        <td class="background">
+                            <?=$pc80_data?>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <strong>Lei:</strong>
                         </td>
-                        <td>
-                            l212_lei
+                        <td style="width: 300px" class="background">
+                            <?=$oDadosPNCP->l212_lei?>
                         </td>
                     </tr>
                 </table>
