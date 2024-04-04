@@ -30,6 +30,7 @@ class cl_regadesao302024
     var $si74_nrodocumento = null;
     var $si74_mes = 0;
     var $si74_instit = 0;
+    var $si74_reg10 = 0;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  si74_sequencial = int8 = sequencial
@@ -45,6 +46,7 @@ class cl_regadesao302024
                  si74_nrodocumento = varchar(14) = Número do  documento
                  si74_mes = int8 = Mês
                  si74_instit = int8 = Instituição
+                 si74_reg10 = int = reg10
                  ";
 
     //funcao construtor da classe
@@ -83,6 +85,7 @@ class cl_regadesao302024
             $this->si74_nrodocumento = ($this->si74_nrodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_nrodocumento"] : $this->si74_nrodocumento);
             $this->si74_mes = ($this->si74_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_mes"] : $this->si74_mes);
             $this->si74_instit = ($this->si74_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_instit"] : $this->si74_instit);
+            $this->si74_reg10 = ($this->si74_reg10 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_reg10"] : $this->si74_reg10);
         } else {
             $this->si74_sequencial = ($this->si74_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_sequencial"] : $this->si74_sequencial);
         }
@@ -134,6 +137,9 @@ class cl_regadesao302024
             $this->erro_status = "0";
             return false;
         }
+        if ($this->si74_reg10 == null) {
+            $this->si74_reg10 = "0";
+        }
         if ($si74_sequencial == "" || $si74_sequencial == null) {
             $result = db_query("select nextval('regadesao302024_si74_sequencial_seq')");
             if ($result == false) {
@@ -180,6 +186,7 @@ class cl_regadesao302024
                                       ,si74_nrodocumento
                                       ,si74_mes
                                       ,si74_instit
+                                      ,si74_reg10
                        )
                 values (
                                 $this->si74_sequencial
@@ -195,6 +202,7 @@ class cl_regadesao302024
                                ,'$this->si74_nrodocumento'
                                ,$this->si74_mes
                                ,$this->si74_instit
+                               ,$this->si74_reg10
                       )";
         $result = db_query($sql);
         if ($result == false) {

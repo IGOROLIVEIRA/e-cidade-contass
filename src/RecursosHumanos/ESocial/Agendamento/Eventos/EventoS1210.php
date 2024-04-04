@@ -69,9 +69,9 @@ class EventoS1210 extends EventoBase
                 for ($iCont = 0; $iCont < count($aDadosPorMatriculas); $iCont++) {
                     $aIdentificador = $this->buscarIdentificador($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime);
                     for ($iCont2 = 0; $iCont2 < count($aIdentificador); $iCont2++) {
-                        $std->infopgto[$seqinfopag]->codcateg = $oDados->codcateg; //Obrigat�rio
+                        $std->infopgto[$seqinfopag]->codcateg = $oDados->codcateg; //Obrigatório
 
-                        $std->infopgto[$seqinfopag] = new \stdClass(); //Obritat�rio
+                        $std->infopgto[$seqinfopag] = new \stdClass(); //Obritatório
 
                         $std->infopgto[$seqinfopag]->dtpgto = "$ano-$mes-$dia";
                         $std->infopgto[$seqinfopag]->tppgto = $this->tppgto;
@@ -217,9 +217,6 @@ class EventoS1210 extends EventoBase
                 and rh30_vinculo = 'A'
                 and r33_tiporegime = '1')
             )
-            and rh30_regime <> '2'
-            and rescisao.r59_mesusu <> $mes
-            and rescisao.r59_anousu <> $ano
             ";
         }
         //2299
