@@ -2093,12 +2093,12 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             resultadoValidacao = verificaMembrosModalidadeParaLei1(descricaoModalidade);  
             if(resultadoValidacao == false && descricaoModalidade == "pregao"){
                 document.getElementById("l20_equipepregao").value = "";
-                return alert("Para as modalidades Pregão presencial e Pregão eletrônico é necessário\nque a Comissão de Licitação tenha no mínimo um integrante do tipo Pregoeiro");
+                return alert("Usuário: Para as modalidades Pregão Presencial e Pregão Eletrônico é necessário que a Comissão de Licitação tenha o tipo Pregoeiro.");
             }
 
             if(resultadoValidacao == false && descricaoModalidade == "outros"){
                 document.getElementById("l20_equipepregao").value = "";
-                return alert("Para as modalidades Tomada de Preços, Concorrência e Convite é necessário\nque a Comissão de Licitação um integrante do tipo Agente de contratação ou um integrante do tipo Comissão de Contratação");
+                return alert("Usuário: Para as modalidades Tomada de Preços, Concorrência e Convite necessário que a Comissão de Licitação tenham os tipos Agente de contratação ou Comissão de Contratação.");
             }
 
             return;

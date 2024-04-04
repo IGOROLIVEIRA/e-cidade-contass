@@ -4801,7 +4801,7 @@ class cl_liclicita
         inner join licpregaocgm on
             l46_licpregao = l45_sequencial
         where
-            l45_sequencial = 6 and l46_tipo in(7, 8)");
+            l45_sequencial = $sequencialComissao and l46_tipo in(7, 8)");
 
            if(pg_num_rows($rsLicPregao) > 0){
                 return true;
