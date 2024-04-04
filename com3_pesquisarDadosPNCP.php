@@ -12,7 +12,12 @@ $sqlPNCP = "SELECT     pc80_modalidadecontratacao,
                        l213_dtlancamento,
                        db_usuarios.nome,
                        pc80_orcsigiloso,
-                       pc80_criteriojulgamento,
+                       case
+                           when pc80_criteriojulgamento = 1 then 'Menor preço'
+                           when pc80_criteriojulgamento = 2 then 'Maior Desconto'
+                           when pc80_criteriojulgamento = 5 then 'Maior Lance'
+                           when pc80_criteriojulgamento = 7 then 'Não se Aplica'
+                           end as pc80_criteriojulgamento,
                        pcproc.pc80_data,
                        l212_lei
                 FROM pcproc
