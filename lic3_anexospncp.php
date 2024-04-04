@@ -235,13 +235,6 @@ $oRotulo->label("l20_objeto");
      */
     const js_downloadAnexos = () => {
 
-
-        const iCodigoProcesso = $('l20_codigo').value
-
-        if (empty(iCodigoProcesso)) {
-            return false
-        }
-
         const documentosSelecionados = oGridDocumentos.getSelection("object")
         if (documentosSelecionados.length == 0) {
             alert('Selecione pelo menos arquivo para download')
@@ -285,6 +278,69 @@ $oRotulo->label("l20_objeto");
                 js_apagarZip(nomeDoZip)
             }, 3000)
         });
+
+    }
+
+    const js_arquivos = oCodigoDocumento => {
+        var oRetorno
+
+        var oAjax2 = new Ajax.Request(
+            sUrlRpc, {
+                parameters: 'json=' + Object.toJSON(oCodigoDocumento),
+                method: 'post',
+                asynchronous: false,
+
+                /**
+                 * Retorno do RPC
+                 */
+                onComplete: oAjax2 => {
+                    oRetorno = eval('(' + oAjax2.responseText + ")")
+                    var sMensagem = oRetorno.sMensagem.urlDecode()
+
+                    if (oRetorno.iStatus > 1) {
+
+                        alert(sMensagem)
+                        return false
+                    }
+                }
+            })
+
+        return oRetorno;
+
+    }
+
+    const js_ziparAnexos = (arquivos, callback) => {
+
+        var oParametros = new Object()
+        oParametros.exec = 'ziparAnexos'
+
+        arquivos.map(documento => {
+            novoTituloDeArquivo = documento.sCaminhoDownloadArquivo.replace('/tmp/', '')
+            documento.sTituloArquivo = novoTituloDeArquivo.slice(37)
+        })
+
+        oParametros.arquivos = arquivos
+
+        let oRetorno = null
+        var oAjax = new Ajax.Request(
+            sUrlRpc, {
+                method: 'post',
+                parameters: `json=${JSON.stringify(oParametros)}`,
+                onComplete: oAjax => {
+
+                    oRetorno = eval('(' + oAjax.responseText + ')')
+                    var sMensagem = oRetorno.sMensagem.urlDecode()
+
+                    if (oRetorno.iStatus > 1) {
+
+                        alert(sMensagem)
+                        return false
+                    }
+
+                    return callback(oRetorno.nomeDoZip)
+
+                }
+            })
 
     }
 
