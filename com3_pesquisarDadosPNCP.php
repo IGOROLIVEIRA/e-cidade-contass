@@ -7,22 +7,24 @@ require_once("std/db_stdClass.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 $oGet                = db_utils::postMemory($_GET);
-$sqlPNPC = "SELECT 3 AS tipoInstrumentoConvocatorioId,
-       pc80_modalidadecontratacao,
-       l213_dtlancamento,
-       db_usuarios.nome,
-       pc80_orcsigiloso,
-       5 AS mododisputaid,
-       pc80_criteriojulgamento,
-       pcproc.pc80_data,
-       pcproc.pc80_data,
-       l212_lei
-FROM pcproc
-left JOIN liccontrolepncp ON l213_processodecompras = pc80_codproc
-left join amparolegal on l212_codigo = pc80_amparolegal
-left join db_usuarios on id_usuario = l213_usuario
-WHERE pc80_codproc = $iProcesso
+
+$sqlPNCP = "SELECT 3 AS tipoInstrumentoConvocatorioId,
+                       pc80_modalidadecontratacao,
+                       l213_dtlancamento,
+                       db_usuarios.nome,
+                       pc80_orcsigiloso,
+                       5 AS mododisputaid,
+                       pc80_criteriojulgamento,
+                       pcproc.pc80_data,
+                       l212_lei
+                FROM pcproc
+                left JOIN liccontrolepncp ON l213_processodecompras = pc80_codproc
+                left join amparolegal on l212_codigo = pc80_amparolegal
+                left join db_usuarios on id_usuario = l213_usuario
+                WHERE pc80_codproc = $iProcesso
 ";
+$rsResultDados =  db_query($sqlPNCP);
+
 ?>
 <html>
 <head>
@@ -39,9 +41,72 @@ WHERE pc80_codproc = $iProcesso
         <div style="display: table;">
             <fieldset>
                 <legend><b>Dados PNCP:</b></legend>
-                <?
-                db_lovrot($sqlPNPC, 15);
-                ?>
+                <table style="border: 1px solid black">
+                    <tr>
+                        <td>
+                            <strong>Tipo de Instrumento Convocatorio:</strong>
+                        </td>
+                        <td>
+                            teste
+                        </td>
+                        <td>
+                            <strong>Usuário:</strong>
+                        </td>
+                        <td>
+                            mario junior
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Modalidade de Contratação:</strong>
+                        </td>
+                        <td>
+                            teste2
+                        </td>
+                        <td>
+                            <strong>Modo disputa:</strong>
+                        </td>
+                        <td>
+                            mododisputateste
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Data de lançamento:</strong>
+                        </td>
+                        <td>
+                            teste3
+                        </td>
+                        <td>
+                            <strong>Critério de Julgamento:</strong>
+                        </td>
+                        <td>
+                            criterio de julgamento
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Orçamento Sigiloso:</strong>
+                        </td>
+                        <td>
+                            orcamento testeorcamento testeorcamento testeorcamento teste
+                        </td>
+                        <td>
+                            <strong>Data:</strong>
+                        </td>
+                        <td>
+                            data do processo
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Lei:</strong>
+                        </td>
+                        <td>
+                            l212_lei
+                        </td>
+                    </tr>
+                </table>
             </fieldset>
         </div>
     </form>
