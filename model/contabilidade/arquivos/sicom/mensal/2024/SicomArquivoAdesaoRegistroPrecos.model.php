@@ -562,6 +562,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
             $regadesao30->si74_nrodocumento = $oDados30->z01_cgccpf;
             $regadesao30->si74_instit = db_getsession("DB_instit");
             $regadesao30->si74_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+            $regadesao30->si74_reg10 = $regadesao10->si67_sequencial;
 
             $regadesao30->incluir(null);
             if ($regadesao30->erro_status == 0) {
@@ -605,6 +606,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
               $regadesao40->si73_nrodocumento = $oDados40->z01_cgccpf;
               $regadesao40->si73_instit = db_getsession("DB_instit");
               $regadesao40->si73_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+              $regadesao40->si73_reg10 = $regadesao10->si67_sequencial;
 
               $regadesao40->incluir(null);
               if ($regadesao40->erro_status == 0) {

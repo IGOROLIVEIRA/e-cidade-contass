@@ -102,7 +102,7 @@ switch ($oParam->exec) {
     try {
 
       $oPlanilhaArrecadacao = new PlanilhaArrecadacao();
-      $dtArrecadacao = date('Y-m-d', db_getsession('DB_datausu'));
+      $dtArrecadacao = formateDateReverse($oParam->novaDtRecebimento);
       $oPlanilhaArrecadacao->setDataCriacao($dtArrecadacao);
       $oPlanilhaArrecadacao->setInstituicao(InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit')));
       $oPlanilhaArrecadacao->setProcessoAdministrativo(db_stdClass::normalizeStringJsonEscapeString($oParam->k144_numeroprocesso));
@@ -159,6 +159,7 @@ switch ($oParam->exec) {
     try {
 
       $oPlanilhaArrecadacao = new PlanilhaArrecadacao($oParam->iPlanilha);
+      $oPlanilhaArrecadacao->setDataAutenticacao(formateDateReverse($oParam->dataestorno));
       $oPlanilhaArrecadacao->estornar();
       db_fim_transacao(false);
       $oRetorno->message = urlencode("Planilha {$oPlanilhaArrecadacao->getCodigo()} estornada com sucesso.");
@@ -228,6 +229,7 @@ switch ($oParam->exec) {
     try {
 
       $oPlanilhaArrecadacao = new PlanilhaArrecadacao($oParam->iPlanilha);
+      $oPlanilhaArrecadacao->setDataAutenticacao(formateDateReverse($oParam->novaDtRecebimento));
       $oPlanilhaArrecadacao->getReceitasPlanilha();
       $oPlanilhaArrecadacao->autenticar();
 
@@ -378,6 +380,67 @@ switch ($oParam->exec) {
 
 	break;
 
+    case 'verificaReceitaAutoComplete':
+
+      $descricao = strtoupper($oParam->iDescricao);
+      $cltabrec = new cl_tabrec;
+      $sSqlCampos   = " * ";
+      $sSqlWhere    = " k02_drecei ILIKE '%$descricao%' or k02_estorc ILIKE '%$descricao%' or o70_codigo ::text ILIKE '%$descricao%' ";
+      $sSqlMonta    = $cltabrec->sql_query_inst(null, $sSqlCampos, "k02_codigo", $sSqlWhere);
+     
+      $rsQuery = $cltabrec->sql_record($sSqlMonta);
+
+      if ($cltabrec->numrows > 0) {
+        for($i=0;$i<$cltabrec->numrows;$i++){
+          $oDadosRetorno = db_utils::fieldsMemory($rsQuery, $i);
+
+          $objRenomeado = new stdClass();
+
+          $objRenomeado->campo1 = $oDadosRetorno->k02_codigo;
+          $objRenomeado->campo2 = utf8_encode($oDadosRetorno->k02_drecei);
+          $objRenomeado->campo3 = $oDadosRetorno->k02_estorc ." - ".$oDadosRetorno->o70_codigo;
+          $oRetorno->oDados[] = $objRenomeado;
+        } 
+        $oRetorno->inputField  = $oParam->inputField;
+        $oRetorno->inputCodigo = $oParam->inputCodigo;
+        $oRetorno->ulField     = $oParam->ulField;
+        $oRetorno->status      = 2;
+        $oRetorno->tipo        = 1; // Tipo 2 AutoComplete Historicos
+      }
+
+  break;  
+
+  case 'verificaContaAutoComplete':
+
+    $descricao = strtoupper($oParam->iDescricao);
+    $clsaltes = new cl_saltes;
+    $sSqlCampos   = " * ";
+    $sSqlWhere    = " k13_descr ILIKE '%$descricao%'";
+    $sSqlMonta    = $clsaltes->sql_query_anousu(null, $sSqlCampos, "c61_codigo", $sSqlWhere);
+
+    $rsQuery = $clsaltes->sql_record($sSqlMonta);
+  
+    if ($clsaltes->numrows > 0) {
+      for($i=0;$i<$clsaltes->numrows;$i++){
+        $oDadosRetorno = db_utils::fieldsMemory($rsQuery, $i);
+
+        $objRenomeado = new stdClass();
+
+        $objRenomeado->campo1 = $oDadosRetorno->k13_reduz;
+        $objRenomeado->campo2 = utf8_encode($oDadosRetorno->k13_descr);
+        $objRenomeado->campo3 = $oDadosRetorno->c61_codigo;
+        $oRetorno->oDados[] = $objRenomeado;
+      } 
+      $oRetorno->inputField  = $oParam->inputField;
+      $oRetorno->inputCodigo = $oParam->inputCodigo;
+      $oRetorno->ulField     = $oParam->ulField;
+      $oRetorno->status      = 2;
+      $oRetorno->tipo        = 1; // Tipo 2 AutoComplete Historicos
+    }
+    
+break;  
+
+
 }
 /**
  * Busca o dedutora da receita caso exista
@@ -495,6 +558,13 @@ function buscaCgmMatricula($iMatricula) {
 
   throw new BusinessException($sMsgErro);
 
+}
+
+function formateDateReverse(string $date): string
+{
+    $data_objeto = DateTime::createFromFormat('d/m/Y', $date);
+    $data_formatada = $data_objeto->format('Y-m-d');
+    return date('Y-m-d', strtotime($data_formatada));
 }
 
 function buscaReceitaFundep($iReceita) {
