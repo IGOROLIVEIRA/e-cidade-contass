@@ -62,7 +62,7 @@ if ($l03_codigo != "") {
 }
 
 $sWhere        .= $sAnd . " l20_licsituacao in (1, 10, 13) and l20_instit = " . db_getsession("DB_instit");
-$sSqlLicLicita  = $clliclicita->sql_query(null, "distinct l20_codigo, l20_codtipocom,l20_edital,l20_dataaber,l20_objeto,l20_numero,l03_descr,l20_anousu", "l20_codtipocom,l20_numero,l20_anousu", $sWhere);
+$sSqlLicLicita  = $clliclicita->sql_query(null, "distinct l20_codigo, l20_codtipocom,l20_edital,l20_dataaber,l20_objeto,l20_numero,l03_descr,l20_anousu,l20_datacria", "l20_codtipocom,l20_numero,l20_anousu", $sWhere);
 $result         = $clliclicita->sql_record($sSqlLicLicita);
 $numrows        = $clliclicita->numrows;
 
@@ -118,7 +118,7 @@ if ($tipo == "PDF") {
     $pdf->setfont('arial', 'b', 8);
     $pdf->cell(30, $alt, 'Data Abertura :', 0, 0, "R", 0);
     $pdf->setfont('arial', '', 7);
-    $pdf->cell(30, $alt, db_formatar($l20_dataaber, 'd'), 0, 0, "L", 0);
+    $pdf->cell(30, $alt, db_formatar($l20_datacria, 'd'), 0, 0, "L", 0);
 
     $pdf->setfont('arial', 'b', 8);
     $pdf->cell(80, $alt, 'Número :', 0, 0, "R", 0);
@@ -303,42 +303,38 @@ if ($tipo == "PDF") {
       mso-header-margin: .5in;
       mso-footer-margin: .5in;
       mso-paper-source: 0;
+      /* Additional styles for headers and footers */
+      mso-header: "Header content here";
+      mso-footer: "Footer content here";
     }
 
     div.WordSection1 {
       page: WordSection1;
+      color: #333333;
     }
 
     body {
       font-family: Arial, sans-serif;
+      font-size: 8pt;
     }
 
     div {
-      font-size: 14px;
       text-align: center;
       border: 1px solid black;
     }
 
-    table {
-      font-size: 12px;
-      border: 1px solid black;
+    .table-header {
+      border: 0;
+      padding: 1px;
     }
 
-    .headerpref {
-      margin-top: 10px;
-      font-size: 11px;
-    }
-
-    .headertitulo {
-      border-collapse: collapse;
+    .table-header th {
       font-weight: bold;
-      margin-top: 10px;
-      font-size: 11px;
+      text-align: right;
     }
 
-    .headertitulo-value {
-      margin-top: 10px;
-      font-size: 11px;
+    .table-header tr {
+      text-align: left;
     }
 
     .table-item {
@@ -375,11 +371,11 @@ if ($tipo == "PDF") {
 <body>
   <div class=WordSection1>
     <table>
-      <tr class="headertr">
+      <tr>
         <td width=641>
-          <? echo $nomeinst . "<br>" . $ender . "<br>" . $munic . " - " . $uf . "<br>" . $telef . " - CNPJ : " . $cgc . "<br>" . $email . "<br>" . $url . "</p>"; ?>
+          <? echo "<b>".$nomeinst . "</b><br>" . $ender . "<br>" . $munic . " - " . $uf . "<br>" . $telef . " - CNPJ : " . $cgc . "<br>" . $email . "<br>" . $url . "</p>"; ?>
         </td>
-        <td width=221 colspan=4>
+        <td width=221 colspan=4 style="text-align: right;">
           <?= $head2 ?><br />
           <?= $head3 ?><br />
           <?= $head4 ?><br />
@@ -393,28 +389,29 @@ if ($tipo == "PDF") {
       <? if ($i > 0) {
         echo "<br clear=all style='page-break-before:always'>";
       } ?>
-      <table width="100%">
-        <tr class="headertr">
-          <td width=200 class="headertitulo">Código Sequencial:</td>
-          <td width=753 class="headertitulo-value" colspan=3 style="text-align: left;"><?= $l20_codigo ?></td>
+      <table width="100%" class="table-header">
         <tr>
-        <tr class="headertr">
-          <td class="headertitulo">Processo:</td>
-          <td style="text-align: left;" class="headertitulo-value"><?= $l20_edital ?></td>
-          <td width=82 class="headertitulo">Modalidade:</td>
-          <td style="text-align: left;" class="headertitulo-value"><?= $l03_descr ?></td>
+          <th width=115>Código Sequencial:</th>
+          <td width=743 colspan=3 style="text-align: left;"><?= $l20_codigo ?></td>
+        </tr>
         <tr>
-        <tr class="headertr">
-          <td class="headertitulo">Data Abertura:</td>
-          <td width=583 style="text-align: left;" class="headertitulo-value"><?= db_formatar($l20_dataaber, 'd') ?></td>
-          <td class="headertitulo">Número:</td>
-          <td width=583 style="text-align: left;" class="headertitulo-value"><?= $l20_numero ?></td>
+          <th width=115>Processo:</th>
+          <td width=312 style="text-align: left;"><?= $l20_edital ?></td>
+          <th width=115>Modalidade:</th>
+          <td width=312 style="text-align: left;"><?= $l03_descr ?></td>
+        </tr>
         <tr>
-        <tr class="headertr">
-          <td class="headertitulo">Objeto:</td>
-          <td colspan="3" style="font-weight: bold; text-align: left;" class="headertitulo-value"><?= $l20_objeto ?></td>
+          <th width="115">Data Abertura:</th>
+          <td width="312" style="text-align: left;"><?= db_formatar($l20_datacria, 'd') ?></td>
+          <th width="115">Número:</th>
+          <td width="312" style="text-align: left;"><?= $l20_numero ?></td>
+        </tr>
         <tr>
+          <th width=115>Objeto:</th>
+          <td width=743 colspan="3" style="font-weight: bold; text-align: left;"><?= $l20_objeto ?></td>
+        </tr>
       </table>
+      <hr style="border: 6px solid #000000;">
       <?
 
       $troca = 1;
@@ -476,7 +473,10 @@ if ($tipo == "PDF") {
           }
 
           if ($troca != 0) {
-            echo "<br clear=all style='page-break-before:always'>";
+
+            if ($w > 0) {
+              echo "<br clear=all style='page-break-before:always'>";
+            }
 
             $text = str_replace(array("\n", "\r"), ' ', $descricao);
             $text = mb_convert_encoding($text, 'UTF-8', 'ISO-8859-1');
@@ -491,18 +491,18 @@ if ($tipo == "PDF") {
             <br /><br />
             <table class="table-item" border="1">
               <tr>
-                <td style="font-weight: bold;">ITEM</td>
+                <td width="100" style="font-weight: bold;">ITEM</td>
                 <td colspan=3 style="font-weight: bold;">DESCRIÇÃO</td>
-                <td style="font-weight: bold;">UNIDADE</td>
+                <td width="100" style="font-weight: bold;">UNIDADE</td>
               </tr>
               <tr>
-                <td><?= $codigo ?></td>
-                <td colspan=3 style="text-align: justify;"><?= $text ?></td>
-                <td><?= strtoupper($m61_descr) ?></td>
+                <td width="100"><?= $codigo ?></td>
+                <td width="665" colspan=3 style="text-align: justify;"><?= $text ?></td>
+                <td width="100"><?= strtoupper($m61_descr) ?></td>
               </tr>
               <tr>
-                <th>COLOCAÇÃO</th>
-                <th style="text-align: left; font-weight: bold;">FORNECEDOR</th>
+                <th width="100">COLOCAÇÃO</th>
+                <th width=515 style="text-align: left; font-weight: bold;">FORNECEDOR</th>
                 <th width="50" style="font-weight: bold;">QTDD</th>
                 <th width="100" style="font-weight: bold;">VLR UNIT.</th>
                 <th width="100" style="font-weight: bold;">VLR TOTAL</th>
@@ -511,11 +511,11 @@ if ($tipo == "PDF") {
           }
             ?>
             <tr>
-              <td><?= $pc24_pontuacao ?></td>
-              <td style="text-align: left;"><?= $fornecedor ?></td>
-              <td><?= $pc23_quant ?></td>
-              <td style="text-align: right;"><?= 'R$' . db_formatar($pc23_vlrun, "f") ?></td>
-              <td style="text-align: right;"><?= 'R$' . db_formatar($pc23_valor, "f") ?></td>
+              <td width="100"><?= $pc24_pontuacao ?></td>
+              <td width=515 style="text-align: left;"><?= $fornecedor ?></td>
+              <td width="50"><?= $pc23_quant ?></td>
+              <td width="100" style="text-align: right;"><?= 'R$' . db_formatar($pc23_vlrun, "f") ?></td>
+              <td width="100" style="text-align: right;"><?= 'R$' . db_formatar($pc23_valor, "f") ?></td>
             </tr>
         <?
           $ordem = $l21_ordem;
