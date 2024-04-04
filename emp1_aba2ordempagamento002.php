@@ -99,8 +99,7 @@ if (isset($alterar)) {
         $oFimPeriodoContabil = db_utils::fieldsMemory($rsConsultaFimPeriodoContabil, 0);
 
         if ($oFimPeriodoContabil->c99_data != '' 
-        && (db_strtotime($e50_data) <= db_strtotime($oFimPeriodoContabil->c99_data)
-        || ($estornoAlterado && db_strtotime($dataEstorno) <= db_strtotime($oFimPeriodoContabil->c99_data))
+        && (($estornoAlterado && db_strtotime($dataEstorno) <= db_strtotime($oFimPeriodoContabil->c99_data))
         || ($liquidacaoAlterado && db_strtotime($dataLiquidacao) <= db_strtotime($oFimPeriodoContabil->c99_data)))) {
 
             $erro_msg = "Dados da OP não alterados!\nData inferior à data do fim do período contábil.";
