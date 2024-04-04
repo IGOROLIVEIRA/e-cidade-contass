@@ -70,6 +70,7 @@ class Acordo extends LegacyModel
         'ac16_descricaoreajuste',
         'ac16_descricaoindice',
         'ac16_vigenciaindeterminada',
+        'ac16_vigenciaindeterminada'
     ];
 
     public function getAcordosDotacoesComPosicoes() {
@@ -136,5 +137,10 @@ class Acordo extends LegacyModel
                 $join->on('orcdotacao.o58_coddot', '=', 'acordoitemdotacao.ac22_coddot')
                     ->whereColumn('orcdotacao.o58_anousu', '=', 'acordoitemdotacao.ac22_anousu');
             });
+    }
+
+    public function posicoes()
+    {
+        return $this->hasMany(AcordoPosicao::class, 'ac26_acordo', 'ac16_sequencial');
     }
 }

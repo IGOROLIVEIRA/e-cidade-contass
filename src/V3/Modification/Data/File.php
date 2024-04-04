@@ -9,7 +9,8 @@ use \ECidade\V3\Extension\AbstractMetadata;
 /**
  * @package modification
  */
-class File extends AbstractMetadata {
+class File extends AbstractMetadata
+{
 
   /**
    * Caminho relativo do arquivo original
@@ -33,7 +34,8 @@ class File extends AbstractMetadata {
    * @param string $path
    * @param string $user
    */
-  public function __construct($path, $user = null) {
+  public function __construct($path, $user = null)
+  {
 
     $prefix = "global/";
 
@@ -52,7 +54,8 @@ class File extends AbstractMetadata {
   /**
    * @param string $persistPath
    */
-  public function setPersistPath($persistPath) {
+  public function setPersistPath($persistPath)
+  {
     $this->persistPath = $persistPath;
     $this->getStorage()->setPath($this->persistPath . $this->prefix . $this->originalPath);
   }
@@ -60,35 +63,40 @@ class File extends AbstractMetadata {
   /**
    * @return string
    */
-  public function getOriginalPath() {
+  public function getOriginalPath()
+  {
     return $this->originalPath;
   }
 
   /**
    * @return string
    */
-  public function getPrefix() {
+  public function getPrefix()
+  {
     return $this->prefix;
   }
 
   /**
    * @param string $content
    */
-  public function setContent($content) {
+  public function setContent($content)
+  {
     $this->getStorage()->setData($content);
   }
 
   /**
    * @return string
    */
-  public function getContent() {
+  public function getContent()
+  {
     return $this->getStorage()->getData();
   }
 
   /**
    * @return boolean
    */
-  public function save() {
+  public function save()
+  {
     return $this->getStorage()->save();
   }
 
@@ -96,7 +104,8 @@ class File extends AbstractMetadata {
    * Carrega conteudo cacheado
    * @return boolean
    */
-  public function load() {
+  public function load()
+  {
     return $this->getStorage()->load();
   }
 
@@ -104,14 +113,14 @@ class File extends AbstractMetadata {
    * Carrega o conteudo original
    * @return boolean
    */
-  public function loadContent() {
+  public function loadContent()
+  {
 
     $path = ECIDADE_PATH . $this->originalPath;
     if (!file_exists($path)) {
-      throw new Exception('Arquivo nÃ£o existe: ' . $path);
+      throw new Exception('Arquivo não existe: ' . $path);
     }
 
     return $this->getStorage()->setData(file_get_contents($path));
   }
-
 }

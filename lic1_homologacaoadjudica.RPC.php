@@ -83,23 +83,6 @@ switch ($oParam->exec) {
                 }
             }
 
-            /**
-             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitação
-             */
-
-            if (!empty($l202_dataAdjudicacao)) {
-                $anousu = db_getsession('DB_anousu');
-                $instituicao = db_getsession('DB_instit');
-                $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu, $instituicao, "c99_datapat", null, null));
-                db_fieldsmemory($result);
-                $data = (implode("/", (array_reverse(explode("-", $c99_datapat)))));
-                $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
-
-                if ($l202_dataAdjudicacao <= $dtencerramento) {
-                    throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
-                }
-            }
-
             $parecer = pg_num_rows($clparecerlicitacao->sql_record($clparecerlicitacao->sql_query(null, '*', null, "l200_licitacao = $l202_licitacao ")));
             $precomedio = pg_num_rows($clprecomedio->sql_record($clprecomedio->sql_query(null, '*', null, 'l209_licitacao =' . $l202_licitacao)));
 
@@ -267,22 +250,6 @@ switch ($oParam->exec) {
             }
 
             /**
-             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitação
-             */
-
-            if (!empty($l202_dataAdjudicacao)) {
-                $anousu = db_getsession('DB_anousu');
-                $instituicao = db_getsession('DB_instit');
-                $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu, $instituicao, "c99_datapat", null, null));
-                db_fieldsmemory($result);
-                $data = (implode("/", (array_reverse(explode("-", $c99_datapat)))));
-                $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
-
-                if ($l202_dataAdjudicacao <= $dtencerramento) {
-                    throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
-                }
-            }
-            /**
              * BUSCO O REGISTRO A SER ALTERADO
              */
             $homologacaoadjudica = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_file(null, "l202_sequencial", "l202_sequencial desc limit 1", "l202_licitacao = {$oParam->iLicitacao}"));
@@ -371,22 +338,7 @@ switch ($oParam->exec) {
         $l202_dataAdjudicacao = DateTime::createFromFormat('d/m/Y', $data);
 
         try {
-            /**
-             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitação
-             */
 
-            if (!empty($l202_dataAdjudicacao)) {
-                $anousu = db_getsession('DB_anousu');
-                $instituicao = db_getsession('DB_instit');
-                $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu, $instituicao, "c99_datapat", null, null));
-                db_fieldsmemory($result);
-                $data = (implode("/", (array_reverse(explode("-", $c99_datapat)))));
-                $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
-
-                if ($l202_dataAdjudicacao <= $dtencerramento) {
-                    throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
-                }
-            }
             /**
              * BUSCO O REGISTRO DA ADJUDICACAO A SER EXCLUIDA
              */
@@ -543,6 +495,10 @@ switch ($oParam->exec) {
             $rsDataAdjudica = $clhomologacaoadjudica->getdataAdjudicacao($l202_licitacao);
             $dtadjudicaca = (implode("/", (array_reverse(explode("-", $rsDataAdjudica[0]->l202_dataadjudicacao)))));
             $datadeAdjudicacao = DateTime::createFromFormat('d/m/Y', $dtadjudicaca);
+            $dataReferencia = (implode("/", (array_reverse(explode("-", $oParam->dataReferencia)))));
+            $l202_datareferencia = DateTime::createFromFormat('d/m/Y', $dataReferencia);
+
+            $oRetorno->periodosicomencerrado = false;
 
             /**
              * VERIFICA SE E REGISTRO DE PREÇO
@@ -580,10 +536,8 @@ switch ($oParam->exec) {
             $aPcmater = $clliclicita->getPcmaterObras($l202_licitacao);
             $aPcmaterverificado = array();
 
-            if ($l20_naturezaobjeto == "1") {
-                if ($l20_cadinicial != "3" && $l20_cadinicial != "4") {
-                    throw new Exception("Usuário: Edital não cadastrado ou com o status de Aguardando envio. Gentileza verificar!");
-                }
+            if ($l20_cadinicial == "1" || $l20_cadinicial == "2") {
+                throw new Exception("Usuário: O envio do edital desta licitação se encontra com o status de <br>PENDENTE/AGUARDANDO ENVIO, gentileza verificar se o envio foi realizado e alterar o status para ENVIADO para que seja possível inserir a homologação.");
             }
 
             foreach ($aPcmater as $item) {
@@ -601,21 +555,40 @@ switch ($oParam->exec) {
                 }
             }
 
-            /**
-             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitação
-             */
-
-            if (!empty($l202_datahomologacao)) {
-                $anousu = db_getsession('DB_anousu');
-                $instituicao = db_getsession('DB_instit');
-                $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu, $instituicao, "c99_datapat", null, null));
-                db_fieldsmemory($result);
-                $data = (implode("/", (array_reverse(explode("-", $c99_datapat)))));
-                $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
-
-                if ($l202_datahomologacao <= $dtencerramento) {
-                    throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+            if($oParam->possuiDataReferencia && $oParam->dataReferencia == ""){
+                throw new Exception("Usuário: Campo Data de Referência nao Informado.");
+            }
+            
+            if($oParam->possuiDataReferencia){
+                $mesDataReferencia = intval($l202_datareferencia->format('m'));
+                $rsDataEncerramento = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit'), "c99_datapat", null, null));
+                $c99_datapat = db_utils::fieldsMemory($rsDataEncerramento,0)->c99_datapat;
+                $dataEncerramento = implode("/", (array_reverse(explode("-", $c99_datapat))));
+                $dataEncerramento = DateTime::createFromFormat('d/m/Y', $dataEncerramento);
+                $mesEncerramentoPatrimonial = intval($dataEncerramento->format('m'));
+                $anoDataReferencia = intval($l202_datareferencia->format('Y'));
+                $anoEncerramentoPatrimonial = intval($dataEncerramento->format('Y'));
+    
+                if($mesDataReferencia <= $mesEncerramentoPatrimonial || $anoDataReferencia < $anoEncerramentoPatrimonial){
+                    throw new Exception("Usuário: a data de referência deve ser no mês subsequente a data de encerramento do patrimonial.");
                 }
+            }
+
+            if(!empty($l202_datahomologacao) && !$oParam->possuiDataReferencia){
+                if (!$clcondataconf->verificaPeriodoPatrimonial($oParam->dtHomologacao)){
+                    $oRetorno->periodosicomencerrado = true;
+                    throw new Exception("O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.");
+                }
+            }
+
+            if(!empty($l202_datareferencia) && $oParam->possuiDataReferencia){
+                if (!$clcondataconf->verificaPeriodoPatrimonial($oParam->dataReferencia)){
+                    throw new Exception("O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.");
+                }
+            }
+
+            if(!$oParam->possuiDataReferencia){
+                $oParam->dataReferencia = $oParam->dtHomologacao;
             }
 
             $parecer = pg_num_rows($clparecerlicitacao->sql_record($clparecerlicitacao->sql_query(null, '*', null, "l200_licitacao = $l202_licitacao ")));
@@ -644,6 +617,7 @@ switch ($oParam->exec) {
                         $clhomologacaoadjudica->l202_datahomologacao = $oParam->dtHomologacao;
                         $clhomologacaoadjudica->l202_licitacao       = $l202_licitacao;
                         $clhomologacaoadjudica->l202_dataadjudicacao = $l202_dataadjudicacao;
+                        $clhomologacaoadjudica->l202_datareferencia = $oParam->dataReferencia;
                         $clhomologacaoadjudica->incluir(null);
 
                         /*Salva os itens*/
@@ -691,6 +665,7 @@ switch ($oParam->exec) {
                         $clhomologacaoadjudica->l202_datahomologacao = $oParam->dtHomologacao;
                         $clhomologacaoadjudica->l202_licitacao       = $l202_licitacao;
                         $clhomologacaoadjudica->l202_dataadjudicacao = null;
+                        $clhomologacaoadjudica->l202_datareferencia = $oParam->dataReferencia;
                         $clhomologacaoadjudica->incluir(null);
 
                         /**
@@ -801,6 +776,10 @@ switch ($oParam->exec) {
         $dataJulgamentoLicitacao = DateTime::createFromFormat('d/m/Y', $dtjulglic);
         $data = (implode("/", (array_reverse(explode("-", $oParam->dtHomologacao)))));
         $l202_datahomologacao = DateTime::createFromFormat('d/m/Y', $data);
+        $dataReferencia = (implode("/", (array_reverse(explode("-", $oParam->dataReferencia)))));
+        $l202_datareferencia = DateTime::createFromFormat('d/m/Y', $dataReferencia);
+
+        $oRetorno->periodosicomencerrado = false;
 
         /**
          * VERIFICA SE E REGISTRO DE PREÃ‡O
@@ -892,6 +871,7 @@ switch ($oParam->exec) {
                         $clliccomissaocgm->incluir(null);
                     }
                     /*inserindo a data de homologacao*/
+                    $clhomologacaoadjudica->l202_datareferencia = $oParam->dataReferencia;
                     $clhomologacaoadjudica->l202_datahomologacao = $oParam->dtHomologacao;
                     $clhomologacaoadjudica->alterar($oParam->iHomologacao);
 

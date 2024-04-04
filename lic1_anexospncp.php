@@ -114,14 +114,14 @@ $oRotulo->label("l20_objeto");
 
               $tipo = array();
               $tipo[0] = "Selecione";
-              $result_tipo = $cltipoanexo->sql_record($cltipoanexo->sql_query(null, "*", "l213_sequencial", ""));
+              $result_tipo = $cltipoanexo->sql_record($cltipoanexo->sql_query(null, "*", "l213_sequencial", "l213_sequencial in (1,2,3,4,5,6,7,8,9,10,16,18,19,20)"));
 
 
               for ($iIndiceTipo = 0; $iIndiceTipo < $cltipoanexo->numrows; $iIndiceTipo++) {
 
                 $oTipo = db_utils::fieldsMemory($result_tipo, $iIndiceTipo);
 
-                $tipo[$oTipo->l213_sequencial] = utf8_decode($oTipo->l213_descricao);
+                  $tipo[$oTipo->l213_sequencial] = urldecode(utf8_decode($oTipo->l213_descricao));
               }
 
               if ($cltipoanexo->numrows == 0) {

@@ -257,7 +257,7 @@ if ($_POST) {
         $sLinhaCalculo .= "{$iTempoServico};";
         $sLinhaCalculo .= "{$oLinhaCalculo->previdencia};";
         $sLinhaCalculo .= "{$oLinhaCalculo->previdencia};";
-        $sLinhaCalculo .= ";"; //reserva poupanï¿½a
+        $sLinhaCalculo .= ";"; //reserva poupança
         $sLinhaCalculo .= "{$oLinhaCalculo->totaldependentes};";
         $sLinhaCalculo .= "{$oLinhaCalculo->idadeconjuge};";
         $sLinhaCalculo .= $sIdadeFilhos;
@@ -334,7 +334,7 @@ if ($_POST) {
 
 	} else {
 
-  	db_msgbox("Erro ao processar os dados.\\nVerifique o cadastro da selecï¿½o de professores");
+  	db_msgbox("Erro ao processar os dados.\\nVerifique o cadastro da selecão de professores");
   }
 }
 
@@ -349,7 +349,7 @@ if ($rsCalculo) {
   switch ($tipo_arquivo) {
   	case "A":
   		echo "  listagem  = '$arq2#Download arquivo TXT (Ativos Anteriores Data)|';";
-	    echo "  listagem += '$arq#Download arquivo TXT (Ativos Apï¿½s a Data)';";
+	    echo "  listagem += '$arq#Download arquivo TXT (Ativos Após a Data)';";
       break;
   	case "I":
   		echo "  listagem  = '$arq#Download arquivo TXT (Inativos)';";

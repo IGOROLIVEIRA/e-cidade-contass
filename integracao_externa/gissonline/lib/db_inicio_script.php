@@ -18,7 +18,7 @@ if(!isset($sNomeScript)) {
   $sNomeScript = basename(__FILE__);
 } 
 
-// Seta nome do arquivo de Log, caso já não exista
+// Seta nome do arquivo de Log, caso já n�o exista
 if(!defined("DB_ARQUIVO_LOG")) {
   $sArquivoLog = "log/".$sNomeScript."_".$sTimeStampInicio.".log";
   define("DB_ARQUIVO_LOG", $sArquivoLog);
@@ -32,5 +32,3 @@ db_log("", $sArquivoLog);
 db_log("Arquivo de Log: $sArquivoLog", $sArquivoLog);
 db_log("    Script PHP: ".$sNomeScript, $sArquivoLog);
 db_log("", $sArquivoLog);
-
-?>

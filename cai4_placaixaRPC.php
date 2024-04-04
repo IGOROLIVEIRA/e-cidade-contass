@@ -61,7 +61,7 @@ if ($oParam->exec == 'getCgmConta') {
       if ($oDaoConfig->numrows > 0) {
 
          $oConfig = db_utils::fieldsMemory($rsConfig, 0);
-         $aCgm    = array("z01_numcgm" => $oConfig->z01_numcgm, "z01_nome" => $oConfig->z01_nome);
+         $aCgm    = array("z01_numcgm" => $oConfig->z01_numcgm, "z01_nome" => utf8_encode($oConfig->z01_nome));
       }
    }
    echo $oJson->encode($aCgm);

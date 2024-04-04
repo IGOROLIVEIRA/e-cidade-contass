@@ -288,6 +288,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         $oDadosDetalhamentoFonte->si122_tiporegistro = 11;
         $oDadosDetalhamentoFonte->si122_codreduzido = substr($oDetalhamento->codreduzido, 0, 15);
         $oDadosDetalhamentoFonte->si122_codfontrecursos = $iFonteAlterada != '0' ? $iFonteAlterada : $oDetalhamento->o15_codigo;
+        $oDadosDetalhamentoFonte->si122_codco = $oDetalhamento->e60_codco;
         $oDadosDetalhamentoFonte->si122_valoranuladofonte = $oDetalhamento->c70_valor;
         $oDadosDetalhamentoFonte->si122_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $oDadosDetalhamentoFonte->si122_instit = db_getsession("DB_instit");
@@ -330,12 +331,12 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
 
       $oDados11 = new cl_alq112024();
 
-      $oDadosAgrupados->Reg11->si122_codfontrecursos = $this->oDeParaRecurso->getDePara2024($oDadosAgrupados->Reg11->si122_codfontrecursos);
+      $oDadosAgrupados->Reg11->si122_codfontrecursos = $this->oDeParaRecurso->getDePara($oDadosAgrupados->Reg11->si122_codfontrecursos);
       
       $oDados11->si122_tiporegistro = 11;
       $oDados11->si122_codreduzido = $oDadosAgrupados->Reg11->si122_codreduzido;
       $oDados11->si122_codfontrecursos = $oDadosAgrupados->Reg11->si122_codfontrecursos;
-      $oDados11->si122_codco = $oDadosAgrupados->e60_codco;
+      $oDados11->si122_codco = $oDadosAgrupados->Reg11->si122_codco;
       $oDados11->si122_valoranuladofonte = $oDadosAgrupados->Reg11->si122_valoranuladofonte;
       $oDados11->si122_mes = $oDadosAgrupados->Reg11->si122_mes;
       $oDados11->si122_reg10 = $oDados10->si121_sequencial;

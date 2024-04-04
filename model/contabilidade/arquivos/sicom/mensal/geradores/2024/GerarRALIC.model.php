@@ -71,7 +71,7 @@ class GerarRALIC extends GerarAM
         }else{
             $aCSVRALIC10['si180_bdi']                     = '';
         }
-        $aCSVRALIC10['si180_mesexercicioreforc']         = $this->padLeftZero($aRALIC10['si180_mesexercicioreforc'], 6);
+        $aCSVRALIC10['si180_mesexercicioreforc']         = empty($aRALIC10['si180_mesexercicioreforc']) ? '' :$this->padLeftZero($aRALIC10['si180_mesexercicioreforc'], 6);
         $aCSVRALIC10['si180_origemrecurso']              = $aRALIC10['si180_origemrecurso'];
         $aCSVRALIC10['si180_dscorigemrecurso']           = substr($aRALIC10['si180_dscorigemrecurso'], 0, 150);
         $aCSVRALIC10['si180_qtdlotes']                   = $aRALIC10['si180_qtdlotes'];
@@ -123,7 +123,7 @@ class GerarRALIC extends GerarAM
               $aCSVRALIC12['si182_numero']                      = !$aRALIC12['si182_numero'] ? '' : $aRALIC12['si182_numero'];
               $aCSVRALIC12['si182_bairro']                      = utf8_decode($aRALIC12['si182_bairro']);
               $aCSVRALIC12['si182_distrito']                    = utf8_decode($aRALIC12['si182_distrito']);
-              $aCSVRALIC12['si182_municipio']                   = '';
+              $aCSVRALIC12['si182_municipio']                   = $aRALIC12['si182_municipio'];
               $aCSVRALIC12['si182_cep']                         = $aRALIC12['si182_cep'];
               $aCSVRALIC12['si182_latitude']                    = $this->sicomNumberReal($aRALIC12['si182_latitude'], 6);
               $aCSVRALIC12['si182_longitude']                   = $this->sicomNumberReal($aRALIC12['si182_longitude'], 6);

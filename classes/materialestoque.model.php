@@ -398,8 +398,8 @@ class materialEstoque
       throw new Exception("Departamento de destino não pode ser o mesmo de origem.");
     }
 
-    if (empty($nQuantidade) || $nQuantidade <= 0) {
-      throw new Exception("Quantidade deve ser maior que 0 (zero).");
+    if ($nQuantidade < 0) {
+      throw new Exception("Quantidade não deve ser menor que 0 (zero).");
     }
 
     if (!db_utils::inTransaction()) {

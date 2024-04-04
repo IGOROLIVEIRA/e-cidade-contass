@@ -91,7 +91,7 @@ class GerarBO extends GerarAM
         $aCSVBO20['si202_tiporegistro']           = $this->padLeftZero($aBO20['si202_tiporegistro'], 2);
         $aCSVBO20['si202_faserecorcamentaria']    = $this->padLeftZero($aBO20['si202_faserecorcamentaria'], 1);
         $aCSVBO20['si202_vlsaldoexeantsupfin']    = $this->sicomNumberReal($aBO20['si202_vlsaldoexeantsupfin'], 2);
-        $aCSVBO20['si202_vlsaldoexeantrecredad']  = $this->sicomNumberReal($aBO20['si202_vlsaldoexeantrecredad'], 2);
+        // $aCSVBO20['si202_vlsaldoexeantrecredad']  = $this->sicomNumberReal($aBO20['si202_vlsaldoexeantrecredad'], 2);
         $aCSVBO20['si202_vltotalsaldoexeant']     = $this->sicomNumberReal($aBO20['si202_vltotalsaldoexeant'], 2);
 
         $this->sLinha = $aCSVBO20;
@@ -117,9 +117,9 @@ class GerarBO extends GerarAM
         $aCSVBO30['si203_vlreservacontingen']       = $this->sicomNumberReal($aBO30['si203_vlreservacontingen'], 2);
         $aCSVBO30['si203_vlreservarpps']            = $this->sicomNumberReal($aBO30['si203_vlreservarpps'], 2);
         $aCSVBO30['si203_vlamortizadiviintermob']   = $this->sicomNumberReal($aBO30['si203_vlamortizadiviintermob'], 2);
-        $aCSVBO30['si203_vlamortizaoutrasdivinter'] = $this->sicomNumberReal($aBO30['si203_vlamortizaoutrasdivinter'], 2);
+        $aCSVBO30['si203_vlamortizadividacontratualinternas'] = $this->sicomNumberReal($aBO30['si203_vlamortizadividacontratualinternas'], 2);
         $aCSVBO30['si203_vlamortizadivextmob']      = $this->sicomNumberReal($aBO30['si203_vlamortizadivextmob'], 2);
-        $aCSVBO30['si203_vlamortizaoutrasdivext']   = $this->sicomNumberReal($aBO30['si203_vlamortizaoutrasdivext'], 2);
+        $aCSVBO30['si203_vlamortizadividacontratualexternas'] = $this->sicomNumberReal($aBO30['si203_vlamortizadividacontratualexternas'], 2);
         $aCSVBO30['si203_vlsuperavit']              = $this->sicomNumberReal($aBO30['si203_vlsuperavit'], 2);
         $aCSVBO30['si203_vltotalquadrodespesa']     = $this->sicomNumberReal($aBO30['si203_vltotalquadrodespesa'], 2);
 

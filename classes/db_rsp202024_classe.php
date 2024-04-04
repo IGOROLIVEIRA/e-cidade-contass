@@ -851,7 +851,8 @@ class cl_rsp202024
                     o15_codtri::int4 AS codidentificafr,
                     ano2022 AS old_codfontrecursos,
                     substr(ano2024, 1, 7) AS new_codfontrecursos,
-                    e60_numemp
+                    e60_numemp,
+                    e60_codco
             FROM conlancamdoc
             JOIN conlancamemp ON c71_codlan = c75_codlan
             JOIN empempenho ON c75_numemp = e60_numemp

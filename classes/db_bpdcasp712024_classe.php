@@ -1,43 +1,45 @@
 <?
 //MODULO: sicom
 //CLASSE DA ENTIDADE bpdcasp712024
-class cl_bpdcasp712024 {
-   // cria variaveis de erro
-   var $rotulo     = null;
-   var $query_sql  = null;
-   var $numrows    = 0;
-   var $numrows_incluir = 0;
-   var $numrows_alterar = 0;
-   var $numrows_excluir = 0;
-   var $erro_status= null;
-   var $erro_sql   = null;
-   var $erro_banco = null;
-   var $erro_msg   = null;
-   var $erro_campo = null;
-   var $pagina_retorno = null;
-   // cria variaveis do arquivo
-   var $si215_sequencial = 0;
-   var $si215_tiporegistro = 0;
-   var $si215_codfontrecursos = 0;
-   var $si215_vlsaldofonte = 0;
+class cl_bpdcasp712024 { 
+   // cria variaveis de erro 
+   var $rotulo     = null; 
+   var $query_sql  = null; 
+   var $numrows    = 0; 
+   var $numrows_incluir = 0; 
+   var $numrows_alterar = 0; 
+   var $numrows_excluir = 0; 
+   var $erro_status= null; 
+   var $erro_sql   = null; 
+   var $erro_banco = null;  
+   var $erro_msg   = null;  
+   var $erro_campo = null;  
+   var $pagina_retorno = null; 
+   // cria variaveis do arquivo 
+   var $si215_sequencial = 0; 
+   var $si215_tiporegistro = 0; 
+   var $si215_codfontrecursos = 0; 
+   var $si215_codfontrecursos24 = 0; 
+   var $si215_vlsaldofonte = 0; 
    var $si215_ano = 0;
    var $si215_periodo = 0;
    var $si215_institu = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 si215_sequencial = int4 = si215_sequencial
-                 si215_tiporegistro = int4 = si215_tiporegistro
-                 si215_codfontrecursos = int4 = si215_codfontrecursos
-                 si215_vlsaldofonte = float4 = si215_vlsaldofonte
+                 si215_sequencial = int4 = si215_sequencial 
+                 si215_tiporegistro = int4 = si215_tiporegistro 
+                 si215_codfontrecursos = int4 = si215_codfontrecursos 
+                 si215_codfontrecursos24 = int4 = si215_codfontrecursos24 
+                 si215_vlsaldofonte = float4 = si215_vlsaldofonte 
                  ";
-   //funcao construtor da classe
-   function cl_bpdcasp712024() {
+   //funcao construtor da classe 
+   function cl_bpdcasp712024() { 
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("bpdcasp712024");
+     $this->rotulo = new rotulo("bpdcasp712024"); 
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro
-   function erro($mostra,$retorna) {
+   //funcao erro 
+   function erro($mostra,$retorna) { 
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -51,6 +53,7 @@ class cl_bpdcasp712024 {
        $this->si215_sequencial = ($this->si215_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_sequencial"]:$this->si215_sequencial);
        $this->si215_tiporegistro = ($this->si215_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_tiporegistro"]:$this->si215_tiporegistro);
        $this->si215_codfontrecursos = ($this->si215_codfontrecursos == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_codfontrecursos"]:$this->si215_codfontrecursos);
+       $this->si215_codfontrecursos24 = ($this->si215_codfontrecursos24 == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_codfontrecursos24"]:$this->si215_codfontrecursos24);
        $this->si215_vlsaldofonte = ($this->si215_vlsaldofonte == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_vlsaldofonte"]:$this->si215_vlsaldofonte);
        $this->si215_ano = ($this->si215_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_ano"]:$this->si215_ano);
        $this->si215_periodo = ($this->si215_periodo == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_periodo"]:$this->si215_periodo);
@@ -60,7 +63,7 @@ class cl_bpdcasp712024 {
      }
    }
    // funcao para inclusao
-   function incluir ($si215_sequencial){
+   function incluir ($si215_sequencial){ 
       $this->atualizacampos();
      if($this->si215_tiporegistro == null ){
        $this->erro_sql = " Campo si215_tiporegistro não informado.";
@@ -74,30 +77,35 @@ class cl_bpdcasp712024 {
      if($this->si215_codfontrecursos == null ){
        $this->si215_codfontrecursos = 0;
      }
+     if($this->si215_codfontrecursos24 == null ){
+      $this->si215_codfontrecursos24 = 0;
+    }
      if($this->si215_vlsaldofonte == null ){
        $this->si215_vlsaldofonte = 0;
      }
 
      $sql = "insert into bpdcasp712024(
-                                       si215_sequencial
-                                      ,si215_tiporegistro
-                                      ,si215_codfontrecursos
-                                      ,si215_vlsaldofonte
+                                       si215_sequencial 
+                                      ,si215_tiporegistro 
+                                      ,si215_codfontrecursos 
+                                      ,si215_codfontrecursos24 
+                                      ,si215_vlsaldofonte 
                                       ,si215_ano
                                       ,si215_periodo
                                       ,si215_institu
                        )
                 values (
                                 (select nextval('bpdcasp712024_si215_sequencial_seq'))
-                               ,$this->si215_tiporegistro
-                               ,$this->si215_codfontrecursos
-                               ,$this->si215_vlsaldofonte
+                               ,$this->si215_tiporegistro 
+                               ,$this->si215_codfontrecursos 
+                               ,$this->si215_codfontrecursos24 
+                               ,$this->si215_vlsaldofonte 
                                ,$this->si215_ano
                                ,$this->si215_periodo
                                ,$this->si215_institu
                       )";
-     $result = db_query($sql);
-     if($result==false){
+     $result = db_query($sql); 
+     if($result==false){ 
        $this->erro_banco = str_replace("
 ","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
@@ -122,16 +130,16 @@ class cl_bpdcasp712024 {
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
      return true;
-   }
+   } 
    // funcao para alteracao
-   function alterar ($si215_sequencial=null) {
+   function alterar ($si215_sequencial=null) { 
       $this->atualizacampos();
      $sql = " update bpdcasp712024 set ";
      $virgula = "";
-     if(trim($this->si215_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si215_sequencial"])){
+     if(trim($this->si215_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si215_sequencial"])){ 
        $sql  .= $virgula." si215_sequencial = $this->si215_sequencial ";
        $virgula = ",";
-       if(trim($this->si215_sequencial) == null ){
+       if(trim($this->si215_sequencial) == null ){ 
          $this->erro_sql = " Campo si215_sequencial não informado.";
          $this->erro_campo = "si215_sequencial";
          $this->erro_banco = "";
@@ -141,10 +149,10 @@ class cl_bpdcasp712024 {
          return false;
        }
      }
-     if(trim($this->si215_tiporegistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si215_tiporegistro"])){
+     if(trim($this->si215_tiporegistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si215_tiporegistro"])){ 
        $sql  .= $virgula." si215_tiporegistro = $this->si215_tiporegistro ";
        $virgula = ",";
-       if(trim($this->si215_tiporegistro) == null ){
+       if(trim($this->si215_tiporegistro) == null ){ 
          $this->erro_sql = " Campo si215_tiporegistro não informado.";
          $this->erro_campo = "si215_tiporegistro";
          $this->erro_banco = "";
@@ -154,10 +162,10 @@ class cl_bpdcasp712024 {
          return false;
        }
      }
-     if(trim($this->si215_codfontrecursos)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si215_codfontrecursos"])){
+     if(trim($this->si215_codfontrecursos)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si215_codfontrecursos"])){ 
        $sql  .= $virgula." si215_codfontrecursos = $this->si215_codfontrecursos ";
        $virgula = ",";
-       if(trim($this->si215_codfontrecursos) == null ){
+       if(trim($this->si215_codfontrecursos) == null ){ 
          $this->erro_sql = " Campo si215_codfontrecursos não informado.";
          $this->erro_campo = "si215_codfontrecursos";
          $this->erro_banco = "";
@@ -167,10 +175,23 @@ class cl_bpdcasp712024 {
          return false;
        }
      }
-     if(trim($this->si215_vlsaldofonte)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si215_vlsaldofonte"])){
+     if(trim($this->si215_codfontrecursos24)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si215_codfontrecursos24"])){ 
+      $sql  .= $virgula." si215_codfontrecursos24 = $this->si215_codfontrecursos24 ";
+      $virgula = ",";
+      if(trim($this->si215_codfontrecursos24) == null ){ 
+        $this->erro_sql = " Campo si215_codfontrecursos24 não informado.";
+        $this->erro_campo = "si215_codfontrecursos24";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+     if(trim($this->si215_vlsaldofonte)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si215_vlsaldofonte"])){ 
        $sql  .= $virgula." si215_vlsaldofonte = $this->si215_vlsaldofonte ";
        $virgula = ",";
-       if(trim($this->si215_vlsaldofonte) == null ){
+       if(trim($this->si215_vlsaldofonte) == null ){ 
          $this->erro_sql = " Campo si215_vlsaldofonte não informado.";
          $this->erro_campo = "si215_vlsaldofonte";
          $this->erro_banco = "";
@@ -209,7 +230,7 @@ class cl_bpdcasp712024 {
        }
      }
      $result = db_query($sql);
-     if($result==false){
+     if($result==false){ 
        $this->erro_banco = str_replace("
 ","",@pg_last_error());
        $this->erro_sql   = "bpdcasp712024 nao Alterado. Alteracao Abortada.\n";
@@ -238,11 +259,11 @@ class cl_bpdcasp712024 {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       }
-     }
-   }
-   // funcao para exclusao
-   function excluir ($si215_sequencial=null,$dbwhere=null) {
+       } 
+     } 
+   } 
+   // funcao para exclusao 
+   function excluir ($si215_sequencial=null,$dbwhere=null) { 
 
      $sql = " delete from bpdcasp712024
                     where ";
@@ -258,7 +279,7 @@ class cl_bpdcasp712024 {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){
+     if($result==false){ 
        $this->erro_banco = str_replace("
 ","",@pg_last_error());
        $this->erro_sql   = "bpdcasp712024 nao Excluído. Exclusão Abortada.\n";
@@ -287,11 +308,11 @@ class cl_bpdcasp712024 {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       }
-     }
-   }
-   // funcao do recordset
-   function sql_record($sql) {
+       } 
+     } 
+   } 
+   // funcao do recordset 
+   function sql_record($sql) { 
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -314,8 +335,8 @@ class cl_bpdcasp712024 {
       }
      return $result;
    }
-   // funcao do sql
-   function sql_query ( $si215_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
+   // funcao do sql 
+   function sql_query ( $si215_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -331,8 +352,8 @@ class cl_bpdcasp712024 {
      $sql2 = "";
      if($dbwhere==""){
        if($si215_sequencial!=null ){
-         $sql2 .= " where bpdcasp712024.si215_sequencial = $si215_sequencial ";
-       }
+         $sql2 .= " where bpdcasp712024.si215_sequencial = $si215_sequencial "; 
+       } 
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -348,8 +369,8 @@ class cl_bpdcasp712024 {
      }
      return $sql;
   }
-   // funcao do sql
-   function sql_query_file ( $si215_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
+   // funcao do sql 
+   function sql_query_file ( $si215_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -365,8 +386,8 @@ class cl_bpdcasp712024 {
      $sql2 = "";
      if($dbwhere==""){
        if($si215_sequencial!=null ){
-         $sql2 .= " where bpdcasp712024.si215_sequencial = $si215_sequencial ";
-       }
+         $sql2 .= " where bpdcasp712024.si215_sequencial = $si215_sequencial "; 
+       } 
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -383,15 +404,15 @@ class cl_bpdcasp712024 {
      return $sql;
   }
 
-  function sql_query_saldoInicialContaCorrente ($iInstit=false,$iFonte=null){
+  function sql_query_saldoInicialContaCorrente ($iInstit=false,$iFonte=null){ 
 
-      $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu
+      $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu 
                              where substr(c60_estrut,1,5)='82111' and c60_anousu=" . db_getsession("DB_anousu") ." and c61_anousu=" . db_getsession("DB_anousu");
 
       if($iInstit==false){
        $sSqlReduzSuperavit = $sSqlReduzSuperavit." and c61_instit in (".db_getsession('DB_instit').")";
       }
-
+      
       $sSqlSaldos = " SELECT saldoanterior , debito , credito
                                         FROM
                                           (select coalesce((SELECT SUM(saldoanterior) AS saldoanterior FROM
@@ -420,7 +441,7 @@ class cl_bpdcasp712024 {
                                                AND c19_reduz IN (  $sSqlReduzSuperavit  )
                                                AND c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . "
                                                AND c19_orctiporec = {$iFonte}
-                                               AND conhistdoc.c53_tipo not in (1000)
+                                               AND conhistdoc.c53_tipo not in (1000) 
                                              GROUP BY c28_tipo),0) as credito) AS creditos,
 
                                             (select coalesce((SELECT sum(c69_valor) as debito
@@ -437,11 +458,11 @@ class cl_bpdcasp712024 {
                                                AND c17_sequencial = 103
                                                AND c19_reduz IN ( $sSqlReduzSuperavit )
                                                AND c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . "
-                                               AND c19_orctiporec = {$iFonte}
-                                               AND conhistdoc.c53_tipo not in (1000)
-                                             GROUP BY c28_tipo),0) as debito) AS debitos";
+                                               AND c19_orctiporec = {$iFonte} 
+                                               AND conhistdoc.c53_tipo not in (1000)                                               
+                                             GROUP BY c28_tipo),0) as debito) AS debitos";          
           return $sSqlSaldos;
-
+      
   }
 
 

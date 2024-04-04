@@ -212,7 +212,7 @@ class Acordo
     protected $sDescricaoLei;
 
     /**
-     * nï¿½mero do processo
+     * número do processo
      *
      * @var string
      */
@@ -370,7 +370,7 @@ class Acordo
     private $aParalisacoes = array();
 
     /**
-     * Cï¿½digo da classificacao do acordo
+     * Código da classificacao do acordo
      */
     private $iClassificacao;
 
@@ -410,7 +410,7 @@ class Acordo
     protected $iCriterioreajuste;
 
     /**
-     *  Data Reajuste 
+     *  Data Reajuste
      */
     protected $dtReajuste;
 
@@ -2186,15 +2186,32 @@ class Acordo
         return $this->aPosicoes;
     }
 
-     /**
+    function getSeqTermoRecisaopncp($iAcordo,$iNumeroAditamento){
+        $oDaoAcoControlePNCP = db_utils::getDao("acocontroletermospncp");
+        $sql = $oDaoAcoControlePNCP->sql_query_file(null, "l214_numerotermo", null, "l214_acordo = $iAcordo and l214_numeroaditamento = $iNumeroAditamento");
+        $rsSequencialpncptermorecisao = $oDaoAcoControlePNCP->sql_record($sql);
+
+        return db_utils::fieldsMemory($rsSequencialpncptermorecisao, 0)->l214_numerotermo;
+    }
+
+    /**
      * retorna dados para envio do PNCP termo de Aditamentos
      * @return AcordoPosicao[]
      */
-    function getDadosTermosPncp($iCodigoPosicao)
+    function getDadosTermosPncp($iCodigoPosicao,$iNumeroAditamento)
     {
         $oDaoAcordoPosicao = db_utils::getDao("acordoposicao");
-        $sSqlPosicao       = $oDaoAcordoPosicao->getTermoContrato($iCodigoPosicao);
+        $sSqlPosicao       = $oDaoAcordoPosicao->getTermoContrato($iCodigoPosicao,$iNumeroAditamento);
         $rsPosicao = $oDaoAcordoPosicao->sql_record($sSqlPosicao);
+
+
+        //RECISAO de contrato
+        if(!pg_num_rows($rsPosicao)){
+            $oDaoAcordoPosicao = db_utils::getDao("acordoposicao");
+            $sSqlPosicao       = $oDaoAcordoPosicao->getTermoContratoRecisao($iCodigoPosicao);
+            $rsPosicao = $oDaoAcordoPosicao->sql_record($sSqlPosicao);
+        }
+
         $oDadosRetornoPNPC = array();
 
         for ($i = 0; $i < pg_num_rows($rsPosicao); $i++) {
@@ -2206,7 +2223,7 @@ class Acordo
         $iTotalPosicaoAnterior = 0;
         $iTotalPosicaoAditivo = 0;
         $valortotaladitado = 0;
-        $iValorAditado = 0; 
+        $iValorAditado = 0;
         /**
          * AQUI IREI CALCULAR O VALOR ADITADO DO REGISTRO 20
          */
@@ -2216,7 +2233,7 @@ class Acordo
             if ($oAcordoItem->getQuantiAditada() != 0 || $oAcordoItem->getValorAditado() != 0) {
                 $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnteriors($oPosicao->getNumeroAditamento());
                 $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
-                
+
                 $sqlServico = "select pc01_servico, ac20_servicoquantidade
                     from acordoitem
                     inner join pcmater on pc01_codmater = ac20_pcmater
@@ -2224,7 +2241,7 @@ class Acordo
                     where ac20_pcmater = {$oAcordoItem->getMaterial()->getCodigo()}
                     and ac26_sequencial = {$iCodigoPosicao}";
                 $rsMatServicoR21  = db_query($sqlServico);
-                
+
                 $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
                 if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
                     $valortotaladitado += $oAcordoItem->getValorAditado();
@@ -2241,16 +2258,16 @@ class Acordo
                 }
             }
         }
-       $oDadosRetornoPNPC[0]->valorAcrescido = $valortotaladitado;
-       $oDadosRetornoPNPC[0]->qualificacaoinformativo = 'false';
+        $oDadosRetornoPNPC[0]->valorAcrescido = $valortotaladitado;
+        $oDadosRetornoPNPC[0]->qualificacaoinformativo = 'false';
 
-       if ($iTotalPosicaoAditivo > 0) {
+        if ($iTotalPosicaoAditivo > 0) {
             $oDadosRetornoPNPC[0]->qualificacaoacrescimosupressao = 'true';
-       } else {
+        } else {
             $oDadosRetornoPNPC[0]->qualificacaoacrescimosupressao = 'false';
-       }
-        
-       return $oDadosRetornoPNPC;
+        }
+
+        return $oDadosRetornoPNPC;
     }
 
     /**
@@ -2710,15 +2727,15 @@ class Acordo
         if (!db_utils::inTransaction()) {
             throw new Exception("Nenhuma transação com o banco de dados aberta.\nProcessamento cancelado.");
         }
-        $sql = "select distinct       
-        ac20_acordoposicao  from acordoposicao        
-        inner join acordoitem          on ac20_acordoposicao = ac26_sequencial        
-        inner join acordoitemexecutado on ac20_sequencial    = ac29_acordoitem        
-        inner join acordoitemexecutadoempautitem on ac29_sequencial = ac19_acordoitemexecutado        
-        inner join empautitem on e55_sequen = ac19_sequen and ac19_autori = e55_autori        
-        inner join empautoriza on e54_autori = e55_autori        
-        inner join empautidot on e56_autori = e54_autori  
-        where ac26_acordo = {$this->getCodigoAcordo()}     
+        $sql = "select distinct
+        ac20_acordoposicao  from acordoposicao
+        inner join acordoitem          on ac20_acordoposicao = ac26_sequencial
+        inner join acordoitemexecutado on ac20_sequencial    = ac29_acordoitem
+        inner join acordoitemexecutadoempautitem on ac29_sequencial = ac19_acordoitemexecutado
+        inner join empautitem on e55_sequen = ac19_sequen and ac19_autori = e55_autori
+        inner join empautoriza on e54_autori = e55_autori
+        inner join empautidot on e56_autori = e54_autori
+        where ac26_acordo = {$this->getCodigoAcordo()}
         and e54_autori = {$iAutorizacao}";
 
 
@@ -2727,8 +2744,8 @@ class Acordo
 
 
         $sql2 = "select max(ac20_acordoposicao) as codigoposicao
-        from acordoposicao 
-        inner join acordoitem on ac20_acordoposicao = ac26_sequencial 
+        from acordoposicao
+        inner join acordoitem on ac20_acordoposicao = ac26_sequencial
         where ac26_acordo = {$this->getCodigoAcordo()}";
 
 
@@ -3442,7 +3459,7 @@ class Acordo
      * @return $this
      * @throws Exception
      */
-    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $sJustificativa, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada, $lProvidencia, $datareferencia, $sPercentualReajuste, $iIndiceReajusteacordo, $sDescricaoIndiceacordo,$sDescricaoReajuste,$iCriterioReajuste)
+    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $sJustificativa, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada, $lProvidencia, $datareferencia, $sPercentualReajuste, $iIndiceReajusteacordo, $sDescricaoIndiceacordo, $sDescricaoReajuste, $iCriterioReajuste)
     {
         $nValorItens = 0;
         $nValorLancamentoContabil = 0;
@@ -3650,7 +3667,7 @@ class Acordo
             return $this;
         }
         $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
-        $sHistorico = "Valor referente ao aditivo {$oNovaPosicao->getNumeroAditamento()} do contrato de cï¿½digo: {$this->getCodigoAcordo()}.";
+        $sHistorico = "Valor referente ao aditivo {$oNovaPosicao->getNumeroAditamento()} do contrato de código: {$this->getCodigoAcordo()}.";
         if ($nValorLancamentoContabil > 0) {
             $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), $nValorLancamentoContabil, $sHistorico, $datareferencia);
         } else {
@@ -3986,7 +4003,7 @@ class Acordo
         /**
          * Remover dos vinculos com obras
          */
-        $oDaoAcordoObra= new cl_acordoobra();
+        $oDaoAcordoObra = new cl_acordoobra();
         $oDaoAcordoObra->excluir(null, "obr08_acordo = {$this->getCodigoAcordo()}");
         if ($oDaoAcordoObra->erro_status == 0) {
             throw new BusinessException($oDaoAcordoObra->erro_msg);
@@ -4007,7 +4024,7 @@ class Acordo
      *
      * @param DBDate $oDataInicio data de inicio da Paralisação
      * @param string $sObervacao Observação
-     * @throws BusinessException contrato jï¿½ esta paralizado
+     * @throws BusinessException contrato já esta paralizado
      * @throws DBException não existe transação ativa
      * @return AcordoParalisacao
      */
@@ -4206,7 +4223,7 @@ class Acordo
         $rsNumeroAnual   = db_query($sSqlNumeroAnual);
 
         if (!$rsNumeroAnual) {
-            throw new Exception("Erro ao buscar prï¿½ximo nï¿½mero do acordo." . pg_last_error());
+            throw new Exception("Erro ao buscar próximo número do acordo." . pg_last_error());
         }
 
         return (int) db_utils::fieldsMemory($rsNumeroAnual, 0)->numero;
@@ -4228,7 +4245,7 @@ class Acordo
         $rsNumeroAditivo   = db_query($sSqlNumeroAditivo);
 
         if (!$rsNumeroAditivo) {
-            throw new Exception("Erro ao buscar prï¿½ximo nï¿½mero do aditivo.");
+            throw new Exception("Erro ao buscar próximo número do aditivo.");
         }
 
         return (int) db_utils::fieldsMemory($rsNumeroAditivo, 0)->proximo == "" ? 1 : (int) db_utils::fieldsMemory($rsNumeroAditivo, 0)->proximo;
@@ -4249,15 +4266,15 @@ class Acordo
         $rsNumeroApostilamento   = db_query($sSqlNumeroApostilamento);
 
         if (!$rsNumeroApostilamento) {
-            throw new Exception("Erro ao buscar prï¿½ximo nï¿½mero do apostilamento.");
+            throw new Exception("Erro ao buscar próximo número do apostilamento.");
         }
 
         return (int) db_utils::fieldsMemory($rsNumeroApostilamento, 0)->proximo == "" ? 1 : (int) db_utils::fieldsMemory($rsNumeroApostilamento, 0)->proximo;
     }
 
     /**
-     * Valida se o nï¿½mero do aditivo ï¿½ vï¿½lido.
-     * Se jï¿½ existir um numero de aditivo para o contrato o sistema não permite a inclusão do aditamento.
+     * Valida se o número do aditivo ï¿½ vï¿½lido.
+     * Se já existir um numero de aditivo para o contrato o sistema não permite a inclusão do aditamento.
      * @param $iContrato
      * @param $sNumeroAditivo
      * @return $sNumeroAditivo
@@ -4271,15 +4288,15 @@ class Acordo
         $rsNumeroAditivo = db_query($sSql);
 
         if (pg_num_rows($rsNumeroAditivo) > 0) {
-            throw new Exception("A numeração {$sNumeroAditivo} jï¿½ existe para o contrato {$iContrato}. A prï¿½xima numeração disponï¿½vel ï¿½: " . $this->getProximoNumeroAditivo($iContrato));
+            throw new Exception("A numeração {$sNumeroAditivo} já existe para o contrato {$iContrato}. A próxima numeração disponível ï¿½: " . $this->getProximoNumeroAditivo($iContrato));
         }
 
         return $sNumeroAditivo;
     }
 
     /**
-     * Valida se o nï¿½mero do apostilamento ï¿½ vï¿½lido.
-     * Se jï¿½ existir um numero de apostilamento para o contrato o sistema não permite a inclusão do apostilamento.
+     * Valida se o número do apostilamento ï¿½ vï¿½lido.
+     * Se já existir um numero de apostilamento para o contrato o sistema não permite a inclusão do apostilamento.
      * @param $iContrato
      * @param $sNumeroApostilamento
      * @return $sNumeroApostilamento
@@ -4294,7 +4311,7 @@ class Acordo
         $rsNumeroApostilamento = db_query($sSql);
 
         if (pg_num_rows($rsNumeroApostilamento) > 0) {
-            throw new Exception("Jï¿½ existe uma posição com numeração {$sNumeroApostilamento} e contrato {$iContrato}.");
+            throw new Exception("Já existe uma posição com numeração {$sNumeroApostilamento} e contrato {$iContrato}.");
         }
 
         return $sNumeroApostilamento;
@@ -4649,7 +4666,7 @@ class Acordo
         }
 
         $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
-        $sHistorico = "Valor referente ao apostilamento {$oNovaPosicao->getNumeroApostilamento()} do contrato de cï¿½digo: {$this->getCodigoAcordo()}.";
+        $sHistorico = "Valor referente ao apostilamento {$oNovaPosicao->getNumeroApostilamento()} do contrato de código: {$this->getCodigoAcordo()}.";
         if ($nValorLancamentoContabil < 0) {
             $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $datareferencia);
         }
@@ -4684,52 +4701,55 @@ class Acordo
         return $sNatureza;
     }
 
-    public function adicionarItemAcordoObra($licitacao,$acodo,$item){
+    public function adicionarItemAcordoObra($licitacao, $acodo, $item)
+    {
         $clacordoobra = new cl_acordoobra();
         $oDaoLicobras = $clacordoobra->sql_record("select l20_tipojulg from liclicita where l20_codigo= {$licitacao}");
-        $oDaoParametro = db_utils::fieldsMemory($oDaoLicobras,0);
-        if($oDaoParametro->l20_tipojulg == 1){
+        $oDaoParametro = db_utils::fieldsMemory($oDaoLicobras, 0);
+        if ($oDaoParametro->l20_tipojulg == 1) {
             return true;
         }
         $oDaoLicobras = $clacordoobra->sql_record("select * from licobras inner join liclicitemlote on l04_numerolote = obr01_licitacaolote inner join liclicitem on l21_codigo = l04_liclicitem inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem inner join solicitempcmater on pc81_solicitem = pc16_solicitem  where obr01_licitacao =  {$licitacao} and pc16_codmater= {$item}");
-        $oDaoParametro = db_utils::fieldsMemory($oDaoLicobras,0);
-        if(pg_num_rows($oDaoLicobras)>0){
+        $oDaoParametro = db_utils::fieldsMemory($oDaoLicobras, 0);
+        if (pg_num_rows($oDaoLicobras) > 0) {
             $oDaoAcordoitem = db_query("select ac20_sequencial from acordoitem where ac20_acordoposicao= (select ac26_sequencial from acordoposicao where ac26_acordo = {$acodo}) and ac20_pcmater= {$item}");
-            $oDaoAcordoitem = db_utils::fieldsMemory($oDaoAcordoitem,0);
-            
-            if(pg_num_rows($oDaoLicobras) != 0){
-                
+            $oDaoAcordoitem = db_utils::fieldsMemory($oDaoAcordoitem, 0);
+
+            if (pg_num_rows($oDaoLicobras) != 0) {
+
                 $clacordoobra->obr08_acordo = $acodo;
-                $clacordoobra->obr08_acordoitem = $oDaoAcordoitem ->ac20_sequencial;
+                $clacordoobra->obr08_acordoitem = $oDaoAcordoitem->ac20_sequencial;
                 $clacordoobra->obr08_licobras = $oDaoParametro->obr01_sequencial;
                 $clacordoobra->obr08_liclicitemlote = $oDaoParametro->obr01_licitacaolote;
                 $clacordoobra->incluir(null);
             }
-            
+
             return true;
         }
-        
+
         return false;
     }
 
-    public function removerAcordoObra($item){
+    public function removerAcordoObra($item)
+    {
         $clacordoobra = new cl_acordoobra();
-        $clacordoobra->excluir(null,"obr08_acordoitem = {$item}");
+        $clacordoobra->excluir(null, "obr08_acordoitem = {$item}");
         return true;
     }
 
-    public function getNumeroTermoPNCP($iAcordo,$iPosicao){
+    public function getNumeroTermoPNCP($iAcordo, $iPosicao)
+    {
         $sql = "select l214_numerotermo from acocontroletermospncp where l214_acordo = {$iAcordo} and l214_acordoposicao = {$iPosicao}";
         $rsTermos = db_query($sql);
         $oDadosTermo = db_utils::fieldsMemory($rsTermos, 0);
         return $oDadosTermo->l214_numerotermo;
     }
 
-    public function getCodigoContratoPNCP($iAcordo){
+    public function getCodigoContratoPNCP($iAcordo)
+    {
         $sql = "select l214_numcontratopncp from acocontroletermospncp where l214_acordo = {$iAcordo}";
         $rsCodControle = db_query($sql);
         $oDados = db_utils::fieldsMemory($rsCodControle, 0);
         return $oDados->l214_numcontratopncp;
     }
-
 }
