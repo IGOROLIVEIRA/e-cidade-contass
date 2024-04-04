@@ -136,7 +136,7 @@ for($i=0;$i<$numrows;$i++){
   $pdf->setfont('arial','b',8); 
   $pdf->cell(30,$alt,'Data Abertura :',0,0,"R",0); 
   $pdf->setfont('arial','',7);
-  $pdf->cell(60,$alt,db_formatar($l20_dataaber,'d'),0,0,"L",0);
+  $pdf->cell(60,$alt,db_formatar($l20_datacria,'d'),0,0,"L",0);
   
   $pdf->setfont('arial','b',8); 
   $pdf->cell(30,$alt,'Hora Abertura :',0,0,"R",0); 
