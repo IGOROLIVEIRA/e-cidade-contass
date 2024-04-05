@@ -141,6 +141,36 @@ $iAnoSessao = db_getsession("DB_anousu");
     </tr>
 </table>
 </body>
+<script>
+
+    function verificacoesStatusLicitacoes(){
+
+        let table = document.getElementById('TabDbLov');
+        const indiceStatus = 10;
+        const indiceLicitacao = 0;
+
+        for(i = 2; i < table.rows.length; i++){
+            if(table.rows[i].cells[indiceStatus].innerText.trim() == "AGUARDANDO ENVIO"){
+                codigoLicitacao = table.rows[i].cells[indiceLicitacao].innerText;
+                table.rows[i].cells[indiceStatus].firstChild.removeAttribute("href");
+                table.rows[i].cells[indiceStatus].firstChild.setAttribute("onclick",`popUpDataEnvio(${codigoLicitacao})`);
+                for(j = 0; j<=11; j++){
+                    table.rows[i].cells[j].bgColor = "red";
+                }
+            }
+        }
+
+    }
+
+    function popUpDataEnvio(codigoLicitacao){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_editais','db_iframe_dataenvio',`lic4_dataenvio.php?codigo=${codigoLicitacao}`,'Data de Envio - SICOM',true,10,10,300,200);
+        CurrentWindow.corpo.iframe_editais.document.getElementById('Jandb_iframe_dataenvio').style.marginLeft = "500px"; 
+        CurrentWindow.corpo.iframe_editais.document.getElementById('Jandb_iframe_dataenvio').style.marginTop = "20px"; 
+    }
+
+    verificacoesStatusLicitacoes();
+
+</script>
 </html>
 <?
 if(!isset($pesquisa_chave)){
@@ -150,123 +180,4 @@ if(!isset($pesquisa_chave)){
     <?
 }
 ?>
-<script>
-    let aTr = document.querySelectorAll('td.DBLovrotRegistrosRetornados');
-    let pendentes = "<?=$oGet->pendentes?>";
-    let dataenvio = "<?=$oGet->dataenviosicom?>";
-    let module_licitacao = ("<?=$oGet->module_licitacao?>" == 'true');
-    let notifica = ("<?=$oGet->notifica?>" == 'true');
 
-    for(let count=0;count<aTr.length;count++){
-
-        let idCampo = parseInt(aTr[count].id.replace('I', ''));
-        let format = idCampo.toString().includes('01') ? idCampo.toString().replace('01', '1') : idCampo;
-        let idCampoInicial = format == 10 ? '00' : idCampo == 1010 ? 100 : parseInt(format.toString().substr(0, format.toString().length - 1)) - 1;
-
-        if(aTr[count].cellIndex == 10){
-
-            let status = aTr[count].innerText.replace(/\./g, '').trim();
-
-            if( status == 'AGUARDANDO ENVIO'){
-
-                if(idCampoInicial == '00'){
-                    for(let count = 0; count<=10; count++){
-                        let campo = document.getElementById(`I0${count}`);
-                        campo.bgColor = 'red';
-
-                        /*Verifica se não está na tela inicial do módulo Licitação. Caso esteja, cancela o evento de click*/
-                        if(!module_licitacao){
-                                /*
-                                * Adiciona o evento de click a todas as células anteriores à célula que contenha o status da licitação como 'AGUARDANDO ENVIO'
-                                * */
-
-                            campo.onclick = (e) => {
-
-                                // 1209 -> posição onde começa a última célula do registro contendo o status da licitação.
-                                if(e.clientX < 1209){
-                                    parent.js_buscaDadosLicitacao(codigoLicitacao);
-                                    parent.db_iframe_liclicita.hide();
-                                }
-                            }
-                        }else{
-                            campo.style.pointerEvents = 'none';
-                        }
-                    }
-                }else{
-                    for(let count = 0; count<10; count++){
-                        let campo = document.getElementById(`I${idCampoInicial+count}`);
-
-                        if(idCampo == 1110 && count == 0){
-                            document.querySelector('tr:nth-child(14)').firstChild.bgColor = 'red';
-                        }
-
-                        campo.bgColor = 'red';
-
-                        /*Verifica se não está na tela inicial do módulo Licitação. Caso esteja, cancela o evento de click*/
-                        if(!module_licitacao){
-                                /*
-                                * Adiciona o evento para retornar os dados a todas as células anteriores à célula que contenha o status da licitação como 'AGUARDANDO ENVIO'
-                                * */
-                            campo.onclick = (e) => {
-                                // 1209 -> posição onde começa a última célula do registro contendo o status da licitação.
-                                if(e.clientX < 1209){
-                                    parent.js_buscaDadosLicitacao(codigoLicitacao);
-                                    parent.db_iframe_liclicita.hide();
-                                }
-                            }
-                        }else{
-                            campo.style.pointerEvents = 'none';
-                        }
-                    }
-                }
-
-                let codigoLicitacao = document.getElementById(`I${idCampoInicial}`).innerText.trim();
-                document.getElementById(`${aTr[count].id}`).bgColor = 'red';
-
-                
-                if(!module_licitacao && !notifica){
-                    document.getElementById(`${aTr[count].id}`).onclick = (e) => {
-                        if(status == 'AGUARDANDO ENVIO'){
-                            js_OpenJanelaIframe('','db_iframe_dataenvio',`lic4_dataenvio.php?codigo=${codigoLicitacao}`,'Data de Envio - SICOM',true, null, 550, 250, 180);
-                        }
-                    }
-                }else{
-                    document.getElementById(`${aTr[count].id}`).style.pointerEvents = 'none';
-                }
-                
-            }else{
-
-                /* Trecho que exibe as licitações pendentes no módulo Licitação */
-                if(pendentes || module_licitacao){
-
-                    if(idCampoInicial == '00'){
-
-                        for(let count = 0; count<=10; count++){
-                            let campo = document.getElementById(`I0${count}`);
-                            campo.style.pointerEvents = 'none';
-                        }
-
-                    }else {
-
-                        for (let count = 0; count <= 10; count++) {
-
-                            let campo = '';
-                            if(count < 10){
-                                campo = `I${idCampoInicial + count}`;
-                            }else{
-                                campo = `I${idCampoInicial.toString().substr(0,1)}${count}`;
-                            }
-                            document.getElementById(`${campo}`).style.pointerEvents = 'none';
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    function retornoEnvio(){
-        db_iframe_dataenvio.hide();
-        parent.retornoEnvio();
-    }
-
-</script>
