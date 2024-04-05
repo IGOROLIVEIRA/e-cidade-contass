@@ -12,20 +12,19 @@ $oGet              = db_utils::postMemory($_GET, false);
 
 
 $sSqlManutencao = "SELECT
-t98_descricao,
-t98_vlrmanut,
-z01_nome,
-t98_data,
-t98_tipo,
-t98_manutencaoprocessada
-FROM bemmanutencao
-JOIN db_usuarios ON id_usuario = t98_idusuario
-JOIN cgmcorreto ON z10_login = id_usuario
-JOIN cgm ON z01_numcgm = z10_numcgm
-JOIN bens ON t52_bem = t98_bem
-WHERE t52_bem = $oGet->t52_bem
-AND
-t98_manutencaoprocessada = 't'";
+                   SUBSTRING(t98_descricao, 1, 500) AS t98_descricao,
+                   t98_vlrmanut,
+                   z01_nome,
+                   t98_data,
+                   t100_descr
+                   FROM bemmanutencao
+                   JOIN db_usuarios ON id_usuario = t98_idusuario
+                   JOIN cgmcorreto ON z10_login = id_usuario
+                   JOIN cgm ON z01_numcgm = z10_numcgm
+                   JOIN bens ON t52_bem = t98_bem
+                   JOIN tipomanubem ON t100_codigo = t98_tipo
+                   WHERE t52_bem = $oGet->t52_bem
+                   AND t98_manutencaoprocessada = 't'";
 
 
 ?>

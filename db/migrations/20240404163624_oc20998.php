@@ -9,20 +9,22 @@ class Oc20998 extends AbstractMigration
     {
         $sql = "
         begin;
-        CREATE TABLE tipomanutbem(
+        CREATE TABLE tipomanubem (
             t100_codigo int8,
-            t100_descr varchar(100),
-            t100_usuario int8
+            t100_descr varchar(100)
         );
-        INSERT INTO tipomanutbem (t100_codigo,t100_descr) VALUES (1,'Acréscimo de Valor');
-        INSERT INTO tipomanutbem (t100_codigo,t100_descr) VALUES (2,'Decréscimo de Valor');
-        INSERT INTO tipomanutbem (t100_codigo,t100_descr) VALUES (3,'Adição de Componente');
-        INSERT INTO tipomanutbem (t100_codigo,t100_descr) VALUES (4,'Remoção de Componente');
-        INSERT INTO tipomanutbem (t100_codigo,t100_descr) VALUES (5,'Manutenção de Imovel');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 't100_codigo','int8' ,'Sequencial','', 'Sequencial'             ,11,false, false, false, 1, 'int8', 'Sequencial');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 't100_descr','varchar' ,'Tipo Manutenção','', 'Tipo Manutenção'    ,11,false, false, false, 1, 'varchar', 'Tipo Manutenção');
 
-        ALTER TABLE tipomanutbem
+        INSERT INTO tipomanubem (t100_codigo,t100_descr) VALUES (1,'Acréscimo de Valor');
+        INSERT INTO tipomanubem (t100_codigo,t100_descr) VALUES (2,'Decréscimo de Valor');
+        INSERT INTO tipomanubem (t100_codigo,t100_descr) VALUES (3,'Adição de Componente');
+        INSERT INTO tipomanubem (t100_codigo,t100_descr) VALUES (4,'Remoção de Componente');
+        INSERT INTO tipomanubem (t100_codigo,t100_descr) VALUES (5,'Manutenção de Imovel');
+
+        ALTER TABLE bemmanutencao
         ADD CONSTRAINT fk_usuario_id
-        FOREIGN KEY (t100_usuario)
+        FOREIGN KEY (t98_idusuario)
         REFERENCES db_usuarios (id_usuario);
         commit;
         ";
