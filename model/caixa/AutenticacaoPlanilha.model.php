@@ -82,7 +82,7 @@ class AutenticacaoPlanilha {
     if (!db_utils::inTransaction()) {
       throw new BusinessException("Sem transação ativa com o banco de dados.");
     }
-    $data_formatada    =  formateDateReverse($this->oPlanilha->getDataAutenticacao());
+    $data_formatada    = $data_formatada = date("Y-m-d", strtotime(str_replace('/', '-', $this->oPlanilha->getDataAutenticacao())));
     $iCodigoPlanilha   = $this->oPlanilha->getCodigo();
     $sSqlAutenticacao  = " select fc_autenticaplanilha({$iCodigoPlanilha}, '{$data_formatada}', ";
     $sSqlAutenticacao .=                             "'{$this->sIpTerminal}', $this->iCodigoUsuario, true)";
@@ -104,7 +104,8 @@ class AutenticacaoPlanilha {
 
   	foreach ($aAutenticacoes as $iCodigoAutenticacao) {
 
-  	  $oDadosAutenticacao  = self::getDadosAutenticacao(formateDateReverse($this->oPlanilha->getDataAutenticacao()));
+      $data_formatada    = $data_formatada = date("Y-m-d", strtotime(str_replace('/', '-', $this->oPlanilha->getDataAutenticacao())));
+  	  $oDadosAutenticacao  = self::getDadosAutenticacao($data_formatada);
   	  $lReceita           = $this->executarLancamentoContabeis($iCodigoAutenticacao, false, $oDadosAutenticacao);
   	  $lReceitaExtra      = $this->executarLancamentosReceitaExtraOrcamentaria($iCodigoAutenticacao, false, $oDadosAutenticacao);
 
@@ -117,12 +118,6 @@ class AutenticacaoPlanilha {
   	return true;
   }
 
-  public function formateDateReverse(string $date): string
-  {
-      $data_objeto = DateTime::createFromFormat('d/m/Y', $date);
-      $data_formatada = $data_objeto->format('Y-m-d');
-      return date('Y-m-d', strtotime($data_formatada));
-  }
 
   /**
    * Estorna a autenticação da planilha
@@ -135,9 +130,10 @@ class AutenticacaoPlanilha {
     	throw new BusinessException("Sem transação ativa com o banco de dados.");
     }
 
+    $data_formatada    = $data_formatada = date("Y-m-d", strtotime(str_replace('/', '-', $this->oPlanilha->getDataAutenticacao())));
     $sIpAutenticadora = db_getsession("DB_ip");
     $iIdUsuario       = db_getsession("DB_id_usuario");
-    $dtEstorno        = formateDateReverse($this->oPlanilha->getDataAutenticacao());
+    $dtEstorno        = $data_formatada;
 
     $sSql      = "select fc_estornoplanilha({$this->oPlanilha->getCodigo()}, '{$dtEstorno}', '{$sIpAutenticadora}', {$iIdUsuario}, true)";
     $rsEstorno = db_query($sSql);
@@ -160,7 +156,8 @@ class AutenticacaoPlanilha {
 
     	foreach ($aAutenticacoes as $iCodigoAutenticacao) {
 
-    	  $oDadoAutenticacao  = self::getDadosAutenticacao(formateDateReverse($this->oPlanilha->getDataAutenticacao()));
+        $data_formatada    = $data_formatada = date("Y-m-d", strtotime(str_replace('/', '-', $this->oPlanilha->getDataAutenticacao())));
+    	  $oDadoAutenticacao  = self::getDadosAutenticacao($data_formatada);
     		$lReceita           = $this->executarLancamentoContabeis($iCodigoAutenticacao, true, $oDadoAutenticacao );
     		$lReceitaExtra      = $this->executarLancamentosReceitaExtraOrcamentaria($iCodigoAutenticacao, true, $oDadoAutenticacao );
 
