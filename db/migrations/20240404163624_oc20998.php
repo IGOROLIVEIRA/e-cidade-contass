@@ -26,6 +26,13 @@ class Oc20998 extends AbstractMigration
         ADD CONSTRAINT fk_usuario_id
         FOREIGN KEY (t98_idusuario)
         REFERENCES db_usuarios (id_usuario);
+
+        ALTER TABLE tipomanubem ADD PRIMARY KEY (t100_codigo);
+
+        ALTER TABLE bemmanutencao
+        ADD CONSTRAINT fk_tipomanutbem_id
+        FOREIGN KEY (t98_tipo)
+        REFERENCES tipomanubem (t100_codigo);
         commit;
         ";
         $this->execute($sql);
