@@ -50,6 +50,9 @@ class GerarAOP extends GerarAM
                     AND si139_instit = " . db_getsession("DB_instit");
         $rsAOP12 = db_query($sSql3);
 
+        $sSql4 = "select * from aop132024 where si140_mes = " . $this->iMes . " and si140_instit = " . db_getsession("DB_instit");
+        $rsAOP13 = db_query($sSql4);
+
         if (pg_num_rows($rsAOP10) == 0) {
 
             $aCSV['tiporegistro'] = '99';
@@ -123,6 +126,24 @@ class GerarAOP extends GerarAM
 
                         $this->sLinha = $aCSVAOP12;
                         $this->adicionaLinha();
+                    }
+                }
+
+                for ($iCont4 = 0; $iCont4 < pg_num_rows($rsAOP13); $iCont4++) {
+    
+                    $aAOP13 = pg_fetch_array($rsAOP13, $iCont4);
+          
+                    if ($aAOP10['si137_sequencial'] == $aAOP13['si140_reg10']) {
+          
+                      $aCSVAOP13['si140_tiporegistro']      = $this->padLeftZero($aAOP13['si140_tiporegistro'], 2);
+                      $aCSVAOP13['si140_codreduzidoop']     = substr($aAOP13['si140_codreduzidoop'], 0, 15);
+                      $aCSVAOP13['si140_tiporetencao']      = $this->padLeftZero($aAOP13['si140_tiporetencao'], 4);
+                      $aCSVAOP13['si140_descricaoretencao'] = substr($aAOP13['si140_descricaoretencao'], 0, 50);
+                      $aCSVAOP13['si140_vlretencao']        = $this->sicomNumberReal($aAOP13['si140_vlretencao'], 2);
+          
+                      $this->sLinha = $aCSVAOP13;
+                      $this->adicionaLinha();
+          
                     }
                 }
             }

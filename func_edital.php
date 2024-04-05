@@ -98,7 +98,8 @@ $iAnoSessao = db_getsession("DB_anousu");
                         WHEN liclancedital.l47_dataenvio is not null
                           THEN liclancedital.l47_dataenvio
                         END) as dl_Data_Referencia,
-                        l10_descr as status
+                        l10_descr as status,
+                        liclancedital.l47_dataenvio
                     FROM liclicita
                     INNER JOIN db_config ON db_config.codigo = liclicita.l20_instit
                     INNER JOIN db_usuarios ON db_usuarios.id_usuario = liclicita.l20_id_usucria
