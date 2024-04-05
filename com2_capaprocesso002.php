@@ -48,7 +48,9 @@ for ($proc = 0; $proc < pg_num_rows($rsProcs); $proc++) {
     $pdf->SetFillColor(235);
     $pdf->roundedrect(10, 80, 190, 35, 2, 'df', 1234);
     $pdf->MultiCell(0, 8, "Processo de Compra:" . $oPcproc->getCodigo(), "", "C", 0);
-    $pdf->MultiCell(0, 8, "$modalidade Nº:" . $oPcproc->getNumerodispensa() . "/" . $ano, "", "C", 0);
+    if($oPcproc->getNumerodispensa() > 0){
+        $pdf->MultiCell(0, 8, "$modalidade Nº:" . $oPcproc->getNumerodispensa() . "/" . $ano, "", "C", 0);
+    }
     $pdf->Ln(14);
     $pdf->roundedrect(10, 110, 190, 5, 2, 'DF', 12);
     $pdf->sety(109);
