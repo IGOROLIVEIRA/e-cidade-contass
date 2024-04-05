@@ -12,7 +12,7 @@ db_fieldsmemory($result, 0);
 
 $sqlProcesso = "SELECT pc80_codproc
 FROM pcproc
-WHERE pc80_codproc BETWEEN $pc80_codprocfim AND $pc80_codprocini";
+WHERE pc80_codproc BETWEEN $pc80_codprocini AND $pc80_codprocfim";
 $rsProcs = db_query($sqlProcesso);
 $pdf = new SCPDF();
 $pdf->Open();
