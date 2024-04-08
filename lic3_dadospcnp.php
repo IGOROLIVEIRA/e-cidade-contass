@@ -75,7 +75,11 @@ $dataEncerramento = implode('/',array_reverse(explode('-',$oDadosPNCP->l20_datae
     <link href="estilos/tab.style.css" rel="stylesheet" type="text/css">
 
 </head>
-
+<style>
+    .background{
+        background-color: #FFFFFF;
+    }
+</style>
 <body bgcolor="#cccccc" onload="">
 <div style="display: table; float:left; margin-left:10%;">
     <fieldset>
