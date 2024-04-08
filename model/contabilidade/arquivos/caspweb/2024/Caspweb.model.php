@@ -82,7 +82,7 @@ class Caspweb {
 
     public function gerarMapaApropriacao() {
         $clDeParaRecurso = new DeParaRecurso;
-        $sSqlMapaApropriacao = "    SELECT
+        $sSqlMapaApropriacao = "    SELECT DISTINCT
                                         codtipomapa,
                                         codentcont,
                                         exercicio,
@@ -106,12 +106,23 @@ class Caspweb {
                                         -- NULL AS espfontanalitica,
                                         NULL AS instjuridico,
                                         codenttransfinanc,
-                                        CASE
-                                            WHEN fonte IS NULL THEN '1500000'
-                                            ELSE fonte
-                                        END AS fonte,
-                                        SUM(coalesce(round(substr(dadosfonte, 59, 15)::float8, 2), debito, 0)) AS debito,
-                                        SUM(coalesce(round(substr(dadosfonte, 75, 15)::float8, 2), credito, 0)) AS credito
+                                        fonte,
+                                        SUM(coalesce(
+                                            CASE
+                                                WHEN c19_sequencial IS NOT NULL AND round(substr(dadosfonte, 75, 15)::float8, 2) !=0 THEN round(substr(dadosfonte, 75, 15)::float8, 2)
+                                                WHEN c19_sequencial IS NOT NULL AND round(substr(dadosfonte, 59, 15)::float8, 2) = 0 AND round(substr(dadosfonte, 75, 15)::float8, 2) = 0 AND credito != 0 THEN credito
+                                                WHEN c19_sequencial IS NOT NULL AND round(substr(dadosfonte, 75, 15)::float8, 2) = 0 THEN 0
+                                                ELSE NULL
+                                            END,
+                                             credito, 0)) as credito,
+                                        SUM(coalesce(
+                                            CASE
+                                                WHEN c19_sequencial IS NOT NULL AND round(substr(dadosfonte, 59, 15)::float8, 2) !=0 THEN round(substr(dadosfonte, 59, 15)::float8, 2)
+                                                WHEN c19_sequencial IS NOT NULL AND round(substr(dadosfonte, 59, 15)::float8, 2) = 0 AND round(substr(dadosfonte, 75, 15)::float8, 2) = 0 AND debito != 0 THEN debito
+                                                WHEN c19_sequencial IS NOT NULL AND round(substr(dadosfonte, 59, 15)::float8, 2) = 0 THEN 0
+                                                ELSE NULL
+                                            END,
+                                             debito, 0)) as debito
                                     FROM
                                     (SELECT 
                                         32 AS codtipomapa,
@@ -133,6 +144,7 @@ class Caspweb {
                                         END AS codagencia, 
                                         CASE 
                                             WHEN ltrim(c63_conta,'0') = '2' OR c63_conta = '001' THEN '06000002-2'
+                                            WHEN c63_conta = '71008' THEN '06071008-9'
                                             ELSE substr(c63_conta, 1, 15) 
                                         END AS codconta,
                                         CASE 
@@ -144,8 +156,18 @@ class Caspweb {
                                             WHEN substr(c60_estrut,1,5) IN ('35112','45112') THEN '201'
                                             ELSE ''
                                         END AS codenttransfinanc,
-                                        c19_orctiporec AS fonte,
+                                        CASE
+                                            WHEN c19_orctiporec IS NOT NULL THEN c19_orctiporec
+                                            ELSE 15000000
+                                        END AS fonte,
+                                        c19_sequencial,
                                         fc_saldocontacorrente({$this->iAnoUsu}, c19_sequencial, 103, {$this->iMes}, c19_instit) AS dadosfonte,
+                                        (SELECT COUNT(*)
+                                            FROM contacorrentedetalhe
+                                            WHERE c19_reduz = c61_reduz 
+                                            AND c19_conplanoreduzanousu = c61_anousu 
+                                            AND c19_instit = {$this->iInstit}
+                                        ) AS contecorrentedetalhe,
                                         (SELECT sum(c69_valor)
                                             FROM conlancamval
                                             WHERE c69_credito = c61_reduz
@@ -163,8 +185,11 @@ class Caspweb {
                                         WHERE c60_anousu = $this->iAnoUsu
                                         AND substr(c60_estrut,1,1)::integer IN (1,2,3,4,7,8)
                                         AND substr(c60_estrut,1,7) NOT IN ('2371101', '2371102')) AS x
-                                    WHERE coalesce(round(substr(dadosfonte, 59, 15)::float8, 2), debito, 0) != 0
-                                    OR coalesce(round(substr(dadosfonte, 75, 15)::float8, 2), credito, 0) != 0
+                                    WHERE (c19_sequencial IS NULL)
+                                    OR (CASE 
+                                            WHEN contecorrentedetalhe > 1 THEN round(substr(dadosfonte, 59, 15)::float8, 2) != 0 OR round(substr(dadosfonte, 75, 15)::float8, 2) != 0
+                                            ELSE 1 = 1
+                                        END)
                                     GROUP BY contacontabil, codagencia, codconta, 
                                     fonte, codtipomapa, codentcont, exercicio, mes, indsuperavit, codbanco, indapfincanc, codenttransfinanc
                                     ORDER BY contacontabil, codbanco";
@@ -175,7 +200,7 @@ class Caspweb {
 
             $oContaContabil = db_utils::fieldsMemory($rsMapaAprop, $iCont);
 
-            if(!(substr($oContaContabil->contacontabil,0,3) == '237' && $this->iMes == 01)){
+            if(!(substr($oContaContabil->contacontabil,0,3) == '237' && $this->iMes == 01) && ($oContaContabil->debito != 0 || $oContaContabil->credito != 0)){
 
                 if (strlen($oContaContabil->fonte) == 3 || $oContaContabil->fonte == '1'){
                     $oContaContabil->fonte = $clDeParaRecurso->getDePara($oContaContabil->fonte);

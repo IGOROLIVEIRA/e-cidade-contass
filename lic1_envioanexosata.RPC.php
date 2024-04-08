@@ -47,7 +47,6 @@ switch ($oParam->exec) {
                 if (pg_num_rows($rsAta) == null) {
                     throw new Exception("Ata não localizada no PNCP !");
                 }
-
                 $campos = "licanexoataspncp.*,
                            CASE
                                WHEN l216_tipoanexo = 11 THEN 'Ata de Registro de Preço'
@@ -85,8 +84,7 @@ switch ($oParam->exec) {
                     $oRetorno->message = "Enviado com Sucesso !";
                 }
             } catch (Exception $oErro) {
-
-                $oRetorno->message = $oErro->getMessage();
+                $oRetorno->message = urlencode($oErro->getMessage());
                 $oRetorno->status  = 2;
             }
         }

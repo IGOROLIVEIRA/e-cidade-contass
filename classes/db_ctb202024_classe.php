@@ -587,17 +587,26 @@ class cl_ctb202024
     return $sql;
   }
 
-  public function sql_Reg20Fonte($codctb, $ano, $mes): string
+  public function sql_Reg20Fonte($codctb, $ano, $mes, $codtce = false): string
   {
-    $instit = db_getsession("DB_instit");
+        $instit = db_getsession("DB_instit");
 
-    return "WITH registro20 AS (
+        $sqlAnd = "c61_reduz = $codctb ";
+        $orderBy = "ORDER BY c61_reduz, 6";
+
+        if ($codtce) {
+            $sqlAnd = "c61_codtce = $codctb";
+            $orderBy = "ORDER BY c61_codtce, 6";
+        }
+
+        return "WITH registro20 AS (
                 SELECT c19_sequencial,
                        c61_reduz,
                        c61_codtce,
                        c61_codcon,
                        c61_codigo,
                        o15_codigo,
+                       o15_codtri,
                        c61_instit,
                        fc_saldocontacorrente($ano, c19_sequencial, 103, $mes, c61_instit)
                 FROM conplanoexe
@@ -607,8 +616,8 @@ class cl_ctb202024
                 LEFT JOIN orctiporec ON c19_orctiporec = o15_codigo
                 WHERE c61_instit = $instit
                   AND c62_anousu = $ano
-                  AND (c61_reduz = $codctb OR c61_codtce = $codctb)
-                ORDER BY c60_estrut
+                  AND " . $sqlAnd . "
+                " . $orderBy . "
             )
             SELECT c19_sequencial,
                    o15_codigo                                                      AS fontemovimento,
@@ -618,6 +627,7 @@ class cl_ctb202024
                    round(substr(fc_saldocontacorrente, 75, 15)::float8, 2)::float8 AS credito,
                    round(substr(fc_saldocontacorrente, 91, 15)::float8, 2)::float8 AS saldofinal,
                    substr(fc_saldocontacorrente, 111, 1)::varchar(1)               AS nat_vlr_sf,
+                   o15_codtri,
                    c61_reduz,
                    c61_codtce
             FROM registro20";
@@ -653,6 +663,7 @@ class cl_ctb202024
                    INNER JOIN conplano p ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu AND c60_codsis = 6
                    WHERE c62_anousu = $iAnoUsu
                      AND c61_instit = $instituicao
-                     AND (c61_reduz = $oConta->codctb OR c61_codtce = $oConta->codctb)) AS x";
+                     AND (c61_reduz = $oConta->codctb OR c61_codtce = $oConta->codctb)) AS x
+             ORDER BY c61_reduz";
   }
 }

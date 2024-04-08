@@ -362,6 +362,7 @@ switch ($oParam->exec) {
             $oItemRetorno->quantidade          = $oItem->getQuantidade();
             $oItemRetorno->lControlaQuantidade = $oItem->getControlaQuantidade();
             $oItemRetorno->ordem  = $oItem->getOrdem();
+            $oItemRetorno->unidade          = $oItem->getDescricaoUnidade();
 
             $aCasasDecimais = explode(".", $oItemRetorno->valorunitario);
             if (count($aCasasDecimais) > 1 && strlen($aCasasDecimais[1]) > 2) {
@@ -846,4 +847,4 @@ switch ($oParam->exec) {
         break;
 }
 
-echo $oJson->encode($oRetorno);
+echo $oJson->encode(DBString::utf8_encode_all($oRetorno));

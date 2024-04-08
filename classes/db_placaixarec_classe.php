@@ -660,6 +660,8 @@ class cl_placaixarec {
    }
    // funcao do sql
    function sql_query ( $k81_seqpla=null,$campos="*",$ordem=null,$dbwhere=""){
+
+    $iAnoUso              = db_getsession("DB_anousu");
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = explode("#",$campos);
@@ -674,6 +676,7 @@ class cl_placaixarec {
      $sql .= " from placaixarec ";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = placaixarec.k81_numcgm";
      $sql .= "      inner join tabrec  on  tabrec.k02_codigo = placaixarec.k81_receita";
+     $sql .= "      inner join taborc on tabrec.k02_codigo = taborc.k02_codigo and taborc.k02_anousu = $iAnoUso ";
      $sql .= "      inner join saltes  on  saltes.k13_conta = placaixarec.k81_conta";
      $sql .= "      inner join orctiporec  on  orctiporec.o15_codigo = placaixarec.k81_codigo";
      $sql .= "      inner join placaixa  on  placaixa.k80_codpla = placaixarec.k81_codpla";
@@ -681,6 +684,12 @@ class cl_placaixarec {
      $sql .= "      inner join tabrecjm  on  tabrecjm.k02_codjm = tabrec.k02_codjm";
      $sql .= "      inner join tabrectipo  on  tabrectipo.k116_sequencial = tabrec.k02_tabrectipo";
      $sql .= "      inner join db_config  on  db_config.codigo = placaixa.k80_instit";
+     $sql .= "      left join conplanoreduz on	k13_reduz = conplanoreduz.c61_reduz and conplanoreduz.c61_anousu = $iAnoUso ";
+     $sql .= "      left join conplanocontabancaria on c56_codcon = conplanoreduz.c61_codcon 	and conplanoreduz.c61_anousu = c56_anousu ";
+     $sql .= "      left join contabancaria on c56_contabancaria = db83_sequencial ";
+     $sql .= "      left join db_operacaodecredito on db83_codigoopcredito = op01_sequencial ";
+     $sql .= "      left join convconvenios on c206_sequencial = db83_numconvenio ";
+
      $sql2 = "";
      if($dbwhere==""){
        if($k81_seqpla!=null ){
