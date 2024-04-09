@@ -189,11 +189,6 @@ $iDataLoginUsuario = date("m", db_getsession("DB_uol_hora"));
           return;
       }
 
-      if (dataSelecionada > dataServidor || dataSelecionada > dataLoginUsuario ) {
-          alert('Processamento abortado, mês selecionado superior ao mês atual');
-          return;
-      }
-
       js_verificaBensSemDepreciacao();
   });
 
