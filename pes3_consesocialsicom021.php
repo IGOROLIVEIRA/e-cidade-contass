@@ -274,7 +274,7 @@ for ($x=0;$x<pg_numrows($result);$x++) {
    */
   if ($opcao == 'rescisao') {
 
-    $rsRubEspeciais = db_query($clrubricasesocial->sql_query(null, "e990_sequencial,e990_descricao", null, "baserubricasesocial.e991_rubricas = '{$rubrica}' AND e990_sequencial IN ('1000','5001','1020')"));
+    $rsRubEspeciais = db_query($clrubricasesocial->sql_query(null, "e990_sequencial,e990_descricao", null, "baserubricasesocial.e991_rubricas = '{$rubrica}' AND e990_sequencial IN ('1000','5001','1020','1016')"));
     if (pg_num_rows($rsRubEspeciais) > 0) {
       $oRubEspeciais = db_utils::fieldsMemory($rsRubEspeciais);
       switch ($oRubEspeciais->e990_sequencial) {
@@ -286,11 +286,11 @@ for ($x=0;$x<pg_numrows($result);$x++) {
           $rubrica = '9001';
           $rh27_descr = '13º Salário na Rescisão';
           break;
-        case '1020' && $tipo == 'P':
+        case ('1020' || '1016') && $tipo == 'P':
           $rubrica = '9002';
           $rh27_descr = 'Férias Proporcional na Rescisão';
           break;
-        case '1020' && $tipo == 'V':
+        case ('1020' || '1016') && $tipo == 'V':
           $rubrica = '9003';
           $rh27_descr = 'Férias Vencidas na Rescisão';
           break;

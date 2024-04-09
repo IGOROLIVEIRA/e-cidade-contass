@@ -26,7 +26,7 @@
  */
 ?>
 <form name="form1" enctype="multipart/form-data" onsubmit="return js_verificar()" method="post" action="">
-    <fieldset style="margin: 40px auto 10px; width: 400px;">
+    <fieldset style="margin: 40px auto 10px; width: 700px;">
         <legend>
             <strong>Importação de Receitas</strong>
         </legend>
@@ -44,7 +44,15 @@
                     ?>
                 </td>
             </tr>
-
+            <tr>
+            <td nowrap><strong>Data Importação:</strong></td>
+              <td>
+                <?php
+                $dataSistema = date("d/m/Y", db_getsession("DB_datausu"));
+                db_inputdata('k81_dataimportacao', @$k81_dataimportacao_dia, @$k81_dataimportacao_mes, @$k81_dataimportacao_ano, true, 'text', 1, "")
+                ?>
+              </td>
+            </tr> 
             <tr>
                 <td nowrap><b>Arquivo:</b></td>
                 <td><?php db_input("arquivo", 29, $Iarqret, true, "file", 4) ?></td>
@@ -71,6 +79,34 @@
             return false;
         }
 
+        if ($F('k81_dataimportacao') == '') {
+            alert("Informe a data da importação.");
+            $('k81_dataimportacao').focus();
+            return false;
+        }
+        
+        var valorCampoEstorno = $F('k81_dataimportacao');
+        var dataAtual = "<?php print $dataSistema; ?>";
+        var dataEstorno = converterParaData(valorCampoEstorno);
+        var dataAtual = converterParaData(dataAtual);
+
+        if (dataEstorno > dataAtual) {
+            alert("A data de importação não pode ser maior que a data atual.");
+            $('k81_dataimportacao').focus();
+            return false;
+        }
+
+        anoDataAutenticacao = $F('k81_dataimportacao');
+        anoDataAtual        = "<?php print $dataSistema; ?>";
+        var partesDataAutenticacao = anoDataAutenticacao.split('/');
+        var anoAtual = anoDataAtual.split('/');
+
+        if (anoAtual[2] != partesDataAutenticacao[2]) {
+            alert("O ano da importção, não pode ser diferente do ano da sessão.");
+            $('k81_dataimportacao').focus();
+            return false;
+        } 
+
         if ($F("arquivo") == "") {
             alert("Campo Arquivo é de preenchimento obrigatório.");
             $('arquivo').focus();
@@ -79,5 +115,10 @@
         
         js_divCarregando('Aguarde, processando arquivos','msgBox');
         return true;
+    }
+
+    function converterParaData(dataString) {
+        var partesData = dataString.split('/');
+        return new Date(partesData[2], partesData[1] - 1, partesData[0]);
     }
 </script>

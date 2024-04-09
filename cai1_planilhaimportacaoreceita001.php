@@ -49,11 +49,12 @@ if (isset($processar)) {
         $arq_size    = $size;
         $arq_array   = file($tmp_name);
         $arq_ext     = substr($name, -3);
+        $data        = $k81_dataimportacao;
 
         if ($arq_ext != "txt")
             throw new FileException("Apenas arquivos de texto (.txt)");
         // Instancia a arrecadacao da receita por importação
-        $oImportacaoReceita = new ImportacaoReceita($arq_name, $layout);
+        $oImportacaoReceita = new ImportacaoReceita($arq_name, $layout,$data);
         $oImportacaoReceita->salvar($arq_array);
         // Commita as modificações no banco
         db_fim_transacao(false);
