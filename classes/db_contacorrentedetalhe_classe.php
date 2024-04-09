@@ -1249,11 +1249,20 @@ class cl_contacorrentedetalhe {
 
             if ($saldoAnterior <= 0){
                 $aTotalPorCodtri[$codtri]['sinal_anterior'] = 'D';
+                $saldoNovo = $aTotalPorCodtri[$codtri]['sinal_anterior'] == 'D' ? $aTotalPorCodtri[$codtri]['saldo_anterior'] * -1 : $aTotalPorCodtri[$codtri]['saldo_anterior'] + ($aCCSaldoAnterior);
+              
+                if ($saldoNovo > $aCCSaldoAnterior){
+                  $aTotalPorCodtri[$codtri]['sinal_anterior'] = 'C';
+                }
             }else{
                 $aTotalPorCodtri[$codtri]['sinal_anterior'] = 'C';
             }
             if ($saldoFinal <= 0){
                 $aTotalPorCodtri[$codtri]['sinal_final'] = 'D';
+                $saldoNovof = $aTotalPorCodtri[$codtri]['sinal_final'] == 'D' ? $aTotalPorCodtri[$codtri]['saldo_final'] * -1 : $aTotalPorCodtri[$codtri]['saldo_final'] + ($aCCSaldoFinal);
+                if ($saldoNovof > $aCCSaldoFinal){
+                  $aTotalPorCodtri[$codtri]['sinal_final'] = 'C';
+                }
             }else{
                 $aTotalPorCodtri[$codtri]['sinal_final'] = 'C';
             }

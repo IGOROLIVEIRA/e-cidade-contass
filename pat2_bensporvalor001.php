@@ -122,14 +122,6 @@ foreach ($resultadoClsituabens as $resSiBens) {
                     db_select("iTipobens", $aTipobens, true, 1); ?>
                 </td>
             </tr>
-            <tr>
-                <td><b>Exibir bens:</b></td>
-                <td nowrap>
-                    <?php
-                    $aExibir = ['1' => 'Ativos','2' => 'Todos','3' => 'Baixados'];
-                    db_select("iExibir", $aExibir, true, 1); ?>
-                </td>
-            </tr>
         </table>
     </fieldset>
     <input type="button" value="Emitir" onClick="js_emite();">
@@ -174,10 +166,6 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
             return false
         }
         query += '&ano=' + ano
-
-        let exibir = document.getElementById('iExibir').value;
-
-        query += '&exibir=' + exibir;
 
         let tipobens = document.getElementById('iTipobens').value;
 

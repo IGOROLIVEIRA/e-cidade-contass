@@ -36,7 +36,7 @@ class cl_protocolos {
                  p101_id_usuario = int4 = Usuario
                  p101_coddeptoorigem = int4 = Depart. Origem
                  p101_coddeptodestino = int4 = Depart. Destino
-                 p101_observacao = varchar(200) = Observacao
+                 p101_observacao = varchar(600) = Observacao
                  p101_dt_protocolo = date = Data
                  p101_hora = varchar(5) = Hora
                  p101_dt_anulado = date = Dt. Anulação

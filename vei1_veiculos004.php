@@ -170,10 +170,12 @@ if (isset($incluir)) {
             }
         }
 
-        $validacaoNumeroSerie = $clveiculos->validacaoNumeroSerie($ve01_nroserie,$si04_especificacao,null,"inclusao");
-        if($validacaoNumeroSerie == false){
-            $sqlerro = true;
-            $erro_msg = "Campo Nº de Série já cadastrado para o tipo de especificação informado.";
+        if(in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
+            $validacaoNumeroSerie = $clveiculos->validacaoNumeroSerie($ve01_nroserie,$si04_especificacao,null,"inclusao");
+            if($validacaoNumeroSerie == false){
+                $sqlerro = true;
+                $erro_msg = "Campo Nº de Série já cadastrado para o tipo de especificação informado.";
+            }
         }
 
         if ($sqlerro == false) {
