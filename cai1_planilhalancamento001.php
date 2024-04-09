@@ -103,7 +103,7 @@ if ($oInstit->db21_usasisagua == "t") {
     #k81_origem,
     #k81_codigo,
     #k81_regrepasse {
-      width: 83px;
+      width: 14%;
     }
 
     .tamanho-primeira-col {
@@ -119,16 +119,16 @@ if ($oInstit->db21_usasisagua == "t") {
     }
 
     #k81_codigodescr {
-      width: 454px;
+      width: 70%;
     }
 
     #k81_emparlamentar {
-      width: 541px;
+      width: 85%;
     }
 
     #k81_obs {
       width: 100%;
-      height: 50px;
+      height: 30px;
     }
 
     #k81_valor {
@@ -163,8 +163,6 @@ if ($oInstit->db21_usasisagua == "t") {
                 db_inputdata('k80_data', @$k80_data_dia, @$k80_data_mes, @$k80_data_ano, true, 'text', 3, "")
                 ?>
               </td>
-            </tr>
-            <tr>
               <td>
                 <b>Processo Administrativo:</b>
               </td>
@@ -180,24 +178,9 @@ if ($oInstit->db21_usasisagua == "t") {
 
 
         <!-- Dados Receita -->
-        <fieldset style="width:95%; margin-top: 20px">
+        <fieldset style="width:95%; margin-top: 1px">
           <legend><b>Receita</b></legend>
           <table border="0" width="101%">
-            <!-- Receita -->
-            <tr>
-              <td class='tamanho-primeira-col' nowrap><? db_ancora($Lk81_receita, "js_pesquisaReceita(true)", $db_opcao); ?></td>
-              <td colspan='3'>
-                <?
-                db_input('codigo_receitaplanilha', 10, null, true, 'text', 2, " style='display:none;'");
-                db_input('k81_receita', 10, $Ik81_receita, true, 'text', 2, " onchange='js_pesquisaReceita(false)'");
-                echo "&nbsp;&nbsp;";db_input('c61_codigo', 7, $Ic61_codigo, true, 'text', 3, " onfocus=\"document.getElementById('k81_conta').focus()\" ", 'recurso');
-                db_input('k02_drecei', 51, $Ik02_drecei, true, 'text', 3);
-                db_input('estrutural', 20, null, true, 'hidden', 2, "");
-                db_input('k02_tipo', 1, null, true, 'hidden');
-                ?>
-              </td>
-            </tr>
-
             <!-- Código Conta -->
             <tr>
               <td class='tamanho-primeira-col' nowrap title="<?= @$Tk81_conta ?>">
@@ -205,13 +188,39 @@ if ($oInstit->db21_usasisagua == "t") {
                 db_ancora($Lk81_conta, "js_pesquisaConta(true);", $db_opcao);
                 ?>
               </td>
-              <td colspan='3'>
+              <td colspan='3' >
                 <?
-                db_input('k81_conta', 10, $Ik81_conta, true, 'text', 2, "onchange='js_pesquisaConta(false);'");
-                echo "&nbsp;&nbsp;";db_input('c61_codigo', 7, $Ic61_codigo, true, 'text', 3);
-                db_input('k13_descr', 51, $Ik13_descr, true, 'text', 3);
+                db_input('k81_conta', 10, $Ik81_conta, true, 'text', 2, "onchange='js_pesquisaConta(false);' tabIndex='1'");
+                db_input('k13_descr', 51, $Ik13_descr, true, 'text', 1,"onkeyup = 'buscaConta()' tabIndex='2'");
+                db_input('c61_codigo', 7, $Ic61_codigo, true, 'text', 3);
                 ?>
               </td>
+            </tr>
+            <tr>
+                <td nowrap></td>
+                <td nowrap></td>
+                <td id='contaAutocomplete' colspan='6' nowrap onclick="js_pequisaconta()"></td>
+            </tr>
+            <!-- Receita -->
+            <tr>
+              <td class='tamanho-primeira-col' nowrap><? db_ancora($Lk81_receita, "js_pesquisaReceita(true)", $db_opcao); ?></td>
+              <td colspan='3'>
+                <?
+                db_input('codigo_receitaplanilha', 10, null, true, 'text', 2, " style='display:none;'");
+                db_input('k81_receita', 10, $Ik81_receita, true, 'text', 2, " onchange='js_pesquisaReceita(false)' tabIndex='3'");
+                db_input('k02_drecei', 51, $Ik02_drecei, true, 'text', 1,"onkeyup = 'buscaReceita()'tabIndex='4'");
+                db_input('c61_codigo', 7, $Ic61_codigo, true, 'text', 3, " onfocus=\"document.getElementById('k81_conta').focus()\" ", 'recurso');
+
+                db_input('estrutural', 20, null, true, 'hidden', 2, "");
+                db_input('k02_tipo', 1, null, true, 'hidden');
+                ?>
+              </td>
+            </tr>
+
+            <tr>
+                <td nowrap></td>
+                <td nowrap></td>
+                <td id='receitaAutocomplete' colspan='6' nowrap onclick="js_pequisarecurso()"></td>
             </tr>
             <tr id="notificacao" style="display:none;">
               <td colspan='4' style="text-align: left; background-color: #fcf8e3; border: 1px solid #fcc888; padding: 10px">
@@ -226,7 +235,7 @@ if ($oInstit->db21_usasisagua == "t") {
             </tr>
 
             <!-- Origem -->
-            <tr>
+            <tr style="display:none;">
               <td class='tamanho-primeira-col' nowrap title="<?= @$Tk81_origem ?>"><?= $Lk81_origem ?></td>
               <td colspan='3'>
                 <?
@@ -243,7 +252,7 @@ if ($oInstit->db21_usasisagua == "t") {
               <td colspan='3'>
                 <?
                 db_input('k81_numcgm', 10, $Ik81_numcgm, true, 'text', 2, "onchange='js_pesquisaCgm(false);'");
-                echo "&nbsp;&nbsp;";db_input('z01_nome', 61, $Iz01_nome, true, 'text', 3);
+                db_input('z01_nome', 61, $Iz01_nome, true, 'text', 3);
                 ?>
               </td>
             </tr>
@@ -271,7 +280,7 @@ if ($oInstit->db21_usasisagua == "t") {
             </tr>
 
             <!-- Recurso -->
-            <tr>
+            <tr style='display:none'>
               <td class='tamanho-primeira-col' nowrap title="<?= @$To15_codigo ?>"><? echo $Lo15_codigo ?></td>
               <td colspan='3'>
                 <?
@@ -291,7 +300,7 @@ if ($oInstit->db21_usasisagua == "t") {
               <td colspan='3'>
                 <?
                 db_input('k81_convenio', 10, $Ik81_convenio, true, 'text', 3, "onChange='js_pesquisak81_convenio(false);'");
-                echo "&nbsp;&nbsp;";db_input("c206_objetoconvenio", 61, 0, true, "text", 3);
+                db_input("c206_objetoconvenio", 61, 0, true, "text", 3);
                 ?>
               </td>
             </tr>
@@ -302,7 +311,7 @@ if ($oInstit->db21_usasisagua == "t") {
                 <td nowrap title="<?= @$Top01_numerocontratoopc ?>"><? echo $Ldb83_numerocontratooc ?></td>
                 <td colspan='3'>
                   <?
-                  db_input('op01_numerocontratoopc', 75, 0, true, $db_opcaotext);
+                  db_input('op01_numerocontratoopc', 75, 0, true, "text",3);
                   ?>
                 </td>
               </tr>
@@ -310,7 +319,7 @@ if ($oInstit->db21_usasisagua == "t") {
                 <td nowrap title="<?= @$Tdb83_dataassinaturacop ?>"><? echo $Ldb83_dataassinaturacop ?></td>
                 <td colspan='3'>
                   <?
-                  db_input('op01_dataassinaturacop', 75, $rsOrctiporec, true, $db_opcao);
+                  db_input('op01_dataassinaturacop', 75, $rsOrctiporec, true,  "text",3);
                   ?>
                 </td>
               </tr>
@@ -356,7 +365,7 @@ if ($oInstit->db21_usasisagua == "t") {
                     '4' => '4 - Emenda não impositiva (Emendas de comissão e relatoria)'
                   );
                 }
-                db_select("k81_emparlamentar", $aOpcoes, true, 1, "class='input-menor'");
+                db_select("k81_emparlamentar", $aOpcoes, true, 1, "class='input-menor' tabIndex='5'");
                 ?>
               </td>
             </tr>
@@ -379,25 +388,20 @@ if ($oInstit->db21_usasisagua == "t") {
             </tr>
 
             <tr>
-              <td nowrap title="<?= @$Tk81_datareceb ?>"><? echo $Lk81_datareceb ?></td>
+              <td nowrap title="<?= @$Tk81_datareceb ?>"><b>Data da Arrecadação:</b></td>
+              
               <td><?
-                  if ($db_opcao == 1) {
-
-                    $k81_datareceb_dia = date("d", db_getsession("DB_datausu"));
-                    $k81_datareceb_mes = date("m", db_getsession("DB_datausu"));
-                    $k81_datareceb_ano = date("Y", db_getsession("DB_datausu"));
-                  }
-                  db_inputdata('k81_datareceb', @$k81_datareceb_dia, @$k81_datareceb_mes, @$k81_datareceb_ano, true, 'text', $db_opcao, "class='input-menor'")
+                  db_inputdata('k81_datareceb', @$k81_datareceb_dia, @$k81_datareceb_mes, @$k81_datareceb_ano, true, 'text', $db_opcao, "class='input-menor' tabIndex='6'")
                   ?>
               </td>
-              <td nowrap title="<?= @$Tk81_operbanco ?>" width="100px"><?= @$Lk81_operbanco ?></td>
-              <td><? db_input('k81_operbanco', 10, $Ik81_operbanco, true, 'text', $db_opcao); ?></td>
+              <td style='display:none' nowrap title="<?= @$Tk81_operbanco ?>" width="100px"><?= @$Lk81_operbanco ?></td>
+              <td style='display:none'><? db_input('k81_operbanco', 10, $Ik81_operbanco, true, 'text', $db_opcao); ?></td>
             </tr>
 
             <tr>
 
               <td nowrap title="<?= @$Tk81_valor ?>"><?= @$Lk81_valor ?></td>
-              <td><? db_input('k81_valor', 10, $Ik81_valor, true, 'text', $db_opcao) ?></td>
+              <td><? db_input('k81_valor', 10, $Ik81_valor, true, 'text', $db_opcao,"tabIndex='7'") ?></td>
 
             </tr>
 
@@ -414,14 +418,14 @@ if ($oInstit->db21_usasisagua == "t") {
         </fieldset>
         <br>
 
-        <input type='button' value='Salvar Item' id='incluir' onclick='js_addReceita();' />
+        <input type='button' value='Salvar Item' id='incluir' onclick='js_addReceita();'tabIndex='8' />
         <input type='button' value='Pesquisar' id='btnPesquisar' onclick='js_pesquisaPlanilha(false);' />
         <input type='button' value='Importar' id='importar' onclick='js_pesquisaPlanilha(true);' />
         <input type='button' value='Limpar Dados Receita' id='limpar' onclick='js_limpaFormularioReceita();' />
         <div id='ctnReceitas' style="margin-top: 20px;"></div>
 
       </fieldset>
-      <input type="button" value='Salvar Planilha' id='salvar' style="margin-top: 10px;" onclick='js_salvarPlanilha()' />
+      <input type="button" value='Salvar Planilha' id='salvar' style="margin-top: 10px;" onclick='js_salvarPlanilha();' tabIndex='9' />
       <input type="button" value='Excluir Selecionados' id='excluir' style="margin-top: 10px;" onclick='js_excluiSelecionados();' />
       <input type="button" value='Nova Planilha' id='excluir' style="margin-top: 10px;" onclick='js_novaReceita()' />
       <input type="hidden" value="<?= db_getsession("DB_anousu") ?>" id="anoUsu" />
@@ -541,13 +545,17 @@ if ($oInstit->db21_usasisagua == "t") {
   }
 
   function js_novaReceita() {
-
+    var conta = $('k81_conta').value;
     document.form1.reset();
     toogleOrigem();
     oGridReceitas.clearAll(true);
     aReceitas = new Array();
     iIndiceReceitas = 0;
     iAlteracao = null;
+    $('k81_conta').value = conta;
+    js_pesquisaConta(false);
+    document.getElementById('dtjs_k81_datareceb').disabled = false;
+    document.getElementById('k81_datareceb').disabled = false;
   }
 
   function js_limpaFormularioReceita() {
@@ -599,7 +607,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
   function toogleOrigem() {
 
-    iTipo = $F("k81_origem");
+    iTipo = 1;//$F("k81_origem");
 
     $('k81_numcgm').value = '';
     $('q02_inscr').value = '';
@@ -823,7 +831,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
     if ($('anoUsu').value >= 2022) {
 
-      if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
+      if (recursoreceita.substr(0,4) == 1574 || recursoreceita.substr(0,4) == 1634 ||recursoreceita.substr(0,4) == 1754 || recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
         document.getElementById('numerocontrato').style.display = "";
         document.getElementById('datacontrato').style.display = "";
         if (idb83_codigoopcredito == '' || idb83_codigoopcredito == null) {
@@ -878,7 +886,7 @@ if ($oInstit->db21_usasisagua == "t") {
       }
 
 
-      if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
+      if (recursoreceita.substr(0,4) == 1574 || recursoreceita.substr(0,4) == 1634 ||recursoreceita.substr(0,4) == 1754 || recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
         document.getElementById('numerocontrato').style.display = "";
         document.getElementById('datacontrato').style.display = "";
       } else {
@@ -983,12 +991,104 @@ if ($oInstit->db21_usasisagua == "t") {
 
   }
 
+  function buscaReceita()
+  {
+      let inputField  = 'k02_drecei';
+      let inputCodigo = 'k81_receita';
+      let ulField     = 'receitaAutocomplete';
+      buscaReceitaAutoComplete(inputField,inputCodigo,ulField,$('k02_drecei').value); 
+  }
+
+  function buscaConta()
+  {
+      let inputField  = 'k13_descr';
+      let inputCodigo = 'k81_conta';
+      let ulField     = 'contaAutocomplete';
+      buscaContaAutoComplete(inputField,inputCodigo,ulField,$('k13_descr').value); 
+  }
+
+  function buscaContaAutoComplete(inputField,inputCodigo,ulField,descricao)
+  {
+        
+        var oParam    = new Object();
+        oParam.exec   = "verificaContaAutoComplete";
+        oParam.iDescricao  = descricao;
+        oParam.inputField  = inputField;
+        oParam.inputCodigo = inputCodigo;
+        oParam.ulField     = ulField;
+
+        if(oParam.iDescricao.length == 3){
+          js_divCarregando("Aguarde, verificando Contas...", "msgBox");
+        };  
+        if(oParam.iDescricao.length < 1){
+          $('c61_codigo').value = '';
+        };  
+        
+        let oAjax = new Ajax.Request ("cai4_planilhaarrecadacao.RPC.php",
+          {method: 'post',
+            parameters: 'json='+Object.toJSON(oParam),
+            onComplete: fillAutoComplete
+          });   
+  } 
+
+  function buscaReceitaAutoComplete(inputField,inputCodigo,ulField,descricao)
+  {
+       
+        var oParam    = new Object();
+        oParam.exec   = "verificaReceitaAutoComplete";
+        oParam.iDescricao  = descricao;
+        oParam.inputField  = inputField;
+        oParam.inputCodigo = inputCodigo;
+        oParam.ulField     = ulField;
+
+        if(oParam.iDescricao.length == 3){
+          js_divCarregando("Aguarde, verificando Receitas...", "msgBox");
+        };  
+        if(oParam.iDescricao.length < 1){
+          $('recurso').value = '';
+        };  
+       
+        let oAjax = new Ajax.Request ("cai4_planilhaarrecadacao.RPC.php",
+          {method: 'post',
+            parameters: 'json='+Object.toJSON(oParam),
+            onComplete: fillAutoComplete
+          });   
+  }
+
+  function fillAutoComplete(oAjax)
+  {    
+      js_removeObj("msgBox");
+      require_once('scripts/classes/autocomplete/AutoComplete.js');  
+      performsAutoComplete(oAjax); 
+               
+  }
+
+  function js_pequisarecurso()
+  {
+    window.setTimeout(
+         function() {
+            js_pesquisaReceita(false)
+        }, 5
+      ); 
+  }
+
+  function js_pequisaconta()
+  {
+    window.setTimeout(
+         function() {
+           js_pesquisaConta(false)
+        }, 5
+      ); 
+  }
+
   function js_mostratabrec(iReceita, sReceita, chave3, chave4, erro, chave5, chave6) {
 
     $receitaTipo = chave4;
     if ($('anoUsu').value >= 2022) {
       if (chave4.substr(0, 1) != 4) {
         $('k81_receita').value = '';
+        $('k02_drecei').value = '';
+        $('recurso').value = '';
         alert('Selecione apenas receita do grupo orçamentária');
 
         return;
@@ -1034,7 +1134,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
     if ($('anoUsu').value >= 2022) {
       var recursoreceita = $('recurso').value;
-      if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
+      if (recursoreceita.substr(0,4) == 1574 || recursoreceita.substr(0,4) == 1634 ||recursoreceita.substr(0,4) == 1754 || recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
         document.getElementById('numerocontrato').style.display = "";
         document.getElementById('datacontrato').style.display = "";
       } else {
@@ -1136,7 +1236,7 @@ if ($oInstit->db21_usasisagua == "t") {
         }
       }
       var recursoreceita = $('recurso').value;
-      if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
+      if (recursoreceita.substr(0,4) == 1574 || recursoreceita.substr(0,4) == 1634 ||recursoreceita.substr(0,4) == 1754 || recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
         document.getElementById('numerocontrato').style.display = "";
         document.getElementById('datacontrato').style.display = "";
       } else {
@@ -1367,7 +1467,7 @@ if ($oInstit->db21_usasisagua == "t") {
     if ($('anoUsu').value >= 2022) {
       var recursoreceita = $('recurso').value;
       if ($F('op01_dataassinaturacop') == '' || $F('op01_numerocontratoopc') == '') {
-        if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
+        if (recursoreceita.substr(0,4) == 1574 || recursoreceita.substr(0,4) == 1634 ||recursoreceita.substr(0,4) == 1754 || recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
           alert('É obrigatório informar o número do contrato da operação de crédito para as receitas de fontes 174,179,190 e 191');
           $('k81_conta').focus();
           return false;
@@ -1465,7 +1565,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
     if ($F('k81_datareceb') == '') {
 
-      alert("Informe a data do recebimento.");
+      alert(" Informe a data da arrecadação.");
       $('k81_datareceb').focus();
       return false;
     }
@@ -1962,6 +2062,10 @@ if ($oInstit->db21_usasisagua == "t") {
     }
     oGridReceitas.renderRows();
     $('TotalForCol4').innerHTML = "Total: " + js_formatar(nTotalReceitas, 'f');
+    if ($('k81_datareceb').value) {
+      document.getElementById('dtjs_k81_datareceb').disabled = true;
+      document.getElementById('k81_datareceb').disabled = true;
+    }
   }
 
   /**
@@ -1970,6 +2074,14 @@ if ($oInstit->db21_usasisagua == "t") {
   function js_mostraReceita(iIndice) {
 
     iAlteracao = iIndice;
+    totalRegistro = document.getElementById("ctnReceitasnumrows");
+    let totalreg = totalRegistro.textContent
+
+    if (totalreg == 1) {
+      document.getElementById('dtjs_k81_datareceb').disabled = false;
+      document.getElementById('k81_datareceb').disabled = false;
+    }
+
     $('codigo_receitaplanilha').value = aReceitas[iIndice].iReceitaPlanilha;
     $('k81_receita').value = aReceitas[iIndice].k81_receita;
     $('k81_conta').value = aReceitas[iIndice].k81_conta;
@@ -2046,18 +2158,13 @@ if ($oInstit->db21_usasisagua == "t") {
       return false;
     }
 
-    var sMensagemSalvar = "Deseja salvar a planilha de arrecadação?\n\n";
-    sMensagemSalvar += "Este procedimento pode demandar algum tempo.";
-    if (!confirm(sMensagemSalvar)) {
-      return false;
-    }
 
     js_divCarregando("Aguarde, salvando planilha de arrecadação...", "msgBox");
 
     var oParametro = new Object();
     oParametro.exec = 'salvarPlanilha';
     oParametro.k144_numeroprocesso = encodeURIComponent(tagString($F('k144_numeroprocesso')));
-
+    oParametro.novaDtRecebimento = $F('k81_datareceb');
     if (lMenuAlteracao) {
       oParametro.exec = 'alterarPlanilha';
     }
@@ -2256,8 +2363,8 @@ if ($oInstit->db21_usasisagua == "t") {
         (iContaReceita == 15420007 && iConta == 15400007) || (iContaReceita == 15420000 && iConta == 15400007) || (iContaReceita == 15420007 && iConta == 15400000) || (iContaReceita == 15420000 && iConta == 15400000) || (iContaReceita == 15400007 && iConta == 15400000) ||
         (iContaReceita == 15000001 && iConta == 15000000) || (iContaReceita == 15000002 && iConta == 15000000) || (iContaReceita == 16590000 && iConta == 16000000) || (iContaReceita == 16590000 && iConta == 16020000) || (iContaReceita == 16040000 && iConta == 16000000) ||
         (iContaReceita == 16040000 && iConta == 16020000) || (iContaReceita == 16590000 && iConta == 16010000) || (iContaReceita == 16590000 && iConta == 16030000) || (iContaReceita == 17070000 && iConta == 15000000) || (iContaReceita == 17040000 && iConta == 17040000) ||
-        (iContaReceita == 17080000 && iConta == 15000000) || ($('estrutural').value.substr(0, 9) == 411130311) || ((substr(iContaReceita,0,4) == 1720 || substr(iContaReceita,0,4)    == 1721 )   && iConta == 17040000) || (substr(iContaReceita,0,4) == 1540 && iConta == 15430000) ||
-        (substr(iContaReceita,0,4) == 1500 && iConta == 16590020)
+        (iContaReceita == 17080000 && iConta == 15000000) || ($('estrutural').value.substr(0, 9) == 411130311) || ((iContaReceita.substr(0,4) == 1720 || iContaReceita.substr(0,4)    == 1721 )   && iConta == 17040000) || (iContaReceita.substr(0,4) == 1540 && iConta == 15430000) ||
+        (iContaReceita.substr(0,4) == 1500 && iConta == 16590020)
       ) {
         $('notificacao').setStyle({
           display: 'none'
@@ -2511,17 +2618,12 @@ if ($oInstit->db21_usasisagua == "t") {
       return false;
     }
 
-    var sMensagemSalvar = "Deseja autenticar a planilha de arrecadação selecionada?\n\n";
-    sMensagemSalvar += "Este procedimento pode demandar algum tempo.";
-    if (!confirm(sMensagemSalvar)) {
-      return false;
-    }
-
     js_divCarregando("Aguarde, autenticando planilha de arrecadação...", "msgBox");
 
     var oParametro = new Object();
     oParametro.exec = 'autenticarPlanilha';
     oParametro.iPlanilha = iPlaninhaAutentica;
+    oParametro.novaDtRecebimento = $F('k81_datareceb');
     oParametro.k144_numeroprocesso = encodeURIComponent(tagString($F("k144_numeroprocesso")));
 
     var oAjax = new Ajax.Request(sRPC, {
@@ -2538,6 +2640,12 @@ if ($oInstit->db21_usasisagua == "t") {
 
     if (oRetorno.status == 1) {
       alert("Planilha " + oRetorno.iPlanilha + " autenticada com sucesso");
+      $('TotalForCol4').innerHTML = "Total: " + "0,00";
+      window.setTimeout(
+         function() {
+          document.getElementById("k81_receita").focus();
+        },1000
+      );      
       js_novaReceita();
     } else {
       alert(oRetorno.message.urlDecode());
@@ -2965,4 +3073,5 @@ if ($oInstit->db21_usasisagua == "t") {
             return iTipo == 15420007 ? fVl15420007 : fVl15400007;
         }
     }
+    document.form1.k81_conta.focus();
 </script>

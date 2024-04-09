@@ -80,7 +80,7 @@ switch ($oParam->exec) {
       $oItem->tipo       = '';
       $oItem->codigo      = $item->ac20_pcmater;
       $oItem->descricao      = urlencode($item->pc01_descrmater);
-      $oItem->unidademed = $item->m61_descr;
+      $oItem->unidademed = urlencode($item->m61_descr);
       $oItem->quantidade = $item->ac20_quantidade;
       $oItem->vlrUnit = $item->ac20_valorunitario;
       $oItem->vlrTotal = $item->ac20_valortotal;

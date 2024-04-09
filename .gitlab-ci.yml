@@ -311,3 +311,11 @@ cmcapitaoeneasv3:
   environment: production
   only:
     - ecidade_v3
+
+homologacao-nfse:
+  stage: deploy
+  script:
+    - 'ssh contass@10.250.30.8 "cd /var/www/homologacao-nfse && git pull origin ecidade_v3 && composer install && php vendor/robmorgan/phinx/bin/phinx migrate -e homologacao_nfse"'
+  environment: production
+  only:
+    - ecidade_v3

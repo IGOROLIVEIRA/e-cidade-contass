@@ -119,7 +119,7 @@ switch ($oParam->exec) {
                     //Ambiente de Producao
                         $l213_numerocompra = substr($rsApiPNCP[1], 67);
                     }
-                
+
                     $l213_numerocontrolepncp = db_utils::getCnpj() . '-1-' . str_pad($l213_numerocompra, 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
 
                     //monto o codigo da compra no pncp
@@ -231,6 +231,8 @@ switch ($oParam->exec) {
 
                 if ($rsApiPNCP->compraUri == null) {
                     //monto o codigo da compra no pncp
+                    $clliccontrolepncp = new cl_liccontrolepncp();
+
                     $l213_numerocontrolepncp = $aLicitacao->numerocontrole;
                     if ($oDadosLicitacao->tipoinstrumentoconvocatorioid == "3") {
                         $clliccontrolepncp->l213_processodecompras = $aProcesso->codigo;
