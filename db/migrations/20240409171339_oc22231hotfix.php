@@ -6,8 +6,8 @@ class Oc22231hotfix extends AbstractMigration
 {
     public function up()
     {
-        $this->verificaDados();
         $this->novosDados();
+        $this->verificaDados();
     }
 
     public function novosDados()
@@ -38,6 +38,13 @@ class Oc22231hotfix extends AbstractMigration
                                         efd05_dscResp  	      character varying(500) NULL
                                         
                     );
+
+                    CREATE SEQUENCE IF NOT EXISTS efdreinfr2010_efd05_sequencial_seq
+                                START WITH 1
+                                INCREMENT BY 1
+                                NO MINVALUE
+                                NO MAXVALUE
+                                CACHE 1;
         COMMIT;   
 
         SQL;
