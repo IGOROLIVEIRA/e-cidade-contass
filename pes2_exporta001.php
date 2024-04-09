@@ -34,27 +34,27 @@ db_postmemory($HTTP_POST_VARS);
 $clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt23');
 $clrotulo->label('DBtxt25');
-  
-
-if (isset($gera)){
-
-if($tipofun == 'E'){
- $xwhere = ' and rh30_regime = 1 ';
-}elseif($tipofun == 'C'){
- $xwhere = ' and rh30_regime = 3 ';
-}elseif($tipofun == 'L'){
- $xwhere = ' and rh30_regime = 2 ';
-}else{
- $xwhere = ' ';
-}
-
-  if($exporta == 'B'){
-    
-  $arq = '/tmp/folha.csv';
 
 
-  $arquivo = fopen($arq,'w');  
-  $sql = "
+if (isset($gera)) {
+
+    if ($tipofun == 'E') {
+        $xwhere = ' and rh30_regime = 1 ';
+    } elseif ($tipofun == 'C') {
+        $xwhere = ' and rh30_regime = 3 ';
+    } elseif ($tipofun == 'L') {
+        $xwhere = ' and rh30_regime = 2 ';
+    } else {
+        $xwhere = ' ';
+    }
+
+    if ($exporta == 'B') {
+
+        $arq = '/tmp/folha.csv';
+
+
+        $arquivo = fopen($arq, 'w');
+        $sql = "
           select
            coalesce(r38_regist,0)||';'||
            coalesce(r38_nome,'')||';'||
@@ -77,28 +77,28 @@ if($tipofun == 'E'){
                inner join rhpessoalmov    on rh02_anousu    = $ano
                                          and rh02_mesusu    = $mes
                                          and rh02_regist    = r38_regist
-                                         and rh02_instit    = ".db_getsession("DB_instit")."
+                                         and rh02_instit    = " . db_getsession("DB_instit") . "
                inner join rhregime        on rh30_codreg    = rh02_codreg
                                          and rh30_instit    = rh02_instit
           where 1 = 1  
           $xwhere
 	 ";
-  }elseif($exporta == 'D'){
-    
-  
-   if($tipofun == 'E'){
-     $arq = '/tmp/cef_estatutarios.csv';
-   }elseif($tipofun == 'C'){
-     $arq = '/tmp/cef_extraquadro.csv';
-   }elseif($tipofun == 'L'){
-     $arq = '/tmp/cef_clt.csv';
-   }else{
-     $arq = '/tmp/cef.csv';
-   }
+    } elseif ($exporta == 'D') {
 
-  $arquivo = fopen($arq,'w');  
 
-  $sql = "
+        if ($tipofun == 'E') {
+            $arq = '/tmp/cef_estatutarios.csv';
+        } elseif ($tipofun == 'C') {
+            $arq = '/tmp/cef_extraquadro.csv';
+        } elseif ($tipofun == 'L') {
+            $arq = '/tmp/cef_clt.csv';
+        } else {
+            $arq = '/tmp/cef.csv';
+        }
+
+        $arquivo = fopen($arq, 'w');
+
+        $sql = "
   select        rpad(coalesce(z01_nome,''),70,' ')
        ||';'||  rpad(coalesce(z01_nome,''),32,' ')
        ||';'||  rpad(coalesce(z01_cgccpf,''),11,'0')
@@ -166,10 +166,10 @@ from rhpessoal
      inner join rhpessoalmov    on rh02_anousu    = $ano
                                and rh02_mesusu    = $mes
                                and rh02_regist    = rh01_regist
-                               and rh02_instit    = ".db_getsession("DB_instit")."
+                               and rh02_instit    = " . db_getsession("DB_instit") . "
      left join  rhpesrescisao   on rh05_seqpes    = rh02_seqpes
-     inner join rhlota          on r70_codigo     = rh02_lota and r70_instit = ".db_getsession("DB_instit")."
-     inner join rhfuncao        on rh01_funcao    = rh37_funcao and rh37_instit = ".db_getsession("DB_instit")." 
+     inner join rhlota          on r70_codigo     = rh02_lota and r70_instit = " . db_getsession("DB_instit") . "
+     inner join rhfuncao        on rh01_funcao    = rh37_funcao and rh37_instit = " . db_getsession("DB_instit") . " 
      inner join rhinstrucao     on rh01_instru    = rh21_instru
      inner join rhestcivil      on rh01_estciv    = rh08_estciv
      left join  rhpesdoc        on rh16_regist    = rh01_regist
@@ -188,21 +188,20 @@ from rhpessoal
                         to_char(sum(CASE WHEN r14_pd = 1 THEN r14_valor WHEN r14_pd = 2 THEN -r14_valor ELSE 0 END), '99999999.99') AS rendaliquida
                    from gerfsal 
                         inner join rhrubricas on rh27_rubric = r14_rubric
-                                             and rh27_instit = ".db_getsession("DB_instit")."
+                                             and rh27_instit = " . db_getsession("DB_instit") . "
                    where r14_anousu = $ano
                      and r14_mesusu = $mes
                      and r14_pd != 3 group by r14_regist) as xxx on xxx.r14_regist = rhpessoalmov.rh02_regist
 where rh05_seqpes is null  
       $xwhere
 order by z01_nome";
+    } elseif ($exporta == 'F') {
 
-  }elseif($exporta == 'F'){
-    
-  $arq = '/tmp/cadastro_ban.csv';
+        $arq = '/tmp/cadastro_ban.csv';
 
-  $arquivo = fopen($arq,'w');  
+        $arquivo = fopen($arq, 'w');
 
-  $sql = "
+        $sql = "
   select
        '0001'
        ||';'||rpad(coalesce(substr(z01_nome,1,35),''),35,' ')
@@ -271,21 +270,20 @@ from rhpessoal
                         to_char(sum(case when r14_pd = 1 then r14_valor else 0 end ),'99999999.99') as provento
                    from gerfsal 
                         inner join rhrubricas on rh27_rubric = r14_rubric
-                                             and rh27_instit = ".db_getsession("DB_instit")."
+                                             and rh27_instit = " . db_getsession("DB_instit") . "
                    where r14_anousu = $ano
                      and r14_mesusu = $mes
                      and r14_pd != 3 group by r14_regist) as xxx on xxx.r14_regist = rhpessoalmov.rh02_regist
 where rh05_seqpes is null
       $xwhere
 order by z01_nome";
+    } elseif ($exporta == 'R') {
 
-  }elseif($exporta == 'R'){
-    
-  $arq = '/tmp/cadastro_bradesco.csv';
+        $arq = '/tmp/cadastro_bradesco.csv';
 
-  $arquivo = fopen($arq,'w');  
+        $arquivo = fopen($arq, 'w');
 
-  $sql = "
+        $sql = "
   select
        '1'
        ||';'||lpad(coalesce(rh01_regist,'0'),8,'0')
@@ -388,7 +386,7 @@ from rhpessoal
      inner join rhpessoalmov    on rh02_anousu    = $ano
                                and rh02_mesusu    = $mes
                                and rh02_regist    = rh01_regist
-                               and rh02_instit    = ".db_getsession("DB_instit")."
+                               and rh02_instit    = " . db_getsession("DB_instit") . "
      inner join db_config       on codigo         = rh02_instit
      left join  rhpesrescisao   on rh05_seqpes    = rh02_seqpes
      inner join rhlota          on r70_codigo     = rh02_lota   and r70_instit  = rh02_instit
@@ -411,20 +409,19 @@ from rhpessoal
                         to_char(sum(case when r14_pd = 1 then r14_valor else 0 end ),'99999999.99') as provento
                    from gerfsal 
                         inner join rhrubricas on rh27_rubric = r14_rubric
-                                             and rh27_instit = ".db_getsession("DB_instit")." 
+                                             and rh27_instit = " . db_getsession("DB_instit") . " 
                    where r14_anousu = $ano
                      and r14_mesusu = $mes
                      and r14_pd != 3 group by r14_regist) as xxx on xxx.r14_regist = rhpessoalmov.rh02_regist
 where rh05_seqpes is null
       $xwhere
 order by z01_nome";
+    } elseif ($exporta == 'C') {
 
-  }elseif($exporta == 'C'){
-  
-  $arq = '/tmp/cadastro.csv';
+        $arq = '/tmp/cadastro.csv';
 
-  $arquivo = fopen($arq,'w'); 
-  $sql = "
+        $arquivo = fopen($arq, 'w');
+        $sql = "
   select $ano||';'||
        $mes||';'||
        rh01_regist||';'||
@@ -486,20 +483,20 @@ from rhpessoal
      inner join rhpessoalmov    on rh02_anousu    = $ano
                                and rh02_mesusu    = $mes
                                and rh02_regist    = rh01_regist
-                               and rh02_instit    = ".db_getsession("DB_instit")."
+                               and rh02_instit    = " . db_getsession("DB_instit") . "
      left join  rhpesrescisao   on rh05_seqpes    = rh02_seqpes
-     inner join rhlota          on r70_codigo     = rh02_lota and r70_instit = ".db_getsession("DB_instit")."
-     inner join rhfuncao        on rh01_funcao    = rh37_funcao and rh37_instit = ".db_getsession("DB_instit")."    
+     inner join rhlota          on r70_codigo     = rh02_lota and r70_instit = " . db_getsession("DB_instit") . "
+     inner join rhfuncao        on rh01_funcao    = rh37_funcao and rh37_instit = " . db_getsession("DB_instit") . "    
      inner join rhinstrucao     on rh01_instru    = rh21_instru
      inner join rhestcivil      on rh01_estciv    = rh08_estciv
      left join rhiperegist      on rh62_regist    = rh01_regist
-     left join rhipe            on rh14_sequencia = rh62_sequencia and rh14_instit = ".db_getsession("DB_instit")."
+     left join rhipe            on rh14_sequencia = rh62_sequencia and rh14_instit = " . db_getsession("DB_instit") . "
      left join  rhpeslocaltrab  on rh56_seqpes    = rh02_seqpes
                                and rh56_princ     = 't'
-     left join  rhlocaltrab     on rh56_localtrab = rh55_codigo and rh55_instit = ".db_getsession("DB_instit")."
+     left join  rhlocaltrab     on rh56_localtrab = rh55_codigo and rh55_instit = " . db_getsession("DB_instit") . "
      left join  rhpesdoc        on rh16_regist    = rh01_regist
      left join  rhpespadrao     on rh02_seqpes    = rh03_seqpes
-     inner join rhregime        on rh30_codreg    = rh02_codreg and rh30_instit = ".db_getsession("DB_instit")."
+     inner join rhregime        on rh30_codreg    = rh02_codreg and rh30_instit = " . db_getsession("DB_instit") . "
      left join  rhpesbanco      on rh44_seqpes    = rh02_seqpes
      
      left  join rhlotaexe  on  rhlotaexe.rh26_anousu = rhpessoalmov.rh02_anousu
@@ -511,15 +508,14 @@ where 1 = 1
 $xwhere
 order by z01_nome
 
-" ;
+";
+    } elseif ($exporta == 'E') {
 
-  }elseif($exporta == 'E'){
-    
-  $arq = '/tmp/cadastro_banespa.txt';
+        $arq = '/tmp/cadastro_banespa.txt';
 
-  $arquivo = fopen($arq,'w');  
+        $arquivo = fopen($arq, 'w');
 
-$sql= "select rpad(coalesce(z01_cgccpf,''),11,'0')||
+        $sql = "select rpad(coalesce(z01_cgccpf,''),11,'0')||
        rpad(coalesce(z01_nome,''),64,' ')||                             
        rpad(coalesce(to_char(rh01_nasc,'DD/MM/YYYY'),''),15)||          
        rpad(coalesce(rh01_sexo,''),4)||                                                      
@@ -557,7 +553,7 @@ from rhpessoal
      inner join rhpessoalmov    on rh02_anousu    = $ano
                                and rh02_mesusu    = $mes
                                and rh02_regist    = rh01_regist
-                               and rh02_instit    = ".db_getsession('DB_instit')."
+                               and rh02_instit    = " . db_getsession('DB_instit') . "
      left join  rhpesrescisao   on rh05_seqpes    = rh02_seqpes
      inner join rhlota          on r70_codigo     = rh02_lota 
                                and r70_instit     = rh02_instit
@@ -580,22 +576,21 @@ from rhpessoal
                         to_char(sum(case when r14_pd = 1 then r14_valor else 0 end ),'99999999.99') as provento
                    from gerfsal 
                         inner join rhrubricas on rh27_rubric = r14_rubric
-                                             and rh27_instit = ".db_getsession("DB_instit")." 
+                                             and rh27_instit = " . db_getsession("DB_instit") . " 
                    where r14_anousu = $ano
                      and r14_mesusu = $mes
-                     and r14_instit = ".db_getsession("DB_instit")."
+                     and r14_instit = " . db_getsession("DB_instit") . "
                      and r14_pd != 3 group by r14_regist) as xxx on xxx.r14_regist = rhpessoalmov.rh02_regist
 where rh05_seqpes is null 
 $xwhere
 order by z01_nome";
+    } elseif ($exporta == 'G') {
 
-  }elseif($exporta == 'G'){
-    
-  $arq = '/tmp/cdc_banrisul.txt';
+        $arq = '/tmp/cdc_banrisul.txt';
 
-  $arquivo = fopen($arq,'w');  
+        $arquivo = fopen($arq, 'w');
 
-$sql= "select rpad(coalesce(z01_cgccpf,''),11,'0')||
+        $sql = "select rpad(coalesce(z01_cgccpf,''),11,'0')||
        rpad(coalesce(z01_nome,''),46,' ')||                             
        lpad(translate(trim(coalesce(provento,'0')),'.',''),17,'0')||     
        lpad(trim(to_char(rh01_regist,'999999')),12,'0')||
@@ -609,7 +604,7 @@ from rhpessoal
      inner join cgm             on rh01_numcgm    = z01_numcgm
      inner join rhpessoalmov    on rh02_anousu    = $ano
                                and rh02_mesusu    = $mes
-                               and rh02_instit    = ".db_getsession('DB_instit')."
+                               and rh02_instit    = " . db_getsession('DB_instit') . "
                                and rh02_regist    = rh01_regist
      left join  rhpesrescisao   on rh05_seqpes    = rh02_seqpes
      inner join rhlota          on r70_codigo     = rh02_lota 
@@ -629,200 +624,258 @@ from rhpessoal
                         to_char(sum(case when r14_pd = 1 then r14_valor else r14_valor*(-1) end ),'99999999.99') as liquido
                    from gerfsal 
                         inner join rhrubricas on rh27_rubric = r14_rubric
-                                             and rh27_instit = ".db_getsession("DB_instit")."
+                                             and rh27_instit = " . db_getsession("DB_instit") . "
                    where r14_anousu = $ano
                      and r14_mesusu = $mes
                      and r14_pd != 3 
-                     and r14_instit = ".db_getsession('DB_instit')."
+                     and r14_instit = " . db_getsession('DB_instit') . "
                      group by r14_regist) as xxx on xxx.r14_regist = rhpessoalmov.rh02_regist
-where rh05_seqpes is null and rh02_instit = ".db_getsession('DB_instit')." 
+where rh05_seqpes is null and rh02_instit = " . db_getsession('DB_instit') . " 
       $xwhere
 order by z01_nome";
-  
-  }elseif($exporta == 'P'){
-    
-    $arq = '/tmp/transparencia.csv';
-  
-    $arquivo = fopen($arq,'w');
-  
-    $sql  = "select        rh01_regist                                        ";
-    $sql .= "       ||';'||trim(z01_nome)                                     ";
-    $sql .= "       ||';'||rh02_codreg                                        ";
-    $sql .= "       ||';'||coalesce(rh02_funcao,0)                            ";
-    $sql .= "       ||';'||coalesce(rh37_descr,' ')                           ";
-    $sql .= "       ||';'||coalesce(rh20_cargo,0)                             ";
-    $sql .= "       ||';'||coalesce(rh04_descr,' ') as tipo                   ";
-    $sql .= "  from pessoal.rhpessoalmov                                      ";
-    $sql .= " inner join pessoal.rhpessoal     on rh02_regist = rh01_regist   ";
-    $sql .= " inner join protocolo.cgm         on rh01_numcgm = z01_numcgm    ";
-    $sql .= "  left join pessoal.rhpesrescisao on rh02_seqpes = rh05_seqpes   ";
-    $sql .= " inner join pessoal.rhregime      on rh02_codreg = rh30_codreg   ";
-    $sql .= "                                 and rh02_instit = rh30_instit   ";
-    $sql .= " inner join pessoal.rhfuncao      on rh02_funcao = rh37_funcao   ";
-    $sql .= "                                 and rh02_instit = rh37_instit   ";
-    $sql .= "  left  join pessoal.rhpescargo   on rh02_seqpes = rh20_seqpes   ";
-    $sql .= "                                 and  rh02_instit = rh20_instit  ";
-    $sql .= "  left join pessoal.rhcargo       on rh04_codigo = rh20_cargo    ";
-    $sql .= "                                 and rh04_instit = rh20_instit   ";
-    $sql .= " where rh05_seqpes is null                                       ";
-    $sql .= "   and rh02_anousu = {$ano}                                      ";
-    $sql .= "   and rh02_mesusu = {$mes}                                      ";
-    $sql .= "   and rh02_instit = ".db_getsession('DB_instit').$xwhere ;             
-    $sql .= " order by z01_nome                                               "; 
+    } elseif ($exporta == 'P') {
 
- 
-  }
- //echo "<br><br><br><br><br>".$sql;exit;
-  $result = db_query($sql);
- //db_criatabela($result);exit;
-  if($exporta == 'C'){
-    fputs($arquivo,"ano;mes;matricula; nome; admissao;rescisao; sexo; nascimento; lotacao; descr_lotacao; funcao; descr_funcao; endereco; numero; complemento; bairro; municipio; uf; cep; telefone; instrucao; estado civil; matr_ipe; titulo; zona; secao; cert_reservista; cat_reserv; ctps_numero; ctps_serie; ctps_digito; ctps_uf; pis;cpf;rg; habilitacao; cat_habilit; validade_habilit; padrao; descr_tipo_vinculo; regime; vinculo; banco; agencia; dig_agencia; conta; dig_conta;estr_local;descr_local;trienio;progressao;salario;secretaria"."\r\n");
-  }elseif($exporta == 'P'){
-    fputs($arquivo,"matricula; nome; cod_regime; cod_cargo; descr_cargo; cod_funcao; descr_funcao"."\r\n");
-  }elseif($exporta == 'B'){
-    fputs($arquivo,"matricula;nome;numcgm;regime;lotacao;vinculo;padrao;salari;funcao;banco;agencia;conta;situacao;previdencia;liquido;proventos;descontos;processamento"."\r\n");
-  }elseif($exporta == 'R'){
-    fputs($arquivo,"TIPO DE REGISTRO;Nº DA MATRICULA FUNCIONARIO;Nº DO CPF/CNPJ;FILIAL;CONTROLE;CAPACIDADE CIVIL;TIPO DE MOVIMENTO;NOME DO FUNCIONARIO;ENDEREÇO RESIDENCIAL;NUMERO;COMPLEMENTO;BAIRRO;CEP;SUFIXO;FONE (DDD);FONE NÚMERO;FAX (DDD);FAX NÚMERO;ENDEREÇO PARA CORRESPONDÊNCIA;NUMERO DO ENDEREÇO;COMPLEMENTO DO ENDEREÇO;BAIRRO DO ENDER;CEP NUMERO;SUFIXO DO CEP;CÓDIGO DE OCUPAÇÃO;DATA DE NASCIMENTO;NATURALIDADE;UF DE NASCIMENTO;SEXO;NOME DO PAI;NOME DA MÃE;BRASILEIRO/ESTRANGEIRO;NACIONALIDADE;ESTADO CIVIL;TIPO DE DOCUMENTO;NÚMERO DO DOCUMENTO;DATA DE EMISSÃO;ORGÃO EMISSOR;NOME DA EMPRESA;CARGO;RENDA;TEMPO DE SERVIÇO;ENDEREÇO DA EMPRESA;NUMERO CEP;SUFIXO CEP;NOME DO CONJUGÊ;DESTINO DO BANCO;DESTINO DA AGÊNCIA;DÍGITO;DESTINO DO PAB;DESTINO RAZÃO;DESTINO CONTA;DESTINO DIGITO;DESTINO TIPO DA CONTA;FILLER;BANCO ORIGEM;AGENCIA ORIGEM;DÍGITO AG ORIGEM;PAB DE ORIGEM;RAZÀO DE ORIGEM;CONTA DE ORIGEM;DÍGITO CONTA ORIGEM;TIPO DA CONTA;DATA DE RECADASTRAMENTO;DATA DE ABERTURA;DATA DE ÚLTIMO ACERTO;FILLER;AGÊNCIA GESTORA;EMITE CARTÀO;CLIENTE PRIME;CLIENTE PRIVATE;PAB PRIME;BANCO PARA;AGÊNCIA PARA;CONTA PARA;DÍGITO DA CTA PARA;FILLER"."\r\n");
-  }elseif($exporta == 'F'){
-    fputs($arquivo,"TIPO_REG;NOME;CPF;ENDEREÇO;CEP;BAIRRO;FONE;RAMAL;DT_NASC;SEXO;EST_CIVIL;REG_CASAMENTO;NATURALIDADE;PAI;MAE;IDENTIDADE;ORGAO_EXPE;DT_EMISSÃO;SALÁRIO;DT_ADMISSÃO;CONJUGE;CPF_CONJUGE;NOME_CARTÃO;AG_CONTA;MATRICULA;REGIME;ÓRGAO_PAG"."\r\n");
-  }elseif($exporta == 'E'){
-    $sql1 = str_pad('CPF',11).
-       str_pad('Nome Titular',64).
-       str_pad('Data Nascimento',15).       
-       str_pad('Sexo',4). 
-       str_pad('Estado_Civil',12). 
-       str_pad('Tipo Documento',14).
-       str_pad('Numero Documento',16).
-       str_pad('Data Emissao do Documento',25). 
-       str_pad('Serie Documento',15). 
-       str_pad('UF Documento',12).
-       str_pad('CEP',8).
-       str_pad('Telefone',12).
-       str_pad('Profissao',9).
-       str_pad('Valor_da_Renda',19).
-       str_pad('Tipo de Renda',13). 
-       str_pad('Data de Admissao',16).
-       str_pad('Nome_do_Pai',64).
-       str_pad('Nome_da_Mae',64).
-       str_pad('Nacionalidade',13).
-       str_pad('Naturalidade',20).
-       str_pad('Endereco',30).
-       str_pad('Numero',4). 
-       str_pad('Complemento',15).  
-       str_pad('Bairro',15).
-       str_pad('Cidade',20).
-       str_pad('UF',2);
-       fputs($arquivo,$sql1."\r\n");
-  }elseif($exporta == 'D'){
-    fputs($arquivo,"nome;nomeabrev;cpf;pis;ctps;nascimento;naturalidade;uf;estadocivil;conjugue;cpfconjugue;pai;mae;sexo;identidade;orgaoidentidade;uforgaoemissor;expedicaoidentidade;cnh;cnhvalidade;cnhexpedicao;cargo;admissao;endereco;numero;complemento;bairro;municipio;uf;cep;ddi;telefone;celular;email;grauinstrucao;rendabruta;rendaliquida;banco;agencia;operacao;conta;dv"."\r\n");
-  }
+        $arq = '/tmp/transparencia.csv';
 
-  for($x = 0;$x < pg_num_rows($result);$x++){
-    db_fieldsmemory($result,$x);
-    fputs($arquivo,$tipo."\r\n");
-  }
-  fclose($arquivo);
+        $arquivo = fopen($arq, 'w');
 
+        $sql  = "select        rh01_regist                                        ";
+        $sql .= "       ||';'||trim(z01_nome)                                     ";
+        $sql .= "       ||';'||rh02_codreg                                        ";
+        $sql .= "       ||';'||coalesce(rh02_funcao,0)                            ";
+        $sql .= "       ||';'||coalesce(rh37_descr,' ')                           ";
+        $sql .= "       ||';'||coalesce(rh20_cargo,0)                             ";
+        $sql .= "       ||';'||coalesce(rh04_descr,' ') as tipo                   ";
+        $sql .= "  from pessoal.rhpessoalmov                                      ";
+        $sql .= " inner join pessoal.rhpessoal     on rh02_regist = rh01_regist   ";
+        $sql .= " inner join protocolo.cgm         on rh01_numcgm = z01_numcgm    ";
+        $sql .= "  left join pessoal.rhpesrescisao on rh02_seqpes = rh05_seqpes   ";
+        $sql .= " inner join pessoal.rhregime      on rh02_codreg = rh30_codreg   ";
+        $sql .= "                                 and rh02_instit = rh30_instit   ";
+        $sql .= " inner join pessoal.rhfuncao      on rh02_funcao = rh37_funcao   ";
+        $sql .= "                                 and rh02_instit = rh37_instit   ";
+        $sql .= "  left  join pessoal.rhpescargo   on rh02_seqpes = rh20_seqpes   ";
+        $sql .= "                                 and  rh02_instit = rh20_instit  ";
+        $sql .= "  left join pessoal.rhcargo       on rh04_codigo = rh20_cargo    ";
+        $sql .= "                                 and rh04_instit = rh20_instit   ";
+        $sql .= " where rh05_seqpes is null                                       ";
+        $sql .= "   and rh02_anousu = {$ano}                                      ";
+        $sql .= "   and rh02_mesusu = {$mes}                                      ";
+        $sql .= "   and rh02_instit = " . db_getsession('DB_instit') . $xwhere;
+        $sql .= " order by z01_nome                                               ";
+    } elseif ($exporta == 'S') {
+
+        $arq = '/tmp/situacaoservidor.csv';
+
+        $arquivo = fopen($arq, 'w');
+
+        $sql = "select rh01_regist||';'||
+        z01_nome||';'||
+        trim(rh37_descr)||';'||
+        coalesce(case
+            when rh05_seqpes is null then 'ativo'
+            else 'inativo'
+        end,'')||';'||
+        coalesce(to_char(case
+                             when rh05_seqpes is null then null
+                             else rh05_recis
+                         end,'dd-mm-yyyy'),'')||';'||
+        coalesce(rh172_descricao,'')||';'||
+        coalesce(to_char(r45_dtafas,'dd-mm-yyyy'),'')||';'||
+        coalesce(to_char(r45_dtreto,'dd-mm-yyyy'),'')||';'||
+        coalesce(rh30_descr,'')||';'||
+        round(rh02_salari,2)||';'||
+        coalesce(o40_descr,'')||';'||
+        coalesce(to_char(rh01_admiss,'dd-mm-yyyy'),'') as tipo
+ from rhpessoal
+ inner join cgm on rh01_numcgm = z01_numcgm
+ inner join rhpessoalmov on rh02_anousu = $ano
+ and rh02_mesusu = $mes
+ and rh02_regist = rh01_regist
+ and rh02_instit = " . db_getsession('DB_instit') . "
+ left join rhpesrescisao on rh05_seqpes = rh02_seqpes
+ inner join rhlota on r70_codigo = rh02_lota
+ and r70_instit = " . db_getsession('DB_instit') . "
+ inner join rhfuncao on rh01_funcao = rh37_funcao
+ and rh37_instit = " . db_getsession('DB_instit') . "
+ inner join rhregime on rh30_codreg = rh02_codreg
+ and rh30_instit = " . db_getsession('DB_instit') . "
+ left join rhlotaexe on rhlotaexe.rh26_anousu = rhpessoalmov.rh02_anousu
+ and rhlotaexe.rh26_codigo = rhlota.r70_codigo
+ left join orcorgao on orcorgao.o40_anousu = rhlotaexe.rh26_anousu
+ and orcorgao.o40_orgao = rhlotaexe.rh26_orgao
+ left join afasta on r45_anousu = rhpessoalmov.rh02_anousu
+ and r45_mesusu = rhpessoalmov.rh02_mesusu
+ and r45_regist = rhpessoalmov.rh02_regist
+ left join rhmotivoafasta on rh172_codigo = afasta.r45_codigoafasta
+ where 1 = 1
+     and (rh05_seqpes is null
+          or (date_part('month',rh05_recis) = $mes
+              and date_part('year',rh05_recis) = $ano))
+     and (r45_codigo is null
+          or (date_part('month',r45_dtreto) >= $mes
+             and date_part('year',r45_dtreto) >= $ano))
+     $xwhere
+ order by z01_nome";
+    }
+    //echo "<br><br><br><br><br>".$sql;exit;
+    $result = db_query($sql);
+    //db_criatabela($result);exit;
+    if ($exporta == 'C') {
+        fputs($arquivo, "ano;mes;matricula; nome; admissao;rescisao; sexo; nascimento; lotacao; descr_lotacao; funcao; descr_funcao; endereco; numero; complemento; bairro; municipio; uf; cep; telefone; instrucao; estado civil; matr_ipe; titulo; zona; secao; cert_reservista; cat_reserv; ctps_numero; ctps_serie; ctps_digito; ctps_uf; pis;cpf;rg; habilitacao; cat_habilit; validade_habilit; padrao; descr_tipo_vinculo; regime; vinculo; banco; agencia; dig_agencia; conta; dig_conta;estr_local;descr_local;trienio;progressao;salario;secretaria" . "\r\n");
+    } elseif ($exporta == 'P') {
+        fputs($arquivo, "matricula; nome; cod_regime; cod_cargo; descr_cargo; cod_funcao; descr_funcao" . "\r\n");
+    } elseif ($exporta == 'B') {
+        fputs($arquivo, "matricula;nome;numcgm;regime;lotacao;vinculo;padrao;salari;funcao;banco;agencia;conta;situacao;previdencia;liquido;proventos;descontos;processamento" . "\r\n");
+    } elseif ($exporta == 'R') {
+        fputs($arquivo, "TIPO DE REGISTRO;Nº DA MATRICULA FUNCIONARIO;Nº DO CPF/CNPJ;FILIAL;CONTROLE;CAPACIDADE CIVIL;TIPO DE MOVIMENTO;NOME DO FUNCIONARIO;ENDEREÇO RESIDENCIAL;NUMERO;COMPLEMENTO;BAIRRO;CEP;SUFIXO;FONE (DDD);FONE NÚMERO;FAX (DDD);FAX NÚMERO;ENDEREÇO PARA CORRESPONDÊNCIA;NUMERO DO ENDEREÇO;COMPLEMENTO DO ENDEREÇO;BAIRRO DO ENDER;CEP NUMERO;SUFIXO DO CEP;CÓDIGO DE OCUPAÇÃO;DATA DE NASCIMENTO;NATURALIDADE;UF DE NASCIMENTO;SEXO;NOME DO PAI;NOME DA MÃE;BRASILEIRO/ESTRANGEIRO;NACIONALIDADE;ESTADO CIVIL;TIPO DE DOCUMENTO;NÚMERO DO DOCUMENTO;DATA DE EMISSÃO;ORGÃO EMISSOR;NOME DA EMPRESA;CARGO;RENDA;TEMPO DE SERVIÇO;ENDEREÇO DA EMPRESA;NUMERO CEP;SUFIXO CEP;NOME DO CONJUGÊ;DESTINO DO BANCO;DESTINO DA AGÊNCIA;DÍGITO;DESTINO DO PAB;DESTINO RAZÃO;DESTINO CONTA;DESTINO DIGITO;DESTINO TIPO DA CONTA;FILLER;BANCO ORIGEM;AGENCIA ORIGEM;DÍGITO AG ORIGEM;PAB DE ORIGEM;RAZÀO DE ORIGEM;CONTA DE ORIGEM;DÍGITO CONTA ORIGEM;TIPO DA CONTA;DATA DE RECADASTRAMENTO;DATA DE ABERTURA;DATA DE ÚLTIMO ACERTO;FILLER;AGÊNCIA GESTORA;EMITE CARTÀO;CLIENTE PRIME;CLIENTE PRIVATE;PAB PRIME;BANCO PARA;AGÊNCIA PARA;CONTA PARA;DÍGITO DA CTA PARA;FILLER" . "\r\n");
+    } elseif ($exporta == 'F') {
+        fputs($arquivo, "TIPO_REG;NOME;CPF;ENDEREÇO;CEP;BAIRRO;FONE;RAMAL;DT_NASC;SEXO;EST_CIVIL;REG_CASAMENTO;NATURALIDADE;PAI;MAE;IDENTIDADE;ORGAO_EXPE;DT_EMISSÃO;SALÁRIO;DT_ADMISSÃO;CONJUGE;CPF_CONJUGE;NOME_CARTÃO;AG_CONTA;MATRICULA;REGIME;ÓRGAO_PAG" . "\r\n");
+    } elseif ($exporta == 'E') {
+        $sql1 = str_pad('CPF', 11) .
+            str_pad('Nome Titular', 64) .
+            str_pad('Data Nascimento', 15) .
+            str_pad('Sexo', 4) .
+            str_pad('Estado_Civil', 12) .
+            str_pad('Tipo Documento', 14) .
+            str_pad('Numero Documento', 16) .
+            str_pad('Data Emissao do Documento', 25) .
+            str_pad('Serie Documento', 15) .
+            str_pad('UF Documento', 12) .
+            str_pad('CEP', 8) .
+            str_pad('Telefone', 12) .
+            str_pad('Profissao', 9) .
+            str_pad('Valor_da_Renda', 19) .
+            str_pad('Tipo de Renda', 13) .
+            str_pad('Data de Admissao', 16) .
+            str_pad('Nome_do_Pai', 64) .
+            str_pad('Nome_da_Mae', 64) .
+            str_pad('Nacionalidade', 13) .
+            str_pad('Naturalidade', 20) .
+            str_pad('Endereco', 30) .
+            str_pad('Numero', 4) .
+            str_pad('Complemento', 15) .
+            str_pad('Bairro', 15) .
+            str_pad('Cidade', 20) .
+            str_pad('UF', 2);
+        fputs($arquivo, $sql1 . "\r\n");
+    } elseif ($exporta == 'D') {
+        fputs($arquivo, "nome;nomeabrev;cpf;pis;ctps;nascimento;naturalidade;uf;estadocivil;conjugue;cpfconjugue;pai;mae;sexo;identidade;orgaoidentidade;uforgaoemissor;expedicaoidentidade;cnh;cnhvalidade;cnhexpedicao;cargo;admissao;endereco;numero;complemento;bairro;municipio;uf;cep;ddi;telefone;celular;email;grauinstrucao;rendabruta;rendaliquida;banco;agencia;operacao;conta;dv" . "\r\n");
+    } elseif ($exporta == 'S') {
+        fputs($arquivo, "matricula; nome; funcao; situacao; datarescisao; afastamento; inicioafastamento; retornoafastamento; regime; salario; secretaria; admissao" . "\r\n");
+    }
+
+    for ($x = 0; $x < pg_num_rows($result); $x++) {
+        db_fieldsmemory($result, $x);
+        fputs($arquivo, $tipo . "\r\n");
+    }
+    fclose($arquivo);
 }
 
 
 ?>
 
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Expires" CONTENT="0">
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 
-</script>  
-<link href="estilos.css" rel="stylesheet" type="text/css">
+    </script>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
+
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
-  <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr>
-    <td width="360" height="18">&nbsp;</td>
-    <td width="263">&nbsp;</td>
-    <td width="25">&nbsp;</td>
-    <td width="140">&nbsp;</td>
-  </tr>
-</table>
-
-  <table  align="center">
-    <form name="form1" method="post" action="">
-      <tr>
-         <td >&nbsp;</td>
-         <td >&nbsp;</td>
-      </tr>
-      <tr >
-        <td align="right" nowrap title="Digite o Ano / Mes de competência" >
-        <strong>Ano / Mês :&nbsp;&nbsp;</strong>
-        </td>
-        <td align="left">
-          <?
-           $ano = db_anofolha();
-           db_input('ano',4,$IDBtxt23,true,'text',2,'')
-          ?>
-          &nbsp;/&nbsp;
-          <?
-           $mes = db_mesfolha();
-           db_input('mes',2,$IDBtxt25,true,'text',2,'')
-          ?>
-        </td>
-      </tr>
-      <tr>
-        <td align="right"><b>Tipo de Arquivo :&nbsp;&nbsp;<b></td>
-	<td align="left">
-	<?
-	  $arr = array('C'=>'Cadastro',
-                 'B'=>'Bancos',
-                 'D'=>'Cadastro CEF',
-                 'E'=>'Cadastro Banespa',
-                 'R'=>'Cadastro Bradesco',
-                 'F'=>'Cadastro Banrisul',
-                 'G'=>'CDC Banrisul',
-                 'P'=>'Portal Transparência'
-                 
-                 );
-	  db_select("exporta",$arr,true,1);
-	?>
-        </td>
-      </tr>
-      <tr>
-        <td align="right"><b>Tipo de Servidor :&nbsp;&nbsp;<b></td>
-	<td align="left">
-	<?
-	  $arr_f = array('T'=>'Todos',
-                   'E'=>'Estatutário', 
-                   'C'=>'Comissionados',
-                   'L'=>'CLT'
-                 );
-	  db_select("tipofun",$arr_f,true,1);
-	?>
-        </td>
-      </tr>
-      <tr>
-        <td >&nbsp;</td>
-        <td >&nbsp;</td>
-      </tr>
-      <tr>
-        <td colspan="2" align = "center"> 
-          <input  name="gera" id="gera" type="submit" value="Processar"  >
- <!--         <input name="verificar" type="submit" value="Download" > -->
-        </td>
-      </tr>
-
-  </form>
+    <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+        <tr>
+            <td width="360" height="18">&nbsp;</td>
+            <td width="263">&nbsp;</td>
+            <td width="25">&nbsp;</td>
+            <td width="140">&nbsp;</td>
+        </tr>
     </table>
-<?
-  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
+
+    <table align="center">
+        <form name="form1" method="post" action="">
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td align="right" nowrap title="Digite o Ano / Mes de competência">
+                    <strong>Ano / Mês :&nbsp;&nbsp;</strong>
+                </td>
+                <td align="left">
+                    <?
+                    $ano = db_anofolha();
+                    db_input('ano', 4, $IDBtxt23, true, 'text', 2, '')
+                    ?>
+                    &nbsp;/&nbsp;
+                    <?
+                    $mes = db_mesfolha();
+                    db_input('mes', 2, $IDBtxt25, true, 'text', 2, '')
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td align="right"><b>Tipo de Arquivo :&nbsp;&nbsp;<b></td>
+                <td align="left">
+                    <?
+                    $arr = array(
+                        'C' => 'Cadastro',
+                        'B' => 'Bancos',
+                        'D' => 'Cadastro CEF',
+                        'E' => 'Cadastro Banespa',
+                        'R' => 'Cadastro Bradesco',
+                        'F' => 'Cadastro Banrisul',
+                        'G' => 'CDC Banrisul',
+                        'P' => 'Portal Transparência',
+                        'S' => 'Situacao Servidor'
+
+                    );
+                    db_select("exporta", $arr, true, 1);
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td align="right"><b>Tipo de Servidor :&nbsp;&nbsp;<b></td>
+                <td align="left">
+                    <?
+                    $arr_f = array(
+                        'T' => 'Todos',
+                        'E' => 'Estatutário',
+                        'C' => 'Comissionados',
+                        'L' => 'CLT'
+                    );
+                    db_select("tipofun", $arr_f, true, 1);
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input name="gera" id="gera" type="submit" value="Processar">
+                    <!--         <input name="verificar" type="submit" value="Download" > -->
+                </td>
+            </tr>
+
+        </form>
+    </table>
+    <?
+    db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+    ?>
 </body>
+
 </html>
 <script>
-  <?
-  if(isset($gera)){
-  	echo "js_montarlista('".$arq."#Arquivo gerado em: ".$arq."','form1');";
-  }
-  ?>
+    <?
+    if (isset($gera)) {
+        echo "js_montarlista('" . $arq . "#Arquivo gerado em: " . $arq . "','form1');";
+    }
+    ?>
 </script>
