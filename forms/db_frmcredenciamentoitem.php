@@ -70,26 +70,37 @@ $clrotulo->label("pc01_descrmater");
             </table>
         </fieldset>
         <div class="container">
-            <div>
-                <table id="myTable" style="display: none" class="display nowrap">
-                    <thead>
-                        <tr>
-                            <th data-orderable="false"></th>
-                            <th data-orderable="false">Ordem</th>
-                            <th data-orderable="false">Item</th>
-                            <th data-orderable="false">Descrição Item</th>
-                            <th data-orderable="false">Unidade</th>
-                            <th data-orderable="false">Quantidade Disponivel</th>
-                            <th data-orderable="false">Valor Disponivel</th>
-                            <th data-orderable="false">Vl. Unitário</th>
-                            <th data-orderable="false">Qtd. Solicitada</th>
-                            <th data-orderable="false">Vlr. Total.</th>
-                            <th data-orderable="false" style="display: none;">Serviço Quantidade.</th>
-                        </tr>
-                    </thead>
-                </table>
+    <div>
+        <!-- Tabela de itens -->
+        <table id="myTable" style="display: none" class="display nowrap">
+            <!-- Cabeçalho da tabela -->
+            <thead>
+                <tr>
+                    <!-- Cabeçalhos das colunas -->
+                    <th data-orderable="false"></th>
+                    <th data-orderable="false">Ordem</th>
+                    <th data-orderable="false">Item</th>
+                    <th data-orderable="false">Descrição Item</th>
+                    <th data-orderable="false">Unidade</th>
+                    <th data-orderable="false">Quantidade Disponivel</th>
+                    <th data-orderable="false">Valor Disponivel</th>
+                    <th data-orderable="false">Vl. Unitário</th>
+                    <th data-orderable="false">Qtd. Solicitada</th>
+                    <th data-orderable="false">Vlr. Total.</th>
+                    <th data-orderable="false" style="display: none;">Serviço Quantidade.</th>
+                </tr>
+            </thead>
+        </table>
+            <div class="text" style="text-align: right;">
+                <div id="total_container" style="display: none;">
+                    <label for="total"><strong>Valor Total:</strong></label>
+                    <input type="text" id="total" readonly style="width: 80px; margin-top: 5px; margin-right: 28px;">
+                </div>
             </div>
-        </div>
+        
+    </div>
+        
+</div>
         <br />
         <input name="Salvar" type="button" id="salvar" value="Salvar" onclick="js_salvar();">
         <input name="Excluir" type="button" id="excluir" value="Excluir" onclick="js_excluir();">
@@ -202,41 +213,97 @@ $clrotulo->label("pc01_descrmater");
     mostrarElemento();
 
     function js_troca() {
-        if (document.getElementById('pc07_codele').value == '...') {
-            $('#textocontainer').css("display", "inline");
-            $('#myTable').DataTable().clear().destroy();
-            $('#myTable').css("display", "none");
-            $('#salvar').css("display", "none");
-            $('#excluir').css("display", "none");
-        } else {
-            $('#textocontainer').css("display", "none");
-            $('#myTable').css("display", "inline");
-            $('#salvar').css("display", "inline");
-            $('#excluir').css("display", "inline");
-            js_loadTable();
+    if (document.getElementById('pc07_codele').value !== '...') {
+      document.getElementById("myTable").style.display = "";
+      document.getElementById("total_container").style.display = "";
+      document.getElementById("salvar").disabled = false;
+      document.getElementById("excluir").disabled = false;
+      js_loadTable();
+      document.getElementById("total").value = calculateTotal(); 
+    } else {
+
+      document.getElementById("myTable").style.display = "none";
+      document.getElementById("total_container").style.display = "none";
+      document.getElementById("salvar").disabled = true;
+      document.getElementById("excluir").disabled = true;
+    }
+}
+    
+
+function js_calcula(id) {
+    const quant = parseFloat($('#qtd_' + id).val()); // Obter a nova quantidade
+    const vlun = parseFloat($('#vlr_' + id).val()); // Obter o valor unitário
+
+    if (!isNaN(quant) && !isNaN(vlun)) { // Verificar se os valores são válidos
+        const t = vlun * quant;
+        $('#total_' + id).val(t.toFixed(2));
+
+        // Atualizar o valor total geral independentemente do estado do checkbox
+        atualizarTotalGeral();
+    }
+}
+
+
+// Adicionar evento de mudança para os campos de quantidade
+$(document).on('change', 'input[id^="qtd_"]', function() {
+    const id = this.id.split('_')[1]; // Obter o ID do item
+    js_calcula(id); // Chamar a função js_calcula() ao alterar a quantidade
+});
+
+function js_calculaVrUnit(origem) {
+    const item = origem.id.split('_');
+    const id = item[1];
+    let quant = parseFloat($('#qtddisponivel_' + id).val());
+    const vlun = parseFloat($('#vlr_' + id).val());
+
+    if (isNaN(quant)) { // Verificar se a quantidade é um número válido
+        quant = 0; // Definir a quantidade como 0 se não for um número válido
+    }
+
+    // Calcular o novo valor total e atualizar os campos
+    const total = vlun * quant;
+    $('#qtd_' + id).val(quant.toFixed(2));
+    $('#total_' + id).val(total.toFixed(2));
+
+    // Atualizar o valor total geral
+    atualizarTotalGeral();
+}
+
+
+// Adicionar evento de mudança para os campos de valor unitário somente se o item estiver marcado
+$(document).on('input', 'input[id^="vlr_"], input[id^="qtd_"]', function() {
+    // Captura o ID do item a partir do ID do campo de entrada
+    let id = $(this).attr('id').replace('vlr_', '').replace('qtd_', '');
+
+    // Verifica se o item está marcado
+    let isChecked = $('#checkbox_' + id).is(':checked');
+
+    // Se o item estiver marcado, ou se a mudança foi em um campo de quantidade
+    if (isChecked || $(this).is('input[id^="qtd_"]')) {
+        // Obtém o valor unitário atual do item
+        let valorUnitarioAtual = parseFloat($('#vlr_' + id).val());
+
+        // Obtém a quantidade atual do item
+        let quant = parseFloat($('#qtd_' + id).val());
+
+        // Verifica se o valor unitário e a quantidade são números válidos
+        if (!isNaN(valorUnitarioAtual) && !isNaN(quant)) {
+            // Calcula o novo valor total
+            let novoTotal = quant * valorUnitarioAtual;
+
+            // Atualiza o campo de entrada do valor total para o item
+            $('#total_' + id).val(novoTotal.toFixed(2));
+
+            // Atualiza o valor total geral
+            atualizarTotalGeral();
         }
     }
+});
 
-    function js_calcula(origem) {
-        const item = origem.id.split('_');
-        const id = item[1];
-        const quant = new Number($('#qtd_' + id).val());
-        const vlun = new Number($('#vlr_' + id).val());
-        // $('checkbox_'+ id).attr("checked",true);
-        t = new Number(vlun * quant);
-        $('#total_' + id).val(t.toFixed(2));
-    }
 
-    function js_calculaVrUnit(origem) {
-        const item = origem.id.split('_');
-        const id = item[1];
-        const quant = new Number($('#qtddisponivel_' + id).val());
-        const vlun = new Number($('#vlr_' + id).val());
-        // $('checkbox_'+ id).attr("checked",true);
-        t = new Number(vlun * quant);
-        $('#qtd_' + id).val(quant.toFixed(2));
-        $('#total_' + id).val(t.toFixed(2));
-    }
+
+
+
 
     function js_salvar() {
 
@@ -358,8 +425,77 @@ $clrotulo->label("pc01_descrmater");
             }
         });
     }
+    
 
-    function js_verificadisponivel() {
+    function js_somaTotal(linha) {
+    let total = 0;
 
+    // Percorre todos os campos de checkbox para calcular o novo total
+    $('input[id^="checkbox_"]:checked').each(function() {
+        let id = $(this).attr('id').replace('checkbox_', '');
+        let valortotal = parseFloat($('#total_' + id).val()); // Obter o valor total do item
+        if (!isNaN(valortotal)) {
+            total += valortotal; // Adicionar ao total apenas se o item estiver marcado
+        }
+    });
+
+    document.getElementById('total').value = total.toFixed(2);
+}
+
+// Adicionar evento de mudança para os campos de quantidade e valor unitário
+$(document).on('input', 'input[id^="qtd_"], input[id^="vlr_"]', function() {
+    // Captura o ID do item a partir do ID do campo de entrada
+    let id = $(this).attr('id').split('_')[1];
+
+    // Obtém o valor unitário atual do item
+    let valorUnitarioAtual = parseFloat($('#vlr_' + id).val());
+
+    // Obtém a quantidade atual do item
+    let quant = parseFloat($('#qtd_' + id).val());
+
+    // Verifica se o valor unitário e a quantidade são números válidos
+    if (!isNaN(valorUnitarioAtual) && !isNaN(quant)) {
+        // Calcula o novo valor total
+        let novoTotal = quant * valorUnitarioAtual;
+
+        // Atualiza o campo de entrada do valor total para o item
+        $('#total_' + id).val(novoTotal.toFixed(2));
+
+        // Atualiza o valor total geral
+        atualizarTotalGeral();
     }
+});
+
+function atualizarTotalGeral() {
+    let totalGeral = 0;
+
+    // Percorre todos os campos de valor total dos itens
+    $('input[id^="total_"]').each(function() {
+        let id = $(this).attr('id').split('_')[1];
+        let isChecked = $('#checkbox_' + id).is(':checked');
+
+        // Verifica se o item está marcado antes de adicionar ao total geral
+        if (isChecked) {
+            let valorTotalItem = parseFloat($(this).val());
+
+            if (!isNaN(valorTotalItem)) {
+                totalGeral += valorTotalItem;
+            }
+        }
+    });
+
+    // Atualiza o campo de entrada do valor total geral
+    $('#total').val(totalGeral.toFixed(2));
+}
+
+
+
+
+
+
+
+
+
+
+
 </script>
