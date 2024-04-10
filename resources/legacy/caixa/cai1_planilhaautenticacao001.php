@@ -99,10 +99,15 @@ if (isset($oGet->db_opcao) && $oGet->db_opcao == 3) {
             <strong>Processo Administrativo:</strong>
           </td>
 
-          <td colspan="3">
+          <td>
              <? db_input('k144_numeroprocesso', 10, null, true, 'text', $iDbOpcao, null,null,null,null,15);?>
           </td>
-        </tr>
+          <td nowrap title="<?= @$Tk81_datareceb ?>"><b>Data da Arrecadação:</b></td> 
+              <td><?
+                  db_inputdata('k81_dataautenticacao', @$k81_dataautenticacao_dia, @$k81_dataautenticacao_mes, @$k81_dataautenticacao_ano, true, 'text', $db_opcao, "")
+                  ?>
+              </td>
+           </tr>
 
         </table>
     <fieldset style="width: 95%">
@@ -245,6 +250,36 @@ function js_autenticar() {
     return false;
   }
 
+  if ($F('k81_dataautenticacao') == '') {
+
+    alert("Informe a data da autenticação.");
+    $('k81_dataautenticacao').focus();
+    return false;
+  }
+
+  var valorCampoEstorno = $F('k81_dataautenticacao');
+  var valorCampoData = $F('k80_data');
+
+  var dataEstorno = converterParaData(valorCampoEstorno);
+  var data = converterParaData(valorCampoData);
+
+  if (dataEstorno < data) {
+    alert("A data de arrecadação não pode menor que a data de criação.");
+    $('k81_dataautenticacao').focus();
+    return false;
+  }
+ 
+  anoDataAutenticacao = $F('k81_dataautenticacao');
+  var partesDataAutenticacao = anoDataAutenticacao.split('/');
+
+  anoData        = $F('k80_data');
+  var partesData = anoData.split('/');
+  if (partesData[2] != partesDataAutenticacao[2]) {
+    alert("O ano do arrecadação, não pode ser diferente do ano de criação.");
+    $('k81_dataautenticacao').focus();
+    return false;
+  } 
+
   var sMensagemSalvar  = "Deseja autenticar a planilha de arrecadação selecionada?\n\n";
   sMensagemSalvar     += "Este procedimento pode demandar algum tempo.";
   if (!confirm(sMensagemSalvar)) {
@@ -256,6 +291,7 @@ function js_autenticar() {
   var oParametro                 = new Object();
   oParametro.exec                = 'autenticarPlanilha';
   oParametro.iPlanilha           = $F('k80_codpla');
+  oParametro.novaDtRecebimento   = $F('k81_dataautenticacao');
   oParametro.k144_numeroprocesso = encodeURIComponent(tagString($F("k144_numeroprocesso")));
 
   var oAjax = new Ajax.Request(sRPC,
@@ -265,6 +301,11 @@ function js_autenticar() {
                                 onComplete:js_retornoAutenticacao
                                }
                               );
+}
+
+function converterParaData(dataString) {
+    var partesData = dataString.split('/');
+    return new Date(partesData[2], partesData[1] - 1, partesData[0]);
 }
 
 /**
@@ -340,6 +381,7 @@ function js_preencheGridReceitas(oAjax) {
 function js_limparDadosTela() {
     $('k80_codpla').value = "";
     $('k80_data').value   = "";
+    $('k81_dataautenticacao').value = "";
     $('k144_numeroprocesso').value = "";
     $('TotalForCol2').innerHTML = "Total: 0";
     oGridReceitas.clearAll(true);

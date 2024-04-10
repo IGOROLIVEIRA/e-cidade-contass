@@ -34,6 +34,7 @@ class ImportacaoReceita
 {
     private $sProcessoAdministrativo;
     private $iLayout;
+    private $iData;
     private $iInscricao = "";
     private $iMatricula = "";
     private $sObservacao = "";
@@ -56,10 +57,11 @@ class ImportacaoReceita
      * @param string $sProcessoAdministrativo
      * @param int $iLayout
      */
-    public function __construct($sProcessoAdministrativo, $iLayout)
+    public function __construct($sProcessoAdministrativo, $iLayout, $iData)
     {
         $this->preencherProcessoAdministrativo($sProcessoAdministrativo);
         $this->iLayout = $iLayout;
+        $this->iData   = $iData;
     }
 
     /**
@@ -83,6 +85,7 @@ class ImportacaoReceita
      */
     public function salvar($aArquivoImportar)
     {
+        $this->formateDateReverse($this->iData);
         $this->importarReceitas($aArquivoImportar);
         $this->salvarReceitaOrcamentaria();
         $this->salvarReceitaExtraOrcamentaria();
@@ -120,7 +123,7 @@ class ImportacaoReceita
         $oReceitaPlanilha->setCaracteristicaPeculiar(new CaracteristicaPeculiar("000"));
         $oReceitaPlanilha->setCGM(CgmFactory::getInstanceByCgm($oReceitaOrcamentaria->iNumeroCgm));
         $oReceitaPlanilha->setContaTesouraria($oReceitaOrcamentaria->oContaTesouraria);
-        $oReceitaPlanilha->setDataRecebimento(new DBDate(date("Y-m-d", db_getsession("DB_datausu"))));
+        $oReceitaPlanilha->setDataRecebimento(new DBDate($this->iData));
         $oReceitaPlanilha->setInscricao($this->iInscricao);
         $oReceitaPlanilha->setMatricula($this->iMatricula);
         $oReceitaPlanilha->setObservacao(db_stdClass::normalizeStringJsonEscapeString($this->sObservacao));
@@ -163,7 +166,7 @@ class ImportacaoReceita
         $oTransferencia->setCodigoCgm($oReceitaExtraOrcamentaria->iNumeroCgm);
         $oTransferencia->setCaracteristicaPeculiarDebito("000");
         $oTransferencia->setCaracteristicaPeculiarCredito("000");
-        $oTransferencia->setData(date("Y-m-d", db_getsession("DB_datausu")));
+        $oTransferencia->setData($this->iData);
         $oTransferencia->setProcessoAdministrativo(db_stdClass::normalizeStringJsonEscapeString($this->sProcessoAdministrativo));
         $oTransferencia->setExercicioCompetenciaDevolucao("");
         if ($oTransferencia instanceof TransferenciaFinanceira) {
@@ -192,12 +195,19 @@ class ImportacaoReceita
             }
             $this->oPlanilhaArrecadacao->salvar();
             $this->oPlanilhaArrecadacao->getReceitasPlanilha();
-            $this->oPlanilhaArrecadacao->setDataAutenticacao($dtAutenticacao);   
+            $this->oPlanilhaArrecadacao->setDataAutenticacao($this->iData);   
             $this->oPlanilhaArrecadacao->autenticar();
             $this->aCodigoPlanilhaArrecadada[] = "CGM ({$cgm}) - Planilha: " . $this->oPlanilhaArrecadacao->getCodigo();
         }
     }
 
+    public function formateDateReverse(string $date)
+    {
+        $data_objeto = DateTime::createFromFormat('d/m/Y', $date);
+        $data_formatada = $data_objeto->format('Y-m-d');
+        $this->iData = date('Y-m-d', strtotime($data_formatada));
+    }
+  
     /**
      * Salva os dados da receita extra orçamentária
      *
