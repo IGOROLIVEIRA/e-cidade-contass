@@ -74,7 +74,7 @@ class EFDReinfEventos extends ModeloBaseEFDREINF
             }
             $aDadosAPI['nfs'][$chave] = array(
                 "serie" => $valor[2],
-                "numDocto" => $valor[1],
+                "numDocto" => preg_replace("/[^0-9]/", "", $valor[1]),
                 "dtEmissaoNF" => $valor[3],
                 "vlrBruto" => $valor[4],
                 "obs" => $valor[7],
