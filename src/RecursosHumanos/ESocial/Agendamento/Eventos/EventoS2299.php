@@ -6,7 +6,7 @@ use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
 use ECidade\RecursosHumanos\ESocial\Model\Formulario\EventoCargaS2299;
 
 /**
- * Classe responsï¿½vel por montar as informaï¿½ï¿½es do evento S2299 Esocial
+ * Classe responsável por montar as informações do evento S2299 Esocial
  *
  * @package  ECidade\RecursosHumanos\ESocial\Agendamento\Eventos
  * @author   Robson de Jesus
