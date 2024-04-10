@@ -75,12 +75,26 @@ $clrotulo = new rotulocampo();
 $clrotulo->label('');
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
-//echo $HTTP_SERVER_VARS['QUERY_STRING'];
+
 
 $sOrigem = "";
 
 if (isset($tipoOrcamento) && !empty($tipoOrcamento)) {
   $sOrigem = $oGet->tipoOrcamento;
+}
+
+if($sOrigem == "processodecompra"){
+    $sql = "SELECT DISTINCT pc22_codorc
+  FROM pcproc
+  INNER JOIN pcprocitem ON pcprocitem.pc81_codproc = pcproc.pc80_codproc
+  INNER JOIN pcorcamitemproc ON pcorcamitemproc.pc31_pcprocitem = pcprocitem.pc81_codprocitem
+  INNER JOIN pcorcamitem ON pcorcamitem.pc22_orcamitem = pcorcamitemproc.pc31_orcamitem
+  WHERE pcproc.pc80_codproc = $oGet->pc80_codproc";
+
+    $rsResult = db_query($sql);
+    $orcamento = db_utils::fieldsMemory($rsResult, 0);
+    $orcamento = $orcamento->pc22_codorc;
+    $pc20_codorc = $orcamento;
 }
 
 $sInner = "";
@@ -92,6 +106,11 @@ if ($sOrigem == "solicitacao") {
 } else if ($sOrigem == "processo") {
   $sSqlMater = $clpcorcamitem->sql_query_pcmaterproc(null, "pc81_codproc, pc11_seq,pc22_codorc, 1 as l20_tipojulg", null, "pc20_codorc=$pc20_codorc");
   $sInner = "inner join pcorcamitemproc          on pcorcamitemproc.pc31_orcamitem  = pcorcamtroca.pc25_orcamitem
+             inner join pcprocitem               on pcprocitem.pc81_codprocitem     = pcorcamitemproc.pc31_pcprocitem
+             inner join solicitem                on solicitem.pc11_codigo           = pcprocitem.pc81_solicitem";
+}else{
+    $sSqlMater = $clpcorcamitem->sql_query_pcmaterproc(null, "pc81_codproc, pc11_seq,pc22_codorc, 1 as l20_tipojulg", null, "pc20_codorc=$pc20_codorc");
+    $sInner = "inner join pcorcamitemproc          on pcorcamitemproc.pc31_orcamitem  = pcorcamtroca.pc25_orcamitem
              inner join pcprocitem               on pcprocitem.pc81_codprocitem     = pcorcamitemproc.pc31_pcprocitem
              inner join solicitem                on solicitem.pc11_codigo           = pcprocitem.pc81_solicitem";
 }
@@ -109,6 +128,10 @@ if (isset($imp_troca) && $imp_troca == "S") {
 
   if ($sOrigem == "processo") {
     $sWhere = "  pc81_codproc =  $pc81_codproc  ";
+  }
+
+  if($sOrigem == "processodecompra"){
+      $sWhere = "  pc81_codproc =  $oGet->pc80_codproc  ";
   }
 
   $sql_troca = "select pc01_codmater, pc01_descrmater, pc25_motivo, nome_julgado, nome_trocado
@@ -141,15 +164,18 @@ if (isset($imp_troca) && $imp_troca == "S") {
 $rsOrcamento = db_query($sSqlMater);
 db_fieldsmemory($rsOrcamento, 0);
 
-$head3 = "Orçamento: " . @$pc22_codorc;
+$orcamento = @$pc22_codorc;
 
 if ($sOrigem == "solicitacao") {
-  $head5 = "Solicitação: $pc11_numero";
+    $head5 = "Solicitação: $pc11_numero";
+    $head3 = "Orçamento: " . @$pc22_codorc;
 } else if ($sOrigem == "processo") {
-  $head5 = "Processo de Compra: $pc81_codproc";
+    $head5 = "Processo de Compra: $pc81_codproc";
+    $head3 = "Orçamento: " . @$pc22_codorc;
+}else{
+    $head5 = "Processo de Compra: $oGet->pc80_codproc";
+    $head3 = "Orçamento: " . @$orcamento;
 }
-
-$orcamento = @$pc22_codorc;
 
 if ($modelo == 1) {
 
@@ -189,6 +215,13 @@ if ($modelo == 1) {
       "pc11_seq",
       "pc22_codorc=$orcamento"
     );
+  }else{
+      $sSqlMater = $clpcorcamitem->sql_query_pcmaterproc(
+          null,
+          "distinct pc11_seq,pc11_reservado,pc22_orcamitem,pc01_descrmater,pc11_resum,pc80_criterioadjudicacao",
+          "pc11_seq",
+          "pc22_codorc=$orcamento"
+      );
   }
 
   $result_itens = $clpcorcamitem->sql_record($sSqlMater);
@@ -463,7 +496,6 @@ if ($modelo == 1) {
   //-----------------------------  MODELO 2  -----------------------------------------------------------------------------------------------------------------//
   //-----------------------------  MODELO 2  -----------------------------------------------------------------------------------------------------------------//
 
-
   if ($sOrigem == "solicitacao") {
     $sSqlItens = $clpcorcamitem->sql_query_pcmatersol(null, "distinct pc22_orcamitem,
                                                              pc01_descrmater,
@@ -474,7 +506,7 @@ if ($modelo == 1) {
                                                                 from pcorcamval val
                                                                where val.pc23_orcamitem = pc22_orcamitem) as valor_medio,
                                                              pc11_seq", "pc11_seq", "pc22_codorc=$orcamento");
-  } else if ($sOrigem == "processo") {
+  } else if ($sOrigem == "processo" || $sOrigem == "processodecompra" ) {
     $sSqlItens = "SELECT DISTINCT pc22_orcamitem,
                 pc01_descrmater,
                 pc11_resum,
@@ -511,7 +543,7 @@ WHERE pc22_codorc= $orcamento
 ORDER BY pc11_seq";
   }
   $result_itens = $clpcorcamitem->sql_record($sSqlItens);
-  //    echo $sSqlItens; db_criatabela($result_itens);exit;
+     //echo $sSqlItens; db_criatabela($result_itens);exit;
 
   $numrows_itens = $clpcorcamitem->numrows;
   if ($numrows_itens == 0) {

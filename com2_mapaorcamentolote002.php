@@ -32,8 +32,18 @@ require_once "libs/db_usuariosonline.php";
 
 $oGet = db_utils::postMemory($_GET);
 
-if (empty($oGet->iOrcamento)) {
-    db_redireciona('db_erros.php?fechar=true&db_erro=Código do orçamento inválido.');
+if($oGet->pc80_codproc){
+    $sql = "SELECT DISTINCT pc22_codorc
+          FROM pcproc
+          INNER JOIN pcprocitem ON pcprocitem.pc81_codproc = pcproc.pc80_codproc
+          INNER JOIN pcorcamitemproc ON pcorcamitemproc.pc31_pcprocitem = pcprocitem.pc81_codprocitem
+          INNER JOIN pcorcamitem ON pcorcamitem.pc22_orcamitem = pcorcamitemproc.pc31_orcamitem
+          WHERE pcproc.pc80_codproc = $oGet->pc80_codproc";
+
+    $rsResult = db_query($sql);
+
+    $orcamento = db_utils::fieldsMemory($rsResult, 0);
+    $oGet->iOrcamento = $orcamento->pc22_codorc;
 }
 
 if (empty($oGet->sJustificativa)) {
@@ -68,8 +78,7 @@ $sSqlItens = $oDaoPcorcamitem->sql_query_pcmaterproc(
     "pc68_sequencial, pc11_seq",
     "pc22_codorc = {$oGet->iOrcamento}"
 );
-// echo $sSqlItens;
-// exit;
+
 $rsItens = $oDaoPcorcamitem->sql_record($sSqlItens);
 
 if (!$rsItens || !pg_num_rows($rsItens)) {
@@ -110,7 +119,9 @@ for ($iRow = 0; $iRow < pg_num_rows($rsItens); $iRow++) {
     /**
      * Imprime os cabeçalhos no inicio de cada lote
      */
+
     if ($iLote != $oItem->pc68_sequencial || $iPageNumberItem != $oPdf->PageNo()) {
+
 
         if ($oPdf->getAvailHeight() < $iLine * 2) {
             $oPdf->addPage();
