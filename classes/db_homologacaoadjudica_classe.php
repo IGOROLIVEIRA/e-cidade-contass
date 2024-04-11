@@ -27,12 +27,17 @@ class cl_homologacaoadjudica
     var $l202_dataadjudicacao_mes = null;
     var $l202_dataadjudicacao_ano = null;
     var $l202_dataadjudicacao = null;
+    var $l202_datareferencia_dia = null;
+    var $l202_datareferencia_mes = null;
+    var $l202_datareferencia_ano = null;
+    var $l202_datareferencia = null;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  l202_sequencial = int4 = Sequencial
                  l202_licitacao = int4 = Licitação
                  l202_datahomologacao = date = Data Homologação
                  l202_dataadjudicacao = date = Data Adjudicação
+                 l202_datareferencia = date = Data de Referência
                  ";
     //funcao construtor da classe
     function cl_homologacaoadjudica()
@@ -73,6 +78,14 @@ class cl_homologacaoadjudica
                     $this->l202_dataadjudicacao = $this->l202_dataadjudicacao_ano . "-" . $this->l202_dataadjudicacao_mes . "-" . $this->l202_dataadjudicacao_dia;
                 }
             }
+            if ($this->l202_datareferencia == "") {
+                $this->l202_datareferencia_dia = ($this->l202_datareferencia_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l202_datareferencia_dia"] : $this->l202_datareferencia_dia);
+                $this->l202_datareferencia_mes = ($this->l202_datareferencia_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l202_datareferencia_mes"] : $this->l202_datareferencia_mes);
+                $this->l202_datareferencia_ano = ($this->l202_dataadjudicacao_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l202_dataadjudicacao_ano"] : $this->l202_dataadjudicacao_ano);
+                if ($this->l202_datareferencia_dia != "") {
+                    $this->l202_datareferencia = $this->l202_datareferencia_ano . "-" . $this->l202_datareferencia_mes . "-" . $this->l202_datareferencia_dia;
+                }
+            }
         } else {
             $this->l202_sequencial = ($this->l202_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["l202_sequencial"] : $this->l202_sequencial);
         }
@@ -90,24 +103,6 @@ class cl_homologacaoadjudica
             $this->erro_status = "0";
             return false;
         }
-        /*if($this->l202_datahomologacao == null ){
-            $this->erro_sql = " Campo Data Homologação nao Informado.";
-            $this->erro_campo = "l202_datahomologacao_dia";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-            $this->erro_status = "0";
-            return false;
-        }*/
-        /*if($this->l202_dataadjudicacao == null ){
-          $this->erro_sql = " Campo Data Adjudicação nao Informado.";
-          $this->erro_campo = "l202_dataadjudicacao_dia";
-          $this->erro_banco = "";
-          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-          $this->erro_status = "0";
-          return false;
-        }*/
         if ($l202_sequencial == "" || $l202_sequencial == null) {
             $result = db_query("select nextval('homologacaoadjudica_l202_sequencial_seq')");
             if ($result == false) {
@@ -145,12 +140,14 @@ class cl_homologacaoadjudica
                                       ,l202_licitacao
                                       ,l202_datahomologacao
                                       ,l202_dataadjudicacao
+                                      ,l202_datareferencia
                        )
                 values (
                                 $this->l202_sequencial
                                ,$this->l202_licitacao
                                ," . ($this->l202_datahomologacao == "null" || $this->l202_datahomologacao == "" ? "null" : "'" . $this->l202_datahomologacao . "'") . "
                                ," . ($this->l202_dataadjudicacao == "null" || $this->l202_dataadjudicacao == "" ? "null" : "'" . $this->l202_dataadjudicacao . "'") . "
+                               ," . ($this->l202_datareferencia == "null" || $this->l202_datareferencia == "" ? "null" : "'" . $this->l202_datareferencia . "'") . "
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -275,6 +272,21 @@ class cl_homologacaoadjudica
                 }*/
             }
         }
+        
+        if (trim($this->l202_datareferencia) != "" ) {
+            $sql  .= $virgula . " l202_datareferencia = '$this->l202_datareferencia' ";
+            $virgula = ",";
+            if (trim($this->l202_datareferencia) == null) {
+                $this->erro_sql = " Campo Data de Referencia nao Informado.";
+                $this->erro_campo = "l202_datareferencia_dia";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
         $sql .= " where ";
         if ($l202_sequencial != null) {
             $sql .= " l202_sequencial = $l202_sequencial";
@@ -607,6 +619,7 @@ class cl_homologacaoadjudica
         $sql .= "      left  join empempaut              on empempaut.e61_autori                = empautitem.e55_autori ";
         $sql .= "      left  join empempenho             on empempenho.e60_numemp               = empempaut.e61_numemp ";
         $sql .= "      left join liclicitem              on liclicitem.l21_codpcprocitem        = pcprocitem.pc81_codprocitem";
+        $sql .= "      left join liclicita              on liclicita.l20_codigo                 = liclicitem.l21_codliclicita";
         $sql .= "      left join liclicitemlote         on liclicitemlote.l04_liclicitem        = liclicitem.l21_codigo";
         $sql .= "      left join pcorcamitemlic         on liclicitem.l21_codigo               = pcorcamitemlic.pc26_liclicitem";
         $sql .= "      left join pcorcamitem            on pcorcamitemlic.pc26_orcamitem       = pcorcamitem.pc22_orcamitem";
@@ -918,7 +931,7 @@ class cl_homologacaoadjudica
     }
 
     /**
-     * Função responsável por verificar se existem itens com o mesmo código e 
+     * Função responsável por verificar se existem itens com o mesmo código e
      * valores unitários diferentes julgados para o mesmo fornecedor.
      * @param int $iLicitacao - Código da Licitação.
      * @param int $iRotina - 1 Adjudicação(Inclusão/Alteração), 2 - Homologação(Inclusão), 3 Homologação(Alteração).
@@ -954,7 +967,7 @@ class cl_homologacaoadjudica
         $aItens = array();
         $sItensInvalidos = "";
 
-        /* Percorrendo sobre os itens e verificando se existem itens com 
+        /* Percorrendo sobre os itens e verificando se existem itens com
            mesmo fornecedor e valores unitarios diferentes */
 
         for ($i = 0; $i < pg_num_rows($rsItens); $i++) {

@@ -948,7 +948,7 @@ if (isset($imp_descla) && $imp_descla == "S") {
                 if ($pc11_reservado == "t") {
                     $pdf->cell(80, $alt, '[ITEM ME/EPP] ' . $pc01_codmater . " - " . $pc01_descrmater, 0, 0, "L", $p);
                 } else {
-                    $pdf->cell(80, $alt, $pc01_codmater . " - " . $pc01_descrmater, 0, 0, "L", $p);
+                    $pdf->cell(80, $alt, substr($pc01_codmater . " - " . $pc01_descrmater,0,48), 0, 0, "L", $p);
                 }
             }
 

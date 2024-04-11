@@ -10,13 +10,15 @@ use \ECidade\V3\Extension\Document;
 use \ECidade\V3\Extension\View;
 use \ECidade\V3\Extension\Data as ExtensionData;
 
-class Dispatcher {
+class Dispatcher
+{
 
   /**
    * @param Request $request
    * @param Response $response
    */
-  public function execute(Request $request, Response $response) {
+  public function execute(Request $request, Response $response)
+  {
 
     $response->setContentType($request->parseAccept());
 
@@ -30,7 +32,7 @@ class Dispatcher {
     $extensionData = ExtensionData::restore($request->getExtension());
 
     if (false === $extensionData->exists()) {
-      throw new ResponseException("Extensão não instalada: " . $request->getExtension());
+      throw new ResponseException("Extensão n�o instalada: " . $request->getExtension());
     }
 
     if (false === $extensionData->isEnabled($request->session()->get('DB_login'))) {
@@ -38,7 +40,7 @@ class Dispatcher {
     }
 
     if (!file_exists($request->getControllerPath()) || is_dir($request->getControllerPath())) {
-      throw new ResponseException("Arquivo do Controller não encontrado: ". $request->getControllerPath());
+      throw new ResponseException("Arquivo do Controller n�o encontrado: " . $request->getControllerPath());
     }
 
     $class = $request->getController();
@@ -49,7 +51,7 @@ class Dispatcher {
     }
 
     if (!method_exists($class, $action)) {
-      throw new ResponseException("Action inválida: ". $class ."::". $action);
+      throw new ResponseException("Action inválida: " . $class . "::" . $action);
     }
 
     $controller = new $class();
@@ -68,7 +70,6 @@ class Dispatcher {
     if (!$response->hasBody()) {
       $response->setBody($result);
     }
-
   }
 
   /**
@@ -76,7 +77,8 @@ class Dispatcher {
    * @param Response $response
    * @return void
    */
-  public function loadAsset(Request $request, Response $response) {
+  public function loadAsset(Request $request, Response $response)
+  {
 
     // Diretorio da extensao atual
     $filePath = ECIDADE_CURRENT_EXTENSION_PATH . $request->getUri();
@@ -88,10 +90,9 @@ class Dispatcher {
 
     // Nao encontrou arquivo no diretorio da extensao nem na raiz
     if (!file_exists($filePath)) {
-      throw new ResponseException('Arquivo não encontrado: ' . $filePath, 404);
+      throw new ResponseException('Arquivo n�o encontrado: ' . $filePath, 404);
     }
 
     $response->setFile($filePath);
   }
-
 }

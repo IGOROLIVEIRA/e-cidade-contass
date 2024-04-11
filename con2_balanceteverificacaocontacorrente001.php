@@ -91,7 +91,7 @@ $aMeses = array(
                         <td>
                         <b>Tipo:</b>
                         <td>
-                            <?$aTipos = array(1 => "Sintético", 2 => "Analítico - Fonte");
+                            <?$aTipos = array(2 => "Analítico - Fonte", 1 => "Sintético");
                             db_select('tipoRelatorio',$aTipos,false,1);
                             ?>
                         </td>

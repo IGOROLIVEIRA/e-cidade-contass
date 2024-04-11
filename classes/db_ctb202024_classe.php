@@ -1,4 +1,4 @@
-<?
+<?php
 //MODULO: sicom
 //CLASSE DA ENTIDADE ctb202024
 class cl_ctb202024
@@ -587,115 +587,83 @@ class cl_ctb202024
     return $sql;
   }
 
-  public function sql_Reg20Fonte($codctb, $ano, $mes)
+  public function sql_Reg20Fonte($codctb, $ano, $mes, $codtce = false): string
   {
-    $sqlReg20Fonte = "SELECT DISTINCT codctb, fontemovimento
-                      FROM
-                          ( SELECT c61_reduz AS codctb,
-                                   o15_codtri AS fontemovimento
-                            FROM conplano
-                            INNER JOIN conplanoreduz ON conplanoreduz.c61_codcon = conplano.c60_codcon AND conplanoreduz.c61_anousu = conplano.c60_anousu
-                            INNER JOIN orctiporec ON o15_codigo = c61_codigo
-                            WHERE conplanoreduz.c61_reduz IN ({$codctb})
-                              AND conplanoreduz.c61_anousu = {$ano}";
+        $instit = db_getsession("DB_instit");
 
-    $sqlReg20Fonte .= " UNION ALL ";
+        $sqlAnd = "c61_reduz = $codctb ";
+        $orderBy = "ORDER BY c61_reduz, 6";
 
-    $sqlReg20Fonte .="      SELECT c61_reduz AS codctb,
-                                   ces02_fonte::varchar AS fontemovimento
-                            FROM conctbsaldo
-                            INNER JOIN conplanoreduz ON conctbsaldo.ces02_reduz = conplanoreduz.c61_reduz AND conplanoreduz.c61_anousu = conctbsaldo.ces02_anousu
-                            INNER JOIN orctiporec ON o15_codigo = c61_codigo
-                            WHERE conctbsaldo.ces02_reduz IN ({$codctb})
-                              AND conctbsaldo.ces02_anousu = {$ano}";
+        if ($codtce) {
+            $sqlAnd = "c61_codtce = $codctb";
+            $orderBy = "ORDER BY c61_codtce, 6";
+        }
 
-    $sqlReg20Fonte .= " UNION ALL ";
-
-    $sqlReg20Fonte .= "     SELECT contacredito.c61_reduz AS codctb,
-                                    CASE
-                                        WHEN c71_coddoc IN (5, 35, 37, 6, 36, 38) THEN fontempenho.o15_codtri
-                                        WHEN c71_coddoc IN (100, 101, 115, 116) THEN fontereceita.o15_codtri
-                                        WHEN c71_coddoc IN (140, 141) THEN contadebitofonte.o15_codtri
-                                        ELSE contacreditofonte.o15_codtri
-                                    END AS fontemovimento
-                            FROM conlancamdoc
-                            INNER JOIN conlancamval ON conlancamval.c69_codlan = conlancamdoc.c71_codlan
-                            INNER JOIN conplanoreduz contadebito ON contadebito.c61_reduz = conlancamval.c69_debito AND contadebito.c61_anousu = conlancamval.c69_anousu
-                            INNER JOIN conplanoreduz contacredito ON contacredito.c61_reduz = conlancamval.c69_credito AND contacredito.c61_anousu = conlancamval.c69_anousu
-                            LEFT JOIN conlancamemp ON conlancamemp.c75_codlan = conlancamdoc.c71_codlan
-                            LEFT JOIN empempenho ON empempenho.e60_numemp = conlancamemp.c75_numemp
-                            LEFT JOIN orcdotacao ON orcdotacao.o58_anousu = empempenho.e60_anousu AND orcdotacao.o58_coddot = empempenho.e60_coddot
-                            LEFT JOIN orctiporec fontempenho ON fontempenho.o15_codigo = orcdotacao.o58_codigo
-                            LEFT JOIN orctiporec contacreditofonte ON contacreditofonte.o15_codigo = contacredito.c61_codigo
-                            LEFT JOIN orctiporec contadebitofonte ON contadebitofonte.o15_codigo = contadebito.c61_codigo
-                            LEFT JOIN conlancamrec ON conlancamrec.c74_codlan = conlancamdoc.c71_codlan
-                            LEFT JOIN orcreceita ON orcreceita.o70_codrec = conlancamrec.c74_codrec AND orcreceita.o70_anousu = conlancamrec.c74_anousu
-                            LEFT JOIN orcfontes receita ON receita.o57_codfon = orcreceita.o70_codfon AND receita.o57_anousu = orcreceita.o70_anousu
-                            LEFT JOIN orctiporec fontereceita ON fontereceita.o15_codigo = orcreceita.o70_codigo
-                            WHERE DATE_PART('YEAR',conlancamdoc.c71_data) = {$ano}
-                              AND DATE_PART('MONTH',conlancamdoc.c71_data) <= '{$mes}'
-                              AND conlancamval.c69_credito IN ({$codctb})";
-
-    $sqlReg20Fonte .=" UNION ALL ";
-
-    $sqlReg20Fonte .="      SELECT contadebito.c61_reduz AS codctb,
-                                    CASE
-                                        WHEN c71_coddoc IN (5, 35, 37, 6, 36, 38) THEN fontempenho.o15_codtri
-                                        WHEN c71_coddoc IN (100, 101, 115, 116) THEN fontereceita.o15_codtri
-                                        WHEN c71_coddoc IN (140, 141) THEN contacreditofonte.o15_codtri
-                                        ELSE contadebitofonte.o15_codtri
-                                    END AS fontemovimento
-                            FROM conlancamdoc
-                            INNER JOIN conlancamval ON conlancamval.c69_codlan = conlancamdoc.c71_codlan
-                            INNER JOIN conplanoreduz contadebito ON contadebito.c61_reduz = conlancamval.c69_debito AND contadebito.c61_anousu = conlancamval.c69_anousu
-                            INNER JOIN conplanoreduz contacredito ON contacredito.c61_reduz = conlancamval.c69_credito AND contacredito.c61_anousu = conlancamval.c69_anousu
-                            LEFT JOIN conlancamemp ON conlancamemp.c75_codlan = conlancamdoc.c71_codlan
-                            LEFT JOIN empempenho ON empempenho.e60_numemp = conlancamemp.c75_numemp
-                            LEFT JOIN orcdotacao ON orcdotacao.o58_anousu = empempenho.e60_anousu AND orcdotacao.o58_coddot = empempenho.e60_coddot
-                            LEFT JOIN orctiporec fontempenho ON fontempenho.o15_codigo = orcdotacao.o58_codigo
-                            LEFT JOIN orctiporec contacreditofonte ON contacreditofonte.o15_codigo = contacredito.c61_codigo
-                            LEFT JOIN orctiporec contadebitofonte ON contadebitofonte.o15_codigo = contadebito.c61_codigo
-                            LEFT JOIN conlancamrec ON conlancamrec.c74_codlan = conlancamdoc.c71_codlan
-                            LEFT JOIN orcreceita ON orcreceita.o70_codrec = conlancamrec.c74_codrec AND orcreceita.o70_anousu = conlancamrec.c74_anousu
-                            LEFT JOIN orcfontes receita ON receita.o57_codfon = orcreceita.o70_codfon AND receita.o57_anousu = orcreceita.o70_anousu
-                            LEFT JOIN orctiporec fontereceita ON fontereceita.o15_codigo = orcreceita.o70_codigo
-                            WHERE DATE_PART('YEAR',conlancamdoc.c71_data) = {$ano}
-                              AND DATE_PART('MONTH',conlancamdoc.c71_data) <= '{$mes}'
-                              AND conlancamval.c69_debito IN ({$codctb})";
-
-    $sqlReg20Fonte .= " UNION ALL ";
-
-    $sqlReg20Fonte .="      SELECT ces02_reduz AS codctb,
-                                   ces02_fonte::varchar AS fontemovimento
-                            FROM conctbsaldo
-                            WHERE ces02_reduz IN ({$codctb})
-                              AND ces02_anousu = {$ano} ) AS xx";
-
-    return $sqlReg20Fonte;
+        return "WITH registro20 AS (
+                SELECT c19_sequencial,
+                       c61_reduz,
+                       c61_codtce,
+                       c61_codcon,
+                       c61_codigo,
+                       o15_codigo,
+                       o15_codtri,
+                       c61_instit,
+                       fc_saldocontacorrente($ano, c19_sequencial, 103, $mes, c61_instit)
+                FROM conplanoexe
+                INNER JOIN conplanoreduz ON c61_anousu = c62_anousu AND c61_reduz = c62_reduz
+                INNER JOIN conplano ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu AND c60_codsis = 6
+                INNER JOIN contacorrentedetalhe ON c19_conplanoreduzanousu = c61_anousu AND c19_reduz = c61_reduz
+                LEFT JOIN orctiporec ON c19_orctiporec = o15_codigo
+                WHERE c61_instit = $instit
+                  AND c62_anousu = $ano
+                  AND " . $sqlAnd . "
+                " . $orderBy . "
+            )
+            SELECT c19_sequencial,
+                   o15_codigo                                                      AS fontemovimento,
+                   round(substr(fc_saldocontacorrente, 43, 15)::float8, 2)::float8 AS saldoinicial,
+                   substr(fc_saldocontacorrente, 107, 1)::varchar(1)               AS nat_vlr_si,
+                   round(substr(fc_saldocontacorrente, 59, 15)::float8, 2)::float8 AS debito,
+                   round(substr(fc_saldocontacorrente, 75, 15)::float8, 2)::float8 AS credito,
+                   round(substr(fc_saldocontacorrente, 91, 15)::float8, 2)::float8 AS saldofinal,
+                   substr(fc_saldocontacorrente, 111, 1)::varchar(1)               AS nat_vlr_sf,
+                   o15_codtri,
+                   c61_reduz,
+                   c61_codtce
+            FROM registro20";
   }
 
   /**
-   * Esse metodo deve retornar os saldos e movimentacoes das fontes no mes
-   * conforme codCtb informado
-   *
-   * @param integer $ano
-   * @param integer $codctb
-   * @param string $fonte
-   * @param integer $mes
-   * @param integer $instit
-   * @return $sSqlMov
+   * @param $iAnoUsu
+   * @param $instituicao
+   * @param $oConta
+   * @param $sDataInicial
+   * @param $sDataFinal
+   * @return string
    */
-  public function queryMovFonte($ano, $codctb, $fonte, $mes, $instit)
+  public function saldosBalancete($iAnoUsu, $instituicao, $oConta, $sDataInicial, $sDataFinal): string
   {
-    $sSqlMov = "SELECT round(substr(fc_saldoctbfonte({$ano}, {$codctb}, '{$fonte}', {$mes}, {$instit}),29,15)::float8,2)::float8 AS saldo_anterior,
-                       round(substr(fc_saldoctbfonte({$ano}, {$codctb}, '{$fonte}', {$mes}, {$instit}),43,15)::float8,2)::float8 AS debitomes,
-                       round(substr(fc_saldoctbfonte({$ano}, {$codctb}, '{$fonte}', {$mes}, {$instit}),57,15)::float8,2)::float8 AS creditomes,
-                       round(substr(fc_saldoctbfonte({$ano}, {$codctb}, '{$fonte}', {$mes}, {$instit}),72,15)::float8,2)::float8 AS saldo_final,
-                       substr(fc_saldoctbfonte({$ano}, {$codctb}, '{$fonte}', {$mes}, {$instit}),87,1)::varchar(1) AS sinalanterior,
-                       substr(fc_saldoctbfonte({$ano}, {$codctb}, '{$fonte}', {$mes}, {$instit}),89,1)::varchar(1) AS sinalfinal";
-
-    return $sSqlMov;
+    return " SELECT c61_reduz,
+                    c61_codtce,
+                    c61_codigo,
+                    c61_instit,
+                    round(substr(fc_planosaldonovo, 3, 14)::float8, 2)::float8  AS saldo_anterior,
+                    round(substr(fc_planosaldonovo, 17, 14)::float8, 2)::float8 AS saldo_anterior_debito,
+                    round(substr(fc_planosaldonovo, 31, 14)::float8, 2)::float8 AS saldo_anterior_credito,
+                    round(substr(fc_planosaldonovo, 45, 14)::float8, 2)::float8 AS saldo_final,
+                    substr(fc_planosaldonovo, 59, 1)::varchar(1)                AS sinal_anterior,
+                    substr(fc_planosaldonovo, 60, 1)::varchar(1)                AS sinal_final
+             FROM (SELECT c61_reduz,
+                          c61_codtce,
+                          c61_codigo,
+                          c61_instit,
+                          fc_planosaldonovo(2024, c61_reduz, '$sDataInicial', '$sDataFinal', false)
+                   FROM conplanoexe
+                   INNER JOIN conplanoreduz ON c61_anousu = c62_anousu AND c61_reduz = c62_reduz
+                   INNER JOIN conplano p ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu AND c60_codsis = 6
+                   WHERE c62_anousu = $iAnoUsu
+                     AND c61_instit = $instituicao
+                     AND (c61_reduz = $oConta->codctb OR c61_codtce = $oConta->codctb)) AS x
+             ORDER BY c61_reduz";
   }
 }
-
-?>

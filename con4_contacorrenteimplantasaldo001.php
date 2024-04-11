@@ -171,7 +171,7 @@ db_app::load("widgets/DBAncora.widget.js");
                 <input name="processar" type="button" id="processar" value="Processar" disabled="disabled" onclick="js_processar();">
                 <input name="novo" type="button" id="novo" value="Novo Detalhamento" onclick="js_NovoDetalhamento();">
                 <input name="importar" type="button" id="importar" value="Importar do Sicom Balancete" disabled="disabled" onclick="js_importar();">
-
+                <input name="zerarsaldoimplantar" type="button" id="zerarsaldoimplantar" value="Zerar Saldo a Implantar" onclick="js_zerarSaldoAImplantar();">
             </div>
 
         </div>
@@ -791,7 +791,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
         var nValorDebito = parseFloat($F("saldoDebito"));
         var sTipoImplantacao = 'credito';
 
-        if (nValorDebito > 0 && nValorCredito == 0) {
+        if (nValorDebito == 0 && nValorCredito == 0) {
             sTipoImplantacao = "debito";
         }
 
@@ -883,6 +883,18 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 
     }
 
+    function js_zerarSaldoAImplantar() 
+    {
+        var rowCount = oGridDetalhamento.aRows.length;
+        for (var i = 0; i < rowCount; i++) {
+            const campo = document.getElementById('qtditem'+i);
+            if (campo) {
+                 campo.value = 0;
+            }
+        } 
+    }
+
+
     function js_somavaloresImp() {
 
         var nValorLinha;
@@ -917,7 +929,10 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
         if (parseFloat(nValorDebito) > 0) {
             nValorSaldo = nValorDebito;
         }
-        if (nValorSaldo === nValorDistribuido) {
+
+        var resultado = parseFloat(nValorSaldo.replace(/\./g, '').replace(',', '.')) - parseFloat(nValorDistribuido.replace(/\./g, '').replace(',', '.'));
+
+        if (nValorSaldo === nValorDistribuido || resultado < 0) {
 
             $('processar').disabled = false;
         }

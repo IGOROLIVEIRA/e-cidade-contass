@@ -24,9 +24,9 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt 
  *                                licenca/licenca_pt.txt 
  */
- 
-require_once ("interfaces/ILancamentoAuxiliar.interface.php");
-require_once ("model/contabilidade/lancamento/LancamentoAuxiliarBase.model.php");
+
+require_once("interfaces/ILancamentoAuxiliar.interface.php");
+require_once("model/contabilidade/lancamento/LancamentoAuxiliarBase.model.php");
 
 /**
  * Model que executa os lancamentos auxiliares para restos a pagar processados
@@ -34,27 +34,28 @@ require_once ("model/contabilidade/lancamento/LancamentoAuxiliarBase.model.php")
  * @package    contabilidade
  * @subpackage lancamento
  * @version    1.0 $
- */   
-class LancamentoAuxiliarInscricaoRestosAPagarProcessado extends LancamentoAuxiliarBase implements ILancamentoAuxiliar {
-  
+ */
+class LancamentoAuxiliarInscricaoRestosAPagarProcessado extends LancamentoAuxiliarBase implements ILancamentoAuxiliar
+{
+
   /**
    * chave para conlancaminscrestosapagarprocessados
    * @var integer
    */
   private $iInscricaoRestosAPagarProcessados;
-  
+
   /**
    * Código do Historico
    * @var integer
    */
   private $iHistorico;
-  
+
   /**
    * Valor Total do Lançamento
    * @var double
    */
   private $nValorTotal;
-    
+
   /**
    * metodo que executao lancamento
    * lancar registros em: 
@@ -62,34 +63,36 @@ class LancamentoAuxiliarInscricaoRestosAPagarProcessado extends LancamentoAuxili
    *   - conlancamcompl
    * @see ILancamentoAuxiliar::executaLancamentoAuxiliar()
    */
-  public function executaLancamentoAuxiliar($iCodigoLancamento, $dtLancamento) {
-    
+  public function executaLancamentoAuxiliar($iCodigoLancamento, $dtLancamento)
+  {
+
     parent::setCodigoLancamento($iCodigoLancamento);
     parent::setDataLancamento($dtLancamento);
     parent::salvarVinculoComplemento();
     $this->salvarVinculoInscricaoRestosAPagarProcessados();
-    
+
     return true;
   }
-  
+
   /**
    * Salva vinculo entre as inscricoes de restos a pagar processados com os lancamentos da contabilidade
    * @throws DBException - erro de sql ao incluir na tabela conlancaminscrestosapagarprocessados
    */
-  public function salvarVinculoInscricaoRestosAPagarProcessados() {
+  public function salvarVinculoInscricaoRestosAPagarProcessados()
+  {
 
     $oDaoConLancamInscricaoRestosAPagarProcessados = db_utils::getDao('conlancaminscrestosapagarprocessados');
     $oDaoConLancamInscricaoRestosAPagarProcessados->c108_inscricaorestosapagarprocessados = $this->getInscricaoRestosAPagarProcessados();
     $oDaoConLancamInscricaoRestosAPagarProcessados->c108_codlan                              = $this->iCodigoLancamento;
     $oDaoConLancamInscricaoRestosAPagarProcessados->c108_sequencial                          = null;
     $oDaoConLancamInscricaoRestosAPagarProcessados->incluir(null);
-    
+
     if ($oDaoConLancamInscricaoRestosAPagarProcessados->erro_status == "0") {
-      
-      $sErroQuery = "Não foi possível salvar o vínculo da inscrição de restos a pagar não processados com o lançamento da contabilidade.";
+
+      $sErroQuery = "N�o foi possível salvar o vínculo da inscrição de restos a pagar n�o processados com o lançamento da contabilidade.";
       throw new DBException($sErroQuery);
     }
-    
+
     return true;
   }
 
@@ -97,47 +100,52 @@ class LancamentoAuxiliarInscricaoRestosAPagarProcessado extends LancamentoAuxili
    * Define o codigo da chave com  tabela conlancaminscrestosapagarprocessados
    * @param integer $iAberturaExercicioOrcamento
    */
-  public function setInscricaoRestosAPagarProcessados($iInscricaoRestosAPagarProcessados) {
+  public function setInscricaoRestosAPagarProcessados($iInscricaoRestosAPagarProcessados)
+  {
     $this->iInscricaoRestosAPagarProcessados = $iInscricaoRestosAPagarProcessados;
   }
-  
+
   /**
    * Retorna o codigo da chave com  tabela conlancaminscrestosapagarprocessados
    * @return integer $iAberturaExercicioOrcamento
    */
-  public function getInscricaoRestosAPagarProcessados() {
+  public function getInscricaoRestosAPagarProcessados()
+  {
     return $this->iInscricaoRestosAPagarProcessados;
   }
-  
+
   /**
    * Define o valor total
    * @param float $nValorTotal
    */
-  public function setValorTotal($nValorTotal){
+  public function setValorTotal($nValorTotal)
+  {
     $this->nValorTotal = $nValorTotal;
   }
-  
+
   /**
    * Retorna o valor total
    * @return float $nValorTotal
    */
-  public function getValorTotal(){
+  public function getValorTotal()
+  {
     return $this->nValorTotal;
   }
-  
+
   /**
    * Retorna o histórico da operação
    */
-  public function getHistorico(){
+  public function getHistorico()
+  {
     return $this->iHistorico;
   }
-  
+
   /**
    * Seta o histórico da operação
    * @param integer $iHistorico
    */
-  public function setHistorico($iHistorico){
-    $this->iHistorico = $iHistorico;    
+  public function setHistorico($iHistorico)
+  {
+    $this->iHistorico = $iHistorico;
   }
-  
 }

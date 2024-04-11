@@ -1776,4 +1776,60 @@ class cl_pcproc
                 return $sSql;
 
   }
+
+  public function getTipoSolicitacao($pc80_codproc){
+
+    $sql = "select
+                pc10_solicitacaotipo
+              from
+                pcproc
+              inner join pcprocitem on
+                pc81_codproc = pc80_codproc
+              inner join solicitem on
+                pc11_codigo = pc81_solicitem
+              inner join solicita on
+                pc10_numero = pc11_numero
+              where
+                pc80_codproc = $pc80_codproc
+              limit 1;";
+
+    $rsTipoSolicitacao = db_query($sql);
+    $tipoSolicitacao = db_utils::fieldsMemory($rsTipoSolicitacao, 0)->pc10_solicitacaotipo;
+
+    return $tipoSolicitacao;
+
+  }
+
+  public function queryDadosAutorizacao($pc80_codproc){
+    
+    $tipoSolicitacao = $this->getTipoSolicitacao($pc80_codproc);
+
+    if($tipoSolicitacao == "5"){
+      return "select *
+      from pcproc
+      inner join pcprocitem on pc81_codproc=pc80_codproc
+      inner join solicitem filho on filho.pc11_codigo=pc81_solicitem
+      inner join solicita solicitaf on solicitaf.pc10_numero=filho.pc11_numero
+      inner join solicitavinculo on pc53_solicitafilho=solicitaf.pc10_numero
+      inner join solicita on solicita.pc10_numero=pc53_solicitapai
+      inner join solicitem on solicitem.pc11_numero=solicita.pc10_numero
+      inner join pcprocitem pcprociteml on pcprociteml.pc81_solicitem=solicitem.pc11_codigo
+      inner join liclicitem on l21_codpcprocitem=pcprociteml.pc81_codprocitem
+      inner join liclicita on l20_codigo=l21_codliclicita
+      inner join cflicita on l03_codigo=l20_codtipocom
+      inner join pctipocompratribunal on l03_pctipocompratribunal=l44_sequencial
+      inner join pctipocompra on pc50_pctipocompratribunal=l44_sequencial and l03_pctipocompratribunal=pc50_pctipocompratribunal
+      where pc80_codproc = $pc80_codproc limit 1";
+    }
+
+    return "select *
+    from pcproc
+    left join pcprocitem on pc81_codproc = pc80_codproc
+    left join liclicitem on l21_codpcprocitem = pc81_codprocitem
+    left join liclicita on l20_codigo = l21_codliclicita
+    left join adesaoregprecos on si06_processocompra = pc80_codproc
+    left join cflicita on l03_codigo = l20_codtipocom
+    where pc80_codproc = $pc80_codproc limit 1";
+
+  }
 }

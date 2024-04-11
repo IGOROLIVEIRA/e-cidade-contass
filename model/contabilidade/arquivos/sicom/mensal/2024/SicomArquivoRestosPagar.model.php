@@ -8,6 +8,7 @@ require_once("classes/db_rsp202024_classe.php");
 require_once("classes/db_rsp212024_classe.php");
 require_once("classes/db_rsp222024_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2024/GerarRSP.model.php");
+require_once("model/orcamento/DeParaRecurso.model.php");
 
 /**
  * selecionar dados de Leis de Alteração Sicom Acompanhamento Mensal
@@ -24,6 +25,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
    */
   protected $iCodigoLayout;
 
+  private $oDeParaRecurso;
   /**
    *
    * Nome do arquivo a ser criado
@@ -51,7 +53,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
    */
   public function __construct()
   {
-
+    $this->oDeParaRecurso = new DeParaRecurso();
   }
 
   /**
@@ -242,14 +244,9 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         $clrsp11->si113_tiporegistro = 11;
         $clrsp11->si113_reg10 = $clrsp10->si112_sequencial;
         $clrsp11->si113_codreduzidorsp = $oDados10->codreduzidorsp;
+        $clrsp11->si113_codfontrecursos = substr($oDados10->codfontrecursos,1) == '86' || substr($oDados10->codfontrecursos,1) == '60' || substr($oDados10->codfontrecursos,1) == '704000' ? substr($oDados10->codfontrecursos,0,1).'704000' :   substr($this->oDeParaRecurso->getDePara(strlen($oDados10->codfontrecursos) == 7 ? $oDados10->codfontrecursos."0" : $oDados10->codfontrecursos), 0, 7);
 
-        $clrsp11->si113_codfontrecursos = $iFonteAlterada != '0' && $iFonteAlterada != '' ? $iFonteAlterada : $oDados10->codfontrecursos;
-        if (in_array($oDados10->codfontrecursos, $this->aFontesEncerradas)) {
-          $clrsp11->si113_codfontrecursos = substr($clrsp11->si113_codfontrecursos, 0, 1).'59';
-        }
-
-        $clrsp11->si113_codco = $oDados10->codco;
-
+        $clrsp11->si113_codco = $oDados10->e60_codco;
         $clrsp11->si113_vloriginalfonte = $oDados10->vloriginal;
         $clrsp11->si113_vlsaldoantprocefonte = $oDados10->vlsaldoantproce;
         $clrsp11->si113_vlsaldoantnaoprocfonte = $oDados10->vlsaldoantnaoproc;
@@ -284,9 +281,8 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
          * Alteracoes nas validacoes do SICOM
          * Cancelamento e Reclassificacoes das fontes encerradas
          */
-        if (db_getsession("DB_anousu") == 2024) {
-
-          if (($oDados10->codfontrecursos == $oDados10->old_codfontrecursos) || (in_array($oDados10->codfontrecursos, $this->aFontesEncerradas))) {
+      
+        if ($oDados10->codfontrecursos == 1704000 || $oDados10->codfontrecursos == 186 || $oDados10->codfontrecursos == 2704000 || $oDados10->codfontrecursos == 286) {
 
             if ($oDados10->vlsaldoantproce > 0) {
 
@@ -298,7 +294,6 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 
               $this->gerarReg202024($oDados10, $clrsp10, 2, 6, $oDados10->vlsaldoantnaoproc, $this::JUSTIFICATIVA_CANCELAMENTO, false);
               $this->gerarReg202024($oDados10, $clrsp10, 2, 5, $oDados10->vlsaldoantnaoproc, $this::JUSTIFICATIVA_RESTABELECIMENTO, true);
-            }
           }
         }
 
@@ -316,7 +311,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
       $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
-      $sHash = $oDados20->nroempenho . $oDados20->exercicioempenho . $oDados20->dtmovimentacao;
+      $sHash = $oDados20->nroempenho . $oDados20->exercicioempenho . $oDados20->dtmovimentacao . $oDados20->tiporestospagar;
       if (!$aDadosAgrupados[$sHash]) {
 
         $clrsp20 = new stdClass();
@@ -369,10 +364,10 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         if (in_array($oDados20->codfontrecursos, $this->aFontesEncerradas) && ($oDados20->tipomovimento != 5 || $oDados20->tipomovimento != 6)) {
           $clrsp21->si116_codfontrecursos = $this->fonteSubstituta;
         } else {
-          $clrsp21->si116_codfontrecursos = $oDados20->codfontrecursos == $oDados20->old_codfontrecursos ? $oDados20->new_codfontrecursos : $oDados20->codfontrecursos;
+          $clrsp21->si116_codfontrecursos = substr($this->oDeParaRecurso->getDePara(strlen($oDados20->codfontrecursos) == 7 ? $oDados20->codfontrecursos."0" : $oDados20->codfontrecursos), 0, 7);
         }
 
-        $clrsp21->si116_codco = $oDados20->codco;
+        $clrsp21->si116_codco = $oDados20->e60_codco;
         $clrsp21->si116_codidentificafr = $oDados20->tipomovimento != 5 || $oDados20->tipomovimento != 6 ? 'null' : $oDados20->codfontrecursos;
         $clrsp21->si116_vlmovimentacaofonte = $oDados20->vlmovimentacao;
         $clrsp21->si116_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -449,7 +444,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
   public function gerarReg202024($oDados10, $clrsp10, $iTiporestospagar, $iTipoMovimento, $vlSaldoproce, $sJustificativa, $bRestabelecimento)
   {
 
-    $fonte = $oDados10->new_codfontrecursos;
+    $fonte = substr($this->oDeParaRecurso->getDePara(strlen($oDados10->codfontrecursos) == 7 ? $oDados10->codfontrecursos."0" : $oDados10->codfontrecursos),0,7);
     $codIdentificaFR = $oDados10->codfontrecursos;
 
     if ($iTipoMovimento == 6) {
@@ -465,8 +460,13 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
       }
       $codIdentificaFR = 159;
     }
-
-
+// echo "<pre>";print_r($oDados10);
+//     if ($oDados10->tiporegistro == 10) {
+//       $oDados10->codfontrecursos = substr($oDados10->codfontrecursos,1) == '86' || substr($oDados10->codfontrecursos,1) == '60' || substr($oDados10->codfontrecursos,1) == '704000' ? substr($oDados10->codfontrecursos,0,1).'704000' :   substr($this->oDeParaRecurso->getDePara($oDados10->codfontrecursos), 0, 7);
+//       $fonte = substr($oDados10->codfontrecursos,1) == '86' || substr($oDados10->codfontrecursos,1) == '60' || substr($oDados10->codfontrecursos,1) == '704000' ? substr($oDados10->codfontrecursos,0,1).'704000' :   substr($this->oDeParaRecurso->getDePara($oDados10->codfontrecursos), 0, 7);
+//       $codIdentificaFR = $fonte;
+//     }
+    // echo $fonte." -- ".$oDados10->codreduzidorsp."<br>";
     $clrsp20 = new cl_rsp202024();
     $clrsp20->si115_tiporegistro = 20;
     $clrsp20->si115_codreduzidomov = $iTipoMovimento == 6 ? $oDados10->codreduzidorsp . $oDados10->codfontrecursos . $iTiporestospagar : $oDados10->codreduzidorsp . '1500000' . $iTiporestospagar;

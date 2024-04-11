@@ -89,7 +89,7 @@ if (isset($incluir)) {
         db_msgbox("Medida de manuten��o menor que Medida de manuten��o anterior.");
         $sqlerro=true;
         $erro_msg="N�o foi poss�vel incluir.";
-        
+
     }
     if($ve62_veiccadtiposervico==""){
       db_msgbox("Tipo de servi�o n�o selecionado");
@@ -97,7 +97,7 @@ if (isset($incluir)) {
       $erro_msg="N�o foi poss�vel incluir.";
       echo "<script> document.form1.ve62_veiccadtiposervico.style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.ve62_veiccadtiposervicofocus();</script>";
-      
+
   }
 
     if($retirada == "" || $retirada == null){
@@ -247,7 +247,7 @@ if (isset($incluir)) {
       }
       db_fim_transacao($sqlerro);
     }
-    
+
   }
   $ve62_codigo = $clveicmanut->ve62_codigo;
   $db_opcao = 1;
@@ -284,11 +284,12 @@ if (isset($incluir)) {
      * para cada ano.
      */
 
-    if(db_getsession('DB_anousu') > 2015)
+    if(db_getsession('DB_anousu') > 2015) {
 
-      include("forms/db_frmveicmanutcstitens.php");
-    else
-      include("forms/db_frmveicmanut.php");
+        include("forms/db_frmveicmanutcstitens.php");
+    } else {
+        include("forms/db_frmveicmanut.php");
+    }
     ?>
   </body>
   </html>
@@ -307,13 +308,13 @@ if (isset($incluir)) {
       $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
       $by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
 
-     
+
      foreach (json_decode(str_replace("\\",'',utf8_encode($itens)), true ) as $item) {
-      $valor = str_replace($what, $by, $item["ve63_descr"]); 
+      $valor = str_replace($what, $by, $item["ve63_descr"]);
       $item["ve63_descr"] = $valor;
       if($item!=null){
 
-        if($sqlerro==false){  
+        if($sqlerro==false){
           db_inicio_transacao();
           $clveicmanutitem->incluir("",$item,$ve62_codigo);
           $erro_msg = $clveicmanutitem->erro_msg;
@@ -336,7 +337,7 @@ if (isset($incluir)) {
     }
 
 
-    
+
     db_msgbox($erro_msg);
     //db_redireciona("vei1_veicmanut005.php?liberaaba=true&chavepesquisa=$ve62_codigo");
     db_redireciona("vei1_veicmanut004.php");

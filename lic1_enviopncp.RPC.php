@@ -40,7 +40,7 @@ switch ($oParam->exec) {
                      AND l213_licitacao=l20_codigo)
         ORDER BY l213_sequencial DESC
         LIMIT 1) AS l213_numerocontrolepncp,l03_descr,l20_numero";
-        $rsLicitacaoAbertas = $clliclicita->sql_record($clliclicita->sql_query(null, $campos, 'l20_codigo desc', "l03_pctipocompratribunal in (110,50,51,53,52,102,101,100,101) and liclicita.l20_leidalicitacao = 1 and l20_instit = " . db_getsession('DB_instit')));
+        $rsLicitacaoAbertas = $clliclicita->sql_record($clliclicita->sql_query(null, $campos, 'l20_codigo desc', "l03_pctipocompratribunal in (110,50,51,53,52,102,101,100,103) and liclicita.l20_leidalicitacao = 1 and l20_instit = " . db_getsession('DB_instit')));
 
         for ($iCont = 0; $iCont < pg_num_rows($rsLicitacaoAbertas); $iCont++) {
 
@@ -240,7 +240,7 @@ switch ($oParam->exec) {
                 //envia Retificacao para pncp
                 $rsApiPNCP = $clAvisoLicitacaoPNCP->enviarRetificacao($oDadosRatificacao, substr($aLicitacao->numerocontrole, 17, -5), substr($aLicitacao->numerocontrole, 24));
 
-                if ($rsApiPNCP->compraUri == null) {
+                if ($rsApiPNCP[0] == 201) {
                     //monto o codigo da compra no pncp
                     $l213_numerocontrolepncp = $aLicitacao->numerocontrole;
                     $clliccontrolepncp->l213_licitacao = $aLicitacao->codigo;
@@ -256,7 +256,7 @@ switch ($oParam->exec) {
                     $oRetorno->status  = 1;
                     $oRetorno->message = "Retificada com Sucesso !";
                 } else {
-                    throw new Exception(utf8_decode($rsApiPNCP->message));
+                    throw new Exception(utf8_decode($rsApiPNCP[1]));
                 }
             }
         } catch (Exception $eErro) {
@@ -324,6 +324,7 @@ switch ($oParam->exec) {
         $oRetorno->licitacoes = $itens;
         break;
     case 'enviarAtaRP':
+
         $clLicitacao  = db_utils::getDao("liclicita");
         $cllicanexopncp = db_utils::getDao("licanexopncp");
         try {
@@ -331,6 +332,10 @@ switch ($oParam->exec) {
 
                 //licitacao
                 $rsDadosEnvioAta = $clLicitacao->sql_record($clLicitacao->sql_query_ata_pncp($aLicitacao->codigo));
+
+                if(!pg_num_rows($rsDadosEnvioAta)){
+                    throw new Exception("Dados de envio não localizado para ATA.");
+                }
 
                 for ($licAta = 0; $licAta < pg_num_rows($rsDadosEnvioAta); $licAta++) {
                     $oDadosLicitacao = db_utils::fieldsMemory($rsDadosEnvioAta, $licAta);
@@ -349,7 +354,7 @@ switch ($oParam->exec) {
                             $l215_ata = substr($urlResutltado[0],85);
                         }else{
                             //Ambiente de Producao
-                            $l215_ata = substr($urlResutltado[0],79);
+                            $l215_ata = substr($urlResutltado[0],78);
                         }
                         $l215_numerocontrolepncp = db_utils::getCnpj() . '-1-' . substr($aLicitacao->numerocontrole, 17, -5) . '/' . substr($aLicitacao->numerocontrole, 24) . '-' . str_pad($l215_ata, 6, '0', STR_PAD_LEFT);
                         $clliccontroleatarppncp->l215_licitacao = $aLicitacao->codigo;

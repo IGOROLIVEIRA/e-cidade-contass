@@ -68,7 +68,7 @@ class EventoS2299 extends EventoBase
     }
 
     /**
-     * Retorna dados das verbas rescisórias formatados
+     * Retorna dados das verbas rescisï¿½rias formatados
      * @param integer $matricula
      * @return stdClass
      */
@@ -122,7 +122,7 @@ class EventoS2299 extends EventoBase
         if (!empty($oVerbasSql->indmv) && !isset($oVerbasResc->infomv->indmv)) {
             $oVerbasResc->infomv->indmv = $oVerbasSql->indmv;
             $oVerbasResc->infomv->remunoutrempr = array();
-            $oItemsRemuOutrEmpr = new stdClass;
+            $oItemsRemuOutrEmpr = new \stdClass;
             $oItemsRemuOutrEmpr->tpinsc = $oVerbasSql->tpinscremunoutrempr;
             $oItemsRemuOutrEmpr->nrinsc = $oVerbasSql->nrinscremunoutrempr;
             $oItemsRemuOutrEmpr->codcateg = $oVerbasSql->codcateg;

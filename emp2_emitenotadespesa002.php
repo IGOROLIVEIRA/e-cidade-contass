@@ -192,7 +192,6 @@ if(isset($sOrdens) && $sOrdens != '') {
     $dbwhere .= " and ";
   }
   $dbwhere .= " e50_codord in ($sOrdens) ";
-  $dbwhere .= " and e60_instit = " . db_getsession("DB_instit") . " and e60_anousu = " . $iAnoUso;
 }
 
 $dbwhere .= "and e60_instit = " . db_getsession("DB_instit");

@@ -161,7 +161,9 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
       LEFT JOIN infocomplementaresinstit ON si09_instit = db_depart.instit
       LEFT JOIN cgm ON tipoveiculos.si04_numcgm = cgm.z01_numcgm
-      WHERE db_config.codigo = " . db_getsession("DB_instit");
+      WHERE db_config.codigo = " . db_getsession("DB_instit") . "
+          AND DATE_PART('YEAR',veiculos.ve01_dtaquis) = " . db_getsession("DB_anousu") . "
+          AND DATE_PART('MONTH',veiculos.ve01_dtaquis) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $rsResult10 = db_query($sSql10);
 
         if (pg_num_rows($rsResult10) > 0) {

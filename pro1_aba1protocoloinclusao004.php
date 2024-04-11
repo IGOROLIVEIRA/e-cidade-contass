@@ -132,7 +132,7 @@ strong {
 
       <div class="formulario">
         <strong id="motivo">Observação:&nbsp;</strong>
-        <textarea style="width: 358px;" maxlength="200" name="p101_observacao"></textarea>
+        <textarea style="width: 358px;" maxlength="599" name="p101_observacao"></textarea>
       </div>
       <div class="formulario" id="anulado" style="display: none">
         <strong>Anulação:&nbsp;</strong>
