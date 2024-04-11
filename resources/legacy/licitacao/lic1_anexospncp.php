@@ -836,7 +836,7 @@ $oRotulo->label("l20_objeto");
       return false;
     }
 
-    js_divCarregando('Aguarde... Salvando documento.', 'msgbox');
+    startLoading()
 
     var oParametros = new Object();
 
@@ -852,7 +852,7 @@ $oRotulo->label("l20_objeto");
         asynchronous: false,
         onComplete: function(oAjax) {
 
-          js_removeObj("msgbox");
+          endLoading();
           var oRetorno = eval('(' + oAjax.responseText + ")");
           var sMensagem = oRetorno.sMensagem.urlDecode();
 
@@ -904,7 +904,7 @@ $oRotulo->label("l20_objeto");
 
     }
 
-    js_divCarregando('Aguarde... Enviando documentos!', 'msgbox');
+    startLoading()
 
     var oParametros = new Object();
 
@@ -925,9 +925,9 @@ $oRotulo->label("l20_objeto");
          */
         onComplete: function(oAjax) {
 
-          js_removeObj("msgbox");
+            endLoading();
           var oRetorno = eval('(' + oAjax.responseText + ")");
-          console.log(oRetorno);
+
           if (oRetorno.status == 1) {
             alert("Anexo(s) Enviado(s) com Sucesso!");
           } else {
@@ -969,7 +969,7 @@ $oRotulo->label("l20_objeto");
 
     }
 
-    js_divCarregando('Aguarde... Excluindo documentos!', 'msgbox');
+      startLoading();
 
     var oParametros = new Object();
 
@@ -990,7 +990,7 @@ $oRotulo->label("l20_objeto");
          */
         onComplete: function(oAjax) {
 
-          js_removeObj("msgbox");
+            endLoading();
           var oRetorno = eval('(' + oAjax.responseText + ")");
           console.log(oRetorno);
           if (oRetorno.status == 1) {

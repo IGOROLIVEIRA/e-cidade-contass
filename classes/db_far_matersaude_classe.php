@@ -58,6 +58,7 @@ class cl_far_matersaude {
    var $fa01_i_concentracaomed = 0;
    var $fa01_i_medhiperdia = 0;
    var $fa01_codigobarras = null;
+   var $fa01_i_catmat = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  fa01_i_codigo = int4 = Código
@@ -75,6 +76,7 @@ class cl_far_matersaude {
                  fa01_i_concentracaomed = int4 = Concentração
                  fa01_i_medhiperdia = int4 = Hiperdia
                  fa01_codigobarras = varchar(20) = Codigo de barras
+                 fa01_i_catmat = int4 = codigo Cat Mat
                  ";
    //funcao construtor da classe
    function cl_far_matersaude() {
@@ -109,6 +111,8 @@ class cl_far_matersaude {
        $this->fa01_i_concentracaomed = ($this->fa01_i_concentracaomed == ""?@$GLOBALS["HTTP_POST_VARS"]["fa01_i_concentracaomed"]:$this->fa01_i_concentracaomed);
        $this->fa01_i_medhiperdia = ($this->fa01_i_medhiperdia == ""?@$GLOBALS["HTTP_POST_VARS"]["fa01_i_medhiperdia"]:$this->fa01_i_medhiperdia);
        $this->fa01_codigobarras = ($this->fa01_codigobarras == ""?@$GLOBALS["HTTP_POST_VARS"]["fa01_codigobarras"]:$this->fa01_codigobarras);
+       $this->fa01_i_catmat = ($this->fa01_i_catmat == ""?@$GLOBALS["HTTP_POST_VARS"]["fa01_i_catmat"]:$this->fa01_i_catmat);
+
      }else{
        $this->fa01_i_codigo = ($this->fa01_i_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["fa01_i_codigo"]:$this->fa01_i_codigo);
      }
@@ -157,6 +161,10 @@ class cl_far_matersaude {
      }
      if($this->fa01_i_concentracaomed == null ){
        $this->fa01_i_concentracaomed = "null";
+     }
+
+     if($this->fa01_i_catmat == null ){
+       $this->fa01_i_catmat = "null";
      }
 
      if($this->fa01_i_medhiperdia == null ){
@@ -217,6 +225,7 @@ class cl_far_matersaude {
                                       ,fa01_i_concentracaomed
                                       ,fa01_i_medhiperdia
                                       ,fa01_codigobarras
+                                      ,fa01_i_catmat
                        )
                 values (
                                 $this->fa01_i_codigo
@@ -234,6 +243,7 @@ class cl_far_matersaude {
                                ,$this->fa01_i_concentracaomed
                                ,$this->fa01_i_medhiperdia
                                ,'$this->fa01_codigobarras'
+                               ,$this->fa01_i_catmat
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -406,6 +416,10 @@ class cl_far_matersaude {
      }
      if(trim($this->fa01_codigobarras)!="" || isset($GLOBALS["HTTP_POST_VARS"]["fa01_codigobarras"])){
        $sql  .= $virgula." fa01_codigobarras = '$this->fa01_codigobarras' ";
+       $virgula = ",";
+     }
+     if(trim($this->fa01_i_catmat)!="" || isset($GLOBALS["HTTP_POST_VARS"]["fa01_i_catmat"])){
+       $sql  .= $virgula." fa01_i_catmat = $this->fa01_i_catmat";
        $virgula = ",";
      }
      $sql .= " where ";

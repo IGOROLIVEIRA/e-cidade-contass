@@ -4009,6 +4009,16 @@ class Acordo
             throw new BusinessException($oDaoAcordoObra->erro_msg);
         }
 
+        
+        $oDaoManutencaoacordo = new cl_manutencaoacordo();
+        $oDaoManutencaoacordo->excluir(null,"manutac_acordo = {$this->getCodigoAcordo()}");
+
+        if ($oDaoManutencaoacordo->erro_status == 0) {
+            throw new BusinessException($oDaoManutencaoacordo->erro_msg);
+        }
+        
+        
+
         /**
          * Remove o acordo
          */

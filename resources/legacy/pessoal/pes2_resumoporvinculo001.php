@@ -76,6 +76,9 @@ function js_emite(){
   qry += "&mes="+document.form1.DBtxt25.value;
   qry += "&lotaini="+document.form1.DBtxt27.value;
   qry += "&lotafin="+document.form1.DBtxt28.value;
+  if(document.form1.separar){
+    qry += "&separar="+document.form1.separar.value;
+  }
 //alert(qry);
   jan = window.open('pes2_resumoporvinculo002.php?'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
@@ -251,7 +254,7 @@ function js_emite(){
       </tr>
 
       <tr >
-        <td align="right" nowrap title="Ordem" ><strong>Ordem</strong>
+        <td align="right" nowrap title="Ordem" ><strong>Ordem :</strong>
         </td>
         <td align="left">
           <?
@@ -260,7 +263,19 @@ function js_emite(){
           ?>
         </td>
       </tr>
-
+      <? if(isset($tipo) && $tipo == "R"){?>
+      <tr >
+        <td align="right" nowrap title="separar" ><strong>Separar Exceções :</strong>
+        </td>
+        
+        <td align="left">
+          <?
+          $s = array(0 => "Não",1 => "Sim");
+          db_select('separar',$s,true,4,"");
+          ?>
+        </td>
+      </tr>
+    <? } ?>
       <tr>
         <td >&nbsp;</td>
         <td >&nbsp;</td>

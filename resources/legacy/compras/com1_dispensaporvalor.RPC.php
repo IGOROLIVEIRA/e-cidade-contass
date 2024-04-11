@@ -28,8 +28,16 @@ $oRetorno->status  = 1;
 switch ($oParam->exec) {
     case 'getProcesso':
 
+        $where = "AND DATE_PART('YEAR',pc80_data) = $oParam->ano";
+
+        if($oParam->tipo == "1"){
+            $where .= "AND l213_numerocontrolepncp is null";
+        }else{
+            $where .= "AND l213_numerocontrolepncp != ''";
+        }
+
         $clpcproc = new cl_pcproc();
-        $rsProcessos = $clpcproc->sql_record($clpcproc->sql_get_dispensa_por_valor());
+        $rsProcessos = $clpcproc->sql_record($clpcproc->sql_get_dispensa_por_valor($where));
 
         for ($iCont = 0; $iCont < pg_num_rows($rsProcessos); $iCont++) {
 

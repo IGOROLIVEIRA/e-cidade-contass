@@ -1808,5 +1808,11 @@ switch ($oParam->exec) {
         $oRetorno->itenssemlotcount = $itensSemLote->itenssemlotcount;
 
         break;
+
+    case 'VerificaMembrosModalidadeParaLei1':
+
+        $oRetorno->validacao = $clliclicita->verificaMembrosModalidadeParaLei1($oParam->modalidade, $oParam->comissao);
+    
+        break;
 }
 echo $oJson->encode($oRetorno);
