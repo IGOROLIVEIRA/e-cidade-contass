@@ -2098,7 +2098,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
             if(resultadoValidacao == false && descricaoModalidade == "outros"){
                 document.getElementById("l20_equipepregao").value = "";
-                return alert("Usuário: Para as modalidades Tomada de Preços, Concorrência e Convite necessário que a Comissão de Licitação tenham os tipos Agente de contratação ou Comissão de Contratação.");
+                return alert("Usuário: Para as modalidades Tomada de Preços, Concorrência e Convite é necessário que a Comissão de Licitação tenha os tipos Agente de contratação ou Comissão de Contratação.");
             }
 
             return;
