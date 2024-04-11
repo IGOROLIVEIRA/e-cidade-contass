@@ -640,23 +640,38 @@ class cl_ctb212024 {
      return $sql;
   }
 
-  /**
-   * Consulta principal para geracao do Registro 21
-   *
-   * @param string $dataFinal
-   * @param integer $ano
-   * @param integer $mes
-   * @param integer $codctb
-   * @param integer $fonte
-   * @param $clDeParaFonte
-   * @return bool|resource|null $rsMovi21
-   */
-  public function sql_Reg21($dataFinal, $ano, $mes, $codctb, $fonte, $clDeParaFonte, $instit)
-  {
-    $sql21 = "CREATE TEMP TABLE tabela_temporaria AS
+    /**
+     * Consulta principal para geracao do Registro 21
+     *
+     * @param string $dataFinal
+     * @param integer $ano
+     * @param integer $mes
+     * @param integer $codctb
+     * @param integer $fonte
+     * @param $clDeParaFonte
+     * @param $instit
+     * @param $codtce
+     * @return bool|resource|null $rsMovi21
+     */
+    public function sql_Reg21($dataFinal, $ano, $mes, $codctb, $fonte, $clDeParaFonte, $instit, $codtce)
+    {
+
+        $sqlAndCredito = "contacredito.c61_reduz = $codctb ";
+        $sqlAndDebito = "contadebito.c61_reduz = $codctb ";
+
+        if ($codtce) {
+            $sqlAndCredito = "contacredito.c61_codtce = $codctb ";
+            $sqlAndDebito = "contadebito.c61_codtce = $codctb";
+        }
+        $sql21 = "CREATE TEMP TABLE tabela_temporaria AS
             WITH lancamentos_saida AS
-                (SELECT DISTINCT '21' AS tiporegistro,
-                        c71_codlan AS codreduzido,
+                (SELECT DISTINCT '21' AS tiporegistro, 
+                        c28_tipo,
+                        CASE 
+                            WHEN c71_coddoc = 980 THEN contacorrentedetalhe.c19_sequencial
+                            ELSE c71_codlan 
+                        END AS codreduzido,
+                        c28_conlancamval,
                         contacredito.c61_reduz AS codctb,
                         conplanodebito.c60_codsis AS codsisctb,
                         contacreditofonte.o15_codtri AS codfontrecurso,
@@ -721,6 +736,7 @@ class cl_ctb212024 {
                                  AND bancocredito.c63_tipoconta IN (2, 3) THEN 7
                             WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta IN (2, 3) AND bancocredito.c63_tipoconta = 1 THEN 9
                             WHEN c71_coddoc IN (141, 140) THEN 6
+                            WHEN c71_coddoc = 980 THEN 98
                             ELSE 99
                         END AS tipoentrsaida,
                         substr(o57_fonte,0,3) AS rubrica,
@@ -789,11 +805,16 @@ class cl_ctb212024 {
                  WHERE DATE_PART('YEAR',conlancamdoc.c71_data) = {$ano}
                    AND DATE_PART('MONTH',conlancamdoc.c71_data) = '{$mes}'
                    AND contacredito.c61_instit = {$instit}
-                   AND (contacredito.c61_reduz = {$codctb} OR contacredito.c61_codtce = {$codctb})),
+                   AND $sqlAndCredito),
             
                  lancamentos_entrada AS
-                 (SELECT DISTINCT '21' AS tiporegistro,
-                        c71_codlan AS codreduzido,
+                 (SELECT DISTINCT '21' AS tiporegistro, 
+                        c28_tipo,
+                        CASE 
+                            WHEN c71_coddoc = 980 THEN contacorrentedetalhe.c19_sequencial
+                            ELSE c71_codlan 
+                        END AS codreduzido,
+                        c28_conlancamval,
                         contadebito.c61_reduz AS codctb,
                         conplanodebito.c60_codsis AS codsisctb,
                         contadebitofonte.o15_codtri AS codfontrecurso,
@@ -813,6 +834,7 @@ class cl_ctb212024 {
                             WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta = 1 AND bancocredito.c63_tipoconta IN (2, 3) THEN 7
                             WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta IN (2, 3) AND bancocredito.c63_tipoconta = 1 THEN 9
                             WHEN c71_coddoc IN (141, 140) THEN 5
+                            WHEN c71_coddoc = 980 THEN 98
                             ELSE 99
                         END AS tipoentrsaida,
                         substr(o57_fonte,0,3) AS rubrica,
@@ -882,46 +904,46 @@ class cl_ctb212024 {
                  WHERE DATE_PART('YEAR',conlancamdoc.c71_data) = {$ano}
                    AND DATE_PART('MONTH',conlancamdoc.c71_data) = '{$mes}'
                    AND contadebito.c61_instit = {$instit}
-                   AND (contadebito.c61_reduz = {$codctb} OR contadebito.c61_codtce = {$codctb}))
+                   AND $sqlAndDebito)
             SELECT * FROM
                 (SELECT * FROM lancamentos_saida
                  UNION ALL 
                  SELECT * FROM lancamentos_entrada) AS xx";
 
-    db_query ($sql21);
+        db_query($sql21);
 
-    $result = db_query("SELECT * FROM tabela_temporaria");
+        $result = db_query("SELECT * FROM tabela_temporaria");
 
-    $tabelaTemporaria = pg_fetch_all($result);
+        $tabelaTemporaria = pg_fetch_all($result);
 
-    foreach ($tabelaTemporaria as $movimento) {
+        foreach ($tabelaTemporaria as $movimento) {
 
-      $fonteMovimento = $movimento['fontemovimento'];
-      $iFonte = substr($clDeParaFonte->getDePara($fonteMovimento), 0, 7);
+            $fonteMovimento = $movimento['fontemovimento'];
+            $iFonte = substr($clDeParaFonte->getDePara($fonteMovimento), 0, 7);
 
-      if ($fonteMovimento != $iFonte){
-        $codreduzidoMov = $movimento['codreduzido'];
-        db_query("UPDATE tabela_temporaria SET fontemovimento = {$iFonte} WHERE codreduzido = {$codreduzidoMov}");
-      }
+            if ($fonteMovimento != $iFonte) {
+                $codreduzidoMov = $movimento['codreduzido'];
+                db_query("UPDATE tabela_temporaria SET fontemovimento = {$iFonte} WHERE codreduzido = {$codreduzidoMov}");
+            }
 
+        }
+
+        $sql1 = "SELECT * FROM tabela_temporaria WHERE fontemovimento::integer = {$fonte} ORDER BY 3";
+        $rsMovi21 = db_query($sql1);
+
+        db_query("DROP TABLE tabela_temporaria");
+
+        return $rsMovi21;
     }
 
-    $sql1 = "SELECT * FROM tabela_temporaria WHERE fontemovimento::integer = {$fonte}";
-    $rsMovi21 = db_query($sql1);
-
-    db_query("DROP TABLE tabela_temporaria");
-
-    return $rsMovi21;
-  }
-
-  /**
-   * Dados da conta utilizada na transferencia
-   *
-   * @param integer $instituicao
-   * @param integer $ano
-   * @param integer $codctbtransf
-   * @return $sqlcontatransf
-   */
+    /**
+     * Dados da conta utilizada na transferencia
+     *
+     * @param integer $instituicao
+     * @param integer $ano
+     * @param integer $codctbtransf
+     * @return string $sqlcontatransf
+     */
   public function contaTransf($instituicao, $ano, $codctbtransf)
   {
     $sqlcontatransf = "SELECT si09_codorgaotce||(c63_banco::integer)::varchar

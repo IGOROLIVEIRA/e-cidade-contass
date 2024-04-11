@@ -43,7 +43,7 @@ class EFDReinfEventos extends ModeloBaseEFDREINF
             ],
             "ideEstabObra" => [
                 "tpInscEstab" => $this->dados->PossuiCNO == 1 ? 4 : 1,
-                "nrInscEstab"  => $this->dados->PossuiCNO == 4 ? $this->dados->NumeroCNO : $this->cgc,
+                "nrInscEstab"  => $this->dados->PossuiCNO == 1 ? preg_replace("/[^0-9]/", "", $this->dados->NumeroCNO) : $this->cgc,
                 "indObra"   => (integer) $this->dados->IndPrestServico,
             ],
             "idePrestServ" => [
@@ -74,7 +74,7 @@ class EFDReinfEventos extends ModeloBaseEFDREINF
             }
             $aDadosAPI['nfs'][$chave] = array(
                 "serie" => $valor[2],
-                "numDocto" => $valor[1],
+                "numDocto" => preg_replace("/[^0-9]/", "", $valor[1]),
                 "dtEmissaoNF" => $valor[3],
                 "vlrBruto" => $valor[4],
                 "obs" => $valor[7],

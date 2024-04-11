@@ -133,24 +133,26 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
         */
         $aCtb20Agrupado = array();
         $aCtb21 = array();
-        $aVerficador = array();
 
         foreach ($aBancosAgrupados as $oContaAgrupada) {
 
             foreach ($oContaAgrupada->contas as $oConta) {
 
+                $codtce = false;
+
                 if (!empty($oConta->codtce)){
                     $oConta->codctb = $oConta->codtce;
+                    $codtce = true;
                 }
 
                 if (($oConta->codtce != $codTce20) || empty($oConta->codtce)){
 
-                    $sSql20Fonte = $cCtb20->sql_Reg20Fonte($oConta->codctb, db_getsession("DB_anousu"), $mes);
+                    $sSql20Fonte = $cCtb20->sql_Reg20Fonte($oConta->codctb, db_getsession("DB_anousu"), $mes, $codtce);
                     $rsReg20Fonte = $cCtb20->sql_record($sSql20Fonte) or die($sSql20Fonte);
 
                     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsReg20Fonte); $iCont20++) {
 
-                        list($iFonte, $sHash20, $oCtb20, $aCtb20Agrupado) = $this->gerarRegistro20($rsReg20Fonte, $iCont20, $oConta, $aCtb20Agrupado, $oContaAgrupada);
+                        list($iFonte, $sHash20, $oCtb20, $aCtb20Agrupado) = $this->gerarRegistro20($rsReg20Fonte, $iCont20, $oConta, $aCtb20Agrupado, $oContaAgrupada, $codtce);
 
                         if (isset($aCtb21[$sHash20])) {
                             continue;
@@ -161,17 +163,31 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                          */
                         $clDeParaFonte = new DeParaRecurso;
 
-                        $rsMovi21 = $cCtb21->sql_Reg21($this->sDataFinal, $ano, $mes, $oCtb20->si96_codctb, $iFonte, $clDeParaFonte, $instit);
+                        $rsMovi21 = $cCtb21->sql_Reg21($this->sDataFinal, $ano, $mes, $oCtb20->si96_codctb, $iFonte, $clDeParaFonte, $instit, $codtce);
 
                         $aCtb21[$sHash20] = db_utils::fieldsMemory($rsMovi21, 0);
 
                         if (pg_num_rows($rsMovi21) != 0) {
+
+                            $codReduzido = null;
 
                             for ($iCont21 = 0; $iCont21 < pg_num_rows($rsMovi21); $iCont21++) {
 
                                 $oMovi = db_utils::fieldsMemory($rsMovi21, $iCont21);
 
                                 $nValor = $oMovi->valorentrsaida;
+
+                                if ($oMovi->c71_coddoc == 980) {
+
+                                    $oMovi->tipomovimentacao = $oMovi->c28_tipo == 'C' ? 2 : ($oMovi->c28_tipo == 'D' ? 1 : $oMovi->tipomovimentacao);
+
+                                }
+
+                                if ($codReduzido == $oMovi->codreduzido){
+                                    continue;
+                                }
+
+                                $codReduzido = $oMovi->codreduzido;
 
                                 $iCodSis = 0;
                                 $conta = 0;
@@ -355,7 +371,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
      * @param $oContaAgrupada
      * @return array
      */
-    public function gerarRegistro20($rsReg20Fonte, int $iCont20, $oConta, array $aCtb20Agrupado, $oContaAgrupada): array
+    public function gerarRegistro20($rsReg20Fonte, int $iCont20, $oConta, array $aCtb20Agrupado, $oContaAgrupada, $codtce): array
     {
         $clDeParaFonte = new DeParaRecurso;
 
@@ -363,6 +379,10 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
         $codCtb = empty($codCtbReg20->c61_codtce) ? $codCtbReg20->c61_reduz : $codCtbReg20->c61_codtce;
 
         $iFonte = db_utils::fieldsMemory($rsReg20Fonte, $iCont20)->fontemovimento;
+
+        if (strlen($iFonte) == 4){
+            $iFonte = db_utils::fieldsMemory($rsReg20Fonte, $iCont20)->o15_codtri;
+        }
         $iFonte = substr($clDeParaFonte->getDePara($iFonte), 0, 7);
 
         $sinalSaldoInicial = db_utils::fieldsMemory($rsReg20Fonte, $iCont20)->nat_vlr_si;
@@ -375,6 +395,10 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
         $saldoFinal = $sinalSaldoFinal == 'C' ? $saldoFinal *-1 : $saldoFinal;
 
         $sHash20 = $codCtb . $iFonte;
+
+        if ($codtce){
+            $sHash20 = $oConta->codtce . $iFonte;
+        }
 
         if (!$aCtb20Agrupado[$sHash20]) {
 
@@ -414,6 +438,10 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
      */
     public function gerarRegistro21($oCtb20, string $sHash, $oMovi, string $iTipoEntrSaida, $nValor, int $iCodSis, $conta)
     {
+        if ($oMovi->c71_coddoc == 980){
+            $sHash .= $oMovi->codreduzido;
+        }
+
         if (!isset($oCtb20->ctb21[$sHash])) {
 
             $oDadosMovi21 = new stdClass();

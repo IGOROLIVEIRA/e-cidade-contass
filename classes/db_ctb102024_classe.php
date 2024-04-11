@@ -780,12 +780,13 @@ class cl_ctb102024
 
     if ($ano == 2024 && $mes == 1) {
       $sSqlGeral .= " WHERE (k13_limite IS NULL OR k13_limite >= '$dataFinal')
-               AND c61_instit = {$instit} ORDER BY k13_reduz";
+               AND c61_instit = {$instit} 
+               ORDER BY CASE WHEN c61_codtce IS NOT NULL THEN c61_codtce ELSE k13_reduz END ASC";
     } else {
       $sSqlGeral .= " WHERE (k13_limite IS NULL OR k13_limite >= '$dataFinal')
-          AND (date_part('MONTH',k13_dtimplantacao) <= '$mes'
-          OR date_part('YEAR',k13_dtimplantacao) < {$ano})
-            AND c61_instit = {$instit} ORDER BY k13_reduz";
+          AND (date_part('MONTH',k13_dtimplantacao) <= '$mes' OR date_part('YEAR',k13_dtimplantacao) < {$ano})
+          AND c61_instit = {$instit} 
+          ORDER BY CASE WHEN c61_codtce IS NOT NULL THEN c61_codtce ELSE k13_reduz END ASC";
     }
 
     return $sSqlGeral;
@@ -797,7 +798,8 @@ class cl_ctb102024
    * @param object $oRegVerifica
    * @param integer $instit
    * @param string $mes
-   * @return $sSqlVerifica
+   * @param $ano
+   * @return string $sSqlVerifica
    */
   public function verificaExisteReg10($oRegVerifica, $instit, $mes, $ano)
   {
