@@ -221,15 +221,21 @@ if (isset($alterar)) {
     }
   }
 
-  if ($ac16_dataassinatura == null) {
+
+  
+  if ($ac16_dataassinatura == null && $ac16_acordosituacao == 4) {
     db_msgbox("O preenchimento da data de assinatura é obrigatório !");
-    $erro = true;
-  }
+    $erro = false;
+}
+if ($ac16_acordosituacao == 4) {
+  return true;
+}
 
   if ($ac16_numeroacordo == null) {
     db_msgbox("O preenchimento do número do acordo é obrigatório !");
-    $erro = true;
+    $erro = false;
   }
+
 
 
 
@@ -1496,6 +1502,9 @@ if (isset($alterar)) {
     if (($('ac16_dataassinatura').value == "" || $('ac16_dataassinatura').value == null) && $('ac16_acordosituacao').value == 4) {
       alert("O preenchimento da Data de Assinatura é obrigatório ! ");
       return false;
+    }
+    if (($('ac16_dataassinatura').value == "" || $('ac16_dataassinatura').value == null) && $('ac16_acordosituacao').value == 1) {
+      return true;
     }
 
 
