@@ -8,7 +8,7 @@ class Sigaf3 extends AbstractMigration
     public function up()
     {
         $sql = "
-            alter table far_matersaude  column fa01_i_catmat int4;
+            alter table far_matersaude  add column fa01_i_catmat int4;
         ";
         $this->execute($sql);
     }
