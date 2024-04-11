@@ -35,10 +35,14 @@ db_app::load("time.js");
                         </select>
 
                         <strong>Tipo: </strong>
-                        <select name="tipo" id="tipo">
+                        <select name="tipo" id="tipo" onchange="js_getLicitacoes()">
                             <option value="1">Inclusão</option>
                             <option value="2">Retificação</option>
                             <option value="3">Exclusão</option>
+                        </select>
+                        </select>
+                            <strong>Ano competência: </strong>
+                            <input type="number" name="anocompetencia" id="anocompetencia" onclick="js_getLicitacoes()" min="1111" max="9999" />
                         </select>
                     </td>
                 </tr>
@@ -65,6 +69,11 @@ db_app::load("time.js");
 
 </html>
 <script>
+
+    var anoCompetenciaInput = document.getElementById("anocompetencia");
+    var anoAtual = new Date().getFullYear();
+    anoCompetenciaInput.value = anoAtual;
+
     function js_showGrid() {
         oGridLicitacao = new DBGrid('gridLicitacao');
         oGridLicitacao.nameInstance = 'oGridLicitacao';
@@ -72,6 +81,7 @@ db_app::load("time.js");
         oGridLicitacao.setCellAlign(new Array("center", "center", "Left", "Left", "Center"));
         oGridLicitacao.setCellWidth(new Array("5%", "10%", "20%", "80%", "20%"));
         oGridLicitacao.setHeader(new Array("Código", "Processo", "Modalidade", "Objeto", "Número de Controle"));
+        oGridLicitacao.setHeight(400);
         oGridLicitacao.hasTotalValue = false;
         oGridLicitacao.show($('cntgridlicitacoes'));
 
@@ -84,7 +94,12 @@ db_app::load("time.js");
 
     function js_getLicitacoes() {
         oGridLicitacao.clearAll(true);
+        let anocompetencia = document.getElementById("anocompetencia").value;
+        let tipo = document.getElementById("tipo").value;
+
         var oParam = new Object();
+        oParam.ano = anocompetencia;
+        oParam.tipo = tipo;
         oParam.exec = "getLicitacoes";
         js_divCarregando('Aguarde, pesquisando Licitaes', 'msgBox');
         var oAjax = new Ajax.Request(

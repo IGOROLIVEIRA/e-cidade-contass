@@ -29,6 +29,13 @@ switch ($oParam->exec) {
     case 'getLicitacoes':
 
         $clliclicita = new cl_liclicita();
+
+        if($oParam->tipo == "1"){
+           $where = "AND l213_numerocontrolepncp is null";
+       }else{
+           $where = "AND l213_numerocontrolepncp != ''";
+       }
+
         $campos = "distinct l20_codigo,l20_edital,l20_objeto,(SELECT l213_numerocontrolepncp
         FROM liccontrolepncp
         WHERE l213_situacao = 1
@@ -40,7 +47,7 @@ switch ($oParam->exec) {
                      AND l213_licitacao=l20_codigo)
         ORDER BY l213_sequencial DESC
         LIMIT 1) AS l213_numerocontrolepncp,l03_descr,l20_numero";
-        $rsLicitacaoAbertas = $clliclicita->sql_record($clliclicita->sql_query(null, $campos, 'l20_codigo desc', "l03_pctipocompratribunal in (110,50,51,53,52,102,101,100,103) and liclicita.l20_leidalicitacao = 1 and l20_instit = " . db_getsession('DB_instit')));
+        $rsLicitacaoAbertas = $clliclicita->sql_record($clliclicita->sql_query(null, $campos, 'l20_codigo desc', "l03_pctipocompratribunal in (110,50,51,53,52,102,101,100,103) and liclicita.l20_leidalicitacao = 1 $where and l20_anousu = $oParam->ano and l20_instit = " . db_getsession('DB_instit')));
 
         for ($iCont = 0; $iCont < pg_num_rows($rsLicitacaoAbertas); $iCont++) {
 

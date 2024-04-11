@@ -38,7 +38,7 @@ switch ($oParam->exec) {
 
             try {
 
-                $rsAnexos = $cl_liccontroleanexopncp->sql_record($cl_liccontroleanexopncp->sql_query_file(null, " * ", null, "l218_sequencialarquivo = " . $iDocumentos));
+                $rsAnexos = $cl_liccontroleanexopncp->sql_record($cl_liccontroleanexopncp->sql_query_file(null, " * ", null, "l218_sequencialarquivo = " . $iDocumentos." and l218_licitacao ". $oParam->iCodigoProcesso));
 
                 if (pg_num_rows($rsAnexos) > 0) {
                     throw new Exception("O documento do codigo " . $iDocumentos . " ja foi enviado !");
