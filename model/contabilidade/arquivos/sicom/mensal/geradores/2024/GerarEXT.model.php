@@ -29,19 +29,7 @@ class GerarEXT extends GerarAM
     $sSql = "select * from ext102024 where si124_mes = " . $this->iMes . " and  si124_instit = " . db_getsession("DB_instit");
     $rsEXT10 = db_query($sSql);
 
-    $sSql = "select si165_tiporegistro,
-                  si165_codorgao,
-                  si165_codext,
-                  si165_codfontrecursos,
-                  sum(si165_vlsaldoanteriorfonte) as si165_vlsaldoanteriorfonte,
-                  sum(si165_totaldebitos) as si165_totaldebitos,
-                  sum(si165_totalcreditos) as si165_totalcreditos ,
-                  sum(si165_vlsaldoatualfonte) as si165_vlsaldoatualfonte,
-                  si165_exerciciocompdevo 
-                  from ext202024 
-                  where si165_mes = " . $this->iMes . " and  si165_instit = " . db_getsession("DB_instit")."
-                  group by si165_codext, si165_codfontrecursos,si165_tiporegistro,si165_codorgao,si165_exerciciocompdevo
-                  order by si165_codext, si165_codfontrecursos " ;
+    $sSql = "select * from ext202024 where si165_mes = " . $this->iMes . " and  si165_instit = " . db_getsession("DB_instit");
     $rsEXT20 = db_query($sSql);
 
     $sSql3 = "select * from EXT302024 where si126_mes = " . $this->iMes . " and  si126_instit = " . db_getsession("DB_instit");
@@ -98,14 +86,12 @@ class GerarEXT extends GerarAM
         $rsReg16saldos = $clContaCorrente->detalhamentoPorFonteext(db_getsession("DB_anousu"), substr($aEXT20['si165_codext'], 0, 15), db_getsession("DB_instit"), $this->iMes);
         // echo $aEXT20['si165_codext']."<br>";
         foreach ($rsReg16saldos as $oReg16Saldo) {
-          
-          //  echo $oReg16Saldo['codtri']." == ".$this->padLeftZero($aEXT20['si165_codfontrecursos'], 3)."<br>";
+
             if ($oReg16Saldo['codtri'] == $this->padLeftZero($aEXT20['si165_codfontrecursos'], 3)) {
               $natsaldoanteriorfonte =  $oReg16Saldo['sinal_anterior'];
               $natsaldoatualfonte    =  $oReg16Saldo['sinal_final'];
             }
-        }
-
+        } 
         // echo "<pre>";
         // print_r($rsReg16saldos);
 
@@ -114,6 +100,11 @@ class GerarEXT extends GerarAM
         $bFonteEncerrada    = in_array($aEXT20['si165_codfontrecursos'], $aFontes);
         $bCorrecaoFonte     = ($bFonteEncerrada && $aEXT20['si165_mes'] == '01' && db_getsession("DB_anousu") == 2024);
 
+        if (strlen($aEXT20['si165_codfontrecursos']) == 7) {
+          // echo strlen($aEXT20['si165_codfontrecursos'])." - ".$aEXT20['si165_codext']."<br>";
+           $aCodEXTCadastroNoMes[] = $aEXT20['si165_codext'];
+        }
+          
         // Condição incluida para permitir que o registro 20 referente a registro 10 no mês aparece mesmo que zerado. OC17723
         if (($aEXT20["si165_vlsaldoanteriorfonte"] + $aEXT20["si165_totaldebitos"] + $aEXT20["si165_totalcreditos"]) == 0 AND !in_array($aEXT20['si165_codext'], $aCodEXTCadastroNoMes))
             continue;
@@ -143,34 +134,6 @@ class GerarEXT extends GerarAM
 
           }
         }else{
-          $where = " c61_instit in (" . db_getsession("DB_instit") . ") ";
-			    $where .= " and c61_reduz = ".$aCSVEXT20['si165_codext']." and c61_reduz != 0";
-
-          db_inicio_transacao();
-          $ano = db_getsession("DB_anousu");
-          $iUltimoDiaMes = date("d", mktime(0, 0, 0, $this->iMes + 1, 0,$ano ));
-          $sDataInicialFiltros = db_getsession("DB_anousu") . "-{$this->iMes}-01";
-          $sDataFinalFiltros   = db_getsession("DB_anousu") . "-{$this->iMes}-{$iUltimoDiaMes}";
-          $rsPlanoContasSaldo = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $sDataInicialFiltros, $sDataFinalFiltros, false, $where);
-          
-          db_fim_transacao(true);
-
-          for ($iContPlano = 0; $iContPlano < pg_num_rows($rsPlanoContasSaldo); $iContPlano++) {
-
-            if (db_utils::fieldsMemory($rsPlanoContasSaldo, $iContPlano)->c61_reduz != 0) {
-              $oPlanoContas = db_utils::fieldsMemory($rsPlanoContasSaldo, $iContPlano);
-              $oSaldoInicioFim = new stdClass();
-              $oSaldoInicioFim->reduz = $oPlanoContas->c61_reduz;
-              $oSaldoInicioFim->sinal_anterior = $oPlanoContas->sinal_anterior;
-              $oSaldoInicioFim->sinal_final = $oPlanoContas->sinal_final;
-              $oSaldoInicioFim->sdini = $oPlanoContas->saldo_anterior;
-              $oSaldoInicioFim->sdfim = $oPlanoContas->saldo_final;
-              $oSaldoInicioFim->saldo_debito = $oPlanoContas->saldo_anterior_debito;
-              $oSaldoInicioFim->saldo_credito = $oPlanoContas->saldo_anterior_credito;
-
-              $aSaldosIniFim[] = $oSaldoInicioFim;
-            }
-          } 
 
           $aCSVEXT20['si165_natsaldoanteriorfonte'] = $natsaldoanteriorfonte;
         }

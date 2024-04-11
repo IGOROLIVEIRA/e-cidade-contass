@@ -385,14 +385,15 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 				for ($iCont = 0; $iCont < pg_num_rows($rsContasReg20); $iCont++) {
 					$oContasReg20 = db_utils::fieldsMemory($rsContasReg20, $iCont);
 					$hash     = $oContasReg20->c61_codtce.substr($clDeParaFonte->getDePara(strlen($oContasReg20->fontemovimento) == 7 ? $oContasReg20->fontemovimento."0" : $oContasReg20->fontemovimento), 0, 7);
-					$arrayExt20[] = $hash;
+					
 					if (pg_num_rows($rsContasReg20) > 0 ) {
-						if (in_array($hash,$arrayExt20)) {
 
+						if (!isset($arrayExt20[$hash])) {
+		
 							$cExt20->si165_tiporegistro = '20';
 							$cExt20->si165_codorgao = $oExt10Agrupado->si124_codorgao;
 							$cExt20->si165_codext = $oContasReg20->c61_codtce;
-							$cExt20->si165_codfontrecursos = $oContasReg20->fontemovimento;//substr($clDeParaFonte->getDePara(strlen($oContasReg20->fontemovimento) == 7 ? $oContasReg20->fontemovimento."0" : $oContasReg20->fontemovimento), 0, 7);
+							$cExt20->si165_codfontrecursos = substr($clDeParaFonte->getDePara(strlen($oContasReg20->fontemovimento) == 7 ? $oContasReg20->fontemovimento."0" : $oContasReg20->fontemovimento), 0, 7);
 							$cExt20->si165_exerciciocompdevo = $oExtExercicioComDevo;
 							$cExt20->si165_natsaldoanteriorfonte = $natsaldoanteriorfonte ;
 							if ($oContasReg20->nat_vlr_si == 'D') {
@@ -412,7 +413,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 							$cExt20->si165_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 							$cExt20->si165_instit = db_getsession("DB_instit");
 							$cExt20->ext30 = array();
-
+							$arrayExt20[$hash] = $cExt20;
 						} else {
 					
 							if ($oContasReg20->nat_vlr_si == 'D') {
@@ -427,8 +428,11 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 							} else {
 								$cExt20->si165_vlsaldoatualfonte    += $oContasReg20->saldofinal;
 							}
+							// $arrayExt20 = $hash;
+							$arrayExt20[$hash] = $cExt20;
 							continue;
 						}	
+						
 						/*
 						* CARREGA OS DADOS DO REGISTRO 30
 						*/
@@ -796,7 +800,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 						$cExt20->si165_totalcreditos 		= 0;
 						$cExt20->si165_vlsaldoatualfonte    = 0;
 				}
-				
+				$arrayExt20[$hash] = $cExt20;
 			  }
 			  $cExt20->ext30[] = $aExt30;	
 			}

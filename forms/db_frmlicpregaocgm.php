@@ -137,7 +137,7 @@ if (isset($db_opcaoal)) {
           $cliframe_alterar_excluir->chavepri = $chavepri; //,"*",null,"si54_seqriscofiscal=".$si54_seqriscofiscal);
           $cliframe_alterar_excluir->sql     = $cllicpregaocgm->sql_query(null, "z01_nome,l46_sequencial,case when l46_tipo = 1 then '1-Leiloeiro' when l46_tipo = 2 then '2-Membro/Equipe de Apoio' 
 	 when l46_tipo = 3 then '3-Presidente' when l46_tipo = 4 then '4-Secretário' when l46_tipo = 5 then '5-Servidor Designado' 
-	 when l46_tipo = 6 then '6-Pregoeiro' end as l46_tipo 
+	 when l46_tipo = 6 then '6-Pregoeiro' when l46_tipo = 7 then 'Agente de Contratação' when l46_tipo = 8 then 'Comissão de Contratação' end as l46_tipo 
 	 ,l46_cargo,case when l46_naturezacargo = 1 then '1-Servidor Efetivo' when l46_naturezacargo = 2 then '2-Empregado Temporário' 
 	 when l46_naturezacargo = 3 then '3-Cargo em Comissão' when l46_naturezacargo = 4 then '4-Empregado Público' when l46_naturezacargo = 5 then '5-Agente Político'
 	 when l46_naturezacargo = 6 then '6-Outra' end as l46_naturezacargo", null, "l46_licpregao=$l46_licpregao");

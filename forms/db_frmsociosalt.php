@@ -9,7 +9,7 @@ $clsocios->rotulo->label();
 $clrotulo = new rotulocampo();
 $clrotulo->label("z01_nome");
 if (empty($excluir) && empty($alterar) && isset($opcao) && $opcao != "") {
-    $result24 = $clsocios->sql_record($clsocios->sql_query($q95_cgmpri, $q95_numcgm, 'z01_nome,q95_perc'));
+    $result24 = $clsocios->sql_record($clsocios->sql_query($q95_cgmpri, $q95_numcgm, 'z01_nome,q95_perc, q95_tipo'));
     db_fieldsmemory($result24, 0);
     $result25 = $clcgm->sql_record($clcgm->sql_query_file($q95_numcgm, 'z01_nome as z01_nome_socio'));
     db_fieldsmemory($result25, 0);
@@ -129,10 +129,10 @@ if (pg_numrows($result_testaval) != 0) {
         <tr>
             <td valign="top">
                 <?php
-                $chavepri = array("q95_cgmpri" => $q95_cgmpri, "q95_numcgm"=>@$q95_numcgm, "q95_tipo" => @$q95_cgmpri);
+                $chavepri = array("q95_cgmpri" => $q95_cgmpri, "q95_numcgm" => @$q95_numcgm, "q95_tipo" => @$q95_cgmpri);
                 $cliframe_alterar_excluir->chavepri = $chavepri;
                 $sWhereSocios = "     q95_cgmpri = $q95_cgmpri ";
-                $sCampoQ95Tipo = ' '.Socio::getCaseAssociateLabel(). ' ';
+                $sCampoQ95Tipo = ' ' . Socio::getCaseAssociateLabel() . ' ';
 
                 $cliframe_alterar_excluir->sql = $clsocios->sql_query_socios(null, null, "q95_numcgm,q95_tipo,soc.z01_nome,q95_perc,q95_cgmpri,$sCampoQ95Tipo", null, $sWhereSocios);
                 $cliframe_alterar_excluir->campos = "q95_numcgm,z01_nome,q95_perc, tipo ";
@@ -159,3 +159,141 @@ if (pg_numrows($result_testaval) != 0) {
         </tr>
     </table>
 </form>
+<script>
+
+    // função verifica se q95_cgmpri e q95_numcgm são diferentes
+    function jc_VerificaCgmCpfIgual() {
+
+        var iEmpresa = $F('q95_cgmpri');
+        var iSocio = $F('q95_numcgm');
+        if (iEmpresa == iSocio) {
+            alert('Não será possível fazer a inclusão do cgm da própria inscrição como sócio');
+            $('q95_numcgm').value = '';
+            $('q95_numcgm').focus();
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    // função que valida o tipo de pessoa, fisica ou juridica, se for fisica, não habilitara a opção sócio no select q95_tipo
+    function js_tipoPessoa() {
+
+        var iTipoPessoa = CurrentWindow.corpo.iframe_issbase.document.form1.z01_cgccpf.value;
+        iTipoPessoa = iTipoPessoa.length;
+
+        if (iTipoPessoa <= 11 || iTipoPessoa == "" || iTipoPessoa == null) {
+
+            $('valor_capital').hide();
+        }
+
+        $("q95_tipo").options.length = 0;
+        $("q95_tipo").options[0] = new Option('Selecione...', '');
+        $("q95_tipo").options[1] = new Option('Sócio', '1');
+        $("q95_tipo").options[2] = new Option('Responsável MEI', '2');
+        $("q95_tipo").options[3] = new Option('Responsável', '3');
+        $("q95_tipo").options[4] = new Option('Socio Administrador', '4');
+        $("q95_tipo").options[5] = new Option('Socio Cotista', '5');
+        $("q95_tipo").options[5] = new Option('Administrador', '6');
+    }
+
+
+    // função que disponibiliza o campo q95_tipo se o tipo de socio for 1 : socio
+    function js_mostraValr_capital() {
+
+        var iTipo = $F('q95_tipo');
+        if (iTipo == 1 || iTipo == '1') {
+            $('valor_capital').show();
+            jc_VerificaCgmCpfIgual();
+        } else {
+            $('valor_capital').hide();
+            $('q95_perc').value = '';
+        }
+    }
+
+    function js_verificatipo() {
+
+        var iTipo = $F('q95_tipo');
+        if (iTipo != 1) {
+            $('q95_perc').value = 0;
+        }
+        if (iTipo == 0 || iTipo == '0') {
+            alert('Selecione o tipo de sócio.');
+
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+
+    function js_cancelar() {
+
+        <?php
+        if (isset($q95_cgmpri)) {
+            echo "location.href=\"iss1_socios004.php?q95_cgmpri={$q95_cgmpri}&z01_nome={$z01_nome}\";\n";
+        }
+        ?>
+    }
+
+    function js_pesquisaq95_numcgm(mostra) {
+        if (mostra == true) {
+            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_socios', 'db_iframe_cgm', 'func_nome.php?filtro=3&testanome=true&funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome|z01_ender|z01_cgccpf', 'Pesquisa', true, 0);
+        } else {
+            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_socios', 'db_iframe_cgm', 'func_nome.php?filtro=3&testanome=true&pesquisa_chave=' + document.form1.q95_numcgm.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false, 0);
+        }
+    }
+
+    function js_mostracgm(erro, chave, chave2) {
+
+        if (chave2 == '') {
+            alert('Contribuinte com o CGM desatualizado');
+            document.form1.fisico_juridico.value = '';
+            document.form1.q95_numcgm.value = '';
+            document.form1.z01_nome_socio.value = 'Contribuinte com o CGM desatualizado';
+            js_tipoPessoa();
+            return false;
+        }
+
+        document.form1.z01_nome_socio.value = chave;
+        document.form1.fisico_juridico.value = chave2;
+        js_tipoPessoa();
+        if (erro == true) {
+            document.form1.q95_numcgm.focus();
+            document.form1.q95_numcgm.value = '';
+        }
+    }
+
+    function js_mostracgm1(chave1, chave2, chave3, chave4) {
+        if (chave3 == '' || chave4 == '') {
+            alert('Contribuinte com o CGM desatualizado');
+            document.form1.fisico_juridico.value = '';
+            document.form1.q95_numcgm.value = '';
+            document.form1.z01_nome_socio.value = 'Contribuinte com o CGM desatualizado';
+
+        } else {
+            document.form1.fisico_juridico.value = chave4;
+            document.form1.q95_numcgm.value = chave1;
+            document.form1.z01_nome_socio.value = chave2;
+        }
+        js_tipoPessoa();
+        db_iframe_cgm.hide();
+    }
+
+    function js_pesquisa() {
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_socios', 'db_iframe_socios', 'func_socios.php?funcao_js=parent.js_preenchepesquisa|q95_numcgm|1', 'Pesquisa', true, 0);
+    }
+
+    function js_preenchepesquisa(chave, chave1) {
+        db_iframe_socios.hide();
+        <?php
+        if ($db_opcao != 1) {
+            echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave;";
+        }
+        ?>
+    }
+
+    js_mostraValr_capital();
+</script>

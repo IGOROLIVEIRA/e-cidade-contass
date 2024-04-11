@@ -69,9 +69,9 @@ class EventoS1210 extends EventoBase
                 for ($iCont = 0; $iCont < count($aDadosPorMatriculas); $iCont++) {
                     $aIdentificador = $this->buscarIdentificador($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime);
                     for ($iCont2 = 0; $iCont2 < count($aIdentificador); $iCont2++) {
-                        $std->infopgto[$seqinfopag]->codcateg = $oDados->codcateg; //Obrigat�rio
+                        $std->infopgto[$seqinfopag]->codcateg = $oDados->codcateg; //Obrigatório
 
-                        $std->infopgto[$seqinfopag] = new \stdClass(); //Obritat�rio
+                        $std->infopgto[$seqinfopag] = new \stdClass(); //Obritatório
 
                         $std->infopgto[$seqinfopag]->dtpgto = "$ano-$mes-$dia";
                         $std->infopgto[$seqinfopag]->tppgto = $this->tppgto;
@@ -223,7 +223,7 @@ class EventoS1210 extends EventoBase
         if ($tppgto == 2) {
             $sql .= " and rh30_regime = '2'
             and rescisao.r59_mesusu = $mes
-            and rescisao.r59_mesusu = $ano ";
+            and rescisao.r59_anousu = $ano ";
         }
         //2399
         if ($tppgto == 3) {
@@ -241,39 +241,10 @@ class EventoS1210 extends EventoBase
         }
 
         $sql .= " and cgm.z01_cgccpf = '$cpf' ";
-        //     and (exists (SELECT
-        //     1
-        // from
-        //     gerfsal
-        // where
-        //     r14_anousu = fc_getsession('DB_anousu')::int
-        //     and r14_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-        //     and r14_instit = fc_getsession('DB_instit')::int
-        //     and r14_regist = rhpessoal.rh01_regist)
-        //     or
-        //     exists (SELECT
-        //     1
-        // from
-        //     gerfcom
-        // where
-        //     r48_anousu = fc_getsession('DB_anousu')::int
-        //     and r48_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-        //     and r48_instit = fc_getsession('DB_instit')::int
-        //     and r48_regist = rhpessoal.rh01_regist)
-        //     or
-        //     exists (SELECT
-        //     1
-        // from
-        //     gerfres
-        // where
-        //     r20_anousu = fc_getsession('DB_anousu')::int
-        //     and r20_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-        //     and r20_instit = fc_getsession('DB_instit')::int
-        //     and r20_regist = rhpessoal.rh01_regist))";
-
 
         $rsValores = db_query($sql);
         // echo $sql;
+        // db_criatabela($rsValores);
         // exit;
         if (pg_num_rows($rsValores) > 0) {
             for ($iCont = 0; $iCont < pg_num_rows($rsValores); $iCont++) {
@@ -435,6 +406,7 @@ class EventoS1210 extends EventoBase
     {
         $iAnoUsu = date("Y", db_getsession("DB_datausu"));
         $iMesusu = date("m", db_getsession("DB_datausu"));
+        
         if ($rh30_regime == 1 || $rh30_regime == 3) {
             $aPontos = array('13salario');
             if ($this->indapuracao != 2)
@@ -442,7 +414,7 @@ class EventoS1210 extends EventoBase
         } else {
             $aPontos = array('13salario');
             if ($this->indapuracao != 2)
-                $aPontos = array('salario', 'complementar');
+                $aPontos = array('salario', 'complementar', 'rescisao');
         }
 
         foreach ($aPontos as $opcao) {
@@ -498,6 +470,7 @@ class EventoS1210 extends EventoBase
                 }
             }
         }
+        //var_dump($aPontos);exit;
         return $aItens;
     }
 
