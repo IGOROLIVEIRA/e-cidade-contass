@@ -4776,4 +4776,42 @@ class cl_liclicita
              AND pc24_pontuacao = 1
              ORDER BY z01_nome;";
     }
+
+    public function verificaMembrosModalidadeParaLei1($modalidade,$sequencialComissao){
+        
+        if($modalidade == "pregao"){
+            $rsLicPregao = db_query("
+            select
+                *
+            from
+                licpregao
+            inner join licpregaocgm on
+                l46_licpregao = l45_sequencial
+            where
+                l45_sequencial = $sequencialComissao and l46_tipo = 6;");
+
+               if(pg_num_rows($rsLicPregao) > 0){
+                    return true;
+               }
+
+               return false;
+        }
+
+        $rsLicPregao = db_query("
+        select
+	        *
+        from
+            licpregao
+        inner join licpregaocgm on
+            l46_licpregao = l45_sequencial
+        where
+            l45_sequencial = $sequencialComissao and l46_tipo in(7, 8)");
+
+           if(pg_num_rows($rsLicPregao) > 0){
+                return true;
+           }
+
+           return false;
+
+    }
 }
