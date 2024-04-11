@@ -72,7 +72,28 @@ $clrotulo->label("pc20_codorc");
       <form name="form1" method="post" action="">
         <fieldset>
           <legend>Mapa das Propostas do Orçamento por Item</legend>
-
+          <fieldset class="fieldsetinterno">
+          <legend>Processo de compra</legend>
+          <table>
+          <tr>
+          <td  align="left" nowrap title="<?=$Tpc10_numero?>"> <b>
+            <? db_ancora("Processos de Compra de : ","js_pesquisaProcessoCompras(true, true);",1);?>
+          </td>
+          <td align="left" nowrap>
+            <?
+              db_input("pc80_codproc", 10, $Ipc80_codproc,
+                       true,
+                       "text",
+                       4,
+                       "onchange='js_pesquisaProcessoCompras(false, true);'",
+                       "pc80_codprocini"
+                      );
+            ?>
+            </b>
+          </td>
+        </tr>
+          </table>
+        </fieldset>
           <fieldset class="fieldsetinterno">
             <legend>Orçamento do Processo de Compras</legend>
             <table>
@@ -266,10 +287,11 @@ $clrotulo->label("pc20_codorc");
 
     function js_validar_formulario(){
 
+      var sProcessoDeCompra           = $F('pc80_codprocini');
       var sCodigoOrcamentoProcesso    = $F('cod_orcamento_processo');
       var sCodigoOrcamentoSolicitacao = $F('cod_orcamento_solicitacao');
 
-      if(empty(sCodigoOrcamentoProcesso) && empty(sCodigoOrcamentoSolicitacao)) {
+      if(empty(sCodigoOrcamentoProcesso) && empty(sCodigoOrcamentoSolicitacao) && empty(sProcessoDeCompra)) {
 
         alert( _M(MENSAGENS + "selecione_um_orcamento"));
         return false;
@@ -277,26 +299,93 @@ $clrotulo->label("pc20_codorc");
 
       if (!empty(sCodigoOrcamentoProcesso)) {
         js_submeter_formulario(sCodigoOrcamentoProcesso, "processo");
+        console.log(sCodigoOrcamentoProcesso);
+        console.log(1);
       }
 
       if (!empty(sCodigoOrcamentoSolicitacao)) {
         js_submeter_formulario(sCodigoOrcamentoSolicitacao, "solicitacao");
       }
 
+      if (!empty(sProcessoDeCompra)) {
+        js_submeter_formulario(sProcessoDeCompra, "processodecompra");
+        console.log(sProcessoDeCompra);
+        console.log(2);
+      }
+
     }
 
     function js_submeter_formulario(iCodigoOrcamento, sTipoOrcamento) {
-
-      var sQueryString  = 'pc20_codorc=' + iCodigoOrcamento;
-      sQueryString     += '&tipoOrcamento=' + sTipoOrcamento;
+      var sQueryString = '';
+      if(sTipoOrcamento === "processo"){
+        sQueryString  = 'pc20_codorc=' + iCodigoOrcamento +'&';
+      }
+      sQueryString     += 'tipoOrcamento=' + sTipoOrcamento;
       sQueryString     += '&modelo=' + $F('modelo');
       sQueryString     += '&imp_troca=' + $F('imp_troca');
       sQueryString     += '&quant_casas=2';
-
+      if(sTipoOrcamento === "processodecompra"){
+        sQueryString     += '&pc80_codproc=' + iCodigoOrcamento;
+      }
       var jan = window.open('com2_mapaorc002.php?' + sQueryString,
                             '',
                             'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
       jan.moveTo(0, 0);
     }
+    function js_pesquisaProcessoCompras(mostra, lInicial) {
+    var sFuncaoRetorno = 'js_mostraProcessoInicial';
+    var sFuncaoRetornoOnChange = 'js_mostraProcessoInicialChange';
+    var sCampo = 'pc80_codprocini';
+
+    if (!lInicial) {
+        sFuncaoRetorno = 'js_mostraProcessoFinal'; 
+        sFuncaoRetornoOnChange = 'js_mostraProcessoFinalChange'; 
+        sCampo = 'pc80_codprocfim'; 
+    }
+
+    if (mostra) {
+        js_OpenJanelaIframe('CurrentWindow.corpo',
+            'db_iframe_processo',
+            'func_pcproc.php?funcao_js=parent.' + sFuncaoRetorno + '|' +
+            'pc80_codproc', 'Pesquisa Processo de Compras', true);
+    } else {
+        var sValorCampo = $F(sCampo);
+        if (sValorCampo != '') {
+            js_submeter_formulario(sValorCampo, "processo");
+            js_OpenJanelaIframe('CurrentWindow.corpo',
+                'db_iframe_processo',
+                'func_pcproc.php?pesquisa_chave=' + sValorCampo +
+                '&funcao_js=parent.' + sFuncaoRetornoOnChange,
+                'Pesquisa Processo de Compras',
+                false);
+        } else {
+            $F(sCampo).value = '';
+        }
+    }
+}
+
+function js_mostraProcessoInicial(iProcesso) {
+    $('pc80_codprocini').value = iProcesso;
+    db_iframe_processo.hide();
+}
+
+function js_mostraProcessoInicialChange(iProcesso, lErro) {
+    if (lErro) {
+        $('pc80_codprocini').value = '';
+    }
+}
+
+function js_mostraProcessoFinal(iProcesso) {
+    $('pc80_codprocfim').value = iProcesso;
+    db_iframe_processo.hide();
+}
+
+function js_mostraProcessoFinalChange(iProcesso, lErro) {
+    if (lErro) {
+        $('pc80_codprocfim').value = '';
+    }
+}
+
+
   </script>
 </html>

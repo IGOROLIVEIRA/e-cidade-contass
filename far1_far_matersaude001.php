@@ -69,6 +69,16 @@ if ( isset($incluir) ) {
 
   }
 
+    $result = db_query("SELECT fa02_i_integracaosigaf FROM far_parametros");
+    if ( pg_num_rows($result)>0) {
+        db_fieldsmemory($result,0);
+    }
+
+    if($fa02_i_integracaosigaf == "t" && $fa01_i_catmat == ""){
+        db_msgbox("Código CATMAT não Informado !");
+        $lErro = true;
+    }
+
   if ( !$lErro ) {
 
   db_inicio_transacao();
@@ -78,11 +88,13 @@ if ( isset($incluir) ) {
     if ( pg_num_rows($result)>0) {
       db_fieldsmemory($result,0);
     }
+
     $fa01_i_codigo = null;
     if ( $fa02_b_numestoque == 't' ) {
       $fa01_i_codigo=$fa01_i_codmater;
     }
 
+    $clfar_matersaude->fa01_i_catmat = $fa01_i_catmat;
     $clfar_matersaude->incluir($fa01_i_codigo);
     db_fim_transacao($clfar_matersaude->erro_status == '0' ? true : false);
   }

@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: saude
@@ -67,7 +67,7 @@ $clrotulo->label("z01_telef");
       <?db_input('z01_cgccpf',16,@$Iz01_cgccpf,true,'text',$db_opcao,"")?>
      </td>
     </tr>
-    
+
      <tr>
      <td nowrap title="<?=@$Tsd02_i_situacao?>" height="20">
       <?=$Lsd02_i_situacao?>
@@ -88,6 +88,17 @@ $clrotulo->label("z01_telef");
       <?db_input('sd42_v_descricao',72,@$Isd42_v_descricao,true,'text',3,"")?>
      </td>
      </tr>
+       <tr id="trtipounidade" style="display: none">
+           <td>
+               <strong>Tipo Unidade:</strong>
+           </td>
+           <td>
+               <?php
+                $aTipo = array("1" => "Farmácia Básica", "2" => "Farmácia Especializada");
+                db_select('sd02_i_tipounidade',$aTipo,true,$db_opcao,"");
+               ?>
+           </td>
+       </tr>
     <tr>
      <td nowrap title="<?=@$Tsd02_i_numcgm?>" height="20">
       <?db_ancora(@$Lsd02_i_numcgm,"js_pesquisasd02_i_numcgm(true);",$db_opcao);?>
@@ -136,7 +147,7 @@ $clrotulo->label("z01_telef");
       <?db_input('z01_ender',86,@$Iz01_ender,true,'text',3,"")?>
      </td>
     </tr>
-    
+
     <tr>
      <td nowrap title="<?=@$Tz01_numero?>" height="20">
       <?=$Lz01_numero?>
@@ -159,7 +170,7 @@ $clrotulo->label("z01_telef");
       <?db_input('z01_bairro',86,@$Iz01_bairro,true,'text',3,"")?>
      </td>
     </tr>
-    
+
      <tr>
           <td title="<?=@$Tz01_v_munic?>">
             <?php db_ancora("Município:", "js_buscaMunicipio();", $db_opcao);?>
@@ -246,7 +257,7 @@ $clrotulo->label("z01_telef");
       <td>
       <?db_input('sd02_v_diretorreg',10,$Isd02_v_diretorreg,true,'text',$db_opcao,"")?>
      </td>
-     
+
      <td nowrap title="<?=@$Tsd02_c_centralagenda?>" height="20" align="right">
       <?=$Lsd02_c_centralagenda?>
       </td>
@@ -256,8 +267,8 @@ $clrotulo->label("z01_telef");
       db_select('sd02_c_centralagenda',$x,true,$db_opcao,"style='font-size:9px;height:15px;width:80px;'");
       ?>
      </td>
-    
-     
+
+
     </tr>
     <tr>
      <td colspan="4" align="center" valign="top">
@@ -282,7 +293,7 @@ function validarCampos() {
     alert( "Selecione um Distrito." );
     return false;
   }
-  
+
   document.form1.submit();
 }
 
@@ -326,12 +337,12 @@ function js_pesquisasd02_i_distrito(mostra) {
 
     js_OpenJanelaIframe('', 'db_iframe_sau_distritosanitario', 'func_sau_distritosanitario.php?chave_s153_c_codigo='+
                         document.form1.s153_c_codigo.value+'&nao_mostra=true'+
-                        '&funcao_js=parent.js_mostrasd02_i_distrito|s153_i_codigo|s153_c_descr|s153_c_codigo', 
+                        '&funcao_js=parent.js_mostrasd02_i_distrito|s153_i_codigo|s153_c_descr|s153_c_codigo',
                         'Pesquisa', false
                        );
 
   } else {
-  
+
     document.form1.sd02_i_distrito.value = '';
     document.form1.s153_c_descr.value    = '';
 
@@ -400,6 +411,11 @@ function js_mostrasau_tipounidade(chave,erro){
 function js_mostrasau_tipounidade1(chave1,chave2){
  document.form1.sd02_i_tp_unid_id.value = chave1;
  document.form1.sd42_v_descricao.value = chave2;
+ if(chave1 == 43){
+     document.getElementById('trtipounidade').style.display = '';
+ }else{
+     document.getElementById('trtipounidade').style.display = 'none';
+ }
  db_iframe_sau_tipounidade.hide();
 }
 function js_pesquisasd02_i_numcgm(mostra){
