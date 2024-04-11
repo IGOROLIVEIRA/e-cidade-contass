@@ -3626,7 +3626,7 @@ class cl_liclicita
     {
         $sql  = "
        SELECT DISTINCT CASE
-            WHEN l03_pctipocompratribunal IN (110,51,53,52,50) THEN 1
+            WHEN l03_pctipocompratribunal IN (110,51,53,54,52,50) THEN 1
             WHEN l03_pctipocompratribunal = 101 THEN 2
             WHEN l03_pctipocompratribunal = 100 THEN 3
             WHEN l03_pctipocompratribunal IN (102,103) THEN 4
@@ -3638,6 +3638,8 @@ class cl_liclicita
            WHEN l03_pctipocompratribunal = 52 THEN 7
            WHEN l03_pctipocompratribunal = 50 and l03_presencial='f' THEN 4
            WHEN l03_pctipocompratribunal = 50 and l03_presencial='t' THEN 5
+           WHEN l03_pctipocompratribunal = 54 and l03_presencial='f' THEN 13
+           WHEN l03_pctipocompratribunal = 54 and l03_presencial='t' THEN 1
            WHEN l03_pctipocompratribunal = 101 THEN 8
            WHEN l03_pctipocompratribunal = 100 THEN 9
            WHEN l03_pctipocompratribunal in (102,103) THEN 12
@@ -3828,6 +3830,8 @@ class cl_liclicita
                     WHEN l03_pctipocompratribunal = 52 THEN 7
                     WHEN l03_pctipocompratribunal = 50 and l03_presencial='t' THEN 5
                     WHEN l03_pctipocompratribunal = 50 and l03_presencial='f' THEN 4
+                    WHEN l03_pctipocompratribunal = 54 and l03_presencial='f' THEN 13
+                    WHEN l03_pctipocompratribunal = 54 and l03_presencial='t' THEN 1
                     WHEN l03_pctipocompratribunal = 101 THEN 8
                     WHEN l03_pctipocompratribunal = 100 THEN 9
                     WHEN l03_pctipocompratribunal = 102 THEN 12
