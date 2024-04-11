@@ -229,7 +229,7 @@ if (isset($o56_codele) and trim($o56_codele) != '') {
             $result = $clpcmater->sql_record($clpcmater->sql_query_desdobra(null, "regexp_replace(pcmater.pc01_descrmater,'\r|\n','','g') as pc01_descrmater,pc01_veiculo,pc01_servico, pc01_complmater", "", "pc01_codmater=$pesquisa_chave and $where_ativo $where_instituicao"));
             if ($clpcmater->numrows != 0) {
               db_fieldsmemory($result, 0);
-              echo "<script>" . $funcao_js . "('" . addslashes($pc01_descrmater) . "',false,'$pc01_veiculo','$pc01_complmater');</script>";
+              echo "<script>" . $funcao_js . "('" . addslashes($pc01_descrmater) . "',false,'$pc01_veiculo','$pc01_servico');</script>";
             } else {
               echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
             }
