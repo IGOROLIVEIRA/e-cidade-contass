@@ -67,12 +67,22 @@ $sql = "SELECT DISTINCT t52_bem AS codigo,
         AND t30_depto=t52_depart
         WHERE t52_instit = ".db_getsession('DB_instit')."
         $where
+                     AND (
+        EXTRACT(YEAR FROM t52_dtaqu) < $ano
+        OR (
+            EXTRACT(YEAR FROM t52_dtaqu) = $ano
+            AND EXTRACT(MONTH FROM t52_dtaqu) <= $mes
+        )
+    )
         AND t52_bem NOT IN
         (SELECT t55_codbem
          FROM bensbaix
-         WHERE DATE_PART('MONTH',t55_baixa) <= $mes
-             AND DATE_PART('YEAR',t55_baixa) <= $ano
-             AND t55_codbem = t52_bem)
+         WHERE EXTRACT(YEAR
+                 FROM t55_baixa) < $ano
+         OR (EXTRACT(YEAR
+                     FROM t55_baixa) = $ano
+             AND EXTRACT(MONTH
+                         FROM t55_baixa) <= $mes))
         UNION
         SELECT DISTINCT t52_bem AS codigo,
                         t52_ident AS placa,
@@ -94,12 +104,22 @@ $sql = "SELECT DISTINCT t52_bem AS codigo,
         LEFT JOIN bensbaix ON t55_codbem=t52_bem and DATE_PART('MONTH',t55_baixa) = $mes and DATE_PART('YEAR',t55_baixa) = $ano
         WHERE t52_instit = ".db_getsession('DB_instit')."
             $where
+                     AND (
+        EXTRACT(YEAR FROM t52_dtaqu) < $ano
+        OR (
+            EXTRACT(YEAR FROM t52_dtaqu) = $ano
+            AND EXTRACT(MONTH FROM t52_dtaqu) <= $mes
+        )
+    )
             AND t52_bem NOT IN
         (SELECT t55_codbem
          FROM bensbaix
-         WHERE DATE_PART('MONTH',t55_baixa) <= $mes
-             AND DATE_PART('YEAR',t55_baixa) <= $ano
-             AND t55_codbem = t52_bem)
+         WHERE EXTRACT(YEAR
+                 FROM t55_baixa) < $ano
+         OR (EXTRACT(YEAR
+                     FROM t55_baixa) = $ano
+             AND EXTRACT(MONTH
+                         FROM t55_baixa) <= $mes))
             AND t52_bem NOT IN
         (SELECT t58_bens
          FROM benshistoricocalculobem

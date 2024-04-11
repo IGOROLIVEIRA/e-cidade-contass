@@ -64,7 +64,8 @@ if ($oPost->atualizar) {
 		echo "</script>";
 	} else {
 		echo "parent.db_iframe_dataenvio.hide();";
-		echo "parent.parent.js_pesquisa();";
+		echo "parent.db_iframe_liclicita.hide();";
+		echo "parent.js_pesquisa();";
 		echo "</script>";
 	}
 }

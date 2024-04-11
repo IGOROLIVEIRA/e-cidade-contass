@@ -169,11 +169,25 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
                         if (pg_num_rows($rsMovi21) != 0) {
 
+                            $codReduzido = null;
+
                             for ($iCont21 = 0; $iCont21 < pg_num_rows($rsMovi21); $iCont21++) {
 
                                 $oMovi = db_utils::fieldsMemory($rsMovi21, $iCont21);
 
                                 $nValor = $oMovi->valorentrsaida;
+
+                                if ($oMovi->c71_coddoc == 980) {
+
+                                    $oMovi->tipomovimentacao = $oMovi->c28_tipo == 'C' ? 2 : ($oMovi->c28_tipo == 'D' ? 1 : $oMovi->tipomovimentacao);
+
+                                }
+
+                                if ($codReduzido == $oMovi->codreduzido){
+                                    continue;
+                                }
+
+                                $codReduzido = $oMovi->codreduzido;
 
                                 $iCodSis = 0;
                                 $conta = 0;
@@ -424,6 +438,10 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
      */
     public function gerarRegistro21($oCtb20, string $sHash, $oMovi, string $iTipoEntrSaida, $nValor, int $iCodSis, $conta)
     {
+        if ($oMovi->c71_coddoc == 980){
+            $sHash .= $oMovi->codreduzido;
+        }
+
         if (!isset($oCtb20->ctb21[$sHash])) {
 
             $oDadosMovi21 = new stdClass();
