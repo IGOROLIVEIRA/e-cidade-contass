@@ -1022,6 +1022,8 @@ function js_mostraDepreciacao1(chave1, chave2) {
  */
 function salvarDados() {
 
+  document.getElementById('db_opcao').disabled = true;
+
    var url     = 'pat1_benslotenovo.RPC.php';
    var oObject = new Object();
 
