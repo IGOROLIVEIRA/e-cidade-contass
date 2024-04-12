@@ -201,7 +201,7 @@ db_app::load("prototype.js");
           </td>
           <td>
             <?
-              db_input('ve61_horadevol',5,@$Ive61_horadevol,true,'text',$db_opcao);
+              db_input('ve61_horadevol',5,@$Ive61_horadevol,true,'text',$db_opcao,"onchange='js_verifica_hora(this.value,this.name);js_pesquisa_medida();' onkeypress='return js_mask(event, \"0-9|:|0-9\"); '  ");
             ?>
           </td>
         </tr>
