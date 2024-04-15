@@ -101,7 +101,7 @@ db_app::load("prototype.js");
             </td>
             <td>
               <?
-              db_input('ve60_horasaida',5,$Ive60_horasaida,true,'text',3);
+              db_input('ve60_horasaida', 30, $Ive60_horasaida, true, 'time', 1, '', '', '', '','width:30%;', null);
               ?>
             </td>
           </tr>

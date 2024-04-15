@@ -150,8 +150,10 @@ db_app::load("estilos.css, grid.style.css");
                                     )
                                     ?>
                                     <strong>Hora:</strong>
-                                    <?php db_input('ve62_hora', 5, $Ive62_hora, true, 'text', $db_opcao,""); ?>
+                                    <?php db_input('ve62_hora', 30, $Ive62_hora, true, 'time', 1, '', '', '', '','width:30%;', null);?>
                                 </td>
+                                ve62_hora
+                                $Ive62_hora
 
                             </tr>
 
