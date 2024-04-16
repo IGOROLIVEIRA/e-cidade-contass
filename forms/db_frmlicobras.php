@@ -686,4 +686,28 @@ $cllicobras->rotulo->label();
             document.getElementById('trdescoutroconselho').value = '';
         }
     }
+    function getNumObra(){
+
+        let oParam = {};
+        oParam.exec = 'buscarNumObra';
+
+        const oAjax = new Ajax.Request(
+            'obr1_obras.RPC.php',{
+                parameters: 'json=' + Object.toJSON(oParam),
+                asynchronous: false,
+                method: 'post',
+                onComplete: mostrarNumObra
+            }
+        );
+    }
+        function mostrarNumObra(oAjax){
+            let oRetorno = eval('(' + oAjax.responseText + ")"); 
+            document.getElementById('obr01_numeroobra').value = oRetorno.numobra;
+
+        }
+        getNumObra();
+
+
+
+
 </script>
