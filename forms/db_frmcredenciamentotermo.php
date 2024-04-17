@@ -214,6 +214,8 @@ $clcredenciamentotermo->rotulo->label();
         document.form1.l212_veiculodepublicacao.value = veicpublica;
         db_iframe_licitacao.hide();
         mostrarFornecedores();
+        lista_objeto_licitacao();
+        
     }
 
     function js_preencheLicitacao2(dtpublica, veicpublica) {
@@ -221,6 +223,7 @@ $clcredenciamentotermo->rotulo->label();
         document.form1.l212_dtpublicacao.value = aDate[2] + '/' + aDate[1] + '/' + aDate[0];
         document.form1.l212_veiculodepublicacao.value = veicpublica;
         mostrarFornecedores();
+        
     }
 
     function mostrarFornecedores() {
@@ -372,4 +375,25 @@ $clcredenciamentotermo->rotulo->label();
             window.open('lic1_imprimetermocredenciamento.php?' + query, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
         }
     }
+    lista_objeto_licitacao();
+    function lista_objeto_licitacao(){
+        let ilicitacao = document.getElementById('l212_licitacao').value;
+        let oParam = {};
+        oParam.exec = 'objetoobservacao';
+        oParam.ilicitacao = ilicitacao;
+
+        const oAjax = new Ajax.Request(
+            'lic_termocredenciamento.RPC.php',{
+                parameters: 'json=' + Object.toJSON(oParam),
+                asynchronous: false,
+                method: 'post',
+                onComplete: mostraobservacao
+            }
+        );
+    }
+    function mostraobservacao(oAjax){
+        let oRetorno = eval('(' + oAjax.responseText + ")");
+        document.getElementById('l212_observacao').value = oRetorno.observacao.urlDecode();
+    }
+    
 </script>
