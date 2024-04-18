@@ -169,11 +169,25 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
                         if (pg_num_rows($rsMovi21) != 0) {
 
+                            $codReduzido = null;
+
                             for ($iCont21 = 0; $iCont21 < pg_num_rows($rsMovi21); $iCont21++) {
 
                                 $oMovi = db_utils::fieldsMemory($rsMovi21, $iCont21);
 
                                 $nValor = $oMovi->valorentrsaida;
+
+                                if ($oMovi->c71_coddoc == 980) {
+
+                                    $oMovi->tipomovimentacao = $oMovi->c28_tipo == 'C' ? 2 : ($oMovi->c28_tipo == 'D' ? 1 : $oMovi->tipomovimentacao);
+
+                                }
+
+                                if ($codReduzido == $oMovi->codreduzido){
+                                    continue;
+                                }
+
+                                $codReduzido = $oMovi->codreduzido;
 
                                 $iCodSis = 0;
                                 $conta = 0;
@@ -217,18 +231,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                 $sHash .= $oMovi->tipomovimentacao;
                                 $sHash .= $oMovi->saldocec;
 
-                                /**
-                                 * Quando o codctb for igual codctbtransf, será agrupado a movimentação no tipoentrsaida 99
-                                 */
-                                if (($iCodSis != '' || $iCodSis != 0) && ($oMovi->codsisctb == 6 && $iCodSis == 5) && $oMovi->tipomovimentacao == 2) {
-                                    $iTipoEntrSaida = '11';
-                                } elseif (($iCodSis != '' || $iCodSis != 0) && ($oMovi->codsisctb == 6 && $iCodSis == 5) && $oMovi->tipomovimentacao == 1) {
-                                    $iTipoEntrSaida = '18';
-                                } elseif (($iCodSis == 5) || ($oCtb20->si96_codctb == $conta) || ($oMovi->retencao == 1 && $oMovi->tipoentrsaida == 8)) {
-                                    $iTipoEntrSaida = '99';
-                                } else {
-                                    $iTipoEntrSaida = $oMovi->tipoentrsaida;
-                                }
+                                $iTipoEntrSaida = $this->tipoEntradaSaida($iCodSis, $oMovi, $oCtb20, $conta);
 
                                 $sHash .= $iTipoEntrSaida;
                                 $sHash .= (in_array($oMovi->tipoentrsaida, $this->aTiposObrigConta) && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0;
@@ -298,7 +301,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                 $cCtb21->si97_saldocec = $oCtb21agrupado->si97_saldocec;
                 $cCtb21->si97_tipoentrsaida = $oCtb21agrupado->si97_tipoentrsaida;
                 $cCtb21->si97_valorentrsaida = abs($oCtb21agrupado->si97_valorentrsaida);
-                $cCtb21->si97_dscoutrasmov = ($oCtb21agrupado->si97_tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário' : ($oCtb21agrupado->si97_tipoentrsaida == 10 ? $oCtb21agrupado->si97_dscoutrasmov : ' '));
+
+                $cCtb21->si97_dscoutrasmov = $oCtb21agrupado->si97_dscoutrasmov;
 
                 $cCtb21->si97_codctbtransf = ($oCtb21agrupado->si97_tipoentrsaida == 5 || $oCtb21agrupado->si97_tipoentrsaida == 6
                     || $oCtb21agrupado->si97_tipoentrsaida == 7 || $oCtb21agrupado->si97_tipoentrsaida == 9
@@ -424,11 +428,21 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
      */
     public function gerarRegistro21($oCtb20, string $sHash, $oMovi, string $iTipoEntrSaida, $nValor, int $iCodSis, $conta)
     {
+        if ($oMovi->c71_coddoc == 980){
+            $sHash .= $oMovi->codreduzido;
+        }
+
         if (!isset($oCtb20->ctb21[$sHash])) {
 
             $oDadosMovi21 = new stdClass();
 
             $codReduzidoMov = $oMovi->codreduzido . substr($oCtb20->si96_codfontrecursos, 0, 4) . $oMovi->tipomovimentacao;
+
+            $descrOutrasMov = $iTipoEntrSaida == 99 ? 'Recebimento Extra Orcamentario' : ($iTipoEntrSaida == 10 ? 'Estorno de recebimentos' : ' ');
+
+            if ($oMovi->tipomovimentacao == 2){
+                $descrOutrasMov = ($oMovi->tipoentrsaida == 3 && $oMovi->bancocredito_c63_tipoconta != 1) ? 'Estorno de receita' : ($iTipoEntrSaida == 99 ? 'Pagamento Extra Orcamentario' : '');
+            }
 
             $oDadosMovi21->si97_tiporegistro = $oMovi->tiporegistro;
             $oDadosMovi21->si97_codctb = $oCtb20->si96_codctb;
@@ -438,7 +452,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
             $oDadosMovi21->si97_tipoentrsaida = $iTipoEntrSaida;
             $oDadosMovi21->si97_valorentrsaida = $nValor;
             $oDadosMovi21->si97_saldocec = $oMovi->saldocec;
-            $oDadosMovi21->si97_dscoutrasmov = ($oMovi->tipoentrsaida == 99 ? 'Recebimento Extra Orcamentario' : ($iTipoEntrSaida == 10 ? 'Estorno de recebimentos' : ' '));
+
+            $oDadosMovi21->si97_dscoutrasmov = $descrOutrasMov;
 
             $oDadosMovi21->si97_codctbtransf = (in_array($iTipoEntrSaida, $this->aTiposObrigConta)
                 && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0;
@@ -1078,6 +1093,34 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
             }
 
         }
+    }
+
+    /**
+     * @param int $iCodSis
+     * @param $oMovi
+     * @param $oCtb20
+     * @param int $conta
+     * @return string
+     */
+    public function tipoEntradaSaida(int $iCodSis, $oMovi, $oCtb20, int $conta): string
+    {
+        /**
+         * Quando o codctb for igual codctbtransf, será agrupado a movimentação no tipoentrsaida 99
+         */
+        $condicoes = [
+            ($iCodSis != '' || $iCodSis != 0) && $oMovi->codsisctb == 6 && $iCodSis == 5 && $oMovi->tipomovimentacao == 2 => '11',
+            ($iCodSis != '' || $iCodSis != 0) && $oMovi->codsisctb == 6 && $iCodSis == 5 && $oMovi->tipomovimentacao == 1 => '18',
+            $iCodSis == 5 || $oCtb20->si96_codctb == $conta || ($oMovi->retencao == 1 && $oMovi->tipoentrsaida == 8) => '99',
+            $oMovi->tipomovimentacao == 2 && $oMovi->tipoentrsaida == 3 && $oMovi->bancocredito_c63_tipoconta != 1 => '99',
+        ];
+
+        foreach ($condicoes as $condicao => $valor) {
+            if ($condicao) {
+                return $valor;
+            }
+        }
+
+        return $oMovi->tipoentrsaida;
     }
 
 }

@@ -76,9 +76,12 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
             if($oDado->modalidadeid == "3"){
                 $oDadosAPI->itensCompra[$key]->criterioJulgamentoId    = 8;
             }
-            $oDadosAPI->itensCompra[$key]->itemCategoriaId             = 3;
-            //$oDadosAPI->itensCompra[$key]->itemCategoriaId             = $item->itemcategoriaid;
-            //$oDadosAPI->itensCompra[$key]->codigoRegistroImobiliario   = utf8_encode($item->codigoregistroimobiliario);
+            if($oDado->modalidadeid == "1" || $oDado->modalidadeid == "13"){
+                $oDadosAPI->itensCompra[$key]->itemCategoriaId   = 2;
+            }else{
+                $oDadosAPI->itensCompra[$key]->itemCategoriaId   = 3;
+            }
+
         }
 
         $aDadosAPI = $oDadosAPI;

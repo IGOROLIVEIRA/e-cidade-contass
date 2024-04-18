@@ -15,6 +15,8 @@ class SiopeDespesa extends Siope {
 
         $aDados = $this->aDespesasAgrupadas;
 
+        uasort($aDados, array($this, 'comparar'));
+
         if (file_exists("model/contabilidade/arquivos/siope/{$this->iAnoUsu}/SiopeCsv.model.php")) {
 
             require_once("model/contabilidade/arquivos/siope/{$this->iAnoUsu}/SiopeCsv.model.php");
@@ -28,6 +30,13 @@ class SiopeDespesa extends Siope {
         $this->gerarDadosFundeb();
         $this->csv->gerarArquivoCSV($this->aDespeAgrupaFundeb, 3);
 
+    }
+
+    function comparar($a, $b) {
+        if ($a->cod_planilha == $b->cod_planilha) {
+            return $a->elemento_siope - $b->elemento_siope;
+        }
+        return $a->cod_planilha - $b->cod_planilha;
     }
 
     public function gerarDadosFundeb() {

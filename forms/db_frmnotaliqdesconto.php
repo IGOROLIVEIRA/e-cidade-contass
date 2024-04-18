@@ -449,7 +449,7 @@ $db_opcao_inf=1;
 
       var sEstilo = "style='height:100%; width:100%; border:1px solid transparent; text-align:right;'";
 
-      var sScripts = "onKeyPress='return js_mask(event,\"0-9|.|-\");'";
+      var sScripts = "onKeyPress='return js_mask(event,\"0-9|.|-|,\");'";
       sScripts += "onBlur='js_bloqueiaDigitacao(this);'";
       sScripts += "onFocus='js_liberaDigitacao(this);'";
       sScripts += "onKeyDown='return js_verifica(this,event,false);'";
@@ -507,7 +507,7 @@ $db_opcao_inf=1;
         /*
          * Validamos se o valor do item é válido.
          */
-        if ( js_countOccurs(oRow.aCells[6].getValue(), '.') > 1 ) {
+        if ( js_countOccurs(oRow.aCells[6].getValue(), '.') > 1 || js_countOccurs(oRow.aCells[6].getValue(), ',') > 1 || (js_countOccurs(oRow.aCells[6].getValue(), '.') > 0 && js_countOccurs(oRow.aCells[6].getValue(), ',') > 0)) {
 
           sItensErro += sVirgula+sNomeProduto;
           sVirgula  = ", ";
@@ -787,7 +787,7 @@ $db_opcao_inf=1;
     object.value            = js_formatar(object.value,"f");
 
     //Se existir mais de um ponto...
-    if( js_countOccurs(object.value, '.') > 1 ) {
+    if( js_countOccurs(object.value, '.') > 1 || js_countOccurs(object.value, ',') > 1 || (js_countOccurs(object.value, '.') > 0 && js_countOccurs(object.value, ',') > 0)) {
       // Erro e retorna valor anterior
       alert("Verifique o valor digitado para desconto!\nMais de um decimal informado no valor de desconto!");
       js_liberaDigitacao(object);

@@ -3626,7 +3626,7 @@ class cl_liclicita
     {
         $sql  = "
        SELECT DISTINCT CASE
-            WHEN l03_pctipocompratribunal IN (110,51,53,52,50) THEN 1
+            WHEN l03_pctipocompratribunal IN (110,51,53,54,52,50) THEN 1
             WHEN l03_pctipocompratribunal = 101 THEN 2
             WHEN l03_pctipocompratribunal = 100 THEN 3
             WHEN l03_pctipocompratribunal IN (102,103) THEN 4
@@ -3638,6 +3638,8 @@ class cl_liclicita
            WHEN l03_pctipocompratribunal = 52 THEN 7
            WHEN l03_pctipocompratribunal = 50 and l03_presencial='f' THEN 4
            WHEN l03_pctipocompratribunal = 50 and l03_presencial='t' THEN 5
+           WHEN l03_pctipocompratribunal = 54 and l03_presencial='f' THEN 13
+           WHEN l03_pctipocompratribunal = 54 and l03_presencial='t' THEN 1
            WHEN l03_pctipocompratribunal = 101 THEN 8
            WHEN l03_pctipocompratribunal = 100 THEN 9
            WHEN l03_pctipocompratribunal in (102,103) THEN 12
@@ -3695,8 +3697,16 @@ class cl_liclicita
     {
         $sql  = "SELECT DISTINCT    liclicitem.l21_ordem AS numeroItem,
                                     CASE
+                                        WHEN pcmater.pc01_servico='t' AND substring(o56_elemento
+                                                                                   FROM 0
+                                                                                   FOR 8) IN
+                                                 (SELECT DISTINCT substring(o56_elemento
+                                                                            FROM 0
+                                                                            FOR 8)
+                                                  FROM orcelemento
+                                                  WHERE o56_elemento LIKE '%3449052%') THEN 'M'
                                         WHEN pcmater.pc01_servico='t' THEN 'S'
-                                        ELSE 'M'
+                                        WHEN pcmater.pc01_servico='f' THEN 'M'
                                     END AS materialOuServico,
                                     COALESCE ((case when liclicita.l20_destexclusiva = 1 then 1 else null end),
                                             (case when liclicita.l20_subcontratacao = 1 then 2 else null end),
@@ -3828,6 +3838,8 @@ class cl_liclicita
                     WHEN l03_pctipocompratribunal = 52 THEN 7
                     WHEN l03_pctipocompratribunal = 50 and l03_presencial='t' THEN 5
                     WHEN l03_pctipocompratribunal = 50 and l03_presencial='f' THEN 4
+                    WHEN l03_pctipocompratribunal = 54 and l03_presencial='f' THEN 13
+                    WHEN l03_pctipocompratribunal = 54 and l03_presencial='t' THEN 1
                     WHEN l03_pctipocompratribunal = 101 THEN 8
                     WHEN l03_pctipocompratribunal = 100 THEN 9
                     WHEN l03_pctipocompratribunal = 102 THEN 12
@@ -4771,5 +4783,43 @@ class cl_liclicita
              l20_codigo={$codigoLicitacao}
              AND pc24_pontuacao = 1
              ORDER BY z01_nome;";
+    }
+
+    public function verificaMembrosModalidadeParaLei1($modalidade,$sequencialComissao){
+
+        if($modalidade == "pregao"){
+            $rsLicPregao = db_query("
+            select
+                *
+            from
+                licpregao
+            inner join licpregaocgm on
+                l46_licpregao = l45_sequencial
+            where
+                l45_sequencial = $sequencialComissao and l46_tipo = 6;");
+
+               if(pg_num_rows($rsLicPregao) > 0){
+                    return true;
+               }
+
+               return false;
+        }
+
+        $rsLicPregao = db_query("
+        select
+	        *
+        from
+            licpregao
+        inner join licpregaocgm on
+            l46_licpregao = l45_sequencial
+        where
+            l45_sequencial = $sequencialComissao and l46_tipo in(7, 8)");
+
+           if(pg_num_rows($rsLicPregao) > 0){
+                return true;
+           }
+
+           return false;
+
     }
 }

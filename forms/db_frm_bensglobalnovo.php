@@ -1020,7 +1020,14 @@ function js_mostraDepreciacao1(chave1, chave2) {
 /** ***********************************************************************************************************
  * Salva os Dados do Formulário
  */
+
+function js_retornoBuscaSalvar(response) {
+   
+    document.getElementById('db_opcao').disabled = true;
+}
 function salvarDados() {
+
+  
 
    var url     = 'pat1_benslotenovo.RPC.php';
    var oObject = new Object();

@@ -405,6 +405,7 @@ if ($oBem->getCedente() != null) {
     $oTabDetalhes->add('placa', 'Placa', "func_detalhesplacabens.php{$sGetUrl}");
     $oTabDetalhes->add('impressao', 'Impressão', "func_impressaodetalhesbem.php{$sGetUrl}");
     $oTabDetalhes->add('inventario', 'Inventário', "func_detalheinventariobem.php{$sGetUrl}");
+    $oTabDetalhes->add('manutencoes', 'Manutenções', "func_manutencao.php{$sGetUrl}");
     $oTabDetalhes->show();
   ?>
 </body>

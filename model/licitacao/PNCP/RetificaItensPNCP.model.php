@@ -30,7 +30,11 @@ class RetificaitensPNCP extends ModeloBasePNCP
         $oDadosAPI                                  = new \stdClass;
         $oDadosAPI->numeroItem                  = $oDado[0]->numeroitem;
         $oDadosAPI->materialOuServico           = $oDado[0]->materialouservico;
-        $oDadosAPI->tipoBeneficioId             = $oDado[0]->tipobeneficioid;
+        if($oDado[0]->modalidadeid == "1" || $oDado[0]->modalidadeid == "13"){
+            $oDadosAPI->tipoBeneficioId         = 5;
+        }else{
+            $oDadosAPI->tipoBeneficioId         = $oDado[0]->tipobeneficioid;
+        }
         $oDadosAPI->incentivoProdutivoBasico    = $oDado[0]->incentivoprodutivobasico == 'f' ? 'false' : 'true';
         $oDadosAPI->descricao                   = utf8_encode($oDado[0]->descricao);
         $oDadosAPI->quantidade                  = $oDado[0]->pc11_quant;
@@ -51,7 +55,12 @@ class RetificaitensPNCP extends ModeloBasePNCP
         if($oDado[0]->modalidadeid == "3"){
             $oDadosAPI->criterioJulgamentoId    = 8;
         }
-        $oDadosAPI->itemCategoriaId             = 3;
+        if($oDado[0]->modalidadeid == "1" || $oDado[0]->modalidadeid == "13"){
+            $oDadosAPI->itemCategoriaId             = 2;
+        }else{
+            $oDadosAPI->itemCategoriaId             = 3;
+        }
+
         $oDadosAPI->justificativa           = utf8_encode($oDado[0]->justificativa);
 
         return json_encode($oDadosAPI);
