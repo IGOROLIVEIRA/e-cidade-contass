@@ -1087,15 +1087,6 @@ class cl_acordo
         if (trim($this->ac16_veiculodivulgacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_veiculodivulgacao"])) {
             $sql  .= $virgula . " ac16_veiculodivulgacao = '$this->ac16_veiculodivulgacao' ";
             $virgula = ",";
-            if (trim($this->ac16_veiculodivulgacao) == null) {
-                $this->erro_sql = " Campo Veiculo de Divulgacao não informado.";
-                $this->erro_campo = "ac16_veiculodivulgacao";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
         }
 
         if (($this->ac16_licoutroorgao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_veiculodivulgacao"])) {
