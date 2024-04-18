@@ -55,12 +55,12 @@ if ($tipo == "conta") {
 
 } else
     if ($tipo == "recurso") {
-	$pdf->Cell(10, $alt, "R.", "LRTB", 0, "C", 0);
-	$pdf->Cell(140, $alt, "DESCRICAO", "LRTB", 0, "C", 0);
-	$pdf->Cell(32, $alt, "SALD.ANTERIOR", "LRTB", 0, "C", 0);
-	$pdf->Cell(32, $alt, "VLR.DEBITO", "LRTB", 0, "C", 0);
-	$pdf->Cell(32, $alt, "VLR.CREDITO", "LRTB", 0, "C", 0);
-	$pdf->Cell(32, $alt, "SALDO ATUAL", "LRTB", 1, "C", 0);
+	$pdf->Cell(20, $alt, "R.", "LRTB", 0, "C", 0);
+	$pdf->Cell(134, $alt, "DESCRICAO", "LRTB", 0, "C", 0);
+	$pdf->Cell(31, $alt, "SALD.ANTERIOR", "LRTB", 0, "C", 0);
+	$pdf->Cell(31, $alt, "VLR.DEBITO", "LRTB", 0, "C", 0);
+	$pdf->Cell(31, $alt, "VLR.CREDITO", "LRTB", 0, "C", 0);
+	$pdf->Cell(31, $alt, "SALDO ATUAL", "LRTB", 1, "C", 0);
 
 } else {
 	$pdf->Cell(20, $alt, "R.", "LRTB", 0, "C", 0);
@@ -89,6 +89,7 @@ if ($tipo == "conta") {
 				          inner join conplano on c61_codcon = c60_codcon and c61_anousu = c60_anousu
 				          inner join orctiporec on o15_codigo = c61_codigo  
 					  where c60_codsis in (5,6)
+					  and (k13_limite is null or k13_limite >= '{$datai_ano}-{$datai_mes}-{$datai_dia}')
 				      order by k13_descr";
 
 } else
@@ -104,6 +105,7 @@ if ($tipo == "conta") {
 				               inner join conplanoconta on c63_codcon = conplano.c60_codcon and c63_anousu=c60_anousu                                                  
 				               inner join db_bancos on db90_codban = conplanoconta.c63_banco
 							where c60_codsis in (5,6)
+							and (k13_limite is null or k13_limite >= '{$datai_ano}-{$datai_mes}-{$datai_dia}')
 				            group by db90_codban, db90_descr
 						    order by db90_codban";
 
@@ -117,6 +119,7 @@ if ($tipo == "conta") {
 						          inner join conplano on c61_codcon = c60_codcon and c61_anousu=c60_anousu
 						          inner join orctiporec on o15_codigo = c61_codigo  
 							where c60_codsis in (5,6)
+							and (k13_limite is null or k13_limite >= '{$datai_ano}-{$datai_mes}-{$datai_dia}')
 					              group by c61_codigo, o15_descr
 						      order by c61_codigo ";
 	}
@@ -155,8 +158,8 @@ for ($i = 0; $i < pg_numrows($result); $i ++) {
 	} else
 		if ($tipo == "recurso") { // tipo = recurso
 			// imprime recurso e totaliza contas
-			$pdf->Cell(10, $alt, "$c61_codigo", "LRTB", 0, "C", 0);
-			$pdf->Cell(140, $alt, "$o15_descr", "LRTB", 0, "L", 0);
+			$pdf->Cell(20, $alt, "$c61_codigo", "LRTB", 0, "C", 0);
+			$pdf->Cell(134, $alt, "$o15_descr", "LRTB", 0, "L", 0);
 			$sql = "select k13_conta
 									                 from saltes 
 										               inner join conplanoexe on c62_anousu = ".db_getsession("DB_anousu")."
@@ -167,7 +170,8 @@ for ($i = 0; $i < pg_numrows($result); $i ++) {
 										               inner join conplano on c61_codcon = c60_codcon and c61_anousu=c60_anousu
 										               inner join orctiporec on o15_codigo = c61_codigo  
 									                 where orctiporec.o15_codigo = $c61_codigo 
-									                 		and c60_codsis in (5,6) 
+									                 		and c60_codsis in (5,6)
+															and (k13_limite is null or k13_limite >= '{$datai_ano}-{$datai_mes}-{$datai_dia}') 
 											 order by k13_conta";
 			$result_contas = db_query($sql);
 			$nrows = pg_numrows($result_contas);
@@ -183,10 +187,10 @@ for ($i = 0; $i < pg_numrows($result); $i ++) {
 					$tval4 += (float) str_replace(",", "", $valor[4]);
 				}
 			}
-			$pdf->Cell(32, $alt, db_formatar($tval1, 'f'), "LRTB", 0, "R", 0);
-			$pdf->Cell(32, $alt, db_formatar($tval2, 'f'), "LRTB", 0, "R", 0);
-			$pdf->Cell(32, $alt, db_formatar($tval3, 'f'), "LRTB", 0, "R", 0);
-			$pdf->Cell(32, $alt, db_formatar($tval4, 'f'), "LRTB", 0, "R", 0);
+			$pdf->Cell(31, $alt, db_formatar($tval1, 'f'), "LRTB", 0, "R", 0);
+			$pdf->Cell(31, $alt, db_formatar($tval2, 'f'), "LRTB", 0, "R", 0);
+			$pdf->Cell(31, $alt, db_formatar($tval3, 'f'), "LRTB", 0, "R", 0);
+			$pdf->Cell(31, $alt, db_formatar($tval4, 'f'), "LRTB", 0, "R", 0);
 
 			$pdf->Ln();
 
@@ -221,7 +225,8 @@ for ($i = 0; $i < pg_numrows($result); $i ++) {
 								            inner join conplanoconta on c63_codcon = conplano.c60_codcon and c63_anousu=c60_anousu
 								            inner join db_bancos on trim(db90_codban) = conplanoconta.c63_banco::varchar(10)  
 							  where trim(db_bancos.db90_codban)::integer = $db90_codban 
-									     and c60_codsis in (5,6)                          
+									     and c60_codsis in (5,6)    
+										 and (k13_limite is null or k13_limite >= '{$datai_ano}-{$datai_mes}-{$datai_dia}')                      
 							  order by k13_descr								                      
 								              ";								 
 				$result_contas = db_query($sql);
@@ -327,6 +332,7 @@ for ($i = 0; $i < pg_numrows($result); $i ++) {
 												                inner join orctiporec on o15_codigo = c61_codigo  
 												             where orctiporec.o15_codigo = $c61_codigo 
 											                    and c60_codsis in (5,6)
+																and (k13_limite is null or k13_limite >= '{$datai_ano}-{$datai_mes}-{$datai_dia}')
 												  	         order by k13_descr";
 				$result_contas = db_query($sql);
 				$nrows = pg_numrows($result_contas);
