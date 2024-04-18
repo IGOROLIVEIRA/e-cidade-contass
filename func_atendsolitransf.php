@@ -95,7 +95,9 @@ $clmatpedido->rotulo->label("m97_sequencial");
  	  $where .= "		   matpedido.m97_db_almox,"; 	  
  	  $where .= "		   matpedidoitem.m98_quant,";
  	  $where .= "		   matpedidoitem.m98_sequencial,";
- 	  $where .= "		   db_almox.m91_depto"; 	  
+ 	  $where .= "		   db_almox.m91_depto,"; 
+     $where .= "		   db_depart.descrdepto,";   
+     $where .= "		   almox.descrdepto ";
   	  $where .= "		   having ";
       $where .= "          coalesce(m98_quant -";
 	  $where .= "                   (select coalesce(sum(m82_quant),0) ";
@@ -111,9 +113,10 @@ $clmatpedido->rotulo->label("m97_sequencial");
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
            if(file_exists("funcoes/db_func_matpedido.php")==true){
+            
              include("funcoes/db_func_matpedido.php");
            }else{
-           $campos = "matpedido.*";
+           $campos = "matpedido.*,db_depart.descrdepto";
            }
         }
         if(isset($chave_m97_sequencial) && (trim($chave_m97_sequencial)!="") ){
@@ -121,6 +124,7 @@ $clmatpedido->rotulo->label("m97_sequencial");
 				}else{
              $sql = $clmatpedido->sql_query_almoxleft("",$campos,"m97_sequencial desc","$where");
 				}
+        
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
