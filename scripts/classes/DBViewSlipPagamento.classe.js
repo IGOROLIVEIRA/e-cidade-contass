@@ -1367,7 +1367,7 @@
      */
     me.oButtonImportar.observe('click', function (){
 
-        me.lImportacao = true;
+      me.lImportacao = true;
       me.pesquisaCodigoSlip(true);
     });
 
@@ -1478,7 +1478,9 @@
     me.preencheDebito = function(sDescricao,sCodfonte,sReduzido, lErro) {
 
       me.oTxtContaDebitoDescricao.setValue(sDescricao);
-      me.oTxtFonteInputCodigo.setValue('');
+      if (me.lImportacao == false ) {
+        me.oTxtFonteInputCodigo.setValue('');
+      }
       if (me.oTxtContaDebitoCodigo && (iTipoTransferencia == '1' || iTipoTransferencia == '3' || iTipoTransferencia == '5' || iTipoTransferencia == '7' || iTipoTransferencia == '9' || iTipoTransferencia == '11' || iTipoTransferencia == '13' || iTipoTransferencia == '15' || iTipoTransferencia == '17')) {
         me.oTxtContaCreditoCodigo.setReadOnly(false);
         me.oTxtContaCreditoDescricao.setReadOnly(false);
@@ -1713,7 +1715,7 @@
             }
            }
        
-       }, 3000
+       }, 2000
      ); 
       
       if (tiposelect == 08) {
@@ -1765,7 +1767,7 @@
 
       me.oTxtHistoricoInputDescricao.setValue(sDescricao);
       if (sHistorico) {
-        me.oTxtObservacaoInput.setValue(sHistorico);
+        // me.oTxtObservacaoInput.setValue(sHistorico);
       }
       if (lErro) {
         me.oTxtHistoricoInputCodigo.setValue();
@@ -2099,13 +2101,13 @@
         function() {
           var oFunctionDebito =  eval(sFunctionPesquisa + me.sPesquisaContaDebito);
           oFunctionDebito(false, false, true,);
-        }, 1000
+        }, 700
       );
       window.setTimeout(
         function() {
           var oFunctionCredito = eval(sFunctionPesquisa + me.sPesquisaContaCredito);
           oFunctionCredito(false, true, true);
-        }, 4000
+        }, 400
       );
 
       if (!me.lImportacao && !me.alteracaoSlip()) {

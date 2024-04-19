@@ -3697,8 +3697,16 @@ class cl_liclicita
     {
         $sql  = "SELECT DISTINCT    liclicitem.l21_ordem AS numeroItem,
                                     CASE
+                                        WHEN pcmater.pc01_servico='t' AND substring(o56_elemento
+                                                                                   FROM 0
+                                                                                   FOR 8) IN
+                                                 (SELECT DISTINCT substring(o56_elemento
+                                                                            FROM 0
+                                                                            FOR 8)
+                                                  FROM orcelemento
+                                                  WHERE o56_elemento LIKE '%3449052%') THEN 'M'
                                         WHEN pcmater.pc01_servico='t' THEN 'S'
-                                        ELSE 'M'
+                                        WHEN pcmater.pc01_servico='f' THEN 'M'
                                     END AS materialOuServico,
                                     COALESCE ((case when liclicita.l20_destexclusiva = 1 then 1 else null end),
                                             (case when liclicita.l20_subcontratacao = 1 then 2 else null end),
@@ -4778,7 +4786,7 @@ class cl_liclicita
     }
 
     public function verificaMembrosModalidadeParaLei1($modalidade,$sequencialComissao){
-        
+
         if($modalidade == "pregao"){
             $rsLicPregao = db_query("
             select

@@ -165,15 +165,7 @@ db_app::load("prototype.js");
                 </td>
                 <td>
                   <?
-                  db_input(
-                    've60_horasaida',
-                    5,
-                    $Ive60_horasaida,
-                    true,
-                    'text',
-                    $db_opcao,
-                    "onchange='js_verifica_hora(this.value,this.name);js_pesquisa_medida();' onkeypress='return js_mask(event, \"0-9|:|0-9\"); '  "
-                  );
+                  db_input('ve60_horasaida', 30, $Ive60_horasaida, true, 'time', 1, '', '', '', 'rounded','width:30%;', null);
                   ?>
                 </td>
               </tr>
