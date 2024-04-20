@@ -25,7 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class M8655ManutencaoEmLote extends PostgresMigration
 {
