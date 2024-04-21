@@ -2,7 +2,7 @@
 
 require_once './model/configuracao/Instituicao.model.php';
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 
 class Oc12875 extends PostgresMigration
