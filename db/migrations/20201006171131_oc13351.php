@@ -1,6 +1,6 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class Oc13351 extends PostgresMigration
 {
@@ -17,7 +17,7 @@ class Oc13351 extends PostgresMigration
                 (SELECT 1 FROM db_menu WHERE menusequencia = 1 AND id_item = (SELECT id_item FROM db_itensmenu WHERE descricao = 'Controle Interno'));
 
         --CRIA OPCAO DE CADASTRO PARA CONTROLE INTERNO
-        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Cadastros', 'Cadastros', '', 1, 1, 'Cadastros do módulo controle interno', 't');
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Cadastros', 'Cadastros', '', 1, 1, 'Cadastros do mï¿½dulo controle interno', 't');
 
         INSERT INTO db_menu VALUES ((SELECT id_item FROM db_itensmenu WHERE descricao = 'Controle Interno'), 
                                     (SELECT max(id_item) FROM db_itensmenu), 
@@ -25,23 +25,23 @@ class Oc13351 extends PostgresMigration
                                     (select id_item FROM db_modulos where nome_modulo = 'Controle Interno'));                                
 
         --CRIA MENU QUESTOES DE AUDITORIA
-        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Questões de Auditoria', 'Questões de Auditoria', '', 1, 1, 'Questões de Auditoria', 't');
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Questï¿½es de Auditoria', 'Questï¿½es de Auditoria', '', 1, 1, 'Questï¿½es de Auditoria', 't');
         
         INSERT INTO db_menu VALUES ((SELECT max(id_item) from db_itensmenu)-1, (SELECT max(id_item) from db_itensmenu), 1, (select id_item FROM db_modulos where nome_modulo = 'Controle Interno'));
 
-        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Inclusão', 'Inclusão', 'cin1_questaoaudit001.php', 1, 1, 'Inclusão', 't');
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Inclusï¿½o', 'Inclusï¿½o', 'cin1_questaoaudit001.php', 1, 1, 'Inclusï¿½o', 't');
         
-        INSERT INTO db_menu VALUES ((SELECT max(id_item) FROM db_itensmenu where descricao = 'Questões de Auditoria'), (SELECT max(id_item) from db_itensmenu), 1, (select id_item FROM db_modulos where nome_modulo = 'Controle Interno'));
+        INSERT INTO db_menu VALUES ((SELECT max(id_item) FROM db_itensmenu where descricao = 'Questï¿½es de Auditoria'), (SELECT max(id_item) from db_itensmenu), 1, (select id_item FROM db_modulos where nome_modulo = 'Controle Interno'));
 
-        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Alteração', 'Alteração', 'cin1_questaoaudit002.php', 1, 1, 'Alteração', 't');
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Alteraï¿½ï¿½o', 'Alteraï¿½ï¿½o', 'cin1_questaoaudit002.php', 1, 1, 'Alteraï¿½ï¿½o', 't');
         
-        INSERT INTO db_menu VALUES ((SELECT max(id_item) FROM db_itensmenu where descricao = 'Questões de Auditoria'), (SELECT max(id_item) from db_itensmenu), 2, (select id_item FROM db_modulos where nome_modulo = 'Controle Interno'));
+        INSERT INTO db_menu VALUES ((SELECT max(id_item) FROM db_itensmenu where descricao = 'Questï¿½es de Auditoria'), (SELECT max(id_item) from db_itensmenu), 2, (select id_item FROM db_modulos where nome_modulo = 'Controle Interno'));
 
-        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Exclusão', 'Exclusão', 'cin1_questaoaudit003.php', 1, 1, 'Exclusão', 't');
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Exclusï¿½o', 'Exclusï¿½o', 'cin1_questaoaudit003.php', 1, 1, 'Exclusï¿½o', 't');
         
-        INSERT INTO db_menu VALUES ((SELECT max(id_item) FROM db_itensmenu where descricao = 'Questões de Auditoria'), (SELECT max(id_item) from db_itensmenu), 3, (select id_item FROM db_modulos where nome_modulo = 'Controle Interno'));
+        INSERT INTO db_menu VALUES ((SELECT max(id_item) FROM db_itensmenu where descricao = 'Questï¿½es de Auditoria'), (SELECT max(id_item) from db_itensmenu), 3, (select id_item FROM db_modulos where nome_modulo = 'Controle Interno'));
 
-        -- CRIA TABELA TIPO QUESTÃO DE AUDITORIA
+        -- CRIA TABELA TIPO QUESTï¿½O DE AUDITORIA
         
         -- INSERE db_sysarquivo
         INSERT INTO db_sysarquivo VALUES((SELECT max(codarq)+1 FROM db_sysarquivo),'tipoquestaoaudit','Tipo da Auditoria','ci01','2020-10-06','Tipo da Auditoria',0,'f','f','f','f');
@@ -50,11 +50,11 @@ class Oc13351 extends PostgresMigration
         INSERT INTO db_sysarqmod (codmod, codarq) VALUES ((SELECT codmod FROM db_sysmodulo WHERE nomemod='Controle Interno'), (SELECT max(codarq) FROM db_sysarquivo));
 
         -- INSERE db_syscampo
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci01_codtipo','int4','Código','', 'Código',11,false,false,false,0,'int4','Código');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci01_codtipo','int4','Cï¿½digo','', 'Cï¿½digo',11,false,false,false,0,'int4','Cï¿½digo');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 
-                                            'ci01_tipoaudit','varchar(150)','Identifica a que as questões de auditoria estão relacionadas','','Tipo da Auditoria',150,
+                                            'ci01_tipoaudit','varchar(150)','Identifica a que as questï¿½es de auditoria estï¿½o relacionadas','','Tipo da Auditoria',150,
                                             false,true,false,0,'text','Tipo da Auditoria');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci01_instit','int4','Instituição','','Instituição',11,false,false,false,0,'int4','Instituição');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci01_instit','int4','Instituiï¿½ï¿½o','','Instituiï¿½ï¿½o',11,false,false,false,0,'int4','Instituiï¿½ï¿½o');
 
         -- INSERE db_sysarqcamp
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci01_codtipo'), 	1, 0);
@@ -67,7 +67,7 @@ class Oc13351 extends PostgresMigration
 
         -- TABELAS E ESTRUTURA
 
-        -- Módulo: Controle Interno
+        -- Mï¿½dulo: Controle Interno
         CREATE TABLE tipoquestaoaudit(
         ci01_codtipo		int4 not null default 0,
         ci01_tipoaudit		varchar(150) not null,
@@ -84,41 +84,41 @@ class Oc13351 extends PostgresMigration
         -- CHAVE ESTRANGEIRA
         ALTER TABLE tipoquestaoaudit ADD PRIMARY KEY (ci01_codtipo);
 
-        -- CRIA TABELA QUESTÃO DE AUDITORIA
+        -- CRIA TABELA QUESTï¿½O DE AUDITORIA
         
         -- INSERE db_sysarquivo
-        INSERT INTO db_sysarquivo VALUES((SELECT max(codarq)+1 FROM db_sysarquivo),'questaoaudit','Questão de Auditoria','ci02','2020-10-06','Questão de Auditoria',0,'f','f','f','f');
+        INSERT INTO db_sysarquivo VALUES((SELECT max(codarq)+1 FROM db_sysarquivo),'questaoaudit','Questï¿½o de Auditoria','ci02','2020-10-06','Questï¿½o de Auditoria',0,'f','f','f','f');
 
         -- INSERE db_sysarqmod
         INSERT INTO db_sysarqmod (codmod, codarq) VALUES ((SELECT codmod FROM db_sysmodulo WHERE nomemod='Controle Interno'), (SELECT max(codarq) FROM db_sysarquivo));
 
         -- INSERE db_syscampo
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci02_codquestao','int4','Código','', 'Código',11,false,false,false,1,'int4','Código');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci02_codquestao','int4','Cï¿½digo','', 'Cï¿½digo',11,false,false,false,1,'int4','Cï¿½digo');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 
                                             'ci02_codtipo','int4','Tipo da Auditoria','','Tipo da Auditoria',11,
                                             false,false,false,1,'int4','Tipo da Auditoria');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 
-                                            'ci02_numquestao','int4','É número que identificará a questão de auditoria no processo','','Número da Questão',
-                                            11,false,false,false,1,'int4','Número da Questão');
+                                            'ci02_numquestao','int4','ï¿½ nï¿½mero que identificarï¿½ a questï¿½o de auditoria no processo','','Nï¿½mero da Questï¿½o',
+                                            11,false,false,false,1,'int4','Nï¿½mero da Questï¿½o');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 
-                                            'ci02_questao','varchar(500)','São as questões a serem respondidas, são vinculadas ao objetivo geral da auditoria e devem ser elaboradas de forma interrogativa, sucintas e sem ambiguidades, factíveis de serem respondidas e priorizadas segundo a relevância da questão para o alcance do objetivo do trabalho','',
-                                            'Questão da Auditoria',500,false,false,false,0,'text','Questão da Auditoria');
+                                            'ci02_questao','varchar(500)','Sï¿½o as questï¿½es a serem respondidas, sï¿½o vinculadas ao objetivo geral da auditoria e devem ser elaboradas de forma interrogativa, sucintas e sem ambiguidades, factï¿½veis de serem respondidas e priorizadas segundo a relevï¿½ncia da questï¿½o para o alcance do objetivo do trabalho','',
+                                            'Questï¿½o da Auditoria',500,false,false,false,0,'text','Questï¿½o da Auditoria');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 
-                                            'ci02_inforeq','varchar(500)','É o conjunto de informações que formarão a base para que a questão de auditoria possa ser analisada. Em resumo, é a informação capaz de responder a questão de auditoria proposta','',
-                                            'Informações Requeridas',500,false,false,false,0,'text','Informações Requeridas');
+                                            'ci02_inforeq','varchar(500)','ï¿½ o conjunto de informaï¿½ï¿½es que formarï¿½o a base para que a questï¿½o de auditoria possa ser analisada. Em resumo, ï¿½ a informaï¿½ï¿½o capaz de responder a questï¿½o de auditoria proposta','',
+                                            'Informaï¿½ï¿½es Requeridas',500,false,false,false,0,'text','Informaï¿½ï¿½es Requeridas');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 
-                                            'ci02_fonteinfo','varchar(500)','Deve-se listar a fonte na qual a informação requerida será obtida. Pode ocorrer de uma informação ter mais de uma fonte','',
-                                            'Fonte das Informações',500,false,false,false,0,'text','Fonte das Informações');
+                                            'ci02_fonteinfo','varchar(500)','Deve-se listar a fonte na qual a informaï¿½ï¿½o requerida serï¿½ obtida. Pode ocorrer de uma informaï¿½ï¿½o ter mais de uma fonte','',
+                                            'Fonte das Informaï¿½ï¿½es',500,false,false,false,0,'text','Fonte das Informaï¿½ï¿½es');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 
-                                            'ci02_procdetal','varchar(500)','Deve ser especificado como serão coletadas as informações. Exemplos de métodos de coleta: entrevista, sondagem, questionário, formulário, utilização de dados já existentes, inspeção física, exame documental, requisição de informações, extração de dados etc','',
+                                            'ci02_procdetal','varchar(500)','Deve ser especificado como serï¿½o coletadas as informaï¿½ï¿½es. Exemplos de mï¿½todos de coleta: entrevista, sondagem, questionï¿½rio, formulï¿½rio, utilizaï¿½ï¿½o de dados jï¿½ existentes, inspeï¿½ï¿½o fï¿½sica, exame documental, requisiï¿½ï¿½o de informaï¿½ï¿½es, extraï¿½ï¿½o de dados etc','',
                                             'Procedimento Detalhado',500,false,false,false,0,'text','Procedimento Detalhado');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 
-                                            'ci02_objeto','varchar(500)','É o documento (material) produzido e fornecido pela unidade auditada sobre o qual recairá a análise, visando sempre o alcance da resposta à questão de auditoria','',
+                                            'ci02_objeto','varchar(500)','ï¿½ o documento (material) produzido e fornecido pela unidade auditada sobre o qual recairï¿½ a anï¿½lise, visando sempre o alcance da resposta ï¿½ questï¿½o de auditoria','',
                                             'Objetos',500,false,false,false,0,'text','Objetos');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 
-                                            'ci02_possivachadneg','varchar(500)','Os achados negativos podem identificar que não houve boa gestão, ou houve falhas nos procedimentos, seja de caráter legal, seja de caráter técnico administrativo, tais como: eficiência, eficácia, economicidade e efetividade dos programas, projetos e ações','',
-                                            'Possíveis Achados Negativos',500,false,false,false,0,'text','Possíveis Achados Negativos');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci02_instit','int4','Instituição','','Instituição',11,false,false,false,1,'int4','Instituição');
+                                            'ci02_possivachadneg','varchar(500)','Os achados negativos podem identificar que nï¿½o houve boa gestï¿½o, ou houve falhas nos procedimentos, seja de carï¿½ter legal, seja de carï¿½ter tï¿½cnico administrativo, tais como: eficiï¿½ncia, eficï¿½cia, economicidade e efetividade dos programas, projetos e aï¿½ï¿½es','',
+                                            'Possï¿½veis Achados Negativos',500,false,false,false,0,'text','Possï¿½veis Achados Negativos');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci02_instit','int4','Instituiï¿½ï¿½o','','Instituiï¿½ï¿½o',11,false,false,false,1,'int4','Instituiï¿½ï¿½o');
 
         -- INSERE db_sysarqcamp
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci02_codquestao'), 		1, 0);
@@ -138,7 +138,7 @@ class Oc13351 extends PostgresMigration
 
         -- TABELAS E ESTRUTURA
 
-        -- Módulo: Controle Interno
+        -- Mï¿½dulo: Controle Interno
         CREATE TABLE questaoaudit(
         ci02_codquestao		int4 not null default 0,
         ci02_codtipo		int4 not null,
@@ -165,20 +165,20 @@ class Oc13351 extends PostgresMigration
 
         ALTER TABLE questaoaudit ADD CONSTRAINT questaoaudit_tipoquestao_fk FOREIGN KEY (ci02_codtipo) REFERENCES tipoquestaoaudit (ci01_codtipo);
 
-        --Cria menu do relatorio das questões cadastradas
+        --Cria menu do relatorio das questï¿½es cadastradas
         INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Auditoria', 'Auditoria', '', 1, 1, 'Auditoria', 't');
 
         INSERT INTO db_menu VALUES (
-            (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Relatórios'), 
+            (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Relatï¿½rios'), 
             (SELECT max(id_item) FROM db_itensmenu), 
             (SELECT CASE
-                WHEN (SELECT count(*) FROM db_menu WHERE db_menu.id_item = (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Relatórios')) = 0 THEN 1 
-                ELSE (SELECT max(menusequencia)+1 as count FROM db_menu WHERE id_item = (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Relatórios')) 
+                WHEN (SELECT count(*) FROM db_menu WHERE db_menu.id_item = (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Relatï¿½rios')) = 0 THEN 1 
+                ELSE (SELECT max(menusequencia)+1 as count FROM db_menu WHERE id_item = (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Relatï¿½rios')) 
             END), 
             (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
         );
 
-        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Questões de Auditoria', 'Questões de Auditoria', 'cin2_relquestaoaudit001.php', 1, 1, 'Questões de Auditoria', 't');
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Questï¿½es de Auditoria', 'Questï¿½es de Auditoria', 'cin2_relquestaoaudit001.php', 1, 1, 'Questï¿½es de Auditoria', 't');
 
         INSERT INTO db_menu VALUES (
             (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Auditoria'), 
@@ -200,7 +200,7 @@ class Oc13351 extends PostgresMigration
             (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
         );
 
-        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Inclusão', 'Inclusão', 'cin4_procaudit001.php', 1, 1, 'Inclusão', 't');
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Inclusï¿½o', 'Inclusï¿½o', 'cin4_procaudit001.php', 1, 1, 'Inclusï¿½o', 't');
 
         INSERT INTO db_menu VALUES (
             (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Processo de Auditoria'), 
@@ -209,7 +209,7 @@ class Oc13351 extends PostgresMigration
             (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
         );
 
-        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Alteração', 'Alteração', 'cin4_procaudit002.php', 1, 1, 'Alteração', 't');
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Alteraï¿½ï¿½o', 'Alteraï¿½ï¿½o', 'cin4_procaudit002.php', 1, 1, 'Alteraï¿½ï¿½o', 't');
 
         INSERT INTO db_menu VALUES (
             (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Processo de Auditoria'), 
@@ -218,7 +218,7 @@ class Oc13351 extends PostgresMigration
             (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
         );
 
-        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Exclusão', 'Exclusão', 'cin4_procaudit003.php', 1, 1, 'Exclusão', 't');
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Exclusï¿½o', 'Exclusï¿½o', 'cin4_procaudit003.php', 1, 1, 'Exclusï¿½o', 't');
 
         INSERT INTO db_menu VALUES (
             (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Processo de Auditoria'), 
@@ -236,16 +236,16 @@ class Oc13351 extends PostgresMigration
         INSERT INTO db_sysarqmod (codmod, codarq) VALUES ((SELECT codmod FROM db_sysmodulo WHERE nomemod='Controle Interno'), (SELECT max(codarq) FROM db_sysarquivo));
 
         -- INSERE db_syscampo
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_codproc','int4','Código','','Código',11,false,false,false,0,'int4','Código');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_numproc','int4','Número do processo da auditoria','','Número do Processo',11,false,false,false,1,'text','Número do Processo');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_codproc','int4','Cï¿½digo','','Cï¿½digo',11,false,false,false,0,'int4','Cï¿½digo');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_numproc','int4','Nï¿½mero do processo da auditoria','','Nï¿½mero do Processo',11,false,false,false,1,'text','Nï¿½mero do Processo');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_anoproc','int4','Ano do processo da auditoria','','Ano do Processo',4,false,false,false,1,'text','Ano do Processo');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_grupoaudit','int4','Grupo de Auditoria','','Grupo de Auditoria',1,false,false,false,1,'text','Grupo de Auditoria');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_objaudit','varchar(500)','Descrever qual é o foco da auditoria em questão','','Objetivo da Auditoria',500,false,false,false,0,'text','Objetivo da Auditoria');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_objaudit','varchar(500)','Descrever qual ï¿½ o foco da auditoria em questï¿½o','','Objetivo da Auditoria',500,false,false,false,0,'text','Objetivo da Auditoria');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_dataini','date','Data Inicial','','Data Inicial',10,false,false,false,1,'text','Data Inicial');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_datafim','date','Data Final','','Data Final',10,false,false,false,1,'text','Data Final');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_protprocesso','int4','Protocolo','','Protocolo',10,false,false,false,0,'text','Protocolo');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_codtipoquest','int4','Tipo da Auditoria','','Tipo da Auditoria',11,true,false,false,1,'int4','Tipo da Auditoria');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_instit','int4','Instituição','','Instituição',11,false,false,false,0,'int4','Instituição');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_instit','int4','Instituiï¿½ï¿½o','','Instituiï¿½ï¿½o',11,false,false,false,0,'int4','Instituiï¿½ï¿½o');
 
         -- INSERE db_sysarqcamp
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_codproc'),      1, 0);
@@ -265,7 +265,7 @@ class Oc13351 extends PostgresMigration
 
         -- TABELAS E ESTRUTURA
 
-        -- Módulo: Controle Interno
+        -- Mï¿½dulo: Controle Interno
         CREATE TABLE processoaudit(
         ci03_codproc        int4 not null default 0,
         ci03_numproc        int4 not null,
@@ -304,8 +304,8 @@ class Oc13351 extends PostgresMigration
         INSERT INTO db_sysarqmod (codmod, codarq) VALUES ((SELECT codmod FROM db_sysmodulo WHERE nomemod='Controle Interno'), (SELECT max(codarq) FROM db_sysarquivo));
 
         -- INSERE db_syscampo
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci04_codproc','int4','Código do Processo','','Código do Processo',11,false,false,false,0,'int4','Código do Processo');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci04_depto','int4','Código do Departamento','','Código do Departamento',11,false,false,false,1,'text','Código do Departamento');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci04_codproc','int4','Cï¿½digo do Processo','','Cï¿½digo do Processo',11,false,false,false,0,'int4','Cï¿½digo do Processo');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci04_depto','int4','Cï¿½digo do Departamento','','Cï¿½digo do Departamento',11,false,false,false,1,'text','Cï¿½digo do Departamento');
 
         CREATE TABLE processoauditdepart(
         ci04_codproc    int4 not null,
@@ -318,8 +318,8 @@ class Oc13351 extends PostgresMigration
 
         ALTER TABLE processoauditdepart ADD CONSTRAINT processoauditdepart_depto_fk FOREIGN KEY (ci04_depto) REFERENCES db_depart (coddepto);
 
-        --Cria menu para lançamento de verificações
-        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Lançamento de Verificações', 'Lançamento de Verificações', 'cin4_lancamverifaudit.php', 1, 1, 'Lançamento de Verificações', 't');
+        --Cria menu para lanï¿½amento de verificaï¿½ï¿½es
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Lanï¿½amento de Verificaï¿½ï¿½es', 'Lanï¿½amento de Verificaï¿½ï¿½es', 'cin4_lancamverifaudit.php', 1, 1, 'Lanï¿½amento de Verificaï¿½ï¿½es', 't');
 
         INSERT INTO db_menu VALUES (
             (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Procedimentos'), 
@@ -331,7 +331,7 @@ class Oc13351 extends PostgresMigration
             (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
         );
 
-        -- CRIA TABELA LANÇAMENTO DE VERIFICAÇÕES
+        -- CRIA TABELA LANï¿½AMENTO DE VERIFICAï¿½ï¿½ES
         
         -- INSERE db_sysarquivo
         INSERT INTO db_sysarquivo VALUES((SELECT max(codarq)+1 FROM db_sysarquivo),'lancamverifaudit','Processo de Auditoria','ci05','2020-10-19','Processo de Auditoria',0,'f','f','f','f');
@@ -340,13 +340,13 @@ class Oc13351 extends PostgresMigration
         INSERT INTO db_sysarqmod (codmod, codarq) VALUES ((SELECT codmod FROM db_sysmodulo WHERE nomemod='Controle Interno'), (SELECT max(codarq) FROM db_sysarquivo));
 
         -- INSERE db_syscampo
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_codlan','int4','Código','','Código',11,false,false,false,0,'int4','Código');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_codproc','int4','Código do Processo de Auditoria','','Código do Processo de Auditoria',11,false,false,false,1,'text','Código do Processo de Auditoria');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_codquestao','int4','Código da Questão','','Código da Questão',11,false,false,false,1,'text','Código da Questão');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_inianalise','date','Início Análise','','Início Análise',10,false,false,false,1,'text','Início Análise');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_atendquestaudit','bool','Atende à questão de auditoria','','Atende à questão de auditoria',1,false,false,false,1,'','Atende à questão de auditoria');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_achados','varchar(500)','São fatos que resultam da aplicação dos programas elaborados para as diversas áreas em análise, referindo-se às deficiências encontradas durante o exame e suportadas por informações disponíveis no órgão auditado','','Achados',500,true,false,false,0,'text','Achados');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_instit','int4','Instituição','','Instituição',11,false,false,false,0,'int4','Instituição');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_codlan','int4','Cï¿½digo','','Cï¿½digo',11,false,false,false,0,'int4','Cï¿½digo');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_codproc','int4','Cï¿½digo do Processo de Auditoria','','Cï¿½digo do Processo de Auditoria',11,false,false,false,1,'text','Cï¿½digo do Processo de Auditoria');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_codquestao','int4','Cï¿½digo da Questï¿½o','','Cï¿½digo da Questï¿½o',11,false,false,false,1,'text','Cï¿½digo da Questï¿½o');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_inianalise','date','Inï¿½cio Anï¿½lise','','Inï¿½cio Anï¿½lise',10,false,false,false,1,'text','Inï¿½cio Anï¿½lise');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_atendquestaudit','bool','Atende ï¿½ questï¿½o de auditoria','','Atende ï¿½ questï¿½o de auditoria',1,false,false,false,1,'','Atende ï¿½ questï¿½o de auditoria');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_achados','varchar(500)','Sï¿½o fatos que resultam da aplicaï¿½ï¿½o dos programas elaborados para as diversas ï¿½reas em anï¿½lise, referindo-se ï¿½s deficiï¿½ncias encontradas durante o exame e suportadas por informaï¿½ï¿½es disponï¿½veis no ï¿½rgï¿½o auditado','','Achados',500,true,false,false,0,'text','Achados');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_instit','int4','Instituiï¿½ï¿½o','','Instituiï¿½ï¿½o',11,false,false,false,0,'int4','Instituiï¿½ï¿½o');
 
         -- INSERE db_sysarqcamp
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci05_codlan'),               1, 0);
@@ -363,7 +363,7 @@ class Oc13351 extends PostgresMigration
 
         -- TABELAS E ESTRUTURA
 
-        -- Módulo: Controle Interno
+        -- Mï¿½dulo: Controle Interno
         CREATE TABLE lancamverifaudit(
         ci05_codlan             int4 not null default 0,
         ci05_codproc            int4 not null,
@@ -388,8 +388,8 @@ class Oc13351 extends PostgresMigration
 
         ALTER TABLE lancamverifaudit ADD CONSTRAINT lancamverifaudit_codquestao_fk FOREIGN KEY (ci05_codquestao) REFERENCES questaoaudit (ci02_codquestao);
 
-        --CRIA MENU PARA RELATÓRIO DE VERIFICAÇÕES
-        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Relatório de Verificações', 'Relatório de Verificações', 'cin2_rellancamverifaudit001.php', 1, 1, 'Relatório de Verificações', 't');
+        --CRIA MENU PARA RELATï¿½RIO DE VERIFICAï¿½ï¿½ES
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Relatï¿½rio de Verificaï¿½ï¿½es', 'Relatï¿½rio de Verificaï¿½ï¿½es', 'cin2_rellancamverifaudit001.php', 1, 1, 'Relatï¿½rio de Verificaï¿½ï¿½es', 't');
 
         INSERT INTO db_menu VALUES (
             (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Auditoria'), 
@@ -421,15 +421,15 @@ class Oc13351 extends PostgresMigration
 
         -- INSERE db_syscampo
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_seq','int4','Sequencial','','Sequencial',11,false,false,false,0,'int4','Sequencial');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_codlan','int4','Código do Lançamento de Verificação','','Código do Lançamento de Verificação',11,false,false,false,1,'text','Código do Lançamento de Verificação');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_situencont','varchar(500)','Descrever toda a situação existente, deixando claro os diversos aspectos do achado','','Situação Encontrada',500,false,false,false,0,'text','Situação Encontrada');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_codlan','int4','Cï¿½digo do Lanï¿½amento de Verificaï¿½ï¿½o','','Cï¿½digo do Lanï¿½amento de Verificaï¿½ï¿½o',11,false,false,false,1,'text','Cï¿½digo do Lanï¿½amento de Verificaï¿½ï¿½o');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_situencont','varchar(500)','Descrever toda a situaï¿½ï¿½o existente, deixando claro os diversos aspectos do achado','','Situaï¿½ï¿½o Encontrada',500,false,false,false,0,'text','Situaï¿½ï¿½o Encontrada');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_objetos','varchar(500)','Indicar todos os objetos nos quais o achado foi contatado','','Objetos',500,false,false,false,0,'text','Objetos');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_criterio','varchar(500)','Indicar os critérios que refletem como a gestão deveria ser','','Critério',500,false,false,false,0,'text','Critério');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_evidencia','varchar(500)','Indicar precisamente os documentos que respaldam a opinião da equipe','','Evidência',500,false,false,false,0,'text','Evidência');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_causa','varchar(500)','Deve ser conclusiva e fornecer elementos para a correta responsabilização','','Causa',500,false,false,false,0,'text','Causa');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_efeito','varchar(500)','Avaliar quais foram ou podem ser as consequências para o órgão, erário ou sociedade','','Efeito',500,false,false,false,0,'text','Efeito');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_recomendacoes','varchar(500)','As recomendações decorrem dos achados e consistem em ações que a equipe de auditoria indica às unidades auditadas, visando corrigir desconformidades, a tratar riscos e a aperfeiçoar processos de trabalhos e controles','','Recomendações',500,false,false,false,0,'text','Recomendações');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_instit','int4','Instituição','','Instituição',11,false,false,false,0,'int4','Instituição');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_criterio','varchar(500)','Indicar os critï¿½rios que refletem como a gestï¿½o deveria ser','','Critï¿½rio',500,false,false,false,0,'text','Critï¿½rio');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_evidencia','varchar(500)','Indicar precisamente os documentos que respaldam a opiniï¿½o da equipe','','Evidï¿½ncia',500,false,false,false,0,'text','Evidï¿½ncia');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_causa','varchar(500)','Deve ser conclusiva e fornecer elementos para a correta responsabilizaï¿½ï¿½o','','Causa',500,false,false,false,0,'text','Causa');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_efeito','varchar(500)','Avaliar quais foram ou podem ser as consequï¿½ncias para o ï¿½rgï¿½o, erï¿½rio ou sociedade','','Efeito',500,false,false,false,0,'text','Efeito');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_recomendacoes','varchar(500)','As recomendaï¿½ï¿½es decorrem dos achados e consistem em aï¿½ï¿½es que a equipe de auditoria indica ï¿½s unidades auditadas, visando corrigir desconformidades, a tratar riscos e a aperfeiï¿½oar processos de trabalhos e controles','','Recomendaï¿½ï¿½es',500,false,false,false,0,'text','Recomendaï¿½ï¿½es');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_instit','int4','Instituiï¿½ï¿½o','','Instituiï¿½ï¿½o',11,false,false,false,0,'int4','Instituiï¿½ï¿½o');
 
         -- INSERE db_sysarqcamp
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_seq'),              1, 0);
@@ -449,7 +449,7 @@ class Oc13351 extends PostgresMigration
 
         -- TABELAS E ESTRUTURA
 
-        -- Módulo: Controle Interno
+        -- Mï¿½dulo: Controle Interno
         CREATE TABLE matrizachadosaudit(
         ci06_seq             	int4 not null default 0,
         ci06_codlan             int4 not null,
@@ -475,7 +475,7 @@ class Oc13351 extends PostgresMigration
 
         ALTER TABLE matrizachadosaudit ADD CONSTRAINT matrizachadosaudit_codlan_fk FOREIGN KEY (ci06_codlan) REFERENCES lancamverifaudit (ci05_codlan);
 
-        --CRIA MENU PARA RELATÓRIO DE MATRIZ DE ACHADOS
+        --CRIA MENU PARA RELATï¿½RIO DE MATRIZ DE ACHADOS
         INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Matriz de Achados', 'Matriz de Achados', 'cin2_relmatrizachadosaudit001.php', 1, 1, 'Matriz de Achados', 't'); 
 
         INSERT INTO db_menu VALUES (
@@ -494,7 +494,7 @@ class Oc13351 extends PostgresMigration
                         AND descricao = 'Consultas');
 
         INSERT INTO db_itensmenu (id_item, descricao, help, funcao, itemativo, manutencao, desctec, libcliente) 
-            SELECT (SELECT max(id_item)+1 FROM db_itensmenu),'Consultas','Consultas','',1,1,'Consultas do módulo controle interno','t'
+            SELECT (SELECT max(id_item)+1 FROM db_itensmenu),'Consultas','Consultas','',1,1,'Consultas do mï¿½dulo controle interno','t'
         WHERE NOT EXISTS 
             (SELECT 1 FROM db_menu 
                     INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item

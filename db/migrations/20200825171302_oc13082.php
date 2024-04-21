@@ -1,18 +1,18 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class Oc13082 extends PostgresMigration
 {
 
     public function up()
     {
-        $sql = "UPDATE db_itensmenu SET descricao = 'Anulação de Autorização de Processo de Compra' WHERE id_item = 4122";
+        $sql = "UPDATE db_itensmenu SET descricao = 'Anulaï¿½ï¿½o de Autorizaï¿½ï¿½o de Processo de Compra' WHERE id_item = 4122";
         $this->execute($sql);
     }
 
     public function down() {
-        $sql = "UPDATE db_itensmenu SET descricao = 'Anular autorização' WHERE id_item = 4122";
+        $sql = "UPDATE db_itensmenu SET descricao = 'Anular autorizaï¿½ï¿½o' WHERE id_item = 4122";
         $this->execute($sql);
     }
 }

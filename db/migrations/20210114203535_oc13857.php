@@ -1,6 +1,6 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class Oc13857 extends PostgresMigration
 {
@@ -12,10 +12,10 @@ class Oc13857 extends PostgresMigration
         SELECT fc_startsession();
 
         INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
-        VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'si31_regularizacaorepasseestornada', 'int8', 'Regularização de Repasse', 0, 'Regularização de Repasse', 1, FALSE, FALSE, FALSE, 1, 'text', 'Regularização de Repasse');
+        VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'si31_regularizacaorepasseestornada', 'int8', 'Regularizaï¿½ï¿½o de Repasse', 0, 'Regularizaï¿½ï¿½o de Repasse', 1, FALSE, FALSE, FALSE, 1, 'text', 'Regularizaï¿½ï¿½o de Repasse');
 
         INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
-        VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'si31_exercicioestornada', 'int8', 'Exercício', 0, 'Exercício', 4, FALSE, FALSE, FALSE, 1, 'text', 'Exercício');
+        VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'si31_exercicioestornada', 'int8', 'Exercï¿½cio', 0, 'Exercï¿½cio', 4, FALSE, FALSE, FALSE, 1, 'text', 'Exercï¿½cio');
 
         INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
         VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'si31_emendaparlamentarestornada', 'int8', 'Emenda Parlamentar', 0, 'Emenda Parlamentar', 1, FALSE, FALSE, FALSE, 1, 'text', 'Emenda Parlamentar');

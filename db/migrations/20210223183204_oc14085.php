@@ -1,6 +1,6 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class Oc14085 extends PostgresMigration
 {
@@ -11,7 +11,7 @@ class Oc14085 extends PostgresMigration
         BEGIN;
         SELECT fc_startsession();
 
-        INSERT INTO conhistdoc VALUES (74, 'CREDITOS EXTRAORDINÁRIOS - SUPERÁVIT FINANCEIRO', 50);
+        INSERT INTO conhistdoc VALUES (74, 'CREDITOS EXTRAORDINï¿½RIOS - SUPERï¿½VIT FINANCEIRO', 50);
 
 		INSERT INTO vinculoeventoscontabeis VALUES (nextval('vinculoeventoscontabeis_c115_sequencial_seq'), 74, null);
 

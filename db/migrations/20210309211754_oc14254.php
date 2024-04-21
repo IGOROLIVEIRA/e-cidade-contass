@@ -1,6 +1,6 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class Oc14254 extends PostgresMigration
 {
@@ -11,7 +11,7 @@ class Oc14254 extends PostgresMigration
         BEGIN;
         SELECT fc_startsession();
 
-        UPDATE db_itensmenu SET descricao = 'Emissão de Decreto' WHERE descricao = 'Emissão do Projeto';
+        UPDATE db_itensmenu SET descricao = 'Emissï¿½o de Decreto' WHERE descricao = 'Emissï¿½o do Projeto';
 
         COMMIT;
 

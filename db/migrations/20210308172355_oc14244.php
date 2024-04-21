@@ -1,6 +1,6 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class Oc14244 extends PostgresMigration
 {
@@ -11,9 +11,9 @@ class Oc14244 extends PostgresMigration
         BEGIN;
         SELECT fc_startsession();
 
-        UPDATE orctiporec SET o15_descr = 'TRANSF. FUNDEB APLIC. MAGISTÉRIO 70' WHERE o15_codigo = '118';
+        UPDATE orctiporec SET o15_descr = 'TRANSF. FUNDEB APLIC. MAGISTï¿½RIO 70' WHERE o15_codigo = '118';
 
-        UPDATE db_estruturavalor SET db121_descricao = 'TRANSF. FUNDEB APLIC. MAGISTÉRIO 70' WHERE db121_estrutural = '118';
+        UPDATE db_estruturavalor SET db121_descricao = 'TRANSF. FUNDEB APLIC. MAGISTï¿½RIO 70' WHERE db121_estrutural = '118';
 
         UPDATE orctiporec SET o15_descr = 'TRANSF. FUNDEB APLIC. OUTRAS DESP. 30' WHERE o15_codigo = '119';
 
@@ -39,7 +39,7 @@ class Oc14244 extends PostgresMigration
             VALUES (166,
                 'TRANSF. DO FUNDEB COMP. DA UNIAO ? VAAT 70',
                 '167',
-                'Recursos de Complementação da União ao FUNDEB ? VAAT, com base no art. 212-A, inciso V, b, da Constituição Federal, destinados ao pagamento da remuneração dos profissionais da educação básica em efetivo exercício.',
+                'Recursos de Complementaï¿½ï¿½o da Uniï¿½o ao FUNDEB ? VAAT, com base no art. 212-A, inciso V, b, da Constituiï¿½ï¿½o Federal, destinados ao pagamento da remuneraï¿½ï¿½o dos profissionais da educaï¿½ï¿½o bï¿½sica em efetivo exercï¿½cio.',
                 2,
                 NULL,
                 (SELECT max(db121_sequencial) FROM db_estruturavalor WHERE db121_estrutural = '166'),
@@ -47,7 +47,7 @@ class Oc14244 extends PostgresMigration
                 (167,
                 'TRANSF. DO FUNDEB COMP. DA UNIAO ? VAAT OUT. DESP 30',
                 '167',
-                'Recursos de Complementação da União ao FUNDEB ? VAAT, com base no art. 212-A, inciso V, b, da Constituição Federal, destinados ao pagamento de outras despesas da educação básica.',
+                'Recursos de Complementaï¿½ï¿½o da Uniï¿½o ao FUNDEB ? VAAT, com base no art. 212-A, inciso V, b, da Constituiï¿½ï¿½o Federal, destinados ao pagamento de outras despesas da educaï¿½ï¿½o bï¿½sica.',
                 2,
                 NULL,
                 (SELECT max(db121_sequencial) FROM db_estruturavalor WHERE db121_estrutural = '167'),
