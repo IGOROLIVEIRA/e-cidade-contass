@@ -1,6 +1,6 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class PixBb003 extends PostgresMigration
 {

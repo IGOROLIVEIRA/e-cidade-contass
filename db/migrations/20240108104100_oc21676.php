@@ -1,11 +1,11 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class Oc21676 extends PostgresMigration
 {
     public function up()
-    {		
+    {
 		//Consulta no banco se existe o modelo 108 (mod_imprime108.php)
 		$mod_imprime108 = $this->execute("SELECT * FROM cadmodcarne WHERE k47_sequencial = 108;");
 

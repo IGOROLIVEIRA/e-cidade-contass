@@ -2,7 +2,7 @@
 
 use App\Support\Database\AsFunction;
 use App\Support\Database\Sequence;
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class PixBb extends PostgresMigration
 {

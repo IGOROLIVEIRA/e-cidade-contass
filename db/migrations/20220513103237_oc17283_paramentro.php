@@ -1,6 +1,6 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class Oc17283Paramentro extends PostgresMigration
 {

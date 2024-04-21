@@ -1,6 +1,6 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class NoTaskFontes extends PostgresMigration
 {
@@ -37,7 +37,7 @@ class NoTaskFontes extends PostgresMigration
                       SET c61_codigo = {$fonte22}
                       WHERE c61_codigo = {$fonte23}
                         AND c61_anousu < 2023";
-        
+
         $this->execute($sSqlFonte);
     }
 }

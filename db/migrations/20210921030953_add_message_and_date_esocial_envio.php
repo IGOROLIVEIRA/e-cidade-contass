@@ -1,10 +1,10 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class AddMessageAndDateEsocialEnvio extends PostgresMigration
 {
-    
+
     public function up()
     {
         $sql = "

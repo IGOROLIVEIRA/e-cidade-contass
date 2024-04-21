@@ -1,6 +1,6 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class Oc18256 extends PostgresMigration
 {
@@ -18,7 +18,7 @@ class Oc18256 extends PostgresMigration
         $this->execute($sqlTriggerOff);
 
         foreach ($aFontes as $fonte) {
-            
+
             $newFonte = $fonte["fonte"] . 0;
             $this->updateOrctiporec($fonte["o15_codigo"], $newFonte);
         }
@@ -31,11 +31,11 @@ class Oc18256 extends PostgresMigration
     public function updateOrctiporec($oldFonte2023, $newFonte2023)
     {
         $aSource = array(15400003, 15420003, 25400003, 25420003);
-        
+
         $sqlOrctiporec = "UPDATE orctiporec
                           SET o15_codigo = {$newFonte2023}
                           WHERE o15_codigo = {$oldFonte2023}";
-            
+
         $this->execute($sqlOrctiporec);
         $this->updateFontes($oldFonte2023, $newFonte2023);
 
@@ -44,7 +44,7 @@ class Oc18256 extends PostgresMigration
                            SET o15_descr = REPLACE(o15_descr, ' - 3', ''),
                                o15_finali = REPLACE(o15_finali, ' - 30', '')
                            WHERE o15_codigo = {$newFonte2023}";
-            
+
             $this->execute($sqlReplace);
         }
 

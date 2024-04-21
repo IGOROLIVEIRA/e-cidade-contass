@@ -1,7 +1,7 @@
 <?php
 
 use App\Support\Database\AsFunction;
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class Oc21886 extends PostgresMigration
 {

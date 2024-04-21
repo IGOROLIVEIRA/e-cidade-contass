@@ -1,13 +1,13 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class Oc14285 extends PostgresMigration
 {
     public function up()
     {
         if ($this->checkMenu()) {
-            
+
             $sql = "
           INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu),'Arquivo Bradesco CNAB 240', 'Arquivo Bradesco CNAB 240','pes2_bradesco240cnab001.php',1,1,'','t');
           INSERT INTO db_menu VALUES (7908,(SELECT id_item FROM db_itensmenu WHERE funcao = 'pes2_bradesco240cnab001.php'),(SELECT MAX(menusequencia)+1 FROM db_menu WHERE id_item = 7908),952);

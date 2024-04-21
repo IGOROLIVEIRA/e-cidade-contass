@@ -1,13 +1,13 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class Oc13886 extends PostgresMigration
 {
     public function up()
     {
         $sql = <<<SQL
-  
+
         BEGIN;
         SELECT fc_startsession();
 

@@ -1,6 +1,6 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class AcertaSequenciaDbItensmenu extends PostgresMigration
 {
@@ -11,7 +11,7 @@ class AcertaSequenciaDbItensmenu extends PostgresMigration
 
         BEGIN;
           SELECT setval('db_itensmenu_id_item_seq', (select max(id_item) from db_itensmenu), FALSE);
-        COMMIT;        
+        COMMIT;
 
 SQL;
         $this->execute($sql);

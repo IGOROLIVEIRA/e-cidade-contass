@@ -2,7 +2,7 @@
 
 use App\Support\Database\AsFunction;
 use App\Support\Database\Instituition;
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class Oc20041 extends PostgresMigration
 {

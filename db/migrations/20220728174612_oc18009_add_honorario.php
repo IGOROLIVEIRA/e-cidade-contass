@@ -1,6 +1,6 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class Oc18009AddHonorario extends PostgresMigration
 {
@@ -14,8 +14,8 @@ class Oc18009AddHonorario extends PostgresMigration
 
         -- ADICIONA CAMPO A TABELA DB_CONFIG
         ALTER TABLE configuracoes.db_config ADD COLUMN db21_honorarioadvocaticio int4 null;
-    
-        COMMIT;        
+
+        COMMIT;
 
 SQL;
         $this->execute($sql);
