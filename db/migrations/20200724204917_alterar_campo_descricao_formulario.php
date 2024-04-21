@@ -1,6 +1,6 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class AlterarCampoDescricaoFormulario extends PostgresMigration
 {
@@ -15,5 +15,5 @@ class AlterarCampoDescricaoFormulario extends PostgresMigration
         $sSql  = "UPDATE db_syscampo SET tamanho = 50  WHERE nomecam = 'db101_descricao'";
         $this->execute($sSql);
     }
-    
+
 }
