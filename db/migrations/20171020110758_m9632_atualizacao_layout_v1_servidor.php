@@ -1,6 +1,6 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class M9632AtualizacaoLayoutV1Servidor extends PostgresMigration
 {
