@@ -1,6 +1,8 @@
 <?php
 
-class Oc18123 extends \Classes\PostgresMigration
+use ECidade\Suporte\Phinx\PostgresMigration;
+
+class Oc18123 extends PostgresMigration
 {
     const TIPO_ISENCAO = 0;
     const TIPO_IMUNIDADE = 1;
