@@ -1,12 +1,12 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class M9812RevezamentoPonto extends PostgresMigration
 {
     public function up()
     {
-        $sql = "insert into db_syscampo values(1009521,'rh190_revezamento','bool','Determina se a escala é de revezamento.','f', 'Revezamento',1,'t','f','f',5,'text','Revezamento');
+        $sql = "insert into db_syscampo values(1009521,'rh190_revezamento','bool','Determina se a escala ï¿½ de revezamento.','f', 'Revezamento',1,'t','f','f',5,'text','Revezamento');
                 insert into db_syscampodef values(1009521,'f','');
                 insert into db_sysarqcamp values(4007,1009521,4,0);";
         $this->execute($sql);

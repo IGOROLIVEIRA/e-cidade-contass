@@ -1,12 +1,12 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class M8642ManutencaoJustificativaEmLote extends PostgresMigration
 {
     public function up()
     {
-        $this->execute("insert into db_itensmenu ( id_item ,descricao ,help ,funcao ,itemativo ,manutencao ,desctec ,libcliente ) values ( 10430 ,'Lançamento de Justificativas em Lote' ,'Lançamento de Justificativas em Lote' ,'rec4_manutencaojustificativaslote.php' ,'1' ,'1' ,'Inclui justificativas para vários servidores através de seleção ou matrículas.' ,'true' );");
+        $this->execute("insert into db_itensmenu ( id_item ,descricao ,help ,funcao ,itemativo ,manutencao ,desctec ,libcliente ) values ( 10430 ,'Lanï¿½amento de Justificativas em Lote' ,'Lanï¿½amento de Justificativas em Lote' ,'rec4_manutencaojustificativaslote.php' ,'1' ,'1' ,'Inclui justificativas para vï¿½rios servidores atravï¿½s de seleï¿½ï¿½o ou matrï¿½culas.' ,'true' );");
         $this->execute("insert into db_menu ( id_item ,id_item_filho ,menusequencia ,modulo ) values ( 10384 ,10430 ,5 ,2323 );");
     }
 

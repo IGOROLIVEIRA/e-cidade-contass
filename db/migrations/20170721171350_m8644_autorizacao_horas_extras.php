@@ -1,12 +1,12 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class M8644AutorizacaoHorasExtras extends PostgresMigration
 {
   public function up()
   {
-    $this->execute("insert into db_syscampo values(1009360,'rh200_autorizahoraextra','bool','Controla a permissão de horas extras para o servidores no ponto eletrônico.','true', 'Calcular H.E. Somente Com Autorização',1,'f','f','f',5,'text','Calcular H.E. Somente Com Autorização')");
+    $this->execute("insert into db_syscampo values(1009360,'rh200_autorizahoraextra','bool','Controla a permissï¿½o de horas extras para o servidores no ponto eletrï¿½nico.','true', 'Calcular H.E. Somente Com Autorizaï¿½ï¿½o',1,'f','f','f',5,'text','Calcular H.E. Somente Com Autorizaï¿½ï¿½o')");
     $this->execute("insert into db_sysarqcamp values(4024,1009360,12,0)");
 
     $this->adicionarCampoPontoEletronicoConfiguracoes();
@@ -48,12 +48,12 @@ class M8644AutorizacaoHorasExtras extends PostgresMigration
 
     $naturezasTipoAssentamentos = $this->fetchAll("SELECT * 
                                                      FROM pessoal.naturezatipoassentamento 
-                                                    WHERE rh159_descricao = 'Autorização H.E.'");
+                                                    WHERE rh159_descricao = 'Autorizaï¿½ï¿½o H.E.'");
 
     if(empty($naturezasTipoAssentamentos)) {
 
       $this->table('naturezatipoassentamento', array('schema'=>'pessoal'))
-        ->insert(array('rh159_sequencial', 'rh159_descricao'), array(array(7, 'Autorização H.E.')
+        ->insert(array('rh159_sequencial', 'rh159_descricao'), array(array(7, 'Autorizaï¿½ï¿½o H.E.')
         ))->saveData();
     }
 
