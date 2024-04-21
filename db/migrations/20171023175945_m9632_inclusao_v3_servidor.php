@@ -1,6 +1,6 @@
 <?php
 
-use ECidade\Suporte\Phinx\PostgresMigration;
+use Classes\PostgresMigration;
 
 class M9632InclusaoV3Servidor extends PostgresMigration
 {
