@@ -418,14 +418,21 @@ class cl_far_matersaude {
        $sql  .= $virgula." fa01_codigobarras = '$this->fa01_codigobarras' ";
        $virgula = ",";
      }
+
      if(trim($this->fa01_i_catmat)!="" || isset($GLOBALS["HTTP_POST_VARS"]["fa01_i_catmat"])){
-       $sql  .= $virgula." fa01_i_catmat = $this->fa01_i_catmat";
-       $virgula = ",";
+
+         if(trim($this->fa01_i_catmat) == null ){
+             $sql  .= $virgula." fa01_i_catmat = NULL";
+         }else{
+             $sql  .= $virgula." fa01_i_catmat = $this->fa01_i_catmat";
+             $virgula = ",";
+         }
      }
      $sql .= " where ";
      if($fa01_i_codigo!=null){
        $sql .= " fa01_i_codigo = $this->fa01_i_codigo";
      }
+
      $resaco = $this->sql_record($this->sql_query_file($this->fa01_i_codigo));
      if($this->numrows>0){
        for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
