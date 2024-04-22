@@ -2364,7 +2364,7 @@ if ($oInstit->db21_usasisagua == "t") {
         (iContaReceita == 15000001 && iConta == 15000000) || (iContaReceita == 15000002 && iConta == 15000000) || (iContaReceita == 16590000 && iConta == 16000000) || (iContaReceita == 16590000 && iConta == 16020000) || (iContaReceita == 16040000 && iConta == 16000000) ||
         (iContaReceita == 16040000 && iConta == 16020000) || (iContaReceita == 16590000 && iConta == 16010000) || (iContaReceita == 16590000 && iConta == 16030000) || (iContaReceita == 17070000 && iConta == 15000000) || (iContaReceita == 17040000 && iConta == 17040000) ||
         (iContaReceita == 17080000 && iConta == 15000000) || ($('estrutural').value.substr(0, 9) == 411130311) || ((iContaReceita.substr(0,4) == 1720 || iContaReceita.substr(0,4)    == 1721 )   && iConta == 17040000) || (iContaReceita.substr(0,4) == 1540 && iConta == 15430000) ||
-        (iContaReceita.substr(0,4) == 1500 && iConta == 16590020)
+        (iContaReceita.substr(0,4) == 1543 && iConta == 15400007) || (iContaReceita.substr(0,4) == 1500 && iConta == 16590020)
       ) {
         $('notificacao').setStyle({
           display: 'none'
