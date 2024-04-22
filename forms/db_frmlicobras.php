@@ -689,7 +689,7 @@ $cllicobras->rotulo->label();
     }
     function getNumObra(){
 
-        let oParam = {};
+        const oParam = {};
         oParam.exec = 'buscarNumObra';
 
         const oAjax = new Ajax.Request(
