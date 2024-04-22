@@ -36,9 +36,11 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ERROR);
 
 use model\caixa\relatorios\ReceitaPeriodoTesourariaPDF;
+use model\caixa\relatorios\ReceitaPeriodoTesourariaCSV;
 use repositories\caixa\relatorios\ReceitaPeriodoTesourariaRepositoryLegacy;
 
 require_once "model/caixa/relatorios/ReceitaPeriodoTesourariaPDF.model.php";
+require_once "model/caixa/relatorios/ReceitaPeriodoTesourariaCSV.model.php";
 require_once "repositories/caixa/relatorios/ReceitaPeriodoTesourariaRepositoryLegacy.php";
 
 $sDesdobramento = $desdobrar;
@@ -55,6 +57,8 @@ $sReceitas = $codrec;
 $sEstrutura = $estrut;
 $sContas = $conta;
 $sContribuintes = $contribuinte;
+$iRecurso = $recurso;
+$iFormato = $formatoRelatorio;
 
 $oReceitaPeriodoTesourariaRepository = new ReceitaPeriodoTesourariaRepositoryLegacy(
     $sTipo,
@@ -70,16 +74,27 @@ $oReceitaPeriodoTesourariaRepository = new ReceitaPeriodoTesourariaRepositoryLeg
     $sReceitas,
     $sEstrutura,
     $sContas,
-    $sContribuintes
+    $sContribuintes,
+    $iRecurso
 );
 
-$oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesourariaPDF(
-    $sTipo,
-    $sTipoReceita,
-    $iFormaArrecadacao,
-    $dDataInicial,
-    $dDataFinal,
-    $oReceitaPeriodoTesourariaRepository);
+if ($iFormato == 1) {
+    $oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesourariaCSV(
+        $sTipo,
+        $sTipoReceita,
+        $iFormaArrecadacao,
+        $dDataInicial,
+        $dDataFinal,
+        $oReceitaPeriodoTesourariaRepository);
+} else {
+    $oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesourariaPDF(
+        $sTipo,
+        $sTipoReceita,
+        $iFormaArrecadacao,
+        $dDataInicial,
+        $dDataFinal,
+        $oReceitaPeriodoTesourariaRepository);
+}
 
 $oRelatorioReceitaPeriodoTesouraria->processar();
 ?>

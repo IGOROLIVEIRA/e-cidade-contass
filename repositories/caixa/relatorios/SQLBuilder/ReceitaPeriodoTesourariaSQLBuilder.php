@@ -87,6 +87,11 @@ class ReceitaPeriodoTesourariaSQLBuilder
     /**
      * @var int
      */
+    private $iRecurso;
+
+    /**
+     * @var int
+     */
     private $iInstituicao;
 
     /**
@@ -123,7 +128,8 @@ class ReceitaPeriodoTesourariaSQLBuilder
         $sReceitas = NULL,
         $sEstrutura = NULL,
         $sContas = NULL,
-        $sContribuintes = NULL
+        $sContribuintes = NULL,
+        $iRecurso
     ) {
         $this->sTipo = $sTipo;
         $this->sTipoReceita = $sTipoReceita;
@@ -139,6 +145,7 @@ class ReceitaPeriodoTesourariaSQLBuilder
         $this->sEstrutura = $sEstrutura;
         $this->sContas = $sContas;
         $this->sContribuintes = $sContribuintes;
+        $this->iRecurso = $iRecurso;
         $this->definirSQL();
     }
 
@@ -190,13 +197,18 @@ class ReceitaPeriodoTesourariaSQLBuilder
             $this->definirSQLGroupContribuinte();
         } 
 
+        if ($this->sOrdem == ReceitaOrdemRepositoryLegacy::OPERACAO_CREDITO) {
+            $this->definirSQLSelectOperacaoCredito();
+            $this->definirSQLGroupOperacaoCredito();
+        } 
+
         if ($this->sTipo == ReceitaTipoRepositoryLegacy::RECEITA) {
             $this->definirSQLSelectReceita();
             $this->definirSQLGroupReceita();
             return;
         }
 
-        if ($this->sTipo == ReceitaTipoRepositoryLegacy::ANALITICO) {
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::ANALITICO || $this->sTipo == ReceitaTipoRepositoryLegacy::ANALITICO_RECEITA) {
             $this->definirSQLSelectAnalitico();
             $this->definirSQLGroupAnalitico();
             return;
@@ -317,6 +329,22 @@ class ReceitaPeriodoTesourariaSQLBuilder
     /**
      * @return void
      */
+    public function definirSQLSelectOperacaoCredito()
+    {
+        $this->sqlSelect .= " , op01_sequencial operacao, op01_numerocontratoopc numcontrato, op01_dataassinaturacop dtassinatura";
+    }
+
+    /**
+     * @return void
+     */
+    public function definirSQLGroupOperacaoCredito()
+    {
+        $this->sqlGroup .= " , op01_sequencial, op01_numerocontratoopc, op01_dataassinaturacop ";
+    }
+
+    /**
+     * @return void
+     */
     public function definirSQLGroupContribuinte()
     {
         $this->sqlGroup .= " , z01_numcgm, z01_cgccpf, z01_nome ";
@@ -405,6 +433,7 @@ class ReceitaPeriodoTesourariaSQLBuilder
         $this->definirSQLWhereContribuinte();
         $this->definirSQLWhereEmenda();
         $this->definirSQLWhereRepasse();
+        $this->definirSQLWhereRecurso();
     }
 
     /**
@@ -461,6 +490,13 @@ class ReceitaPeriodoTesourariaSQLBuilder
         }
     }
 
+    public function definirSQLWhereRecurso()
+    {
+        if ($this->iRecurso != 0) {
+            $this->sqlWhere .= " AND c61_codigo = {$this->iRecurso} ";
+        }
+    }
+
     /**
      * @return void
      */
@@ -494,6 +530,9 @@ class ReceitaPeriodoTesourariaSQLBuilder
                 z01_numcgm, 
                 z01_cgccpf,
                 z01_nome,
+                op01_sequencial,
+                op01_numerocontratoopc,
+                op01_dataassinaturacop,
 				ROUND(
                         ( 
                         f.k12_valor - COALESCE((
@@ -534,6 +573,9 @@ class ReceitaPeriodoTesourariaSQLBuilder
                 AND r.k12_autent = k82_autent
             LEFT JOIN placaixarec ON k82_seqpla = k81_seqpla
             LEFT JOIN cgm ON z01_numcgm = k81_numcgm
+            LEFT JOIN conplanocontabancaria ON c60_codcon = c56_codcon AND c60_anousu = c56_anousu
+            LEFT JOIN contabancaria ON c56_contabancaria = db83_sequencial
+            LEFT JOIN db_operacaodecredito ON db83_codigoopcredito = op01_sequencial
 			WHERE 
                 1 = 1 
                 {$this->sqlWhere} 
@@ -576,6 +618,9 @@ class ReceitaPeriodoTesourariaSQLBuilder
                 z01_numcgm, 
                 z01_cgccpf,
                 z01_nome,
+                op01_sequencial,
+                op01_numerocontratoopc,
+                op01_dataassinaturacop,
                 corrente.k12_valor AS valor
             FROM
                 corlanc
@@ -600,6 +645,9 @@ class ReceitaPeriodoTesourariaSQLBuilder
                 AND corrente.k12_autent = k82_autent
             LEFT JOIN placaixarec ON k82_seqpla = k81_seqpla
             LEFT JOIN cgm ON z01_numcgm = k81_numcgm 
+            LEFT JOIN conplanocontabancaria ON c60_codcon = c56_codcon AND c60_anousu = c56_anousu
+            LEFT JOIN contabancaria ON c56_contabancaria = db83_sequencial
+            LEFT JOIN db_operacaodecredito ON db83_codigoopcredito = op01_sequencial
             WHERE 
                 1 = 1 
                 {$this->sqlWhere} 
@@ -648,6 +696,11 @@ class ReceitaPeriodoTesourariaSQLBuilder
 
         if ($this->sOrdem == ReceitaOrdemRepositoryLegacy::CONTRIBUINTE) {
             $this->sqlOrder = " ORDER BY k02_tipo, z01_numcgm, z01_cgccpf ";
+            return;
+        }
+
+        if ($this->sOrdem == ReceitaOrdemRepositoryLegacy::OPERACAO_CREDITO) {
+            $this->sqlOrder = " ORDER BY k02_tipo, op01_sequencial ";
             return;
         }
     }
