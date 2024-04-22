@@ -101,7 +101,7 @@ db_app::load("prototype.js");
             </td>
             <td>
               <?
-              db_input('ve60_horasaida',5,$Ive60_horasaida,true,'text',3);
+              db_input('ve60_horasaida', 30, $Ive60_horasaida, true, 'time', 1, '', '', '', '','width:30%;', null);
               ?>
             </td>
           </tr>
@@ -201,7 +201,7 @@ db_app::load("prototype.js");
           </td>
           <td>
             <?
-              db_input('ve61_horadevol',5,@$Ive61_horadevol,true,'text',$db_opcao);
+              db_input('ve61_horadevol',5,@$Ive61_horadevol,true,'text',$db_opcao,"onchange='js_verifica_hora(this.value,this.name);js_pesquisa_medida();' onkeypress='return js_mask(event, \"0-9|:|0-9\"); '  ");
             ?>
           </td>
         </tr>

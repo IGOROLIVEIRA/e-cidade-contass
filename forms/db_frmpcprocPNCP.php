@@ -164,17 +164,16 @@ $val = false;
                     </td>
                 </tr>
                 <tr>
-                    <td align="left">
-                        <strong>Situação: </strong>
-                    </td>
+                <td align="left" style="display: none;">
+                    <strong>Situação: </strong>
+                </td>
                     <td>
                         <?php
 
                         $aOpcoesSituacao = array(
-                            2 => 'Autorizado',
-                            1 => 'Análise'
+                            2 => 'Autorizado'
                         );
-                        db_select('pc80_situacao', $aOpcoesSituacao, true, '', 'style="width:50%"');
+                        db_select('pc80_situacao', $aOpcoesSituacao, true, '','style="display: none;"');
                         ?>
                     </td>
                     <td colspan="2"></td>

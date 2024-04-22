@@ -15,12 +15,15 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\RequestOptions;
 use InvalidArgumentException;
 
 class ApiPixArrecadacao implements IPixProvider
 {
     private Configuration $configuration;
     private ClientInterface $client;
+
+    protected bool $debug = false;
 
     public function __construct(Configuration $configuration)
     {
@@ -60,7 +63,8 @@ class ApiPixArrecadacao implements IPixProvider
         $request = $this->createRequest($body, $authorization);
 
         try {
-            $response = $this->client->send($request, ['verify' => false]);
+            $options = $this->createHttpClientOption();
+            $response = $this->client->send($request, $options);
 
         } catch (ClientException | RequestException $e) {
             $message = 'Erro ao integrar com API pix da Instituição Financeira habilidata.';
@@ -145,5 +149,25 @@ class ApiPixArrecadacao implements IPixProvider
         }
 
         return $newDate;
+    }
+
+    /**
+     * Create http client option
+     *
+     * @return array of http client options
+     * @throws BusinessException
+     */
+    protected function createHttpClientOption(): array
+    {
+        $options = ['verify' => false];
+        if ($this->debug) {
+            $filename = 'tmp/' . date('Y-m-d') . '_pixlog.log';
+            $options[RequestOptions::DEBUG] = fopen($filename, 'a');
+            if (!$options[RequestOptions::DEBUG]) {
+                throw new BusinessException('Failed to open the debug file: ' . $filename);
+            }
+        }
+
+        return $options;
     }
 }

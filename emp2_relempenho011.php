@@ -95,6 +95,7 @@ $anousu = db_getsession("DB_anousu");
             db_input('listahist',10,"",true,"hidden",1);
             db_input('listatipoanulacao',10,"",true,"hidden",1);
             db_input('listaevento',10,"",true,"hidden",1);
+            db_input('listaeventodesc',10,"",true,"hidden",1);
             db_input('listaitem',10,"",true,"hidden",1);
             db_input('ver',10,"",true,"hidden",1);
             db_input('verhist',10,"",true,"hidden",1);
@@ -114,8 +115,8 @@ $anousu = db_getsession("DB_anousu");
             db_input('agrupar',10,"",true,"hidden",1);
             db_input('listasub',10,"",true,"hidden",1);
             db_input("desdobramento",10,0,true,"hidden",3);
-            db_input("listaconcarpeculiar",10,0,true,"hidden",3);
-            db_input("verconcarpeculiar",  10,0,true,"hidden",3);
+            db_input("listaconvconvenios",10,0,true,"hidden",3);
+            db_input("verconvenio",  10,0,true,"hidden",3);
             db_input("orgaos",  10,0,true,"hidden",3);
             db_input("vernivel",  10,0,true,"hidden",3);
             ?>
@@ -362,8 +363,10 @@ $anousu = db_getsession("DB_anousu");
 
         vir="";
         listaevento="";
+        listaeventodesc="";
         for(x=0;x<parent.iframe_g3.document.form1.evento.length;x++){
             listaevento+=vir+parent.iframe_g3.document.form1.evento.options[x].value;
+            listaeventodesc+=vir+parent.iframe_g3.document.form1.evento.options[x].innerText;
             vir=",";
         }
 
@@ -412,14 +415,14 @@ $anousu = db_getsession("DB_anousu");
 
         if (anousu > 2007){
             vir="";
-            listaconcarpeculiar="";
-            for(x=0;x< parent.iframe_g6.document.form1.concarpeculiar.length;x++){
-                listaconcarpeculiar+=vir+ parent.iframe_g6.document.form1.concarpeculiar.options[x].value;
+            listaconvconvenios="";
+            for(x=0;x< parent.iframe_g6.document.form1.convconvenios.length;x++){
+                listaconvconvenios+=vir+ parent.iframe_g6.document.form1.convconvenios.options[x].value;
                 vir=",";
             }
 
-            document.form1.listaconcarpeculiar.value = listaconcarpeculiar;
-            document.form1.verconcarpeculiar.value   = parent.iframe_g6.document.form1.verconcarpeculiar.value;
+            document.form1.listaconvconvenios.value = listaconvconvenios;
+            document.form1.verconvenio.value   = parent.iframe_g6.document.form1.verconvenio.value;
         }
 
         document.form1.listacom.value = listacom;
@@ -443,6 +446,7 @@ $anousu = db_getsession("DB_anousu");
         document.form1.listagestor.value = listaGestores;
         document.form1.listahist.value   = listahist;
         document.form1.listaevento.value = listaevento;
+        document.form1.listaeventodesc.value = listaeventodesc;
         document.form1.listatipoanulacao.value = listatipoanulacao;
 
         document.form1.listaitem.value=listaitem;
@@ -501,6 +505,7 @@ $anousu = db_getsession("DB_anousu");
             +'&emptipo='+emptipo
             +'&listahist='+listahist
             +'&listaevento='+listaevento
+            +'&listaeventodesc='+listaeventodesc
             +'&listatipoanulacao='+listatipoanulacao
             +'&listacom='+listacom
             +'&listalicita='+listalicita
@@ -531,6 +536,7 @@ $anousu = db_getsession("DB_anousu");
             +'&emptipo='+emptipo
             +'&listahist='+listahist
             +'&listaevento='+listaevento
+            +'&listaeventodesc='+listaeventodesc
             +'&listatipoanulacao='+listatipoanulacao
             +'&listacom='+listacom
             +'&listalicita='+listalicita

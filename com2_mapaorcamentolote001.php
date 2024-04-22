@@ -50,7 +50,28 @@ $oRotulo->label("pc20_codorc");
       <form name="mapaOrcamentoLote" id="mapaOrcamentoLote" method="post" action="">
         <fieldset>
           <legend>Mapa das Propostas do Orçamento por Lote</legend>
-
+          <fieldset class="separator">
+          <legend>Processo de compra</legend>
+          <table>
+          <tr>
+          <td  align="left" nowrap title="<?=$Tpc10_numero?>"> <b>
+            <? db_ancora("Processos de Compra de : ","js_pesquisaProcessoCompras(true, true);",1);?>
+          </td>
+          <td align="left" nowrap>
+            <?
+              db_input("pc80_codproc", 10, $Ipc80_codproc,
+                       true,
+                       "text",
+                       4,
+                       "onchange='js_pesquisaProcessoCompras(false, true);'",
+                       "pc80_codprocini"
+                      );
+            ?>
+            </b>
+          </td>
+        </tr>
+          </table>
+        </fieldset>
           <fieldset class="separator">
             <legend>Orçamento do Processo de Compras</legend>
 
@@ -162,21 +183,75 @@ $oRotulo->label("pc20_codorc");
 
       var iOrcamento = $F('pc20_codorc'),
           sJustificativa = $F('justificativa'),
-          sCasasdecimais =  $F('quant_casas');
+          sCasasdecimais =  $F('quant_casas'),
+          iProcessodecompras = $F('pc80_codprocini');
 
-      if (iOrcamento == '') {
 
-        alert( _M(MENSAGENS + "campo_obrigatorio", { sCampo : "Orçamento"}) );
-        return false;
-      }
-
-      oJanela = window.open( "com2_mapaorcamentolote002.php?iOrcamento=" + iOrcamento + "&sJustificativa=" + sJustificativa + "&sCasasdecimais=" + sCasasdecimais ,
+      oJanela = window.open( "com2_mapaorcamentolote002.php?iOrcamento=" + iOrcamento + "&sJustificativa=" + sJustificativa + "&sCasasdecimais=" + sCasasdecimais + "&pc80_codproc="+iProcessodecompras,
                              '',
                              'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
       oJanela.moveTo(0,0);
 
       return false;
     })
+    function js_pesquisaProcessoCompras(mostra, lInicial) {
+
+var sFuncaoRetorno         = 'js_mostraProcessoInicial';
+var sFuncaoRetornoOnChange = 'js_mostraProcessoInicialChange';
+var sCampo                 = 'pc80_codprocini';
+if (!lInicial) {
+
+  var sFuncaoRetorno         = 'js_mostraProcessoFinal';
+  var sFuncaoRetornoOnChange = 'js_mostraProcessoFinalChange';
+  var sCampo                 = 'pc80_codprocfim';
+}
+
+if (mostra) {
+  js_OpenJanelaIframe('CurrentWindow.corpo',
+                      'db_iframe_processo',
+                      'func_pcproc.php?funcao_js=parent.'+sFuncaoRetorno+'|'+
+                      'pc80_codproc','Pesquisa Processo de Compras',true);
+} else {
+
+   var sValorCampo = $F(sCampo);
+   if (sValorCampo != '') {
+      js_OpenJanelaIframe('CurrentWindow.corpo',
+                          'db_iframe_processo',
+                          'func_pcproc.php?pesquisa_chave='+sValorCampo+
+                          '&funcao_js=parent.'+sFuncaoRetornoOnChange,
+                          'Pesquisa Processo de Compras',
+                          false);
+   } else {
+     $F(sCampo).value = '';
+   }
+}
+}
+
+function js_mostraProcessoInicial(iProcesso) {
+
+$('pc80_codprocini').value = iProcesso;
+db_iframe_processo.hide();
+}
+
+function js_mostraProcessoInicialChange(iProcesso, lErro) {
+
+if (lErro) {
+  $('pc80_codprocini').value = '';
+}
+}
+
+function js_mostraProcessoFinal(iProcesso) {
+
+db_iframe_processo.hide();
+$('pc80_codprocfim').value = iProcesso;
+}
+
+function js_mostraProcessoFinalChange(iProcesso, lErro) {
+
+if (lErro) {
+  $('pc80_codprocfim').value = '';
+}
+}
 
   </script>
 </html>

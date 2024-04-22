@@ -1796,6 +1796,10 @@ class cl_empempenho
         $sql .= " left join empempenhocontrato on  empempenho.e60_numemp = empempenhocontrato.e100_numemp    ";
         $sql .= " left join acordo ON ac16_sequencial = e100_acordo ";
 
+        $sql .= " left join convconvenios on c206_sequencial = empempenho.e60_numconvenio ";
+        $sql .= " left join emppresta on e45_numemp = empempenho.e60_numemp";
+        $sql .= " left join empprestatip on e44_tipo = e45_tipo";
+
         $sql .= $sqlanulado;
 
         $sql2 = "";

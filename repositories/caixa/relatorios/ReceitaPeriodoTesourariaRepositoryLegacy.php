@@ -35,7 +35,8 @@ implements IReceitaPeriodoTesourariaRepository
         $sReceitas = NULL,
         $sEstrutura = NULL,
         $sContas = NULL,
-        $sContribuintes = NULL
+        $sContribuintes = NULL,
+        $iRecurso
     ) {
         $this->sTipo = $sTipo;
         $this->iAno = date("Y", strtotime($dDataInicial));
@@ -55,7 +56,8 @@ implements IReceitaPeriodoTesourariaRepository
             $sReceitas,
             $sEstrutura,
             $sContas,
-            $sContribuintes
+            $sContribuintes,
+            $iRecurso
         );
     }
 
@@ -80,6 +82,21 @@ implements IReceitaPeriodoTesourariaRepository
                 $descricaoCpfCnpj = strlen($data->cpfcnpj) == 11 ? "CPF:" : "CNPJ:";
                 $chave = $data->nome ? "CGM: $data->cgm {$descricaoCpfCnpj} $data->cpfcnpj NOME: $data->nome" : "Sem contribuinte informado";
                 $aDados[$data->tipo]["CGM"][$chave][] = $data;
+                continue;
+            }
+
+            if ($this->sTipo == ReceitaTipoRepositoryLegacy::ANALITICO_RECEITA) {
+                $data->codreceita = $data->codigo ? $data->codigo : 0;
+                $chave = $data->codigo != 0 ? "CÓDIGO DE RECEITA: {$data->codreceita} - {$data->estrutural} - {$data->descricao} " : "Sem código de receita informado";
+                $aDados[$data->tipo]["RECEITA"][$chave][] = $data;
+                continue;
+            }
+
+            if ($this->sOrdem == ReceitaOrdemRepositoryLegacy::OPERACAO_CREDITO) {
+                $data->codreceita = $data->operacao ? $data->operacao : 0;
+                $dataAssinatura = date('d/m/Y', strtotime($data->dtassinatura));
+                $chave = $data->operacao != 0 ? "OPERAÇÃO DE CRÉDITO: {$data->operacao} - CONTRATO: {$data->numcontrato} - DATA DA ASSINATURA: {$dataAssinatura}" : "Sem operação de crédito informada";
+                $aDados[$data->tipo]["OPCREDITO"][$chave][] = $data;
                 continue;
             }
 
