@@ -278,6 +278,7 @@ $cllicobras->rotulo->label();
 
                 if (document.form1.obr01_licitacao.value != '') {
 
+
                     js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_licobras',
                         'func_liclicita.php?situacao=10&obras=true&licitacaosistema=' + licitacaosistema + '&pesquisa_chave=' +
@@ -297,6 +298,7 @@ $cllicobras->rotulo->label();
             } else {
 
                 if (document.form1.obr01_licitacao.value != '') {
+                    alert('OI');
 
                     js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_licobraslicitacao',
@@ -348,6 +350,7 @@ $cllicobras->rotulo->label();
             document.form1.l20_objeto.value = "";
             document.getElementById('trdescricaolote').style.display = 'none';
         }
+        getNumObra();
     }
 
     function js_preencheLicitacaoanterior(codigo, objeto, descrcompra) {
@@ -359,6 +362,7 @@ $cllicobras->rotulo->label();
     }
 
     function js_preencheLicitacaoanterior2(descrcompra, objeto, numero, julgamento, erro) {
+        
         document.form1.l03_descr.value = descrcompra;
         document.form1.l20_objeto.value = objeto;
         document.form1.l20_numero.value = numero;
