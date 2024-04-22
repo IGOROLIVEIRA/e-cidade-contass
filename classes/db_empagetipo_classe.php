@@ -1137,7 +1137,7 @@ class cl_empagetipo {
         $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('15000000')) and";   
       }
       elseif($iFonteEmpenho == '15430000' || $iFonteEmpenho == '25430000'){
-          $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where (SUBSTRING(o15_codigo::text, 1,4) in ('1540') ) and"; 
+       $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where SUBSTRING(o15_codigo::text, 1,4) in ('1540') ) and"; 
             
       } 
       else {
