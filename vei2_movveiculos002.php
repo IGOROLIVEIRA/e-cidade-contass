@@ -51,6 +51,9 @@ if ($iVeiculo != "") {
 if ($sPlaca != "") {
     $where .= " and ve01_placa = '$sPlaca' ";
 }
+if ($iMotorista != "") {
+    $where .= " and ve60_veicmotoristas = $iMotorista ";
+}
 
 if ($iCentral != "") {
     $where .= " and ve40_veiccadcentral = $iCentral ";
