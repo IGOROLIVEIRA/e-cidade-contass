@@ -269,7 +269,7 @@ if(isset($alterar)){
         db_fieldsmemory($result, 0);
     }	
 
-    $result  = $clempempaut->sql_record($clempempaut->sql_query_empenho(null, " e60_tipodespesa , e60_esferaemendaparlamentar , e60_emendaparlamentar ",null, " e61_autori = $chavepesquisa"));
+    $result  = $clempempaut->sql_record($clempempaut->sql_query_empenho(null, " e60_tipodespesa , e60_esferaemendaparlamentar , e60_emendaparlamentar ",null, " e61_autori = $e54_autori"));
     $numrows = $clempempaut->numrows;
     if ($numrows > 0) {
         db_fieldsmemory($result, 0);

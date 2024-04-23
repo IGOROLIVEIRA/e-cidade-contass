@@ -1096,13 +1096,13 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
     }
 
     /**
-     * @param int $iCodSis
+     * @param $iCodSis
      * @param $oMovi
      * @param $oCtb20
-     * @param int $conta
+     * @param $conta
      * @return string
      */
-    public function tipoEntradaSaida(int $iCodSis, $oMovi, $oCtb20, int $conta): string
+    public function tipoEntradaSaida($iCodSis, $oMovi, $oCtb20, $conta): string
     {
         /**
          * Quando o codctb for igual codctbtransf, será agrupado a movimentação no tipoentrsaida 99

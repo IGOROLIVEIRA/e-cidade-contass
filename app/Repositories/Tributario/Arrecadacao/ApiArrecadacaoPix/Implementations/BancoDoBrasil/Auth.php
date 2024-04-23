@@ -125,7 +125,7 @@ class Auth implements IAuth
     {
         $options = ['verify' => false];
         if ($this->debug) {
-            $filename = 'tmp/' . date('Y-m-d') . '_pixlog.log';
+            $filename = 'tmp/' . date('Y-m-d') . '_authpixlog.log';
             $options[RequestOptions::DEBUG] = fopen($filename, 'a');
             if (!$options[RequestOptions::DEBUG]) {
                 throw new BusinessException('Failed to open the debug file: ' . $filename);

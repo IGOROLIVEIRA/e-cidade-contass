@@ -68,6 +68,23 @@ switch ($oParam->exec) {
 
         break;
 
+    case 'buscarNumObra':
+        $cllicobras = new cl_licobras();
+
+        $rsObra = $cllicobras->sql_record($cllicobras->sql_query(null,'max(obr01_numeroobra) +1 as numeroobra',null,'obr01_instit ='.db_getsession('DB_instit')));
+        
+        if(pg_num_rows($rsObra) > 0){
+            db_fieldsmemory($rsObra,0);
+            $oRetorno->status = 1;
+            $oRetorno->numobra = $numeroobra;
+        }else{
+           
+            $oRetorno->status = 2;
+            $oRetorno->numobra = urlencode("Não Encontrato");
+        }
+
+        break;
+
     case 'alterarAnexo':
 
         $cllicobrasanexos = new cl_licobrasanexo();
