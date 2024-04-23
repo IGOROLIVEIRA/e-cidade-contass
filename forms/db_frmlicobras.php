@@ -256,7 +256,7 @@ $cllicobras->rotulo->label();
      * funcao para retornar licitacao
      */
     function js_pesquisa_liclicita(mostra) {
-
+        
         let licitacaosistema = document.getElementById('obr01_licitacaosistema').value;
         let db_opcao = <?= $db_opcao ?>;
 
@@ -278,6 +278,7 @@ $cllicobras->rotulo->label();
 
                 if (document.form1.obr01_licitacao.value != '') {
 
+
                     js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_licobras',
                         'func_liclicita.php?situacao=10&obras=true&licitacaosistema=' + licitacaosistema + '&pesquisa_chave=' +
@@ -297,6 +298,7 @@ $cllicobras->rotulo->label();
             } else {
 
                 if (document.form1.obr01_licitacao.value != '') {
+                    alert('OI');
 
                     js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_licobraslicitacao',
@@ -314,6 +316,7 @@ $cllicobras->rotulo->label();
      */
     function js_preencheLicitacao(codigo, objeto, numero, descrcompra, julgamento)
     {
+        getNumObra();
         document.form1.obr01_licitacao.value = codigo;
         document.form1.l03_descr.value = descrcompra;
         document.form1.l20_numero.value = numero;
@@ -347,6 +350,7 @@ $cllicobras->rotulo->label();
             document.form1.l20_objeto.value = "";
             document.getElementById('trdescricaolote').style.display = 'none';
         }
+        getNumObra();
     }
 
     function js_preencheLicitacaoanterior(codigo, objeto, descrcompra) {
@@ -358,6 +362,7 @@ $cllicobras->rotulo->label();
     }
 
     function js_preencheLicitacaoanterior2(descrcompra, objeto, numero, julgamento, erro) {
+        
         document.form1.l03_descr.value = descrcompra;
         document.form1.l20_objeto.value = objeto;
         document.form1.l20_numero.value = numero;
@@ -686,4 +691,28 @@ $cllicobras->rotulo->label();
             document.getElementById('trdescoutroconselho').value = '';
         }
     }
+    function getNumObra(){
+
+        const oParam = {};
+        oParam.exec = 'buscarNumObra';
+
+        const oAjax = new Ajax.Request(
+            'obr1_obras.RPC.php',{
+                parameters: 'json=' + Object.toJSON(oParam),
+                asynchronous: false,
+                method: 'post',
+                onComplete: mostrarNumObra
+            }
+        );
+    }
+        function mostrarNumObra(oAjax){
+            let oRetorno = eval('(' + oAjax.responseText + ")"); 
+            document.getElementById('obr01_numeroobra').value = oRetorno.numobra;
+
+        }
+        
+
+
+
+
 </script>
