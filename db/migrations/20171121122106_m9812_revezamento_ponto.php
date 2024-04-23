@@ -1,6 +1,6 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class M9812RevezamentoPonto extends PostgresMigration
 {
@@ -22,7 +22,7 @@ class M9812RevezamentoPonto extends PostgresMigration
             insert into db_sysarqcamp values(4007,22239,3,0);
             delete from db_syscampodef where codcam = 1009521;
             delete from db_syscampo where codcam = 1009521;
-        "; 
+        ";
         $this->execute($sql);
         $this->removeCampoTabela();
     }

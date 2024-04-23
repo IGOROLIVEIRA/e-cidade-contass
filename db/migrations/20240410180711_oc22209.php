@@ -8,7 +8,7 @@ class Oc22209 extends AbstractMigration
     {
         $sql = "
             begin;
-            update db_itensmenu set descricao = 'Anexar Documentos no PNCP'
+            update configuracoes.db_itensmenu set descricao = 'Anexar Documentos no PNCP'
             where funcao = 'con4_anexarArquivos001.php';
             commit;
         ";

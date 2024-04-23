@@ -1,6 +1,6 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class M9632InclusaoV3Servidor extends PostgresMigration
 {
@@ -745,10 +745,10 @@ SQL;
         $this->execute("insert into esocialversaoformulario values(nextval('esocialversaoformulario_rh211_sequencial_seq'), '2.3', 3000013, 3);");
 
         $this->execute(<<<SQL
-        
+
         select fc_startsession();
-        
-        
+
+
         -- auto-generated definition
 CREATE SEQUENCE avaliacaogruporespostarhpessoal_eso02_sequencial_seq;
 
@@ -760,9 +760,9 @@ CREATE SEQUENCE avaliacaoperguntadb_formulas_eso01_sequencial_seq;
 
 -- auto-generated definition
 CREATE SEQUENCE avaliacaogruporespostacgm_eso03_sequencial_seq;
-        
-        
-        
+
+
+
         -- auto-generated definition
 CREATE TABLE avaliacaoperguntadb_formulas
 (
@@ -888,7 +888,7 @@ SQL
         );*/
         $this->execute(<<<SQL
 insert into avaliacaoperguntadb_formulas
-values 
+values
        (nextval('avaliacaoperguntadb_formulas_eso01_sequencial_seq'), 6667, 3000657),
        (nextval('avaliacaoperguntadb_formulas_eso01_sequencial_seq'), 6668, 3000658),
        (nextval('avaliacaoperguntadb_formulas_eso01_sequencial_seq'), 6669, 3000659),

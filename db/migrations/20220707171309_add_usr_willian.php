@@ -1,6 +1,6 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class AddUsrWillian extends PostgresMigration
 {
@@ -9,12 +9,12 @@ class AddUsrWillian extends PostgresMigration
     {
       $this->_run();
     }
-  
+
     public function down()
     {
-  
+
     }
-  
+
     /**
      * Executa a migration com todas as dependencias
      */
@@ -24,32 +24,32 @@ class AddUsrWillian extends PostgresMigration
         array('Willian Douglas Paiva Silva','NAO INFORMADO','0','NAO INFORMADO','MONTES CLAROS','MG','39400053','2021-03-19 00:00:00.0','1','0','1','2','0','08702392607','M','2021-03-19 00:00:00.0','16:42','Willian Douglas Paiva Silva','true','0','0','null', 'user' => array('Willian Douglas Paiva Silva','willian.contass','','1','widouglasmail@gmail.com','0','1','2020-04-09 00:00:00.0')),
         array('Dayvison Marley Nunes Silva','NAO INFORMADO','0','NAO INFORMADO','MONTES CLAROS','MG','39400053','2021-03-19 00:00:00.0','1','0','1','2','0','08702392607','M','2021-03-19 00:00:00.0','16:42','Dayvison Marley Nunes Silva','true','0','0','null', 'user' => array('Dayvison Marley Nunes Silva','dayvison.contass','','1','dayvison.marley@contassconsultoria.com.br','0','1','2020-04-09 00:00:00.0'))
       );
-  
+
       foreach ($data as $cgm) {
-  
+
         $arrUser = $cgm['user'];
         unset($cgm['user']);
-  
+
         $z01_numcgm = current($this->fetchRow("select nextval('cgm_z01_numcgm_seq')"));
         array_unshift($cgm, $z01_numcgm);
         $this->_loadCgm($cgm);
-  
+
         $id_usuario = current($this->fetchRow("select nextval('db_usuarios_id_usuario_seq')"));
         array_unshift($arrUser, $id_usuario);
         $this->_loadUsers($arrUser);
         $this->_loadDepartamentos($id_usuario);
         $this->_loadPermissions($id_usuario);
-  
+
         $this->_loadUsuaCgm(array($id_usuario, $z01_numcgm));
-  
+
         $arrInstits = $this->fetchAll("select codigo from db_config");
-  
+
         foreach ($arrInstits as $instit) {
           $this->_loadUserInstit(array($instit['codigo'], $id_usuario));
         }
       }
     }
-  
+
     /**
      * Faz a carga dos dados na tabela cgm
      * @param Array $data
@@ -79,10 +79,10 @@ class AddUsrWillian extends PostgresMigration
         'z01_renda',
         'z01_incmunici',
         'z01_ibge');
-  
+
       $this->table('cgm', array('schema' => 'protocolo'))->insert($columns, array($data))->saveData();
     }
-  
+
     /**
      * Faz a carga dos dados na tabela db_usuarios
      * @param Array $data
@@ -100,10 +100,10 @@ class AddUsrWillian extends PostgresMigration
         'administrador',
         'datatoken',
       );
-  
+
       $this->table('db_usuarios', array('schema' => 'configuracoes'))->insert($columns, array($data))->saveData();
     }
-  
+
     /**
      * Faz a carga dos dados na tabela db_usuacgm
      * @param Array $data
@@ -111,10 +111,10 @@ class AddUsrWillian extends PostgresMigration
     private function _loadUsuaCgm($data)
     {
       $columns = array('id_usuario', 'cgmlogin');
-  
+
       $this->table('db_usuacgm', array('schema' => 'configuracoes'))->insert($columns, array($data))->saveData();
     }
-  
+
     /**
      * Faz a carga dos dados na tabela db_userinst
      * @param Array $data
@@ -122,10 +122,10 @@ class AddUsrWillian extends PostgresMigration
     private function _loadUserInstit($data)
     {
       $columns = array('id_instit', 'id_usuario');
-  
+
       $this->table('db_userinst', array('schema' => 'configuracoes'))->insert($columns, array($data))->saveData();
     }
-  
+
     /**
      * Copia os mesmos departamentos do usuario dbseller
      * @param int $id_usuario
@@ -134,7 +134,7 @@ class AddUsrWillian extends PostgresMigration
     {
       $this->execute("insert into db_depusu select {$id_usuario}, coddepto, db17_ordem from db_depusu where id_usuario = 1 order by 2");
     }
-  
+
     /**
      * Faz a carga das permissoes de acordo com as pemissoes do usuario dbseller
      * @param int $id_usuario

@@ -1,14 +1,14 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
-class Sigaf3 extends AbstractMigration
+class Sigaf3 extends PostgresMigration
 {
 
     public function up()
     {
         $sql = "
-            alter table far_matersaude  add column fa01_i_catmat int4;
+            alter table farmacia.far_matersaude  add column fa01_i_catmat int4;
         ";
         $this->execute($sql);
     }

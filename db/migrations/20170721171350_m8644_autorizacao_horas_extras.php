@@ -1,6 +1,6 @@
 <?php
 
-use Classes\PostgresMigration;
+use ECidade\Suporte\Phinx\PostgresMigration;
 
 class M8644AutorizacaoHorasExtras extends PostgresMigration
 {
@@ -46,8 +46,8 @@ class M8644AutorizacaoHorasExtras extends PostgresMigration
 
   public function adicionarNaturezaAssentamento() {
 
-    $naturezasTipoAssentamentos = $this->fetchAll("SELECT * 
-                                                     FROM pessoal.naturezatipoassentamento 
+    $naturezasTipoAssentamentos = $this->fetchAll("SELECT *
+                                                     FROM pessoal.naturezatipoassentamento
                                                     WHERE rh159_descricao = 'Autoriza��o H.E.'");
 
     if(empty($naturezasTipoAssentamentos)) {
