@@ -482,7 +482,7 @@ $codigoModalidade = (db_utils::fieldsMemory($resource, 0))->codigomodalidade;
             alert("Publicações alteradas com sucesso");
             parent.window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
         } else {
-            alert(sMensagem);
+            alert('ERRO: O link informado na Publicação Veículo possui mais de 50 caracteres.');
         }
     }
 
