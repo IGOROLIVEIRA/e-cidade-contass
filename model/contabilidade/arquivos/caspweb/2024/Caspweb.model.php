@@ -157,7 +157,7 @@ class Caspweb {
                                             ELSE ''
                                         END AS codenttransfinanc,
                                         CASE
-                                            WHEN c19_orctiporec IS NOT NULL THEN c19_orctiporec
+                                            WHEN c19_orctiporec IS NOT NULL AND c19_orctiporec != 1 THEN c19_orctiporec
                                             ELSE 15000000
                                         END AS fonte,
                                         c19_sequencial,
