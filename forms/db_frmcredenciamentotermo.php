@@ -377,8 +377,8 @@ $clcredenciamentotermo->rotulo->label();
     }
     lista_objeto_licitacao();
     function lista_objeto_licitacao(){
-        let ilicitacao = document.getElementById('l212_licitacao').value;
-        let oParam = {};
+        const ilicitacao = document.getElementById('l212_licitacao').value;
+        const oParam = {};
         oParam.exec = 'objetoobservacao';
         oParam.ilicitacao = ilicitacao;
 
