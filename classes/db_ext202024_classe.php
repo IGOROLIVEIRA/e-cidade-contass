@@ -663,7 +663,7 @@ class cl_ext202024
                         when c61_codtce is null or c61_codtce = 0 then c61_reduz
                    else c61_codtce
 				      	   end as c61_codtce
-            FROM registro20 	order by c61_codtce,fontemovimento";
+            FROM registro20 	order by c61_codtce,fontemovimento,c61_reduz";
   }
 }
 ?>
