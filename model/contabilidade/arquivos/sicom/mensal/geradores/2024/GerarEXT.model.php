@@ -30,6 +30,7 @@ class GerarEXT extends GerarAM
     $rsEXT10 = db_query($sSql);
 
     $sSql = "select * from ext202024 where si165_mes = " . $this->iMes . " and  si165_instit = " . db_getsession("DB_instit");
+
     $rsEXT20 = db_query($sSql);
 
     $sSql3 = "select * from EXT302024 where si126_mes = " . $this->iMes . " and  si126_instit = " . db_getsession("DB_instit");
@@ -82,32 +83,10 @@ class GerarEXT extends GerarAM
 
         $aEXT20 = pg_fetch_array($rsEXT20, $iCont);
 
-        $clContaCorrente = new cl_contacorrentedetalhe;
-        $rsReg16saldos = $clContaCorrente->detalhamentoPorFonteext(db_getsession("DB_anousu"), substr($aEXT20['si165_codext'], 0, 15), db_getsession("DB_instit"), $this->iMes);
-        // echo $aEXT20['si165_codext']."<br>";
-        foreach ($rsReg16saldos as $oReg16Saldo) {
-
-            if ($oReg16Saldo['codtri'] == $this->padLeftZero($aEXT20['si165_codfontrecursos'], 3)) {
-              $natsaldoanteriorfonte =  $oReg16Saldo['sinal_anterior'];
-              $natsaldoatualfonte    =  $oReg16Saldo['sinal_final'];
-            }
-        } 
-        // echo "<pre>";
-        // print_r($rsReg16saldos);
-
         //OC11537
         $aFontes  = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252', '159');
         $bFonteEncerrada    = in_array($aEXT20['si165_codfontrecursos'], $aFontes);
-        $bCorrecaoFonte     = ($bFonteEncerrada && $aEXT20['si165_mes'] == '01' && db_getsession("DB_anousu") == 2024);
-
-        if (strlen($aEXT20['si165_codfontrecursos']) == 7) {
-          // echo strlen($aEXT20['si165_codfontrecursos'])." - ".$aEXT20['si165_codext']."<br>";
-           $aCodEXTCadastroNoMes[] = $aEXT20['si165_codext'];
-        }
-          
-        // Condição incluida para permitir que o registro 20 referente a registro 10 no mês aparece mesmo que zerado. OC17723
-        if (($aEXT20["si165_vlsaldoanteriorfonte"] + $aEXT20["si165_totaldebitos"] + $aEXT20["si165_totalcreditos"]) == 0 AND !in_array($aEXT20['si165_codext'], $aCodEXTCadastroNoMes))
-            continue;
+        $bCorrecaoFonte     = ($bFonteEncerrada && $aEXT20['si165_mes'] == '01' && db_getsession("DB_anousu") == 2022);
 
         $aCSVEXT20['si165_tiporegistro']          = $this->padLeftZero($aEXT20['si165_tiporegistro'], 2);
         $aCSVEXT20['si165_codorgao']              = $this->padLeftZero($aEXT20['si165_codorgao'], 2);
@@ -117,7 +96,7 @@ class GerarEXT extends GerarAM
         $aCSVEXT20['si165_vlsaldoanteriorfonte']  = $this->sicomNumberReal(abs($aEXT20['si165_vlsaldoanteriorfonte']), 2);
 
         if($aEXT20['si165_vlsaldoanteriorfonte'] == 0 && !$bFonteEncerrada && !$bCorrecaoFonte){
-
+      
           $clconplano->sql_record($clconplano->sql_query(null, null, "*", "", "c61_codtce = ". $aEXT20['si165_codext'] ." " ));
 
           if($clconplano->numrows > 0) {
@@ -129,13 +108,12 @@ class GerarEXT extends GerarAM
           }else{
 
             $result = $clconplano->sql_record($clconplano->sql_query(null, null, "CASE WHEN c60_tipolancamento = 3 THEN 'D' WHEN c60_tipolancamento = 4 AND (substr(c60_estrut, 1, 1)) = '3' THEN 'D' ELSE 'C' END AS c60_naturezasaldo ", "", "c61_reduz = ". $aEXT20['si165_codext'] ." and c60_codsis = 7"));
-
+            
             $aCSVEXT20['si165_natsaldoanteriorfonte'] = substr(db_utils::fieldsMemory($result, 0)->c60_naturezasaldo, 0, 1);
 
           }
         }else{
-
-          $aCSVEXT20['si165_natsaldoanteriorfonte'] = $natsaldoanteriorfonte;
+           $aCSVEXT20['si165_natsaldoanteriorfonte'] = substr($aEXT20['si165_natsaldoanteriorfonte'], 0, 1);
         }
 
         $aCSVEXT20['si165_totaldebitos']          = $this->sicomNumberReal(abs($aEXT20['si165_totaldebitos']), 2);
@@ -144,12 +122,13 @@ class GerarEXT extends GerarAM
 
 
         if($aEXT20['si165_vlsaldoatualfonte'] == 0 && !$bFonteEncerrada && !$bCorrecaoFonte){
-
+          //$aCSVEXT20['si165_natsaldoanteriorfonte']  
+          
           $clconplano->sql_record($clconplano->sql_query(null, null, "*", "", "c61_codtce = ". $aEXT20['si165_codext'] ." " ));
 
           if($clconplano->numrows > 0) {
 
-          $result = $clconplano->sql_record($clconplano->sql_query(null, null, "CASE WHEN c60_tipolancamento = 3 THEN 'D' WHEN c60_tipolancamento = 4 AND (substr(c60_estrut, 1, 1)) = '3' THEN 'D' ELSE 'C' END AS c60_naturezasaldo ", "", " c61_anousu = 2024 and c61_codtce = ".$aEXT20['si165_codext']." and c60_codsis = 7"));
+            $result = $clconplano->sql_record($clconplano->sql_query(null, null, "CASE WHEN c60_tipolancamento = 3 THEN 'D' WHEN c60_tipolancamento = 4 AND (substr(c60_estrut, 1, 1)) = '3' THEN 'D' ELSE 'C' END AS c60_naturezasaldo ", "", " c61_anousu = 2024 and c61_codtce = ".$aEXT20['si165_codext']." and c60_codsis = 7"));
 
             $aCSVEXT20['si165_natsaldoatualfonte'] = substr(db_utils::fieldsMemory($result, 0)->c60_naturezasaldo, 0, 1);
 
@@ -161,12 +140,13 @@ class GerarEXT extends GerarAM
 
           }
         }else{
-            $aCSVEXT20['si165_natsaldoatualfonte']  = $natsaldoatualfonte;
+
+          $aCSVEXT20['si165_natsaldoatualfonte']    = substr($aEXT20['si165_natsaldoatualfonte'], 0, 1);
         }
 
         $this->sLinha = $aCSVEXT20;
         $this->adicionaLinha();
-
+        
       }
 
       /**

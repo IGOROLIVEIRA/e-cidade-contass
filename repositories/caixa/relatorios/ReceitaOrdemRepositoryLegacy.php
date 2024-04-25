@@ -10,4 +10,5 @@ class ReceitaOrdemRepositoryLegacy
     CONST REDUZIDO_ORCAMENTO = 4;
     CONST REDUZIDO_CONTA = 5;
     CONST CONTRIBUINTE = 6;
+    CONST OPERACAO_CREDITO = 7;
 }

@@ -126,9 +126,9 @@ class EventoS2300 extends EventoBase
                 $oDadosAPI->evtTSVInicio->infoEstagiario->cpfSupervisor = empty($oDados->cpfsupervisor) ? null : $oDados->cpfsupervisor;
             }
 
-            $oDadosAPI->evtTSVInicio->nfoComplementares->localTrabGeral->tpinsc   = 1;
-            $oDadosAPI->evtTSVInicio->nfoComplementares->localTrabGeral->nrinsc   = $oDados->nrinsc_localtrabgeral;
-            $oDadosAPI->evtTSVInicio->nfoComplementares->localTrabGeral->desccomp = $oDados->desccomp_localtrabgeral;
+            $oDadosAPI->evtTSVInicio->localTrabGeral->tpinsc   = 1;
+            $oDadosAPI->evtTSVInicio->localTrabGeral->nrinsc   = $oDados->nrinsc_localtrabgeral;
+            $oDadosAPI->evtTSVInicio->localTrabGeral->desccomp = $oDados->desccomp_localtrabgeral;
 
             $oDadosAPI->evtTSVInicio->afastamento = null;
             if (!empty($oDados->dtiniafast)) {

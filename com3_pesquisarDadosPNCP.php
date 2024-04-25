@@ -19,7 +19,8 @@ $sqlPNCP = "SELECT     pc80_modalidadecontratacao,
                            when pc80_criteriojulgamento = 7 then 'Não se Aplica'
                            end as pc80_criteriojulgamento,
                        pcproc.pc80_data,
-                       l212_lei
+                       l212_lei,
+                       pc80_dispvalor
                 FROM pcproc
                 left JOIN liccontrolepncp ON l213_processodecompras = pc80_codproc
                 left join amparolegal on l212_codigo = pc80_amparolegal
@@ -27,20 +28,21 @@ $sqlPNCP = "SELECT     pc80_modalidadecontratacao,
                 WHERE pc80_codproc = $iProcesso
 ";
 $rsResultDados =  db_query($sqlPNCP);
-$oDadosPNCP = db_utils::fieldsMemory($rsResultDados,0);
+$oDadosPNCP = db_utils::fieldsMemory($rsResultDados, 0);
 
-if($oDadosPNCP->pc80_modalidadecontratacao == "9"){
+if ($oDadosPNCP->pc80_modalidadecontratacao == "9") {
     $modalidade = "INEXIGIBILIDADE";
 }
 
-if($oDadosPNCP->pc80_modalidadecontratacao == "8"){
+if ($oDadosPNCP->pc80_modalidadecontratacao == "8") {
     $modalidade = "DISPENSA SEM DISPUTA";
 }
 
-$pc80_data = implode('/',array_reverse(explode('-',$oDadosPNCP->pc80_data)));
+$pc80_data = implode('/', array_reverse(explode('-', $oDadosPNCP->pc80_data)));
 
 ?>
 <html>
+
 <head>
     <title>Contass Consultoria Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -54,81 +56,86 @@ $pc80_data = implode('/',array_reverse(explode('-',$oDadosPNCP->pc80_data)));
         }
     </style>
 </head>
+
 <body bgcolor="#cccccc" onload="">
-<center>
-    <form name="form1" method="post">
-        <div style="display: table;">
-            <fieldset>
-                <legend><b>Dados PNCP:</b></legend>
-                <table>
-                    <tr>
-                        <td>
-                            <strong>Tipo de Instrumento Convocatorio:</strong>
-                        </td>
-                        <td class="background">
-                            Ato que autoriza a Contratação Direta
-                        </td>
-                        <td>
-                            <strong>Usuário:</strong>
-                        </td>
-                        <td class="background">
-                            <?= $oDadosPNCP->nome ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>Modalidade de Contratação:</strong>
-                        </td>
-                        <td class="background">
-                            <?=$modalidade?>
-                        </td>
-                        <td>
-                            <strong>Modo disputa:</strong>
-                        </td>
-                        <td class="background">
-                            Não se aplica
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>Data de lançamento:</strong>
-                        </td>
-                        <td class="background">
-                            <?= $oDadosPNCP->l213_dtlancamento ?>
-                        </td>
-                        <td>
-                            <strong>Critério de Julgamento:</strong>
-                        </td>
-                        <td class="background">
-                            <?=$oDadosPNCP->pc80_criteriojulgamento?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>Orçamento Sigiloso:</strong>
-                        </td>
-                        <td class="background">
-                            <?= $oDadosPNCP->pc80_orcsigiloso == 't' ? 'Sim' : 'Não' ?>
-                        </td>
-                        <td>
-                            <strong>Data:</strong>
-                        </td>
-                        <td class="background">
-                            <?=$pc80_data?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>Lei:</strong>
-                        </td>
-                        <td style="width: 300px" class="background">
-                            <?=$oDadosPNCP->l212_lei?>
-                        </td>
-                    </tr>
-                </table>
-            </fieldset>
-        </div>
-    </form>
-</center>
+    <center>
+        <form name="form1" method="post">
+            <div style="display: table;">
+                <fieldset>
+                    <legend><b>Dados PNCP:</b></legend>
+                    <table>
+                        <tr>
+                            <td>
+                                <strong>Tipo de Instrumento Convocatorio:</strong>
+                            </td>
+                            <td class="background">
+                                <?php if ($oDadosPNCP->pc80_dispvalor == 't') echo 'Ato que autoriza a Contratação Direta'; ?>
+                            </td>
+                            <td>
+                                <strong>Usuário:</strong>
+                            </td>
+                            <td class="background">
+                                <?= $oDadosPNCP->nome ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Modalidade de Contratação:</strong>
+                            </td>
+                            <td class="background">
+                                <?= $modalidade ?>
+                            </td>
+                            <td>
+                                <strong>Modo disputa:</strong>
+                            </td>
+                            <td class="background">
+                                <?= $oDadosPNCP->pc80_dispvalor == 't' ? 'Não se aplica' : ''; ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Data de lançamento:</strong>
+                            </td>
+                            <td class="background">
+                                <?= $oDadosPNCP->l213_dtlancamento ?>
+                            </td>
+                            <td>
+                                <strong>Critério de Julgamento:</strong>
+                            </td>
+                            <td class="background">
+                                <?= $oDadosPNCP->pc80_criteriojulgamento ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Orçamento Sigiloso:</strong>
+                            </td>
+                            <?php if ($oDadosPNCP->pc80_dispvalor == 't') { ?>
+                                <td class="background">
+                                    <?= $oDadosPNCP->pc80_orcsigiloso == 't' ? 'Sim' : 'Não' ?>
+                                </td>
+                            <?php } else { ?>
+                                <td class="background"></td>
+                            <?php } ?>
+                            <td>
+                                <strong>Data:</strong>
+                            </td>
+                            <td class="background">
+                                <?= $oDadosPNCP->pc80_dispvalor == 't' ? $pc80_data : '' ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Lei:</strong>
+                            </td>
+                            <td style="width: 300px" class="background">
+                                <?= $oDadosPNCP->l212_lei ?>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </div>
+        </form>
+    </center>
 </body>
 </html>
