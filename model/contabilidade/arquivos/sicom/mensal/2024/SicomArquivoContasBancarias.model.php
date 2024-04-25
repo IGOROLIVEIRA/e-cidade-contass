@@ -189,6 +189,17 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
                                 $codReduzido = $oMovi->codreduzido;
 
+                                $contaDebito = $oMovi->bancodebito_c63_conta . $oMovi->bancodebito_c63_tipoconta;
+                                $contaCredito = $oMovi->bancocredito_c63_conta . $oMovi->bancocredito_c63_tipoconta;
+
+                                if (($contaDebito == $contaCredito) && ($oMovi->c71_coddoc == 140)){
+
+                                    if ($codReduzido == $oMovi->codreduzido . $oMovi->tipomovimentacao){
+                                        continue;
+                                    }
+                                    $codReduzido .= $oMovi->tipomovimentacao;
+                                }
+
                                 $iCodSis = 0;
                                 $conta = 0;
                                 $instituicao = db_getsession("DB_instit");

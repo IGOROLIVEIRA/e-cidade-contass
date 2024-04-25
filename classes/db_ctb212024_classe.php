@@ -666,7 +666,10 @@ class cl_ctb212024 {
         $sql21 = "CREATE TEMP TABLE tabela_temporaria AS
             WITH lancamentos_saida AS
                 (SELECT DISTINCT '21' AS tiporegistro, 
-                        c28_tipo,
+                        CASE 
+                            WHEN c71_coddoc = 980 THEN c28_tipo
+                            ELSE '' 
+                        END AS c28_tipo,
                         CASE 
                             WHEN c71_coddoc = 980 THEN contacorrentedetalhe.c19_sequencial
                             ELSE c71_codlan 
@@ -809,7 +812,10 @@ class cl_ctb212024 {
             
                  lancamentos_entrada AS
                  (SELECT DISTINCT '21' AS tiporegistro, 
-                        c28_tipo,
+                        CASE 
+                            WHEN c71_coddoc = 980 THEN c28_tipo
+                            ELSE '' 
+                        END AS c28_tipo,
                         CASE 
                             WHEN c71_coddoc = 980 THEN contacorrentedetalhe.c19_sequencial
                             ELSE c71_codlan 
