@@ -466,6 +466,17 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 						/*
 						* CARREGA OS DADOS DO REGISTRO 30
 						*/
+						$cont = 0;
+						$codreduzido = '';
+						if (is_array($oExt10Agrupado->extras)) {
+							foreach ($oExt10Agrupado->extras as $contasExtras) {
+								if ($cont > 0)  
+								  $codreduzido .= " , "; 
+								$codreduzido .= "'{$contasExtras}'";
+								$cont ++ ;
+							}	
+						} 
+						
 						$sSql30Geral = "select   '30' as tiporegitro,
 										k17_codigo as codigo,
 										k17_debito	 as codext,
@@ -480,7 +491,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 									join orctiporec on o15_codigo  = c61_codigo
 								left join infocomplementaresinstit on k17_instit = si09_instit
 								where c71_data between '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
-								and k17_debito = {$nExtras} and k17_situacao IN (2,4)
+								and k17_debito in ({$codreduzido}) and k17_situacao IN (2,4)
 								and c71_coddoc in (151,161,120);
 
 								"; 
