@@ -343,14 +343,19 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 			$cExt20 = new cl_ext202024();
 			$aExt30 = array();
 			$arrayExt20 = array();
+			$saldoinicial 			=  0;
+			$saldofinal				=  0;
+			$valordebito			=  0;
+			$valorcredito			=  0;
+		
 			foreach ($oExt10Agrupado->extras as $nExtras) {
 
 				$clDeParaFonte = new DeParaRecurso;          
 				$cExt20 = new cl_ext202024();
 				$ano = db_getsession("DB_anousu");
-				$sSqlExt20 = $cExt20->sql_Reg20Fonte($nExtras,$ano,$oExt10Agrupado->si124_mes);
+				$sSqlExt20 = $cExt20->sql_Reg20Fonte($nExtras,$ano,$oExt10Agrupado->si124_mes,null,null);
 				$rsContasReg20 = db_query($sSqlExt20);
-			
+				
 				/*
                  * GRAVAR DADOS DO REGISTRO 20
                  */
@@ -365,25 +370,83 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 								
 				for ($iCont = 0; $iCont < pg_num_rows($rsContasReg20); $iCont++) {
 					$oContasReg20 = db_utils::fieldsMemory($rsContasReg20, $iCont);
-					$hash     = $oContasReg20->c61_codtce.substr($clDeParaFonte->getDePara(strlen($oContasReg20->fontemovimento) == 7 ? $oContasReg20->fontemovimento."0" : $oContasReg20->fontemovimento), 0, 7);
-					$arrayExt20[] = $hash;
+					$hash2     = $oContasReg20->c61_codtce.substr($clDeParaFonte->getDePara(strlen($oContasReg20->fontemovimento) == 7 ? $oContasReg20->fontemovimento."0" : $oContasReg20->fontemovimento), 0, 7);
+	
+					if ($arrayExt20[$hash2])
+						continue;
 
-					$clContaCorrente = new cl_contacorrentedetalhe;
-					$rsReg16saldos = $clContaCorrente->detalhamentoPorFonteext(db_getsession("DB_anousu"), $nExtras, db_getsession("DB_instit"), $this->sDataFinal['5'] . $this->sDataFinal['6']);
+					if (($oContasReg20->saldoinicial + $oContasReg20->debito + $oContasReg20->credito) == 0)
+						continue;
 					
-					foreach ($rsReg16saldos as $oReg16Saldo) {
-			
-						if ($oReg16Saldo['codtri'] == $oContasReg20->fontemovimento) {
-							$saldoinicial          =  $oReg16Saldo['saldo_anterior'];
-							$natsaldoanteriorfonte =  $oReg16Saldo['sinal_anterior'];
-							$natsaldoatualfonte    =  $oReg16Saldo['sinal_final'];
-							$saldofinal            =  $oReg16Saldo['saldo_final'];
-						}
-						
-				  	}
+					$fonte = substr($clDeParaFonte->getDePara(strlen($oContasReg20->fontemovimento) == 7 ? $oContasReg20->fontemovimento."0" : $oContasReg20->fontemovimento), 0, 7);	
+					$sSqlExt200 = $cExt20->sql_Reg20Fonte($oExt10Agrupado->extras,$ano,$oExt10Agrupado->si124_mes,$fonte,$oContasReg20->fontemovimento);
+					$rsContasReg200 = db_query($sSqlExt200);
+					for ($iConti = 0; $iConti < pg_num_rows($rsContasReg200); $iConti++) {
 
+						$oDadosReg20 = db_utils::fieldsMemory($rsContasReg200, $iConti);
+						$hash     = $oDadosReg20->c61_codtce.substr($clDeParaFonte->getDePara(strlen($oDadosReg20->fontemovimento) == 7 ? $oDadosReg20->fontemovimento."0" : $oDadosReg20->fontemovimento), 0, 7);
+						
+						if (($oDadosReg20->saldoinicial + $oDadosReg20->debito + $oDadosReg20->credito) == 0)
+						continue;	
+
+						if (!in_array($hash,$arrayExt20)) {
+							$saldoinicial 			=  0;
+							$saldofinal				=  0;
+							$valordebito			=  0;
+							$valorcredito			=  0;
+
+							if ($oDadosReg20->nat_vlr_si == 'C') {
+								$saldoinicial 			-=  $oDadosReg20->saldoinicial;
+								
+							}
+							if ($oDadosReg20->nat_vlr_si == 'D') {
+								$saldoinicial 			+=  $oDadosReg20->saldoinicial;
+								
+							}
+							if ($oDadosReg20->nat_vlr_sf == 'C') {
+								
+								$saldofinal				-=  $oDadosReg20->saldofinal;
+							}
+							if ($oDadosReg20->nat_vlr_sf == 'D') {
+								
+								$saldofinal				+=  $oDadosReg20->saldofinal;
+							}
+							$valordebito			+=  $oDadosReg20->debito;
+							$valorcredito			+=  $oDadosReg20->credito;
+							
+						} else {
+							
+							if ($oDadosReg20->nat_vlr_si == 'C') {
+								$saldoinicial 			-=  $oDadosReg20->saldoinicial;
+								
+							}
+							if ($oDadosReg20->nat_vlr_si == 'D') {
+								$saldoinicial 			+=  $oDadosReg20->saldoinicial;
+								
+							}
+							if ($oDadosReg20->nat_vlr_sf == 'C') {
+								
+								$saldofinal				-=  $oDadosReg20->saldofinal;
+							}
+							if ($oDadosReg20->nat_vlr_sf == 'D') {
+								
+								$saldofinal				+=  $oDadosReg20->saldofinal;
+							}
+							$valordebito			+=  $oDadosReg20->debito;
+							$valorcredito			+=  $oDadosReg20->credito;
+							
+						}	
+						
+						$arrayExt20[$hash] = $hash;
+											
+					} 
+
+					
+					$natsaldoanteriorfonte = $saldoinicial >= 0 ? 'D' : 'C';
+					$saldoFinal = ($saldoinicial + $valordebito - $valorcredito) == '' ? 0 : ($saldoinicial + $valordebito - $valorcredito);
+					$natsaldoatualfonte = $saldoFinal >= 0 ? 'D' : 'C';
+				
 					if (pg_num_rows($rsContasReg20) > 0 ) {
-						if (in_array($hash,$arrayExt20)) {
 
 							$cExt20->si165_tiporegistro = '20';
 							$cExt20->si165_codorgao = $oExt10Agrupado->si124_codorgao;
@@ -391,26 +454,29 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 							$cExt20->si165_codfontrecursos = substr($clDeParaFonte->getDePara(strlen($oContasReg20->fontemovimento) == 7 ? $oContasReg20->fontemovimento."0" : $oContasReg20->fontemovimento), 0, 7);
 							$cExt20->si165_exerciciocompdevo = $oExtExercicioComDevo;
 							$cExt20->si165_natsaldoanteriorfonte = $natsaldoanteriorfonte ;
-							$cExt20->si165_vlsaldoanteriorfonte += $saldoinicial;
-							$cExt20->si165_vlsaldoatualfonte  += $saldofinal;
+							$cExt20->si165_vlsaldoanteriorfonte = $saldoinicial;
+							$cExt20->si165_vlsaldoatualfonte  = $saldofinal;
 							$cExt20->si165_natsaldoatualfonte = $natsaldoatualfonte;
-							$cExt20->si165_totaldebitos += $oContasReg20->debito;
-							$cExt20->si165_totalcreditos += $oContasReg20->credito;
+							$cExt20->si165_totaldebitos = $valordebito;
+							$cExt20->si165_totalcreditos = $valorcredito;
 							$cExt20->si165_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 							$cExt20->si165_instit = db_getsession("DB_instit");
 							$cExt20->ext30 = array();
 
-						} else {
-					
-							$cExt20->si165_vlsaldoanteriorfonte += $saldoinicial;
-							$cExt20->si165_totaldebitos         += $oContasReg20->debito;
-							$cExt20->si165_totalcreditos 		+= $oContasReg20->credito;
-							$cExt20->si165_vlsaldoatualfonte  += $saldofinal;
-							continue;
-						}	
 						/*
 						* CARREGA OS DADOS DO REGISTRO 30
 						*/
+						$cont = 0;
+						$codreduzido = '';
+						if (is_array($oExt10Agrupado->extras)) {
+							foreach ($oExt10Agrupado->extras as $contasExtras) {
+								if ($cont > 0)  
+								  $codreduzido .= " , "; 
+								$codreduzido .= "'{$contasExtras}'";
+								$cont ++ ;
+							}	
+						} 
+						
 						$sSql30Geral = "select   '30' as tiporegitro,
 										k17_codigo as codigo,
 										k17_debito	 as codext,
@@ -425,7 +491,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 									join orctiporec on o15_codigo  = c61_codigo
 								left join infocomplementaresinstit on k17_instit = si09_instit
 								where c71_data between '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
-								and k17_debito = {$nExtras} and k17_situacao IN (2,4)
+								and k17_debito in ({$codreduzido}) and k17_situacao IN (2,4)
 								and c71_coddoc in (151,161,120);
 
 								"; 
@@ -770,10 +836,10 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 						if ($cExt20->erro_status == 0) {
 							throw new Exception($cExt20->erro_msg);
 						}
-						$cExt20->si165_vlsaldoanteriorfonte = 0;
-						$cExt20->si165_totaldebitos         = 0;
-						$cExt20->si165_totalcreditos 		= 0;
-						$cExt20->si165_vlsaldoatualfonte    = 0;
+						$saldoinicial 			=  0;
+						$saldofinal				=  0;
+						$valordebito			=  0;
+						$valorcredito			=  0;
 				}
 				
 			  }
