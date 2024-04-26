@@ -8,7 +8,7 @@ class Oc22272 extends AbstractMigration
     {
         $sql = "
         begin;
-        UPDATE db_syscampo set descricao = 'Departamento de Origem',rotulo = 'Departamento de Origem',rotulorel = 'Departamento de Origem' where nomecam = 'm91_depto';
+        UPDATE configuracoes.db_syscampo set descricao = 'Departamento de Origem',rotulo = 'Departamento de Origem',rotulorel = 'Departamento de Origem' where nomecam = 'm91_depto';
 
         commit;
         ";
