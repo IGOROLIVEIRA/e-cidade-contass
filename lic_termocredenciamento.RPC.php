@@ -7,6 +7,7 @@ require_once("libs/db_sessoes.php");
 require_once("libs/JSON.php");
 require_once("dbforms/db_funcoes.php");
 
+
 $oJson                = new services_json();
 $oParam               = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 //echo "<pre>"; print_r($oParam);exit;
@@ -19,6 +20,7 @@ switch ($oParam->exec) {
             $sqlFornecedor = "SELECT DISTINCT z01_numcgm,
                                           z01_nome,
                                           l20_dtpubratificacao
+                                          
             FROM credenciamento
             INNER JOIN cgm ON z01_numcgm = l205_fornecedor
             INNER JOIN liclicita on l20_codigo = l205_licitacao
@@ -27,6 +29,7 @@ switch ($oParam->exec) {
             $sqlFornecedor = "SELECT z01_numcgm,
                                      z01_nome,
                                      l20_dtpubratificacao
+                                     
             FROM credenciamentotermo
             INNER JOIN cgm ON z01_numcgm = l212_fornecedor
             INNER JOIN liclicita on l20_codigo = l212_licitacao
@@ -116,7 +119,17 @@ switch ($oParam->exec) {
         $iNumTermoAno = $iNum;
 
         $oRetorno->numerotermo = $iNumTermoAno;
-
         break;
+
+        case 'objetoobservacao':
+            $sql = "SELECT l20_objeto FROM liclicita WHERE l20_codigo = $oParam->ilicitacao";
+            $rsResultado = db_query($sql);
+
+            
+        if(pg_num_rows($rsResultado) > 0){
+            db_fieldsmemory($rsResultado,0);
+            $oRetorno->observacao = urlencode($l20_objeto);
+        }
+                
 }
 echo $oJson->encode($oRetorno);
