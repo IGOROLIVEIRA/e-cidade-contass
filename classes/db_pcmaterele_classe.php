@@ -541,7 +541,11 @@ class cl_pcmaterele {
      $where_sql = explode("#",$dbwhere);
      $where1 = $where_sql[0];
      $where2 = $where_sql[1];
-     
+
+     $where2 =  explode("and",$where2);
+     $where3 = trim($where2[0]);
+     $where4 = $where2[1];
+  
 //     $sql .= " from pcmaterele ";
 //     $sql .= "      inner join orcelemento  on  orcelemento.o56_codele = pcmaterele.pc07_codele and orcelemento.o56_anousu = ".db_getsession("DB_anousu");
 //     $sql .= "      inner join pcmater  on  pcmater.pc01_codmater = pcmaterele.pc07_codmater and pc01_ativo is false and pc01_conversao is false ";
@@ -567,10 +571,10 @@ class cl_pcmaterele {
 
      $sql .= " from ";
      $sql .= " (select * from ";
-     $sql .= " (select * from orcelemento where o56_elemento like '%$where2%' and o56_anousu = " . db_getsession("DB_anousu") . ") as x ";
+     $sql .= " (select * from orcelemento where o56_elemento like '%$where3%' and o56_anousu = " . db_getsession("DB_anousu") . ") as x ";
      $sql .= " inner join pcmaterele  on pcmaterele.pc07_codele = x.o56_codele ";
      $sql .= " inner join pcmater     on pcmater.pc01_codmater = pcmaterele.pc07_codmater and pc01_ativo is false and pc01_conversao is false ";
-     $sql .= " where pc01_descrmater like '%$where1%') as y ";  
+     $sql .= " where pc01_descrmater like '%$where1%' and $where4 ) as y ";  
      $sql .= " left  join db_usuarios on  db_usuarios.id_usuario = y.pc01_id_usuario ";
      $sql .= " inner join pcsubgrupo  on  pcsubgrupo.pc04_codsubgrupo = y.pc01_codsubgrupo";
 
