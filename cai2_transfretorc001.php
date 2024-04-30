@@ -166,6 +166,14 @@ function js_emitir()
   const dataInicial = new Date($F('datainicial'));
   const dataFinal = new Date($F('datafinal'));
 
+  $novaDataIni = $F('datainicial').split('/');
+  $novaDataFim = $F('datafinal').split('/');
+ 
+  if ($novaDataIni[2] != $novaDataFim[2]) {
+    alert('O ano inicial e final devem ser iguais.');
+    return false;
+  }
+
   if (dataInicial > dataFinal) {
     alert('A Data Inicial deve ser menor que à Data do Final!');
     return false;
