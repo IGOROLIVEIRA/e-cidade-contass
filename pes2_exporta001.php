@@ -669,54 +669,79 @@ order by z01_nome";
 
         $arquivo = fopen($arq, 'w');
 
-        $sql = "select rh01_regist||';'||
-        z01_nome||';'||
-        trim(rh37_descr)||';'||
+        $sql = "select distinct rh01_regist as registro,
+        z01_nome as nome,
+        trim(rh37_descr) as funcao,
         coalesce(case
-            when rh05_seqpes is null then 'ativo'
-            else 'inativo'
-        end,'')||';'||
+                     when rh05_seqpes is null then 'ativo'
+                     else 'rescisao'
+                 end,'') as situacao,
         coalesce(to_char(case
                              when rh05_seqpes is null then null
                              else rh05_recis
-                         end,'dd-mm-yyyy'),'')||';'||
-        coalesce(rh172_descricao,'')||';'||
-        coalesce(to_char(r45_dtafas,'dd-mm-yyyy'),'')||';'||
-        coalesce(to_char(r45_dtreto,'dd-mm-yyyy'),'')||';'||
-        coalesce(rh30_descr,'')||';'||
-        round(rh02_salari,2)||';'||
-        coalesce(o40_descr,'')||';'||
-        coalesce(to_char(rh01_admiss,'dd-mm-yyyy'),'') as tipo
- from rhpessoal
- inner join cgm on rh01_numcgm = z01_numcgm
- inner join rhpessoalmov on rh02_anousu = $ano
- and rh02_mesusu = $mes
- and rh02_regist = rh01_regist
- and rh02_instit = " . db_getsession('DB_instit') . "
- left join rhpesrescisao on rh05_seqpes = rh02_seqpes
- inner join rhlota on r70_codigo = rh02_lota
- and r70_instit = " . db_getsession('DB_instit') . "
- inner join rhfuncao on rh01_funcao = rh37_funcao
- and rh37_instit = " . db_getsession('DB_instit') . "
- inner join rhregime on rh30_codreg = rh02_codreg
- and rh30_instit = " . db_getsession('DB_instit') . "
- left join rhlotaexe on rhlotaexe.rh26_anousu = rhpessoalmov.rh02_anousu
- and rhlotaexe.rh26_codigo = rhlota.r70_codigo
- left join orcorgao on orcorgao.o40_anousu = rhlotaexe.rh26_anousu
- and orcorgao.o40_orgao = rhlotaexe.rh26_orgao
- left join afasta on r45_anousu = rhpessoalmov.rh02_anousu
- and r45_mesusu = rhpessoalmov.rh02_mesusu
- and r45_regist = rhpessoalmov.rh02_regist
- left join rhmotivoafasta on rh172_codigo = afasta.r45_codigoafasta
- where 1 = 1
-     and (rh05_seqpes is null
-          or (date_part('month',rh05_recis) = $mes
-              and date_part('year',rh05_recis) = $ano))
-     and (r45_codigo is null
-          or (date_part('month',r45_dtreto) >= $mes
-             and date_part('year',r45_dtreto) >= $ano))
-     $xwhere
- order by z01_nome";
+                         end,'dd-mm-yyyy'),'') as datarescisao,
+coalesce((select case
+        when r45_regist is not null
+             and (max(r45_dtreto) is null
+                  or max(r45_dtreto) > '" . $ano . "-" . $mes . "-01') then case
+                                                                                when r45_dtreto >= '" . $ano . "-" . $mes . "-01' then 'afastado até: '||to_char(max(r45_dtreto),'dd-mm-yyyy')
+                                                                                else null
+                                                                            end
+        else null
+    end as afastamento
+from afasta
+where r45_anousu = $ano
+ and r45_mesusu = $mes
+ and r45_regist = rh01_regist
+ and (r45_regist is null
+      or r45_regist is not null
+      and (r45_dtreto is null
+           or r45_dtreto >= '" . $ano . "-" . $mes . "-01'))
+group by r45_regist,
+      r45_dtreto,
+      r45_situac
+order by r45_dtreto desc
+limit 1),'') as afastamento,
+coalesce(rh30_descr,'') as regime,
+       round(rh02_salari,2) as salario,
+       coalesce(o40_descr,'') as secretaria,
+       coalesce(to_char(rh01_admiss,'dd-mm-yyyy'),'') as admissao
+from rhpessoal
+inner join cgm on rh01_numcgm = z01_numcgm
+inner join rhpessoalmov on rh02_anousu = $ano
+and rh02_mesusu = $mes
+and rh02_regist = rh01_regist
+and rh02_instit = " . db_getsession('DB_instit') ."
+left join rhpesrescisao on rh05_seqpes = rh02_seqpes
+inner join rhlota on r70_codigo = rh02_lota
+and r70_instit = " . db_getsession('DB_instit') . "
+inner join rhfuncao on rh01_funcao = rh37_funcao
+and rh37_instit = " . db_getsession('DB_instit') . "
+inner join rhregime on rh30_codreg = rh02_codreg
+and rh30_instit = " . db_getsession('DB_instit') . "
+left join rhlotaexe on rhlotaexe.rh26_anousu = rhpessoalmov.rh02_anousu
+and rhlotaexe.rh26_codigo = rhlota.r70_codigo
+left join orcorgao on orcorgao.o40_anousu = rhlotaexe.rh26_anousu
+and orcorgao.o40_orgao = rhlotaexe.rh26_orgao
+left join afasta on r45_anousu = rhpessoalmov.rh02_anousu
+and r45_mesusu = rhpessoalmov.rh02_mesusu
+and r45_regist = rhpessoalmov.rh02_regist
+where 1 = 1
+and (rh05_seqpes is null
+ or (date_part('month',rh05_recis) = $mes
+     and date_part('year',rh05_recis) = $ano))
+group by rh01_regist,
+ z01_nome,
+ trim(rh37_descr),
+ rh05_seqpes,
+ r45_regist,
+ r45_dtafas,
+ r45_dtreto,
+ rh30_descr,
+ rh02_salari,
+ o40_descr,
+ rh01_admiss
+order by z01_nome";
     }
     //echo "<br><br><br><br><br>".$sql;exit;
     $result = db_query($sql);
@@ -762,12 +787,18 @@ order by z01_nome";
     } elseif ($exporta == 'D') {
         fputs($arquivo, "nome;nomeabrev;cpf;pis;ctps;nascimento;naturalidade;uf;estadocivil;conjugue;cpfconjugue;pai;mae;sexo;identidade;orgaoidentidade;uforgaoemissor;expedicaoidentidade;cnh;cnhvalidade;cnhexpedicao;cargo;admissao;endereco;numero;complemento;bairro;municipio;uf;cep;ddi;telefone;celular;email;grauinstrucao;rendabruta;rendaliquida;banco;agencia;operacao;conta;dv" . "\r\n");
     } elseif ($exporta == 'S') {
-        fputs($arquivo, "matricula; nome; funcao; situacao; datarescisao; afastamento; inicioafastamento; retornoafastamento; regime; salario; secretaria; admissao" . "\r\n");
+        fputs($arquivo, "matricula; nome; funcao; situacao; datarescisao; afastamento; regime; salario; secretaria; admissao" . "\r\n");
     }
 
     for ($x = 0; $x < pg_num_rows($result); $x++) {
         db_fieldsmemory($result, $x);
-        fputs($arquivo, $tipo . "\r\n");
+        if($exporta == 'S'){
+            $dados = $registro . ";" . $nome . ";" . $funcao . ";" . $situacao . ";" . $datarescisao . ";" . $afastamento . ";" . $regime . ";" . $salario . ";" . $secretaria . ";" . $admissao;
+            fputs($arquivo, $dados . "\r\n");
+        }else{
+            fputs($arquivo, $tipo . "\r\n");
+        }
+
     }
     fclose($arquivo);
 }
