@@ -200,7 +200,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
             list($aAnulacoes) = $this->aopTratamentoDados($oAnulacoes, $sDataInicial, $aAnulacoes, $sCodUnidade, $itipoOP);
 
         }
-// echo "<pre>"; var_dump($aAnulacoes);die;
+
         foreach ($aAnulacoes as $anulacao) {
 
             $oDadosAnulacao = new cl_aop102024();
@@ -221,28 +221,6 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
             $oDadosAnulacao->incluir(null);
             if ($oDadosAnulacao->erro_status == 0) {
                 throw new Exception($oDadosAnulacao->erro_msg);
-            }
-
-            $iTotalReg13 = 0;
-            foreach ($anulacao->reg13 as $reg13){
-                $oDadosAnulacaoRetencao = new cl_aop132024();
-                
-                $oDadosAnulacaoRetencao->si140_tiporegistro = $reg13->si140_tiporegistro;
-                $oDadosAnulacaoRetencao->si140_codreduzidoop = $reg13->si140_codreduzidoop;
-                $oDadosAnulacaoRetencao->si140_tiporetencao = $reg13->si140_tiporetencao;
-                $oDadosAnulacaoRetencao->si140_descricaoretencao = substr($reg13->si140_descricaoretencao, 0, 50);
-                $oDadosAnulacaoRetencao->si140_vlretencao = $reg13->si140_vlretencao;
-                $oDadosAnulacaoRetencao->si140_mes = $reg13->si140_mes;
-                $oDadosAnulacaoRetencao->si140_reg10 = $oDadosAnulacao->si137_sequencial;
-                $oDadosAnulacaoRetencao->si140_instit = db_getsession("DB_instit");
-                
-                $oDadosAnulacaoRetencao->incluir(null);
-
-                if ($oDadosAnulacaoRetencao->erro_status == 0) {
-                    throw new Exception($oDadosAnulacaoRetencao->erro_msg);
-                }
-
-                $iTotalReg13 += $reg13->si140_vlretencao;
             }
 
             foreach ($anulacao->reg11 as $reg11) {
@@ -270,6 +248,32 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 
                 if ($reg11->reg12) {
 
+                    $iTotalReg13 = 0;
+                    foreach ($reg11->reg12->reg13 as $reg13){
+                        if ((count($reg11->reg12->reg13) == 1 && $reg11->reg12->si139_vldocumento == $reg13->si140_vlretencao) 
+                        || count($reg11->reg12->reg13) > 1) {
+
+                            $oDadosAnulacaoRetencao = new cl_aop132024();
+                                
+                            $oDadosAnulacaoRetencao->si140_tiporegistro = $reg13->si140_tiporegistro;
+                            $oDadosAnulacaoRetencao->si140_codreduzidoop = $reg13->si140_codreduzidoop;
+                            $oDadosAnulacaoRetencao->si140_tiporetencao = $reg13->si140_tiporetencao;
+                            $oDadosAnulacaoRetencao->si140_descricaoretencao = substr($reg13->si140_descricaoretencao, 0, 50);
+                            $oDadosAnulacaoRetencao->si140_vlretencao = $reg13->si140_vlretencao;
+                            $oDadosAnulacaoRetencao->si140_mes = $reg13->si140_mes;
+                            $oDadosAnulacaoRetencao->si140_reg10 = $oDadosAnulacao->si137_sequencial;
+                            $oDadosAnulacaoRetencao->si140_instit = db_getsession("DB_instit");
+                            
+                            $oDadosAnulacaoRetencao->incluir(null);
+                            
+                            if ($oDadosAnulacaoRetencao->erro_status == 0) {
+                                throw new Exception($oDadosAnulacaoRetencao->erro_msg);
+                            }
+                            
+                            $iTotalReg13 += $reg13->si140_vlretencao;
+                        }
+                    }
+
                     $reg11->reg12->si139_reg10 = $oDadosAnulacao->si137_sequencial;
                     $reg11->reg12->si139_vldocumento -= $iTotalReg13;
                     $reg11->reg12->incluir(null);
@@ -294,6 +298,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 
         $rsPagOrd12 = $claop12->sqlReg12($oEmpPago, $iAnoUsu);
         $reg12 = db_utils::fieldsMemory($rsPagOrd12, 0);
+        if (pg_num_rows($rsPagOrd12) > 0 && $reg12->codctb != '') {
 
         $sSqlContaPagFont = " SELECT * FROM ( ";
         for ($iAno = 2014; $iAno <= 2024; $iAno++) {
@@ -326,6 +331,32 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
         $claop12->si139_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $claop12->si139_instit = $iInstit;
 
+    } else {
+        $sSqlContaPagFont = " SELECT * FROM ( ";
+            for ($iAno = 2014; $iAno <= 2024; $iAno++) {
+                $sSqlContaPagFont .= $claop12->getUnionPagFont(null, $iAno, $sDataFinal, $iInstit, $iAnoUsu, $oEmpPago->lancamento);
+                if ($iAno < 2024) {
+                    $sSqlContaPagFont .= " UNION ";
+                }
+            }
+            $sSqlContaPagFont .= ") AS x ORDER BY contapag DESC";
+
+        $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont . " teste1");
+
+        $ContaPag = db_utils::fieldsMemory($rsResultContaPag)->contapag;
+
+        $claop12->si139_tiporegistro = 12;
+        $claop12->si139_codreduzido = $oAOP11->si138_codreduzido;
+        $claop12->si139_tipodocumento = 99;
+        $claop12->si139_nrodocumento = 0;
+        $claop12->si139_codctb = $ContaPag;
+        $claop12->si139_codfontectb = $oAOP11->si138_codfontrecursos;
+        $claop12->si139_desctipodocumentoop = "TED";
+        $claop12->si139_dtemissao = $oEmpPago->dtaAnulacao;
+        $claop12->si139_vldocumento = abs($oEmpPago->valor);
+        $claop12->si139_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+        $claop12->si139_instit = db_getsession("DB_instit");
+    }
         return $claop12;
     }
 
@@ -427,10 +458,6 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 
                 $oDadosAnulacao->reg11[$Hash] = $oDadosAnulacaoFonte;
 
-                if (date('Y-m', strtotime($oDadosAnulacao->si137_dtpagamento)) != date('Y-m', $oDadosAnulacao->si137_dtanulacaoop)) {
-                    $oDadosAnulacao->reg13 = $this->setDetalhamento13($oAnulacoes);
-                }
-
                 $aAnulacoes[$Hash] = $oDadosAnulacao;
             } else {
                 $aAnulacoes[$Hash]->si137_vlanulacaoop += $oAnulacoes->vlrordem;
@@ -441,12 +468,17 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
             $oEmpPago->ordem = $oAnulacoes->e50_codord;
             $oEmpPago->lancamento = $iOpPagamento;
             $oEmpPago->valor = $oAnulacoes->vlrordem;
+            $oEmpPago->dtaAnulacao = $oAnulacoes->dtanulacao;
 
             $sDataFinal = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $iAnoUsu = db_getsession("DB_anousu");
             $iInstit = db_getsession("DB_instit");
 
             $aAnulacoes[$Hash]->reg11[$Hash]->reg12 = $this->setDetalhamento12($oEmpPago, $aAnulacoes[$Hash], $aAnulacoes[$Hash]->reg11[$Hash], $sDataFinal, $iAnoUsu, $iInstit);
+            
+            if (date('Y-m', strtotime($aAnulacoes[$Hash]->si137_dtpagamento)) != date('Y-m', $aAnulacoes[$Hash]->si137_dtanulacaoop)) {
+                $aAnulacoes[$Hash]->reg11[$Hash]->reg12->reg13 = $this->setDetalhamento13($aAnulacoes[$Hash]->si137_codreduzido, $aAnulacoes[$Hash]->reg11[$Hash]->reg12->e81_codmov, $oEmpPago->ordem);
+            }
         }
         return array($aAnulacoes, $oDadosAnulacao, $oDadosAnulacaoFonte);
     }
@@ -530,9 +562,10 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
         $oAnulacoes->numordem = $oAopDuplicado->numordem;
     }
 
-    public function setDetalhamento13($oAnulacoes){
+    public function setDetalhamento13($codlan, $codmov, $codord){
         
         $sSql13 = "SELECT 
+                    DISTINCT
                     13 AS tiporegistro,
                     e20_pagordem AS codreduzidoop,
                     CASE
@@ -567,7 +600,14 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                     LEFT JOIN conplano ON (tp.k02_anousu, tp.k02_estpla) = (conplano.c60_anousu, conplano.c60_estrut)
                     LEFT JOIN taborc ON tr.k02_codigo = taborc.k02_codigo AND taborc.k02_anousu = " . db_getsession("DB_anousu") . "
                     JOIN retencaoempagemov on e27_retencaoreceitas = e23_sequencial
-                    WHERE e20_pagordem = {$oAnulacoes->e50_codord}";
+                    WHERE e23_recolhido = TRUE ";
+
+        if ($codmov == ''){
+            $sSql13 .= " AND (e20_pagordem) = ({$codord})";
+        } else {
+            $sSql13 .= " AND (e20_pagordem, e27_empagemov) = ({$codord}, {$codmov})";
+        }
+        $sSql13 .= " AND e23_dtcalculo < '" . $this->sDataFinal . "'";
 
         $rsPagOrd13 = db_query($sSql13);
         $aReg13 = array();  	
@@ -577,7 +617,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                 $oDadosAnulacaoRetencao = new stdClass();
 
                 $oDadosAnulacaoRetencao->si140_tiporegistro  = 13;
-                $oDadosAnulacaoRetencao->si140_codreduzidoop = $oAnulacoes->c71_codlan;
+                $oDadosAnulacaoRetencao->si140_codreduzidoop = $codlan;
 
                 if ($reg13->c60_tipolancamento == 1) {
                     $oDadosAnulacaoRetencao->si140_tiporetencao = $reg13->c60_subtipolancamento;
