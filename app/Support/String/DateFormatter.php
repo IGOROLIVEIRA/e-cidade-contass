@@ -3,7 +3,7 @@
 namespace App\Support\String;
 
 use DateTime;
-use InvalidArgumentException;
+use Exception;
 
 class DateFormatter
 {
@@ -12,7 +12,7 @@ class DateFormatter
         $dateTime = DateTime::createFromFormat('d/m/Y', $date);
 
         if ($dateTime === false) {
-            throw new InvalidArgumentException("Please, provide a string with d/m/Y format.");
+            throw new Exception("Please, provide a string with d/m/Y format.");
         }
 
         return $dateTime->format('Y-m-d');
