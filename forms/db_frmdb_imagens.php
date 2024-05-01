@@ -126,7 +126,7 @@
   </fieldset>
 
   <div class="form-container">
-    <p><strong>Apenas serão aceitas imagens nos formatos "JPG", "PNG" e "GIF", com tamanho máximo de <span style="color:blue">100 KB</span>.</strong></p>
+    <p><strong>Apenas serão aceitas imagens nos formatos "JPG", "PNG" e "GIF", com tamanho máximo de <span style="color:blue">400 KB</span>.</strong></p>
     <input type="submit" id='btnSalvar' name="btnSalvar" Value='Salvar' onclick="return js_validaForm();" />
   </div>
 
