@@ -1889,17 +1889,17 @@ if (@$tipo_pesq[0] != "numpre") { // inicio do tipo de certidao
 
   if ($cltermoanu->numrows > 0) {
     //
-    // Parcelamentos anulados
+    // Parcelamentos revogados
     //
-    $htmlParcAnulados = " <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">";
-    $htmlParcAnulados .= "   <tr>";
-    $htmlParcAnulados .= "     <td valign=\"top\" class=\"links2\" id=\"outrasmatriculas\">";
-    $htmlParcAnulados .= "       <a class=\"links2\" onClick=\"js_MudaLink('parcelamentosanulados')\" id=\"parcelamentosanulados\" href=\"cai3_gerfinanc071.php?opcao=" . $tipo . "&codopcao=" . $cod_filtro . "\" target=\"debitos\">PARCELAMENTOS REVOGADOS</a>";
-    $htmlParcAnulados .= "     </td> ";
-    $htmlParcAnulados .= "   </tr> ";
-    $htmlParcAnulados .= " </table>\n";
+    $htmlParcRevogados = " <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">";
+    $htmlParcRevogados .= "   <tr>";
+    $htmlParcRevogados .= "     <td valign=\"top\" class=\"links2\" id=\"outrasmatriculas\">";
+    $htmlParcRevogados .= "       <a class=\"links2\" onClick=\"js_MudaLink('parcelamentosrevogados')\" id=\"parcelamentosrevogados\" href=\"cai3_gerfinanc071.php?opcao=" . $tipo . "&codopcao=" . $cod_filtro . "\" target=\"debitos\">PARCELAMENTOS REVOGADOS</a>";
+    $htmlParcRevogados .= "     </td> ";
+    $htmlParcRevogados .= "   </tr> ";
+    $htmlParcRevogados .= " </table>\n";
 
-    echo $htmlParcAnulados;
+    echo $htmlParcRevogados;
   }
 
   if (@$temprescr == true) {

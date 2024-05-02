@@ -26,11 +26,9 @@ $objGet  = db_utils::postmemory($_GET);
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <script>
-
-function js_mostraParcelamento(parcelamento){
-  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_consultaparc'+parcelamento,'div3_consultaParcelamento.php?parcelamento='+parcelamento,'Consulta Parcelamentos Revogados',true);
-}
-
+    function js_mostraParcelamento(parcelamento){
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_consultaparc'+parcelamento,'div3_consultaParcelamento.php?parcelamento='+parcelamento,'Consulta Parcelamentos Revogados',true);
+    }
 </script>
 <style type="text/css">
 <!--
@@ -41,6 +39,12 @@ function js_mostraParcelamento(parcelamento){
 }
 -->
 </style>
+<script>
+    function js_imprime() {
+        const jandb = window.open('cai2_gerfinanc071.php?opcao=<?php echo $opcao;?>&codopcao=<?php echo $codopcao;?>', '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+        jandb.moveTo(0, 0);
+    }
+</script>
 <script>
 function MM_reloadPage(init) {  //reloads the window if Nav4 resized
   if (init==true) with (navigator) {
@@ -58,7 +62,7 @@ MM_reloadPage(true);
 <form name="form1" method="post">
 <tr>&nbsp;&nbsp;</tr>
 <table border="1" cellpadding="0" cellspacing="0">
-<?
+<?php
     if ($opcao=="cgm"){
       $where = "and arrenumcgm.k00_numcgm = $codopcao";
     }else if ($opcao=="matric"){
@@ -148,7 +152,10 @@ MM_reloadPage(true);
 ?>
 
 </table>
-
+<br/>
+<tr>
+    <td colspan="11" align="center" class="tabs"><input type="button" name="imprimir" value="Imprimir" onclick="js_imprime()"></td>
+</tr>
 </form>
 </center>
 </body>
