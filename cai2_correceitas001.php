@@ -70,7 +70,7 @@ function js_verifica(){
   var anoi = new Number(document.form1.datai_ano.value);
   var anof = new Number(document.form1.dataf_ano.value);
   if(anoi.valueOf() > anof.valueOf()){
-    alert('Intervalo de data invalido. Velirique !.');
+    alert('Intervalo de data invalido. Verifique !.');
     return false;
   }
   return true;
@@ -134,6 +134,7 @@ function js_emite(){
 	qry += "&emparlamentar="+document.form1.emparlamentar.value;
 	qry += "&regrepasse="+document.form1.regrepasse.value;
 	qry += "&formarrecadacao="+document.form1.formarrecadacao.value;
+	qry += "&formatoRelatorio="+document.form1.formatoRelatorio.value;
 
 	jan = window.open('cai2_correceitas002.php?'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	jan.moveTo(0,0);
@@ -290,13 +291,14 @@ function js_emite(){
 							<strong>Ordem:</strong>
 						</td>
 						<td>
-							<select name="ordem" id="ordem" onchange="js_validarTipo(this)">
+							<select name="ordem" id="ordem" onchange="js_validarTipo(this)" style="width: 175px;">
 								<option value=<?= ReceitaOrdemRepositoryLegacy::CODIGO ?>>Código Receita</option>
 								<option value=<?= ReceitaOrdemRepositoryLegacy::ESTRUTURAL ?>>Estrutural</option>
 								<option value=<?= ReceitaOrdemRepositoryLegacy::ALFABETICA ?>>Alfabética Descrição Receita</option>
 								<option value=<?= ReceitaOrdemRepositoryLegacy::REDUZIDO_ORCAMENTO ?>>Reduzido Orçamento</option>
 								<option value=<?= ReceitaOrdemRepositoryLegacy::REDUZIDO_CONTA ?>>Reduzido Conta</option>
 								<option value=<?= ReceitaOrdemRepositoryLegacy::CONTRIBUINTE ?>>Contribuinte</option>
+								<option value=<?= ReceitaOrdemRepositoryLegacy::OPERACAO_CREDITO ?>>Operação de Crédito</option>
                             </select>
 						</td>
 					</tr>
@@ -311,6 +313,17 @@ function js_emite(){
 								<option value=<?= ReceitaTipoRepositoryLegacy::ANALITICO ?>>Analítico</option>
 								<option value=<?= ReceitaTipoRepositoryLegacy::CONTA ?>>Sintético/Conta</option>
 								<option value=<?= ReceitaTipoRepositoryLegacy::DIARIO ?>>Diário</option>
+								<option value=<?= ReceitaTipoRepositoryLegacy::ANALITICO_RECEITA ?>>Analítico/Receita</option>
+						</td>
+					</tr>
+					<tr>
+						<td align="right">
+							<strong>Formato:</strong>
+						</td>
+						<td>
+							<?
+							db_select('formatoRelatorio',array("0" => "PDF", "1" => "CSV"),true,1);
+							?>
 						</td>
 					</tr>
 					<tr>
@@ -371,6 +384,7 @@ function js_emite(){
 </body>
 </html>
 <script>
+document.getElementById('formatoRelatorio').style.width='175px';
 
 oDBToogleCredores = new DBToogle('fieldset_contas', false);
 oDBToogleCredores = new DBToogle('fieldset_cgm', false);
@@ -401,13 +415,22 @@ function js_mostratabrec1(chave1,chave2){
 
 function js_validarTipo(select)
 {
-    if (select.options[select.selectedIndex].value == <?= ReceitaOrdemRepositoryLegacy::CONTRIBUINTE ?>) {
+    if (select.options[select.selectedIndex].value == <?= ReceitaOrdemRepositoryLegacy::CONTRIBUINTE ?>
+		|| select.options[select.selectedIndex].value == <?= ReceitaOrdemRepositoryLegacy::OPERACAO_CREDITO ?>) {
         if (document.getElementById('sinana').value == 'S4')
             document.getElementById('sinana').options[3].setAttribute('selected', '');
+		
+		if (document.getElementById('sinana').value == 'AR'){
+            document.getElementById('sinana').options[3].setAttribute('selected', '');
+		}
+
         document.getElementById('sinana').options[4].setAttribute('disabled', '');
+		document.getElementById('sinana').options[5].setAttribute('disabled', '');
         return;
     }
     document.getElementById('sinana').options[4].removeAttribute('disabled', '');
+	document.getElementById('sinana').options[5].removeAttribute('disabled', '');
+	document.getElementById('sinana').options[3].removeAttribute('selected', '');
     return
 }
 </script>

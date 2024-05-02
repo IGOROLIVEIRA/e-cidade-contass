@@ -58,7 +58,7 @@ switch ($oParam->exec) {
 			$oRetorno->nValor                 = $oSlip->getValor();
 			$oRetorno->iHistorico             = $oSlip->getHistorico();
 			$oRetorno->sHistorico             = "";
-			$oRetorno->sObservacao            = urlencode($oSlip->getObservacao());
+			$oRetorno->sObservacao            = strtoupper(urlencode($oSlip->getObservacao()));
 			$oRetorno->iTipoPagamento         = $oSlip->getTipoPagamento();
 			$oRetorno->iSituacao              = $oSlip->getSituacao();
 			$oRetorno->dtData                 = $oSlip->getData();
@@ -392,7 +392,7 @@ switch ($oParam->exec) {
       $oRetorno->iContaCredito          = $oTransferencia->getContaCredito();
       $oRetorno->nValor                 = $oTransferencia->getValor();
       $oRetorno->iHistorico             = $oTransferencia->getHistorico();
-      $oRetorno->sObservacao            = urlencode($oTransferencia->getObservacao());
+      $oRetorno->sObservacao            = strtoupper(urlencode($oTransferencia->getObservacao()));
       $oRetorno->iTipoPagamento         = $oTransferencia->getTipoPagamento();
       $oRetorno->iSituacao              = $oTransferencia->getSituacao();
       $oRetorno->dtData                 = $oTransferencia->getData();

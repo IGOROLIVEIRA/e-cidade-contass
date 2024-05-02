@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "matpedido.m97_sequencial,matpedido.m97_db_almox,matpedido.m97_coddepto,matpedido.m97_data,matpedido.m97_login,matpedido.m97_hora,matpedido.m97_origem,matpedido.m97_obs,nome,m91_depto";
+$campos = "matpedido.m97_sequencial,matpedido.m97_db_almox,matpedido.m97_coddepto,db_depart.descrdepto,matpedido.m97_data,matpedido.m97_login,matpedido.m97_hora,matpedido.m97_origem,matpedido.m97_obs,nome,m91_depto,almox.descrdepto";
 ?>

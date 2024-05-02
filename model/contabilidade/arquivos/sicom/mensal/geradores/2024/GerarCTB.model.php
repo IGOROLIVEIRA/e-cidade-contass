@@ -119,15 +119,7 @@ class GerarCTB extends GerarAM
                         $aCSVCTB21['si97_tipomovimentacao']   = $this->padLeftZero($aCTB21['si97_tipomovimentacao'], 1);
                         $aCSVCTB21['si97_tipoentrsaida']      = $this->padLeftZero($aCTB21['si97_tipoentrsaida'], 2);
 
-                        if ($aCTB21['si97_tipomovimentacao'] == 2 && $aCTB21['si97_tipoentrsaida'] == 99){
-
-                            $aCSVCTB21['si97_dscoutrasmov']   = "Pagamento Extra Orcamentario";
-
-                        } else {
-
-                            $aCSVCTB21['si97_dscoutrasmov']   = $aCTB21['si97_dscoutrasmov'] != ' ' ? substr($aCTB21['si97_dscoutrasmov'], 0, 50) : ' ';
-
-                        }
+                        $aCSVCTB21['si97_dscoutrasmov']       = $aCTB21['si97_dscoutrasmov'] ?? ' ';
 
                         $aCSVCTB21['si97_saldocec']           = $this->padLeftZero($aCTB21['si97_saldocec'], 1);
                         $aCSVCTB21['si97_valorentrsaida']     = $this->sicomNumberReal($aCTB21['si97_valorentrsaida'], 2);

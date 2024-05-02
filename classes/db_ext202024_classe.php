@@ -608,10 +608,28 @@ class cl_ext202024
 
     return $sql;
   }
-  public function sql_Reg20Fonte($codctb, $ano, $mes): string
+  public function sql_Reg20Fonte($codctb, $ano, $mes, $fonte,$fonteantiga): string
   {
     $instit = db_getsession("DB_instit");
+   
+    if ($fonte) {
+      $filtro =  " AND o15_codtri in ('{$fonte}','{$fonteantiga}' ) ";
+    }
 
+    $codreduzido = "";
+    $cont        = 0 ;
+   
+    if (is_array($codctb)) {
+      foreach ($codctb as $contasExtras) {
+          if ($cont > 0)  
+            $codreduzido .= " , "; 
+          $codreduzido .= "'{$contasExtras}'";
+          $cont ++ ;
+      }	
+    } else {
+        $codreduzido .= "'{$codctb}'";
+    }
+		
     return "WITH registro20 AS (
                 SELECT c19_sequencial,
                        c61_reduz,
@@ -627,8 +645,9 @@ class cl_ext202024
                 INNER JOIN contacorrentedetalhe ON c19_conplanoreduzanousu = c61_anousu AND c19_reduz = c61_reduz
                 LEFT JOIN orctiporec ON c19_orctiporec = o15_codigo
                 WHERE c61_instit = $instit
-                  AND c61_reduz = $codctb
+                  AND c62_reduz in ($codreduzido)
                   AND c62_anousu = $ano
+                  $filtro
                 ORDER BY c60_estrut
             )
             SELECT c19_sequencial,
@@ -644,7 +663,7 @@ class cl_ext202024
                         when c61_codtce is null or c61_codtce = 0 then c61_reduz
                    else c61_codtce
 				      	   end as c61_codtce
-            FROM registro20 	order by c61_codtce,fontemovimento";
+            FROM registro20 	order by c61_codtce,fontemovimento,c61_reduz";
   }
 }
 ?>

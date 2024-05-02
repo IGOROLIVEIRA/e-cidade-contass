@@ -33,6 +33,7 @@ include("libs/db_liborcamento.php");
 include("dbforms/db_classesgenericas.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_orctiporec_classe.php");
+include("model/caixa/slip/TipoSlip.model.php");
 
 db_postmemory($HTTP_POST_VARS);
 db_postmemory($_GET);
@@ -46,7 +47,7 @@ $clrotulo->label("k17_codigo");
 $clrotulo->label("c50_descr");
 $clrotulo->label("k17_hist");
 $clrotulo->label("c61_reduz");
-
+$clTipoSlip = new TipoSlip;
 
 $db_opcao = 1;
 ?>
@@ -61,7 +62,7 @@ $db_opcao = 1;
 <script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/widgets/DBToogle.widget.js"></script>
 <script>
-function js_emite(){
+function js_emite(tipoRelatorio){
   var var_obj     = document.getElementById('cgm').length;
   var cods        = "";
   var vir         = "";
@@ -96,9 +97,18 @@ function js_emite(){
   qry+= '&tiposlip='+document.form1.tiposlip.value;
   qry+= '&movimento='+"0";
   qry+= '&agrupar='+document.form1.agrupar.value;
-  jan = window.open('cai2_relslip002.php?'+qry,'',
-                    'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-  jan.moveTo(0,0);
+  qry+= '&ordenar='+document.form1.ordenar.value;
+  qry+= '&tipo='+document.form1.k17_tiposelect.value;
+
+  if (tipoRelatorio == 1) {
+    jan = window.open('cai2_relslip003.php?'+qry,'',
+                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    jan.moveTo(0,0);
+  } else {
+    jan = window.open('cai2_relslip002.php?'+qry,'',
+                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    jan.moveTo(0,0);
+  }
 }
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
@@ -211,6 +221,19 @@ function js_emite(){
                             </td>
                         </tr>
                         <tr>
+                            <td>
+                                <strong>Tipo:</strong>
+                            </td>
+                            <td colspan='2'>
+                                <? $tipoSlip = $clTipoSlip->getDescricaoTipoSlipArray();
+                                  //  $rs      = $clorctiporec->sql_record($clorctiporec->sql_query(null,"o15_codigo,o15_descr","o15_codigo",$dbwhere));
+                                   db_select("k17_tiposelect",$tipoSlip,false,1,"","","","0"); ?>
+                                <script>
+                                    document.getElementById('k17_tiposelect').style.width='99.7%';
+                                </script>
+                            </td>
+                        </tr>
+                        <tr>
                             <td align=left><strong>Situação:&nbsp;&nbsp;</strong></td><td colspan=2>
                                 <? $tipo_ordem = array("A"=>"Todas","1"=>"Não Autenticado","2"=>"Autenticado","3"=>"Estornado","4"=>"Cancelado");
                                    db_select("situacao",$tipo_ordem,true,2); ?>
@@ -251,6 +274,40 @@ function js_emite(){
                             </td>
                         </tr>
                         <tr>
+                            <td align="left" nowrap title="Agrupar Por" >
+                                <strong>Agrupar Por:&nbsp;&nbsp;</strong>
+                            </td>
+                            <td colspan='2'>
+                                <? $aAgrupar = array(
+                                        "0"=>"Selecione",
+                                        "1"=>"Credor",
+                                        "2"=>"Conta Débito",
+                                        "3"=>"Conta Crédito",
+                                        "4"=>"Recurso",
+                                        "5"=>"Tipo");
+                                db_select("agrupar",$aAgrupar,true,2); ?>
+                                <script>
+                                    document.getElementById('agrupar').style.width='99.7%';
+                                </script>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" nowrap title="Ordenar Por" >
+                                <strong>Ordenar Por:&nbsp;&nbsp;</strong>
+                            </td>
+                            <td colspan='2'>
+                                <? $aOrdenar = array(
+                                        "0"=>"Selecione",
+                                        "1"=>"Código Slip",
+                                        "2"=>"Data Emissão",
+                                        "3"=>"Data Autenticação");
+                                db_select("ordenar",$aOrdenar,true,2); ?>
+                                <script>
+                                    document.getElementById('ordenar').style.width='99.7%';
+                                </script>
+                            </td>
+                        </tr>
+                        <tr>
                             <td nowrap="nowrap">
                                 <strong>Processo Administrativo:</strong>
                             </td>
@@ -260,22 +317,6 @@ function js_emite(){
                             <script>
                                 document.getElementById('k145_numeroprocesso').style.width='99.7%';
                             </script>
-                        </tr>
-                        <tr>
-                            <td align="left" nowrap title="Agrupar Por" >
-                                <strong>Agrupar Por:&nbsp;&nbsp;</strong>
-                            </td>
-                            <td colspan='2'>
-                                <? $aAgrupar = array(
-                                        "0"=>"Selecione",
-                                        "1"=>"Credor",
-                                        "2"=>"Conta Débito",
-                                        "3"=>"Conta Crédito");
-                                db_select("agrupar",$aAgrupar,true,2); ?>
-                                <script>
-                                    document.getElementById('agrupar').style.width='99.7%';
-                                </script>
-                            </td>
                         </tr>
                         <? $aux = new cl_arquivo_auxiliar;
                            $aux->cabecalho = "<strong>Credor</strong>";
@@ -314,7 +355,8 @@ function js_emite(){
 </table>
 <br>
 <center>
-    <input  name="emite2" id="emite2" type="button" value="Emitir Relatório" onclick="js_emite();">
+    <input  name="emite2" id="emite2" type="button" value="Emitir Relatório" onclick="js_emite(0);">
+    <input  name="emitecsv" id="emitecsv" type="button" value="Emitir CSV" onclick="js_emite(1);">
 </center>
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));

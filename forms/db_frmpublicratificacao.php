@@ -77,7 +77,7 @@ if (isset($l20_codigo)) {
                 </td>
             </tr>
 
-            <tr id="trdtlimitecredenciamento" style="display: none">
+            <tr id="trdtlimitecredenciamento" <?php echo (in_array($l03_pctipocompratribunal, array(102, 103))) ? '' : 'style="display: none"'; ?>>
                 <td>
                     <strong>Data Final do Credenciamento:</strong>
                 </td>
