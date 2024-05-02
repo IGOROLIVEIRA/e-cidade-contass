@@ -1547,7 +1547,7 @@ class cl_pcproc
     return $sql;
   }
 
-  public function sql_get_dispensa_por_valor()
+  public function sql_get_dispensa_por_valor($where)
   {
     $sql  = "SELECT DISTINCT pc80_codproc,
     pc80_numdispensa,
@@ -1571,6 +1571,7 @@ class cl_pcproc
          FROM liclicitem
          INNER JOIN pcprocitem ON pc81_codprocitem = l21_codpcprocitem
          WHERE pc81_codproc = pc80_codproc)
+      $where
       and db_depart.instit = " . db_getsession('DB_instit') . "
     ORDER BY pc80_codproc desc";
     return $sql;
@@ -1801,7 +1802,7 @@ class cl_pcproc
   }
 
   public function queryDadosAutorizacao($pc80_codproc){
-    
+
     $tipoSolicitacao = $this->getTipoSolicitacao($pc80_codproc);
 
     if($tipoSolicitacao == "5"){

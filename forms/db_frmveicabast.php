@@ -217,8 +217,8 @@ db_app::load("estilos.css");
                     "js_pesquisa_ultimamedida();"
                   );
                   echo "<strong>Hora:</strong>";
-                  db_input('ve70_hora', 10, $Ive70_hora, true, 'text', $db_opcao, "onchange='js_verifica_hora(this.value,this.name)';onkeypress='return js_mask(event, \"0-9|:|0-9\"); '");
-                  ?>
+                  db_input('ve70_hora', 30, $Ive70_hora, true, 'time', 1, '', '', '', '','width:30%;', null);?>
+                  
                 </td>
 
               </tr>

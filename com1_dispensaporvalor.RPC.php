@@ -28,8 +28,16 @@ $oRetorno->status  = 1;
 switch ($oParam->exec) {
     case 'getProcesso':
 
+        $where = "AND DATE_PART('YEAR',pc80_data) = $oParam->ano";
+
+        if($oParam->tipo == "1"){
+            $where .= "AND l213_numerocontrolepncp is null";
+        }else{
+            $where .= "AND l213_numerocontrolepncp != ''";
+        }
+
         $clpcproc = new cl_pcproc();
-        $rsProcessos = $clpcproc->sql_record($clpcproc->sql_get_dispensa_por_valor());
+        $rsProcessos = $clpcproc->sql_record($clpcproc->sql_get_dispensa_por_valor($where));
 
         for ($iCont = 0; $iCont < pg_num_rows($rsProcessos); $iCont++) {
 
@@ -119,7 +127,7 @@ switch ($oParam->exec) {
                     //Ambiente de Producao
                         $l213_numerocompra = substr($rsApiPNCP[1], 67);
                     }
-                
+
                     $l213_numerocontrolepncp = db_utils::getCnpj() . '-1-' . str_pad($l213_numerocompra, 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
 
                     //monto o codigo da compra no pncp
@@ -231,6 +239,8 @@ switch ($oParam->exec) {
 
                 if ($rsApiPNCP->compraUri == null) {
                     //monto o codigo da compra no pncp
+                    $clliccontrolepncp = new cl_liccontrolepncp();
+
                     $l213_numerocontrolepncp = $aLicitacao->numerocontrole;
                     if ($oDadosLicitacao->tipoinstrumentoconvocatorioid == "3") {
                         $clliccontrolepncp->l213_processodecompras = $aProcesso->codigo;

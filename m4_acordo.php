@@ -221,15 +221,6 @@ if (isset($alterar)) {
     }
   }
 
-  if ($ac16_dataassinatura == null) {
-    db_msgbox("O preenchimento da data de assinatura é obrigatório !");
-    $erro = true;
-  }
-
-  if ($ac16_numeroacordo == null) {
-    db_msgbox("O preenchimento do número do acordo é obrigatório !");
-    $erro = true;
-  }
 
 
 
@@ -1497,6 +1488,15 @@ if (isset($alterar)) {
       alert("O preenchimento da Data de Assinatura é obrigatório ! ");
       return false;
     }
+    if (($('ac16_datapublicacao').value == "" || $('ac16_datapublicacao').value == null) && $('ac16_acordosituacao').value == 4) {
+      alert("O preenchimento da Data de Publicação é obrigatório ! ");
+      return false;
+    }
+    if (($('ac16_veiculodivulgacao').value == "" || $('ac16_veiculodivulgacao').value == null) && $('ac16_acordosituacao').value == 4) {
+      alert("O preenchimento da Veículo de Divulgação é obrigatório ! ");
+      return false;
+    }
+    
 
 
     ac26_numeroapostilamento = document.getElementsByClassName('numeroapostilamento');

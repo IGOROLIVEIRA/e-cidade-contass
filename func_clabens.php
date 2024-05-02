@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -46,33 +46,33 @@ $iInstituicaoSessao = db_getsession("DB_instit");
   </head>
   <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
     <table height="100%" width="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-      <tr> 
+      <tr>
         <td height="63" align="center" valign="top">
           <table width="35%" border="0" align="center" cellspacing="0">
             <form name="form2" method="post" action="" >
-              <tr> 
+              <tr>
                 <td width="4%" align="right" nowrap title="<?php echo $Tt64_codcla;?>">
                   <?php echo $Lt64_codcla;?>
                 </td>
-                <td width="96%" align="left" nowrap> 
+                <td width="96%" align="left" nowrap>
                   <?php
                     db_input("t64_codcla",10,$It64_codcla,true,"text",4,"","chave_t64_codcla");
                   ?>
                 </td>
               </tr>
-              <tr> 
+              <tr>
                 <td width="4%" align="right" nowrap title="<?php echo $Tt64_descr;?>">
                   <?php echo $Lt64_descr;?>
                 </td>
-                <td width="96%" align="left" nowrap> 
+                <td width="96%" align="left" nowrap>
                   <?php
                     db_input("t64_descr",50,$It64_descr,true,"text",4,"","chave_t64_descr");
                   ?>
                 </td>
               </tr>
-              <tr> 
-                <td colspan="2" align="center"> 
-                  <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
+              <tr>
+                <td colspan="2" align="center">
+                  <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
                   <input name="limpar" type="reset" id="limpar" value="Limpar" >
                   <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_clabens.hide();">
                  </td>
@@ -81,8 +81,8 @@ $iInstituicaoSessao = db_getsession("DB_instit");
           </table>
         </td>
       </tr>
-      <tr> 
-        <td align="center" valign="top"> 
+      <tr>
+        <td align="center" valign="top">
           <?php
           if(isset($campos)==false){
         	  if(file_exists("funcoes/db_func_clabens.php")==true){
@@ -91,7 +91,7 @@ $iInstituicaoSessao = db_getsession("DB_instit");
         	    $campos = "clabens.*";
         	  }
           }
-          
+
           $param = "";
           $aParam = array();
           if(isset($analitica)){
@@ -99,7 +99,7 @@ $iInstituicaoSessao = db_getsession("DB_instit");
           	  $aParam[] = " t64_analitica <> 'f' ";
     	      }
           }
-    
+
           $aParam[] = "t64_instit = {$iInstituicaoSessao}";
           $param = implode(" and ", $aParam);
           if(!isset($pesquisa_chave)){
@@ -125,18 +125,18 @@ $iInstituicaoSessao = db_getsession("DB_instit");
 							}else{
 								$sWhere = "t64_class = '$pesquisa_chave'";
 							}
-              
+
               if(isset($lClass)) {
                 $sWhere = "t64_class = '$pesquisa_chave'";
               }
-              
+
               $sWhere .= " and t64_instit = {$iInstituicaoSessao}";
-              
+
               $sSqlBens = $clclabens->sql_query(null, "*", null, $sWhere);
               $result   = $clclabens->sql_record($sSqlBens);
-              
+
               if($clclabens->numrows!=0){
-    
+
                 db_fieldsmemory($result,0);
                 echo "<script>".$funcao_js."('$t64_descr',false, $t64_codcla, '{$t64_benstipodepreciacao}', '{$t46_descricao}', '{$t64_vidautil}');</script>";
               }else{

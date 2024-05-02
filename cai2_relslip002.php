@@ -28,6 +28,7 @@
 include("fpdf151/pdf.php");
 include("libs/db_sql.php");
 include("libs/db_utils.php");
+include("model/caixa/slip/TipoSlip.model.php");
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 //db_postmemory($HTTP_GET_VARS,2);exit;
@@ -153,6 +154,11 @@ if(isset($hist) && $hist != ''){
     $whereslip .= " slip.k17_hist = {$hist}";
 }
 
+if($tipo != 0){
+  $sWhere3 .= "{$sAnd} k17_tiposelect = '$tipo'   ";
+   $sAnd   = " and ";
+}
+
 if (!empty($whereslip)) {
   $sWhere .= $sAnd.$whereslip;
 }
@@ -197,8 +203,12 @@ if ($agrupar == 1) {
     $sAgrupar = "slip.k17_debito";
 } elseif ($agrupar == 3) {
     $sAgrupar = "slip.k17_credito";
+} elseif ($agrupar == 4) {
+    $sAgrupar = "k29_recurso";
+} elseif ($agrupar == 5) {
+  $sAgrupar = "k17_tiposelect";
 } else {
-    $sAgrupar = "slip.k17_codigo";
+    $sAgrupar = "";
 }
 
 $head3 = "CADASTRO DE SLIP ";
@@ -224,7 +234,13 @@ $sql = "         select slip.k17_codigo {$sCampoProcesso},
 						     k17_dtaut,
 						     k17_autent,
 						     z01_numcgm,
-						     z01_nome
+						     z01_nome,
+                 case
+                  when k29_recurso = 1 then 15000000
+                  else k29_recurso
+                 end as k29_recurso,
+                 o15_descr,
+                 k17_tiposelect
                       from slip
 	                     inner join conplanoreduz r1 on r1.c61_reduz = k17_debito and r1.c61_anousu=".$iAnoUsu."
 	                     inner join conplano c1 on c1.c60_codcon = r1.c61_codcon and c1.c60_anousu = r1.c61_anousu
@@ -236,9 +252,16 @@ $sql = "         select slip.k17_codigo {$sCampoProcesso},
 		             left  join cgm on cgm.z01_numcgm = slipnum.k17_numcgm
 		             left join slipprocesso on slip.k17_codigo = k145_slip
                  left join sliptipooperacaovinculo on slip.k17_codigo = sliptipooperacaovinculo.k153_slip
-           where {$sWhere} {$where1} {$sWhere3}
-		      order by {$sAgrupar}" ;
-// echo $sql;exit;
+                 left join sliprecurso on slip.k17_codigo = k29_slip
+                 left join orctiporec on k29_recurso = o15_codigo
+                 where {$sWhere} {$where1} {$sWhere3}";
+
+if ($sAgrupar != "" || $ordenar != '0') {
+  $sql .= "order by {$sAgrupar}";
+  $sql .= $sAgrupar != "" && $ordenar != '0' ? "," : "";
+  $sql .= ($ordenar == '1' ? " slip.k17_codigo" : ($ordenar == '2' ? " slip.k17_data" : ($ordenar == '3' ? " slip.k17_dtaut" : "")));
+}          
+
 $result = db_query($sql);
 
 
@@ -264,9 +287,16 @@ $total_credito_grupo  = 0;
 $total_debito         = 0;
 $total_debito_grupo   = 0;
 $num_rows             = pg_numrows($result);
+$clDeParaRecurso = new DeParaRecurso;
+$clTipoSlip = new TipoSlip;
 for($x = 0; $x < pg_numrows($result);$x++){
     
     db_fieldsmemory($result,$x);
+
+    $k29_recurso = $clDeParaRecurso->getDePara($k29_recurso);
+
+    $clTipoSlip->setTipoSlip($k17_tiposelect);
+    $k17_tiposelectdescr = $clTipoSlip->getDescricaoTipoSlip();
 
     if ( isset($sprocesso) && !empty($sprocesso)) {
         $head7 = "PROCESSO ADMINISTRATIVO: {$sprocesso}";
@@ -280,6 +310,10 @@ for($x = 0; $x < pg_numrows($result);$x++){
             $nome_variavel = "k17_debito";
         } elseif ($agrupar == 3) {
             $nome_variavel = "k17_credito";
+        } elseif ($agrupar == 4) {
+          $nome_variavel = "k29_recurso";
+        } elseif ($agrupar == 5) {
+          $nome_variavel = "k17_tiposelect";
         }
 
     }
@@ -342,6 +376,17 @@ for($x = 0; $x < pg_numrows($result);$x++){
         } elseif ($agrupar == 3) {
             $pdf->cell(280, $alt, "CONTA CREDITO: ".$k17_credito.' - '.$credito_descr, 0, 0, "L", 0);
             $pdf->Ln();
+        } elseif ($agrupar == 4) {
+            $pdf->cell(280, $alt, "FONTE DE RECURSO: ".$k29_recurso.' - '.$o15_descr, 0, 0, "L", 0);
+            $pdf->Ln();
+        } elseif ($agrupar == 5) {
+            if ($k17_tiposelect) {
+              $pdf->cell(280, $alt, "TIPO: ".$k17_tiposelect.' - '.$k17_tiposelectdescr, 0, 0, "L", 0);
+              $pdf->Ln();
+            } else {
+              $pdf->cell(280, $alt, "Sem Tipo Informado", 0, 0, "L", 0);
+              $pdf->Ln();
+            }
         }
         
 
@@ -395,7 +440,11 @@ for($x = 0; $x < pg_numrows($result);$x++){
           $repete = $k17_debito;
       } elseif ($agrupar == 3) {
           $repete = $k17_credito;
-      }
+      } elseif ($agrupar == 4) {
+        $repete = $k29_recurso;
+      } elseif ($agrupar == 5) {
+        $repete = $k17_tiposelect;
+    }
 
   }
 

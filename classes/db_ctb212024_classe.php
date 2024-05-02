@@ -665,8 +665,16 @@ class cl_ctb212024 {
         }
         $sql21 = "CREATE TEMP TABLE tabela_temporaria AS
             WITH lancamentos_saida AS
-                (SELECT DISTINCT '21' AS tiporegistro,
-                        c71_codlan AS codreduzido,
+                (SELECT DISTINCT '21' AS tiporegistro, 
+                        CASE 
+                            WHEN c71_coddoc = 980 THEN c28_tipo
+                            ELSE '' 
+                        END AS c28_tipo,
+                        CASE 
+                            WHEN c71_coddoc = 980 THEN contacorrentedetalhe.c19_sequencial
+                            ELSE c71_codlan 
+                        END AS codreduzido,
+                        c28_conlancamval,
                         contacredito.c61_reduz AS codctb,
                         conplanodebito.c60_codsis AS codsisctb,
                         contacreditofonte.o15_codtri AS codfontrecurso,
@@ -731,6 +739,7 @@ class cl_ctb212024 {
                                  AND bancocredito.c63_tipoconta IN (2, 3) THEN 7
                             WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta IN (2, 3) AND bancocredito.c63_tipoconta = 1 THEN 9
                             WHEN c71_coddoc IN (141, 140) THEN 6
+                            WHEN c71_coddoc = 980 THEN 98
                             ELSE 99
                         END AS tipoentrsaida,
                         substr(o57_fonte,0,3) AS rubrica,
@@ -802,8 +811,16 @@ class cl_ctb212024 {
                    AND $sqlAndCredito),
             
                  lancamentos_entrada AS
-                 (SELECT DISTINCT '21' AS tiporegistro,
-                        c71_codlan AS codreduzido,
+                 (SELECT DISTINCT '21' AS tiporegistro, 
+                        CASE 
+                            WHEN c71_coddoc = 980 THEN c28_tipo
+                            ELSE '' 
+                        END AS c28_tipo,
+                        CASE 
+                            WHEN c71_coddoc = 980 THEN contacorrentedetalhe.c19_sequencial
+                            ELSE c71_codlan 
+                        END AS codreduzido,
+                        c28_conlancamval,
                         contadebito.c61_reduz AS codctb,
                         conplanodebito.c60_codsis AS codsisctb,
                         contadebitofonte.o15_codtri AS codfontrecurso,
@@ -823,6 +840,7 @@ class cl_ctb212024 {
                             WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta = 1 AND bancocredito.c63_tipoconta IN (2, 3) THEN 7
                             WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta IN (2, 3) AND bancocredito.c63_tipoconta = 1 THEN 9
                             WHEN c71_coddoc IN (141, 140) THEN 5
+                            WHEN c71_coddoc = 980 THEN 98
                             ELSE 99
                         END AS tipoentrsaida,
                         substr(o57_fonte,0,3) AS rubrica,

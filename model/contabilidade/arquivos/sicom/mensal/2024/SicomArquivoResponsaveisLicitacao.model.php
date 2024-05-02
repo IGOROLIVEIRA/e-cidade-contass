@@ -287,9 +287,7 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 				licpregao.l45_validade as finalVigencia,
 				cgm.z01_cgccpf as cpfMembroComissao,
 				licpregaocgm.l46_tipo as codAtribuicao,
-				case when l46_tipo = 1 then 'Leiloeiro' when l46_tipo = 2 then 'Membro/Equipe de Apoio'
-	 when l46_tipo = 3 then 'Presidente' when l46_tipo = 4 then 'Secretário' when l46_tipo = 5 then 'Servidor Designado'
-	 when l46_tipo = 6 then 'Pregoeiro' end as cargo,
+                l46_cargo as cargo,
 				l46_naturezacargo as naturezaCargo,
                 liclicita.l20_leidalicitacao as leidalicitacao,
                 manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
@@ -332,7 +330,7 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
             $clresplic20->si56_finalvigencia = $oDados20->finalvigencia;
             $clresplic20->si56_cpfmembrocomissao = $oDados20->cpfmembrocomissao;
             $clresplic20->si56_codatribuicao = $oDados20->codatribuicao;
-            $clresplic20->si56_cargo = $oDados20->cargo;
+            $clresplic20->si56_cargo = $this->removeCaracteres($oDados20->cargo);
             $clresplic20->si56_naturezacargo = $oDados20->naturezacargo;
             $clresplic20->si56_instit = db_getsession("DB_instit");
             $clresplic20->si56_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];

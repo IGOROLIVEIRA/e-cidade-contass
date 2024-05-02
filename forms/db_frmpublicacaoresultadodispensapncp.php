@@ -11,8 +11,9 @@ db_app::load("estilos.css, grid.style.css");
             </td>
             <td>
                 <select name="tipo" id="tipo" onchange="js_verificatipo();">
-                    <option value="1">Inclusão</option>
-                    <option value="2">Retificação</option>
+                    <option value="1">Julgamento</option>
+                    <option value="2">Homologação</option>
+                    <option value="3">Retificação</option>
                 </select>
             </td>
         </tr>

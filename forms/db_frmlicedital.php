@@ -263,10 +263,8 @@ $db_botao = true;
   }
 
   function js_preenchepesquisa(nroedital, codigo, status) {
-    if (status.trim() != 'AGUARDANDO ENVIO') {
       js_buscaDadosLicitacao(codigo);
       db_iframe_liclicita.hide();
-    }
   }
 
   function js_buscaDadosLicitacao(valor) {

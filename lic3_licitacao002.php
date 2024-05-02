@@ -394,11 +394,13 @@ if (!empty($oProcessoProtocolo)) {
         "com3_pesquisaresponsaveis.php?{$sGetUrl}"
     );
 
-    $oVerticalTab->add(
-        'dadosComissao',
-        'Comissão de Licitação',
-        "com3_pesquisacomissao.php?{$sGetUrl}"
-    );
+    if (!in_array($tipoTribunal, array('100', '101', '102', '103'))){
+        $oVerticalTab->add(
+            'dadosComissao',
+            'Comissão de Licitação',
+            "com3_pesquisacomissao.php?{$sGetUrl}"
+        );
+    }
 
     $oVerticalTab->add(
         'dadosParecer',
@@ -425,6 +427,16 @@ if (!empty($oProcessoProtocolo)) {
             "lic3_infolicedital002.php?{$sGetUrl}"
         );
     }
+    $oVerticalTab->add(
+        'dadosPncp',
+        'Dados PNCP',
+        "lic3_dadospcnp.php?{$sGetUrl}"
+    );
+    $oVerticalTab->add(
+        'AnexosPncp',
+        'Anexos PNCP',
+        "lic3_anexospncp.php?{$sGetUrl}"
+    );
     $oVerticalTab->show();
     ?>
 

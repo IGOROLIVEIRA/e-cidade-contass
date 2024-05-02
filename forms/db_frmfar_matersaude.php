@@ -109,6 +109,19 @@ $clrotulo->label("fa01_codigobarras");
           ?>
         </td>
       </tr>
+        <tr>
+            <td nowrap title="Código Material">
+                <?php
+                db_ancora("<b>Código CatMat:</b>","js_pesquisacatmat(true);",$db_opcao);
+                ?>
+            </td>
+            <td>
+                <?php
+                db_input('fa01_i_catmat',10,$fa01_i_catmat,true,'text',$db_opcao," onchange='js_pesquisacatmat(false);'");
+                db_input('faxx_i_desc',40,$faxx_i_desc,true,'text',3,'');
+                ?>
+            </td>
+        </tr>
       <tr>
         <td nowrap title="<?=@$Tfa01_i_listacontroladomed?>">
           <?php
@@ -507,4 +520,29 @@ function js_preenchepesquisa(chave){
   }
   ?>
 }
+
+function js_pesquisacatmat(mostra){
+
+    if(mostra==true){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_catmat','func_far_catmat.php?funcao_js=parent.js_mostraCatMat|faxx_i_codigo|faxx_i_desc','Pesquisa',true);
+    }else{
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_catmat','func_far_catmat.php?fa01_i_catmat='+document.form1.fa01_i_catmat.value+'&funcao_js=parent.js_mostraCatMat1','Pesquisa',false);
+    }
+}
+
+function js_mostraCatMat(chave1,chave2){
+    document.form1.fa01_i_catmat.value = chave1;
+    document.form1.faxx_i_desc.value = chave2;
+    db_iframe_far_catmat.hide();
+}
+
+function js_mostraCatMat1(chave,error){
+    document.form1.faxx_i_desc.value = chave;
+    if(erro==true){
+        document.form1.fa01_i_catmat.focus();
+        document.form1.fa01_i_catmat.value = '';
+    }
+}
+
+
 </script>

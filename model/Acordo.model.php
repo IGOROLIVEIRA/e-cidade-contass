@@ -4009,6 +4009,16 @@ class Acordo
             throw new BusinessException($oDaoAcordoObra->erro_msg);
         }
 
+        
+        $oDaoManutencaoacordo = new cl_manutencaoacordo();
+        $oDaoManutencaoacordo->excluir(null,"manutac_acordo = {$this->getCodigoAcordo()}");
+
+        if ($oDaoManutencaoacordo->erro_status == 0) {
+            throw new BusinessException($oDaoManutencaoacordo->erro_msg);
+        }
+        
+        
+
         /**
          * Remove o acordo
          */
@@ -4365,7 +4375,7 @@ class Acordo
         $sCampos        = "ac20_ordem, ac20_valoraditado, ac20_quantidadeaditada, sum(case when ac26_acordoposicaotipo <> " . AcordoPosicao::TIPO_REEQUILIBRIO . " then ac20_quantidade else 0 end) as quantidade, ";
         $sCampos .= "sum(ac20_valortotal) as valortotal, ";
         $sCampos .= "pc01_descrmater, pc01_codmater, max(ac20_sequencial) as codigo, max(ac20_acordoposicao) as posicao, ";
-        $sCampos .= "m61_codmatunid, m61_abrev ";
+        $sCampos .= "m61_codmatunid, m61_abrev,m61_descr ";
         $sWhere       = "ac16_sequencial = {$this->getCodigo()} ";
         $sGroup       = "group by ac20_ordem, pc01_descrmater, pc01_codmater, m61_codmatunid, m61_abrev, ac20_valoraditado, ac20_quantidadeaditada ";
         $sSqlItens    = $oDaoAcordoitem->sql_query_transparencia($sCampos, "ac20_ordem", $sWhere . $sGroup);
@@ -4385,6 +4395,7 @@ class Acordo
             $oItem->setUnidade($oDadosItem->m61_codmatunid);
             $oItem->setDescricaoUnidade($oDadosItem->m61_abrev);
             $oItem->setOrdem($oDadosItem->ac20_ordem);
+            $oItem->setDescricaoUnidade($oDadosItem->m61_descr);
             $aItens[] = $oItem;
         }
         return $aItens;

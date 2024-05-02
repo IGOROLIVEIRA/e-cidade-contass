@@ -9,4 +9,5 @@ class ReceitaTipoRepositoryLegacy
     CONST ANALITICO = 'A';
     CONST CONTA = 'S3';
     CONST DIARIO = 'S4';
+    CONST ANALITICO_RECEITA = 'AR';
 }

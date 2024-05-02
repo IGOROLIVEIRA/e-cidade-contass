@@ -178,6 +178,8 @@ class GerarREGADESAO extends GerarAM
             for ($iCont5 = 0; $iCont5 < pg_num_rows($rsREGADESAO20); $iCont5++) {
 
                 $aREGADESAO20 = pg_fetch_array($rsREGADESAO20, $iCont5);
+                if ($aREGADESAO10['si67_sequencial'] == $aREGADESAO20['si72_reg10']) {
+
                 $aCSVREGADESAO20['si72_tiporegistro']       = $this->padLeftZero($aREGADESAO20['si72_tiporegistro'], 2);
                 $aCSVREGADESAO20['si72_codorgao']           = $this->padLeftZero($aREGADESAO20['si72_codorgao'], 2);
                 $aCSVREGADESAO20['si72_codunidadesub']      = $this->padLeftZero($aREGADESAO20['si72_codunidadesub'], 5);
@@ -193,6 +195,9 @@ class GerarREGADESAO extends GerarAM
 
                 $this->sLinha = $aCSVREGADESAO20;
                 $this->adicionaLinha();
+
+              }
+
             }
         }
 
@@ -205,6 +210,8 @@ class GerarREGADESAO extends GerarAM
               for ($iCont6 = 0; $iCont6 < pg_num_rows($rsREGADESAO30); $iCont6++) {
 
                   $aREGADESAO30 = pg_fetch_array($rsREGADESAO30, $iCont6);
+                  if ($aREGADESAO10['si67_sequencial'] == $aREGADESAO30['si74_reg10']) {
+
                   $aCSVREGADESAO30['si74_tiporegistro'] = $this->padLeftZero($aREGADESAO30['si74_tiporegistro'], 2);
                   $aCSVREGADESAO30['si74_codorgao'] = $this->padLeftZero($aREGADESAO30['si74_codorgao'], 2);
                   $aCSVREGADESAO30['si74_codunidadesub'] = $this->padLeftZero($aREGADESAO30['si74_codunidadesub'], 5);
@@ -219,6 +226,8 @@ class GerarREGADESAO extends GerarAM
                   $this->sLinha = $aCSVREGADESAO30;
                   $this->adicionaLinha();
 
+                  }
+
               }
           }
 
@@ -230,6 +239,8 @@ class GerarREGADESAO extends GerarAM
               for ($iCont6 = 0; $iCont6 < pg_num_rows($rsREGADESAO40); $iCont6++) {
 
                   $aREGADESAO40 = pg_fetch_array($rsREGADESAO40, $iCont6);
+                  if ($aREGADESAO10['si67_sequencial'] == $aREGADESAO40['si73_reg10']) {
+
                   $aCSVREGADESAO40['si73_tiporegistro'] = $this->padLeftZero($aREGADESAO40['si73_tiporegistro'], 2);
                   $aCSVREGADESAO40['si73_codorgao'] = $this->padLeftZero($aREGADESAO40['si73_codorgao'], 2);
                   $aCSVREGADESAO40['si73_codunidadesub'] = $this->padLeftZero($aREGADESAO40['si73_codunidadesub'], 5);
@@ -243,6 +254,8 @@ class GerarREGADESAO extends GerarAM
 
                   $this->sLinha = $aCSVREGADESAO40;
                   $this->adicionaLinha();
+
+                  }
 
               }
           }

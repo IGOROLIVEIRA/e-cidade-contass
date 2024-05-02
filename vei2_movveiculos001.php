@@ -31,14 +31,19 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_veiccaddestino_classe.php");
+include("classes/db_veicretirada_classe.php");
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 $clrotulo = new rotulocampo;
+$clveicretirada = new cl_veicretirada;
 $clrotulo->label('ve01_codigo');
 $clrotulo->label('ve01_placa');
 $clrotulo->label('ve40_veiccadcentral');
 $clrotulo->label('descrdepto');
 $db_opcao = 1;
+$clveicretirada->rotulo->label();
+$clrotulo->label("z01_nome");
 ?>
+
 <html>
 
 <head>
@@ -56,9 +61,10 @@ $db_opcao = 1;
             var sDataIni = $F('data_inicial_ano') + '-' + $F('data_inicial_mes') + '-' + $F('data_inicial_dia');
             var sDatafim = $F('data_final_ano') + '-' + $F('data_final_mes') + '-' + $F('data_final_dia');
             var sDestino = $F('destino');
+            var iMotorista = $F('ve60_veicmotoristas');
             var sDescDes = document.getElementById('destionodescr');
-            var sUrl = 'iVeiculo=' + iVeiculo + '&sPlaca=' + sPlaca + '&iCentral=' + iCentral + '&sDataIni=' + sDataIni + '&sDataFim=' + sDatafim + '&sDestino=' + sDestino + '&sDescDes=' + sDescDes;
-
+            var sUrl = 'iVeiculo=' + iVeiculo + '&iMotorista=' + iMotorista +'&sPlaca=' + sPlaca + '&iCentral=' + iCentral + '&sDataIni=' + sDataIni + '&sDataFim=' + sDatafim + '&sDestino=' + sDestino + '&sDescDes=' + sDescDes;
+            
             jan = window.open('vei2_movveiculos002.php?' + sUrl, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
             jan.moveTo(0, 0);
 
@@ -93,6 +99,36 @@ $db_opcao = 1;
                                         ?>
                                     </td>
                                 </tr>
+                                <tr>
+                <td nowrap title="<?= @$Tve60_veicmotoristas ?>">
+                  <?
+                  db_ancora(@$Lve60_veicmotoristas, "js_pesquisave60_veicmotoristas(true);", $db_opcao);
+                  ?>
+                </td>
+                <td>
+                  <?
+                  db_input(
+                    've60_veicmotoristas',
+                    10,
+                    $Ive60_veicmotoristas,
+                    true,
+                    'text',
+                    $db_opcao,
+                    " onchange='js_pesquisave60_veicmotoristas(false);'"
+                  );
+                  if (isset($ve50_integrapessoal) && trim(@$ve50_integrapessoal) != "") {
+                    if ($ve50_integrapessoal == 1) {
+                      $pessoal = "true";
+                    }
+
+                    if ($ve50_integrapessoal == 2) {
+                      $pessoal = "false";
+                    }
+                  }
+                  db_input('z01_nome', 40, $Iz01_nome, true, 'text', 3, '')
+                  ?>
+                </td>
+              </tr>
                                 <tr>
                                     <td>
                                         <?= @$Lve01_placa ?>
@@ -270,4 +306,33 @@ $db_opcao = 1;
         db_iframe_central.hide();
     }
     js_tabulacaoforms("form1", "ve01_codigo", true, 0, "ve01_codigo", true);
+
+
+    function js_pesquisave60_veicmotoristas(mostra) {
+    if (mostra == true) {
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_veicmotoristas', 'func_veicmotoristasalt.php?pessoal=<?= $pessoal ?>&funcao_js=parent.js_mostraveicmotoristas1|ve05_codigo|z01_nome', 'Pesquisa', true);
+    } else {
+      if (document.form1.ve60_veicmotoristas.value != '') {
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_veicmotoristas', 'func_veicmotoristasalt.php?pessoal=<?= $pessoal ?>&pesquisa_chave=' + document.form1.ve60_veicmotoristas.value + '&funcao_js=parent.js_mostraveicmotoristas', 'Pesquisa', false);
+      } else {
+        document.form1.z01_nome.value = '';
+      }
+    }
+  }
+
+  function js_mostraveicmotoristas(chave, erro) {
+    document.form1.z01_nome.value = chave;
+    if (erro == true) {
+      document.form1.ve60_veicmotoristas.focus();
+      document.form1.ve60_veicmotoristas.value = '';
+    }
+  }
+
+  function js_mostraveicmotoristas1(chave1, chave2) {
+    document.form1.ve60_veicmotoristas.value = chave1;
+    document.form1.z01_nome.value = chave2;
+    db_iframe_veicmotoristas.hide();
+  }
+
+
 </script>
