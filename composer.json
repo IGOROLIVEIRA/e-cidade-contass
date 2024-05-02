@@ -27,7 +27,8 @@
         "endroid/qr-code": "^4.6.1"
     },
     "require-dev": {
-        "rafaelnery/phputils": "^1.3.10"
+        "rafaelnery/phputils": "^1.3.10",
+        "phpunit/phpunit": "^9.6"
     },
     "autoload": {
         "classmap": [
