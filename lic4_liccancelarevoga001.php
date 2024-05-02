@@ -189,13 +189,13 @@ function js_pesquisa_liclicita(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_liclicita',
-                        'func_liclicita.php?situacao=2&funcao_js=parent.js_mostraliclicita1|l20_codigo',
+                        'func_liclicitacancelarevogacao.php?situacao=2&funcao_js=parent.js_mostraliclicita1|l20_codigo',
                         'Pesquisa',true);
   }else{
      if(document.form1.l20_codigo.value != ''){
         js_OpenJanelaIframe('CurrentWindow.corpo',
                             'db_iframe_liclicita',
-                            'func_liclicita.php?situacao=2&pesquisa_chave='+document.form1.l20_codigo.value+
+                            'func_liclicitacancelarevogacao.php?situacao=2&pesquisa_chave='+document.form1.l20_codigo.value+
                             '&funcao_js=parent.js_mostraliclicita',
                             'Pesquisa',false);
      }else{
