@@ -28,7 +28,8 @@
     },
     "require-dev": {
         "rafaelnery/phputils": "^1.3.10",
-        "phpunit/phpunit": "^9.6"
+        "phpunit/phpunit": "^9.6",
+        "mockery/mockery": "^1.6"
     },
     "autoload": {
         "classmap": [
