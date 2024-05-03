@@ -37,7 +37,7 @@ class AddUserRaiane extends PostgresMigration
 
             $this->_loadUsuaCgm(array($id_usuario, $z01_numcgm));
 
-            $arrInstits = $this->fetchAll("select codigo from db_config");
+            $arrInstits = $this->fetchAll("select codigo from configuracoes.db_config");
 
             foreach ($arrInstits as $instit) {
                 $this->_loadUserInstit(array($instit['codigo'], $id_usuario));
