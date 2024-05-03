@@ -304,6 +304,8 @@ $nSaldoGeralaTransf = 0;
 $nValorTotalTransferido = 0;
 $nSaldoTotalTransfer = 0;
 $nImprimirFonte = 0;
+$nImprimirCabecalho = 0;
+$nDadosCabecalho  = 0;
 
 $oPdf->AddPage();
 
@@ -327,9 +329,17 @@ foreach ($aRetencoes as $oQuebra) {
   }
   foreach ($oQuebra->itens as $oRetencaoAtiva) {
   
-    $sSqlSlip   = " select round(sum(k17_valor),2) as k17_valor from slip where k17_credito = $oRetencaoAtiva->c61_reduz  
-                  and k17_tiposelect in ('04','4') and
-                  k17_data between '{$dataInicial}' and '{$dataFinal}' and (k17_dtanu > '{$dataFinal}' or k17_dtanu is null)  ";
+    $sSqlSlip   = " select round(sum(k17_valor),2) as k17_valor 
+                          from slip 
+                          inner join sliprecurso on k29_slip = k17_codigo
+                          where k17_credito = $oRetencaoAtiva->c61_reduz and 
+                        
+                          k17_tiposelect in ('04','4') and
+                          k17_data between '{$dataInicial}' and '{$dataFinal}' and 
+                          (k17_dtanu > '{$dataFinal}' or k17_dtanu is null)  
+                          
+                          ";
+                          // and k29_recurso = $oRetencaoAtiva->codigo
     $rsSlip     = db_query($sSqlSlip);
     $iTotalSlip = pg_num_rows($rsSlip); 
     if ($iTotalSlip > 0) {
@@ -340,6 +350,9 @@ foreach ($aRetencoes as $oQuebra) {
 
       if ($oPdf->Gety() > $oPdf->h - 27) {
         $oPdf->AddPage();
+        if ($nDadosCabecalho == $oRetencaoAtiva->c61_reduz.$oRetencaoAtiva->codigo) {
+            $nImprimirCabecalho = 1;
+        }
       }
 
       if ($oQuebra->texto != "") {
@@ -361,15 +374,15 @@ foreach ($aRetencoes as $oQuebra) {
     }
   
     if ($oParametros->iTipo == 'a'){
-      $nValorTotalTransferido = $oSlip->k17_valor;
-      $nSaldoTotalTransfer = $oQuebra->total - $oSlip->k17_valor;
-      if ($nImprimirFonte != $oRetencaoAtiva->codigo || $nImprimirFonte == 0){
+      if ($nImprimirCabecalho == 0 && ( $nImprimirFonte != $oRetencaoAtiva->codigo || $nImprimirFonte == 0 )){
         $oPdf->SetFont($sFonte, "b",$iTamFonte+1);
         $oPdf->cell(143+$iTamCell,5,$oRetencaoAtiva->codigo ." - ". $oRetencaoAtiva->descricao,1,0,"L");
         $oPdf->cell(35+$iTamCell,5,"R$ ".db_formatar($aRetencoes[$oRetencaoAtiva->c61_reduz.$oRetencaoAtiva->codigo]->totalfonte,"f"),1,0,"C");
-        $oPdf->cell(35+$iTamCell,5,"R$ ".db_formatar($oSlip->k17_valor,"f"),1,0,"C");
-        $oPdf->cell(35+$iTamCell,5,"R$ ".db_formatar($aRetencoes[$oRetencaoAtiva->c61_reduz.$oRetencaoAtiva->codigo]->totalfonte - $oSlip->k17_valor,"f"),1,1,"C");
-        $nTotalGeralTransf  += $oSlip->k17_valor;
+        $oPdf->cell(35+$iTamCell,5,"R$ ".db_formatar($oSlip->k17_valor - $nValorTotalTransferido,"f"),1,0,"C");
+        $oPdf->cell(35+$iTamCell,5,"R$ ".db_formatar($aRetencoes[$oRetencaoAtiva->c61_reduz.$oRetencaoAtiva->codigo]->totalfonte - $oSlip->k17_valor + $nValorTotalTransferido,"f"),1,1,"C");
+        $nTotalGeralTransf  += $oSlip->k17_valor - $nValorTotalTransferido;
+        $nValorTotalTransferido += $oSlip->k17_valor - $nValorTotalTransferido;
+        $nSaldoTotalTransfer = $oQuebra->total - $nValorTotalTransferido;
       }
       $oPdf->SetFont($sFonte, "",$iTamFonte);
       $oPdf->cell(143+$iTamCell,5,$oRetencaoAtiva->e21_sequencial ." - ". $oRetencaoAtiva->e21_descricao,1,0,"L"); 
@@ -377,19 +390,21 @@ foreach ($aRetencoes as $oQuebra) {
       $oPdf->cell(35+$iTamCell,5," - ",1,0,"C");
       $oPdf->cell(35+$iTamCell,5," - ",1,1,"C");
       $nTotalGeralRetido  += $oRetencaoAtiva->e23_valorretencao;
-      $nSaldoGeralaTransf = $nTotalGeralRetido - $nTotalGeralTransf;
+      $nSaldoGeralaTransf = $nValorTotalTransferido + $nTotalGeralRetido - $nTotalGeralTransf;
+      $nDadosCabecalho = $oRetencaoAtiva->c61_reduz.$oRetencaoAtiva->codigo;
+      $nImprimirCabecalho = 0;
     } 
     if ($oParametros->iTipo == 's'){
-      $nValorTotalTransferido += $oSlip->k17_valor;
-      $nSaldoTotalTransfer += $oRetencaoAtiva->e23_valorretencao - $oSlip->k17_valor;
+      $nSaldoTotalTransfer += $nValorTotalTransferido + $oRetencaoAtiva->e23_valorretencao - $oSlip->k17_valor;
       $oPdf->SetFont($sFonte, "",$iTamFonte);
       $oPdf->cell(143+$iTamCell,5,$oRetencaoAtiva->codigo ." - ". $oRetencaoAtiva->descricao,1,0,"L");
       $oPdf->cell(35+$iTamCell,5,"R$ ".db_formatar($oRetencaoAtiva->e23_valorretencao,"f"),1,0,"C");
-      $oPdf->cell(35+$iTamCell,5,"R$ ".db_formatar($oSlip->k17_valor,"f"),1,0,"C");
-      $oPdf->cell(35+$iTamCell,5,"R$ ".db_formatar($oRetencaoAtiva->e23_valorretencao - $oSlip->k17_valor,"f"),1,1,"C");
+      $oPdf->cell(35+$iTamCell,5,"R$ ".db_formatar($oSlip->k17_valor - $nValorTotalTransferido,"f"),1,0,"C");
+      $oPdf->cell(35+$iTamCell,5,"R$ ".db_formatar($oRetencaoAtiva->e23_valorretencao - $oSlip->k17_valor + $nValorTotalTransferido,"f"),1,1,"C");      
       $nTotalGeralRetido += $oRetencaoAtiva->e23_valorretencao;
-      $nTotalGeralTransf += $nValorTotalTransferido;
+      $nTotalGeralTransf +=  $oSlip->k17_valor - $nValorTotalTransferido;
       $nSaldoGeralaTransf = $nTotalGeralRetido - $nTotalGeralTransf;
+      $nValorTotalTransferido += $oSlip->k17_valor - $nValorTotalTransferido;
     }   
     $nImprimirFonte = $oRetencaoAtiva->codigo;
   }

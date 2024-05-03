@@ -55,6 +55,9 @@
         "zendframework/zend-eventmanager": "2.2.10"
     },
     "require-dev": {
+        "rafaelnery/phputils": "^1.3.10",
+        "phpunit/phpunit": "^9.6",
+        "mockery/mockery": "^1.6"
         "barryvdh/laravel-ide-helper": "^2.4",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
@@ -64,15 +67,22 @@
         "phpunit/phpunit": "^9.5.10"
     },
     "autoload": {
+        "classmap": [
+            "app",
+            "app/Models"
+        ],
         "files": [
             "definitions.php",
             "bootstrap/tenant_resolver.php",
-            "std/autoload.php"
+            "std/autoload.php",
+            "model/protocolo/cgm/CgmRepository.model.php",
+            "classes/ClasseBase.php"
         ],
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/"
+            "Database\\Seeders\\": "database/seeders/",
+            "ECidadeLegacy\\Classes\\": "classes/"
         }
     },
     "autoload-dev": {
@@ -94,6 +104,27 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "merge-ecidade-3": [
+            "php bin/v3/modification/refresh-metadata",
+            "php bin/v3/modification/refresh-cache",
+            "echo 'DONE!'"
+        ],
+        "install-desktop": [
+            "bin/v3/extension/pack Desktop",
+            "bin/v3/extension/unpack desktop-package.tar.gz true",
+            "bin/v3/extension/install Desktop dbseller"
+        ],
+        "install-dbug": [
+            "bin/v3/extension/pack DBug",
+            "bin/v3/extension/unpack dbug-package.tar.gz true",
+            "bin/v3/extension/install DBug"
+        ],
+        "install-v3": [
+            "bin/v3/extension/install Desktop "
+        ],
+        "migrate": [
+            "vendor/robmorgan/phinx/bin/phinx migrate -e e-cidade"
         ]
     },
     "extra": {

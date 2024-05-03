@@ -422,7 +422,7 @@ $sqlSlip  = "select distinct
       $densidadearquivo = "01600";
       $usoprefeitura1 = $e90_codgera;
       $db_layouttxt = new db_layouttxt(9,"tmp/".$nomearquivo, "A B");
-      db_setaPropriedadesLayoutTxt(&$db_layouttxt,1);
+      db_setaPropriedadesLayoutTxt($db_layouttxt,1);
 
     }
 	  ///// FINAL HEADER DO ARQUIVO
@@ -473,7 +473,7 @@ $sqlSlip  = "select distinct
           	$loteservico = db_formatar($seq_header,'s','0',4,'e',0);
             $quantidadetotallote = ($seq_detalhe + 2);
             $valortotallote = $valor_header;
-            db_setaPropriedadesLayoutTxt(&$db_layouttxt,4);
+            db_setaPropriedadesLayoutTxt($db_layouttxt,4);
             $valortotallote = 0;
             $valor_header = 0;
 
@@ -629,7 +629,7 @@ $sqlSlip  = "select distinct
 //      $contalote = $conta_pre;
       $contalote = str_pad($c63_codigooperacao,4,"0",STR_PAD_LEFT).str_pad($conta_pre,8,"0",STR_PAD_LEFT);
       $dvcontalote = $dvconta_pre;
-      db_setaPropriedadesLayoutTxt(&$db_layouttxt,2);
+      db_setaPropriedadesLayoutTxt($db_layouttxt,2);
 	  }
 	      // FINAL HEADER DO LOTE
 	 }
@@ -835,14 +835,14 @@ $sqlSlip  = "select distinct
         $diasvencimento       = db_subdata($e87_dataproc,"d");
         $numparcelas          = "00";
         $avisofavorecido      = "0";
-        db_setaPropriedadesLayoutTxt(&$db_layouttxt,3,"A");
+        db_setaPropriedadesLayoutTxt($db_layouttxt,3,"A");
         $seq_detalhe         += 1;
         $loteservico          = db_formatar($seq_header,'s','0',4,'e',0);
         $sequencialnolote     = $seq_detalhe;
         $tipoinscricaofav     = $conf;
         $datavencimento       = $e87_dataproc;
         $valorvencimento      = $valor;
-        db_setaPropriedadesLayoutTxt(&$db_layouttxt,3,"B");
+        db_setaPropriedadesLayoutTxt($db_layouttxt,3,"B");
         $registro += 1;
 
 	    }
@@ -855,7 +855,7 @@ $sqlSlip  = "select distinct
       $loteservico        = db_formatar($seq_header,'s','0',4,'e',0);
       $quantidadetotallote = ($seq_detalhe + 2);
       $valortotallote = $valor_header;
-      db_setaPropriedadesLayoutTxt(&$db_layouttxt,4);
+      db_setaPropriedadesLayoutTxt($db_layouttxt,4);
       $valortotallote = 0;
       $valor_header = 0;
 
@@ -884,7 +884,7 @@ $sqlSlip  = "select distinct
 	  	$loteservico = '99999';
       $quantidadelotesarq = db_formatar($seq_header,'s','0',4,'e',0);
       $quantidaderegistarq = $registro + $quantidadelotesarq +1;
-      db_setaPropriedadesLayoutTxt(&$db_layouttxt,5);
+      db_setaPropriedadesLayoutTxt($db_layouttxt,5);
 
     } else {
 
@@ -962,7 +962,6 @@ if(isset($sqlerro)){
   if($sqlerro == true){
     db_msgbox($erro_msg);
   }else{
-//    db_msgbox($nomearquivo);
     echo "
     <script>
       function js_emitir(){
