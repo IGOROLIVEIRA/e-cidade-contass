@@ -9,12 +9,12 @@ class FixOc22066 extends AbstractMigration
     {
         $sSql = "insert
                     into
-                    db_menu
+                    configuracoes.db_menu
                 values ( (
                 select
                     id_item
                 from
-                    db_itensmenu
+                    configuracoes.db_itensmenu
                 where
                     descricao = 'Manutenção de Lançamentos (Patrimonial)'
                 ),
@@ -22,26 +22,26 @@ class FixOc22066 extends AbstractMigration
                 select
                     id_item
                 from
-                    db_itensmenu
+                    configuracoes.db_itensmenu
                 where
                     funcao = 'm4_orcamento.php'),
                 (
                 select
                     max(menusequencia)+ 1
                 from
-                    db_menu
+                    configuracoes.db_menu
                 where
                     id_item = (
                     select
                         id_item
                     from
-                        db_itensmenu
+                        configuracoes.db_itensmenu
                     where
                         descricao = 'Manutenção de Lançamentos (Patrimonial)')
-                
+
                 ),
                 1);";
-                
+
             $this->execute($sSql);
     }
 }
