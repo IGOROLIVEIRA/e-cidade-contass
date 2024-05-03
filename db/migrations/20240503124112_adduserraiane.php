@@ -25,11 +25,11 @@ class AddUserRaiane extends PostgresMigration
             $arrUser = $cgm['user'];
             unset($cgm['user']);
 
-            $z01_numcgm = current($this->fetchRow("select nextval('cgm_z01_numcgm_seq')"));
+            $z01_numcgm = current($this->fetchRow("select nextval('protocolo.cgm_z01_numcgm_seq')"));
             array_unshift($cgm, $z01_numcgm);
             $this->_loadCgm($cgm);
 
-            $id_usuario = current($this->fetchRow("select nextval('db_usuarios_id_usuario_seq')"));
+            $id_usuario = current($this->fetchRow("select nextval('protocolo.db_usuarios_id_usuario_seq')"));
             array_unshift($arrUser, $id_usuario);
             $this->_loadUsers($arrUser);
             $this->_loadDepartamentos($id_usuario);
@@ -129,7 +129,7 @@ class AddUserRaiane extends PostgresMigration
      */
     private function _loadDepartamentos($id_usuario)
     {
-        $this->execute("insert into db_depusu select {$id_usuario}, coddepto, db17_ordem from db_depusu where id_usuario = 1 order by 2");
+        $this->execute("insert into configuracoes.db_depusu select {$id_usuario}, coddepto, db17_ordem from configuracoes.db_depusu where id_usuario = 1 order by 2");
     }
 
     /**
@@ -138,6 +138,6 @@ class AddUserRaiane extends PostgresMigration
      */
     private function _loadPermissions($id_usuario)
     {
-        $this->execute("insert into db_permissao select {$id_usuario}, id_item, permissaoativa, anousu, id_instit, id_modulo from db_permissao where id_usuario = 1 order by 2");
+        $this->execute("insert into configuracoes.db_permissao select {$id_usuario}, id_item, permissaoativa, anousu, id_instit, id_modulo from configuracoes.db_permissao where id_usuario = 1 order by 2");
     }
 }
