@@ -32,18 +32,20 @@ class FilaESocialTask extends Task implements iTarefa
         require_once("libs/db_stdlib.php");
         require_once("libs/db_utils.php");
         require_once("dbforms/db_funcoes.php");
+        
         //require_once("libs/db_conecta.php");
 
         $dao = new \cl_esocialenvio();
 
 
         $hostname = gethostname();
+        //var_dump($hostname);exit;
         $cmd = shell_exec("cat updatedb/conn | grep -e {$hostname}$");
         $rows        = preg_split('/\s+/', $cmd);
         $rows = array_filter($rows);
         $array_global = array();
         $array_interno = array();
-
+        
         foreach ($rows as $row) {
             if (count($array_interno) <= 3) {
                 $array_interno[] = $row;
@@ -80,7 +82,6 @@ class FilaESocialTask extends Task implements iTarefa
                 }
             } catch (\Exception $e) {
                 echo "Erro na execução:\n{$e->getMessage()} \n";
-                var_dump($row);
                 continue;
             }
         }
@@ -89,6 +90,7 @@ class FilaESocialTask extends Task implements iTarefa
     private function enviar($conn, $dadosEnvio)
     {
         try {
+            //var_dump('enviar');exit;
             $dao = new \cl_esocialenvio();
             $daoEsocialCertificado = new \cl_esocialcertificado();
             $sql = $daoEsocialCertificado->sql_query(null, "rh214_senha as senha,rh214_certificado as certificado, cgc as nrinsc, z01_nome as nmRazao", "rh214_sequencial", "rh214_cgm = {$dadosEnvio->rh213_empregador}");
@@ -104,16 +106,19 @@ class FilaESocialTask extends Task implements iTarefa
 
             $exportar = new ESocial(Registry::get('app.config'), "run.php");
             $exportar->setDados($dados);
+            //var_dump($exportar);exit;
+            
             $retorno = $exportar->request();
-
+            
+            //var_dump($exportar->getDescResposta());exit;
             if (!$retorno) {
-                throw new Exception("Erro no envio das informa??es. \n {$exportar->getDescResposta()}");
+                throw new Exception("Erro no envio das informações. \n {$exportar->getDescResposta()}");
             }
             $dao->setSituacaoEnviado($dadosEnvio->rh213_sequencial);
             if ($dao->erro_status == "0") {
-                throw new Exception("N?o foi poss?vel alterar situa??o ENVIADO da fila.");
+                throw new Exception("N?o foi poss?vel alterar situação ENVIADO da fila.");
             }
-
+            
             $dados[] = $exportar->getProtocoloEnvioLote();
 
             $dao->setProtocolo($dadosEnvio->rh213_sequencial, $exportar->getProtocoloEnvioLote());
@@ -128,12 +133,13 @@ class FilaESocialTask extends Task implements iTarefa
             $exportar = new ESocial(Registry::get('app.config'), "consulta.php");
             $exportar->setDados($dados);
             $retorno = $exportar->request();
+            //var_dump($retorno);
             if (!$retorno) {
                 throw new Exception("Erro ao buscar processamento do envio. \n {$exportar->getDescResposta()}");
             }
-
+            //var_dump($exportar->getCdRespostaProcessamento());exit;
             if ($exportar->getCdRespostaProcessamento() != self::LOTE_PROCESSADO_SUCESSO) {
-                throw new Exception("Erro no processamento do lote. " . utf8_decode($exportar->getDescRespostaProcessamento()));
+                throw new Exception($exportar->getCdRespostaProcessamento(). " Erro no processamento do lote. " . utf8_decode($exportar->getDescRespostaProcessamento()));
             }
 
             $this->incluirRecido($dadosEnvio->rh213_sequencial, $exportar->getNumeroRecibo());
@@ -142,9 +148,9 @@ class FilaESocialTask extends Task implements iTarefa
         } catch (\Exception $e) {
             $dao->setSituacaoErroEnvio($dadosEnvio->rh213_sequencial, $e->getMessage());
             if ($dao->erro_status == "0") {
-                echo "Erro na execu??o:\n N?o foi poss?vel alterar situa??o NAO ENVIADO da fila. \n {$dao->erro_msg}";
+                echo "Erro na execução:\n Não foi possível alterar situação NAO ENVIADO da fila. \n {$dao->erro_msg}";
             }
-            echo "Erro na execu??o:\n{$e->getMessage()} \n";
+            echo "Erro na execução:\n{$e->getMessage()} \n";
         }
     }
 
@@ -236,7 +242,7 @@ class FilaESocialTask extends Task implements iTarefa
                     echo "{$exportar->getDescResposta()} Recibo de Envio {$exportar->getNumeroRecibo()}";
                 }
             } catch (\Exception $e) {
-                echo "Erro na execu??o:\n{$e->getMessage()} \n";
+                echo "Erro na execução:\n{$e->getMessage()} \n";
             }
         }
     }
