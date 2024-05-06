@@ -399,35 +399,6 @@ if (isset($confirmar) && trim($confirmar) != "") {
         break;
       }
 
-      $rResultado = db_query("
-            select pc24_orcamforne
-            from pcorcamjulg
-              where pc24_orcamforne = {$pc24_orcamforne} and pc24_orcamitem = {$pc24_orcamitem}
-      ");
-
-
-      if (pg_num_rows($rResultado) > 0) {
-        //db_inicio_transacao();
-        $clpcorcamjulg->excluir($pc24_orcamitem, $pc24_orcamforne);
-        //db_fim_transacao();
-        if ($clpcorcamjulg->erro_status == 0) {
-          $erro_msg = $clpcorcamjulg->erro_msg;
-          $sqlerro = true;
-        }
-      }
-
-      $clpcorcamjulg->pc24_orcamitem  = $pc24_orcamitem;
-      $clpcorcamjulg->pc24_orcamforne = $pc24_orcamforne;
-      $clpcorcamjulg->pc24_pontuacao  = 1;
-
-      $clpcorcamjulg->incluir($pc24_orcamitem, $pc24_orcamforne);
-      if ($clpcorcamjulg->erro_status == 0) {
-
-        $erro_msg = $clpcorcamjulg->erro_msg;
-        $sqlerro  = true;
-        break;
-      }
-
       if ($lRegistroPreco) {
         /**
          * buscamos o código do item do registro de preço , e o valor unitário para inserir em registroprecojulgamento
@@ -498,6 +469,11 @@ if (isset($confirmar) && trim($confirmar) != "") {
       $clsituacaoitemlic->incluir();
     }
 
+    $clpcorcamjulg->julgamentoLicitacao($oDadosLicitacao->l20_tipojulg,$pc20_codorc);
+    if ($clpcorcamjulg->erro_status == 0) {
+      $erro_msg = $clpcorcamjulg->erro_msg;
+      $sqlerro = true;
+    }
 
     if ($sqlerro == false) {
       $clliclicita->l20_licsituacao = 1;
