@@ -202,7 +202,7 @@ class DBHttpRequest
             $arrXmlTags = array('<s:envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">','<s:body>','</s:body>','</s:envelope>');
             $objxml = new SimpleXMLElement(str_ireplace($arrXmlTags,"",$this->body));
             // ver xml de retorno completo
-            // echo "<pre>","XML ENVIO";print_r($objxml);die;
+            //echo "<pre>","XML ENVIO";print_r($objxml);die;
             switch ($url) {
                 case 'run.php':
                     return $objxml->EnviarLoteEventosResult->eSocial->retornoEnvioLoteEventos;
@@ -212,6 +212,13 @@ class DBHttpRequest
                     return $objxml->EnviarLoteEventosResult->eSocial->retornoEnvioLoteEventos;
             }
         } catch (\Exception $e) {
+            if (strpos($e->getMessage(), 'String could not be parsed as XML') !== false &&
+                strpos($this->body, 'Impossivel ler o certificado') !== false) {
+                throw new Exception("Erro api :\n Não foi posssível analisar a cadeia de caracteres como XML - Retorno API: {$this->body}");
+            }
+            if(strpos($this->body, 'The validity of the certificate has expired') !== false) {
+                throw new Exception("Erro api :\n Não foi posssível analisar a cadeia de caracteres como XML - Retorno API: A validade do certificado expirou.");
+            }
             throw new Exception("Erro api :\n{$e->getMessage()} - Retorno API: {$this->body}");
         }
     }

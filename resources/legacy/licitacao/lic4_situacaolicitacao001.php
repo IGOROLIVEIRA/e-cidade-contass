@@ -170,6 +170,8 @@ switch ($iOpcao) {
     var sUrlRPC = "lic4_situacaolicitacao.RPC.php";
 
     function js_pequisaLicitacao() {
+        let iTiposituacao = <?=$iCodigoTipoSituacao?>
+
         if (iOpcao == 1) {
             sAcaoRPC = "incluir";
             iTipoSituacao = 0;
@@ -178,7 +180,7 @@ switch ($iOpcao) {
             iTipoSituacao = 3;
         } else if (iOpcao == 3) {
             sAcaoRPC = "cancelar";
-            iTipoSituacao = 3;
+            iTipoSituacao = iTiposituacao;
         }
 
 
@@ -201,6 +203,7 @@ switch ($iOpcao) {
     }
 
     function js_salvarOperacao() {
+        let iTiposituacao = <?=$iCodigoTipoSituacao?>
 
         /**
          *  validar existência licitação
@@ -214,10 +217,10 @@ switch ($iOpcao) {
 
         if (iOpcao == 1) {
             sAcaoRPC = "incluir";
-            iTipoSituacao = 3;
+            iTipoSituacao = iTiposituacao;
         } else if (iOpcao == 2) {
             sAcaoRPC = "alterar";
-            iTipoSituacao = 3;
+            iTipoSituacao = iTiposituacao;
         } else if (iOpcao == 3) {
             sAcaoRPC = "cancelar";
             iTipoSituacao = 0;
