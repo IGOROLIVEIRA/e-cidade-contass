@@ -205,7 +205,7 @@ $sWhereContratos = " and 1 = 1 ";
                 }
 
                 if (isset($tiponatu) && $tiponatu == '2') {
-                    $dbwhere .= " l20_tipnaturezaproced  = 2 AND ";
+                    $dbwhere .= " (l20_tipnaturezaproced  = 2  or  l20_usaregistropreco = 't') AND ";
                 }
 
                 if (!empty($oGet->validasaldo)) {
