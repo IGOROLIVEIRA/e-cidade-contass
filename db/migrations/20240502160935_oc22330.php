@@ -194,13 +194,22 @@ class Oc22330 extends AbstractMigration
                 $this->execute("insert into amparocflicita values(102,{$aInexigibilidade[0]})");
             }
 
-            $aCredenciamento = $this->getCredenciamento($aInstit['codigo']);
-            if(!empty($aCredenciamento)){
-                $this->execute("insert into amparocflicita values(103,{$aCredenciamento[0]})");
-                $this->execute("insert into amparocflicita values(125,{$aCredenciamento[0]})");
-                $this->execute("insert into amparocflicita values(140,{$aCredenciamento[0]})");
-                $this->execute("insert into amparocflicita values(141,{$aCredenciamento[0]})");
-                $this->execute("insert into amparocflicita values(142,{$aCredenciamento[0]})");
+            $aDispensaporchamadapublica = $this->getDispensaporchamadapublica($aInstit['codigo']);
+            if(!empty($aDispensaporchamadapublica)){
+                $this->execute("insert into amparocflicita values(103,{$aDispensaporchamadapublica[0]})");
+                $this->execute("insert into amparocflicita values(125,{$aDispensaporchamadapublica[0]})");
+                $this->execute("insert into amparocflicita values(140,{$aDispensaporchamadapublica[0]})");
+                $this->execute("insert into amparocflicita values(141,{$aDispensaporchamadapublica[0]})");
+                $this->execute("insert into amparocflicita values(142,{$aDispensaporchamadapublica[0]})");
+            }
+
+            $aInexigibilidadeporcredenciamento = $this->getInexigibilidadeporcredenciamento($aInstit['codigo']);
+            if(!empty($aInexigibilidadeporcredenciamento)){
+                $this->execute("insert into amparocflicita values(103,{$aInexigibilidadeporcredenciamento[0]})");
+                $this->execute("insert into amparocflicita values(125,{$aInexigibilidadeporcredenciamento[0]})");
+                $this->execute("insert into amparocflicita values(140,{$aInexigibilidadeporcredenciamento[0]})");
+                $this->execute("insert into amparocflicita values(141,{$aInexigibilidadeporcredenciamento[0]})");
+                $this->execute("insert into amparocflicita values(142,{$aInexigibilidadeporcredenciamento[0]})");
             }
         }
 
@@ -311,13 +320,24 @@ class Oc22330 extends AbstractMigration
         }
     }
 
-    private function getCredenciamento($instit): array
+    private function getDispensaporchamadapublica($instit): array
     {
-        $result = $this->fetchRow("select l03_codigo from cflicita where l03_instit = $instit and l03_pctipocompratribunal in (102,103)");
+        $result = $this->fetchRow("select l03_codigo from cflicita where l03_instit = $instit and l03_pctipocompratribunal = 102");
         if ($result) {
             return $result;
         } else {
             return [];
         }
     }
+
+    private function getInexigibilidadeporcredenciamento($instit): array
+    {
+        $result = $this->fetchRow("select l03_codigo from cflicita where l03_instit = $instit and l03_pctipocompratribunal  = 103");
+        if ($result) {
+            return $result;
+        } else {
+            return [];
+        }
+    }
+
 }
