@@ -177,7 +177,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
         }
 
 
-        $sSql = "SELECT DISTINCT '10' AS tipoRegistro,
+        $sSql = "SELECT distinct on (nroprocessolicitatorio) nroprocessolicitatorio, '10' AS tipoRegistro,
                 substr(si01_datacotacao, 6, 2)||substr(si01_datacotacao, 1, 4) as dataCotacao,
                 codorgaoresp,
                 codunidadesubresp,
@@ -206,6 +206,9 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                 l20_recdocumentacao,
                 l20_dataaberproposta,
                 l20_orcsigiloso,
+                si01_sequencial,
+                (select sum (si02_vltotalprecoreferencia) from itemprecoreferencia where si02_precoreferencia = si01_sequencial) as valortotal, 
+                si02_vltotalprecoreferencia,
                 emailContato,
                 codUnidadeSubRespEstadual
 FROM
@@ -268,6 +271,8 @@ FROM
                      liclicita.l20_recdocumentacao,
                      liclicita.l20_dataaberproposta,
                      liclicita.l20_orcsigiloso,
+                     si01_sequencial,
+                     si02_vltotalprecoreferencia,
                      (SELECT count(*) FROM
                         (SELECT DISTINCT l04_descricao
                             FROM liclicitemlote
@@ -341,12 +346,15 @@ FROM
               si01_datacotacao,
               pc23_quant,
               l47_email,
-              si09_codunidadesubunidade) AS query
+              si09_codunidadesubunidade,
+              si02_vltotalprecoreferencia,
+              si01_sequencial
+              ) AS query
 GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exerciciolicitacao, nroProcessoLicitatorio,
          tipoCadastradoLicitacao, codmodalidadelicitacao, naturezaprocedimento, nroedital,
          exercicioedital, dtpublicacaoeditaldo, LINK, tipolicitacao, naturezaobjeto, objeto, bdi, regimeexecucaoobras,
          origemrecurso, dscorigemrecurso, qtdLotes, tipoJulgamento, l20_usaregistropreco,l20_leidalicitacao,
-         l20_mododisputa,l20_recdocumentacao,l20_dataaberproposta,l20_orcsigiloso,emailContato,codUnidadeSubRespEstadual
+         l20_mododisputa,l20_recdocumentacao,l20_dataaberproposta,l20_orcsigiloso,si01_sequencial,si02_vltotalprecoreferencia,emailContato,codUnidadeSubRespEstadual
 
 ORDER BY nroprocessolicitatorio
 
@@ -393,7 +401,7 @@ ORDER BY nroprocessolicitatorio
             }else{
                 $clralic10->si180_tipoorcamento = 2; //22
             }
-            $clralic10->si180_vlcontratacao = $oDados10->vlcontratacao; //23
+            $clralic10->si180_vlcontratacao = $oDados10->valortotal; //23
             $clralic10->si180_bdi = $oDados10->bdi; //24
             $clralic10->si180_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];//25
             $clralic10->si180_origemrecurso = $oDados10->origemrecurso; //26

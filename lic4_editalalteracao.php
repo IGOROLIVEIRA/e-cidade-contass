@@ -91,6 +91,13 @@ if (isset($alterar)) {
   $sSqlDocumentos = $cleditaldocumento->sql_query(null, 'l48_tipo', null, ' l48_liclicita = ' . $licitacao);
   $rsDocumentos = $cleditaldocumento->sql_record($sSqlDocumentos);
 
+  $sqlLicita = $clliclicita->sql_query_edital('', 'DISTINCT l20_codigo, l20_edital, l20_nroedital, l20_objeto,l20_numero, pctipocompratribunal.l44_sequencial as tipo_tribunal,
+  UPPER(pctipocompratribunal.l44_descricao) as descr_tribunal, l20_naturezaobjeto as natureza_objeto,
+  l47_dataenvio, l20_anousu, l20_tipojulg', '', 'l20_codigo = ' . $licitacao . $sWhere, '', 1);
+  $rsLicita = $clliclicita->sql_record($sqlLicita);
+  $oDadosLicitacao = db_utils::fieldsMemory($rsLicita, 0);
+  $tipo_tribunal = $oDadosLicitacao->tipo_tribunal;
+
   if ($natureza_objeto == 1) {
 
     $aTipos = db_utils::getCollectionByRecord($rsDocumentos);

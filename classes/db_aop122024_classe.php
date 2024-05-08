@@ -638,7 +638,7 @@ class cl_aop122024
     {
         $sSql12 = " SELECT
                     12 AS tiporegistro,
-                    coremp.k12_codord AS codreduzidoop,
+                    e82_codord AS codreduzidoop,
                     CASE
                         WHEN e96_codigo = 4
                         AND c60_codsis = 5 THEN 5
@@ -661,43 +661,65 @@ class cl_aop122024
                     c23_conlancam AS codlan,
                     e81_codmov,
                     e81_numdoc
-                FROM corrente
-                JOIN coremp ON (coremp.k12_autent, coremp.k12_data, coremp.k12_id) = (corrente.k12_autent, corrente.k12_data, corrente.k12_id)
-                JOIN conplanoreduz ON c61_reduz = k12_conta
-                JOIN conplano ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
-                LEFT JOIN conplanoconta ON c63_codcon = c60_codcon AND c60_anousu = c63_anousu
-                JOIN corgrupocorrente ON corgrupocorrente.k105_autent = corrente.k12_autent AND corgrupocorrente.k105_data = corrente.k12_data
-                    AND (corgrupocorrente.k105_data, corgrupocorrente.k105_id) = (corrente.k12_data, corrente.k12_id)
-                JOIN conlancamcorgrupocorrente ON c23_corgrupocorrente = corgrupocorrente.k105_sequencial
-                JOIN pagordem ON (k12_empen, k12_codord) = (e50_numemp, e50_codord)
-                INNER JOIN empempenho ON empempenho.e60_numemp = e50_numemp
-                INNER JOIN empagemov ON empempenho.e60_numemp = empagemov.e81_numemp
-                INNER JOIN empord ON empord.e82_codmov = empagemov.e81_codmov
-                LEFT JOIN empagemovforma ON empagemovforma.e97_codmov = empagemov.e81_codmov
-                LEFT JOIN empageforma ON empageforma.e96_codigo = empagemovforma.e97_codforma
-                LEFT JOIN empageconf ON empageconf.e86_codmov = empagemov.e81_codmov
-                JOIN orcdotacao ON (o58_coddot, o58_anousu) = (e60_coddot, e60_anousu)
-                JOIN orctiporec ON o58_codigo = o15_codigo
-                WHERE k12_codord = {$oEmpPago->ordem}
-                  AND c23_conlancam = {$oEmpPago->lancamento}
-                  AND c61_anousu = {$iAnoUsu}
-                  AND e81_cancelado IS NULL";
+                    FROM empagemov
+                    INNER JOIN empage ON empage.e80_codage = empagemov.e81_codage
+                    INNER JOIN empord ON empord.e82_codmov = empagemov.e81_codmov
+                    INNER JOIN empempenho ON empempenho.e60_numemp = empagemov.e81_numemp
+                    LEFT JOIN empagemovforma ON empagemovforma.e97_codmov = empagemov.e81_codmov
+                    LEFT JOIN empageforma ON empageforma.e96_codigo = empagemovforma.e97_codforma
+                    LEFT JOIN empagepag ON empagepag.e85_codmov = empagemov.e81_codmov
+                    LEFT JOIN empagetipo ON empagetipo.e83_codtipo = empagepag.e85_codtipo
+                    LEFT JOIN empageconf ON empageconf.e86_codmov = empagemov.e81_codmov
+                    LEFT JOIN empageconfgera ON (empageconfgera.e90_codmov, empageconfgera.e90_cancelado) = (empagemov.e81_codmov, 'f')
+                    LEFT JOIN saltes ON saltes.k13_conta = empagetipo.e83_conta
+                    LEFT JOIN empagegera ON empagegera.e87_codgera = empageconfgera.e90_codgera
+                    LEFT JOIN empagedadosret ON empagedadosret.e75_codgera = empagegera.e87_codgera
+                    LEFT JOIN empagedadosretmov ON (empagedadosretmov.e76_codret, empagedadosretmov.e76_codmov) = (empagedadosret.e75_codret, empagemov.e81_codmov)
+                    LEFT JOIN empagedadosretmovocorrencia ON (empagedadosretmovocorrencia.e02_empagedadosretmov, empagedadosretmovocorrencia.e02_empagedadosret) = (empagedadosretmov.e76_codmov, empagedadosretmov.e76_codret)
+                    LEFT JOIN errobanco ON errobanco.e92_sequencia = empagedadosretmovocorrencia.e02_errobanco
+                    LEFT JOIN empageconfche ON empageconfche.e91_codmov = empagemov.e81_codmov AND empageconfche.e91_ativo IS TRUE
+                    LEFT JOIN corconf ON corconf.k12_codmov = empageconfche.e91_codcheque AND corconf.k12_ativo IS TRUE
+                    LEFT JOIN corempagemov ON corempagemov.k12_codmov = empagemov.e81_codmov
+                    LEFT JOIN pagordemele ON e53_codord = empord.e82_codord
+                    LEFT JOIN empagenotasordem ON e43_empagemov = e81_codmov
+                    LEFT JOIN coremp ON (coremp.k12_id, coremp.k12_data, coremp.k12_autent) = (corempagemov.k12_id, corempagemov.k12_data, corempagemov.k12_autent)
+                    JOIN pagordem ON (k12_empen, k12_codord) = (e50_numemp, e50_codord)
+                    JOIN corrente ON (coremp.k12_autent, coremp.k12_data, coremp.k12_id) = (corrente.k12_autent, corrente.k12_data, corrente.k12_id) AND corrente.k12_estorn != TRUE
+                    JOIN conplanoreduz ON c61_reduz = k12_conta AND c61_anousu = " . db_getsession("DB_anousu") . "
+                    JOIN conplano ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
+                    LEFT JOIN conplanoconta ON c63_codcon = c60_codcon AND c60_anousu = c63_anousu
+                    JOIN corgrupocorrente cg ON cg.k105_autent = corrente.k12_autent
+                    JOIN orcdotacao ON (o58_coddot, o58_anousu) = (e60_coddot, e60_anousu)
+                    JOIN orctiporec ON o58_codigo = o15_codigo AND (cg.k105_data, cg.k105_id) = (corrente.k12_data, corrente.k12_id)
+                    JOIN conlancamcorgrupocorrente ON c23_corgrupocorrente = cg.k105_sequencial AND c23_conlancam = {$oEmpPago->lancamento}
+                    WHERE e60_instit = " . db_getsession("DB_instit") . "
+                      AND k12_codord = {$oEmpPago->ordem}
+                      AND e81_cancelado IS NULL";
 
         return db_query ($sSql12);
     }
 
-    public function getUnionPagFont($reg12, $iAno, $sDataFinal, $iInstit, $iAnousu)
+    public function getUnionPagFont($reg12, $iAno, $sDataFinal, $iInstit, $iAnousu, $codlan = null)
     {
+      if ($reg12 == null && $codlan != null) {
+        $sConlancampag = " join conlancampag on c82_reduz = c61_reduz and c82_anousu = c61_anousu ";
+        $sWhere = " c82_codlan = {$codlan} ";
+      } else {
+        $sConlancampag = "";
+        $sWhere = " c61_reduz = {$reg12->codctb} ";
+      }
+
         return " SELECT DISTINCT 'ctb10{$iAno}' as ano, si95_codctb  AS contapag, o15_codtri AS fonte from conplanoconta
                 JOIN conplanoreduz ON c61_codcon = c63_codcon AND c61_anousu = c63_anousu
                 JOIN orctiporec ON c61_codigo = o15_codigo
+                {$sConlancampag}
                 JOIN ctb10{$iAno} ON si95_banco = c63_banco
                         AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer
                         AND coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '')
                         AND si95_contabancaria = c63_conta::int8
                         AND si95_digitoverificadorcontabancaria = c63_dvconta
                         AND si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20{$iAno} on si96_codctb = si95_codctb AND si96_mes = si95_mes
-                WHERE si95_instit =  {$iInstit} AND c61_reduz = {$reg12->codctb} AND c61_anousu = {$iAnousu}
+                WHERE si95_instit =  {$iInstit} AND {$sWhere} AND c61_anousu = {$iAnousu}
                   AND si95_mes <='{$sDataFinal}'";
     }
 }

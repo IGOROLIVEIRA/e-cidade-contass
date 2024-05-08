@@ -554,6 +554,7 @@ class cl_layout_BBBS {
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // OBS.: Arquivos do banco do brasil e do banrisul não mudam trailler de arquivo e trailler de lote //
     function geraTRAILLERLote(){
+      $this->arquivo = fopen($this->nomearq,"w");
 	  fputs($this->arquivo,
 	          $this->BBBStraillerL_001_003
 	         .$this->BBBStraillerL_004_007
@@ -569,6 +570,7 @@ class cl_layout_BBBS {
 	       );
     }
     function geraTRAILLERArquivo(){
+      $this->arquivo = fopen($this->nomearq,"w");
 	  fputs($this->arquivo,
 	          $this->BBBStraillerA_001_003
 	         .$this->BBBStraillerA_004_007

@@ -94,6 +94,8 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
     db_msgbox($erro_msg);
   }
 
+  $rsValidacaoAlteracaoDescricao = db_query("select * from pcmater where pc01_codmater = $pc01_codmater and pc01_descrmater = '$pc01_descrmater' and pc01_complmater = '$pc01_complmater' ");
+  if(pg_num_rows($rsValidacaoAlteracaoDescricao) == 0){
     //Salva o item na tabela historicomaterial para gerar no sicom OC20960
     $clhistoricomaterial = new cl_historicomaterial;
 
@@ -137,6 +139,8 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
             $oRetorno->message = urlencode($clhistoricomaterial->erro_msg);
         }
     }
+
+  }
 
   if (!$sqlerro) {
     $clpcmater->pc01_dataalteracao = date("Y-m-d", db_getsession("DB_datausu"));
