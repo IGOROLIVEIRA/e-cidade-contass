@@ -437,9 +437,11 @@ $oRotulo->label("l20_objeto");
     js_divCarregando('Excluindo documento...', 'msgbox');
 
     var oParametros = new Object();
+    const iCodigoProcesso = $('l20_codigo').value
 
     oParametros.exec = 'excluir';
     oParametros.iCodigoDocumento = iCodigoDocumento;
+    oParametros.iCodigoProcesso = iCodigoProcesso;
 
     var oAjax = new Ajax.Request(
       sUrlRpc, {
