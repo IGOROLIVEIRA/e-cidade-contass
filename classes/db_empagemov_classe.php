@@ -1176,5 +1176,35 @@ class cl_empagemov {
      }
      return $sql;
   }
+
+  function consultaEstorno ($sCampos = "*",$iCodord, $sDataPagamento, $iCodmov) {
+
+    $sSql = "SELECT
+              c23_conlancam, c82_reduz
+              FROM
+              caixa.corempagemov
+              JOIN caixa.corgrupocorrente ON (k12_data, k12_autent, k12_id) = (k105_data, k105_autent, k105_id)
+              JOIN contabilidade.conlancamcorgrupocorrente ON c23_corgrupocorrente = k105_sequencial
+              LEFT OUTER JOIN conlancampag on c82_codlan = c23_conlancam
+              WHERE k12_codmov = {$iCodmov} order by c82_codlan limit 1";
+
+    $oResult = db_utils::fieldsMemory(db_query($sSql), 0);
+
+    $sSql = "SELECT 
+                {$sCampos}
+              FROM 
+              contabilidade.conlancamcorgrupocorrente  
+              JOIN caixa.corgrupocorrente ON c23_corgrupocorrente = k105_sequencial
+              JOIN contabilidade.conlancamord ON c23_conlancam = c80_codlan
+              JOIN contabilidade.conlancam on c80_codlan = c70_codlan 
+              LEFT OUTER JOIN conlancampag on c82_codlan = c23_conlancam
+              JOIN contabilidade.conlancamdoc ON c70_codlan = c71_codlan
+              JOIN contabilidade.conhistdoc ON c71_coddoc = c53_coddoc
+              WHERE c80_codord = {$iCodord}
+              AND c53_tipo = 31
+              AND k105_data >= '{$sDataPagamento}'
+              AND c23_conlancam > {$oResult->c23_conlancam}".($oResult->c82_reduz != null ? " and c82_reduz = {$oResult->c82_reduz} " : "");
+    return $sSql;
+  }
 }
 ?>

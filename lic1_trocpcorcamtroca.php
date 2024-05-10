@@ -355,7 +355,44 @@ if(isset($orcamento) && trim($orcamento)!="") {
             }
         }
 
-        $sSqlJulgamento = $clpcorcamjulg->sqlQueryPreviaJulgamento($l20_tipojulg,$orcamento);
+        if ($l20_tipojulg != 1) {
+            $ordem = "l04_descricao,l21_ordem,pc23_orcamitem,pc23_orcamforne";
+        } else {
+            $ordem = "l21_ordem,l04_descricao,pc23_orcamitem,pc23_orcamforne";
+        }
+        $sCamposJulgamento  = "select l21_ordem, pc81_codprocitem, pc23_orcamitem, pc23_orcamforne, pc01_codmater, pc01_descrmater";
+        $sCamposJulgamento .= ", pc23_obs, z01_numcgm, z01_nome, pc23_quant, pc23_vlrun, pc23_valor, pc11_resum";
+        $sCamposJulgamento .= ", l04_descricao, l20_tipojulg, pc11_vlrun as valor_registro_preco,        CASE
+           WHEN pc23_percentualdesconto = 0 THEN null
+           ELSE pc23_percentualdesconto
+       END AS pc23_percentualdesconto, pc23_perctaxadesctabela,pc80_criterioadjudicacao ";
+        $sWhereJulgamento   = "    pc32_orcamitem is null and pc32_orcamforne is null and l21_situacao = 0 ";
+        $sWhereJulgamento  .= "and l20_codigo = $l21_codliclicita ";
+        /*OC3770*/
+        if (isset($criterioajudicacao) == true) {
+            $sWhereJulgamento .= " AND pc24_pontuacao = 1 ";
+        }
+        /*FIM - OC3770*/
+        $sSqlJulgamento     = "$sCamposJulgamento
+FROM liclicitemlote
+INNER JOIN liclicitem ON liclicitem.l21_codigo = liclicitemlote.l04_liclicitem
+INNER JOIN pcorcamitemlic ON pcorcamitemlic.pc26_liclicitem = liclicitem.l21_codigo
+INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
+INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+INNER JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+INNER JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+INNER JOIN pcorcamval ON pcorcamval.pc23_orcamitem = pcorcamitemlic.pc26_orcamitem
+INNER JOIN pcorcamforne ON pcorcamforne.pc21_orcamforne = pcorcamval.pc23_orcamforne
+INNER JOIN cgm ON cgm.z01_numcgm = pcorcamforne.pc21_numcgm
+LEFT JOIN pcorcamdescla ON pcorcamdescla.pc32_orcamitem = pcorcamval.pc23_orcamitem
+AND pcorcamdescla.pc32_orcamforne = pcorcamval.pc23_orcamforne
+LEFT JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitemlic.pc26_orcamitem
+AND pcorcamjulg.pc24_orcamforne = pcorcamforne.pc21_orcamforne
+WHERE $sWhereJulgamento
+ORDER BY $ordem";
+//    die($sSqlJulgamento);
         $res_liclicitemlote = $clliclicitemlote->sql_record($sSqlJulgamento);
         if ($clliclicitemlote->numrows > 0){
 
