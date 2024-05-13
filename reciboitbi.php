@@ -1067,7 +1067,7 @@ $settings = Numpref::query()
     ->where('k03_instit', db_getsession("DB_instit"))
     ->first();
 
-if ($settings->k03_ativo_integracao_pix && !empty($pdf1->it14_valorpaga)) {
+if ($settings->k03_ativo_integracao_pix && !empty($valorpagamento)) {
     $usePixIntegration = true;
     $providerConfig = (new ResolvePixProviderService())->execute($settings);
 }
@@ -1075,7 +1075,7 @@ if ($settings->k03_ativo_integracao_pix && !empty($pdf1->it14_valorpaga)) {
 if ($usePixIntegration) {
     $body['codigoGuiaRecebimento'] = $codigo_barras;
     $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
-    $body['valorOriginalSolicitacao'] = $pdf1->it14_valorpaga;
+    $body['valorOriginalSolicitacao'] = $valorpagamento;
     $body['k00_numpre'] = $pdf1->numpreitbi;
     $body['k00_numpar'] = 1;
     $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
