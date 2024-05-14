@@ -501,7 +501,7 @@ class retencaoNota
    * @param boolean $lPrincipal retorna somente as retenções calculadas como principais
    * @return boolean| array retorna m boolean caso $lInSession = true ou um array de objetos caso false;
    */
-  function getRetencoesFromDB($iNotaLiquidacao, $lInSession = true, $iTipo = 2, $iMes = "", $iAno = "", $lPrincipal = false)
+  function getRetencoesFromDB($iNotaLiquidacao, $lInSession = true, $iTipo = 2, $iMes = "", $iAno = "", $lPrincipal = false, $lAtivo = true)
   {
 
     $aRetencoes = array();
@@ -524,6 +524,10 @@ class retencaoNota
         $sWhere .= " and e27_principal is true ";
       }
 
+      if ($lAtivo == true) {
+        $sWhere .= " and e23_ativo is true ";
+      }
+
       $sRecolhida = "";
       if ($iTipo == 1) {
         $sRecolhida = " and e23_recolhido is true ";
@@ -536,7 +540,6 @@ class retencaoNota
       $oDaoRetencaoReceitas = db_utils::getDao("retencaoreceitas");
       $sSqlRetencaoReceitas = $oDaoRetencaoReceitas->sql_query_notas(null, "tabrec.*,retencaotiporec.*,
         retencaoreceitas.*,e27_empagemov,e27_principal", "e21_sequencial", "e20_pagordem     = {$iNotaLiquidacao}
-    and e23_ativo     = true
     and e71_anulado   = false
     {$sRecolhida}
     {$sWhere}");

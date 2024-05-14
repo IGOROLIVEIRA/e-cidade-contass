@@ -95,7 +95,7 @@ class DBHttpRequest
     public function getResponseCode()
     {
         if (!isset($this->responseHeaders['response_code'])) {
-            throw new \Exception('Requisição não executada.');
+            throw new \Exception('Requisiï¿½ï¿½o nÃ£o executada.');
         }
         return $this->responseHeaders['response_code'];
     }
@@ -161,7 +161,7 @@ class DBHttpRequest
 
         if ($result === false) {
             $error = error_get_last();
-            throw new BusinessException("Erro ao executar requisição:\nRetorno: " . $error['message']);
+            throw new BusinessException("Erro ao executar requisiï¿½ï¿½o:\nRetorno: " . $error['message']);
         }
         // print_r($result);
         return $result;
@@ -214,10 +214,29 @@ class DBHttpRequest
         } catch (\Exception $e) {
             if (strpos($e->getMessage(), 'String could not be parsed as XML') !== false &&
                 strpos($this->body, 'Impossivel ler o certificado') !== false) {
-                throw new Exception("Erro api :\n Não foi posssível analisar a cadeia de caracteres como XML - Retorno API: {$this->body}");
+                throw new Exception("Erro api :\n NÃ£o foi posssÃ­vel analisar a cadeia de caracteres como XML - Retorno API: {$this->body}");
             }
             if(strpos($this->body, 'The validity of the certificate has expired') !== false) {
-                throw new Exception("Erro api :\n Não foi posssível analisar a cadeia de caracteres como XML - Retorno API: A validade do certificado expirou.");
+                throw new Exception("Erro api :\n NÃ£o foi posssÃ­vel analisar a cadeia de caracteres como XML - Retorno API: A validade do certificado expirou.");
+            }
+            if (strpos($e->getMessage(), 'String could not be parsed as XML') !== false &&
+                strpos($this->body, 'cpfdep') !== false) {
+                throw new Exception("Erro api :\n NÃ£o foi posssÃ­vel analisar a cadeia de caracteres como XML - Retorno API: {$this->body} - Corrija o cpf dos dependentes.");
+            }
+            if (strpos($e->getMessage(), 'String could not be parsed as XML') !== false &&
+                strpos($this->body, '[dmdev] NULL encontrado') !== false) {
+                throw new Exception("Erro api :\n NÃ£o foi posssÃ­vel analisar a cadeia de caracteres como XML - Retorno API: {$this->body} - NÃ£o existe contra cheque para este servidor na competencia enviada.");
+            }
+            if (strpos($e->getMessage(), 'String could not be parsed as XML') !== false &&
+                strpos($this->body, '[infopgto] NULL encontrado') !== false) {
+                throw new Exception("Erro api :\n NÃ£o foi posssÃ­vel analisar a cadeia de caracteres como XML - Retorno API: {$this->body} - NÃ£o existe contra cheque para este servidor na competencia enviada.");
+            }
+            if (strpos($e->getMessage(), 'String could not be parsed as XML') !== false &&
+                strpos($this->body, 'Connection timed out') !== false) {
+                throw new Exception("Erro api :\n NÃ£o foi posssÃ­vel analisar a cadeia de caracteres como XML - Retorno API: {$this->body} - Tempo limete para retono esgotado. Verifique no site do e-social se o evento foi enviado ou envie novamete esta matricula.");
+            }
+            if (strpos($e->getMessage(), 'String could not be parsed as XML') !== false) {
+                throw new Exception("Erro api :\n NÃ£o foi posssÃ­vel analisar a cadeia de caracteres como XML - Retorno API: {$this->body}");
             }
             throw new Exception("Erro api :\n{$e->getMessage()} - Retorno API: {$this->body}");
         }

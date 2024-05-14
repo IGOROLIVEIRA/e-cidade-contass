@@ -122,10 +122,23 @@ class ResultadoItensPNCP extends ModeloBasePNCP
         $contentpncp = curl_exec($chpncp);
         curl_close($chpncp);
 
+        /*$err     = curl_errno($chpncp);
+        $errmsg  = curl_error($chpncp);
+        $header  = curl_getinfo($chpncp);
+        $header['errno']   = $err;
+        $header['errmsg']  = $errmsg;
+        $header['header']  = $contentpncp;
+        echo "<pre>";
+        print_r($header);
+        exit;*/
+
         $retorno = explode(':', $contentpncp);
+
         if (substr($retorno[0], 7, 3) == '200') {
             return array(201, "Enviado com Sucesso!");
-        } else {
+        } elseif(substr($retorno[0],7,3) == "404"){
+            return array(422, $retorno[22] . "-".$retorno[23]);
+        }else {
             return array(422, $retorno[17]);
         }
     }

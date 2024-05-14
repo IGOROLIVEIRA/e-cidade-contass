@@ -140,68 +140,43 @@ $resultorcamentaria = db_query($sql);
   Incluído as receitas extras de slips
 */
 $sql_rec_ext = "
-                select
-                       k12_id,
-                       k12_autent,
-                       k12_data,
-                       k12_valor,
-                       entrou as debito,
-                       f.c60_descr as descr_debito,
-                       f.c60_codsis as sis_debito,
-                       saiu as credito,
-                       h.c60_descr as descr_credito,
-                       h.c60_codsis as sis_credito,
-                       k153_slipoperacaotipo
-                from
-                     (select
-                             k12_id,
-                             k12_autent,
-                             k12_data,
-                             k12_valor,
-                             k153_slipoperacaotipo,
-                             corlanc as entrou,
-                             corrente as saiu
-                      from
-                           (select corrente.k12_id,
-                                   corrente.k12_autent,
-                                   corrente.k12_data,
-                                   corrente.k12_valor,
-                                   corrente.k12_conta as corrente,
-                                   coalesce(c.k13_conta,0) as corr_saltes,
-                                   b.k12_conta as corlanc,
-                                   k153_slipoperacaotipo,
-                                   coalesce(d.k13_conta,0) as corl_saltes
-                            from corrente
-                                 inner join corlanc b on corrente.k12_id = b.k12_id
-                                                     and corrente.k12_autent=b.k12_autent
-                                                     and corrente.k12_data = b.k12_data
-                                 inner join sliptipooperacaovinculo on b.k12_codigo = k153_slip
-                                                                   and k153_slipoperacaotipo not in (1,2,5,6,9,10,13,14)
-                                 left join saltes c   on c.k13_conta = corrente.k12_conta
-                                 left join saltes d   on d.k13_conta = b.k12_conta
-                     	      where corrente.k12_instit = ".db_getsession("DB_instit")." and
-                            corrente.k12_data between '".$datai."' and '".$dataf."' $seleciona_conta $seleciona
-                           ) as xx
-                     ) as xxx
-                          inner join conplanoexe   e on entrou = e.c62_reduz
-                                              and e.c62_anousu = ".db_getsession('DB_anousu')."
-                          inner join conplanoreduz i on e.c62_reduz  = i.c61_reduz and
-                	                                e.c62_anousu = i.c61_anousu
-                          inner join conplano      f on i.c61_codcon = f.c60_codcon and
-                                                        i.c61_anousu = f.c60_anousu and
-                                                        i.c61_instit = ".db_getsession("DB_instit")."
-                          inner join conplanoexe   g on saiu = g.c62_reduz and
-                                                g.c62_anousu = ".db_getsession('DB_anousu')."
-                          inner join conplanoreduz j on g.c62_reduz  = j.c61_reduz  and
-                                                        g.c62_anousu = j.c61_anousu
-                          inner join conplano      h on j.c61_codcon = h.c60_codcon and
-                                                        j.c61_anousu = h.c60_anousu
-                                                        and j.c61_instit = ".db_getsession("DB_instit")."
+
+                SELECT corrente.k12_id,
+                corrente.k12_autent,
+                corrente.k12_data,
+                corrente.k12_valor,
+                CASE
+                    WHEN (h.c60_codsis = 6 AND f.c60_codsis = 6) THEN 'tran'
+                    WHEN (h.c60_codsis = 5 AND f.c60_codsis = 6) THEN 'tran'
+                    WHEN (h.c60_codsis = 6 AND f.c60_codsis = 5) THEN 'tran'
+                    WHEN (h.c60_codsis = 5 AND f.c60_codsis = 5) THEN 'tran'
+                    ELSE 'desp'
+                END AS tipo,
+                b.k12_conta AS debito,
+                f.c60_descr AS descr_debito,
+                f.c60_codsis AS sis_debito,
+                corrente.k12_conta AS credito,
+                h.c60_descr AS descr_credito,
+                h.c60_codsis AS sis_credito
+                FROM corrente
+                INNER JOIN corlanc b ON corrente.k12_id = b.k12_id AND corrente.k12_autent = b.k12_autent AND corrente.k12_data = b.k12_data
+                INNER JOIN conplanoreduz t2 ON b.k12_conta = t2.c61_reduz AND t2.c61_anousu = ".db_getsession('DB_anousu')." AND t2.c61_instit = ".db_getsession("DB_instit")."
+                INNER JOIN conplano f ON t2.c61_codcon = f.c60_codcon AND t2.c61_anousu = f.c60_anousu
+                INNER JOIN conplanoreduz t3 ON corrente.k12_conta = t3.c61_reduz AND t3.c61_anousu = ".db_getsession('DB_anousu')." AND t3.c61_instit = ".db_getsession("DB_instit")."
+                INNER JOIN conplano h ON t3.c61_codcon = h.c60_codcon AND t3.c61_anousu = h.c60_anousu
+                INNER JOIN sliptipooperacaovinculo ON b.k12_codigo = k153_slip AND k153_slipoperacaotipo NOT IN (1, 2, 5, 6, 9, 10, 13, 14)
+                LEFT JOIN saltes c ON c.k13_conta = corrente.k12_conta
+                LEFT JOIN saltes d ON d.k13_conta = b.k12_conta
+                WHERE corrente.k12_instit = ".db_getsession("DB_instit")."
+                AND corrente.k12_data BETWEEN '".$datai."' and '".$dataf."' $seleciona_conta $seleciona
+
+
+               
                ";
 
 $resultextraorcamentaria = db_query($sql_rec_ext);
 
-//db_criatabela($resultextraorcamentaria);exit;
+// db_criatabela($resultextraorcamentaria);exit;
 
 //// DESPESA EXTRA-ORCAMENTARIA E MOVIMENTAÇÕES BANCARIAS
 
@@ -212,54 +187,36 @@ if (USE_PCASP) {
 }
 
 $sql = "
-select
-       k12_id,
-       k12_autent,
-       k12_data,
-       k12_valor,
-       case when (h.c60_codsis = 6 and f.c60_codsis = 6) then 'tran'
-            when (h.c60_codsis = 5 and f.c60_codsis = 6) then 'tran'
-            when (h.c60_codsis = 6 and f.c60_codsis = 5) then 'tran'
-            when (h.c60_codsis = 5 and f.c60_codsis = 5) then 'tran'
-            else 'desp' end as  tipo,
-       entrou as debito,
-       f.c60_descr as descr_debito,
-       f.c60_codsis as sis_debito,
-       saiu as credito,
-       h.c60_descr as descr_credito,
-       h.c60_codsis as sis_credito
-from
-(select
-       k12_id,
-       k12_autent,
-       k12_data,
-       k12_valor,
-       tipo,
-       corlanc as entrou,
-       corrente as saiu
-from
-    (select *, case when coalesce(corl_saltes,0) = 0
-                   then 'desp'
-	           else 'tran'
-	    	     end as tipo
-    from
-        (select corrente.k12_id,
-                corrente.k12_autent,
-                corrente.k12_data,
-                corrente.k12_valor,
-                corrente.k12_conta as corrente,
-                coalesce(c.k13_conta,0) as corr_saltes,
-                b.k12_conta as corlanc,
-                coalesce(d.k13_conta,0) as corl_saltes
-         from corrente
-              inner join corlanc b on corrente.k12_id = b.k12_id
-                                  and corrente.k12_autent=b.k12_autent
-                                  and corrente.k12_data = b.k12_data
-              $sWherePCASP
-              left join saltes c   on c.k13_conta = corrente.k12_conta
-              left join saltes d   on d.k13_conta = b.k12_conta
-	 where corrente.k12_instit = ".db_getsession("DB_instit")." and
-	       corrente.k12_data between '".$datai."' and '".$dataf."' $seleciona_conta $seleciona ";
+SELECT corrente.k12_id,
+corrente.k12_autent,
+corrente.k12_data,
+corrente.k12_valor,
+CASE
+    WHEN (h.c60_codsis = 6 AND f.c60_codsis = 6) THEN 'tran'
+    WHEN (h.c60_codsis = 5 AND f.c60_codsis = 6) THEN 'tran'
+    WHEN (h.c60_codsis = 6 AND f.c60_codsis = 5) THEN 'tran'
+    WHEN (h.c60_codsis = 5 AND f.c60_codsis = 5) THEN 'tran'
+    ELSE 'desp'
+END AS tipo,
+b.k12_conta AS debito,
+f.c60_descr AS descr_debito,
+f.c60_codsis AS sis_debito,
+corrente.k12_conta AS credito,
+h.c60_descr AS descr_credito,
+h.c60_codsis AS sis_credito
+FROM corrente
+INNER JOIN corlanc b ON corrente.k12_id = b.k12_id AND corrente.k12_autent = b.k12_autent AND corrente.k12_data = b.k12_data
+INNER JOIN conplanoreduz t2 ON b.k12_conta = t2.c61_reduz AND t2.c61_anousu = ".db_getsession('DB_anousu')." AND t2.c61_instit = ".db_getsession("DB_instit")."
+INNER JOIN conplano f ON t2.c61_codcon = f.c60_codcon AND t2.c61_anousu = f.c60_anousu
+INNER JOIN conplanoreduz t3 ON corrente.k12_conta = t3.c61_reduz AND t3.c61_anousu = ".db_getsession('DB_anousu')." AND t3.c61_instit = ".db_getsession("DB_instit")."
+INNER JOIN conplano h ON t3.c61_codcon = h.c60_codcon AND t3.c61_anousu = h.c60_anousu
+$sWherePCASP
+LEFT JOIN saltes c ON c.k13_conta = corrente.k12_conta
+LEFT JOIN saltes d ON d.k13_conta = b.k12_conta
+WHERE corrente.k12_instit = ".db_getsession("DB_instit")."
+AND corrente.k12_data BETWEEN '".$datai."' and '".$dataf."' $seleciona_conta $seleciona
+
+";
 if ($agrupar == 'S') {
 
       $sql .= " and (select c63_banco::integer||lpad(c63_agencia,4,0)||c63_conta||c63_dvconta||c63_dvagencia as hashconta
@@ -275,7 +232,7 @@ if ($agrupar == 'S') {
                  where c61_reduz=b.k12_conta
                      and c61_anousu=".db_getsession('DB_anousu').") ";
 }
-      $sql .= " )
+      $sqlxx .= " )
 	as x) as xx) as xxx
           inner join conplanoexe   e on entrou = e.c62_reduz
                               and e.c62_anousu = ".db_getsession('DB_anousu')."
