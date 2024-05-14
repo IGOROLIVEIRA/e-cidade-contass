@@ -131,26 +131,7 @@ class cl_balancete172024
 
       return false;
     }
-    if ($this->si184_codctb == null) {
-      $this->erro_sql = " Campo si184_codctb não informado.";
-      $this->erro_campo = "si184_codctb";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
-      $this->erro_status = "0";
 
-      return false;
-    }
-    if ($this->si184_codfontrecursos == null) {
-      $this->erro_sql = " Campo si184_codfontrecursos não informado.";
-      $this->erro_campo = "si184_codfontrecursos";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
-      $this->erro_status = "0";
-
-      return false;
-    }
     if ($this->si184_saldoinicialctb == null) {
       $this->erro_sql = " Campo si184_saldoinicialctb não informado.";
       $this->erro_campo = "si184_saldoinicialctb";

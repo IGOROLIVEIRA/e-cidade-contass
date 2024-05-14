@@ -794,7 +794,7 @@ class manad {
     $sSqlEmpenho .= " INNER JOIN orctiporec ON o58_codigo = o15_codigo ";
     $sSqlEmpenho .= " WHERE c75_data BETWEEN '{$sDataInicial}' AND '{$sDataFinal}' ";
     $sSqlEmpenho .= "   AND e60_emiss BETWEEN '{$sDataInicial}' AND '{$sDataFinal}' ";
-    $sSqlEmpenho .= "   AND c71_coddoc IN (1, 2, 31, 32) ";
+    $sSqlEmpenho .= "   AND c71_coddoc IN (1, 2, 31, 32,410) ";
     $sSqlEmpenho .= "   AND e60_instit IN ({$sListaInstit}) ";
     /**
      * Empenhos RP:
@@ -887,7 +887,7 @@ class manad {
     $sSqlEmpenho .= " INNER JOIN orctiporec ON o58_codigo = o15_codigo ";
     $sSqlEmpenho .= " WHERE e91_anousu = {$iAno} ";
     $sSqlEmpenho .= "   AND c75_data <= '{$sDataFinal}' ";
-    $sSqlEmpenho .= "   AND c71_coddoc IN (1, 2, 31, 32) ";
+    $sSqlEmpenho .= "   AND c71_coddoc IN (1, 2, 31, 32,410) ";
     $sSqlEmpenho .= "   AND e91_rpcorreto IS TRUE ";
     $sSqlEmpenho .= "   AND e60_instit IN ({$sListaInstit}) ";
     $sSqlEmpenho .= " ORDER BY 5, 6, 7, 8, 9, 10, 11, 12, 13 ";

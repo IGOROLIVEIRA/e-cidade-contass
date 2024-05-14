@@ -287,7 +287,11 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   if($this->vlrPago == 0){
     $nValorSaldo = 0;
   }else{
-    $nValorSaldo = $this->vlrPago - ($total_ret + $this->vlrEstorno);
+    if ($this->vlrEstorno > 0) {
+      $nValorSaldo = $this->vlrPago - $this->vlrEstorno;
+    } else {
+      $nValorSaldo = $this->vlrPago - ($total_ret + $this->vlrEstorno);
+    }
   }
 
   $this->objpdf->cell(23, 1, db_formatar($nValorSaldo, 'f'), 0, 1, "R");

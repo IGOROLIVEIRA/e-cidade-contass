@@ -3,7 +3,7 @@
 //CLASSE DA ENTIDADE licanexopncp
 class cl_licanexopncp
 {
-  // cria variaveis de erro 
+  // cria variaveis de erro
   public $rotulo     = null;
   public $query_sql  = null;
   public $numrows    = 0;
@@ -16,7 +16,7 @@ class cl_licanexopncp
   public $erro_msg   = null;
   public $erro_campo = null;
   public $pagina_retorno = null;
-  // cria variaveis do arquivo 
+  // cria variaveis do arquivo
   public $l215_sequencial = 0;
   public $l215_liclicita = 0;
   public $l215_dataanexo_dia = null;
@@ -26,17 +26,17 @@ class cl_licanexopncp
   public $l215_id_usuario = 0;
   public $l215_hora = null;
   public $l215_instit = 0;
-  // cria propriedade com as variaveis do arquivo 
+  // cria propriedade com as variaveis do arquivo
   public $campos = "
-                 l215_sequencial = int8 = l215_sequencial 
-                 l215_liclicita = int8 = l215_liclicita 
-                 l215_dataanexo = date = l215_dataanexo 
-                 l215_id_usuario = int8 = l215_id_usuario 
-                 l215_hora = varchar(5) = l215_hora 
-                 l215_instit = int8 = l215_instit 
+                 l215_sequencial = int8 = l215_sequencial
+                 l215_liclicita = int8 = l215_liclicita
+                 l215_dataanexo = date = l215_dataanexo
+                 l215_id_usuario = int8 = l215_id_usuario
+                 l215_hora = varchar(5) = l215_hora
+                 l215_instit = int8 = l215_instit
                  ";
 
-  //funcao construtor da classe 
+  //funcao construtor da classe
   function __construct()
   {
     //classes dos rotulos dos campos
@@ -44,7 +44,7 @@ class cl_licanexopncp
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
 
-  //funcao erro 
+  //funcao erro
   function erro($mostra, $retorna)
   {
     if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
@@ -159,20 +159,20 @@ class cl_licanexopncp
       return false;
     }
     $sql = "insert into licanexopncp(
-                                       l215_sequencial 
-                                      ,l215_liclicita 
-                                      ,l215_dataanexo 
-                                      ,l215_id_usuario 
-                                      ,l215_hora 
-                                      ,l215_instit 
+                                       l215_sequencial
+                                      ,l215_liclicita
+                                      ,l215_dataanexo
+                                      ,l215_id_usuario
+                                      ,l215_hora
+                                      ,l215_instit
                        )
                 values (
-                                $this->l215_sequencial 
-                               ,$this->l215_liclicita 
-                               ," . ($this->l215_dataanexo == "null" || $this->l215_dataanexo == "" ? "null" : "'" . $this->l215_dataanexo . "'") . " 
-                               ,$this->l215_id_usuario 
-                               ,'$this->l215_hora' 
-                               ,$this->l215_instit 
+                                $this->l215_sequencial
+                               ,$this->l215_liclicita
+                               ," . ($this->l215_dataanexo == "null" || $this->l215_dataanexo == "" ? "null" : "'" . $this->l215_dataanexo . "'") . "
+                               ,$this->l215_id_usuario
+                               ,'$this->l215_hora'
+                               ,$this->l215_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -334,7 +334,7 @@ class cl_licanexopncp
     }
   }
 
-  // funcao para exclusao 
+  // funcao para exclusao
   function excluir($l215_sequencial = null, $dbwhere = null)
   {
 
@@ -376,7 +376,7 @@ class cl_licanexopncp
     }
   }
 
-  // funcao do recordset 
+  // funcao do recordset
   function sql_record($sql)
   {
     $result = db_query($sql);
@@ -401,7 +401,7 @@ class cl_licanexopncp
     return $result;
   }
 
-  // funcao do sql 
+  // funcao do sql
   function sql_query($oid = null, $campos = "licanexopncp.oid,*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
@@ -438,7 +438,7 @@ class cl_licanexopncp
     return $sql;
   }
 
-  // funcao do sql 
+  // funcao do sql
   function sql_query_file($oid = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
@@ -511,5 +511,17 @@ class cl_licanexopncp
         where l215_liclicita = {$l20_codigo} and l216_sequencial = $l216_sequencial
     ";
     return $sql;
+  }
+
+  public function sql_anexos_licitacao_exclusao($l20_codigo)
+  {
+      $sql = "
+       SELECT l216_nomedocumento,l216_tipoanexo,l213_descricao
+        FROM licanexopncp
+        INNER JOIN licanexopncpdocumento ON l215_sequencial = l216_licanexospncp
+        INNER JOIN tipoanexo ON l213_sequencial = l216_tipoanexo
+        where l215_liclicita = {$l20_codigo}
+    ";
+      return $sql;
   }
 }

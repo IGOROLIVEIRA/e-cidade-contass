@@ -262,7 +262,7 @@ for ($i = 0; $i < $clpagordem->numrows; $i++) {
     $resultordass = db_query($sql1);
     db_fieldsmemory($resultordass, 0);
 
-    $aRetencoes = $oRetencaoNota->getRetencoesFromDB($e50_codord, false, 0, "", "", true);
+    $aRetencoes = $oRetencaoNota->getRetencoesFromDB($e50_codord, false, 1, "", "", true, false);
 
     $sqlfornecon         = $clemite_nota_liq->get_sql_fornecedor($z01_cgccpf);
     $result_pcfornecon   = db_query($sqlfornecon);
@@ -275,9 +275,6 @@ for ($i = 0; $i < $clpagordem->numrows; $i++) {
       $cgc      = $o41_cnpj;
     }
 
-    $sSqlEstorno = $clempagemov->consultaEstornoPorMovimento($e81_codmov,'c70_valor');
-    $vlrEstorno = db_utils::fieldsMemory(db_query($sSqlEstorno), 0)->c70_valor;
-
     $clControleOrc = new ControleOrcamentario;
     $e60_codco = $e60_codco == null ? '0000' : $e60_codco;
     $clControleOrc->setCodCO($e60_codco);
@@ -289,9 +286,24 @@ for ($i = 0; $i < $clpagordem->numrows; $i++) {
     $pdf1->tipoDocumento    = $rsForma . ($e81_numdoc == null ? '' : ' / ' . $e81_numdoc);
 
     if($k12_sequencial != null){
-      $pdf1->dataPagamento = $k12_data == null ? '' : date('d/m/Y', strtotime($k12_data));
+      $sDataPagamento = $k12_data == null ? '' : date('d/m/Y', strtotime($k12_data));
+      $sDataPagamentoISO = $k12_data;
     }else{
-      $pdf1->dataPagamento = $e86_data == null ? '' : date('d/m/Y', strtotime($e86_data));
+      $sDataPagamento = $e86_data == null ? '' : date('d/m/Y', strtotime($e86_data));
+      $sDataPagamentoISO = $e86_data;
+    }
+
+    $pdf1->dataPagamento = $sDataPagamento;
+
+    if ($e81_cancelado == null) {
+      $sSqlEstorno = $clempagemov->consultaEstorno('c70_valor',$e50_codord,$sDataPagamentoISO, $e81_codmov);
+      $aEstorno = pg_fetch_all(db_query($sSqlEstorno));
+      $vlrEstorno = 0;
+      foreach ($aEstorno as $estorno) {
+        $vlrEstorno += $estorno['c70_valor'];
+      }
+    } else {
+      $vlrEstorno = $e81_valor;
     }
 
     $sqlTesoureiro = $clReponsaveis->sql_query(null,'z01_nome',null, " si166_tiporesponsavel = 5 and ('$e80_data' between si166_dataini and si166_datafim) and si166_instit = ".db_getsession("DB_instit"));
