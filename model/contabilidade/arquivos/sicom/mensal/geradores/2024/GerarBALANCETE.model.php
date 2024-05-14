@@ -300,8 +300,8 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE17['si184_codfundo']                = $aBALACETE17['si184_codfundo'];
                         $aCSVBALANCETE17['si184_atributosf']              = trim($aBALACETE17['si184_atributosf']);
                         $aCSVBALANCETE17['si184_codctb']                  = trim($aBALACETE17['si184_codctb']);
-                        $aCSVBALANCETE17['si184_codfontrecursos']         = $this->padLeftZero($aBALACETE17['si184_codfontrecursos'], 3);
-                        $aCSVBALANCETE17['si184_codco']                   = $this->padLeftZero($aBALACETE17['si184_codco'], 4);
+                        $aCSVBALANCETE17['si184_codfontrecursos']         = $aCSVBALANCETE17['si184_atributosf'] == 'F' ? $this->padLeftZero($aBALACETE17['si184_codfontrecursos'], 3) : '';
+                        $aCSVBALANCETE17['si184_codco']                   = $aCSVBALANCETE17['si184_atributosf'] == 'F' ? $this->padLeftZero($aBALACETE17['si184_codco'], 4) : '';
                         $aCSVBALANCETE17['si184_saldoinicialctb']         = $this->sicomNumberReal($aBALACETE17['si184_saldoinicialctb'], 2);
                         $aCSVBALANCETE17['si184_naturezasaldoinicialctb'] = $this->padLeftZero($aBALACETE17['si184_naturezasaldoinicialctb'], 1);
                         $aCSVBALANCETE17['si184_totaldebitosctb']         = $this->sicomNumberReal($aBALACETE17['si184_totaldebitosctb'], 2);

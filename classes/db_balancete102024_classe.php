@@ -683,7 +683,7 @@ class cl_balancete102024
                                        LEFT OUTER JOIN consistema ON c60_codsis = c52_codsis
                                        WHERE c62_anousu = " . db_getsession('DB_anousu') . "
                                          AND c61_instit IN (" . db_getsession('DB_instit') . ")
-						 AND c61_codcon = {$codcon} ) AS x) as y where saldoinicial > 0 or debitos > 0 or creditos > 0 group by 1,2";
+						 AND c61_codcon = {$codcon} ) AS x) as y group by 1,2";
     return $sSql;
   }
 
