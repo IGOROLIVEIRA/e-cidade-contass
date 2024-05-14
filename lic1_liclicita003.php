@@ -146,8 +146,7 @@ if (isset($excluir)) {
     $rsAnexos = $cllicanexopncp->sql_record($sSqlBusca);
 
     if(pg_num_rows($rsAnexos) > 0){
-        $sqlerro  = true;
-        $erro_msg = "Licitação não Excluída! Licitação com anexos vinculados.";
+        $cllicanexopncp->excluir(null,"l215_liclicita = $l20_codigo");
     }
 
     if (!$sqlerro) {

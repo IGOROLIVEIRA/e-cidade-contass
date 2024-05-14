@@ -137,9 +137,12 @@ switch ($oParam->exec) {
                 if ($rsApiPNCP[0] == 201) {
                     $clliccontroleanexopncp = new cl_liccontroleanexopncp();
                     $clliccontroleanexopncp->excluir($oDadosAnexo->l218_sequencial);
-
+                    $cllicanexopncp->excluir($oParam->iCodigoProcesso);
                     $oRetorno->status  = 1;
                     $oRetorno->message = "Enviado com Sucesso !";
+                }else{
+                    $oRetorno->status  = 2;
+                    throw new Exception($rsApiPNCP[1]);
                 }
             } catch (Exception $oErro) {
 
