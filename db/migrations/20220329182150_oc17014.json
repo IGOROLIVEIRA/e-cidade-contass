@@ -1,0 +1,260 @@
+{
+    "contas": [
+        {
+            "estrutural": "237120101000000",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DO EXERCICIO",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237120101010000",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DO EXERCICIO",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237120101010100",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DO EXERCICIO",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237120101010101",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DO EXERCICIO",
+            "natsaldo": "AMBOS",
+            "nro_reg": "0",
+            "ic_msc": 1,
+            "sistema": 0
+        },
+        {
+            "estrutural": "237120201000000",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DE EXERCICIOS ANTERIORES ",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237120201010000",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DE EXERCICIOS ANTERIORES ",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237120201010100",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DE EXERCICIOS ANTERIORES ",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237120201010101",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DE EXERCICIOS ANTERIORES ",
+            "natsaldo": "AMBOS",
+            "nro_reg": "0",
+            "ic_msc": 1,
+            "sistema": 0
+        },
+        {
+            "estrutural": "237130101000000",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DO EXERCICIO",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237130101010000",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DO EXERCICIO",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237130101010100",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DO EXERCICIO",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237130101010101",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DO EXERCICIO",
+            "natsaldo": "AMBOS",
+            "nro_reg": "0",
+            "ic_msc": 1,
+            "sistema": 0
+        },
+        {
+            "estrutural": "237130201000000",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DE EXERCICIOS ANTERIORES ",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237130201010000",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DE EXERCICIOS ANTERIORES ",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237130201010100",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DE EXERCICIOS ANTERIORES ",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237130201010101",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DE EXERCICIOS ANTERIORES ",
+            "natsaldo": "AMBOS",
+            "nro_reg": "0",
+            "ic_msc": 1,
+            "sistema": 0
+        },
+        {
+            "estrutural": "237140101000000",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DO EXERCICIO",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237140101010000",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DO EXERCICIO",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237140101010100",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DO EXERCICIO",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237140101010101",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DO EXERCICIO",
+            "natsaldo": "AMBOS",
+            "nro_reg": "0",
+            "ic_msc": 1,
+            "sistema": 0
+        },
+        {
+            "estrutural": "237140201000000",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DE EXERCICIOS ANTERIORES ",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237140201010000",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DE EXERCICIOS ANTERIORES ",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237140201010100",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DE EXERCICIOS ANTERIORES ",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237140201010101",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DE EXERCICIOS ANTERIORES ",
+            "natsaldo": "AMBOS",
+            "nro_reg": "0",
+            "ic_msc": 1,
+            "sistema": 0
+        },
+        {
+            "estrutural": "237150101000000",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DO EXERCICIO",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237150101010000",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DO EXERCICIO",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237150101010100",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DO EXERCICIO",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237150101010101",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DO EXERCICIO",
+            "natsaldo": "AMBOS",
+            "nro_reg": "0",
+            "ic_msc": 1,
+            "sistema": 0
+        },
+        {
+            "estrutural": "237150201000000",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DE EXERCICIOS ANTERIORES ",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237150201010000",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DE EXERCICIOS ANTERIORES ",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237150201010100",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DE EXERCICIOS ANTERIORES ",
+            "natsaldo": "AMBOS",
+            "nro_reg": null,
+            "ic_msc": null,
+            "sistema": null
+        },
+        {
+            "estrutural": "237150201010101",
+            "nomeclatura": "SUPERAVITS OU DEFICITS DE EXERCICIOS ANTERIORES ",
+            "natsaldo": "AMBOS",
+            "nro_reg": "0",
+            "ic_msc": 1,
+            "sistema": 0
+        }
+    ]
+}

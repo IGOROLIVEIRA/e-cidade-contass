@@ -1,0 +1,52 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]
+then
+  echo "
+  Modo de usar:
+
+  $ sh $0 NUMERO
+
+  ---
+
+  NUMERO: int
+    deve ser o número da ocorrência geradora do script
+
+  ";
+
+  exit 1
+fi
+
+ocorrencia=$1
+
+timestamp=$(date +%s)
+
+path=$(dirname $(realpath $0))
+
+fileName="${timestamp}_OC${ocorrencia}.sql"
+
+pathCompleto="${path}/${fileName}";
+
+if test -f $pathCompleto
+then
+
+  echo "erro: O arquivo ${pathCompleto} já existe."
+  exit 2
+
+fi
+
+echo "
+-- Ocorrência ${ocorrencia}
+BEGIN;                   
+SELECT fc_startsession();
+
+-- Início do script
+
+
+
+-- Fim do script
+
+COMMIT;
+" > $pathCompleto
+
+echo "Arquivo '${pathCompleto}' criado com sucesso."

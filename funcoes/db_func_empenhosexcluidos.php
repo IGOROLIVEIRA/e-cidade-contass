@@ -1,0 +1,3 @@
+<?
+$campos = "empenhosexcluidos.e290_sequencial,empenhosexcluidos.e290_e60_numemp,empenhosexcluidos.e290_e60_codemp,empenhosexcluidos.e290_e60_vlremp,empenhosexcluidos.e290_e60_emiss,empenhosexcluidos.e290_z01_numcgm,empenhosexcluidos.e290_z01_nome,empenhosexcluidos.e290_id_usuario,empenhosexcluidos.e290_nomeusuario,empenhosexcluidos.e290_dtexclusao,empenhosexcluidos.e290_e60_anousu as db_e290_e60_anousu";
+?>

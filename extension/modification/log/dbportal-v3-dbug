@@ -1,0 +1,4 @@
+[2021-03-25 01:41:05] INFO: Instalando modificação
+[2021-03-25 01:41:05] INFO: Realizado parse: templates/template_login_e-cidade.php | operacoes executadas: 1/1 | global
+[2021-03-25 01:41:05] INFO: Realizado parse: abrir.php | operacoes executadas: 0/1 | global
+[2021-03-25 01:41:05] WARNING: file: 'abrir.php' operation: '#0 - Abre o ecidade em nova aba'

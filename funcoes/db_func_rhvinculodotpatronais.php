@@ -1,0 +1,3 @@
+<?
+$campos = "rhvinculodotpatronais.rh171_sequencial,rhvinculodotpatronais.rh171_orgaoorig,rhvinculodotpatronais.rh171_orgaonov,rhvinculodotpatronais.rh171_unidadeorig,rhvinculodotpatronais.rh171_unidadenov,rhvinculodotpatronais.rh171_projativorig,rhvinculodotpatronais.rh171_projativnov,rhvinculodotpatronais.rh171_recursoorig,rhvinculodotpatronais.rh171_recursonov,rhvinculodotpatronais.rh171_mes,rhvinculodotpatronais.rh171_instit,rhvinculodotpatronais.rh171_anousu as db_rh171_anousu";
+?>

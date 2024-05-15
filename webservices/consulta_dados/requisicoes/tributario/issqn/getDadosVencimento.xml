@@ -1,0 +1,13 @@
+<?xml version='1.0' ?>
+<consulta distinct="false">
+    <campos>
+        <campo campo="q92_diasvcto" label="dias_vencimento"/>
+    </campos>
+    <from tabela="parissqn"/>
+    <juncoes>
+        <join tipo="inner" tabela="cadvencdesc" condicao="q92_codigo = q60_codvencvar"/>
+    </juncoes>
+    <filtros/>
+    <agrupamento/>
+    <ordenacao/>
+</consulta>

@@ -1,0 +1,188 @@
+BEGIN;
+
+SELECT fc_startsession();
+
+--DROP TABLE:
+DROP TABLE IF EXISTS flpgo102017 CASCADE;
+DROP TABLE IF EXISTS flpgo112017 CASCADE;
+DROP TABLE IF EXISTS flpgo122017 CASCADE;
+DROP TABLE IF EXISTS pessoaflpgo102017 CASCADE;
+DROP TABLE IF EXISTS respinf102017 CASCADE;
+DROP TABLE IF EXISTS terem102017 CASCADE;
+--Criando drop sequences
+DROP SEQUENCE IF EXISTS flpgo102017_si195_sequencial_seq;
+DROP SEQUENCE IF EXISTS flpgo112017_si196_sequencial_seq;
+DROP SEQUENCE IF EXISTS flpgo122017_si197_sequencial_seq;
+DROP SEQUENCE IF EXISTS pessoaflpgo102017_si193_sequencial_seq;
+DROP SEQUENCE IF EXISTS respinf102017_si197_sequencial_seq;
+DROP SEQUENCE IF EXISTS terem102017_si194_sequencial_seq;
+
+
+-- Criando  sequences
+CREATE SEQUENCE flpgo102017_si195_sequencial_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+
+CREATE SEQUENCE flpgo112017_si196_sequencial_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+
+CREATE SEQUENCE flpgo122017_si197_sequencial_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+
+CREATE SEQUENCE pessoaflpgo102017_si193_sequencial_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+
+CREATE SEQUENCE respinf102017_si197_sequencial_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+
+CREATE SEQUENCE terem102017_si194_sequencial_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+CREATE TABLE flpgo102017
+(
+    si195_sequencial BIGINT DEFAULT 0 NOT NULL,
+    si195_tiporegistro BIGINT DEFAULT 0 NOT NULL,
+    si195_nrodocumento VARCHAR(14) DEFAULT 0 NOT NULL,
+    si195_codreduzidopessoa BIGINT DEFAULT 0 NOT NULL,
+    si195_regime VARCHAR(1) NOT NULL,
+    si195_indtipopagamento VARCHAR(1) NOT NULL,
+    si195_indsituacaoservidorpensionista VARCHAR(1) NOT NULL,
+    si195_dscsituacao VARCHAR(120),
+    si195_datconcessaoaposentadoriapensao DATE,
+    si195_dsccargo VARCHAR(150) NOT NULL,
+    si195_sglcargo VARCHAR(3) NOT NULL,
+    si195_dscsiglacargo VARCHAR(150),
+    si195_reqcargo BIGINT DEFAULT 0 NOT NULL,
+    si195_indcessao VARCHAR(3),
+    si195_dsclotacao VARCHAR(120),
+    si195_vlrcargahorariasemanal BIGINT DEFAULT 0,
+    si195_datefetexercicio DATE NOT NULL,
+    si195_datexclusao DATE,
+    si195_vlrremuneracaobruta DOUBLE PRECISION DEFAULT 0 NOT NULL,
+    si195_natsaldoliquido VARCHAR(1) NOT NULL,
+    si195_vlrremuneracaoliquida DOUBLE PRECISION DEFAULT 0 NOT NULL,
+    si195_vlrdeducoes DOUBLE PRECISION DEFAULT 0 NOT NULL,
+    si195_mes BIGINT DEFAULT 0 NOT NULL,
+    si195_inst BIGINT DEFAULT 0,
+    CONSTRAINT flpgo102017_sequ_pk PRIMARY KEY (si195_sequencial));
+
+CREATE TABLE flpgo112017
+(
+    si196_sequencial BIGINT DEFAULT 0 NOT NULL,
+    si196_tiporegistro BIGINT DEFAULT 0 NOT NULL,
+    si196_nrodocumento VARCHAR(14) DEFAULT 0 NOT NULL,
+    si196_codreduzidopessoa BIGINT DEFAULT 0 NOT NULL,
+    si196_tiporemuneracao BIGINT DEFAULT 0 NOT NULL,
+    si196_desctiporemuneracao VARCHAR(150),
+    si196_vlrremuneracaodetalhada DOUBLE PRECISION DEFAULT 0 NOT NULL,
+    si196_mes BIGINT DEFAULT 0 NOT NULL,
+    si196_inst BIGINT DEFAULT 0 NOT NULL,
+    si196_reg10 BIGINT DEFAULT 0,
+    CONSTRAINT flpgo112017_sequ_pk PRIMARY KEY (si196_sequencial));
+
+CREATE TABLE flpgo122017
+(
+    si197_sequencial BIGINT DEFAULT 0 NOT NULL,
+    si197_tiporegistro BIGINT DEFAULT 0 NOT NULL,
+    si197_nrodocumento VARCHAR(14) DEFAULT 0 NOT NULL,
+    si197_codreduzidopessoa BIGINT DEFAULT 0 NOT NULL,
+    si197_tipodesconto BIGINT DEFAULT 0 NOT NULL,
+    si197_vlrdescontodetalhado DOUBLE PRECISION DEFAULT 0 NOT NULL,
+    si197_mes BIGINT DEFAULT 0 NOT NULL,
+    si197_inst BIGINT DEFAULT 0 NOT NULL,
+    si197_reg10 BIGINT DEFAULT 0,
+    CONSTRAINT flpgo122017_sequ_pk PRIMARY KEY (si197_sequencial));
+
+CREATE TABLE pessoaflpgo102017
+(
+    si193_sequencial BIGINT DEFAULT 0 NOT NULL,
+    si193_tiporegistro BIGINT DEFAULT 0 NOT NULL,
+    si193_tipodocumento BIGINT DEFAULT 0 NOT NULL,
+    si193_nrodocumento VARCHAR(14) NOT NULL,
+    si193_nome VARCHAR(120) NOT NULL,
+    si193_indsexo VARCHAR(1),
+    si193_datanascimento DATE,
+    si193_tipocadastro BIGINT DEFAULT 0 NOT NULL,
+    si193_justalteracao VARCHAR(100),
+    si193_mes BIGINT DEFAULT 0 NOT NULL,
+    si193_inst BIGINT DEFAULT 0,
+    CONSTRAINT pessoaflpgo102017_sequ_pk PRIMARY KEY (si193_sequencial));
+
+CREATE TABLE respinf102017
+(
+    si197_sequencial BIGINT DEFAULT 0 NOT NULL,
+    si197_nomeresponsavel VARCHAR(120) NOT NULL,
+    si197_cartident VARCHAR(10) NOT NULL,
+    si197_orgemissorci VARCHAR(10) NOT NULL,
+    si197_cpf VARCHAR(11) NOT NULL,
+    si197_dtinicio DATE NOT NULL,
+    si197_dtfinal DATE NOT NULL,
+    si197_mes BIGINT DEFAULT 0 NOT NULL,
+    si197_inst BIGINT DEFAULT 0,
+    CONSTRAINT respinf102017_sequ_pk PRIMARY KEY (si197_sequencial));
+
+
+CREATE TABLE terem102017
+(
+    si194_sequencial BIGINT DEFAULT 0 NOT NULL,
+    si194_tiporegistro BIGINT DEFAULT 0 NOT NULL,
+    si194_cnpj VARCHAR(14),
+    si194_vlrparateto DOUBLE PRECISION DEFAULT 0 NOT NULL,
+    si194_tipocadastro BIGINT DEFAULT 0 NOT NULL,
+    si194_dtinicial DATE NOT NULL,
+    si194_dtfinal DATE NOT NULL,
+    si194_justalteracao VARCHAR(100),
+    si194_mes BIGINT DEFAULT 0 NOT NULL,
+    si194_inst BIGINT DEFAULT 0,
+    CONSTRAINT terem102017_sequ_pk PRIMARY KEY (si194_sequencial));
+
+
+-- CHAVE ESTRANGEIRA
+
+
+ALTER TABLE flpgo112017
+ADD CONSTRAINT flpgo112017_reg10_fk FOREIGN KEY (si196_reg10)
+REFERENCES flpgo102017;
+
+ALTER TABLE flpgo122017
+ADD CONSTRAINT flpgo122017_reg10_fk FOREIGN KEY (si197_reg10)
+REFERENCES flpgo102017;
+
+
+
+
+-- INDICES
+
+
+CREATE  INDEX flpgo112017_si196_reg10_index ON flpgo112017(si196_reg10);
+CREATE  INDEX flpgo122017_si197_reg10_index ON flpgo122017(si197_reg10);
+
+COMMIT;

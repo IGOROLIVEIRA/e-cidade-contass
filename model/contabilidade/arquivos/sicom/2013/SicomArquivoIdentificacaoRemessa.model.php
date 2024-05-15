@@ -1,0 +1,127 @@
+<?php
+require_once ("model/iPadArquivoBaseCSV.interface.php");
+require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
+require_once ("classes/db_ide2014_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarIDE.model.php");
+
+ /**
+  * gerar arquivo de identificacao da Remessa Sicom Acompanhamento Mensal
+  * @author robson
+  * @package Contabilidade
+  */
+class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadArquivoBaseCSV {
+  
+	/**
+	 * 
+	 * Codigo do layout. (db_layouttxt.db50_codigo)
+	 * @var Integer
+	 */
+  protected $iCodigoLayout = 147;
+  
+  /**
+   * 
+   * NOme do arquivo a ser criado
+   * @var String
+   */
+  protected $sNomeArquivo = 'IDE';
+  
+  /**
+   * 
+   * Contrutor da classe
+   */
+  public function __construct() {
+    
+  }
+  
+  /**
+	 * Retorna o codigo do layout
+	 *
+	 * @return Integer
+	 */
+  public function getCodigoLayout(){
+    return $this->iCodigoLayout;
+  }
+  
+  /**
+   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV 
+   */
+  public function getCampos(){
+    
+    $aElementos  = array(
+                          "codMunicipio",
+                          "cnpjMunicipio",
+    											"codOrgao",
+    											"tipoOrgao",
+                          "exercicioReferencia",
+                          "mesReferencia",
+                          "dataGeracao",
+    											"codControleRemessa"
+                        );
+    return $aElementos;
+  }
+  
+  /**
+   * selecionar os dados de indentificacao da remessa pra gerar o arquivo
+   * @see iPadArquivoBase::gerarDados()
+   */
+  public function gerarDados(){
+ 		
+  	/**
+  	 * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo 
+  	 */
+  	$clide2014 = new cl_ide2014();
+  	
+  	$sSql  = "SELECT db21_codigomunicipoestado AS codmunicipio,
+                cgc AS cnpjmunicipio,
+                si09_tipoinstit AS tipoorgao,
+                si09_codorgaotce AS codorgao,
+                prefeitura
+              FROM db_config
+              LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
+              WHERE codigo = ".db_getsession("DB_instit");
+    	
+    $rsResult  = db_query($sSql);
+    
+    /**
+     * inserir informacoes no banco de dados
+     */
+    db_inicio_transacao();
+    $result = $clide2014->sql_record($clide2014->sql_query(NULL,"*",NULL,"si11_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']));
+    if (pg_num_rows($result) > 0) {
+    	$clide2014->excluir(NULL,"si11_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']);
+    }
+    
+    for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+      
+    	$oDadosIde = db_utils::fieldsMemory($rsResult, $iCont);
+			
+	    $oDadosMunicipio = new stdClass();
+	   
+		  $clide2014->si11_codmunicipio         = $oDadosIde->codmunicipio;
+		  $clide2014->si11_cnpjmunicipio        = $oDadosIde->cnpjmunicipio;
+		  $clide2014->si11_codorgao							= $oDadosIde->codorgao;
+		  $clide2014->si11_tipoorgao            = $oDadosIde->tipoorgao;
+		  $clide2014->si11_exercicioreferencia  = db_getsession("DB_anousu");
+		  $clide2014->si11_mesreferencia        = $this->sDataFinal['5'].$this->sDataFinal['6'];
+		  $clide2014->si11_datageracao          = date("d-m-Y");
+		  $clide2014->si11_codcontroleremessa   = " ";
+		  $clide2014->si11_mes                  = $this->sDataFinal['5'].$this->sDataFinal['6'];
+		  
+		  
+		  $clide2014->incluir(null);
+		  if ($clide2014->erro_status == 0) {
+		  	throw new Exception($clide2014->erro_msg);
+		  }
+		  
+		  
+    }
+    
+    db_fim_transacao();
+    
+    $oGerarIde = new GerarIDE();
+    $oGerarIde->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
+    $oGerarIde->gerarDados();
+    
+  }
+  
+}

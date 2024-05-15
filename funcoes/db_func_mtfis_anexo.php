@@ -1,0 +1,3 @@
+<?
+$campos = "mtfis_anexo.mtfisanexo_sequencial,mtfis_anexo.mtfisanexo_especificacao,mtfis_anexo.mtfisanexo_valorcorrente1,mtfis_anexo.mtfisanexo_valorcorrente2,mtfis_anexo.mtfisanexo_valorcorrente3,mtfis_anexo.mtfisanexo_valorconstante1,mtfis_anexo.mtfisanexo_valorconstante2,mtfis_anexo.mtfisanexo_valorconstante3,mtfis_anexo.mtfisanexo_ldo";
+?>

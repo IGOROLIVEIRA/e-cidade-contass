@@ -1,0 +1,48 @@
+<?xml version="1.0" standalone="yes" ?>
+<table codigo='1010208' name='arrecadacao.parametroscobrancaregistrada' description="Parâmetros da cobrança registrada" prefix="ar28" label="Parâmetros da cobrança registrada" type="0">
+  <fields>
+    <field codigo="1009337"
+           campo_api=''
+           name="ar28_sequencial"
+           conteudo="int4"
+           description="Código sequencial dos parâmetros da cobrança registrada."
+           inivalue="0"
+           label="Código"
+           size="10"
+           null="f"
+           uppercase="f"
+           autocompl="f"
+           aceitatipo="1"
+           tipoobj="text"
+           labelrel="Código"
+           reference=""
+           ispk="t"
+           hassequence="t">
+        <sequence name='parametroscobrancaregistrada_ar28_sequencial_seq' ></sequence>
+
+    </field>
+    <field codigo="1009338"
+           campo_api=''
+           name="ar28_usuario"
+           conteudo="varchar(30)"
+           description="Usu�rio do Webservice da Caixa"
+           inivalue=""
+           label="Usu�rio"
+           size="30"
+           null="t"
+           uppercase="t"
+           autocompl="f"
+           aceitatipo="0"
+           tipoobj="text"
+           labelrel="Usu�rio"
+           reference=""
+           ispk="f"
+           hassequence="t">
+    </field>
+  </fields>
+  <primarykey>
+    <fieldpk name="ar28_sequencial"></fieldpk>
+  </primarykey>
+  <foreignkeys>
+  </foreignkeys>
+</table>

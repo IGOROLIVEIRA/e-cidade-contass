@@ -1,0 +1,118 @@
+<?php
+
+use Phinx\Migration\AbstractMigration;
+
+class Oc16737Desativar extends AbstractMigration
+{
+    public function up()
+    {
+        $sql = <<<SQL
+            begin;
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '111110601000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '113510801000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '113510900000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110800000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110801000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110900000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110901000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110902000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110903000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110904000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110905000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110906000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110907000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110908000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110909000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110910000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110911000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110912000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110913000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110914000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110915000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114110916000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111001000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111002000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111003000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111004000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111005000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111006000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111007000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111008000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111100000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111101000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111200000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111201000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111300000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111301000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111400000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111401000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111500000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111600000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111601000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111602000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '114111603000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '122910400000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '122920400000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '122930400000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '122940400000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '122950400000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '123110203000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '123210406000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '218810802000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '218910500000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '218910900000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '218911000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '218911100000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '218911500000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '219000000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '219900000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '219930000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '219940000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '219950000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '228810802000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '228910500000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '228910900000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '228911000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '228911100000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '228911500000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '711110304000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '793000000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '794000000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '891130000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '893000000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '893100000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '893110000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '893120000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '893130000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '893200000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '893210000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '893220000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '893230000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '893300000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '893310000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '893310100000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '893310200000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '893310300000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '893319900000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '893400000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '894000000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '112919800000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '113700000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '113720000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '121129800000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '121139800000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '121149800000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '121159800000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '219800000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '219820000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '219830000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '219840000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '219850000000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '218810101000000';
+                update conplano set c60_descr = 'DESATIVADA 2022' where c60_anousu > 2021 and c60_estrut = '228810102000000';
+            commit;
+SQL;
+        $this->execute($sql);
+    }
+}

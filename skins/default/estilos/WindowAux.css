@@ -1,0 +1,14 @@
+
+/**
+ * WindowAux
+ */
+.windowAux12 {
+  background-color: #F5FFFB !important;
+}
+
+.windowAux12 .windowAuxTitle {
+  background-color: #057518 !important;
+}
+.windowAux12 .windowAuxTitle .dragme {
+  padding: 3px !important;
+}

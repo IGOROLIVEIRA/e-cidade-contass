@@ -1,0 +1,12 @@
+begin;
+select fc_startsession();
+alter table dadoscomplementareslrf add column si170_vlsaldoatualconcgarantiainterna double precision;
+alter table dadoscomplementareslrf add column si170_vlsaldoatualcontragarantiainterna double precision;
+alter table dadoscomplementareslrf add column si170_vlsaldoatualcontragarantiaexterna double precision;
+alter table dadoscomplementareslrf add column si170_medidascorretivas text;
+alter table dadoscomplementareslrf add column si170_publiclrf integer;
+alter table dadoscomplementareslrf add column si170_dtpublicacaorelatoriolrf date;
+alter table dadoscomplementareslrf add column si170_tpbimestre integer;
+alter table dadoscomplementareslrf add column si170_metarrecada integer;
+alter table dadoscomplementareslrf add column si170_dscmedidasadotadas text;
+commit;

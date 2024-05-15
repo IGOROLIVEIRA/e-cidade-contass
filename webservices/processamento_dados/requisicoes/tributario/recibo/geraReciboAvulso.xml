@@ -1,0 +1,22 @@
+<?xml version='1.0' ?>
+<processamento>
+  <versao>1.2</versao>
+  <parametros>
+    <parametro nome="cnpj_cpf"          obrigatorio="true" tipo="integer" />
+    <parametro nome="nome_doador"       obrigatorio="true" tipo="string" />
+    <parametro nome="valor_doacao"      obrigatorio="true" tipo="float" />
+    <parametro nome="codigo_receita"    obrigatorio="true" tipo="integer" />
+    <parametro nome="data_vencimento"   obrigatorio="true" tipo="date" />
+  </parametros>
+  <configuracoes>
+    <classe   referencia="oGeraReciboAvulso" nome="ReciboAvulsoPortalDoacoes" parametros="" caminho="model/arrecadacao/webservice/ReciboAvulsoPortalDoacoes.model.php"/>
+    <exec>
+      <metodo referencia="oGeraReciboAvulso" nome="setDataVencimento" parametros="$data_vencimento" />
+      <metodo referencia="oGeraReciboAvulso" nome="setCnpjCpf"        parametros="$cnpj_cpf" />
+      <metodo referencia="oGeraReciboAvulso" nome="setCodigoReceita"  parametros="$codigo_receita" />
+      <metodo referencia="oGeraReciboAvulso" nome="setNomeDoador"     parametros="$nome_doador" />
+      <metodo referencia="oGeraReciboAvulso" nome="setValorDoacao"    parametros="$valor_doacao" />
+      <metodo referencia="oGeraReciboAvulso" nome="gerarRecibo"       parametros="" />
+    </exec>
+  </configuracoes>
+</processamento>

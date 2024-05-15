@@ -1,0 +1,3 @@
+<?
+$campos = "consexecucaoorc.c202_sequencial,consexecucaoorc.c202_consconsorcios,consexecucaoorc.c202_mescompetencia,consexecucaoorc.c202_funcao,consexecucaoorc.c202_subfuncao,consexecucaoorc.c202_elemento,consexecucaoorc.c202_valorempenhado,consexecucaoorc.c202_valorempenhadoanu,consexecucaoorc.c202_valorliquidado,consexecucaoorc.c202_valorpago,consexecucaoorc.c202_valorpagoanu";
+?>

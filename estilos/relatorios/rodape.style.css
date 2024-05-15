@@ -1,0 +1,33 @@
+.rodape {
+  width: auto;
+  margin: 0 0px;
+  height: 45px;
+  padding: 0 15px 0 5px;
+  font-size: 10px;
+  border-top: 1px solid #000;
+  line-height: 1;
+}
+
+.rodape .db-base {
+  font-size: 8px;
+  margin-bottom: 5px;
+}
+
+.rodape .info {
+  font-size: 9px;
+  width: 100%;
+}
+
+.rodape .info .rotina {
+  float: left;
+  width: 950px;
+  height: 5px;
+}
+
+.rodape .info .paginacao {
+  float: right;
+  width: 70px;
+  height: 5px;
+  text-align: right;
+}
+

@@ -1,0 +1,163 @@
+e-cidade			5432	cmpirapora
+e-cidade			5432	cmbocaiuva
+e-cidade			5432	cmcapitaoeneas
+cmmoc   			5432	cmmoc
+e-cidade			5432	fumasa
+e-cidade			5432	pmibiracatu
+e-cidade			5433	pmpatis
+e-cidade			5432	pmsaofrancisco
+e-cidade			5432	pmsaojoaodaponte
+e-cidade			5432	cmuba
+e-cidade			5432	pmpirapora
+e-cidade			5432	cisaje
+e-cidade        	5432	prevmoc
+e-cidade			5432	pmverdelandia
+e-cidade			5432	pmvarzelandia
+e-cidade			5432	pmclarodospocoes
+e-cidade			5432	cii-amaje
+e-cidade			5432	mctrans
+e-cidade            5432    cmarinos
+e-cidade            5432    pmlagoadospatos
+e-cidade            5432    pmjuramento
+e-cidade            5432    cisajev3
+
+
+e-cidade            5432    pmsaoromao
+
+pmcapitaoeneas      5432    prefeituras
+pmcristalia         5432    prefeituras
+pmluislandia        5432    prefeituras
+pmitacambira        5432    prefeituras
+basemodeloppa       5432    prefeituras
+treinamento         5432    prefeituras
+pmsantafeminas      5432    prefeituras
+pmjanuaria_consulta 5432    prefeituras
+
+
+pmsaojoaomissoes           5432 prefeituras2
+pmcurraldedentro           5432 prefeituras2
+pmcurraldedentro_consulta  5432 prefeituras2
+pmnovaporteirinha_consulta 5432 prefeituras2
+
+cmnavarro			    5432 cmnavarro
+cmfranciscodumont		5432 cmnavarro
+    
+ammesf				    5432	e-cidade
+cii-amaje			    5432	e-cidade
+cimams				    5432	e-cidade
+cindecon			    5432	e-cidade
+cmberizal			    5432	e-cidade
+cmbotumirim			    5432	e-cidade
+cmgraomogol			    5432	e-cidade
+cmibiracatu			    5432	e-cidade
+cmjosenopolis		    5432	e-cidade
+cmjuramento			    5432	e-cidade
+cmmatiascardoso		    5432	e-cidade
+cmmonteazul			    5432	e-cidade
+cmsantafe			    5432	e-cidade
+cmsjponte			    5432	e-cidade
+cmubai				    5432	e-cidade
+e-cidade                5432    pmubai
+cmvarzelandia			5432	e-cidade
+converdegran			5432	e-cidade
+e-cidade-zerada-2019    5432	e-cidade
+emutur				    5432	e-cidade
+prevponte39			    5432	e-cidade
+cmburitizeiro           5432    e-cidade
+samu                    5432    e-cidade
+cmjanauba               5432    e-cidade
+cmibiai                 5432    e-cidade
+cmubai_folha            5432    e-cidade
+cmbotumirim_folha       5432    e-cidade
+comar                   5432    e-cidade
+conserrageral           5432    e-cidade
+cisgraomogol		    5432	e-cidade
+cimvales                5432    e-cidade
+cidsmeje                5432    e-cidade
+cisaje                  5432    e-cidade
+cmnavarro               5432    e-cidade
+cmluislandia            5432    e-cidade
+cisnorte                5432    e-cidade
+cisarp                  5432    e-cidade
+hrjanauba               5432    e-cidade
+cmitacambira            5432    e-cidade
+arsan    			    5432	e-cidade
+cisame    			    5432	e-cidade
+
+e-cidade            5432    pmnovaporteirinha
+
+e-cidade            5432    pmgraomogol
+
+e-cidade            5432    pmburitizeiro
+
+e-cidade            5432    pmmonteazul
+
+e-cidade            5432    pmmontalvania
+
+base_desenvolvimento   5432   teste
+
+e-cidade            5432    codanorte
+
+e-cidade            5432    pmserranopolis
+
+e-cidade            5432    pmsantafeminas
+
+e-cidade            5432    pmsantafeminasv3
+
+e-cidade            5432    pmsaogoncalov3
+
+e-cidade            5432    pmcurraldentro
+
+e-cidade            5432    pmsaojoaodapontev3
+
+e-cidade            5432    pmverdelandiav3
+
+e-cidade            5432    pmgraomogolv3
+
+e-cidade            5432    pmpiraporav3
+
+e-cidade-treinamento   5432 e-cidadev3
+pmfranciscodumont      5432 e-cidadev3
+pmsaogoncalodoriopreto 5432 e-cidadev3
+cismesf                5432 e-cidadev3
+cias                   5432 e-cidadev3
+treinamento_consorcio  5432 e-cidadev3
+
+e-cidade            5432 pmmonteazulv3
+
+e-cidade            5432 pmmontalvaniav3
+e-cidade            5432 pmpedrasdemariadacruzv3
+e-cidade            5432 pmsaoromaov3
+e-cidade            5432 pmserranopolisv3
+e-cidade            5432 codanortev3
+
+e-cidade            5432 pmubaiv3
+e-cidade            5432 pmclarodoscpocoes
+e-cidade            5432 pmvarzelandiav3
+e-cidade            5432 pmibiracatuv3
+e-cidade            5432 pmsaojoaomissoes
+pmlagoadospatos     5432 pmsaojoaomissoes
+cimva               5432 pmsaojoaomissoes
+
+
+ammesf                  5432 e-cidadev3-prod
+cisame                  5432 e-cidadev3-prod
+e-cidade-zerada-2023    5432 e-cidadev3-prod
+cmmatiascardoso         5432 e-cidadev3-prod
+arsamb                  5432 e-cidadev3-prod
+arsan                   5432 e-cidadev3-prod
+cisgraomogol            5432 e-cidadev3-prod
+converdegran            5432 e-cidadev3-prod
+inframinas              5432 e-cidadev3-prod
+cimams                  5432 e-cidadev3-prod
+cisnorte                5432 e-cidadev3-prod
+comar                   5432 e-cidadev3-prod
+cisarp                  5432 e-cidadev3-prod
+cimvales                5432 e-cidadev3-prod
+mctrans                 5432 e-cidadev3-prod
+samu                    5432 e-cidadev3-prod
+prevcap				    5432 e-cidadev3-prod
+cmmirabela			    5432 e-cidadev3-prod
+cmpatis			        5432 e-cidadev3-prod
+cmbrasilandia			5432 e-cidadev3-prod
+e-cidade                5432 cmcapitaoeneasv3

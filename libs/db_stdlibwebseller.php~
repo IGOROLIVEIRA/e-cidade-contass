@@ -1,0 +1,1995 @@
+<?
+//WebSeller
+
+function db_inputdatasaude( $intEspecmed,
+							$nome,
+							$dia = "",
+							$mes = "",
+							$ano = "",
+							$dbcadastro = true,
+							$dbtype = 'text',
+							$db_opcao = 3,
+							$js_script = "",
+							$nomevar = "",
+							$bgcolor = "",
+							$shutdown_function="none",
+							$onclickBT="",
+							$onfocus="",
+							$jsRetornoCal="",
+							$exame=false
+							){
+
+		//#00#//db_inputdata
+		//#10#//FunÁ„o para montar um objeto tipo data. Ser„o trÍs objetos input na tela mais um objeto input tipo button para
+		//#10#//acessar o calend·rio do sistema
+		//#15#//db_inputdata($nome,$dia="",$mes="",$ano="",$dbcadastro=true,$dbtype='text',$db_opcao=3,$js_script="",$nomevar="",$bgcolor="",$shutdown_funcion="none",$onclickBT="",$onfocus"");
+		//#20#//Nome            : Nome do campo da documentacao do sistema ou do arquivo
+		//#20#//Dia             : Valor para o objeto |db_input| do dia
+		//#20#//MÍs             : Valor para o objeto |db_input| do mÍs
+		//#20#//Ano             : Valor para o objeto |db_input| do ano
+		//#20#//Cadastro        : True se cadastro ou false se nao cadastro Padr„o: true
+		//#20#//Type            : Tipo a ser incluido para a data Padr„o: text
+		//#20#//Opcao           : *db_opcao* do programa a ser executado neste objeto input, inclus„o(1) alteraÁ„o(2) exclus„o(3)
+		//#20#//Script          : JAVASCRIPT  a ser executado juntamento com o objeto, indicando os mÈtodos
+		//#20#//Nome Secund·rio : Nome do input que ser· gerado, assumindo somente as caracterÌsticas do campo Nome
+		//#20#//Cor Background  : Cor de fundo da tela, no caso de *db_opcao*=3 ser· "#DEB887"
+		//#20#//shutdown_funcion : funÁ„o que ser· executada apos o retorno do calend·rio
+		//#20#//onclickBT       : FunÁ„o que ser· executada ao clicar no bot„o que abre o calend·rio
+		//#20#//onfocus         : FunÁ„o que ser· executada ao focar os campos
+		//#99#//Quando o par‚metro OpÁ„o for de alteraÁ„o (Opcao = 22) ou exclus„o (OpÁ„o = 33) o sistema
+		//#99#//colocar· a sem acesso ao calend·rio
+		//#99#//Para *db_opcao* 3 e 5 o sistema colocar· sem o calend·rio e com readonly
+		//#99#//
+		//#99#//Os trÍs input gerados para a data ter„o o nome do campo acrescido do [Nome]_dia, [Nome]_mes e
+		//#99#//[Nome]_ano os quais ser„o acessados pela classe com estes nome.
+		//#99#//
+		//#99#//O sistema ger· para a primeira data incluÌda um formul·rio, um objeto de JanelaIframe do nosso
+		//#99#//sistema para que sej· mostrado o calend·rio.
+
+	global $DataJavaScript;
+	if ($db_opcao == 3 || $db_opcao == 22) {
+		$bgcolor = "style='background-color:#DEB887'";
+	}
+
+	if(isset($dia) && $dia != "" && isset($mes) && $mes != '' && isset($ano) && $ano != ""){
+		$diamesano = $dia."/".$mes."/".$ano;
+		$anomesdia = $ano."/".$mes."/".$dia;
+	}
+
+	$sButtonType = "button";
+
+	?>
+		<input name="<?=($nomevar==""?$nome:$nomevar).""?>" <?=$bgcolor?>
+		       type="<?=$dbtype?>"
+		       id="<?=($nomevar==""?$nome:$nomevar).""?>"
+		       <?=($db_opcao==3 || $db_opcao==22 ?'readonly':($db_opcao==5?'disabled':''))?>
+		       value="<?=@$diamesano?>" size="10" maxlength="10" autocomplete="off"
+		       onBlur='js_validaDbData(this);'
+		       onKeyUp="return js_mascaraData(this,event)"
+		       onSelect="return js_bloqueiaSelecionar(this);"
+		       onFocus="js_validaEntrada(this);" <?=$js_script?> >
+
+		<input name="<?=($nomevar==""?$nome:$nomevar)."_dia"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_dia"?>" value="<?=@$dia?>" size="2"  maxlength="2" >
+		<input name="<?=($nomevar==""?$nome:$nomevar)."_mes"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_mes"?>" value="<?=@$mes?>" size="2"  maxlength="2" >
+		<input name="<?=($nomevar==""?$nome:$nomevar)."_ano"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_ano"?>" value="<?=@$ano?>" size="4"  maxlength="4" >
+	<?
+	if (($db_opcao < 3) || ($db_opcao == 4)) {
+		?>
+		<script>
+		var PosMouseY, PosMoudeX;
+
+		function js_comparaDatas<?=($nomevar==""?$nome:$nomevar).""?>(dia,mes,ano){
+			var objData        = document.getElementById('<?=($nomevar==""?$nome:$nomevar).""?>');
+			objData.value      = dia+"/"+mes+'/'+ano;
+			<?=$jsRetornoCal?>
+		}
+		</script>
+		<?
+		if (isset($dbtype) && strtolower($dbtype) == strtolower('hidden')) {
+			$sButtonType = "hidden";
+		}
+
+		if( $exame == true ){
+		?>
+			<input value="D"
+			       type="<?=$sButtonType?>"
+			       name="dtjs_<?=($nomevar==""?$nome:$nomevar)?>"
+			       onclick="<?=$onclickBT?>pegaPosMouse(event);show_calendarexames('<?=($nomevar==""?$nome:$nomevar)?>','<?=$shutdown_function?>',<?=$intEspecmed ?>)"  >
+		<?
+		}else{
+		?>
+			<input value="D"
+			       type="<?=$sButtonType?>"
+			       name="dtjs_<?=($nomevar==""?$nome:$nomevar)?>"
+			       onclick="<?=$onclickBT?>pegaPosMouse(event);show_calendarsaude('<?=($nomevar==""?$nome:$nomevar)?>','<?=$shutdown_function?>',<?=$intEspecmed ?>)"  >
+		<?
+		}
+	}
+} //fim function
+
+
+//funÁ„o para mostrar mensagens de aviso ao usu·rio
+
+function MsgAviso($codescola,$tabela,$arquivo=null,$where=null){
+ include("classes/db_".trim($tabela)."_classe.php");
+ $instancia = "cl_".$tabela;
+ $cltabela = new $instancia;
+ if(trim($tabela)=="escola"){
+  $result = $cltabela->sql_record($cltabela->sql_query("","*",""," ed18_i_codigo = $codescola"));
+ }else{
+  $result = $cltabela->sql_record($cltabela->sql_query("","*","","$where"));
+ }
+ if($cltabela->numrows==0){
+  $where = $arquivo!=null?"AND ed90_c_arquivo = '$arquivo'":"";
+  $sql = "SELECT * FROM msgaviso
+          WHERE trim(ed90_c_tabela) = '$tabela'
+          $where";
+  $result1 = pg_query($sql);
+  $dados = pg_fetch_array($result1);
+  $arquivo = trim($dados['ed90_c_arqdestino']);
+  ?>
+  <br>
+  <center>
+  <fieldset style="width:90%"><legend><b>Aviso Importante:</b></legend>
+   <?=$dados["ed90_t_msg"]?><br><br>
+   <a href="javascript:location.href='<?=$arquivo?>'" title="<?=$dados['ed90_c_titulolink']?>"><?=$dados["ed90_c_descrlink"]?></a>
+  </fieldset>
+  </center>
+  <?
+  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+  exit;
+ }
+}
+function DiasLetivos($data_inicio,$data_fim,$sabado,$calendario,$retorno){
+ $data_in = mktime(0,0,0,substr($data_inicio,5,2),substr($data_inicio,8,2),substr($data_inicio,0,4));
+ $data_out = mktime(0,0,0,substr($data_fim,5,2),substr($data_fim,8,2),substr($data_fim,0,4));
+ #pega a data de saida em UNIX_TIMESTAMP e diminui da data de entrada UNIX_TIMESTAMP
+ $data_entre = $data_out - $data_in;
+ #divide a diferenca das datas pelo numero de segundos de um dia e arredonda, para saber o numero de dias inteiro que tem
+ $dias = ceil($data_entre/86400);
+ $dias2 = $dias;
+ $day = 0;
+ $nao_util = 0;
+ #pega dia, mes e ano da data de entrada
+ $mes_inicial = date('m', $data_in);
+ $d = date('d', $data_in);
+ $m = date('m', $data_in);
+ $y = date('Y', $data_in);
+ #pega mes e ano da data de saida
+ $m2 = date('m', $data_out);
+ $y2 = date('Y', $data_out);
+ #conta o numero de dias do mes de entrada
+ $days_month = date("t", $data_in);
+ $mi = date('m', $data_in);
+ $semanas = 1;
+ #se o dia da entrada + total de dias for menor que total de dias do mes, ou seja, se n„o passar do mesmo mÍs.
+ if($dias+$d <= $days_month){
+  for ($i = 0; $i < $dias+1; $i++){
+   $letivo = true;
+   $day++;
+   #checa o dia da semana para cada dia do mÍs, se for igual a 0 (domingo) ou 6 (sabado) ele adiciona 1 no dia n„o ˙til
+   if($sabado=="N"){
+    if (date("w", mktime (0,0,0,$m,$d+$i,$y)) == 0 || date("w", mktime (0,0,0,$m,$d+$i,$y)) == 6){
+     #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia n„o ˙til
+     $res = pg_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
+     if(pg_num_rows($res)==0){
+      $nao_util++;
+      $letivo = false;
+     }else{
+      if(pg_result($res,0,'ed54_c_dialetivo')=="N"){
+       $nao_util++;
+       $letivo = false;
+      }
+     }
+    }else{
+     #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia n„o ˙til
+     $res = pg_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
+     if($row = pg_fetch_assoc($res)){
+      $nao_util++;
+      $letivo = false;
+     }
+    }
+   }else{
+    if (date("w", mktime (0,0,0,$m,$d+$i,$y)) == 0 ){
+     #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia n„o ˙til
+     $res = pg_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
+     if(pg_num_rows($res)==0){
+      $nao_util++;
+      $letivo = false;
+     }else{
+      if(pg_result($res,0,'ed54_c_dialetivo')=="N"){
+       $nao_util++;
+       $letivo = false;
+      }
+     }
+    }else{
+     #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia n„o ˙til
+     $res = pg_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
+     if($row = pg_fetch_assoc($res)){
+      $nao_util++;
+      $letivo = false;
+     }
+    }
+   }
+   if($letivo==true){
+    $dia_mes_letivo[] = (strlen($d+$i)==1?"0".($d+$i):($d+$i))."-".(strlen($m)==1?"0".$m:$m);
+   }
+  }
+ #se o dia da entrada + total de dias for maior que total de dias do mes, ou seja, se passar do mesmo mÍs.
+ }else{
+  #enquanto o mÍs de entrada for diferente do mÍs de saida ou ano de entrada for diferente do ano de saida.
+  while($m != $m2 || $y != $y2){
+   #pega total de dias do mes de entrada
+   if($m==$mi){
+    $days_month = date("t", mktime (0,0,0,$m,$d,$y))-$d+1;
+   }else{
+    $days_month = date("t", mktime (0,0,0,$m,$d,$y));
+   }
+   for ($i = 0; $i < $days_month; $i++){
+    $letivo = true;
+    $day++;
+    #checa o dia da semana para cada dia do mÍs, se for igual a 0 (domingo) ou 6 (sabado) ele adiciona 1 no dia n„o ˙til
+    if($sabado=="N"){
+     if (date("w", mktime (0,0,0,$m,$d+$i,$y)) == 0 || date("w", mktime (0,0,0,$m,$d+$i,$y)) == 6){
+      #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia n„o ˙til
+      $res = pg_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
+      if(pg_num_rows($res)==0){
+       $nao_util++;
+       $letivo = false;
+      }else{
+       if(pg_result($res,0,'ed54_c_dialetivo')=="N"){
+        $nao_util++;
+        $letivo = false;
+       }
+      }
+     }else{
+      #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia n„o ˙til
+      $res = pg_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
+      if($row = pg_fetch_assoc($res)){
+       $nao_util++;
+       $letivo = false;
+      }
+     }
+    }else{
+     if (date("w", mktime (0,0,0,$m,$d+$i,$y)) == 0 ){
+      #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia n„o ˙til
+      $res = pg_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
+      if(pg_num_rows($res)==0){
+       $nao_util++;
+       $letivo = false;
+      }else{
+       if(pg_result($res,0,'ed54_c_dialetivo')=="N"){
+        $nao_util++;
+        $letivo = false;
+       }
+      }
+     }else{
+      #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia n„o ˙til
+      $res = pg_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
+      if($row = pg_fetch_assoc($res)){
+       $nao_util++;
+       $letivo = false;
+      }
+     }
+    }
+    if($letivo==true){
+     $dia_mes_letivo[] = (strlen($d+$i)==1?"0".($d+$i):($d+$i))."-".(strlen($m)==1?"0".$m:$m);
+    }
+   }
+   #se o mes for igual a 12 (dezembro), mes recebe 1 (janeiro) e ano recebe +1 (prÛximo ano)
+   if($m == 12){
+    $m = 1;
+    $y++;
+   #mÍs recebe mais 1 para fazer o mesmo processo do prÛximo mÍs
+   }else{
+    $m++;
+   }
+   $d = 1;
+   //$dias2 = $dias2 - $day;
+   if($m==$m2){
+    $d3 = date('d', $data_out);
+    $m3 = date('m', $data_out);
+    $y3 = date('Y', $data_out);
+    for ($i = 0; $i < $d3; $i++){
+     $letivo = true;
+     $day++;
+     #checa o dia da semana para cada dia do mÍs, se for igual a 0 (domingo) ou 6 (sabado) ele adiciona 1 no dia n„o ˙til
+     if($sabado=="N"){
+      if(date("w", mktime (0,0,0,$m3,$d+$i,$y3)) == 0 || date("w", mktime (0,0,0,$m3,$d+$i,$y3)) == 6){
+       #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia n„o ˙til
+       $res = pg_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m3 AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
+       if(pg_num_rows($res)==0){
+        $nao_util++;
+        $letivo = false;
+       }else{
+        if(pg_result($res,0,'ed54_c_dialetivo')=="N"){
+         $nao_util++;
+         $letivo = false;
+        }
+       }
+      }else{
+       #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia n„o ˙til
+       $res = pg_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m3 AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
+       if($row = pg_fetch_assoc($res)){
+        $nao_util++;
+        $letivo = false;
+       }
+      }
+     }else{
+      if (date("w", mktime (0,0,0,$m3,$d+$i,$y3)) == 0 ){
+       #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia n„o ˙til
+       $res = pg_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m3 AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
+       if(pg_num_rows($res)==0){
+        $nao_util++;
+        $letivo = false;
+       }else{
+        if(pg_result($res,0,'ed54_c_dialetivo')=="N"){
+         $nao_util++;
+         $letivo = false;
+        }
+       }
+      }else{
+       #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia n„o ˙til
+       $res = pg_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m3 AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
+       if($row = pg_fetch_assoc($res)){
+        $nao_util++;
+        $letivo = false;
+       }
+      }
+     }
+     if($letivo==true){
+      $dia_mes_letivo[] = (strlen($d+$i)==1?"0".($d+$i):($d+$i))."-".(strlen($m3)==1?"0".$m3:$m3);
+     }
+    }
+   }
+  }
+ }
+ $diasletivos = $day-$nao_util;
+ $cont = 0;
+ for($r=0;$r<count($dia_mes_letivo);$r++){
+  $array_data = explode("-",$dia_mes_letivo[$r]);
+  if(trim($array_data[1])!=$mes_inicial || $r==(count($dia_mes_letivo)-1)){
+   $mes_qtdias[] = $mes_inicial.",".($r==(count($dia_mes_letivo)-1)?$cont+1:$cont);
+   $mes_inicial = $array_data[1];
+   $cont = 0;
+  }
+  $cont++;
+ }
+ if($retorno==1){
+  return $diasletivos;
+ }elseif($retorno==2){
+  return $dia_mes_letivo;
+ }elseif($retorno==3){
+  return $mes_qtdias;
+ }
+}
+function Situacao($situacao,$matricula){
+ if(trim($situacao)=="MATRICULADO"){
+  $sql = "SELECT ed60_c_tipo
+          FROM matricula
+          WHERE ed60_i_codigo = $matricula
+         ";
+  $result = pg_query($sql);
+  $tipo = pg_result($result,0,0);
+  if($tipo=="N"){
+   $retorno = "MATRICULADO";
+  }else{
+   $retorno = "REMATRICULADO";
+  }
+ }else{
+  $retorno = $situacao;
+ }
+ return $retorno;
+}
+
+function eduparametros($escola){
+ $sql2 = "SELECT *
+          FROM edu_parametros
+          WHERE ed233_i_escola = $escola
+         ";
+ $result2 = pg_query($sql2);
+ if(pg_num_rows($result2)>0){
+  $retorno = pg_result($result2,0,"ed233_c_decimais");
+ }else{
+  $retorno = null;
+ }
+ return $retorno;
+}
+
+function TiraAcento($string){
+ set_time_limit(240);
+ $acentos = '·ÈÌÛ˙¡…Õ”⁄‡¿¬‚ ÍÙ‘¸‹Ôœˆ÷Ò—„√ı’Á«™∫‰ƒ\'';
+ $letras  = 'AEIOUAEIOUAAAAEEOOUUIIOONNAAOOCCAOAA ';
+ $new_string = '';
+ for($x=0; $x<strlen($string); $x++){
+  $let = substr($string, $x, 1);
+  for($y=0; $y<strlen($acentos); $y++){
+   if($let==substr($acentos, $y, 1)){
+    $let=substr($letras, $y, 1);
+    break;
+   }
+  }
+  $new_string = $new_string . $let;
+ }
+ return $new_string;
+}
+
+function VerParametroNota($escola){
+ $sql2 = "SELECT *
+          FROM edu_parametros
+          WHERE ed233_i_escola = $escola
+         ";
+ $result2 = pg_query($sql2);
+ if(pg_num_rows($result2)>0){
+  $retorno = pg_result($result2,0,"ed233_c_notabranca");
+ }else{
+  $retorno = "N";
+ }
+ return $retorno;
+}
+function calcage($dd,$mm,$yy,$dd2,$mm2,$yy2){
+    $yy  = $yy * 1;
+    $yy2 = $yy2 * 1;
+
+    if ($yy < 100 && $yy < 20){$yy = $yy + 2000;}
+    if ($yy2 < 100 && $yy2 > 20){$yy2 = $yy2 + 1900;}
+    if ($yy2 < 100 && $yy2 < 20){$yy2 = $yy2 + 2000;}
+
+    //firstdate = new Date(mm+'/'+ dd +'/'+ yy)
+    $mm = $mm + 1;
+
+    //seconddate = new Date(mm2+'/'+ dd2 +'/'+ yy2)
+    $mm2 = $mm2 + 1;
+
+    $ageyears = $yy2 - $yy;
+
+    if($mm2 == $mm){
+          if($dd2 < $dd){
+               $mm2 = $mm2 + 12;
+               $ageyears = $ageyears - 1;
+          }
+    }
+
+    if($mm2 < $mm){
+          $mm2 = $mm2 + 12;
+          $ageyears = $ageyears - 1;
+          $agemonths = $mm2 - $mm;
+     }
+
+     $agemonths = $mm2 - $mm;
+
+    if ($dd2 < $dd) {
+          $agemonths = $agemonths - 1;
+          $dd2 = $dd2 + 30;
+          if ($mm2 == $mm) {
+               $agemonths = 0;
+               $ageyears = $ageyears - 1;
+          }
+     }
+     $agedays = $dd2 - $dd;
+
+     return $totalage =  $ageyears . ' anos, '. $agemonths .' meses e '. $agedays .' dias';
+}
+
+function ResultadoFinal($ed60_i_codigo,$ed60_i_aluno,$ed60_i_turma,$ed60_c_situacao,$ed60_c_concluida){
+ if(trim($ed60_c_situacao)=="CLASSIFICADO" || trim($ed60_c_situacao)=="AVAN«ADO"){
+  $resultado = "APROVADO";
+ }elseif(trim($ed60_c_situacao)=="TRANSFERIDO FORA" || trim($ed60_c_situacao)=="TRANSFERIDO REDE"){
+  if($ed60_c_concluida=="S"){
+   $resultado = Situacao($ed60_c_situacao,$ed60_i_codigo);
+  }else{
+   $resultado = "EM ANDAMENTO";
+  }
+ }else{
+  $sql4 = "SELECT ed95_c_encerrado
+           FROM diario
+            inner join aluno on ed47_i_codigo = ed95_i_aluno
+            inner join diariofinal on ed74_i_diario = ed95_i_codigo
+            inner join regencia on ed59_i_codigo = ed95_i_regencia
+           WHERE ed95_i_aluno = $ed60_i_aluno
+           AND ed95_c_encerrado = 'S'
+           AND ed95_i_regencia in (select ed59_i_codigo
+                                   from regencia
+                                   where ed59_i_turma = $ed60_i_turma
+                                   and ed59_c_condicao = 'OB')
+          ";
+  $result4 = pg_query($sql4);
+  $linhas4 = pg_num_rows($result4);
+  if($linhas4==0){
+   if($ed60_c_concluida=="S"){
+    $resultado = Situacao($ed60_c_situacao,$ed60_i_codigo);
+   }else{
+    $resultado = "EM ANDAMENTO";
+   }
+  }else{
+   $sql41 = "SELECT ed74_c_resultadofinal
+             FROM diario
+              inner join aluno on ed47_i_codigo = ed95_i_aluno
+              inner join diariofinal on ed74_i_diario = ed95_i_codigo
+             WHERE ed95_i_aluno = $ed60_i_aluno
+             AND ed95_c_encerrado = 'S'
+             AND ed95_i_regencia in (select ed59_i_codigo
+                                     from regencia
+                                     where ed59_i_turma = $ed60_i_turma
+                                     and ed59_c_condicao = 'OB')
+            ";
+   $result41 = pg_query($sql41);
+   $linhas41 = pg_num_rows($result41);
+   $res_final = "";
+   $sep = "";
+   for($f=0;$f<$linhas4;$f++){
+    $ed74_c_resultadofinal = pg_result($result41,$f,'ed74_c_resultadofinal')==""?" ":pg_result($result41,$f,'ed74_c_resultadofinal');
+    $res_final .= $sep.$ed74_c_resultadofinal;
+    $sep = ",";
+   }
+   if(strstr($res_final," ")){
+    if($ed60_c_concluida=="S"){
+     if(strstr($res_final,"R")){
+      $resultado = "REPROVADO";
+     }else{
+      $resultado = Situacao($ed60_c_situacao,$ed60_i_codigo);
+     }
+    }else{
+     $resultado = "EM ANDAMENTO";
+    }
+   }elseif(strstr($res_final,"R")){
+    $resultado = "REPROVADO";
+   }else{
+    $resultado = "APROVADO";
+   }
+  }
+ }
+ return $resultado;
+}
+
+function LimpaResultadoFinal($matricula){
+ $result = pg_query("SELECT ed60_i_turma,ed60_i_aluno FROM matricula WHERE ed60_i_codigo = $matricula");
+ $ed60_i_turma = pg_result($result,0,0);
+ $ed60_i_aluno = pg_result($result,0,1);
+ $result1 = pg_query("UPDATE diariofinal SET
+                       ed74_i_procresultadoaprov = null,
+                       ed74_c_valoraprov = '',
+                       ed74_c_resultadoaprov = '',
+                       ed74_i_procresultadofreq = null,
+                       ed74_i_percfreq = null,
+                       ed74_c_resultadofreq = '',
+                       ed74_c_resultadofinal = ''
+                      WHERE ed74_i_diario in (select ed95_i_codigo
+                                              from diario
+                                              where ed95_i_aluno = $ed60_i_aluno
+                                              and ed95_i_regencia in (select ed59_i_codigo
+                                                                      from regencia
+                                                                      where ed59_i_turma = $ed60_i_turma
+                                                                      )
+                                              )
+                     ");
+}
+
+function MatriculaPosterior($turma,$aluno){
+ $sql1 = "SELECT ed52_i_ano,ed52_d_inicio,ed52_i_codigo
+          FROM turma
+           inner join calendario on ed52_i_codigo = ed57_i_calendario
+          WHERE ed57_i_codigo = $turma
+        ";
+ $result1 = pg_query($sql1);
+ $ed52_i_ano = pg_result($result1,0,'ed52_i_ano');
+ $ed52_d_inicio = pg_result($result1,0,'ed52_d_inicio');
+ $ed52_i_codigo = pg_result($result1,0,'ed52_i_codigo');
+ $sql2 = "SELECT ed60_i_codigo
+          FROM matricula
+           inner join turma on ed57_i_codigo = ed60_i_turma
+           inner join calendario on ed52_i_codigo = ed57_i_calendario
+          WHERE ed60_i_aluno = $aluno
+          AND ed52_i_ano >= $ed52_i_ano
+          AND ed52_d_inicio > '$ed52_d_inicio'
+          AND ed52_i_codigo != $ed52_i_codigo
+         ";
+ $result2 = pg_query($sql2);
+ $linhas2 = pg_num_rows($result2);
+ if($linhas2>0){
+  $retorno = "SIM";
+ }else{
+  $retorno = "NAO";
+ }
+ return $retorno;
+}
+
+function RFanterior($matricula){
+ $sql = "SELECT ed57_i_calendario,ed57_i_serie,ed60_i_aluno
+         FROM matricula
+          inner join turma on ed57_i_codigo = ed60_i_turma
+         WHERE ed60_i_codigo = $matricula
+        ";
+ $result = pg_query($sql);
+ $calendario = pg_result($result,0,0);
+ $serie = pg_result($result,0,1);
+ $aluno = pg_result($result,0,2);
+ $sql1 = "SELECT ed60_i_codigo,ed57_i_codigo,ed57_c_descr,ed60_c_situacao,ed60_c_concluida
+          FROM matricula
+           inner join turma on ed57_i_codigo = ed60_i_turma
+          WHERE ed60_i_aluno = $aluno
+          AND ed60_i_codigo not in ($matricula)
+          AND (ed57_i_calendario not in ($calendario)
+               OR
+               (ed57_i_calendario = $calendario AND ed57_i_serie != $serie)
+              )
+          AND ed60_c_ativa = 'S'
+          AND ed60_c_concluida = 'S'
+          ORDER BY ed60_d_datamatricula desc LIMIT 1
+         ";
+ $result1 = pg_query($sql1);
+ $linhas1 = pg_num_rows($result1);
+ if($linhas1>0){
+  $codigo = pg_result($result1,0,0);
+  $turma = pg_result($result1,0,1);
+  $descrturma = pg_result($result1,0,2);
+  $situacao = trim(pg_result($result1,0,3));
+  $concluida = trim(pg_result($result1,0,4));
+  if($situacao=="CLASSIFICADO" || $situacao=="AVAN«ADO"){
+   $rfanterior = "APROVADO";
+  }elseif($situacao=="MATRICULADO"){
+   $rfanterior = ResultadoFinal($codigo,$aluno,$turma,$situacao,$concluida);
+  }else{
+   $rfanterior = $situacao;
+  }
+ }else{
+  $descrturma = "";
+  $rfanterior = "";
+ }
+ if($rfanterior=="EM ANDAMENTO"){
+  $descrturma = "";
+  $rfanterior = "";
+ }
+ return trim($descrturma)."|".trim($rfanterior);
+}
+
+
+
+
+
+
+function data_farmacia($ano,$tipo='1T'){
+   //#10#// retorna datas bimestrais, trimestrais,quadrimestras ou semestrais
+   //#20#// tipo: [1B|2B|3B|4B|5B|6B|1T|2T|T3|T4|1Q|2Q|3Q|1S|2S|M1|M2|M3|M4|M5|M6|M7|M8|M9|M10|M11|M12|QUIN1|QUIN2]
+   //#20#//
+   $mes_ini = '';
+   $mes_fin = '';
+   $texto ='';
+   $abrev ='';
+
+  if($tipo=='1T'){ ////COME«A TRIMESTRE
+      $mes_ini=1;  $mes_fin=3;
+      $texto = 'PRIMEIRO TRIMESTRE';
+      $abrev = 'Trimestre';
+   } elseif($tipo=='2T'){
+      $mes_ini=4;  $mes_fin=6;
+      $texto = 'SEGUNDO TRIMESTRE';
+      $abrev = 'Trimestre';
+   } elseif($tipo=='3T'){
+      $mes_ini=7;  $mes_fin=9;
+      $texto = 'TERCEIRO TRIMESTRE';
+      $abrev = 'Trimestre';
+   } elseif($tipo=='4T'){
+      $mes_ini=10;  $mes_fin=12;
+      $texto = 'QUARTO TRIMESTRE';
+      $abrev = 'Trimestre';
+   }  elseif($tipo=='1M'){ ///COME«A OS MESES X MESES
+      $mes_ini=1;  $mes_fin=1;
+      $texto = 'JANEIRO';
+      $abrev = 'Janeiro';
+   }  elseif($tipo=='2M'){
+      $mes_ini=2;  $mes_fin=2;
+      $texto = 'FEVEREIRO';
+      $abrev = 'Fevereiro';
+   }  elseif($tipo=='3M'){
+      $mes_ini=3;  $mes_fin=3;
+      $texto = 'MAR«O';
+      $abrev = 'MarÁo';
+   }  elseif($tipo=='4M'){
+      $mes_ini=4;  $mes_fin=4;
+      $texto = 'ABRIL';
+      $abrev = 'Abril';
+   }  elseif($tipo=='5M'){
+      $mes_ini=5;  $mes_fin=5;
+      $texto = 'MAIO';
+      $abrev = 'Maio';
+   }  elseif($tipo=='6M'){
+      $mes_ini=6;  $mes_fin=6;
+      $texto = 'JUNHO';
+      $abrev = 'Junho';
+   }  elseif($tipo=='7M'){
+      $mes_ini=7;  $mes_fin=7;
+      $texto = 'JULHO';
+      $abrev = 'Julho';
+   }  elseif($tipo=='8M'){
+      $mes_ini=8;  $mes_fin=8;
+      $texto = 'AGOSTO';
+      $abrev = 'Agosto';
+   }  elseif($tipo=='9M'){
+      $mes_ini=9;  $mes_fin=9;
+      $texto = 'SETEMBRO';
+      $abrev = 'Setembro';
+   }  elseif($tipo=='10M'){
+      $mes_ini=10;  $mes_fin=10;
+      $texto = 'OUTUBRO';
+      $abrev = 'Outubro';
+   }  elseif($tipo=='11M'){
+      $mes_ini=11;  $mes_fin=11;
+      $texto = 'NOVEMBRO';
+      $abrev = 'Novembro';
+   }  elseif($tipo=='12M'){
+      $mes_ini=12;  $mes_fin=12;
+      $texto = 'DEZEMBRO';
+      $abrev = 'Dezembro';
+   }  elseif($tipo=='1A'){
+      $mes_ini=1;  $mes_fin=12;
+      $texto = 'ANO';
+      $abrev = 'ano';
+   }  else {
+       echo "Datas inv·lidas";
+      exit;
+   }
+   $data_ini = $ano."-".$mes_ini."-01";
+   $data_fin = $ano."-".$mes_fin."-".ultimo_dia_mes($mes_fin, $ano);
+   $matriz[0] = $data_ini;
+   $matriz[1] = $data_fin;
+   $matriz['texto']=$texto;
+   $matriz['periodo']=$abrev;
+
+   return $matriz;
+}  
+
+
+
+function retorna_dia($ano,$mes,$dia,$tipo='1D'){
+   //#10#// retorna datas di·rias
+   //#20#// tipo: [D1|D2.....]
+   //#20#//
+
+   $dia_ini = '';
+   $dia_fin = '';
+   $texto ='';
+   $abrev ='';
+   
+   $data_ini = $ano."-".$mes."-".$dia;
+   $data_fin = $ano."-".$mes."-".$dia;
+   $matriz[0] = $data_ini;
+   $matriz[1] = $data_fin;
+
+   return $matriz;
+
+}  
+
+
+////////////////////////////////////////////////
+// Retorna a data de inicio da ultima quinzena
+function inicio_ultima_quinzena()
+{
+        $data_atual = getdate();
+        
+        if ($data_atual['mday'] <= 15)
+        {
+                $mes = $data_atual['mon'] - 1;
+                $ano = $data_atual['year'];
+                if ($mes == 0)
+                {
+                        $mes = 12;
+                        $ano --;
+                }
+                return date("d/m/y",strtotime($ano . sprintf("%02d", $mes) . "16"));
+        }
+        else
+        {
+                return date("d/m/y",strtotime($data_atual['year'] .
+                sprintf("%02d", $data_atual['mon']) . "01"));
+        }
+}
+
+// Retorna a data de termino da ultima quinzena
+function fim_ultima_quinzena()
+{
+        $data_atual = getdate();
+        
+        if ($data_atual['mday'] <= 15)
+        {
+                $mes = $data_atual['mon'] - 1;
+                $ano = $data_atual['year'];
+                if ($mes == 0)
+                {
+                        $mes = 12;
+                        $ano --;
+                }
+                return date("d/m/y",strtotime("{$ano}-{$mes}-" .
+                cal_days_in_month(CAL_GREGORIAN, $mes, $ano)));
+        }
+        else
+        {
+                return date("d/m/y",strtotime($data_atual['year'] .
+                sprintf("%02d", $data_atual['mon']) . "15"));
+        }
+}
+
+
+
+/*
+ * Se ela estiver assim 0000-00-00, ela converte para 00/00/0000.
+ * Se ela estiver assim 00/00/0000, ela converte para 0000-00-00.
+ */
+function converte_data($data){
+    if (strstr($data, "/")){//verifica se tem a barra /
+  $d = explode ("/", $data);//tira a barra
+  $invert_data = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mÍs etc...
+  return $invert_data;
+    }
+    elseif(strstr($data, "-")){
+  $d = explode ("-", $data);
+  $invert_data = "$d[2]/$d[1]/$d[0]";
+  return $invert_data;
+    }
+    else{
+  return "Data invalida";
+  }
+    
+}
+
+
+
+
+function db_geraArquivoOidfarmacia ($arquivo,$arquivoAlt=null,$opcao=1,$conn){
+  /*
+   * $arquivo    => o arquivo do type "file", o arquivo a ser gravado
+   * $arquivoAlt => o arquivo ja existente no banco,
+   *                a opÁ„o alterar a funÁ„o altera do $arquivoAlt para o $arquivo
+   *                na opÁ„o excluir a funÁ„o exclui este arquivo
+   * $opcao      => 1 = incluir, 2= alterar, 3 = excluir
+   * $conn       => conex„o com banco
+   */
+   
+  if($opcao==2){
+    pg_lo_unlink($conn, $arquivoAlt);
+  }
+  if($opcao==3){
+    pg_lo_unlink($conn, $arquivoAlt);
+  return "null";
+  }
+   
+  $nomeArquivo        = $arquivo;
+  $localRecebeArquivo = $arquivo;
+ 
+  if ( trim($localRecebeArquivo) != "") {
+      $arquivoGrava = fopen($localRecebeArquivo, "rb");
+      if ($arquivoGrava == false) {
+        echo "erro aruivograva";
+        exit;
+      }
+      $dados = fread($arquivoGrava, filesize($localRecebeArquivo));
+      if ($dados == false) {
+        echo "erro fread";
+        exit;
+      }
+      fclose($arquivoGrava);
+      $oidgrava = pg_lo_create();
+      if ($oidgrava == false) {
+        echo "erro pg_lo_create";
+        exit;
+      }
+       
+      
+      $objeto = pg_lo_open($conn, $oidgrava, "w");
+      if ($objeto != false) {
+        $erro = pg_lo_write($objeto, $dados);
+        if ($erro == false) {
+          echo "erro pg_lo_write";
+          exit;
+        }
+        pg_lo_close($objeto);
+      } else {
+        $erro_msg ("OperaÁ„o Cancelada!!");
+        $sqlerro = true;
+      }
+      
+      return $oidgrava;
+    }
+  
+}
+
+function GradeAproveitamentoSQL($matricula,$relatorio="N"){
+ #Campos de Retorno do sql:
+ ## 01 - DescriÁ„o da Disciplina
+ ## 02 - Array contendo informaÁıes de cada elemento(periodo de avaliaÁ„o e/ou resultado)
+ ##      do procedimento de avaliaÁ„o, separados por "|"
+ ##      [0] - sequencial
+ ##      [1] - abreviatura da descriÁ„o do elemento
+ ##      [2] - forma de avaliaÁ„o do elemento
+ ##      [3] - aproveitamento do aluno no elemento
+ ##      [4] - n∞ de faltas do aluno no elemento
+ ##      [5] - se o elemento È periodo de avaliaÁ„o ou resultado: AVA->Periodo de AvaliaÁ„o | RES->Resultado
+ ##      [6] - ordenaÁ„o do elemento no procedimento de avaliaÁ„o
+ ##      [7] - se aluno atingiu aproveitamento minimo no elemento: S->Sim | N->N„o
+ ##      [8] - descriÁ„o do elemento
+ ##      [9] - se o elemento est· amparado: S->Sim | N->N„o
+ ## 03 - Nota Parcial
+ ## 04 - Total de Aulas Dadas ou Dias Letivos
+ ## 05 - Percentual de FrequÍncia
+ ## 06 - Aproveitamento do aluno no Resultado Final
+ ## 07 - Resultado Final da matrÌcula: APR->Aprovado | REP->Reprovado
+ ## 08 - Total de Faltas
+ ## 09 - Total de Faltas Abonadas
+ ## 10 - MÌnimo para AprovaÁ„o do Resultado que gera o Resultado Final
+ ## 11 - DescriÁ„o dos NÌveis da Forma de AvaliaÁ„o, caso a turma tenha forma de avaliaÁ„o NIVEL
+ ## 12 - Se matricula est· concluida: S->Sim | N->N„o
+ ## 13 - SituaÁ„o da MatrÌcula
+ ## 14 - CÛdigo do Aluno
+ ## 15 - CÛdigo da Turma
+ ## 16 - DescriÁ„o da SÈrie
+ ## 17 - Se par‚metro Calcular MÈdia Final est· habilitado: S->Sim | N->N„o
+ ## 18 - Se par‚metro Casas Decimais est· habilitado: S->Sim | N->N„o
+ ## 19 - Medidor da FrequÍncia: PERIODOS ou DIAS LETIVOS
+ ## 20 - Forma de AvaliaÁ„o do Resultado que gera o Resultado Final
+ ## 21 - Convencoes de Amparo
+ ## 22 - Forma de ObtenÁ„o do Resultado que gera o Resultado Final
+ if($relatorio=="S"){
+  $restricao1 = " AND procavaliacao.ed41_c_boletim = 'S'";
+  $restricao2 = " AND procresultado_res.ed43_c_boletim = 'S'";
+  $restricao3 = "";
+ }else{
+  $restricao1 = "";
+  $restricao2 = "";
+  $restricao3 = "AND procresultado_res.ed43_c_geraresultado = 'N'";
+ }
+ $sql="SELECT caddisciplina.ed232_c_descr as disciplina,
+              (SELECT ARRAY ( SELECT coalesce(lpad(procavaliacao.ed41_i_sequencia,3,0)::varchar,'')||'|'||
+                                     coalesce(periodoavaliacao.ed09_c_abrev::varchar,'')||'|'||
+                                     coalesce(formaavaliacao.ed37_c_tipo::varchar,'')||'|'||
+                                     coalesce(
+                                      case when diarioavaliacao.ed72_c_amparo = 'S'
+                                       then
+                                        case when amparo.ed81_i_justificativa is not null
+                                         then 'Amparo'
+                                         else convencaoamp.ed250_c_abrev
+                                        end::varchar
+                                       else
+                                       case when matricula.ed60_c_parecer = 'S'
+                                        then
+                                         case when diarioavaliacao.ed72_t_parecer != ''
+                                          then
+                                           case when (diarioavaliacao.ed72_i_escola != diario.ed95_i_escola) or diarioavaliacao.ed72_c_tipo = 'F'
+                                            then '*Parecer'
+                                            else 'Parecer'
+                                           end
+                                          else ''
+                                         end ::varchar
+                                        else
+                                          case when formaavaliacao.ed37_c_tipo = 'NOTA'
+                                           then
+                                            case when (select edu_parametros.ed233_c_decimais from edu_parametros where edu_parametros.ed233_i_escola = diario.ed95_i_escola) = 'S'
+                                             then
+                                              case when (diarioavaliacao.ed72_i_escola != diario.ed95_i_escola) or diarioavaliacao.ed72_c_tipo = 'F'
+                                               then '*'||trim(round(diarioavaliacao.ed72_i_valornota,2))::varchar
+                                               else round(diarioavaliacao.ed72_i_valornota,2)::varchar
+                                              end
+                                             else
+                                              case when (diarioavaliacao.ed72_i_escola != diario.ed95_i_escola) or diarioavaliacao.ed72_c_tipo = 'F'
+                                               then '*'||trim(round(diarioavaliacao.ed72_i_valornota,0))::varchar
+                                               else round(diarioavaliacao.ed72_i_valornota,0)::varchar
+                                              end
+                                             end::varchar
+                                           when formaavaliacao.ed37_c_tipo = 'NIVEL'
+                                            then
+                                             case when (diarioavaliacao.ed72_i_escola != diario.ed95_i_escola) or diarioavaliacao.ed72_c_tipo = 'F'
+                                              then '*'||trim(diarioavaliacao.ed72_c_valorconceito)
+                                              else diarioavaliacao.ed72_c_valorconceito
+                                             end::varchar
+                                           when formaavaliacao.ed37_c_tipo = 'PARECER'
+                                            then
+                                             case when diarioavaliacao.ed72_t_parecer != ''
+                                              then
+                                               case when (diarioavaliacao.ed72_i_escola != diario.ed95_i_escola) or diarioavaliacao.ed72_c_tipo = 'F'
+                                                then '*Parecer'
+                                                else 'Parecer'
+                                               end
+                                              else ''
+                                             end::varchar
+                                           else null
+                                         end
+                                       end
+                                     end::varchar,'')||'|'||
+                                     coalesce(
+                                      case when diarioavaliacao.ed72_c_amparo = 'N'
+                                       then diarioavaliacao.ed72_i_numfaltas
+                                       else null
+                                      end::varchar,'')||'|'||'AVA'||'|'||
+                                     procavaliacao.ed41_i_sequencia||'|'||
+                                     diarioavaliacao.ed72_c_aprovmin||'|'||
+                                     periodoavaliacao.ed09_c_descr||'|'||
+                                     diarioavaliacao.ed72_c_amparo as elemento
+                              FROM diarioavaliacao
+                               inner join procavaliacao on procavaliacao.ed41_i_codigo = diarioavaliacao.ed72_i_procavaliacao
+                               inner join formaavaliacao on formaavaliacao.ed37_i_codigo = procavaliacao.ed41_i_formaavaliacao
+                               inner join periodoavaliacao on periodoavaliacao.ed09_i_codigo = procavaliacao.ed41_i_periodoavaliacao
+                              WHERE diarioavaliacao.ed72_i_diario = diario.ed95_i_codigo
+                              $restricao1
+
+                              UNION
+                              
+                              SELECT coalesce(lpad(procresultado_res.ed43_i_sequencia,3,0)::varchar,'')||'|'||
+                                     coalesce(resultado.ed42_c_abrev::varchar,'')||'|'||
+                                     coalesce(formaavaliacao_res.ed37_c_tipo::varchar,'')||'|'||
+                                     coalesce(
+                                      case when diarioresultado_res.ed73_c_amparo = 'S'
+                                       then
+                                        case when amparo.ed81_i_justificativa is not null
+                                         then 'Amparo'
+                                         else convencaoamp.ed250_c_abrev
+                                        end::varchar
+                                       else
+                                       case when matricula.ed60_c_parecer = 'S'
+                                        then
+                                         case when diarioresultado_res.ed73_t_parecer != ''
+                                          then 'Parecer'
+                                          else ''
+                                         end ::varchar
+                                        else
+                                          case when formaavaliacao_res.ed37_c_tipo = 'NOTA'
+                                           then
+                                            case when (select edu_parametros.ed233_c_decimais from edu_parametros where edu_parametros.ed233_i_escola = diario.ed95_i_escola) = 'S'
+                                             then round(diarioresultado_res.ed73_i_valornota,2)::varchar
+                                             else round(diarioresultado_res.ed73_i_valornota,0)::varchar
+                                             end::varchar
+                                           when formaavaliacao_res.ed37_c_tipo = 'NIVEL'
+                                            then diarioresultado_res.ed73_c_valorconceito
+                                           when formaavaliacao_res.ed37_c_tipo = 'PARECER'
+                                            then
+                                             case when diarioresultado_res.ed73_t_parecer != ''
+                                              then 'Parecer'
+                                              else ''
+                                             end::varchar
+                                           else null
+                                         end
+                                       end
+                                     end::varchar,'')||'|'||''||'|'||'RES'||'|'||
+                                     procresultado_res.ed43_i_sequencia||'|'||
+                                     diarioresultado_res.ed73_c_aprovmin||'|'||
+                                     resultado.ed42_c_descr||'|'||
+                                     diarioresultado_res.ed73_c_amparo as elemento
+                              FROM diarioresultado as diarioresultado_res
+                               inner join procresultado as procresultado_res on procresultado_res.ed43_i_codigo = diarioresultado_res.ed73_i_procresultado
+                               inner join formaavaliacao as formaavaliacao_res on formaavaliacao_res.ed37_i_codigo = procresultado_res.ed43_i_formaavaliacao
+                               inner join resultado on resultado.ed42_i_codigo = procresultado_res.ed43_i_resultado
+                              WHERE diarioresultado_res.ed73_i_diario = diario.ed95_i_codigo
+                              $restricao2
+                              $restricao3
+                              ORDER BY elemento
+                            )
+              ) as periodos,
+              case when formaavaliacaores.ed37_c_tipo = 'NOTA'
+                        and matricula.ed60_c_situacao = 'MATRICULADO'
+                        and matricula.ed60_c_concluida = 'N'
+                        and (procresultado.ed43_c_obtencao = 'ME' OR procresultado.ed43_c_obtencao = 'MP' OR procresultado.ed43_c_obtencao = 'SO')
+                        and (select edu_parametros.ed233_c_notabranca from edu_parametros where edu_parametros.ed233_i_escola = diario.ed95_i_escola) = 'S'
+               then
+                case
+
+                 when procresultado.ed43_c_obtencao = 'ME' then
+                  (select sum(coalesce(diariorescomp.ed73_i_valornota,0)+coalesce(da3.ed72_i_valornota,0))
+                          /case when count(dr3.ed73_i_valornota) = 0
+                            then count(da3.ed72_i_valornota)
+                            else count(dr3.ed73_i_valornota)
+                           end
+                   from diarioresultado as dr3
+                    inner join procresultado as proc3 on proc3.ed43_i_codigo = dr3.ed73_i_procresultado
+                    inner join diario as d3 on d3.ed95_i_codigo = dr3.ed73_i_diario
+                    left join rescompoeres on rescompoeres.ed68_i_procresultado = proc3.ed43_i_codigo
+                    left join avalcompoeres on avalcompoeres.ed44_i_procresultado = proc3.ed43_i_codigo
+                    left join diarioresultado as diariorescomp on diariorescomp.ed73_i_procresultado = rescompoeres.ed68_i_procresultcomp
+                                                              and diariorescomp.ed73_i_diario = dr3.ed73_i_diario
+                    left join diarioavaliacao as da3 on da3.ed72_i_procavaliacao = avalcompoeres.ed44_i_procavaliacao
+                                                    and da3.ed72_i_diario = dr3.ed73_i_diario
+                   where dr3.ed73_i_codigo = diarioresultado.ed73_i_codigo
+                   and (da3.ed72_c_amparo = 'N' OR diariorescomp.ed73_c_amparo = 'N')
+                   and (da3.ed72_i_valornota is not null OR diariorescomp.ed73_i_valornota is not null))
+                 when procresultado.ed43_c_obtencao = 'MP' then
+                  (select sum(coalesce(diariorescomp.ed73_i_valornota*rescompoeres.ed68_i_peso,0)+coalesce(da3.ed72_i_valornota*avalcompoeres.ed44_i_peso,0))
+                         /coalesce(sum(coalesce(avalcompoeres.ed44_i_peso,0)+coalesce(rescompoeres.ed68_i_peso,0)),1)
+                   from diarioresultado as dr3
+                    inner join procresultado as proc3 on proc3.ed43_i_codigo = dr3.ed73_i_procresultado
+                    inner join diario as d3 on d3.ed95_i_codigo = dr3.ed73_i_diario
+                    left join rescompoeres on rescompoeres.ed68_i_procresultado = proc3.ed43_i_codigo
+                    left join avalcompoeres on avalcompoeres.ed44_i_procresultado = proc3.ed43_i_codigo
+                    left join diarioresultado as diariorescomp on diariorescomp.ed73_i_procresultado = rescompoeres.ed68_i_procresultcomp
+                                                              and diariorescomp.ed73_i_diario = dr3.ed73_i_diario
+                    left join diarioavaliacao as da3 on da3.ed72_i_procavaliacao = avalcompoeres.ed44_i_procavaliacao
+                                                    and da3.ed72_i_diario = dr3.ed73_i_diario
+                   where dr3.ed73_i_codigo = diarioresultado.ed73_i_codigo
+                   and (da3.ed72_c_amparo = 'N' OR diariorescomp.ed73_c_amparo = 'N')
+                   and (da3.ed72_i_valornota is not null OR diariorescomp.ed73_i_valornota is not null))
+                 when procresultado.ed43_c_obtencao = 'SO' then
+                  (select sum(coalesce(diariorescomp.ed73_i_valornota,0)
+                             +coalesce(da3.ed72_i_valornota,0))
+                   from diarioresultado as dr3
+                    inner join procresultado as proc3 on proc3.ed43_i_codigo = dr3.ed73_i_procresultado
+                    inner join diario as d3 on d3.ed95_i_codigo = dr3.ed73_i_diario
+                    left join rescompoeres on rescompoeres.ed68_i_procresultado = proc3.ed43_i_codigo
+                    left join avalcompoeres on avalcompoeres.ed44_i_procresultado = proc3.ed43_i_codigo
+                    left join diarioresultado as diariorescomp on diariorescomp.ed73_i_procresultado = rescompoeres.ed68_i_procresultcomp
+                                                              and diariorescomp.ed73_i_diario = dr3.ed73_i_diario
+                    left join diarioavaliacao as da3 on da3.ed72_i_procavaliacao = avalcompoeres.ed44_i_procavaliacao
+                                                    and da3.ed72_i_diario = dr3.ed73_i_diario
+                   where dr3.ed73_i_codigo = diarioresultado.ed73_i_codigo
+                   and (da3.ed72_c_amparo = 'N' OR diariorescomp.ed73_c_amparo = 'N')
+                   and (da3.ed72_i_valornota is not null OR diariorescomp.ed73_i_valornota is not null))
+                 when procresultado.ed43_c_obtencao = 'MN' then
+                  (select case
+                           when max(coalesce(diariorescomp.ed73_i_valornota,0)) > max(coalesce(da3.ed72_i_valornota,0))
+                            then max(coalesce(diariorescomp.ed73_i_valornota,0))
+                           when max(coalesce(da3.ed72_i_valornota,0)) > max(coalesce(diariorescomp.ed73_i_valornota,0))
+                            then max(coalesce(da3.ed72_i_valornota,0))
+                           else max(coalesce(da3.ed72_i_valornota,0))
+                          end
+                   from diarioresultado as dr3
+                    inner join procresultado as proc3 on proc3.ed43_i_codigo = dr3.ed73_i_procresultado
+                    inner join diario as d3 on d3.ed95_i_codigo = dr3.ed73_i_diario
+                    left join rescompoeres on rescompoeres.ed68_i_procresultado = proc3.ed43_i_codigo
+                    left join avalcompoeres on avalcompoeres.ed44_i_procresultado = proc3.ed43_i_codigo
+                    left join diarioresultado as diariorescomp on diariorescomp.ed73_i_procresultado = rescompoeres.ed68_i_procresultcomp
+                                                              and diariorescomp.ed73_i_diario = dr3.ed73_i_diario
+                    left join diarioavaliacao as da3 on da3.ed72_i_procavaliacao = avalcompoeres.ed44_i_procavaliacao
+                                                    and da3.ed72_i_diario = dr3.ed73_i_diario
+                   where dr3.ed73_i_codigo = diarioresultado.ed73_i_codigo
+                   and (da3.ed72_c_amparo = 'N' OR diariorescomp.ed73_c_amparo = 'N')
+                   and (da3.ed72_i_valornota is not null OR diariorescomp.ed73_i_valornota is not null))
+                 when procresultado.ed43_c_obtencao = 'UN' then
+                  (select daval5.ed72_i_valornota
+                   from diario as d5
+                    inner join diarioavaliacao as daval5 on daval5.ed72_i_diario = d5.ed95_i_codigo
+                    inner join procavaliacao as proc5 on proc5.ed41_i_codigo = daval5.ed72_i_procavaliacao
+                   where d5.ed95_i_aluno = diario.ed95_i_aluno
+                   and d5.ed95_i_regencia = diario.ed95_i_regencia
+                   order by proc5.ed41_i_sequencia DESC LIMIT 1)
+                 else null
+                end
+               else null
+              end as notaparcial,
+              (select sum(regenciaperiodo.ed78_i_aulasdadas)
+               from regenciaperiodo
+                inner join procavaliacao as proc6 on proc6.ed41_i_codigo = regenciaperiodo.ed78_i_procavaliacao
+                inner join periodoavaliacao as per6 on per6.ed09_i_codigo = proc6.ed41_i_periodoavaliacao
+               where regenciaperiodo.ed78_i_regencia = diario.ed95_i_regencia
+               and per6.ed09_c_somach = 'S') as aulas,
+              case when diario.ed95_c_encerrado = 'S'
+               then
+                case when matricula.ed60_c_situacao = 'MATRICULADO'
+                 then
+                  case when amparo.ed81_c_todoperiodo = 'S'
+                   then ''
+                   else
+                    case when (select edu_parametros.ed233_c_decimais from edu_parametros where edu_parametros.ed233_i_escola = diario.ed95_i_escola) = 'S'
+                     then
+                      round(diariofinal.ed74_i_percfreq,2)::varchar
+                     else
+                      round(diariofinal.ed74_i_percfreq,0)::varchar
+                    end
+                  end
+                 else
+                  case
+                   when matricula.ed60_c_situacao = 'AVAN«ADO' or matricula.ed60_c_situacao = 'CLASSIFICADO'
+                    then 'Apr'
+                   when matricula.ed60_c_situacao != 'MATRICULADO'
+                    then substr(matricula.ed60_c_situacao,1,5)
+                  end
+                end
+               else
+                case when matricula.ed60_c_situacao = 'MATRICULADO'
+                 then
+                  case when amparo.ed81_c_todoperiodo = 'S'
+                   then ''
+                   else
+                    case when (select edu_parametros.ed233_c_decimais from edu_parametros where edu_parametros.ed233_i_escola = diario.ed95_i_escola) = 'S'
+                     then
+                      case when procedimento.ed40_i_calcfreq = 2
+                       then
+                         (SELECT round( ( ( coalesce(sum(rp1.ed78_i_aulasdadas),0)-coalesce(sum(da1.ed72_i_numfaltas),0)+coalesce(sum(ab1.ed80_i_numfaltas),0) )
+                                            / coalesce(sum(rp1.ed78_i_aulasdadas),1)::float
+                                        )*100,2)
+                          FROM diarioavaliacao as da1
+                           inner join procavaliacao as proc1 on proc1.ed41_i_codigo = da1.ed72_i_procavaliacao
+                           inner join periodoavaliacao as per1 on per1.ed09_i_codigo = proc1.ed41_i_periodoavaliacao
+                           inner join avalfreqres as ava1 on ava1.ed67_i_procavaliacao = proc1.ed41_i_codigo
+                           inner join diario as d1 on d1.ed95_i_codigo = da1.ed72_i_diario
+                           inner join regencia as reg1 on reg1.ed59_i_codigo = d1.ed95_i_regencia
+                           inner join regenciaperiodo rp1 on rp1.ed78_i_procavaliacao = proc1.ed41_i_codigo
+                                                      and rp1.ed78_i_regencia = d1.ed95_i_regencia
+                           left join abonofalta as ab1 on ab1.ed80_i_diarioavaliacao = da1.ed72_i_codigo
+                          WHERE ava1.ed67_i_procresultado = procresultado.ed43_i_codigo
+                          AND d1.ed95_i_regencia in (select reg2.ed59_i_codigo from regencia as reg2 where reg2.ed59_i_turma = turma.ed57_i_codigo and reg2.ed59_c_condicao = 'OB')
+                          AND d1.ed95_i_aluno = matricula.ed60_i_aluno
+                          AND da1.ed72_c_amparo = 'N'
+                          AND per1.ed09_c_somach = 'S')::varchar
+                       else
+                         (SELECT round( ( ( coalesce(sum(rp1.ed78_i_aulasdadas),0)-coalesce(sum(da1.ed72_i_numfaltas),0)+coalesce(sum(ab1.ed80_i_numfaltas),0) )
+                                            / coalesce(sum(rp1.ed78_i_aulasdadas),1)::float
+                                        )*100,2)
+                          FROM diarioavaliacao as da1
+                           inner join procavaliacao as proc1 on proc1.ed41_i_codigo = da1.ed72_i_procavaliacao
+                           inner join periodoavaliacao as per1 on per1.ed09_i_codigo = proc1.ed41_i_periodoavaliacao
+                           inner join avalfreqres as ava1 on ava1.ed67_i_procavaliacao = proc1.ed41_i_codigo
+                           inner join diario as d1 on d1.ed95_i_codigo = da1.ed72_i_diario
+                           inner join regencia as reg1 on reg1.ed59_i_codigo = d1.ed95_i_regencia
+                           inner join regenciaperiodo rp1 on rp1.ed78_i_procavaliacao = proc1.ed41_i_codigo
+                                                      and rp1.ed78_i_regencia = d1.ed95_i_regencia
+                           left join abonofalta as ab1 on ab1.ed80_i_diarioavaliacao = da1.ed72_i_codigo
+                          WHERE ava1.ed67_i_procresultado = procresultado.ed43_i_codigo
+                          AND rp1.ed78_i_regencia = diario.ed95_i_regencia
+                          AND da1.ed72_i_diario = diario.ed95_i_codigo
+                          AND da1.ed72_c_amparo = 'N')::varchar
+                      end
+                     else
+                      case when procedimento.ed40_i_calcfreq = 2
+                       then
+                         (SELECT round( ( ( coalesce(sum(rp1.ed78_i_aulasdadas),0)-coalesce(sum(da1.ed72_i_numfaltas),0)+coalesce(sum(ab1.ed80_i_numfaltas),0) )
+                                            / coalesce(sum(rp1.ed78_i_aulasdadas),1)::float
+                                        )*100,0)
+                          FROM diarioavaliacao as da1
+                           inner join procavaliacao as proc1 on proc1.ed41_i_codigo = da1.ed72_i_procavaliacao
+                           inner join periodoavaliacao as per1 on per1.ed09_i_codigo = proc1.ed41_i_periodoavaliacao
+                           inner join avalfreqres as ava1 on ava1.ed67_i_procavaliacao = proc1.ed41_i_codigo
+                           inner join diario as d1 on d1.ed95_i_codigo = da1.ed72_i_diario
+                           inner join regencia as reg1 on reg1.ed59_i_codigo = d1.ed95_i_regencia
+                           inner join regenciaperiodo rp1 on rp1.ed78_i_procavaliacao = proc1.ed41_i_codigo
+                                                      and rp1.ed78_i_regencia = d1.ed95_i_regencia
+                           left join abonofalta as ab1 on ab1.ed80_i_diarioavaliacao = da1.ed72_i_codigo
+                          WHERE ava1.ed67_i_procresultado = procresultado.ed43_i_codigo
+                          AND d1.ed95_i_regencia in (select reg2.ed59_i_codigo from regencia as reg2 where reg2.ed59_i_turma = turma.ed57_i_codigo and reg2.ed59_c_condicao = 'OB')
+                          AND d1.ed95_i_aluno = matricula.ed60_i_aluno
+                          AND da1.ed72_c_amparo = 'N'
+                          AND per1.ed09_c_somach = 'S')::varchar
+                       else
+                         (SELECT round( ( ( coalesce(sum(rp1.ed78_i_aulasdadas),0)-coalesce(sum(da1.ed72_i_numfaltas),0)+coalesce(sum(ab1.ed80_i_numfaltas),0) )
+                                            / coalesce(sum(rp1.ed78_i_aulasdadas),1)::float
+                                        )*100,0)
+                          FROM diarioavaliacao as da1
+                           inner join procavaliacao as proc1 on proc1.ed41_i_codigo = da1.ed72_i_procavaliacao
+                           inner join periodoavaliacao as per1 on per1.ed09_i_codigo = proc1.ed41_i_periodoavaliacao
+                           inner join avalfreqres as ava1 on ava1.ed67_i_procavaliacao = proc1.ed41_i_codigo
+                           inner join diario as d1 on d1.ed95_i_codigo = da1.ed72_i_diario
+                           inner join regencia as reg1 on reg1.ed59_i_codigo = d1.ed95_i_regencia
+                           inner join regenciaperiodo rp1 on rp1.ed78_i_procavaliacao = proc1.ed41_i_codigo
+                                                      and rp1.ed78_i_regencia = d1.ed95_i_regencia
+                           left join abonofalta as ab1 on ab1.ed80_i_diarioavaliacao = da1.ed72_i_codigo
+                          WHERE ava1.ed67_i_procresultado = procresultado.ed43_i_codigo
+                          AND rp1.ed78_i_regencia = diario.ed95_i_regencia
+                          AND da1.ed72_i_diario = diario.ed95_i_codigo
+                          AND da1.ed72_c_amparo = 'N')::varchar
+                      end
+                    end
+                  end
+                 else
+                  case
+                   when matricula.ed60_c_situacao = 'AVAN«ADO' or matricula.ed60_c_situacao = 'CLASSIFICADO'
+                    then 'Apr'
+                   when matricula.ed60_c_situacao != 'MATRICULADO'
+                    then substr(matricula.ed60_c_situacao,1,5)
+                  end
+                end
+              end as frequencia,
+              case when diario.ed95_c_encerrado = 'S'
+               then
+                case when matricula.ed60_c_situacao = 'MATRICULADO'
+                 then
+                  case when amparo.ed81_c_todoperiodo = 'S'
+                   then
+                    case when amparo.ed81_i_justificativa is not null
+                     then 'Amparo'
+                     else convencaoamp.ed250_c_abrev
+                    end
+                   else
+                    case
+                     when formaavaliacaores.ed37_c_tipo = 'NOTA' then
+                      case when diariofinal.ed74_c_valoraprov != ''
+                       then
+                        case when (select edu_parametros.ed233_c_decimais from edu_parametros where edu_parametros.ed233_i_escola = diario.ed95_i_escola) = 'S'
+                         then round(diariofinal.ed74_c_valoraprov::numeric,2)
+                         else round(diariofinal.ed74_c_valoraprov::numeric,0)
+                        end
+                       else null
+                      end::varchar
+                     when formaavaliacaores.ed37_c_tipo = 'NIVEL' then
+                      diariofinal.ed74_c_valoraprov::varchar
+                     when formaavaliacaores.ed37_c_tipo = 'PARECER' then
+                      diariofinal.ed74_c_valoraprov::varchar
+                    end
+                   end
+                 else substr(matricula.ed60_c_situacao,1,5)
+                end
+               else
+                case
+                 when matricula.ed60_c_situacao = 'AVAN«ADO' or matricula.ed60_c_situacao = 'CLASSIFICADO'
+                  then 'Apr'
+                 when matricula.ed60_c_situacao != 'MATRICULADO'
+                  then substr(matricula.ed60_c_situacao,1,5)
+                 else null
+                end
+              end as aprovfinal,
+              case when diario.ed95_c_encerrado = 'S'
+               then
+                case when matricula.ed60_c_situacao = 'MATRICULADO'
+                 then
+                  case when diariofinal.ed74_c_resultadofinal = 'A'
+                   then 'Apr'
+                  when diariofinal.ed74_c_resultadofinal = 'R'
+                   then 'Rep'
+                  when diariofinal.ed74_c_resultadofinal = ''
+                   then ''
+                  end
+                 else
+                  case
+                   when matricula.ed60_c_situacao = 'AVAN«ADO' or matricula.ed60_c_situacao = 'CLASSIFICADO'
+                    then 'Apr'
+                    else substr(matricula.ed60_c_situacao,1,5)
+                  end
+                end
+               else
+                case
+                 when matricula.ed60_c_situacao = 'AVAN«ADO' or matricula.ed60_c_situacao = 'CLASSIFICADO'
+                  then 'Apr'
+                 when matricula.ed60_c_situacao != 'MATRICULADO'
+                  then substr(matricula.ed60_c_situacao,1,5)
+                 else null
+                end
+              end as resfinal,
+              (select sum(diarioavaliacao.ed72_i_numfaltas)
+               from diarioavaliacao
+               where diarioavaliacao.ed72_i_diario = diario.ed95_i_codigo
+               and diarioavaliacao.ed72_c_amparo = 'N') as tot_faltas,
+              (select sum(abonofalta.ed80_i_numfaltas)
+               from diarioavaliacao
+                left join abonofalta on abonofalta.ed80_i_diarioavaliacao = diarioavaliacao.ed72_i_codigo
+               where diarioavaliacao.ed72_i_diario = diario.ed95_i_codigo
+               and diarioavaliacao.ed72_c_amparo = 'N') as tot_abonos,
+              case
+               when formaavaliacaores.ed37_c_tipo = 'NOTA'
+                then
+                 case when (select edu_parametros.ed233_c_decimais from edu_parametros where edu_parametros.ed233_i_escola = diario.ed95_i_escola) = 'S'
+                  then round(formaavaliacaores.ed37_c_minimoaprov::numeric,2)::varchar
+                  else round(formaavaliacaores.ed37_c_minimoaprov::numeric,0)::varchar
+                 end
+                else formaavaliacaores.ed37_c_minimoaprov
+              end as minimoaprov,
+              (select array(select distinct conceito.ed39_i_sequencia||'-'||conceito.ed39_c_conceito||':'||conceito.ed39_c_conceitodescr as descricao
+                            from conceito
+                             inner join formaavaliacao as forma1 on forma1.ed37_i_codigo = conceito.ed39_i_formaavaliacao
+                             inner join procavaliacao as proc1 on proc1.ed41_i_formaavaliacao = forma1.ed37_i_codigo
+                             inner join procedimento as proced1 on proced1.ed40_i_codigo = proc1.ed41_i_procedimento
+                             inner join turma as turma1 on turma1.ed57_i_procedimento = proced1.ed40_i_codigo
+                            where turma1.ed57_i_codigo = turma.ed57_i_codigo order by descricao)) as descr_niveis,
+              matricula.ed60_c_concluida as concluida,
+              matricula.ed60_c_situacao as situacao,
+              matricula.ed60_i_aluno as aluno,
+              matricula.ed60_i_turma as turma,
+              serie.ed11_c_descr as serie,
+              (select edu_parametros.ed233_c_notabranca from edu_parametros where edu_parametros.ed233_i_escola = diario.ed95_i_escola) as permitenotaembranco,
+              (select edu_parametros.ed233_c_decimais from edu_parametros where edu_parametros.ed233_i_escola = diario.ed95_i_escola) as decimais,
+              turma.ed57_c_medfreq as medfrequencia,
+              formaavaliacaores.ed37_c_tipo as formafinal,
+              (select array(select distinct convencaoamp.ed250_c_abrev||' - '||convencaoamp.ed250_c_descr
+                            from convencaoamp as camp
+                             inner join amparo as amp on amp.ed81_i_convencaoamp = camp.ed250_i_codigo
+                            where amp.ed81_i_diario = diario.ed95_i_codigo)) as convencao,
+              procresultado.ed43_c_obtencao as formaobtencao
+       FROM matricula
+        inner join turma on turma.ed57_i_codigo = matricula.ed60_i_turma
+        inner join serie on serie.ed11_i_codigo = turma.ed57_i_serie
+        inner join regencia on regencia.ed59_i_turma = turma.ed57_i_codigo
+                            and regencia.ed59_i_turma = matricula.ed60_i_turma
+        inner join disciplina on disciplina.ed12_i_codigo = regencia.ed59_i_disciplina
+        inner join caddisciplina on caddisciplina.ed232_i_codigo = disciplina.ed12_i_caddisciplina
+        inner join procedimento on procedimento.ed40_i_codigo = turma.ed57_i_procedimento
+        inner join procresultado on procresultado.ed43_i_procedimento = procedimento.ed40_i_codigo
+                                 and procresultado.ed43_c_geraresultado = 'S'
+        inner join formaavaliacao as formaavaliacaores on formaavaliacaores.ed37_i_codigo = procresultado.ed43_i_formaavaliacao
+        left join diario on diario.ed95_i_aluno = matricula.ed60_i_aluno
+                         and diario.ed95_i_regencia = regencia.ed59_i_codigo
+        left join diariofinal on diariofinal.ed74_i_diario = diario.ed95_i_codigo
+        left join amparo on amparo.ed81_i_diario = diario.ed95_i_codigo
+        left join convencaoamp on convencaoamp.ed250_i_codigo = amparo.ed81_i_convencaoamp
+        left join diarioresultado on diarioresultado.ed73_i_diario = diario.ed95_i_codigo
+                                  and diarioresultado.ed73_i_procresultado = procresultado.ed43_i_codigo
+       WHERE matricula.ed60_i_codigo = $matricula
+       AND matricula.ed60_c_ativa = 'S'
+       ORDER BY caddisciplina.ed232_c_descr
+       ";
+ return $sql;
+}
+function GradeAproveitamentoHTML($matricula,$mostraresfinal="S"){
+ ?>
+ <style>
+ .titulo{
+  font-size: 11px;
+  color: #DEB887;
+  background-color:#444444;
+  font-weight: bold;
+  border: 1px solid #f3f3f3;
+ }
+ .cabec1{
+  font-size: 11px;
+  color: #000000;
+  background-color:#999999;
+  font-weight: bold;
+ }
+ .aluno{
+  color: #000000;
+  font-family : Tahoma;
+  font-size: 10px;
+  font-weight: bold;
+ }
+ .aluno1{
+  color: #000000;
+  font-family : Tahoma;
+  font-weight: bold;
+  text-align: center;
+  font-size: 10px;
+ }
+ .aluno2{
+  color: #000000;
+  font-family : Verdana;
+  font-size: 10px;
+  font-weight: bold;
+ }
+ </style>
+ <?
+ $sql = GradeAproveitamentoSQL($matricula);
+ $result = pg_query($sql);
+ //db_criatabela($result);exit;
+ if(pg_numrows($result)>0){
+  echo '<table width="100%" border="1" cellspacing="0" cellpadding="2">';
+  $cor1 = "#f3f3f3";
+  $cor2 = "#DBDBDB";
+  $cor = "";
+  $qtd_periodo = 0;
+  for($y=0;$y<pg_num_rows($result);$y++){
+   db_fieldsmemory($result,$y);
+   $disciplina = pg_result($result,$y,'disciplina');
+   $periodos = pg_result($result,$y,'periodos');
+   $notaparcial = pg_result($result,$y,'notaparcial');
+   $aulas = pg_result($result,$y,'aulas');
+   $frequencia = pg_result($result,$y,'frequencia');
+   $aprovfinal = pg_result($result,$y,'aprovfinal');
+   $resfinal = pg_result($result,$y,'resfinal');
+   $concluida = pg_result($result,$y,'concluida');
+   $situacao = pg_result($result,$y,'situacao');
+   $decimais = pg_result($result,$y,'decimais');
+   $aluno = pg_result($result,$y,'aluno');
+   $turma = pg_result($result,$y,'turma');
+   $serie = pg_result($result,$y,'serie');
+   $permitenotaembranco = pg_result($result,$y,'permitenotaembranco');
+   $medfrequencia = pg_result($result,$y,'medfrequencia');
+   $formaobtencao = trim(pg_result($result,$y,'formaobtencao'));
+   if($cor==$cor1){
+    $cor = $cor2;
+   }else{
+    $cor = $cor1;
+   }
+   if($y==0){
+    echo '<tr align="center"><td class="cabec1">&nbsp;</td>';
+    if(trim($periodos)==""){
+     echo '<td class="cabec1">&nbsp;</td></tr>';
+    }else{
+     $pri_periodos = str_replace("{","",$periodos);
+     $pri_periodos = str_replace("}","",$pri_periodos);
+     $pri_periodos = str_replace(chr(34),"",$pri_periodos);
+     $pri_periodos = explode(",",$pri_periodos);
+     for($x=0;$x<count($pri_periodos);$x++){
+      $arr_periodo = explode("|",$pri_periodos[$x]);
+      echo '<td class="cabec1" '.(trim($arr_periodo[5])=="AVA"?"colspan=2":"").' >'.trim($arr_periodo[1]).'</td>';
+     }
+     if(trim($permitenotaembranco)=="S" && trim($situacao)=="MATRICULADO" && trim($concluida)=="N" && ($formaobtencao=="ME" || $formaobtencao=="MP" || $formaobtencao=="SO")){
+      $qtd_periodo++;
+      echo '<td class="cabec1">Nota Parcial</td>';
+     }
+     echo '<td class="cabec1" colspan="2">FrequÍncia</td>';
+     echo '<td class="cabec1" colspan="2">Resultado Final</td>';
+     echo '</tr>';
+    }
+    echo '<tr align="center">';
+    echo '<td class="cabec1">Disciplina</td>';
+    if(trim($periodos)==""){
+     echo '<td class="cabec1">&nbsp;</td></tr>';
+    }else{
+     for($x=0;$x<count($pri_periodos);$x++){
+      $arr_periodo = explode("|",$pri_periodos[$x]);
+      echo '<td class="cabec1">'.trim($arr_periodo[2]).'</td>';
+      if(trim($arr_periodo[5])=="AVA"){
+       echo '<td class="cabec1">Ft.</td>';
+      }
+     }
+     if(trim($permitenotaembranco)=="S" && trim($situacao)=="MATRICULADO" && trim($concluida)=="N" && ($formaobtencao=="ME" || $formaobtencao=="MP" || $formaobtencao=="SO")){
+      echo '<td class="cabec1">&nbsp;</td>';
+     }
+     echo '<td class="cabec1">'.(trim($medfrequencia)=="PERÃODOS"?"Aulas":"Dias").'</td>';
+     echo '<td class="cabec1" >% Freq</td>';
+     echo '<td class="cabec1" >Aprov.</td>';
+     echo '<td class="cabec1" >RF</td>';
+     echo '</tr>';
+    }
+   }
+   echo '<tr bgcolor="'.$cor.'"><td class="aluno">&nbsp;'.trim($disciplina).'</td>';
+   if(trim($periodos)==""){
+    echo '<td align="center" class="aluno1">Nenhum registro para esta disciplina.</td></tr>';
+   }else{
+    $array_peraval = str_replace("{","",$periodos);
+    $array_peraval = str_replace("}","",$array_peraval);
+    $array_peraval = str_replace(chr(34),"",$array_peraval);
+    $array_peraval = explode(",",$array_peraval);
+    for($x=0;$x<count($array_peraval);$x++){
+     $arr_explode = explode("|",$array_peraval[$x]);
+     echo '<td class="aluno1">'.(trim($arr_explode[3])==""?"&nbsp;":trim($arr_explode[3])).'</td>';
+     if(trim($arr_explode[5])=="AVA"){
+      echo '<td class="aluno1">'.(trim($arr_explode[4])==""?"&nbsp;":trim($arr_explode[4])).'</td>';
+     }
+    }
+    if(trim($permitenotaembranco)=="S" && trim($situacao)=="MATRICULADO" && trim($concluida)=="N" && ($formaobtencao=="ME" || $formaobtencao=="MP" || $formaobtencao=="SO")){
+     echo '<td class="aluno1">'.(trim($notaparcial)==""?"&nbsp;":($decimais=="S"?number_format(trim($notaparcial),2,".","."):number_format(trim($notaparcial),0,".","."))).'</td>';
+    }
+    echo '<td class="aluno1">'.(trim($aulas)==""?"&nbsp;":trim($aulas)).'</td>';
+    echo '<td class="aluno1">'.(trim($frequencia)==""?"&nbsp;":($mostraresfinal=="S"?trim($frequencia):"")).'</td>';
+    echo '<td class="aluno1">'.(trim($aprovfinal)==""?"&nbsp;":($mostraresfinal=="S"?trim($aprovfinal):"")).'</td>';
+    $corfonte = trim($resfinal)=="Apr"?"green":(trim($resfinal)=="Rep"?"red":"black");
+    echo '<td class="aluno1"><font color="'.$corfonte.'">'.(trim($resfinal)==""?"&nbsp;":($mostraresfinal=="S"?trim($resfinal):"")).'</font></td>';
+    echo '</tr>';
+   }
+  }
+  if(trim($periodos)!=""){
+   $rfatual = ResultadoFinal($matricula,$aluno,$turma,trim($situacao),trim($concluida));
+   echo '<tr>
+          <td colspan="'.((count($pri_periodos)*2)+5+$qtd_periodo).'">
+           <table width="100%">
+            <tr>
+             <td>
+              <b>Resultado final em '.trim($serie).': '.trim($rfatual).'</b>&nbsp;&nbsp;
+             </td>
+             <td align="right">
+               * <font size="2">Nota Externa</font>
+             </td>
+            </tr>
+           </table>
+          </td>
+         </tr>';
+  }
+  echo '</table>';
+ }
+}
+
+function GradeAproveitamentoPDF($matricula,$largura,$pdf,$mostraresfinal="S"){
+ $pdf->setfont('arial','b',7);
+ $largura_disc = $largura*20/100;
+ $largura_meio = $largura*55/100;
+ $largura_rf = $largura*25/100;
+ $sql = GradeAproveitamentoSQL($matricula,"S");
+ $result = pg_query($sql);
+ if(pg_numrows($result)>0){
+  for($y=0;$y<pg_num_rows($result);$y++){
+   $qtd_periodo = 0;
+   db_fieldsmemory($result,$y);
+   $disciplina = pg_result($result,$y,'disciplina');
+   $periodos = pg_result($result,$y,'periodos');
+   $notaparcial = pg_result($result,$y,'notaparcial');
+   $aulas = pg_result($result,$y,'aulas');
+   $frequencia = pg_result($result,$y,'frequencia');
+   $aprovfinal = pg_result($result,$y,'aprovfinal');
+   $resfinal = pg_result($result,$y,'resfinal');
+   $concluida = pg_result($result,$y,'concluida');
+   $situacao = pg_result($result,$y,'situacao');
+   $decimais = pg_result($result,$y,'decimais');
+   $aluno = pg_result($result,$y,'aluno');
+   $turma = pg_result($result,$y,'turma');
+   $serie = pg_result($result,$y,'serie');
+   $permitenotaembranco = pg_result($result,$y,'permitenotaembranco');
+   $medfrequencia = pg_result($result,$y,'medfrequencia');
+   $formaobtencao = trim(pg_result($result,$y,'formaobtencao'));
+   if($y==0){
+    $pdf->cell($largura_disc,4,"",1,0,"C",0);
+    if(trim($periodos)==""){
+     $pdf->cell($largura_meio+$largura_rf,4,"",1,1,"C",0);
+    }else{
+     $pri_periodos = str_replace("{","",$periodos);
+     $pri_periodos = str_replace("}","",$pri_periodos);
+     $pri_periodos = str_replace(chr(34),"",$pri_periodos);
+     $pri_periodos = explode(",",$pri_periodos);
+     if(trim($permitenotaembranco)=="S" && trim($situacao)=="MATRICULADO" && trim($concluida)=="N" && ($formaobtencao=="ME" || $formaobtencao=="MP" || $formaobtencao=="SO")){
+      $acrescecoluna = 1;
+     }else{
+      $acrescecoluna = 0;
+     }
+     $largura_periodo = $largura_meio/(count($pri_periodos)+$acrescecoluna);
+     for($x=0;$x<count($pri_periodos);$x++){
+      $arr_periodo = explode("|",$pri_periodos[$x]);
+      $pdf->cell($largura_periodo,4,trim($arr_periodo[1]),1,0,"C",0);
+     }
+     if(trim($permitenotaembranco)=="S" && trim($situacao)=="MATRICULADO" && trim($concluida)=="N" && ($formaobtencao=="ME" || $formaobtencao=="MP" || $formaobtencao=="SO")){
+      $qtd_periodo++;
+      $pdf->cell($largura_periodo,4,"Nota Parcial",1,0,"C",0);
+     }
+     $pdf->cell($largura_rf/2,4,"FrequÍncia",1,0,"C",0);
+     $pdf->cell($largura_rf/2,4,"Resultado Final",1,1,"C",0);
+    }
+    $pdf->cell($largura_disc,4,"Disciplina",1,0,"C",0);
+    if(trim($periodos)==""){
+     $pdf->cell($largura_meio+$largura_rf,4,"",1,1,"C",0);
+    }else{
+     $largura_aprov = $largura_periodo*70/100;
+     $largura_ft = $largura_periodo*30/100;
+     for($x=0;$x<count($pri_periodos);$x++){
+      $arr_periodo = explode("|",$pri_periodos[$x]);
+      if(trim($arr_periodo[5])=="AVA"){
+       $pdf->cell($largura_aprov,4,trim($arr_periodo[2]),1,0,"C",0);
+       $pdf->cell($largura_ft,4,"Ft",1,0,"C",0);
+      }else{
+       $pdf->cell($largura_periodo,4,trim($arr_periodo[2]),1,0,"C",0);
+      }
+     }
+     if(trim($permitenotaembranco)=="S" && trim($situacao)=="MATRICULADO" && trim($concluida)=="N" && ($formaobtencao=="ME" || $formaobtencao=="MP" || $formaobtencao=="SO")){
+      $pdf->cell($largura_periodo,4,"",1,0,"C",0);
+     }
+     $largura_dias = $largura_rf*20/100;
+     $largura_freq = $largura_rf*30/100;
+     $largura_aprovrf = $largura_rf*30/100;
+     $largura_result = $largura_rf*20/100;
+     $pdf->cell($largura_dias,4,(trim($medfrequencia)=="PERÃODOS"?"Aulas":"Dias"),1,0,"C",0);
+     $pdf->cell($largura_freq,4,"% Freq",1,0,"C",0);
+     $pdf->cell($largura_aprovrf,4,"Aprov.",1,0,"C",0);
+     $pdf->cell($largura_result,4,"RF",1,1,"C",0);
+    }
+   }
+   $pdf->cell($largura_disc,4,trim($disciplina),1,0,"L",0);
+   if(trim($periodos)==""){
+    $pdf->cell($largura_meio+$largura_rf,4,"Nenhum registro para esta disciplina.",1,1,"C",0);
+   }else{
+    $array_peraval = str_replace("{","",$periodos);
+    $array_peraval = str_replace("}","",$array_peraval);
+    $array_peraval = str_replace(chr(34),"",$array_peraval);
+    $array_peraval = explode(",",$array_peraval);
+    for($x=0;$x<count($array_peraval);$x++){
+     $arr_explode = explode("|",$array_peraval[$x]);
+     if(trim($arr_explode[5])=="AVA"){
+      $pdf->cell($largura_aprov,4,trim($arr_explode[3]),1,0,"C",0);
+      $pdf->cell($largura_ft,4,trim($arr_explode[4]),1,0,"C",0);
+     }else{
+      $pdf->cell($largura_periodo,4,trim($arr_explode[3]),1,0,"C",0);
+     }
+    }
+    if(trim($permitenotaembranco)=="S" && trim($situacao)=="MATRICULADO" && trim($concluida)=="N" && ($formaobtencao=="ME" || $formaobtencao=="MP" || $formaobtencao=="SO")){
+     $pdf->cell($largura_periodo,4,(trim($notaparcial)==""?"":($decimais=="S"?number_format(trim($notaparcial),2,".","."):number_format(trim($notaparcial),0,".","."))),1,0,"C",0);
+    }
+    $pdf->cell($largura_dias,4,trim($aulas),1,0,"C",0);
+    $pdf->cell($largura_freq,4,$mostraresfinal=="S"?trim($frequencia):"",1,0,"C",0);
+    $pdf->cell($largura_aprovrf,4,$mostraresfinal=="S"?trim($aprovfinal):"",1,0,"C",0);
+    $pdf->cell($largura_result,4,$mostraresfinal=="S"?trim($resfinal):"",1,1,"C",0);
+   }
+  }
+ }
+}
+
+function GradeAproveitamentoBOLETIM($matricula,$largura,$pdf,$niveis,$orientacao,$seqatual,$ficha="N"){
+ if($orientacao=="P"){
+  $largura_disc = $largura*20/100;//coluna da descriÁao da disciplina 20%
+  $largura_meio = $largura*53/100;//coluna dos elementos da avaliaÁao 53%
+ }else{
+  $largura_disc = $largura*19/100;//coluna da descriÁao da disciplina 18%
+  $largura_meio = $largura*54/100;//coluna dos elementos da avaliaÁao 55%
+ }
+ $largura_rf = $largura*27/100;//coluna do resultado final (Aulas|Faltas|Abonos|Freq|Aprov|RF) 27%
+ $sql = GradeAproveitamentoSQL($matricula,"S");
+ $result = pg_query($sql);
+ //db_criatabela($result);exit;
+ if(pg_numrows($result)>0){
+  global $boletim_periodos;
+  global $boletim_convencao;
+  $boletim_periodos = pg_result($result,0,'periodos');
+  $boletim_convencao = pg_result($result,0,'convencao');
+  for($y=0;$y<pg_num_rows($result);$y++){
+   $qtd_periodo = 0;
+   db_fieldsmemory($result,$y);
+   $disciplina = pg_result($result,$y,'disciplina');
+   $periodos = pg_result($result,$y,'periodos');
+   $notaparcial = pg_result($result,$y,'notaparcial');
+   $aulas = pg_result($result,$y,'aulas');
+   $frequencia = pg_result($result,$y,'frequencia');
+   $aprovfinal = pg_result($result,$y,'aprovfinal');
+   $resfinal = pg_result($result,$y,'resfinal');
+   $concluida = pg_result($result,$y,'concluida');
+   $situacao = pg_result($result,$y,'situacao');
+   $decimais = pg_result($result,$y,'decimais');
+   $aluno = pg_result($result,$y,'aluno');
+   $turma = pg_result($result,$y,'turma');
+   $serie = pg_result($result,$y,'serie');
+   $permitenotaembranco = pg_result($result,$y,'permitenotaembranco');
+   $medfrequencia = pg_result($result,$y,'medfrequencia');
+   $tot_faltas = pg_result($result,$y,'tot_faltas');
+   $tot_abonos = pg_result($result,$y,'tot_abonos');
+   $minimoaprov = pg_result($result,$y,'minimoaprov');
+   $formafinal = pg_result($result,$y,'formafinal');
+   $descr_niveis = pg_result($result,$y,'descr_niveis');
+   $formaobtencao = trim(pg_result($result,$y,'formaobtencao'));
+   $pdf->setfont('arial','b',7);
+   if($y==0){
+    $pdf->cell($largura_disc,4,"",1,0,"C",0);
+    if(trim($periodos)==""){
+     $pdf->cell($largura_meio+$largura_rf,4,"",1,1,"C",0);
+    }else{
+     $pri_periodos = str_replace("{","",$periodos);
+     $pri_periodos = str_replace("}","",$pri_periodos);
+     $pri_periodos = str_replace(chr(34),"",$pri_periodos);
+     $pri_periodos = explode(",",$pri_periodos);
+     if(trim($permitenotaembranco)=="S" && trim($situacao)=="MATRICULADO" && trim($concluida)=="N" && ($formaobtencao=="ME" || $formaobtencao=="MP" || $formaobtencao=="SO")){
+      $acrescecoluna = 1;
+     }else{
+      $acrescecoluna = 0;
+     }
+     $largura_periodo = $largura_meio/(count($pri_periodos)+$acrescecoluna);
+     for($x=0;$x<count($pri_periodos);$x++){
+      $arr_periodo = explode("|",$pri_periodos[$x]);
+      $pdf->cell($largura_periodo,4,trim(@$arr_periodo[1]),1,0,"C",0);
+     }
+     if(trim($permitenotaembranco)=="S" && trim($situacao)=="MATRICULADO" && trim($concluida)=="N" && ($formaobtencao=="ME" || $formaobtencao=="MP" || $formaobtencao=="SO")){
+      $qtd_periodo++;
+      $pdf->cell($largura_periodo,4,"Nota Parcial",1,0,"C",0);
+     }
+     $pdf->cell($largura_rf*61/100,4,"FrequÍncia",1,0,"C",0);
+     $pdf->cell($largura_rf*39/100,4,"Resultado Final",1,1,"C",0);
+    }
+    $pdf->cell($largura_disc,4,"Disciplina",1,0,"C",0);
+    if(trim($periodos)==""){
+     $pdf->cell($largura_meio+$largura_rf,4,"",1,1,"C",0);
+    }else{
+     $largura_aprov = $largura_periodo*70/100;
+     $largura_ft = $largura_periodo*30/100;
+     for($x=0;$x<count($pri_periodos);$x++){
+      $arr_periodo = explode("|",$pri_periodos[$x]);
+      if(trim(@$arr_periodo[5])=="AVA"){
+       $pdf->cell($largura_aprov,4,trim($arr_periodo[2]),1,0,"C",0);
+       $pdf->cell($largura_ft,4,"FT",1,0,"C",0);
+      }else{
+       $pdf->cell($largura_periodo,4,trim(@$arr_periodo[2]),1,0,"C",0);
+      }
+     }
+     if(trim($permitenotaembranco)=="S" && trim($situacao)=="MATRICULADO" && trim($concluida)=="N" && ($formaobtencao=="ME" || $formaobtencao=="MP" || $formaobtencao=="SO")){
+      $pdf->cell($largura_periodo,4,"",1,0,"C",0);
+     }
+     $largura_dias = $largura_rf*13/100;
+     $largura_ttfaltas = $largura_rf*13/100;
+     $largura_ttabonos = $largura_rf*14/100;
+     $largura_freq = $largura_rf*21/100;
+     $largura_aprovrf = $largura_rf*21/100;
+     $largura_result = $largura_rf*18/100;
+     $pdf->cell($largura_dias,4,(trim($medfrequencia)=="PERÃODOS"?"AD":"DL"),1,0,"C",0);
+     $pdf->cell($largura_ttfaltas,4,"TF",1,0,"C",0);
+     $pdf->cell($largura_ttabonos,4,"FA",1,0,"C",0);
+     $pdf->cell($largura_freq,4,"% Freq",1,0,"C",0);
+     $pdf->cell($largura_aprovrf,4,"Aprov.",1,0,"C",0);
+     $pdf->cell($largura_result,4,"RF",1,1,"C",0);
+    }
+   }
+   $pdf->setfont('arial','',7);
+   $pdf->cell($largura_disc,4,$orientacao=="P"?substr(trim($disciplina),0,25):substr(trim($disciplina),0,35),1,0,"L",0);
+   if(trim($periodos)==""){
+    $pdf->cell($largura_meio+$largura_rf,4,"Nenhum registro para esta disciplina.",1,1,"C",0);
+   }else{
+    $array_peraval = str_replace("{","",$periodos);
+    $array_peraval = str_replace("}","",$array_peraval);
+    $array_peraval = str_replace(chr(34),"",$array_peraval);
+    $array_peraval = explode(",",$array_peraval);
+    for($x=0;$x<count($array_peraval);$x++){
+     $arr_explode = explode("|",$array_peraval[$x]);
+     if((trim(@$arr_explode[2])=="NOTA" || trim(@$arr_explode[2])=="NIVEL") && @$arr_explode[9]=="N"){
+      if(trim($arr_explode[7])=="N"){
+       $pdf->setfont('arial','b',10);
+      }else{
+       $pdf->setfont('arial','',9);
+      }
+     }else{
+      $pdf->setfont('arial','',7);
+     }
+     if(trim(@$arr_explode[5])=="AVA"){
+      $pdf->cell($largura_aprov,4,trim($arr_explode[3]),1,0,"C",0);
+      $pdf->setfont('arial','',8);
+      $pdf->cell($largura_ft,4,trim($arr_explode[4]),1,0,"C",0);
+     }else{
+      $pdf->cell($largura_periodo,4,trim(@$arr_explode[3]),1,0,"C",0);
+     }
+    }
+    if(trim($permitenotaembranco)=="S" && trim($situacao)=="MATRICULADO" && trim($concluida)=="N" && ($formaobtencao=="ME" || $formaobtencao=="MP" || $formaobtencao=="SO")){
+     if(trim($notaparcial)<$minimoaprov){
+      $pdf->setfont('arial','b',10);
+     }else{
+      $pdf->setfont('arial','',9);
+     }
+     $pdf->cell($largura_periodo,4,(trim($notaparcial)==""?"":($decimais=="S"?number_format(trim($notaparcial),2,".","."):number_format(trim($notaparcial),0,".","."))),1,0,"C",0);
+    }
+    $pdf->setfont('arial','',8);
+    if(trim($situacao)!="MATRICULADO"){
+     $pdf->setfont('arial','',7);
+    }
+    $pdf->cell($largura_dias,4,trim($aulas),1,0,"C",0);
+    $pdf->cell($largura_ttfaltas,4,trim($tot_faltas),1,0,"C",0);
+    $pdf->cell($largura_ttabonos,4,trim($tot_abonos),1,0,"C",0);
+    $pdf->cell($largura_freq,4,trim($frequencia),1,0,"C",0);
+    if(trim($formafinal)=="PARECER" || trim($aprovfinal)=="Amparo"){
+     $pdf->setfont('arial','',7);
+    }else{
+     if(trim($aprovfinal)<$minimoaprov){
+      $pdf->setfont('arial','b',10);
+     }else{
+      $pdf->setfont('arial','',9);
+     }
+    }
+    if(trim($situacao)!="MATRICULADO"){
+     $pdf->setfont('arial','',7);
+    }
+    $pdf->cell($largura_aprovrf,4,trim($aprovfinal),1,0,"C",0);
+    $pdf->setfont('arial','',8);
+    if(trim($situacao)!="MATRICULADO"){
+     $pdf->setfont('arial','',7);
+    }
+    $pdf->cell($largura_result,4,trim($resfinal),1,1,"C",0);
+   }
+  }
+  if($formafinal!="PARECER"){
+   $pdf->setfont('arial','b',8);
+   $pdf->cell(35,4,"MÌnimo para AprovaÁ„o:","LT",0,"L",0);
+   $pdf->cell($largura-35,4,trim($minimoaprov)=="0"?"":$minimoaprov,"RT",1,"L",0);
+  }
+  if($concluida=="S" || $ficha=="S"){
+   $pdf->setfont('arial','b',8);
+   $pdf->cell(35,4,"Resultado Final: ","BTL",0,"L",0);
+   $pdf->cell($largura-35,4,(ResultadoFinal($matricula,$aluno,$turma,trim($situacao),trim($concluida))),"BTR",1,"L",0);
+  }
+  if($niveis=="yes"){
+   $pdf->setfont('arial','b',8);
+   $pdf->cell($largura,4,"NÌveis:",1,1,"L",1);
+   $pdf->setfont('arial','',7);
+   $arr_niveis = str_replace("{","",$descr_niveis);
+   $arr_niveis = str_replace("}","",$arr_niveis);
+   $troca = chr(34).",".chr(34);
+   $arr_niveis = str_replace($troca," | ",$arr_niveis);
+   $arr_niveis = str_replace(chr(34),"",$arr_niveis);
+   $pdf->multicell($largura,4,$arr_niveis,"RL","L",0,0);
+  }
+ }
+}
+
+function Assinatura($escola){
+ $instit = db_getsession("DB_instit");
+ $ano = db_anofolha();
+ $mes = db_mesfolha();
+ $sql = "SELECT 'DIRETOR' as funcao,z01_nome as nome,ed15_c_nome||' - '||ed83_c_descr||' n∞: '||ed05_c_numero::varchar as descricao,'D' as tipo
+         FROM escoladiretor
+          left  join atolegal  on  atolegal.ed05_i_codigo = escoladiretor.ed254_i_atolegal
+          left  join tipoato  on  tipoato.ed83_i_codigo = atolegal.ed05_i_tipoato
+          inner join turno  on  turno.ed15_i_codigo = escoladiretor.ed254_i_turno
+          inner join rechumano  on  rechumano.ed20_i_codigo = escoladiretor.ed254_i_rechumano
+          inner join rhpessoal  on  rhpessoal.rh01_regist = rechumano.ed20_i_codigo
+          inner join rhpessoalmov on rh02_anousu  = $ano
+                                  and rh02_mesusu  = $mes
+                                  and rh02_regist  = rh01_regist
+                                  and rh02_instit  = $instit
+          left join rhfuncao  on  rhfuncao.rh37_funcao = rhpessoal.rh01_funcao and rh37_instit  = rh02_instit
+          inner join cgm  on  cgm.z01_numcgm = rhpessoal.rh01_numcgm
+         WHERE ed254_i_escola = $escola
+         AND ed254_c_tipo = 'A'
+         UNION
+         SELECT ed01_c_descr as funcao,z01_nome as nome,ed83_c_descr||' n∞: '||ed05_c_numero::varchar as descricao,'O' as tipo
+         FROM rechumanoativ
+          left  join atolegal  on  atolegal.ed05_i_codigo = rechumanoativ.ed22_i_atolegal
+          left  join tipoato  on  tipoato.ed83_i_codigo = atolegal.ed05_i_tipoato
+          inner join rechumanoescola  on  rechumanoescola.ed75_i_codigo = rechumanoativ.ed22_i_rechumanoescola
+          inner join atividaderh  on  atividaderh.ed01_i_codigo = rechumanoativ.ed22_i_atividade
+          inner join escola  on  escola.ed18_i_codigo = rechumanoescola.ed75_i_escola
+          inner join rechumano  on  rechumano.ed20_i_codigo = rechumanoescola.ed75_i_rechumano
+          inner join rhpessoal  on  rhpessoal.rh01_regist = rechumano.ed20_i_codigo
+          inner join cgm  on  cgm.z01_numcgm = rhpessoal.rh01_numcgm
+         WHERE ed75_i_escola = $escola
+         AND ed01_c_exigeato = 'S'
+        ";
+ $result = pg_query($sql);
+ ?>
+ <select name="diretor" style="font-size:9px;width:330px;">
+  <option value=""></option>
+  <?
+  for($r=0;$r<pg_num_rows($result);$r++){
+   db_fieldsmemory($result,$r);
+   $funcao = trim(pg_result($result,$r,'funcao'));
+   $nome = trim(pg_result($result,$r,'nome'));
+   $descricao = trim(pg_result($result,$r,'descricao'));
+   $tipo = trim(pg_result($result,$r,'tipo'));
+   $valor = $funcao."|".$nome."|".$descricao;
+   $texto = $funcao." - ".$nome.($descricao!=""?" ($descricao)":"");
+   echo "<option value='$valor'>$texto</option>";
+  }
+  ?>
+ </select>
+ <?
+}
+function NotaParcial(){
+ $sql = "case
+
+         when procresultado.ed43_c_obtencao = 'ME' then
+          (select sum(coalesce(diariorescomp.ed73_i_valornota,0)+coalesce(da3.ed72_i_valornota,0))
+                  /case when count(dr3.ed73_i_valornota) = 0
+                    then count(da3.ed72_i_valornota)
+                    else count(dr3.ed73_i_valornota)
+                   end
+           from diarioresultado as dr3
+            inner join procresultado as proc3 on proc3.ed43_i_codigo = dr3.ed73_i_procresultado
+            inner join diario as d3 on d3.ed95_i_codigo = dr3.ed73_i_diario
+            left join rescompoeres on rescompoeres.ed68_i_procresultado = proc3.ed43_i_codigo
+            left join avalcompoeres on avalcompoeres.ed44_i_procresultado = proc3.ed43_i_codigo
+            left join diarioresultado as diariorescomp on diariorescomp.ed73_i_procresultado = rescompoeres.ed68_i_procresultcomp
+                                                      and diariorescomp.ed73_i_diario = dr3.ed73_i_diario
+            left join diarioavaliacao as da3 on da3.ed72_i_procavaliacao = avalcompoeres.ed44_i_procavaliacao
+                                            and da3.ed72_i_diario = dr3.ed73_i_diario
+           where dr3.ed73_i_codigo = diarioresultado.ed73_i_codigo
+           and (da3.ed72_c_amparo = 'N' OR diariorescomp.ed73_c_amparo = 'N')
+           and (da3.ed72_i_valornota is not null OR diariorescomp.ed73_i_valornota is not null))
+         when procresultado.ed43_c_obtencao = 'MP' then
+          (select sum(coalesce(diariorescomp.ed73_i_valornota*rescompoeres.ed68_i_peso,0)+coalesce(da3.ed72_i_valornota*avalcompoeres.ed44_i_peso,0))
+                 /coalesce(sum(coalesce(avalcompoeres.ed44_i_peso,0)+coalesce(rescompoeres.ed68_i_peso,0)),1)
+           from diarioresultado as dr3
+            inner join procresultado as proc3 on proc3.ed43_i_codigo = dr3.ed73_i_procresultado
+            inner join diario as d3 on d3.ed95_i_codigo = dr3.ed73_i_diario
+            left join rescompoeres on rescompoeres.ed68_i_procresultado = proc3.ed43_i_codigo
+            left join avalcompoeres on avalcompoeres.ed44_i_procresultado = proc3.ed43_i_codigo
+            left join diarioresultado as diariorescomp on diariorescomp.ed73_i_procresultado = rescompoeres.ed68_i_procresultcomp
+                                                      and diariorescomp.ed73_i_diario = dr3.ed73_i_diario
+            left join diarioavaliacao as da3 on da3.ed72_i_procavaliacao = avalcompoeres.ed44_i_procavaliacao
+                                            and da3.ed72_i_diario = dr3.ed73_i_diario
+           where dr3.ed73_i_codigo = diarioresultado.ed73_i_codigo
+           and (da3.ed72_c_amparo = 'N' OR diariorescomp.ed73_c_amparo = 'N')
+           and (da3.ed72_i_valornota is not null OR diariorescomp.ed73_i_valornota is not null))
+         when procresultado.ed43_c_obtencao = 'SO' then
+          (select sum(coalesce(diariorescomp.ed73_i_valornota,0)
+                     +coalesce(da3.ed72_i_valornota,0))
+           from diarioresultado as dr3
+            inner join procresultado as proc3 on proc3.ed43_i_codigo = dr3.ed73_i_procresultado
+            inner join diario as d3 on d3.ed95_i_codigo = dr3.ed73_i_diario
+            left join rescompoeres on rescompoeres.ed68_i_procresultado = proc3.ed43_i_codigo
+            left join avalcompoeres on avalcompoeres.ed44_i_procresultado = proc3.ed43_i_codigo
+            left join diarioresultado as diariorescomp on diariorescomp.ed73_i_procresultado = rescompoeres.ed68_i_procresultcomp
+                                                      and diariorescomp.ed73_i_diario = dr3.ed73_i_diario
+            left join diarioavaliacao as da3 on da3.ed72_i_procavaliacao = avalcompoeres.ed44_i_procavaliacao
+                                            and da3.ed72_i_diario = dr3.ed73_i_diario
+           where dr3.ed73_i_codigo = diarioresultado.ed73_i_codigo
+           and (da3.ed72_c_amparo = 'N' OR diariorescomp.ed73_c_amparo = 'N')
+           and (da3.ed72_i_valornota is not null OR diariorescomp.ed73_i_valornota is not null))
+         when procresultado.ed43_c_obtencao = 'MN' then
+          (select case
+                   when max(coalesce(diariorescomp.ed73_i_valornota,0)) > max(coalesce(da3.ed72_i_valornota,0))
+                    then max(coalesce(diariorescomp.ed73_i_valornota,0))
+                   when max(coalesce(da3.ed72_i_valornota,0)) > max(coalesce(diariorescomp.ed73_i_valornota,0))
+                    then max(coalesce(da3.ed72_i_valornota,0))
+                   else max(coalesce(da3.ed72_i_valornota,0))
+                  end
+           from diarioresultado as dr3
+            inner join procresultado as proc3 on proc3.ed43_i_codigo = dr3.ed73_i_procresultado
+            inner join diario as d3 on d3.ed95_i_codigo = dr3.ed73_i_diario
+            left join rescompoeres on rescompoeres.ed68_i_procresultado = proc3.ed43_i_codigo
+            left join avalcompoeres on avalcompoeres.ed44_i_procresultado = proc3.ed43_i_codigo
+            left join diarioresultado as diariorescomp on diariorescomp.ed73_i_procresultado = rescompoeres.ed68_i_procresultcomp
+                                                      and diariorescomp.ed73_i_diario = dr3.ed73_i_diario
+            left join diarioavaliacao as da3 on da3.ed72_i_procavaliacao = avalcompoeres.ed44_i_procavaliacao
+                                            and da3.ed72_i_diario = dr3.ed73_i_diario
+           where dr3.ed73_i_codigo = diarioresultado.ed73_i_codigo
+           and (da3.ed72_c_amparo = 'N' OR diariorescomp.ed73_c_amparo = 'N')
+           and (da3.ed72_i_valornota is not null OR diariorescomp.ed73_i_valornota is not null))
+         when procresultado.ed43_c_obtencao = 'UN' then
+          (select daval5.ed72_i_valornota
+           from diario as d5
+            inner join diarioavaliacao as daval5 on daval5.ed72_i_diario = d5.ed95_i_codigo
+            inner join procavaliacao as proc5 on proc5.ed41_i_codigo = daval5.ed72_i_procavaliacao
+           where d5.ed95_i_aluno = diario.ed95_i_aluno
+           and d5.ed95_i_regencia = diario.ed95_i_regencia
+           order by proc5.ed41_i_sequencia DESC LIMIT 1)
+         else null
+        end";
+ return $sql;
+}
+?>

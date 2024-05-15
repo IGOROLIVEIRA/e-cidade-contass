@@ -1,0 +1,3 @@
+{
+  "contas_diferentes": "Você está tentando arrecadar uma receita do recurso [ContaReceita] em uma conta bancária do recurso [Conta]. Esta incompatibilidade gera problemas no controle dos recursos. Corrija o lançamento e tente novamente."
+}

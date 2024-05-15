@@ -1,0 +1,1723 @@
+{
+    "fontes": [
+        {
+            "FONTE_2022": "1",
+            "FONTE_2023": "15000000",
+            "2023-FONTE_DETALHAMENTO": "15000000",
+            "COD_TCE": "1500000",
+            "COD_STN": "1500",
+            "DESCRICAO": "RECURSOS NAO VINCULADOS DE IMPOSTOS",
+            "FINALIDADE": "Recursos nao vinculados de Impostos"
+        },
+        {
+            "FONTE_2022": "152",
+            "FONTE_2023": "15000000",
+            "2023-FONTE_DETALHAMENTO": "15000000",
+            "COD_TCE": "1500000",
+            "COD_STN": "1500",
+            "DESCRICAO": "RECURSOS NAO VINCULADOS DE IMPOSTOS",
+            "FINALIDADE": "Recursos nao vinculados de Impostos"
+        },
+        {
+            "FONTE_2022": "149",
+            "FONTE_2023": "15000000",
+            "2023-FONTE_DETALHAMENTO": "15000000",
+            "COD_TCE": "1500000",
+            "COD_STN": "1500",
+            "DESCRICAO": "RECURSOS NAO VINCULADOS DE IMPOSTOS",
+            "FINALIDADE": "Recursos nao vinculados de Impostos"
+        },
+        {
+            "FONTE_2022": "1100",
+            "FONTE_2023": "15000000",
+            "2023-FONTE_DETALHAMENTO": "15000000",
+            "COD_TCE": "1500000",
+            "COD_STN": "1500",
+            "DESCRICAO": "RECURSOS NAO VINCULADOS DE IMPOSTOS",
+            "FINALIDADE": "Recursos nao vinculados de Impostos"
+        },
+        {
+            "FONTE_2022": "100",
+            "FONTE_2023": "15000000",
+            "2023-FONTE_DETALHAMENTO": "15000000",
+            "COD_TCE": "1500000",
+            "COD_STN": "1500",
+            "DESCRICAO": "RECURSOS NAO VINCULADOS DE IMPOSTOS",
+            "FINALIDADE": "Recursos nao vinculados de Impostos"
+        },
+        {
+            "FONTE_2022": "101",
+            "FONTE_2023": "15000001",
+            "2023-FONTE_DETALHAMENTO": "15000001",
+            "COD_TCE": "1500000",
+            "COD_STN": "1500",
+            "DESCRICAO": "RECURSOS DE IMPOSTOS - MDE",
+            "FINALIDADE": "Recursos de Impostos - MDE"
+        },
+        {
+            "FONTE_2022": "102",
+            "FONTE_2023": "15000002",
+            "2023-FONTE_DETALHAMENTO": "15000002",
+            "COD_TCE": "1500000",
+            "COD_STN": "1500",
+            "DESCRICAO": "RECURSOS DE IMPOSTOS - ASPS",
+            "FINALIDADE": "Recursos de Impostos - ASPS"
+        },
+        {
+            "FONTE_2022": "1102",
+            "FONTE_2023": "15000002",
+            "2023-FONTE_DETALHAMENTO": "15000002",
+            "COD_TCE": "1500000",
+            "COD_STN": "1500",
+            "DESCRICAO": "RECURSOS DE IMPOSTOS - ASPS",
+            "FINALIDADE": "Recursos de Impostos - ASPS"
+        },
+        {
+            "FONTE_2022": "103",
+            "FONTE_2023": "18000000",
+            "2023-FONTE_DETALHAMENTO": "18000000",
+            "COD_TCE": "1800000",
+            "COD_STN": "1800",
+            "DESCRICAO": "RECURSOS VINCULADOS AO RPPS - FUNDO EM CAPITALIZACAO",
+            "FINALIDADE": "Recursos vinculados ao RPPS - Fundo em Capitalizacao (Plano Previdenciario)"
+        },
+        {
+            "FONTE_2022": "104",
+            "FONTE_2023": "18010000",
+            "2023-FONTE_DETALHAMENTO": "18010000",
+            "COD_TCE": "1801000",
+            "COD_STN": "1801",
+            "DESCRICAO": "RECURSOS VINCULADOS AO RPPS - FUNDO EM REPARTICAO",
+            "FINALIDADE": "Recursos vinculados ao RPPS - Fundo em Reparticao (Plano Financeiro)"
+        },
+        {
+            "FONTE_2022": "105",
+            "FONTE_2023": "18020000",
+            "2023-FONTE_DETALHAMENTO": "18020000",
+            "COD_TCE": "1802000",
+            "COD_STN": "1802",
+            "DESCRICAO": "RECURSOS VINCULADOS AO RPPS - TAXA DE ADMINISTRACAO",
+            "FINALIDADE": "Recursos vinculados ao RPPS - Taxa de Administracao"
+        },
+        {
+            "FONTE_2022": "106",
+            "FONTE_2023": "15760010",
+            "2023-FONTE_DETALHAMENTO": "15760010",
+            "COD_TCE": "1576001",
+            "COD_STN": "1576",
+            "DESCRICAO": "TRANSFERENCIAS DE RECURSOS PARA O PTE",
+            "FINALIDADE": "Transferencias de Recursos para o Programa Estadual de Transporte Escolar (PTE)"
+        },
+        {
+            "FONTE_2022": "107",
+            "FONTE_2023": "15440000",
+            "2023-FONTE_DETALHAMENTO": "15440000",
+            "COD_TCE": "1544000",
+            "COD_STN": "1544",
+            "DESCRICAO": "RECURSOS DE PRECATORIOS DO FUNDEF",
+            "FINALIDADE": "Recursos de Precatorios do FUNDEF"
+        },
+        {
+            "FONTE_2022": "108",
+            "FONTE_2023": "17080000",
+            "2023-FONTE_DETALHAMENTO": "17080000",
+            "COD_TCE": "1708000",
+            "COD_STN": "1708",
+            "DESCRICAO": "TRANSFERENCIA DA UNIAO REFERENTE A CFEM",
+            "FINALIDADE": "Transferencia da Uniao Referente a Compensacao Financeira de Recursos Minerais"
+        },
+        {
+            "FONTE_2022": "112",
+            "FONTE_2023": "16590020",
+            "2023-FONTE_DETALHAMENTO": "16590020",
+            "COD_TCE": "1659002",
+            "COD_STN": "1659",
+            "DESCRICAO": "SERVICOS DE SAUDE",
+            "FINALIDADE": "Servicos de Saude"
+        },
+        {
+            "FONTE_2022": "113",
+            "FONTE_2023": "15990030",
+            "2023-FONTE_DETALHAMENTO": "15990030",
+            "COD_TCE": "1599003",
+            "COD_STN": "1599",
+            "DESCRICAO": "SERVICOS EDUCACIONAIS",
+            "FINALIDADE": "Servicos Educacionais"
+        },
+        {
+            "FONTE_2022": "116",
+            "FONTE_2023": "17500000",
+            "2023-FONTE_DETALHAMENTO": "17500000",
+            "COD_TCE": "1750000",
+            "COD_STN": "1750",
+            "DESCRICAO": "RECURSOS DA CONTRIBUICAO DE INTERVENCAO NO DOMINIO ECONOMICO",
+            "FINALIDADE": "Recursos da Contribuicao de Intervencao no DomInio Economico - CIDE"
+        },
+        {
+            "FONTE_2022": "117",
+            "FONTE_2023": "17510000",
+            "2023-FONTE_DETALHAMENTO": "17510000",
+            "COD_TCE": "1751000",
+            "COD_STN": "1751",
+            "DESCRICAO": "RECURSOS DA CONTRIBUICAO PARA CUST. SER. ILUM. PUB. - COSIP",
+            "FINALIDADE": "Recursos da Contribuicao para o Custeio do Servico de Iluminacao Publica - COSIP"
+        },
+        {
+            "FONTE_2022": "118",
+            "FONTE_2023": "15400007",
+            "2023-FONTE_DETALHAMENTO": "15400007",
+            "COD_TCE": "1540000",
+            "COD_STN": "1540",
+            "DESCRICAO": "TRANSFERENCIAS DO FUNDEB - IMPOS. E TRANSF. DE IMPOSTOS - 70",
+            "FINALIDADE": "Transferencias do FUNDEB - Impostos e Transferencias de Impostos - 70"
+        },
+        {
+            "FONTE_2022": "119",
+            "FONTE_2023": "15400003",
+            "2023-FONTE_DETALHAMENTO": "15400003",
+            "COD_TCE": "1540000",
+            "COD_STN": "1540",
+            "DESCRICAO": "TRANSFERENCIAS DO FUNDEB - IMPOS. E TRANSF. DE IMPOSTOS - 30",
+            "FINALIDADE": "Transferencias do FUNDEB - Impostos e Transferencias de Impostos - 30"
+        },
+        {
+            "FONTE_2022": "120",
+            "FONTE_2023": "15760000",
+            "2023-FONTE_DETALHAMENTO": "15760000",
+            "COD_TCE": "1576000",
+            "COD_STN": "1576",
+            "DESCRICAO": "TRANSF. DE RECURSOS DOS ESTADOS PARA PROGRAMAS DE EDUCACAO",
+            "FINALIDADE": "Transferencias de Recursos dos Estados para programas de Educacao"
+        },
+        {
+            "FONTE_2022": "121",
+            "FONTE_2023": "16220000",
+            "2023-FONTE_DETALHAMENTO": "16220000",
+            "COD_TCE": "1622000",
+            "COD_STN": "1622",
+            "DESCRICAO": "TRANSF. FUNDO A FUNDO DE REC. DO SUS PROV. GOVER. MUNICIPAIS",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do SUS provenientes dos Governos Municipais"
+        },
+        {
+            "FONTE_2022": "122",
+            "FONTE_2023": "15700000",
+            "2023-FONTE_DETALHAMENTO": "15700000",
+            "COD_TCE": "1570000",
+            "COD_STN": "1570",
+            "DESCRICAO": "TRANSF. GOV. FEDERAL REF. CONVENIOS E CONGE VINC. EDUCACAO",
+            "FINALIDADE": "Transferencias do Governo Federal referentes a Convenios e Instrumentos Congeneres vinculados a Educacao"
+        },
+        {
+            "FONTE_2022": "123",
+            "FONTE_2023": "16310000",
+            "2023-FONTE_DETALHAMENTO": "16310000",
+            "COD_TCE": "1631000",
+            "COD_STN": "1631",
+            "DESCRICAO": "TRANSF. GOV. FEDERAL REF. CONVENIOS E INST CONGE VINC. SAUDE",
+            "FINALIDADE": "Transferencias do Governo Federal referentes a Convenios e Instrumentos Congeneres vinculados a Saude "
+        },
+        {
+            "FONTE_2022": "124",
+            "FONTE_2023": "17000000",
+            "2023-FONTE_DETALHAMENTO": "17000000",
+            "COD_TCE": "1700000",
+            "COD_STN": "1700",
+            "DESCRICAO": "OUTRAS TRANSF. DE CONVENIOS OU INST. CONGENERES DA UNIAO",
+            "FINALIDADE": "Outras Transferencias de Convenios ou Instrumentos Congeneres da Uniao"
+        },
+        {
+            "FONTE_2022": "129",
+            "FONTE_2023": "16600000",
+            "2023-FONTE_DETALHAMENTO": "16600000",
+            "COD_TCE": "1660000",
+            "COD_STN": "1660",
+            "DESCRICAO": "TRANSF. DE REC. DO FUNDO NACIONAL DE ASSISTENCIA SOCIAL FNAS",
+            "FINALIDADE": "Transferencia de Recursos do Fundo Nacional de Assistencia Social - FNAS"
+        },
+        {
+            "FONTE_2022": "130",
+            "FONTE_2023": "18990040",
+            "2023-FONTE_DETALHAMENTO": "18990040",
+            "COD_TCE": "1899004",
+            "COD_STN": "1899",
+            "DESCRICAO": "TRANSF. ACORDO JUDICIAL BARRAGEM FUNDAO",
+            "FINALIDADE": "Transferencia referente ao Acordo Judicial de Reparacao dos Impactos Socioeconomicos e Ambientais do Rompimento da Barragem de Fundao"
+        },
+        {
+            "FONTE_2022": "131",
+            "FONTE_2023": "17590050",
+            "2023-FONTE_DETALHAMENTO": "17590050",
+            "COD_TCE": "1759005",
+            "COD_STN": "1759",
+            "DESCRICAO": "REPASSE TARIFARIO PARA OS FUNDOS MUNICIPAIS DE SANEAMENTO",
+            "FINALIDADE": "Repasse tarifario para os Fundos Municipais de Saneamento"
+        },
+        {
+            "FONTE_2022": "132",
+            "FONTE_2023": "16040000",
+            "2023-FONTE_DETALHAMENTO": "16040000",
+            "COD_TCE": "1604000",
+            "COD_STN": "1604",
+            "DESCRICAO": "TRANSF. DO GOVERNO FEDERAL DEST. AO VENCIMENTO DOS AGENTES",
+            "FINALIDADE": "Transferencias provenientes do Governo Federal destinadas ao vencimento dos agentes comunitarios de saude e dos agentes de combate as endemias."
+        },
+        {
+            "FONTE_2022": "142",
+            "FONTE_2023": "16650000",
+            "2023-FONTE_DETALHAMENTO": "16650000",
+            "COD_TCE": "1665000",
+            "COD_STN": "1665",
+            "DESCRICAO": "TRANSF. DE CONVENIOS E INST CONGE VINC. A ASSISTENCIA SOCIAL",
+            "FINALIDADE": "Transferencias de Convenios e Instrumentos Congeneres Vinculados a Assistencia Social"
+        },
+        {
+            "FONTE_2022": "143",
+            "FONTE_2023": "15510000",
+            "2023-FONTE_DETALHAMENTO": "15510000",
+            "COD_TCE": "1551000",
+            "COD_STN": "1551",
+            "DESCRICAO": "TRANSFERENCIAS DE RECURSOS DO FNDE REFERENTES AO PDDE",
+            "FINALIDADE": "Transferencias de Recursos do FNDE Referentes ao Programa Dinheiro Direto na Escola (PDDE)"
+        },
+        {
+            "FONTE_2022": "144",
+            "FONTE_2023": "15520000",
+            "2023-FONTE_DETALHAMENTO": "15520000",
+            "COD_TCE": "1552000",
+            "COD_STN": "1552",
+            "DESCRICAO": "TRANSFERENCIAS DE RECURSOS DO FNDE REFERENTES AO PNAE",
+            "FINALIDADE": "Transferencias de Recursos do FNDE Referentes ao Programa Nacional de Alimentacao Escolar (PNAE)"
+        },
+        {
+            "FONTE_2022": "145",
+            "FONTE_2023": "15530000",
+            "2023-FONTE_DETALHAMENTO": "15530000",
+            "COD_TCE": "1553000",
+            "COD_STN": "1553",
+            "DESCRICAO": "TRANSFERENCIAS DE RECURSOS DO FNDE REFERENTES AO PNATE",
+            "FINALIDADE": "Transferencias de Recursos do FNDE Referentes ao Programa Nacional de Apoio ao Transporte Escolar (PNATE) "
+        },
+        {
+            "FONTE_2022": "146",
+            "FONTE_2023": "15690000",
+            "2023-FONTE_DETALHAMENTO": "15690000",
+            "COD_TCE": "1569000",
+            "COD_STN": "1569",
+            "DESCRICAO": "OUTRAS TRANSFERENCIAS DE RECURSOS DO FNDE",
+            "FINALIDADE": "Outras Transferencias de Recursos do FNDE"
+        },
+        {
+            "FONTE_2022": "147",
+            "FONTE_2023": "15500000",
+            "2023-FONTE_DETALHAMENTO": "15500000",
+            "COD_TCE": "1550000",
+            "COD_STN": "1550",
+            "DESCRICAO": "TRANSFERENCIA DO SALARIO-EDUCACAO",
+            "FINALIDADE": "Transferencia do Salario-Educacao"
+        },
+        {
+            "FONTE_2022": "153",
+            "FONTE_2023": "16010000",
+            "2023-FONTE_DETALHAMENTO": "16010000",
+            "COD_TCE": "1601000",
+            "COD_STN": "1601",
+            "DESCRICAO": "TRANSF. DE REC. DO SUS PROV. GOV. FEDERAL - BLOCO ESTR. ASPS",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do SUS provenientes do Governo Federal - Bloco de Estruturacao da Rede de Servicos Publicos de Saude"
+        },
+        {
+            "FONTE_2022": "154",
+            "FONTE_2023": "16590000",
+            "2023-FONTE_DETALHAMENTO": "16590000",
+            "COD_TCE": "1659000",
+            "COD_STN": "1659",
+            "DESCRICAO": "OUTROS RECURSOS VINCULADOS A SAUDE ",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude "
+        },
+        {
+            "FONTE_2022": "155",
+            "FONTE_2023": "16210000",
+            "2023-FONTE_DETALHAMENTO": "16210000",
+            "COD_TCE": "1621000",
+            "COD_STN": "1621",
+            "DESCRICAO": "TRANSFERENCIAS FUNDO A FUNDO DE RECURSOS DO SUS PROVENIENTES DO GOVERNO ESTADUAL ",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do SUS provenientes do Governo Estadual "
+        },
+        {
+            "FONTE_2022": "156",
+            "FONTE_2023": "16610000",
+            "2023-FONTE_DETALHAMENTO": "16610000",
+            "COD_TCE": "1661000",
+            "COD_STN": "1661",
+            "DESCRICAO": "TRANSFERENCIA DE RECURSOS DOS FUNDOS ESTADUAIS DE ASSISTENCIA SOCIAL",
+            "FINALIDADE": "Transferencia de Recursos dos Fundos Estaduais de Assistencia Social"
+        },
+        {
+            "FONTE_2022": "157",
+            "FONTE_2023": "17520000",
+            "2023-FONTE_DETALHAMENTO": "17520000",
+            "COD_TCE": "1752000",
+            "COD_STN": "1752",
+            "DESCRICAO": "RECURSOS VINCULADOS AO TRÂNSITO",
+            "FINALIDADE": "Recursos Vinculados ao Trânsito"
+        },
+        {
+            "FONTE_2022": "158",
+            "FONTE_2023": "18990060",
+            "2023-FONTE_DETALHAMENTO": "18990060",
+            "COD_TCE": "1899006",
+            "COD_STN": "1899",
+            "DESCRICAO": "CONTRIB. ASSIST. A SAUDE DOS SERVIDORES ",
+            "FINALIDADE": "Contribuicao para a Assistencia a Saude dos Servidores: Patronal, dos Servidores, dos Prestadores de Servicos Contratados"
+        },
+        {
+            "FONTE_2022": "159",
+            "FONTE_2023": "16000000",
+            "2023-FONTE_DETALHAMENTO": "16000000",
+            "COD_TCE": "1600000",
+            "COD_STN": "1600",
+            "DESCRICAO": "TRANSF. DE REC. DO SUS - GOVERNO FEDERAL - BLOCO MANUT. ASPS",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do SUS provenientes do Governo Federal - Bloco de Manutencao das Acoes e Servicos Publicos de Saude"
+        },
+        {
+            "FONTE_2022": "160",
+            "FONTE_2023": "17040000",
+            "2023-FONTE_DETALHAMENTO": "17040000",
+            "COD_TCE": "1704000",
+            "COD_STN": "1704",
+            "DESCRICAO": "TRANSF. DA UNIAO REF. A COMP. FINAN. EXPLO. DE REC. NATURAIS",
+            "FINALIDADE": "Transferencias da Uniao Referentes a Compensacoes Financeiras pela Exploracao de Recursos Naturais"
+        },
+        {
+            "FONTE_2022": "161",
+            "FONTE_2023": "17070000",
+            "2023-FONTE_DETALHAMENTO": "17070000",
+            "COD_TCE": "1707000",
+            "COD_STN": "1707",
+            "DESCRICAO": "TRANSFERENCIAS DA UNIAO – INCISO I DO ART. 5º DA LEI COMPLEMENTAR 173/2020",
+            "FINALIDADE": "Transferencias da Uniao – inciso I do art. 5º da Lei Complementar 173/2020"
+        },
+        {
+            "FONTE_2022": "162",
+            "FONTE_2023": "17490120",
+            "2023-FONTE_DETALHAMENTO": "17490120",
+            "COD_TCE": "1749012",
+            "COD_STN": "1749",
+            "DESCRICAO": "TRANSF. DE REC. LEI ALDIR BLANC",
+            "FINALIDADE": "Transferencia de Recursos para aplicacao em Acoes Emergenciais de Apoio ao Setor Cultural (Lei Aldir Blanc)"
+        },
+        {
+            "FONTE_2022": "163",
+            "FONTE_2023": "17130070",
+            "2023-FONTE_DETALHAMENTO": "17130070",
+            "COD_TCE": "1713007",
+            "COD_STN": "1713",
+            "DESCRICAO": "TRANSFERENCIAS DE CONVENIOS VINCULADOS A SEGURANCA PUBLICA",
+            "FINALIDADE": "Transferencias de Convenios Vinculados a Seguranca Publica"
+        },
+        {
+            "FONTE_2022": "164",
+            "FONTE_2023": "17060000",
+            "2023-FONTE_DETALHAMENTO": "17060000",
+            "COD_TCE": "1706000",
+            "COD_STN": "1706",
+            "DESCRICAO": "TRANSFERENCIA ESPECIAL DA UNIAO ",
+            "FINALIDADE": "Transferencia Especial da Uniao "
+        },
+        {
+            "FONTE_2022": "165",
+            "FONTE_2023": "18990000",
+            "2023-FONTE_DETALHAMENTO": "18990000",
+            "COD_TCE": "1899000",
+            "COD_STN": "1899",
+            "DESCRICAO": "OUTROS RECURSOS VINCULADOS",
+            "FINALIDADE": "Outros Recursos Vinculados"
+        },
+        {
+            "FONTE_2022": "166",
+            "FONTE_2023": "15420007",
+            "2023-FONTE_DETALHAMENTO": "15420007",
+            "COD_TCE": "1542000",
+            "COD_STN": "1542",
+            "DESCRICAO": "TRANSFERENCIAS DO FUNDEB - COMPLEMENTACAO DA UNIAO - VAAT - 70",
+            "FINALIDADE": "Transferencias do FUNDEB - Complementacao da Uniao - VAAT - 70"
+        },
+        {
+            "FONTE_2022": "167",
+            "FONTE_2023": "15420003",
+            "2023-FONTE_DETALHAMENTO": "15420003",
+            "COD_TCE": "1542000",
+            "COD_STN": "1542",
+            "DESCRICAO": "TRANSFERENCIAS DO FUNDEB - COMPLEMENTACAO DA UNIAO - VAAT - 30",
+            "FINALIDADE": "Transferencias do FUNDEB - Complementacao da Uniao - VAAT - 30"
+        },
+        {
+            "FONTE_2022": "168",
+            "FONTE_2023": "17100100",
+            "2023-FONTE_DETALHAMENTO": "17100100",
+            "COD_TCE": "1710010",
+            "COD_STN": "1710",
+            "DESCRICAO": "TRANSF. ESP. ESTADO - BARRAGEM BRUMADINHO",
+            "FINALIDADE": "Transferencia Especial do Estado - Acordo Judicial de Reparacao dos Impactos Socioeconomicos e Ambientais do Rompimento de Barragem em Brumadinho "
+        },
+        {
+            "FONTE_2022": "169",
+            "FONTE_2023": "17100000",
+            "2023-FONTE_DETALHAMENTO": "17100000",
+            "COD_TCE": "1710000",
+            "COD_STN": "1710",
+            "DESCRICAO": "TRANSFERENCIA ESPECIAL DOS ESTADOS",
+            "FINALIDADE": "Transferencia Especial dos Estados"
+        },
+        {
+            "FONTE_2022": "170",
+            "FONTE_2023": "15010000",
+            "2023-FONTE_DETALHAMENTO": "15010000",
+            "COD_TCE": "1501000",
+            "COD_STN": "1501",
+            "DESCRICAO": "OUTROS RECURSOS NAO VINCULADOS",
+            "FINALIDADE": "Outros Recursos nao Vinculados"
+        },
+        {
+            "FONTE_2022": "171",
+            "FONTE_2023": "15710000",
+            "2023-FONTE_DETALHAMENTO": "15710000",
+            "COD_TCE": "1571000",
+            "COD_STN": "1571",
+            "DESCRICAO": "TRANSF. DO ESTADO REF. A CONV. E INST. CONG. VINC. EDUCACAO",
+            "FINALIDADE": "Transferencias do Estado referentes a Convenios e Instrumentos Congeneres vinculados a Educacao"
+        },
+        {
+            "FONTE_2022": "172",
+            "FONTE_2023": "15720000",
+            "2023-FONTE_DETALHAMENTO": "15720000",
+            "COD_TCE": "1572000",
+            "COD_STN": "1572",
+            "DESCRICAO": "TRANSF. MUNICPIOS  REF. A CONV. E INST. CONG. VINC. EDUCACAO",
+            "FINALIDADE": "Transferencias de MunicIpios referentes a Convenios e Instrumentos Congeneres Vinculados a Educacao"
+        },
+        {
+            "FONTE_2022": "173",
+            "FONTE_2023": "15750000",
+            "2023-FONTE_DETALHAMENTO": "15750000",
+            "COD_TCE": "1575000",
+            "COD_STN": "1575",
+            "DESCRICAO": "OUTRAS TRANSF. DE CONVENIOS E INST. CONGE VINC. EDUCACAO",
+            "FINALIDADE": "Outras Transferencias de Convenios e Instrumentos Congeneres Vinculados a Educacao"
+        },
+        {
+            "FONTE_2022": "174",
+            "FONTE_2023": "15740000",
+            "2023-FONTE_DETALHAMENTO": "15740000",
+            "COD_TCE": "1574000",
+            "COD_STN": "1574",
+            "DESCRICAO": "OPERACOES DE CREDITO VINCULADAS A EDUCACAO",
+            "FINALIDADE": "Operacoes de Credito Vinculadas a Educacao"
+        },
+        {
+            "FONTE_2022": "175",
+            "FONTE_2023": "15730000",
+            "2023-FONTE_DETALHAMENTO": "15730000",
+            "COD_TCE": "1573000",
+            "COD_STN": "1573",
+            "DESCRICAO": "ROYALTIES DO PETROLEO E GAS NATURAL VINCULADOS A EDUCACAO",
+            "FINALIDADE": "Royalties do Petroleo e Gas Natural Vinculados a Educacao"
+        },
+        {
+            "FONTE_2022": "176",
+            "FONTE_2023": "16320000",
+            "2023-FONTE_DETALHAMENTO": "16320000",
+            "COD_TCE": "1632000",
+            "COD_STN": "1632",
+            "DESCRICAO": "TRANSF. DO ESTADO REF. CONVENIOS E INST. CONGE VINC. SAUDE",
+            "FINALIDADE": "Transferencias do Estado referentes a Convenios e Instrumentos Congeneres Vinculados a Saude"
+        },
+        {
+            "FONTE_2022": "177",
+            "FONTE_2023": "16330000",
+            "2023-FONTE_DETALHAMENTO": "16330000",
+            "COD_TCE": "1633000",
+            "COD_STN": "1633",
+            "DESCRICAO": "TRANSF. DE MUNICÍPIOS REF. CONVENIOS E INST CONGE VINC SAUDE",
+            "FINALIDADE": "Transferencias de MunicIpios referentes a Convenios e Instumentos Congeneres Vinculados a Saude"
+        },
+        {
+            "FONTE_2022": "178",
+            "FONTE_2023": "16360000",
+            "2023-FONTE_DETALHAMENTO": "16360000",
+            "COD_TCE": "1636000",
+            "COD_STN": "1636",
+            "DESCRICAO": "OUTRAS TRANSF CONVENIOS E INST CONGENERES VINCULADOS A SAUDE",
+            "FINALIDADE": "Outras Transferencias de Convenios e Instrumentos Congeneres Vinculados a Saude"
+        },
+        {
+            "FONTE_2022": "179",
+            "FONTE_2023": "16340000",
+            "2023-FONTE_DETALHAMENTO": "16340000",
+            "COD_TCE": "1634000",
+            "COD_STN": "1634",
+            "DESCRICAO": "OPERACOES DE CREDITO VINCULADAS A SAUDE",
+            "FINALIDADE": "Operacoes de Credito Vinculadas a Saude"
+        },
+        {
+            "FONTE_2022": "180",
+            "FONTE_2023": "16350000",
+            "2023-FONTE_DETALHAMENTO": "16350000",
+            "COD_TCE": "1635000",
+            "COD_STN": "1635",
+            "DESCRICAO": "ROYALTIES DO PETROLEO E GAS NATURAL VINCULADOS A SAUDE",
+            "FINALIDADE": "Royalties do Petroleo e Gas Natural Vinculados a Saude"
+        },
+        {
+            "FONTE_2022": "181",
+            "FONTE_2023": "17010000",
+            "2023-FONTE_DETALHAMENTO": "17010000",
+            "COD_TCE": "1701000",
+            "COD_STN": "1701",
+            "DESCRICAO": "OUTRAS TRANSF. DE CONVENIOS OU INST. CONGENERES DOS ESTADOS",
+            "FINALIDADE": "Outras Transferencias de Convenios ou Instrumentos Congeneres dos Estados"
+        },
+        {
+            "FONTE_2022": "182",
+            "FONTE_2023": "17020000",
+            "2023-FONTE_DETALHAMENTO": "17020000",
+            "COD_TCE": "1702000",
+            "COD_STN": "1702",
+            "DESCRICAO": "OUTRAS TRANSF DE CONVENIOS OU INST CONGENERES DOS MUNICIPIOS",
+            "FINALIDADE": "Outras Transferencias de Convenios ou Instrumentos Congeneres dos MunicIpios"
+        },
+        {
+            "FONTE_2022": "183",
+            "FONTE_2023": "17030000",
+            "2023-FONTE_DETALHAMENTO": "17030000",
+            "COD_TCE": "1703000",
+            "COD_STN": "1703",
+            "DESCRICAO": "OUTRAS TRANSF DE CONVENIOS OU INST CONGE DE OUTRAS ENTIDADES",
+            "FINALIDADE": "Outras Transferencias de Convenios ou Instrumentos Congeneres de outras Entidades"
+        },
+        {
+            "FONTE_2022": "184",
+            "FONTE_2023": "17090000",
+            "2023-FONTE_DETALHAMENTO": "17090000",
+            "COD_TCE": "1709000",
+            "COD_STN": "1709",
+            "DESCRICAO": "TRANSF. DA UNIAO REF. A COMPENSACAO FINAN. DE REC. HIDRICOS",
+            "FINALIDADE": "Transferencia da Uniao referente a Compensacao Financeira de Recursos HIdricos"
+        },
+        {
+            "FONTE_2022": "185",
+            "FONTE_2023": "17530000",
+            "2023-FONTE_DETALHAMENTO": "17530000",
+            "COD_TCE": "1753000",
+            "COD_STN": "1753",
+            "DESCRICAO": "REC. PROVENIENTES DE TAXAS, CONTRIBUICOES E PRECOS PUBLICOS",
+            "FINALIDADE": "Recursos Provenientes de Taxas, Contribuicoes e Precos Publicos"
+        },
+        {
+            "FONTE_2022": "186",
+            "FONTE_2023": "17040000",
+            "2023-FONTE_DETALHAMENTO": "17040000",
+            "COD_TCE": "1704000",
+            "COD_STN": "1704",
+            "DESCRICAO": "TRANSF. DA UNIAO REF. COMP. FINAN EXPLORACAO DE REC NATURAIS",
+            "FINALIDADE": "Transferencias da Uniao Referentes a Compensacoes Financeiras pela Exploracao de Recursos Naturais"
+        },
+        {
+            "FONTE_2022": "187",
+            "FONTE_2023": "17050000",
+            "2023-FONTE_DETALHAMENTO": "17050000",
+            "COD_TCE": "1705000",
+            "COD_STN": "1705",
+            "DESCRICAO": "TRANSF. DOS ESTADOS REF. COMP. FINAN EXPLORACAO REC NATURAIS",
+            "FINALIDADE": "Transferencias dos Estados Referentes a Compensacoes Financeiras pela Exploracao de Recursos Naturais"
+        },
+        {
+            "FONTE_2022": "188",
+            "FONTE_2023": "15000080",
+            "2023-FONTE_DETALHAMENTO": "15000080",
+            "COD_TCE": "1500008",
+            "COD_STN": "1500",
+            "DESCRICAO": " DIS. CAIXA. VINCULADA A RESTOS A PAGAR - SAUDE",
+            "FINALIDADE": "Disponibilidade de Caixa vinculada a Restos a Pagar considerados na Aplicacao MInima da Saude e posteriormente Cancelados ou Prescritos"
+        },
+        {
+            "FONTE_2022": "189",
+            "FONTE_2023": "15000090",
+            "2023-FONTE_DETALHAMENTO": "15000090",
+            "COD_TCE": "1500009",
+            "COD_STN": "1500",
+            "DESCRICAO": " DIS. CAIXA. VINCULADA A RESTOS A PAGAR - EDUCACAO",
+            "FINALIDADE": "Disponibilidade de Caixa vinculada a Restos a Pagar considerados na Aplicacao MInima da Educacao e posteriormente Cancelados ou Prescritos"
+        },
+        {
+            "FONTE_2022": "190",
+            "FONTE_2023": "17540000",
+            "2023-FONTE_DETALHAMENTO": "17540000",
+            "COD_TCE": "1754000",
+            "COD_STN": "1754",
+            "DESCRICAO": "RECURSOS DE OPERACOES DE CREDITO ",
+            "FINALIDADE": "Recursos de Operacoes de Credito "
+        },
+        {
+            "FONTE_2022": "191",
+            "FONTE_2023": "17540000",
+            "2023-FONTE_DETALHAMENTO": "17540000",
+            "COD_TCE": "1754000",
+            "COD_STN": "1754",
+            "DESCRICAO": "RECURSOS DE OPERACOES DE CREDITO ",
+            "FINALIDADE": "Recursos de Operacoes de Credito "
+        },
+        {
+            "FONTE_2022": "192",
+            "FONTE_2023": "17550000",
+            "2023-FONTE_DETALHAMENTO": "17550000",
+            "COD_TCE": "1755000",
+            "COD_STN": "1755",
+            "DESCRICAO": "RECURSOS DE ALIENACAO DE BENS-ATIVOS - ADMINISTRACAO DIRETA",
+            "FINALIDADE": "Recursos de Alienacao de Bens/Ativos - Administracao Direta"
+        },
+        {
+            "FONTE_2022": "193",
+            "FONTE_2023": "18990130",
+            "2023-FONTE_DETALHAMENTO": "18990130",
+            "COD_TCE": "1899013",
+            "COD_STN": "1899",
+            "DESCRICAO": "OUTRAS RECEITAS NAO PRIMARIAS ",
+            "FINALIDADE": "Outras Receitas Nao Primarias "
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "15410000",
+            "2023-FONTE_DETALHAMENTO": "15410000",
+            "COD_TCE": "1541000",
+            "COD_STN": "1541",
+            "DESCRICAO": "TRANSFERENCIAS DO FUNDEB - COMPLEMENTACAO DA UNIAO - VAAF",
+            "FINALIDADE": "Transferencias do FUNDEB - Complementacao da Uniao - VAAF"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "15430000",
+            "2023-FONTE_DETALHAMENTO": "15430000",
+            "COD_TCE": "1543000",
+            "COD_STN": "1543",
+            "DESCRICAO": "TRANSFERENCIAS DO FUNDEB - COMPLEMENTACAO DA UNIAO - VAAR",
+            "FINALIDADE": "Transferencias do FUNDEB - Complementacao da Uniao - VAAR"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "16040000",
+            "2023-FONTE_DETALHAMENTO": "16040000",
+            "COD_TCE": "1604000",
+            "COD_STN": "1604",
+            "DESCRICAO": "TRANSF. DO GOVERNO FEDERAL DEST. AO VENCIMENTO DOS AGENTES",
+            "FINALIDADE": "Transferencias provenientes do Governo Federal destinadas ao vencimento dos agentes comunitarios de saude e dos agentes de combate as endemias"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "17140000",
+            "2023-FONTE_DETALHAMENTO": "17140000",
+            "COD_TCE": "1714000",
+            "COD_STN": "1714",
+            "DESCRICAO": "TRANSF. FUNDO A FUNDO DE REC. FUNDO AMPARO TRABALHADOR - FAT",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do Fundo de Amparo ao Trabalhador - FAT"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "17580000",
+            "2023-FONTE_DETALHAMENTO": "17580000",
+            "COD_TCE": "1758000",
+            "COD_STN": "1758",
+            "DESCRICAO": "REC DEPOSITOS JUDICIAIS LIDES DAS QUAIS O ENTE NAO FAZ PARTE",
+            "FINALIDADE": "Recursos de depositos judiciais – Lides das quais o ente nao faz parte"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "17610000",
+            "2023-FONTE_DETALHAMENTO": "17610000",
+            "COD_TCE": "1761000",
+            "COD_STN": "1761",
+            "DESCRICAO": "REC. VINC. AO FUNDO DE COMBATE E ERRADICACAO DA POBREZA",
+            "FINALIDADE": "Recursos vinculados ao Fundo de Combate e Erradicacao da Pobreza"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "17990000",
+            "2023-FONTE_DETALHAMENTO": "17990000",
+            "COD_TCE": "1799000",
+            "COD_STN": "1799",
+            "DESCRICAO": "OUTRAS VINCULACOES LEGAIS",
+            "FINALIDADE": "Outras vinculacoes legais"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "18620000",
+            "2023-FONTE_DETALHAMENTO": "18620000",
+            "COD_TCE": "1862000",
+            "COD_STN": "1862",
+            "DESCRICAO": "DEPOSITOS DE TERCEIROS",
+            "FINALIDADE": "Depositos de terceiros"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "18690000",
+            "2023-FONTE_DETALHAMENTO": "18690000",
+            "COD_TCE": "1869000",
+            "COD_STN": "1869",
+            "DESCRICAO": "OUTROS RECURSOS EXTRAORCAMENTARIOS",
+            "FINALIDADE": "Outros recursos extraorcamentarios"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "17560000",
+            "2023-FONTE_DETALHAMENTO": "17560000",
+            "COD_TCE": "1756000",
+            "COD_STN": "1756",
+            "DESCRICAO": "RECURSOS DE ALIENACAO DE BENS-ATIVOS - ADMINISTRACAO INDIRETA",
+            "FINALIDADE": "Recursos de Alienacao de Bens/Ativos - Administracao Indireta"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "17590000",
+            "2023-FONTE_DETALHAMENTO": "17590000",
+            "COD_TCE": "1759000",
+            "COD_STN": "1759",
+            "DESCRICAO": "RECURSOS VINCULADOS A FUNDOS",
+            "FINALIDADE": "Recursos vinculados a fundos"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "15990000",
+            "2023-FONTE_DETALHAMENTO": "15990000",
+            "COD_TCE": "1599000",
+            "COD_STN": "1599",
+            "DESCRICAO": "OUTROS RECURSOS VINCULADOS A EDUCACAO",
+            "FINALIDADE": "Outros Recursos Vinculados a Educacao"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "16590000",
+            "2023-FONTE_DETALHAMENTO": "16590000",
+            "COD_TCE": "1659000",
+            "COD_STN": "1659",
+            "DESCRICAO": "OUTROS RECURSOS VINCULADOS A SAUDE ",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude "
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "16620000",
+            "2023-FONTE_DETALHAMENTO": "16620000",
+            "COD_TCE": "1662000",
+            "COD_STN": "1662",
+            "DESCRICAO": "TRANSF. DE REC. DOS FUNDOS MUNICIPAIS DE ASSISTENCIA SOCIAL",
+            "FINALIDADE": "Transferencias de Recursos dos Fundos Municipais de Assistencia Social"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "16690000",
+            "2023-FONTE_DETALHAMENTO": "16690000",
+            "COD_TCE": "1669000",
+            "COD_STN": "1669",
+            "DESCRICAO": "OUTROS RECURSOS VINCULADOS A ASSISTENCIA SOCIAL",
+            "FINALIDADE": "Outros Recursos Vinculados a Assistencia Social"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "17110000",
+            "2023-FONTE_DETALHAMENTO": "17110000",
+            "COD_TCE": "1711000",
+            "COD_STN": "1711",
+            "DESCRICAO": "DEMAIS TRANSF. OBRIGAT. NAO DECO. DE REPARTICOES DE RECEITAS",
+            "FINALIDADE": "Demais Transferencias Obrigatorias nao Decorrentes de Reparticoes de Receitas"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "17120000",
+            "2023-FONTE_DETALHAMENTO": "17120000",
+            "COD_TCE": "1712000",
+            "COD_STN": "1712",
+            "DESCRICAO": "TRANSF. FUNDO A FUNDO DE REC. DO FUNDO PENITENCIARIO -FUNPEN",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do Fundo Penitenciario - FUNPEN"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "17130000",
+            "2023-FONTE_DETALHAMENTO": "17130000",
+            "COD_TCE": "1713000",
+            "COD_STN": "1713",
+            "DESCRICAO": "TRANSF. FUNDO A FUNDO DE REC FUNDO DE SEGURANCA PUBLICA -FSP",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do Fundo de Seguranca Publica - FSP"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "17490000",
+            "2023-FONTE_DETALHAMENTO": "17490000",
+            "COD_TCE": "1749000",
+            "COD_STN": "1749",
+            "DESCRICAO": "OUTRAS VINCULACOES DE TRANSFERENCIAS",
+            "FINALIDADE": "Outras vinculacoes de transferencias"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "16020000",
+            "2023-FONTE_DETALHAMENTO": "16020000",
+            "COD_TCE": "1602000",
+            "COD_STN": "1602",
+            "DESCRICAO": "TRANSF FUNDO A FUNDO DE REC DO SUS GOV FED MAN. ASPS COVID19",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do SUS provenientes do Governo Federal - Bloco de Manutencao das Acoes e Servicos Publicos de Saude – Recursos destinados ao enfrentamento da COVID-19 no bojo da acao 21C0"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "16030000",
+            "2023-FONTE_DETALHAMENTO": "16030000",
+            "COD_TCE": "1603000",
+            "COD_STN": "1603",
+            "DESCRICAO": "TRANSF FUNDO A FUNDO DE REC DO SUS GOV FED EST. ASPS COVID19",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do SUS provenientes do Governo Federal - Bloco de Estruturacao da Rede de Servicos Publicos de Saude – Recursos destinados ao enfrentamento da COVID-19 no bojo da acao 21C0."
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "16590000",
+            "2023-FONTE_DETALHAMENTO": "16590000",
+            "COD_TCE": "1659000",
+            "COD_STN": "1659",
+            "DESCRICAO": "OUTROS RECURSOS VINCULADOS A SAUDE ",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude "
+        },
+        {
+            "FONTE_2022": "200",
+            "FONTE_2023": "25000000",
+            "2023-FONTE_DETALHAMENTO": "25000000",
+            "COD_TCE": "2500000",
+            "COD_STN": "2500",
+            "DESCRICAO": "RECURSOS NAO VINCULADOS DE IMPOSTOS",
+            "FINALIDADE": "Recursos nao vinculados de Impostos"
+        },
+        {
+            "FONTE_2022": "201",
+            "FONTE_2023": "25000001",
+            "2023-FONTE_DETALHAMENTO": "25000001",
+            "COD_TCE": "2500000",
+            "COD_STN": "2500",
+            "DESCRICAO": "RECURSOS DE IMPOSTOS - MDE",
+            "FINALIDADE": "Recursos de Impostos - MDE"
+        },
+        {
+            "FONTE_2022": "202",
+            "FONTE_2023": "25000002",
+            "2023-FONTE_DETALHAMENTO": "25000002",
+            "COD_TCE": "2500000",
+            "COD_STN": "2500",
+            "DESCRICAO": "RECURSOS DE IMPOSTOS - ASPS",
+            "FINALIDADE": "Recursos de Impostos - ASPS"
+        },
+        {
+            "FONTE_2022": "203",
+            "FONTE_2023": "28000000",
+            "2023-FONTE_DETALHAMENTO": "28000000",
+            "COD_TCE": "2800000",
+            "COD_STN": "2800",
+            "DESCRICAO": "RECURSOS VINCULADOS AO RPPS - FUNDO EM CAPITALIZACAO",
+            "FINALIDADE": "Recursos vinculados ao RPPS - Fundo em Capitalizacao (Plano Previdenciario)"
+        },
+        {
+            "FONTE_2022": "204",
+            "FONTE_2023": "28010000",
+            "2023-FONTE_DETALHAMENTO": "28010000",
+            "COD_TCE": "2801000",
+            "COD_STN": "2801",
+            "DESCRICAO": "RECURSOS VINCULADOS AO RPPS - FUNDO EM REPARTICAO",
+            "FINALIDADE": "Recursos vinculados ao RPPS - Fundo em Reparticao (Plano Financeiro)"
+        },
+        {
+            "FONTE_2022": "205",
+            "FONTE_2023": "28020000",
+            "2023-FONTE_DETALHAMENTO": "28020000",
+            "COD_TCE": "2802000",
+            "COD_STN": "2802",
+            "DESCRICAO": "RECURSOS VINCULADOS AO RPPS - TAXA DE ADMINISTRACAO",
+            "FINALIDADE": "Recursos vinculados ao RPPS - Taxa de Administracao"
+        },
+        {
+            "FONTE_2022": "206",
+            "FONTE_2023": "25760010",
+            "2023-FONTE_DETALHAMENTO": "25760010",
+            "COD_TCE": "2576001",
+            "COD_STN": "2576",
+            "DESCRICAO": "TRANSFERENCIAS DE RECURSOS PARA O PTE",
+            "FINALIDADE": "Transferencias de Recursos para o Programa Estadual de Transporte Escolar (PTE)"
+        },
+        {
+            "FONTE_2022": "207",
+            "FONTE_2023": "25440000",
+            "2023-FONTE_DETALHAMENTO": "25440000",
+            "COD_TCE": "2544000",
+            "COD_STN": "2544",
+            "DESCRICAO": "RECURSOS DE PRECATORIOS DO FUNDEF",
+            "FINALIDADE": "Recursos de Precatorios do FUNDEF"
+        },
+        {
+            "FONTE_2022": "208",
+            "FONTE_2023": "27080000",
+            "2023-FONTE_DETALHAMENTO": "27080000",
+            "COD_TCE": "2708000",
+            "COD_STN": "2708",
+            "DESCRICAO": "TRANSFERENCIA DA UNIAO REFERENTE A CFEM",
+            "FINALIDADE": "Transferencia da Uniao Referente a Compensacao Financeira de Recursos Minerais"
+        },
+        {
+            "FONTE_2022": "212",
+            "FONTE_2023": "26590020",
+            "2023-FONTE_DETALHAMENTO": "26590020",
+            "COD_TCE": "2659002",
+            "COD_STN": "2659",
+            "DESCRICAO": "SERVICOS DE SAUDE",
+            "FINALIDADE": "Servicos de Saude"
+        },
+        {
+            "FONTE_2022": "213",
+            "FONTE_2023": "25990030",
+            "2023-FONTE_DETALHAMENTO": "25990030",
+            "COD_TCE": "2599003",
+            "COD_STN": "2599",
+            "DESCRICAO": "SERVICOS EDUCACIONAIS",
+            "FINALIDADE": "Servicos Educacionais"
+        },
+        {
+            "FONTE_2022": "216",
+            "FONTE_2023": "27500000",
+            "2023-FONTE_DETALHAMENTO": "27500000",
+            "COD_TCE": "2750000",
+            "COD_STN": "2750",
+            "DESCRICAO": "RECURSOS DA CONTRIBUICAO DE INTERVENCAO NO DOMINIO ECONOMICO",
+            "FINALIDADE": "Recursos da Contribuicao de Intervencao no DomInio Economico - CIDE"
+        },
+        {
+            "FONTE_2022": "217",
+            "FONTE_2023": "27510000",
+            "2023-FONTE_DETALHAMENTO": "27510000",
+            "COD_TCE": "2751000",
+            "COD_STN": "2751",
+            "DESCRICAO": "RECURSOS DA CONTRIBUICAO PARA CUST. SER. ILUM. PUB. - COSIP",
+            "FINALIDADE": "Recursos da Contribuicao para o Custeio do Servico de Iluminacao Publica - COSIP"
+        },
+        {
+            "FONTE_2022": "218",
+            "FONTE_2023": "25400007",
+            "2023-FONTE_DETALHAMENTO": "25400007",
+            "COD_TCE": "2540000",
+            "COD_STN": "2540",
+            "DESCRICAO": "TRANSFERENCIAS DO FUNDEB - IMPOS. E TRANSF. DE IMPOSTOS - 70",
+            "FINALIDADE": "Transferencias do FUNDEB - Impostos e Transferencias de Impostos - 70"
+        },
+        {
+            "FONTE_2022": "219",
+            "FONTE_2023": "25400003",
+            "2023-FONTE_DETALHAMENTO": "25400003",
+            "COD_TCE": "2540000",
+            "COD_STN": "2540",
+            "DESCRICAO": "TRANSFERENCIAS DO FUNDEB - IMPOS. E TRANSF. DE IMPOSTOS - 30",
+            "FINALIDADE": "Transferencias do FUNDEB - Impostos e Transferencias de Impostos - 30"
+        },
+        {
+            "FONTE_2022": "220",
+            "FONTE_2023": "25760000",
+            "2023-FONTE_DETALHAMENTO": "25760000",
+            "COD_TCE": "2576000",
+            "COD_STN": "2576",
+            "DESCRICAO": "TRANSF. DE RECURSOS DOS ESTADOS PARA PROGRAMAS DE EDUCACAO",
+            "FINALIDADE": "Transferencias de Recursos dos Estados para programas de Educacao"
+        },
+        {
+            "FONTE_2022": "221",
+            "FONTE_2023": "26220000",
+            "2023-FONTE_DETALHAMENTO": "26220000",
+            "COD_TCE": "2622000",
+            "COD_STN": "2622",
+            "DESCRICAO": "TRANSF. FUNDO A FUNDO DE REC. DO SUS PROV. GOVER. MUNICIPAIS",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do SUS provenientes dos Governos Municipais"
+        },
+        {
+            "FONTE_2022": "222",
+            "FONTE_2023": "25700000",
+            "2023-FONTE_DETALHAMENTO": "25700000",
+            "COD_TCE": "2570000",
+            "COD_STN": "2570",
+            "DESCRICAO": "TRANSF. GOV. FEDERAL REF. CONVENIOS E CONGE VINC. EDUCACAO",
+            "FINALIDADE": "Transferencias do Governo Federal referentes a Convenios e Instrumentos Congeneres vinculados a Educacao"
+        },
+        {
+            "FONTE_2022": "223",
+            "FONTE_2023": "26310000",
+            "2023-FONTE_DETALHAMENTO": "26310000",
+            "COD_TCE": "2631000",
+            "COD_STN": "2631",
+            "DESCRICAO": "TRANSF. GOV. FEDERAL REF. CONVENIOS E INST CONGE VINC. SAUDE",
+            "FINALIDADE": "Transferencias do Governo Federal referentes a Convenios e Instrumentos Congeneres vinculados a Saude "
+        },
+        {
+            "FONTE_2022": "224",
+            "FONTE_2023": "27000000",
+            "2023-FONTE_DETALHAMENTO": "27000000",
+            "COD_TCE": "2700000",
+            "COD_STN": "2700",
+            "DESCRICAO": "OUTRAS TRANSF. DE CONVENIOS OU INST. CONGENERES DA UNIAO",
+            "FINALIDADE": "Outras Transferencias de Convenios ou Instrumentos Congeneres da Uniao"
+        },
+        {
+            "FONTE_2022": "229",
+            "FONTE_2023": "26600000",
+            "2023-FONTE_DETALHAMENTO": "26600000",
+            "COD_TCE": "2660000",
+            "COD_STN": "2660",
+            "DESCRICAO": "TRANSF. DE REC. DO FUNDO NACIONAL DE ASSISTENCIA SOCIAL FNAS",
+            "FINALIDADE": "Transferencia de Recursos do Fundo Nacional de Assistencia Social - FNAS"
+        },
+        {
+            "FONTE_2022": "230",
+            "FONTE_2023": "28990040",
+            "2023-FONTE_DETALHAMENTO": "28990040",
+            "COD_TCE": "2899004",
+            "COD_STN": "2899",
+            "DESCRICAO": "TRANSF. ACORDO JUDICIAL BARRAGEM FUNDAO",
+            "FINALIDADE": "Transferencia referente ao Acordo Judicial de Reparacao dos Impactos Socioeconomicos e Ambientais do Rompimento da Barragem de Fundao"
+        },
+        {
+            "FONTE_2022": "231",
+            "FONTE_2023": "27590050",
+            "2023-FONTE_DETALHAMENTO": "27590050",
+            "COD_TCE": "2759005",
+            "COD_STN": "2759",
+            "DESCRICAO": "REPASSE TARIFARIO PARA OS FUNDOS MUNICIPAIS DE SANEAMENTO",
+            "FINALIDADE": "Repasse tarifario para os Fundos Municipais de Saneamento"
+        },
+        {
+            "FONTE_2022": "232",
+            "FONTE_2023": "26040000",
+            "2023-FONTE_DETALHAMENTO": "26040000",
+            "COD_TCE": "2604000",
+            "COD_STN": "2604",
+            "DESCRICAO": "TRANSF. DO GOVERNO FEDERAL DEST. AO VENCIMENTO DOS AGENTES",
+            "FINALIDADE": "Transferencias provenientes do Governo Federal destinadas ao vencimento dos agentes comunitarios de saude e dos agentes de combate as endemias."
+        },
+        {
+            "FONTE_2022": "242",
+            "FONTE_2023": "26650000",
+            "2023-FONTE_DETALHAMENTO": "26650000",
+            "COD_TCE": "2665000",
+            "COD_STN": "2665",
+            "DESCRICAO": "TRANSF. DE CONVENIOS E INST CONGE VINC. A ASSISTENCIA SOCIAL",
+            "FINALIDADE": "Transferencias de Convenios e Instrumentos Congeneres Vinculados a Assistencia Social"
+        },
+        {
+            "FONTE_2022": "243",
+            "FONTE_2023": "25510000",
+            "2023-FONTE_DETALHAMENTO": "25510000",
+            "COD_TCE": "2551000",
+            "COD_STN": "2551",
+            "DESCRICAO": "TRANSFERENCIAS DE RECURSOS DO FNDE REFERENTES AO PDDE",
+            "FINALIDADE": "Transferencias de Recursos do FNDE Referentes ao Programa Dinheiro Direto na Escola (PDDE)"
+        },
+        {
+            "FONTE_2022": "244",
+            "FONTE_2023": "25520000",
+            "2023-FONTE_DETALHAMENTO": "25520000",
+            "COD_TCE": "2552000",
+            "COD_STN": "2552",
+            "DESCRICAO": "TRANSFERENCIAS DE RECURSOS DO FNDE REFERENTES AO PNAE",
+            "FINALIDADE": "Transferencias de Recursos do FNDE Referentes ao Programa Nacional de Alimentacao Escolar (PNAE)"
+        },
+        {
+            "FONTE_2022": "245",
+            "FONTE_2023": "25530000",
+            "2023-FONTE_DETALHAMENTO": "25530000",
+            "COD_TCE": "2553000",
+            "COD_STN": "2553",
+            "DESCRICAO": "TRANSFERENCIAS DE RECURSOS DO FNDE REFERENTES AO PNATE",
+            "FINALIDADE": "Transferencias de Recursos do FNDE Referentes ao Programa Nacional de Apoio ao Transporte Escolar (PNATE) "
+        },
+        {
+            "FONTE_2022": "246",
+            "FONTE_2023": "25690000",
+            "2023-FONTE_DETALHAMENTO": "25690000",
+            "COD_TCE": "2569000",
+            "COD_STN": "2569",
+            "DESCRICAO": "OUTRAS TRANSFERENCIAS DE RECURSOS DO FNDE",
+            "FINALIDADE": "Outras Transferencias de Recursos do FNDE"
+        },
+        {
+            "FONTE_2022": "247",
+            "FONTE_2023": "25500000",
+            "2023-FONTE_DETALHAMENTO": "25500000",
+            "COD_TCE": "2550000",
+            "COD_STN": "2550",
+            "DESCRICAO": "TRANSFERENCIA DO SALARIO-EDUCACAO",
+            "FINALIDADE": "Transferencia do Salario-Educacao"
+        },
+        {
+            "FONTE_2022": "253",
+            "FONTE_2023": "26010000",
+            "2023-FONTE_DETALHAMENTO": "26010000",
+            "COD_TCE": "2601000",
+            "COD_STN": "2601",
+            "DESCRICAO": "TRANSF. DE REC. DO SUS PROV. GOV. FEDERAL - BLOCO ESTR. ASPS",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do SUS provenientes do Governo Federal - Bloco de Estruturacao da Rede de Servicos Publicos de Saude"
+        },
+        {
+            "FONTE_2022": "254",
+            "FONTE_2023": "26590000",
+            "2023-FONTE_DETALHAMENTO": "26590000",
+            "COD_TCE": "2659000",
+            "COD_STN": "2659",
+            "DESCRICAO": "OUTROS RECURSOS VINCULADOS A SAUDE ",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude "
+        },
+        {
+            "FONTE_2022": "255",
+            "FONTE_2023": "26210000",
+            "2023-FONTE_DETALHAMENTO": "26210000",
+            "COD_TCE": "2621000",
+            "COD_STN": "2621",
+            "DESCRICAO": "TRANSFERENCIAS FUNDO A FUNDO DE RECURSOS DO SUS PROVENIENTES DO GOVERNO ESTADUAL ",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do SUS provenientes do Governo Estadual "
+        },
+        {
+            "FONTE_2022": "256",
+            "FONTE_2023": "26610000",
+            "2023-FONTE_DETALHAMENTO": "26610000",
+            "COD_TCE": "2661000",
+            "COD_STN": "2661",
+            "DESCRICAO": "TRANSFERENCIA DE RECURSOS DOS FUNDOS ESTADUAIS DE ASSISTENCIA SOCIAL",
+            "FINALIDADE": "Transferencia de Recursos dos Fundos Estaduais de Assistencia Social"
+        },
+        {
+            "FONTE_2022": "257",
+            "FONTE_2023": "27520000",
+            "2023-FONTE_DETALHAMENTO": "27520000",
+            "COD_TCE": "2752000",
+            "COD_STN": "2752",
+            "DESCRICAO": "RECURSOS VINCULADOS AO TRÂNSITO",
+            "FINALIDADE": "Recursos Vinculados ao Trânsito"
+        },
+        {
+            "FONTE_2022": "258",
+            "FONTE_2023": "28990060",
+            "2023-FONTE_DETALHAMENTO": "28990060",
+            "COD_TCE": "2899006",
+            "COD_STN": "2899",
+            "DESCRICAO": "CONTRIB. ASSIST. A SAUDE DOS SERVIDORES ",
+            "FINALIDADE": "Contribuicao para a Assistencia a Saude dos Servidores: Patronal, dos Servidores, dos Prestadores de Servicos Contratados"
+        },
+        {
+            "FONTE_2022": "259",
+            "FONTE_2023": "26000000",
+            "2023-FONTE_DETALHAMENTO": "26000000",
+            "COD_TCE": "2600000",
+            "COD_STN": "2600",
+            "DESCRICAO": "TRANSF. DE REC. DO SUS - GOVERNO FEDERAL - BLOCO MANUT. ASPS",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do SUS provenientes do Governo Federal - Bloco de Manutencao das Acoes e Servicos Publicos de Saude"
+        },
+        {
+            "FONTE_2022": "260",
+            "FONTE_2023": "27040000",
+            "2023-FONTE_DETALHAMENTO": "27040000",
+            "COD_TCE": "2704000",
+            "COD_STN": "2704",
+            "DESCRICAO": "TRANSF. DA UNIAO REF. A COMP. FINAN. EXPLO. DE REC. NATURAIS",
+            "FINALIDADE": "Transferencias da Uniao Referentes a Compensacoes Financeiras pela Exploracao de Recursos Naturais"
+        },
+        {
+            "FONTE_2022": "261",
+            "FONTE_2023": "27070000",
+            "2023-FONTE_DETALHAMENTO": "27070000",
+            "COD_TCE": "2707000",
+            "COD_STN": "2707",
+            "DESCRICAO": "TRANSFERENCIAS DA UNIAO – INCISO I DO ART. 5º DA LEI COMPLEMENTAR 173/2020",
+            "FINALIDADE": "Transferencias da Uniao – inciso I do art. 5º da Lei Complementar 173/2020"
+        },
+        {
+            "FONTE_2022": "262",
+            "FONTE_2023": "27490120",
+            "2023-FONTE_DETALHAMENTO": "27490120",
+            "COD_TCE": "2749012",
+            "COD_STN": "2749",
+            "DESCRICAO": "TRANSF. DE REC. LEI ALDIR BLANC",
+            "FINALIDADE": "Transferencia de Recursos para aplicacao em Acoes Emergenciais de Apoio ao Setor Cultural (Lei Aldir Blanc)"
+        },
+        {
+            "FONTE_2022": "263",
+            "FONTE_2023": "27130070",
+            "2023-FONTE_DETALHAMENTO": "27130070",
+            "COD_TCE": "2713007",
+            "COD_STN": "2713",
+            "DESCRICAO": "TRANSFERENCIAS DE CONVENIOS VINCULADOS A SEGURANCA PUBLICA",
+            "FINALIDADE": "Transferencias de Convenios Vinculados a Seguranca Publica"
+        },
+        {
+            "FONTE_2022": "264",
+            "FONTE_2023": "27060000",
+            "2023-FONTE_DETALHAMENTO": "27060000",
+            "COD_TCE": "2706000",
+            "COD_STN": "2706",
+            "DESCRICAO": "TRANSFERENCIA ESPECIAL DA UNIAO ",
+            "FINALIDADE": "Transferencia Especial da Uniao "
+        },
+        {
+            "FONTE_2022": "265",
+            "FONTE_2023": "28990000",
+            "2023-FONTE_DETALHAMENTO": "28990000",
+            "COD_TCE": "2899000",
+            "COD_STN": "2899",
+            "DESCRICAO": "OUTROS RECURSOS VINCULADOS",
+            "FINALIDADE": "Outros Recursos Vinculados"
+        },
+        {
+            "FONTE_2022": "266",
+            "FONTE_2023": "25420007",
+            "2023-FONTE_DETALHAMENTO": "25420007",
+            "COD_TCE": "2542000",
+            "COD_STN": "2542",
+            "DESCRICAO": "TRANSFERENCIAS DO FUNDEB - COMPLEMENTACAO DA UNIAO - VAAT - 70",
+            "FINALIDADE": "Transferencias do FUNDEB - Complementacao da Uniao - VAAT - 70"
+        },
+        {
+            "FONTE_2022": "267",
+            "FONTE_2023": "25420003",
+            "2023-FONTE_DETALHAMENTO": "25420003",
+            "COD_TCE": "2542000",
+            "COD_STN": "2542",
+            "DESCRICAO": "TRANSFERENCIAS DO FUNDEB - COMPLEMENTACAO DA UNIAO - VAAT - 30",
+            "FINALIDADE": "Transferencias do FUNDEB - Complementacao da Uniao - VAAT - 30"
+        },
+        {
+            "FONTE_2022": "268",
+            "FONTE_2023": "27100100",
+            "2023-FONTE_DETALHAMENTO": "27100100",
+            "COD_TCE": "2710010",
+            "COD_STN": "2710",
+            "DESCRICAO": "TRANSF. ESP. ESTADO - BARRAGEM BRUMADINHO",
+            "FINALIDADE": "Transferencia Especial do Estado - Acordo Judicial de Reparacao dos Impactos Socioeconomicos e Ambientais do Rompimento de Barragem em Brumadinho "
+        },
+        {
+            "FONTE_2022": "269",
+            "FONTE_2023": "27100000",
+            "2023-FONTE_DETALHAMENTO": "27100000",
+            "COD_TCE": "2710000",
+            "COD_STN": "2710",
+            "DESCRICAO": "TRANSFERENCIA ESPECIAL DOS ESTADOS",
+            "FINALIDADE": "Transferencia Especial dos Estados"
+        },
+        {
+            "FONTE_2022": "270",
+            "FONTE_2023": "25010000",
+            "2023-FONTE_DETALHAMENTO": "25010000",
+            "COD_TCE": "2501000",
+            "COD_STN": "2501",
+            "DESCRICAO": "OUTROS RECURSOS NAO VINCULADOS",
+            "FINALIDADE": "Outros Recursos nao Vinculados"
+        },
+        {
+            "FONTE_2022": "271",
+            "FONTE_2023": "25710000",
+            "2023-FONTE_DETALHAMENTO": "25710000",
+            "COD_TCE": "2571000",
+            "COD_STN": "2571",
+            "DESCRICAO": "TRANSF. DO ESTADO REF. A CONV. E INST. CONG. VINC. EDUCACAO",
+            "FINALIDADE": "Transferencias do Estado referentes a Convenios e Instrumentos Congeneres vinculados a Educacao"
+        },
+        {
+            "FONTE_2022": "272",
+            "FONTE_2023": "25720000",
+            "2023-FONTE_DETALHAMENTO": "25720000",
+            "COD_TCE": "2572000",
+            "COD_STN": "2572",
+            "DESCRICAO": "TRANSF. MUNICPIOS  REF. A CONV. E INST. CONG. VINC. EDUCACAO",
+            "FINALIDADE": "Transferencias de MunicIpios referentes a Convenios e Instrumentos Congeneres Vinculados a Educacao"
+        },
+        {
+            "FONTE_2022": "273",
+            "FONTE_2023": "25750000",
+            "2023-FONTE_DETALHAMENTO": "25750000",
+            "COD_TCE": "2575000",
+            "COD_STN": "2575",
+            "DESCRICAO": "OUTRAS TRANSF. DE CONVENIOS E INST. CONGE VINC. EDUCACAO",
+            "FINALIDADE": "Outras Transferencias de Convenios e Instrumentos Congeneres Vinculados a Educacao"
+        },
+        {
+            "FONTE_2022": "274",
+            "FONTE_2023": "25740000",
+            "2023-FONTE_DETALHAMENTO": "25740000",
+            "COD_TCE": "2574000",
+            "COD_STN": "2574",
+            "DESCRICAO": "OPERACOES DE CREDITO VINCULADAS A EDUCACAO",
+            "FINALIDADE": "Operacoes de Credito Vinculadas a Educacao"
+        },
+        {
+            "FONTE_2022": "275",
+            "FONTE_2023": "25730000",
+            "2023-FONTE_DETALHAMENTO": "25730000",
+            "COD_TCE": "2573000",
+            "COD_STN": "2573",
+            "DESCRICAO": "ROYALTIES DO PETROLEO E GAS NATURAL VINCULADOS A EDUCACAO",
+            "FINALIDADE": "Royalties do Petroleo e Gas Natural Vinculados a Educacao"
+        },
+        {
+            "FONTE_2022": "276",
+            "FONTE_2023": "26320000",
+            "2023-FONTE_DETALHAMENTO": "26320000",
+            "COD_TCE": "2632000",
+            "COD_STN": "2632",
+            "DESCRICAO": "TRANSF. DO ESTADO REF. CONVENIOS E INST. CONGE VINC. SAUDE",
+            "FINALIDADE": "Transferencias do Estado referentes a Convenios e Instrumentos Congeneres Vinculados a Saude"
+        },
+        {
+            "FONTE_2022": "277",
+            "FONTE_2023": "26330000",
+            "2023-FONTE_DETALHAMENTO": "26330000",
+            "COD_TCE": "2633000",
+            "COD_STN": "2633",
+            "DESCRICAO": "TRANSF. DE MUNICÍPIOS REF. CONVENIOS E INST CONGE VINC SAUDE",
+            "FINALIDADE": "Transferencias de MunicIpios referentes a Convenios e Instumentos Congeneres Vinculados a Saude"
+        },
+        {
+            "FONTE_2022": "278",
+            "FONTE_2023": "26360000",
+            "2023-FONTE_DETALHAMENTO": "26360000",
+            "COD_TCE": "2636000",
+            "COD_STN": "2636",
+            "DESCRICAO": "OUTRAS TRANSF CONVENIOS E INST CONGENERES VINCULADOS A SAUDE",
+            "FINALIDADE": "Outras Transferencias de Convenios e Instrumentos Congeneres Vinculados a Saude"
+        },
+        {
+            "FONTE_2022": "279",
+            "FONTE_2023": "26340000",
+            "2023-FONTE_DETALHAMENTO": "26340000",
+            "COD_TCE": "2634000",
+            "COD_STN": "2634",
+            "DESCRICAO": "OPERACOES DE CREDITO VINCULADAS A SAUDE",
+            "FINALIDADE": "Operacoes de Credito Vinculadas a Saude"
+        },
+        {
+            "FONTE_2022": "280",
+            "FONTE_2023": "26350000",
+            "2023-FONTE_DETALHAMENTO": "26350000",
+            "COD_TCE": "2635000",
+            "COD_STN": "2635",
+            "DESCRICAO": "ROYALTIES DO PETROLEO E GAS NATURAL VINCULADOS A SAUDE",
+            "FINALIDADE": "Royalties do Petroleo e Gas Natural Vinculados a Saude"
+        },
+        {
+            "FONTE_2022": "281",
+            "FONTE_2023": "27010000",
+            "2023-FONTE_DETALHAMENTO": "27010000",
+            "COD_TCE": "2701000",
+            "COD_STN": "2701",
+            "DESCRICAO": "OUTRAS TRANSF. DE CONVENIOS OU INST. CONGENERES DOS ESTADOS",
+            "FINALIDADE": "Outras Transferencias de Convenios ou Instrumentos Congeneres dos Estados"
+        },
+        {
+            "FONTE_2022": "282",
+            "FONTE_2023": "27020000",
+            "2023-FONTE_DETALHAMENTO": "27020000",
+            "COD_TCE": "2702000",
+            "COD_STN": "2702",
+            "DESCRICAO": "OUTRAS TRANSF DE CONVENIOS OU INST CONGENERES DOS MUNICIPIOS",
+            "FINALIDADE": "Outras Transferencias de Convenios ou Instrumentos Congeneres dos MunicIpios"
+        },
+        {
+            "FONTE_2022": "283",
+            "FONTE_2023": "27030000",
+            "2023-FONTE_DETALHAMENTO": "27030000",
+            "COD_TCE": "2703000",
+            "COD_STN": "2703",
+            "DESCRICAO": "OUTRAS TRANSF DE CONVENIOS OU INST CONGE DE OUTRAS ENTIDADES",
+            "FINALIDADE": "Outras Transferencias de Convenios ou Instrumentos Congeneres de outras Entidades"
+        },
+        {
+            "FONTE_2022": "284",
+            "FONTE_2023": "27090000",
+            "2023-FONTE_DETALHAMENTO": "27090000",
+            "COD_TCE": "2709000",
+            "COD_STN": "2709",
+            "DESCRICAO": "TRANSF. DA UNIAO REF. A COMPENSACAO FINAN. DE REC. HIDRICOS",
+            "FINALIDADE": "Transferencia da Uniao referente a Compensacao Financeira de Recursos HIdricos"
+        },
+        {
+            "FONTE_2022": "285",
+            "FONTE_2023": "27530000",
+            "2023-FONTE_DETALHAMENTO": "27530000",
+            "COD_TCE": "2753000",
+            "COD_STN": "2753",
+            "DESCRICAO": "REC. PROVENIENTES DE TAXAS, CONTRIBUICOES E PRECOS PUBLICOS",
+            "FINALIDADE": "Recursos Provenientes de Taxas, Contribuicoes e Precos Publicos"
+        },
+        {
+            "FONTE_2022": "286",
+            "FONTE_2023": "27040000",
+            "2023-FONTE_DETALHAMENTO": "27040000",
+            "COD_TCE": "2704000",
+            "COD_STN": "2704",
+            "DESCRICAO": "TRANSF. DA UNIAO REF. COMP. FINAN EXPLORACAO DE REC NATURAIS",
+            "FINALIDADE": "Transferencias da Uniao Referentes a Compensacoes Financeiras pela Exploracao de Recursos Naturais"
+        },
+        {
+            "FONTE_2022": "287",
+            "FONTE_2023": "27050000",
+            "2023-FONTE_DETALHAMENTO": "27050000",
+            "COD_TCE": "2705000",
+            "COD_STN": "2705",
+            "DESCRICAO": "TRANSF. DOS ESTADOS REF. COMP. FINAN EXPLORACAO REC NATURAIS",
+            "FINALIDADE": "Transferencias dos Estados Referentes a Compensacoes Financeiras pela Exploracao de Recursos Naturais"
+        },
+        {
+            "FONTE_2022": "288",
+            "FONTE_2023": "25000080",
+            "2023-FONTE_DETALHAMENTO": "25000080",
+            "COD_TCE": "2500008",
+            "COD_STN": "2500",
+            "DESCRICAO": " DIS. CAIXA. VINCULADA A RESTOS A PAGAR - SAUDE",
+            "FINALIDADE": "Disponibilidade de Caixa vinculada a Restos a Pagar considerados na Aplicacao MInima da Saude e posteriormente Cancelados ou Prescritos"
+        },
+        {
+            "FONTE_2022": "289",
+            "FONTE_2023": "25000090",
+            "2023-FONTE_DETALHAMENTO": "25000090",
+            "COD_TCE": "2500009",
+            "COD_STN": "2500",
+            "DESCRICAO": " DIS. CAIXA. VINCULADA A RESTOS A PAGAR - EDUCACAO",
+            "FINALIDADE": "Disponibilidade de Caixa vinculada a Restos a Pagar considerados na Aplicacao MInima da Educacao e posteriormente Cancelados ou Prescritos"
+        },
+        {
+            "FONTE_2022": "290",
+            "FONTE_2023": "27540000",
+            "2023-FONTE_DETALHAMENTO": "27540000",
+            "COD_TCE": "2754000",
+            "COD_STN": "2754",
+            "DESCRICAO": "RECURSOS DE OPERACOES DE CREDITO ",
+            "FINALIDADE": "Recursos de Operacoes de Credito "
+        },
+        {
+            "FONTE_2022": "291",
+            "FONTE_2023": "27540000",
+            "2023-FONTE_DETALHAMENTO": "27540000",
+            "COD_TCE": "2754000",
+            "COD_STN": "2754",
+            "DESCRICAO": "RECURSOS DE OPERACOES DE CREDITO ",
+            "FINALIDADE": "Recursos de Operacoes de Credito "
+        },
+        {
+            "FONTE_2022": "292",
+            "FONTE_2023": "27550000",
+            "2023-FONTE_DETALHAMENTO": "27550000",
+            "COD_TCE": "2755000",
+            "COD_STN": "2755",
+            "DESCRICAO": "RECURSOS DE ALIENACAO DE BENS-ATIVOS - ADMINISTRACAO DIRETA",
+            "FINALIDADE": "Recursos de Alienacao de Bens/Ativos - Administracao Direta"
+        },
+        {
+            "FONTE_2022": "293",
+            "FONTE_2023": "28990130",
+            "2023-FONTE_DETALHAMENTO": "28990130",
+            "COD_TCE": "2899013",
+            "COD_STN": "2899",
+            "DESCRICAO": "OUTRAS RECEITAS NAO PRIMARIAS ",
+            "FINALIDADE": "Outras Receitas Nao Primarias "
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "25410000",
+            "2023-FONTE_DETALHAMENTO": "25410000",
+            "COD_TCE": "2541000",
+            "COD_STN": "2541",
+            "DESCRICAO": "TRANSFERENCIAS DO FUNDEB - COMPLEMENTACAO DA UNIAO - VAAF",
+            "FINALIDADE": "Transferencias do FUNDEB - Complementacao da Uniao - VAAF"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "25430000",
+            "2023-FONTE_DETALHAMENTO": "25430000",
+            "COD_TCE": "2543000",
+            "COD_STN": "2543",
+            "DESCRICAO": "TRANSFERENCIAS DO FUNDEB - COMPLEMENTACAO DA UNIAO - VAAR",
+            "FINALIDADE": "Transferencias do FUNDEB - Complementacao da Uniao - VAAR"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "26040000",
+            "2023-FONTE_DETALHAMENTO": "26040000",
+            "COD_TCE": "2604000",
+            "COD_STN": "2604",
+            "DESCRICAO": "TRANSF. DO GOVERNO FEDERAL DEST. AO VENCIMENTO DOS AGENTES",
+            "FINALIDADE": "Transferencias provenientes do Governo Federal destinadas ao vencimento dos agentes comunitarios de saude e dos agentes de combate as endemias"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "27140000",
+            "2023-FONTE_DETALHAMENTO": "27140000",
+            "COD_TCE": "2714000",
+            "COD_STN": "2714",
+            "DESCRICAO": "TRANSF. FUNDO A FUNDO DE REC. FUNDO AMPARO TRABALHADOR - FAT",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do Fundo de Amparo ao Trabalhador - FAT"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "27580000",
+            "2023-FONTE_DETALHAMENTO": "27580000",
+            "COD_TCE": "2758000",
+            "COD_STN": "2758",
+            "DESCRICAO": "REC DEPOSITOS JUDICIAIS LIDES DAS QUAIS O ENTE NAO FAZ PARTE",
+            "FINALIDADE": "Recursos de depositos judiciais – Lides das quais o ente nao faz parte"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "27610000",
+            "2023-FONTE_DETALHAMENTO": "27610000",
+            "COD_TCE": "2761000",
+            "COD_STN": "2761",
+            "DESCRICAO": "REC. VINC. AO FUNDO DE COMBATE E ERRADICACAO DA POBREZA",
+            "FINALIDADE": "Recursos vinculados ao Fundo de Combate e Erradicacao da Pobreza"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "27990000",
+            "2023-FONTE_DETALHAMENTO": "27990000",
+            "COD_TCE": "2799000",
+            "COD_STN": "2799",
+            "DESCRICAO": "OUTRAS VINCULACOES LEGAIS",
+            "FINALIDADE": "Outras vinculacoes legais"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "28620000",
+            "2023-FONTE_DETALHAMENTO": "28620000",
+            "COD_TCE": "2862000",
+            "COD_STN": "2862",
+            "DESCRICAO": "DEPOSITOS DE TERCEIROS",
+            "FINALIDADE": "Depositos de terceiros"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "28690000",
+            "2023-FONTE_DETALHAMENTO": "28690000",
+            "COD_TCE": "2869000",
+            "COD_STN": "2869",
+            "DESCRICAO": "OUTROS RECURSOS EXTRAORCAMENTARIOS",
+            "FINALIDADE": "Outros recursos extraorcamentarios"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "27560000",
+            "2023-FONTE_DETALHAMENTO": "27560000",
+            "COD_TCE": "2756000",
+            "COD_STN": "2756",
+            "DESCRICAO": "RECURSOS DE ALIENACAO DE BENS-ATIVOS - ADMINISTRACAO INDIRETA",
+            "FINALIDADE": "Recursos de Alienacao de Bens/Ativos - Administracao Indireta"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "27590000",
+            "2023-FONTE_DETALHAMENTO": "27590000",
+            "COD_TCE": "2759000",
+            "COD_STN": "2759",
+            "DESCRICAO": "RECURSOS VINCULADOS A FUNDOS",
+            "FINALIDADE": "Recursos vinculados a fundos"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "25990000",
+            "2023-FONTE_DETALHAMENTO": "25990000",
+            "COD_TCE": "2599000",
+            "COD_STN": "2599",
+            "DESCRICAO": "OUTROS RECURSOS VINCULADOS A EDUCACAO",
+            "FINALIDADE": "Outros Recursos Vinculados a Educacao"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "26590000",
+            "2023-FONTE_DETALHAMENTO": "26590000",
+            "COD_TCE": "2659000",
+            "COD_STN": "2659",
+            "DESCRICAO": "OUTROS RECURSOS VINCULADOS A SAUDE ",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude "
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "26620000",
+            "2023-FONTE_DETALHAMENTO": "26620000",
+            "COD_TCE": "2662000",
+            "COD_STN": "2662",
+            "DESCRICAO": "TRANSF. DE REC. DOS FUNDOS MUNICIPAIS DE ASSISTENCIA SOCIAL",
+            "FINALIDADE": "Transferencias de Recursos dos Fundos Municipais de Assistencia Social"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "26690000",
+            "2023-FONTE_DETALHAMENTO": "26690000",
+            "COD_TCE": "2669000",
+            "COD_STN": "2669",
+            "DESCRICAO": "OUTROS RECURSOS VINCULADOS A ASSISTENCIA SOCIAL",
+            "FINALIDADE": "Outros Recursos Vinculados a Assistencia Social"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "27110000",
+            "2023-FONTE_DETALHAMENTO": "27110000",
+            "COD_TCE": "2711000",
+            "COD_STN": "2711",
+            "DESCRICAO": "DEMAIS TRANSF. OBRIGAT. NAO DECO. DE REPARTICOES DE RECEITAS",
+            "FINALIDADE": "Demais Transferencias Obrigatorias nao Decorrentes de Reparticoes de Receitas"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "27120000",
+            "2023-FONTE_DETALHAMENTO": "27120000",
+            "COD_TCE": "2712000",
+            "COD_STN": "2712",
+            "DESCRICAO": "TRANSF. FUNDO A FUNDO DE REC. DO FUNDO PENITENCIARIO -FUNPEN",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do Fundo Penitenciario - FUNPEN"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "27130000",
+            "2023-FONTE_DETALHAMENTO": "27130000",
+            "COD_TCE": "2713000",
+            "COD_STN": "2713",
+            "DESCRICAO": "TRANSF. FUNDO A FUNDO DE REC FUNDO DE SEGURANCA PUBLICA -FSP",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do Fundo de Seguranca Publica - FSP"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "27490000",
+            "2023-FONTE_DETALHAMENTO": "27490000",
+            "COD_TCE": "2749000",
+            "COD_STN": "2749",
+            "DESCRICAO": "OUTRAS VINCULACOES DE TRANSFERENCIAS",
+            "FINALIDADE": "Outras vinculacoes de transferencias"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "26020000",
+            "2023-FONTE_DETALHAMENTO": "26020000",
+            "COD_TCE": "2602000",
+            "COD_STN": "2602",
+            "DESCRICAO": "TRANSF FUNDO A FUNDO DE REC DO SUS GOV FED MAN. ASPS COVID19",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do SUS provenientes do Governo Federal - Bloco de Manutencao das Acoes e Servicos Publicos de Saude – Recursos destinados ao enfrentamento da COVID-19 no bojo da acao 21C0"
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "26030000",
+            "2023-FONTE_DETALHAMENTO": "26030000",
+            "COD_TCE": "2603000",
+            "COD_STN": "2603",
+            "DESCRICAO": "TRANSF FUNDO A FUNDO DE REC DO SUS GOV FED EST. ASPS COVID19",
+            "FINALIDADE": "Transferencias Fundo a Fundo de Recursos do SUS provenientes do Governo Federal - Bloco de Estruturacao da Rede de Servicos Publicos de Saude – Recursos destinados ao enfrentamento da COVID-19 no bojo da acao 21C0."
+        },
+        {
+            "FONTE_2022": "",
+            "FONTE_2023": "26590000",
+            "2023-FONTE_DETALHAMENTO": "26590000",
+            "COD_TCE": "2659000",
+            "COD_STN": "2659",
+            "DESCRICAO": "OUTROS RECURSOS VINCULADOS A SAUDE ",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude "
+        }
+    ]
+}

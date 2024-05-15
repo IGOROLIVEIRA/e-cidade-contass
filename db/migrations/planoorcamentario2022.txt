@@ -1,0 +1,46 @@
+codigo;descricao;natureza;tipo;pcasp;fonte;intituicao
+331909204;Contratação por Tempo Determinado;D;ANALITICA;311110101;100;Todas
+331909205;Outros Benef. Previd .do Servidor ou do Militar;D;ANALITICA;311110101;100;Todas
+331909207;Contrib. a Entidades Fechadas de Previdência;D;ANALITICA;311110101;100;Todas
+331909211;Vencimentos e Vantagens Fixas - Pessoal Civil;D;ANALITICA;311110101;100;Todas
+331909213;Obrigações Patronais;D;ANALITICA;311110101;100;Todas
+331909216;Outras Despesas Variáveis - Pessoal Civil;D;ANALITICA;311110101;100;Todas
+331909259;Pensões Especiais;D;ANALITICA;311110101;100;Todas
+331909291;Sentenças Judiciais;D;ANALITICA;311110101;100;Todas
+331909294;Indenizações e Restituições Trabalhistas;D;ANALITICA;311110101;100;Todas
+331909296;Ressarcimento de Despesas com Pessoal Requisitado;D;ANALITICA;311110101;100;Todas
+331909298;Indenizações por Dem. e Prog. de Inc. à Dem. Vol.;D;ANALITICA;311110101;100;Todas
+331909299;Outras Despesas de Exercícios Anteriores;D;ANALITICA;311110101;100;Todas
+331909413;Indenizações e Restituições Trab. Pens. Civil ;D;ANALITICA;319910100;100;Todas
+331909498;Indenizações por Dem. e Prog. de Inc. à Dem. Vol.;D;ANALITICA;319910100;100;Todas
+331909499;Outras Indenizações e Restituições Trabalhistas;D;ANALITICA;319910100;100;Todas
+331911309;Seguros de Acidentes do Trabalho;D;ANALITICA;312120100;100;Todas
+331911310;CONT. PREV. P. INATIVO E PENSIONISTA - PLANO PREV.;D;ANALITICA;312120100;100;Todas
+331911311;Contrib. Prev.- Pessoal Ativo - Plano Financeiro;D;ANALITICA;312120100;100;Todas
+331911312;CONT. PREV. P. INATIVO E PENSIONISTA - PLANO FINAN;D;ANALITICA;312120100;100;Todas
+331911320;Alíquota Sup. Cont. Prev. Pessoal Ativo Plano Prev.;D;ANALITICA;312120100;100;Todas
+331911321;Alíq. Sup. Cont. Prev. P. Inativo e Pen. Plano Pre;D;ANALITICA;312120100;100;Todas
+331911322;ALÍQ SUP. CONT. PREV. P. INATIVO E PEN. PLANO PREV;D;ANALITICA;312120100;100;Todas
+331911323;ALÍQ SUP. CONT. PREV. P. INATIVO E PEN. PLANO FINAN;D;ANALITICA;312120100;100;Todas
+331919204;Contratação por Tempo Determinado;D;ANALITICA;311120000;100;Todas
+331919205;CONTRIB. PREV. RPPS- P. ATIVO DO PLANO PREVIDENC.;D;ANALITICA;312120100;100;Todas
+331919206;CONTRIB. PREV. RPPS- P. INATIVO E PENS. DO P. PREV;D;ANALITICA;312120100;100;Todas
+331919207;CONTRIB. PREV. - RPPS - PESSOAL ATIVO DO PLANO FIN;D;ANALITICA;312120100;100;Todas
+331919208;CONT. PREV PESSOAL INATIVO E PENSIONISTA P. FINAN.;D;ANALITICA;312120100;100;Todas
+331919209;Alíquota Sup. Cont. Prev. Pessoal Ativo Plano Prev.;D;ANALITICA;312120100;100;Todas
+331919210;Alíq. Sup. Cont. Prev. P. Inativo e Pen. Plano Pre;D;ANALITICA;312120100;100;Todas
+331919211;ALÍQUOTA SUP. CONT. PREV. PESSOAL ATIVO PLANO FIN.;D;ANALITICA;312120100;100;Todas
+331919212;Alíq. Sup. Cont. Prev. P. Inativo e Pen. Plano Fina.;D;ANALITICA;312120100;100;Todas
+331919213;Demais Obrigações Patronais;D;ANALITICA;312129900;100;Todas
+331919251;Indenizações Trabalhistas - Obrig. Patronais;D;ANALITICA;312129900;100;Todas
+331919291;Sentenças Judiciais;D;ANALITICA;319920000;100;Todas
+331919296;Ressarcimento de Despesas com Pessoal Requisitado;D;ANALITICA;319920000;100;Todas
+331919298;Indenizações por Dem. e Prog. de Inc. à Dem. Vol.;D;ANALITICA;319920000;100;Todas
+331919299;Outras Despesas de Exercícios Anteriores;D;ANALITICA;319920000;100;Todas
+331919451;Indenizações Trabalhistas - Obrig. Patronais;D;ANALITICA;319110000;100;Todas
+331919498;Indenizações por Dem. e Prog. de Inc. à Dem. Vol.;D;ANALITICA;319920000;100;Todas
+331919499;Outras Indenizações e Restituições Trabalhistas;D;ANALITICA;319920000;100;Todas
+331959498;Indenizações por Dem. e Prog. de Inc. à Dem. Vol.;D;ANALITICA;311110212;100;Todas
+331959499;Outras Indenizações e Restituições Trabalhistas;D;ANALITICA;319110000;100;Todas
+333908600;Compensações a  Regimes de Previdência;D;ANALITICA;399130000;100;Todas
+333919800;Despesas do Orçamento de Investimento;D;ANALITICA;399920000;100;Todas

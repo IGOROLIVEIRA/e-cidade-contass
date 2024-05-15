@@ -1,0 +1,18 @@
+{
+  "certidao_inexistente"                  : "Certidão inexistente.",
+  "cartorio_inexistente"                  : "Cartório inexistente.",
+  "emissao_sucesso"                       : "Emissão realizada com sucesso",
+  "cartorio_judicial"                     : "Para esse procedimento é necessário um Cartório Extrajudicial.",
+  "certidao_fechada"                      : "Certidão não está em aberto.",
+  "erro_regra_emissao"                    : "Erro ao buscar Regra de Emissão.",
+  "erro_emite_recibo"                     : "Erro ao emitir o Recibo para Certidão [codigo_certidao].",
+  "erro_incluir_certidcartorio"           : "Erro ao vincular a Certidão com o Cartório Extrajudicial.",
+  "erro_incluir_certidcartoriorecibopaga" : "Erro ao vincular a Certidão com o Recibo.",
+  "erro_incluir_certidmovimentacao"       : "Erro ao gerar movimentação para a Certidão.",
+  "erro_cartorio_diferente"               : "Há recibo(s) emitido(s) para está CDA usando um Cartório diferente.",
+  "recibo_valido"                         : "Há um recibo válido para esta Certidão.",
+  "sem_certidoes_validas"                 : "Não há certidões válidas para emissão.",
+  "certidao_com_inicial"                  : "Há uma Inicial vinculada a esta Certidão.",
+  "pagamento_parcial"                     : "Esta Certidão possui Pagamento Parcial.",
+  "limite_receitas"                       : "O número de receitas ultrapassou o espaço limite do carne para Certidão [codigo_certidao]."
+}

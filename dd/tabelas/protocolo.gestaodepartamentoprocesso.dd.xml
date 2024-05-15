@@ -1,0 +1,77 @@
+<?xml version="1.0" standalone="yes" ?>
+<table codigo='1010241' name='protocolo.gestaodepartamentoprocesso'
+       description="Armazena o usu醨io respons谩vel pela gest茫o de processos em um departamento e que pode visualizar o relat贸rio de processos vencidos com somente dados do departamento em que 茅 respons谩vel."
+       prefix="p103" label="Gest茫o de Processos Vencidos no Departamento" type="0">
+    <fields>
+        <field codigo="1009532"
+               campo_api=''
+               name="p103_sequencial"
+               conteudo="int4"
+               description="C贸digo sequencial."
+               inivalue="0"
+               label="C贸digo"
+               size="10"
+               null="f"
+               uppercase="f"
+               autocompl="f"
+               aceitatipo="1"
+               tipoobj="text"
+               labelrel="C贸digo"
+               reference=""
+               ispk="t"
+               hassequence="t">
+
+            <sequence name='protocolo.gestaodepartamentoprocesso_p103_sequencial_seq'/>
+
+        </field>
+        <field codigo="1009533"
+               campo_api=''
+               name="p103_db_depart"
+               conteudo="int4"
+               description="C贸digo do departamento que ser谩 administrado os processos vencidos."
+               inivalue="0"
+               label="C贸digo do Departamento"
+               size="10"
+               null="f"
+               uppercase="f"
+               autocompl="f"
+               aceitatipo="1"
+               tipoobj="text"
+               labelrel="C贸digo do Departamento"
+               reference=""
+               ispk="f"
+               hassequence="t">
+
+        </field>
+        <field codigo="1009534"
+               campo_api=''
+               name="p103_db_usuarios"
+               conteudo="int4"
+               description="C贸digo do usu醨io respons谩vel pelos processos vencidos em um departamento."
+               inivalue="0"
+               label="C贸digo do Usu醨io"
+               size="10"
+               null="f"
+               uppercase="f"
+               autocompl="f"
+               aceitatipo="1"
+               tipoobj="text"
+               labelrel="C贸digo do Usu醨io"
+               reference=""
+               ispk="f"
+               hassequence="t">
+
+        </field>
+    </fields>
+    <primarykey>
+        <fieldpk name="p103_sequencial"></fieldpk>
+    </primarykey>
+    <foreignkeys>
+        <foreignkey reference="db_usuarios" inner='t'>
+            <fieldfk name="p103_db_usuarios" reference="id_usuario"/>
+        </foreignkey>
+        <foreignkey reference="db_depart" inner='t'>
+            <fieldfk name="p103_db_depart" reference="coddepto"/>
+        </foreignkey>
+    </foreignkeys>
+</table>

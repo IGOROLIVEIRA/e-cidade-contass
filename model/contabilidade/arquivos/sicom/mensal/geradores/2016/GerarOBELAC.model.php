@@ -1,0 +1,91 @@
+<?php 
+
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model.php");
+
+
+ /**
+  * Sicom Acompanhamento Mensal
+  * @author marcelo
+  * @package Contabilidade
+  */
+
+class GerarOBELAC extends GerarAM {
+
+   /**
+  * 
+  * Mes de referência
+  * @var Integer
+  */
+  public $iMes;
+  
+  public function gerarDados() {
+
+    $this->sArquivo = "OBELAC";
+    $this->abreArquivo();
+    
+    $sSql = "select * from obelac102016 where si139_mes = ". $this->iMes;
+    $rsOBELAC10    = db_query($sSql);
+
+    $sSql2 = "select * from obelac112016 where si140_mes = ". $this->iMes;
+    $rsOBELAC11    = db_query($sSql2);
+
+
+  if (pg_num_rows($rsOBELAC10) == 0) {
+
+      $aCSV['tiporegistro']       =   '99';
+      $this->sLinha = $aCSV;
+      $this->adicionaLinha();
+
+  } else {
+
+      /**
+      *
+      * Registros 10, 11
+      */
+      for ($iCont = 0;$iCont < pg_num_rows($rsOBELAC10); $iCont++) {
+
+        $aOBELAC10  = pg_fetch_array($rsOBELAC10,$iCont);
+        
+        $aCSVOBELAC10['si139_tiporegistro']               =   str_pad($aOBELAC10['si139_tiporegistro'], 2, "0", STR_PAD_LEFT);
+        $aCSVOBELAC10['si139_codreduzido']                =   substr($aOBELAC10['si139_nroop'], 0, 15);
+        $aCSVOBELAC10['si139_codorgao']                   =   str_pad($aOBELAC10['si139_codunidadesubresp'], 2, "0", STR_PAD_LEFT);
+        $aCSVOBELAC10['si139_codunidadesub']              =   str_pad($aOBELAC10['si139_codunidadesub'], 8, "0", STR_PAD_LEFT);
+        $aCSVOBELAC10['si139_nroLancamento']              =   substr($aOBELAC10['si139_nroLancamento'], 0, 22);
+        $aCSVOBELAC10['si139_dtlancamento']               =   implode("", array_reverse(explode("-", $aOBELAC10['si139_dtlancamento'])));
+        $aCSVOBELAC10['si139_tipolancamento']             =   str_pad($aOBELAC10['si139_tipolancamento'], 1, "0", STR_PAD_LEFT);
+        $aCSVOBELAC10['si139_nroempenho']                 =   substr($aOBELAC10['si139_nroempenho'], 0, 22);
+        $aCSVOBELAC10['si139_dtempenho']                  =   implode("", array_reverse(explode("-", $aOBELAC10['si139_dtempenho'])));
+        $aCSVOBELAC10['si139_nroliquidacao']              =   substr($aOBELAC10['si139_nroliquidacao'], 0, 22);
+        $aCSVOBELAC10['si139_dtliquidacao']               =   implode("", array_reverse(explode("-", $aOBELAC10['si139_dtliquidacao'])));
+        $aCSVOBELAC10['si139_esplancamento']              =   substr($aOBELAC10['si139_esplancamento'], 0, 200);
+        $aCSVOBELAC10['si139_valorlancamento']            =   number_format($aOBELAC10['si139_valorlancamento'], 2, ",", "");
+        
+        $this->sLinha = $aCSVOBELAC10;
+        $this->adicionaLinha();
+
+        for ($iCont2 = 0;$iCont2 < pg_num_rows($rsOBELAC11); $iCont2++) {        
+
+          $aOBELAC11  = pg_fetch_array($rsOBELAC11,$iCont2);
+          
+          if ($aOBELAC10['si139_sequencial'] == $aOBELAC11['si140_reg10']) {
+
+            $aCSVOBELAC11['si140_tiporegistro']             =    str_pad($aOBELAC11['si140_tiporegistro'], 2, "0", STR_PAD_LEFT);
+            $aCSVOBELAC11['si140_codreduzido']              =    substr($aOBELAC11['si140_codreduzido'], 0, 15);
+            $aCSVOBELAC11['si140_codfontrecursos']          =    str_pad($aOBELAC11['si140_codfontrecursos'], 3, "0", STR_PAD_LEFT);
+            $aCSVOBELAC11['si136_valorfonte']               =    number_format($aOBELAC11['si136_valorfonte'], 2, ",", "");
+
+            $this->sLinha = $aCSVOBELAC11;
+            $this->adicionaLinha();
+          }
+
+        }
+
+      }
+
+      $this->fechaArquivo();
+
+    }
+
+  } 
+
+}

@@ -1,0 +1,3 @@
+<?
+$campos = "transferenciaveiculos.ve80_sequencial,transferenciaveiculos.ve80_motivo,transferenciaveiculos.ve80_dt_transferencia,transferenciaveiculos.ve80_id_usuario,transferenciaveiculos.ve80_coddeptoatual,transferenciaveiculos.ve80_coddeptodestino";
+?>

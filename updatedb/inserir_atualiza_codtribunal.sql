@@ -1,0 +1,26 @@
+SELECT fc_startsession();
+begin;
+insert into pctipocompratribunal values (48,'1','Convite','MG');
+insert into pctipocompratribunal values (49,'2','Tomada de Precos','MG');
+insert into pctipocompratribunal values (50,'3','Concorrencia','MG');
+insert into pctipocompratribunal values (51,'4','Concurso','MG');
+insert into pctipocompratribunal values (52,'5','Pregao presencial','MG');
+insert into pctipocompratribunal values (53,'6','Pregao eletronico','MG');
+insert into pctipocompratribunal values (54,'6','Leilao','MG');
+insert into pctipocompratribunal values (100,'2','Inexigibilidade','MG');
+insert into pctipocompratribunal values (101,'1','Dispensa de Licitacao','MG');
+insert into pctipocompratribunal values (102,'3','Inexigibilidade Por Credenciamento','MG');
+commit;
+
+begin;
+update pctipocompratribunal set l44_codigotribunal = '1', l44_descricao = 'Convite', l44_uf = 'MG' where l44_sequencial = 48;
+update pctipocompratribunal set l44_codigotribunal = '2', l44_descricao = 'Tomada de Precos', l44_uf = 'MG' where l44_sequencial = 49;
+update pctipocompratribunal set l44_codigotribunal = '3', l44_descricao = 'Concorrencia', l44_uf = 'MG' where l44_sequencial = 50;
+update pctipocompratribunal set l44_codigotribunal = '4', l44_descricao = 'Concurso', l44_uf = 'MG' where l44_sequencial = 51;
+update pctipocompratribunal set l44_codigotribunal = '5', l44_descricao = 'Pregao presencial', l44_uf = 'MG' where l44_sequencial = 52;
+update pctipocompratribunal set l44_codigotribunal = '6', l44_descricao = 'Pregao eletronico', l44_uf = 'MG' where l44_sequencial = 53;
+update pctipocompratribunal set l44_codigotribunal = '6', l44_descricao = 'Leilao', l44_uf = 'MG' where l44_sequencial = 54;
+update pctipocompratribunal set l44_codigotribunal = '2', l44_descricao = 'Inexigibilidade', l44_uf = 'MG' where l44_sequencial = 100;
+update pctipocompratribunal set l44_codigotribunal = '1', l44_descricao = 'Dispensa de Licitacao', l44_uf = 'MG' where l44_sequencial = 101;
+update pctipocompratribunal set l44_codigotribunal = '3', l44_descricao = 'Inexigibilidade Por Credenciamento', l44_uf = 'MG' where l44_sequencial = 102;
+commit;

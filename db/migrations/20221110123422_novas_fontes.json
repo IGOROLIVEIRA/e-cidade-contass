@@ -1,0 +1,40 @@
+{
+    "Novas_Fontes": [
+        {
+            "FONTES": "18000001",
+            "COD_TCE": "1800000",
+            "COD_STN": "1800",
+            "TIPO_RECURSO": "VINCULADOS",
+            "DESCRICAO": "RECURSOS VINCULADOS AO RPPS - BENEFICIOS PREV. EXECUTIVO",
+            "FINALIDADE": "Recursos vinculados ao RPPS - Fundo em Capitalizacao (Plano Previdenciario) - Beneficios Previdenciarios Executivo",
+            "DETALHAMENTO_FONTE-DESTINACAO_RECURSOS": "0000"
+        },
+        {
+            "FONTES": "18000002",
+            "COD_TCE": "1800000",
+            "COD_STN": "1800",
+            "TIPO_RECURSO": "VINCULADOS",
+            "DESCRICAO": "RECURSOS VINCULADOS AO RPPS -- BENEFICIOS PREV. LEGISLATIVO",
+            "FINALIDADE": "Recursos vinculados ao RPPS - Fundo em Capitalizacao (Plano Previdenciario) - Beneficios Previdenciarios Legislativo",
+            "DETALHAMENTO_FONTE-DESTINACAO_RECURSOS": "0000"
+        },
+        {
+            "FONTES": "28000001",
+            "COD_TCE": "2800000",
+            "COD_STN": "2800",
+            "TIPO_RECURSO": "VINCULADOS",
+            "DESCRICAO": "RECURSOS VINCULADOS AO RPPS - BENEFICIOS PREV. EXECUTIVO",
+            "FINALIDADE": "Recursos vinculados ao RPPS - Fundo em Capitalizacao (Plano Previdenciario) - Beneficios Previdenciarios Executivo",
+            "DETALHAMENTO_FONTE-DESTINACAO_RECURSOS": "0000"
+        },
+        {
+            "FONTES": "28000002",
+            "COD_TCE": "2800000",
+            "COD_STN": "2800",
+            "TIPO_RECURSO": "VINCULADOS",
+            "DESCRICAO": "RECURSOS VINCULADOS AO RPPS -- BENEFICIOS PREV. LEGISLATIVO",
+            "FINALIDADE": "Recursos vinculados ao RPPS - Fundo em Capitalizacao (Plano Previdenciario) - Beneficios Previdenciarios Legislativo",
+            "DETALHAMENTO_FONTE-DESTINACAO_RECURSOS": "0000"
+        }
+    ]
+}

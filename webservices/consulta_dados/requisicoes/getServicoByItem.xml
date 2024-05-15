@@ -1,0 +1,19 @@
+<?xml version='1.0' ?>
+<consulta distinct="true">
+  <campos>
+    <campo campo="db121_estrutural" label="estrutural"   />
+    <campo campo="q136_valor_reduzido" label="aliq_reduz"   />
+    <campo campo="db121_descricao" label="desc_item_servico"   />
+  </campos>
+  <from tabela="issgruposervico"/>
+  <juncoes>
+    <join tipo="left"  tabela="db_estruturavalor"           condicao="db121_sequencial = q126_db_estruturavalor"/>
+    <join tipo="left"  tabela="issconfiguracaogruposervico" condicao="q126_sequencial  = q136_issgruposervico"  />
+  </juncoes>
+  <filtros>
+    <filtro label="itemservico" condicao="REPLACE(db121_estrutural,'.','') = REPLACE('$itemservico','.','')" obrigatorio="true"/>
+    <filtro label="exercicio" condicao="q136_exercicio = '$exercicio'" obrigatorio="true"/>
+  </filtros>
+  <agrupamento campos=""         />
+  <ordenacao   campos=""/>
+</consulta>

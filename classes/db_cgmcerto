@@ -1,0 +1,813 @@
+<?
+//MODULO: protocolo
+//CLASSE DA ENTIDADE cgm
+class cl_cgm { 
+   // cria variaveis de erro 
+   var $rotulo     = null; 
+   var $query_sql  = null; 
+   var $numrows    = 0; 
+   var $erro_status= null; 
+   var $erro_sql   = null; 
+   var $erro_banco = null;  
+   var $erro_msg   = null;  
+   var $erro_campo = null;  
+   var $pagina_retorno = null; 
+   // cria variaveis do arquivo 
+   var $z01_numcgm = 0; 
+   var $z01_nome = null; 
+   var $z01_ender = null; 
+   var $z01_numero = 0; 
+   var $z01_compl = null; 
+   var $z01_bairro = null; 
+   var $z01_munic = null; 
+   var $z01_uf = null; 
+   var $z01_cep = null; 
+   var $z01_cxpostal = null; 
+   var $z01_cadast_dia = null; 
+   var $z01_cadast_mes = null; 
+   var $z01_cadast_ano = null; 
+   var $z01_cadast = null; 
+   var $z01_telef = null; 
+   var $z01_ident = null; 
+   var $z01_login = 0; 
+   var $z01_incest = null; 
+   var $z01_telcel = null; 
+   var $z01_email = null; 
+   var $z01_endcon = null; 
+   var $z01_numcon = 0; 
+   var $z01_comcon = null; 
+   var $z01_baicon = null; 
+   var $z01_muncon = null; 
+   var $z01_ufcon = null; 
+   var $z01_cepcon = null; 
+   var $z01_cxposcon = null; 
+   var $z01_telcon = null; 
+   var $z01_celcon = null; 
+   var $z01_emailc = null; 
+   var $z01_nacion = 0; 
+   var $z01_estciv = 0; 
+   var $z01_profis = null; 
+   var $z01_tipcre = 0; 
+   var $z01_cgccpf = null; 
+   // cria propriedade com as variaveis do arquivo 
+   var $campos = "
+                 z01_numcgm = int4 = Numcgm 
+                 z01_nome = varchar(40) = Nome/Razao Social 
+                 z01_ender = varchar(40) = Endereco 
+                 z01_numero = int4 = Numero 
+                 z01_compl = varchar(20) = Complemento 
+                 z01_bairro = varchar(20) = Bairro 
+                 z01_munic = varchar(20) = Municipio 
+                 z01_uf = varchar(2) = UF 
+                 z01_cep = varchar(8) = CEP 
+                 z01_cxpostal = varchar(20) = Caixa Postal 
+                 z01_cadast = date = Data do cadastramento 
+                 z01_telef = varchar(12) = Telefone 
+                 z01_ident = varchar(20) = Identidade 
+                 z01_login = int4 = Login 
+                 z01_incest = varchar(15) = Inscricao Estadual 
+                 z01_telcel = varchar(12) = Celular 
+                 z01_email = varchar(30) = email 
+                 z01_endcon = varchar(40) = Endereco Comercial 
+                 z01_numcon = int4 = Numero 
+                 z01_comcon = varchar(20) = Complemento 
+                 z01_baicon = varchar(20) = Bairro 
+                 z01_muncon = varchar(20) = Municipio Comercial 
+                 z01_ufcon = varchar(2) = Estado Comercial 
+                 z01_cepcon = varchar(8) = CEP 
+                 z01_cxposcon = varchar(20) = Caixa Postal 
+                 z01_telcon = varchar(12) = Telefone comercial 
+                 z01_celcon = varchar(12) = Celular comercial 
+                 z01_emailc = varchar(30) = email comercial 
+                 z01_nacion = int4 = Nacionalidade 
+                 z01_estciv = int4 = Estado civil 
+                 z01_profis = varchar(40) = Profissao 
+                 z01_tipcre = int4 = Tipo de credor 
+                 z01_cgccpf = varchar(14) = CNPJ/CPF 
+                 ";
+   //funcao construtor da classe 
+   function cl_cgm() { 
+     //classes dos rotulos dos campos
+     $this->rotulo = new rotulo("cgm"); 
+     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
+   }
+   //funcao erro 
+   function erro($mostra,$retorna) { 
+     if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
+        echo "<script>alert(\"".$this->erro_msg."\");</script>";
+        if($retorna==true){
+           echo "<script>location.href='".$this->pagina_retorno."'</script>";
+        }
+     }
+   }
+   // funcao para atualizar campos
+   function atualizacampos($exclusao=false) {
+     if($exclusao==false){
+       $this->z01_numcgm = ($this->z01_numcgm == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_numcgm"]:$this->z01_numcgm);
+       $this->z01_nome = ($this->z01_nome == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_nome"]:$this->z01_nome);
+       $this->z01_ender = ($this->z01_ender == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_ender"]:$this->z01_ender);
+       $this->z01_numero = ($this->z01_numero == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_numero"]:$this->z01_numero);
+       $this->z01_compl = ($this->z01_compl == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_compl"]:$this->z01_compl);
+       $this->z01_bairro = ($this->z01_bairro == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_bairro"]:$this->z01_bairro);
+       $this->z01_munic = ($this->z01_munic == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_munic"]:$this->z01_munic);
+       $this->z01_uf = ($this->z01_uf == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_uf"]:$this->z01_uf);
+       $this->z01_cep = ($this->z01_cep == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_cep"]:$this->z01_cep);
+       $this->z01_cxpostal = ($this->z01_cxpostal == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_cxpostal"]:$this->z01_cxpostal);
+       if($this->z01_cadast == ""){
+         $this->z01_cadast_dia = @$GLOBALS["HTTP_POST_VARS"]["z01_cadast_dia"];
+         $this->z01_cadast_mes = @$GLOBALS["HTTP_POST_VARS"]["z01_cadast_mes"];
+         $this->z01_cadast_ano = @$GLOBALS["HTTP_POST_VARS"]["z01_cadast_ano"];
+         if($this->z01_cadast_dia != ""){
+            $this->z01_cadast = $this->z01_cadast_ano."-".$this->z01_cadast_mes."-".$this->z01_cadast_dia;
+         }
+       }
+       $this->z01_telef = ($this->z01_telef == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_telef"]:$this->z01_telef);
+       $this->z01_ident = ($this->z01_ident == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_ident"]:$this->z01_ident);
+       $this->z01_login = ($this->z01_login == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_login"]:$this->z01_login);
+       $this->z01_incest = ($this->z01_incest == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_incest"]:$this->z01_incest);
+       $this->z01_telcel = ($this->z01_telcel == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_telcel"]:$this->z01_telcel);
+       $this->z01_email = ($this->z01_email == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_email"]:$this->z01_email);
+       $this->z01_endcon = ($this->z01_endcon == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_endcon"]:$this->z01_endcon);
+       $this->z01_numcon = ($this->z01_numcon == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_numcon"]:$this->z01_numcon);
+       $this->z01_comcon = ($this->z01_comcon == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_comcon"]:$this->z01_comcon);
+       $this->z01_baicon = ($this->z01_baicon == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_baicon"]:$this->z01_baicon);
+       $this->z01_muncon = ($this->z01_muncon == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_muncon"]:$this->z01_muncon);
+       $this->z01_ufcon = ($this->z01_ufcon == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_ufcon"]:$this->z01_ufcon);
+       $this->z01_cepcon = ($this->z01_cepcon == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_cepcon"]:$this->z01_cepcon);
+       $this->z01_cxposcon = ($this->z01_cxposcon == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_cxposcon"]:$this->z01_cxposcon);
+       $this->z01_telcon = ($this->z01_telcon == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_telcon"]:$this->z01_telcon);
+       $this->z01_celcon = ($this->z01_celcon == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_celcon"]:$this->z01_celcon);
+       $this->z01_emailc = ($this->z01_emailc == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_emailc"]:$this->z01_emailc);
+       $this->z01_nacion = ($this->z01_nacion == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_nacion"]:$this->z01_nacion);
+       $this->z01_estciv = ($this->z01_estciv == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_estciv"]:$this->z01_estciv);
+       $this->z01_profis = ($this->z01_profis == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_profis"]:$this->z01_profis);
+       $this->z01_tipcre = ($this->z01_tipcre == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_tipcre"]:$this->z01_tipcre);
+       $this->z01_cgccpf = ($this->z01_cgccpf == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_cgccpf"]:$this->z01_cgccpf);
+     }else{
+       $this->z01_numcgm = ($this->z01_numcgm == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_numcgm"]:$this->z01_numcgm);
+     }
+   }
+   // funcao para inclusao
+   function incluir ($z01_numcgm){ 
+      $this->atualizacampos();
+     if($this->z01_nome == null ){ 
+       $this->erro_sql = " Campo Nome/Razao Social nao Informado.";
+       $this->erro_campo = "z01_nome";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->z01_ender == null ){ 
+       $this->erro_sql = " Campo Endereco nao Informado.";
+       $this->erro_campo = "z01_ender";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->z01_numero == null ){ 
+       $this->z01_numero = "0";
+     }
+     if($this->z01_cep == null ){ 
+       $this->erro_sql = " Campo CEP nao Informado.";
+       $this->erro_campo = "z01_cep";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->z01_cadast == null ){ 
+       $this->z01_cadast = "null";
+     }
+     if($this->z01_login == null ){ 
+       $this->z01_login = "0";
+     }
+     if($this->z01_numcon == null ){ 
+       $this->z01_numcon = "0";
+     }
+     if($this->z01_nacion == null ){ 
+       $this->z01_nacion = "0";
+     }
+     if($this->z01_estciv == null ){ 
+       $this->z01_estciv = "0";
+     }
+     if($this->z01_tipcre == null ){ 
+       $this->z01_tipcre = "0";
+     }
+     if($z01_numcgm == "" || $z01_numcgm == null ){
+       $result = @pg_query("select nextval('cgm_z01_numcgm_seq')"); 
+       if($result==false){
+         $this->erro_banco = str_replace("\n","",@pg_last_error());
+         $this->erro_sql   = "Verifique o cadastro da sequencia: cgm_z01_numcgm_seq do campo: z01_numcgm"; 
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false; 
+       }
+       $this->z01_numcgm = pg_result($result,0,0); 
+     }else{
+       $result = pg_query("select last_value from cgm_z01_numcgm_seq");
+       if(($result != false) && (pg_result($result,0,0) < $z01_numcgm)){
+         $this->erro_sql = " Campo z01_numcgm maior que último número da sequencia.";
+         $this->erro_banco = "Sequencia menor que este número.";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }else{
+         $this->z01_numcgm = $z01_numcgm; 
+       }
+     }
+     if(($this->z01_numcgm == null) || ($this->z01_numcgm == "") ){ 
+       $this->erro_sql = " Campo z01_numcgm nao declarado.";
+       $this->erro_banco = "Chave Primaria zerada.";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+ 
+     $resac = pg_query("select nextval('db_acount_id_acount_seq') as acount");
+     $acount = pg_result($resac,0,0);
+     $resac = pg_query("insert into db_acount values($acount,42,216,'','$this->z01_numcgm',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+     $resac = pg_query("insert into db_acountkey values($acount,216,'$this->z01_numcgm','I')");
+
+     $result = @pg_query("insert into cgm(
+                                       z01_numcgm 
+                                      ,z01_nome 
+                                      ,z01_ender 
+                                      ,z01_numero 
+                                      ,z01_compl 
+                                      ,z01_bairro 
+                                      ,z01_munic 
+                                      ,z01_uf 
+                                      ,z01_cep 
+                                      ,z01_cxpostal 
+                                      ,z01_cadast 
+                                      ,z01_telef 
+                                      ,z01_ident 
+                                      ,z01_login 
+                                      ,z01_incest 
+                                      ,z01_telcel 
+                                      ,z01_email 
+                                      ,z01_endcon 
+                                      ,z01_numcon 
+                                      ,z01_comcon 
+                                      ,z01_baicon 
+                                      ,z01_muncon 
+                                      ,z01_ufcon 
+                                      ,z01_cepcon 
+                                      ,z01_cxposcon 
+                                      ,z01_telcon 
+                                      ,z01_celcon 
+                                      ,z01_emailc 
+                                      ,z01_nacion 
+                                      ,z01_estciv 
+                                      ,z01_profis 
+                                      ,z01_tipcre 
+                                      ,z01_cgccpf 
+                       )
+                values (
+                                $this->z01_numcgm 
+                               ,'$this->z01_nome' 
+                               ,'$this->z01_ender' 
+                               ,$this->z01_numero 
+                               ,'$this->z01_compl' 
+                               ,'$this->z01_bairro' 
+                               ,'$this->z01_munic' 
+                               ,'$this->z01_uf' 
+                               ,'$this->z01_cep' 
+                               ,'$this->z01_cxpostal' 
+                               ,".($this->z01_cadast == "null" || $this->z01_cadast == ""?"null":'$this->z01_cadast')." 
+                               ,'$this->z01_telef' 
+                               ,'$this->z01_ident' 
+                               ,$this->z01_login 
+                               ,'$this->z01_incest' 
+                               ,'$this->z01_telcel' 
+                               ,'$this->z01_email' 
+                               ,'$this->z01_endcon' 
+                               ,$this->z01_numcon 
+                               ,'$this->z01_comcon' 
+                               ,'$this->z01_baicon' 
+                               ,'$this->z01_muncon' 
+                               ,'$this->z01_ufcon' 
+                               ,'$this->z01_cepcon' 
+                               ,'$this->z01_cxposcon' 
+                               ,'$this->z01_telcon' 
+                               ,'$this->z01_celcon' 
+                               ,'$this->z01_emailc' 
+                               ,$this->z01_nacion 
+                               ,$this->z01_estciv 
+                               ,'$this->z01_profis' 
+                               ,$this->z01_tipcre 
+                               ,'$this->z01_cgccpf' 
+                      )");
+     if($result==false){ 
+       $this->erro_banco = str_replace("\n","",@pg_last_error());
+       $this->erro_sql   = "Cadastro Geral de Contribuinte ($this->z01_numcgm) nao Incluído. Inclusao Abortada.";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     $this->erro_banco = "";
+     $this->erro_sql = "Inclusao Efetivada com Sucesso\\n";
+     $this->erro_sql .= "Valores : ".$this->z01_numcgm;
+     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+     $this->erro_status = "1";
+ 
+     $resaco = $this->sql_record($this->sql_query($this->z01_numcgm));
+     if($this->numrows>0){
+       $resac = pg_query("select nextval('db_acount_id_acount_seq') as acount");
+       $acount = pg_result($resac,0,0);
+       $resac = pg_query("insert into db_acountkey values($acount,216,'$this->z01_numcgm','I')");
+       $resac = pg_query("insert into db_acount values($acount,42,216,'','".pg_result($resaco,$xrecord,'z01_numcgm')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,217,'','".pg_result($resaco,$xrecord,'z01_nome')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,218,'','".pg_result($resaco,$xrecord,'z01_ender')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,732,'','".pg_result($resaco,$xrecord,'z01_numero')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,733,'','".pg_result($resaco,$xrecord,'z01_compl')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,227,'','".pg_result($resaco,$xrecord,'z01_bairro')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,219,'','".pg_result($resaco,$xrecord,'z01_munic')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,220,'','".pg_result($resaco,$xrecord,'z01_uf')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,221,'','".pg_result($resaco,$xrecord,'z01_cep')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,738,'','".pg_result($resaco,$xrecord,'z01_cxpostal')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,222,'','".pg_result($resaco,$xrecord,'z01_cadast')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,223,'','".pg_result($resaco,$xrecord,'z01_telef')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,224,'','".pg_result($resaco,$xrecord,'z01_ident')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,226,'','".pg_result($resaco,$xrecord,'z01_login')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,228,'','".pg_result($resaco,$xrecord,'z01_incest')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,229,'','".pg_result($resaco,$xrecord,'z01_telcel')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,230,'','".pg_result($resaco,$xrecord,'z01_email')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,231,'','".pg_result($resaco,$xrecord,'z01_endcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,734,'','".pg_result($resaco,$xrecord,'z01_numcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,735,'','".pg_result($resaco,$xrecord,'z01_comcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,233,'','".pg_result($resaco,$xrecord,'z01_baicon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,232,'','".pg_result($resaco,$xrecord,'z01_muncon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,234,'','".pg_result($resaco,$xrecord,'z01_ufcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,235,'','".pg_result($resaco,$xrecord,'z01_cepcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,739,'','".pg_result($resaco,$xrecord,'z01_cxposcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,236,'','".pg_result($resaco,$xrecord,'z01_telcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,237,'','".pg_result($resaco,$xrecord,'z01_celcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,238,'','".pg_result($resaco,$xrecord,'z01_emailc')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,239,'','".pg_result($resaco,$xrecord,'z01_nacion')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,240,'','".pg_result($resaco,$xrecord,'z01_estciv')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,241,'','".pg_result($resaco,$xrecord,'z01_profis')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,242,'','".pg_result($resaco,$xrecord,'z01_tipcre')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = pg_query("insert into db_acount values($acount,42,1126,'','".pg_result($resaco,$xrecord,'z01_cgccpf')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+     }
+     pg_free_result($resaco);
+
+     return true;
+   } 
+   // funcao para alteracao
+   function alterar ($z01_numcgm=null) { 
+      $this->atualizacampos();
+     $sql = " update cgm set ";
+     $virgula = "";
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_numcgm"])){ 
+       $sql  .= $virgula." z01_numcgm = $this->z01_numcgm ";
+       $virgula = ",";
+       if($this->z01_numcgm == null ){ 
+         $this->erro_sql = " Campo Numcgm nao Informado.";
+         $this->erro_campo = "z01_numcgm";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_nome"])){ 
+       $sql  .= $virgula." z01_nome = '$this->z01_nome' ";
+       $virgula = ",";
+       if($this->z01_nome == null ){ 
+         $this->erro_sql = " Campo Nome/Razao Social nao Informado.";
+         $this->erro_campo = "z01_nome";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_ender"])){ 
+       $sql  .= $virgula." z01_ender = '$this->z01_ender' ";
+       $virgula = ",";
+       if($this->z01_ender == null ){ 
+         $this->erro_sql = " Campo Endereco nao Informado.";
+         $this->erro_campo = "z01_ender";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_numero"])){ 
+       $sql  .= $virgula." z01_numero = $this->z01_numero ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_compl"])){ 
+       $sql  .= $virgula." z01_compl = '$this->z01_compl' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_bairro"])){ 
+       $sql  .= $virgula." z01_bairro = '$this->z01_bairro' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_munic"])){ 
+       $sql  .= $virgula." z01_munic = '$this->z01_munic' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_uf"])){ 
+       $sql  .= $virgula." z01_uf = '$this->z01_uf' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_cep"])){ 
+       $sql  .= $virgula." z01_cep = '$this->z01_cep' ";
+       $virgula = ",";
+       if($this->z01_cep == null ){ 
+         $this->erro_sql = " Campo CEP nao Informado.";
+         $this->erro_campo = "z01_cep";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_cxpostal"])){ 
+       $sql  .= $virgula." z01_cxpostal = '$this->z01_cxpostal' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_cadast"])){ 
+       $sql  .= $virgula." z01_cadast = '$this->z01_cadast' ";
+       $virgula = ",";
+     }     else{ 
+       $sql  .= $virgula." z01_cadast = null ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_telef"])){ 
+       $sql  .= $virgula." z01_telef = '$this->z01_telef' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_ident"])){ 
+       $sql  .= $virgula." z01_ident = '$this->z01_ident' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_login"])){ 
+       $sql  .= $virgula." z01_login = $this->z01_login ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_incest"])){ 
+       $sql  .= $virgula." z01_incest = '$this->z01_incest' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_telcel"])){ 
+       $sql  .= $virgula." z01_telcel = '$this->z01_telcel' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_email"])){ 
+       $sql  .= $virgula." z01_email = '$this->z01_email' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_endcon"])){ 
+       $sql  .= $virgula." z01_endcon = '$this->z01_endcon' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_numcon"])){ 
+       $sql  .= $virgula." z01_numcon = $this->z01_numcon ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_comcon"])){ 
+       $sql  .= $virgula." z01_comcon = '$this->z01_comcon' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_baicon"])){ 
+       $sql  .= $virgula." z01_baicon = '$this->z01_baicon' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_muncon"])){ 
+       $sql  .= $virgula." z01_muncon = '$this->z01_muncon' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_ufcon"])){ 
+       $sql  .= $virgula." z01_ufcon = '$this->z01_ufcon' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_cepcon"])){ 
+       $sql  .= $virgula." z01_cepcon = '$this->z01_cepcon' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_cxposcon"])){ 
+       $sql  .= $virgula." z01_cxposcon = '$this->z01_cxposcon' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_telcon"])){ 
+       $sql  .= $virgula." z01_telcon = '$this->z01_telcon' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_celcon"])){ 
+       $sql  .= $virgula." z01_celcon = '$this->z01_celcon' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_emailc"])){ 
+       $sql  .= $virgula." z01_emailc = '$this->z01_emailc' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_nacion"])){ 
+       $sql  .= $virgula." z01_nacion = $this->z01_nacion ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_estciv"])){ 
+       $sql  .= $virgula." z01_estciv = $this->z01_estciv ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_profis"])){ 
+       $sql  .= $virgula." z01_profis = '$this->z01_profis' ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_tipcre"])){ 
+       $sql  .= $virgula." z01_tipcre = $this->z01_tipcre ";
+       $virgula = ",";
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["z01_cgccpf"])){ 
+       $sql  .= $virgula." z01_cgccpf = '$this->z01_cgccpf' ";
+       $virgula = ",";
+     }
+     $sql .= " where  z01_numcgm = $this->z01_numcgm
+";
+    
+ 
+     $resaco = $this->sql_record($this->sql_query($this->z01_numcgm));
+     if($this->numrows>0){
+       for($xrecord=0;$xrecord<$this->numrows;$xrecord++){
+          $this->z01_numcgm = pg_result($resaco,$xrecord,'z01_numcgm');
+          $resac = pg_query("select nextval('db_acount_id_acount_seq') as acount");
+          $acount = pg_result($resac,0,0);
+          $resac = pg_query("insert into db_acountkey values($acount,216,'$this->z01_numcgm','A')");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_numcgm"])) 
+            $resac = pg_query("insert into db_acount values($acount,42,216,'$this->z01_numcgm','".pg_result($resaco,$xrecord,'z01_numcgm')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_nome"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,217,'$this->z01_nome','".pg_result($resaco,$xrecord,'z01_nome')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_ender"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,218,'$this->z01_ender','".pg_result($resaco,$xrecord,'z01_ender')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_numero"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,732,'$this->z01_numero','".pg_result($resaco,$xrecord,'z01_numero')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_compl"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,733,'$this->z01_compl','".pg_result($resaco,$xrecord,'z01_compl')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_bairro"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,227,'$this->z01_bairro','".pg_result($resaco,$xrecord,'z01_bairro')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_munic"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,219,'$this->z01_munic','".pg_result($resaco,$xrecord,'z01_munic')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_uf"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,220,'$this->z01_uf','".pg_result($resaco,$xrecord,'z01_uf')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_cep"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,221,'$this->z01_cep','".pg_result($resaco,$xrecord,'z01_cep')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_cxpostal"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,738,'$this->z01_cxpostal','".pg_result($resaco,$xrecord,'z01_cxpostal')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_cadast"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,222,'$this->z01_cadast','".pg_result($resaco,$xrecord,'z01_cadast')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_telef"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,223,'$this->z01_telef','".pg_result($resaco,$xrecord,'z01_telef')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_ident"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,224,'$this->z01_ident','".pg_result($resaco,$xrecord,'z01_ident')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_login"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,226,'$this->z01_login','".pg_result($resaco,$xrecord,'z01_login')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_incest"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,228,'$this->z01_incest','".pg_result($resaco,$xrecord,'z01_incest')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_telcel"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,229,'$this->z01_telcel','".pg_result($resaco,$xrecord,'z01_telcel')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_email"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,230,'$this->z01_email','".pg_result($resaco,$xrecord,'z01_email')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_endcon"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,231,'$this->z01_endcon','".pg_result($resaco,$xrecord,'z01_endcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_numcon"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,734,'$this->z01_numcon','".pg_result($resaco,$xrecord,'z01_numcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_comcon"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,735,'$this->z01_comcon','".pg_result($resaco,$xrecord,'z01_comcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_baicon"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,233,'$this->z01_baicon','".pg_result($resaco,$xrecord,'z01_baicon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_muncon"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,232,'$this->z01_muncon','".pg_result($resaco,$xrecord,'z01_muncon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_ufcon"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,234,'$this->z01_ufcon','".pg_result($resaco,$xrecord,'z01_ufcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_cepcon"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,235,'$this->z01_cepcon','".pg_result($resaco,$xrecord,'z01_cepcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_cxposcon"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,739,'$this->z01_cxposcon','".pg_result($resaco,$xrecord,'z01_cxposcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_telcon"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,236,'$this->z01_telcon','".pg_result($resaco,$xrecord,'z01_telcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_celcon"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,237,'$this->z01_celcon','".pg_result($resaco,$xrecord,'z01_celcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_emailc"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,238,'$this->z01_emailc','".pg_result($resaco,$xrecord,'z01_emailc')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_nacion"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,239,'$this->z01_nacion','".pg_result($resaco,$xrecord,'z01_nacion')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_estciv"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,240,'$this->z01_estciv','".pg_result($resaco,$xrecord,'z01_estciv')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_profis"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,241,'$this->z01_profis','".pg_result($resaco,$xrecord,'z01_profis')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_tipcre"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,242,'$this->z01_tipcre','".pg_result($resaco,$xrecord,'z01_tipcre')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["z01_cgccpf"])) 
+	    $resac = pg_query("insert into db_acount values($acount,42,1126,'$this->z01_cgccpf','".pg_result($resaco,$xrecord,'z01_cgccpf')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       }
+     }
+
+     pg_free_result($resaco);
+
+     $result = @pg_exec($sql);
+     if($result==false){ 
+       $this->erro_banco = str_replace("\n","",@pg_last_error());
+       $this->erro_sql   = "Cadastro Geral de Contribuinte nao Alterado. Alteracao Abortada.\\n";
+         $this->erro_sql .= "Valores : ".$this->z01_numcgm;
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }else{
+       if(pg_affected_rows($result)==0){
+         $this->erro_banco = "";
+         $this->erro_sql = "Cadastro Geral de Contribuinte nao foi Alterado. Alteracao Executada.\\n";
+         $this->erro_sql .= "Valores : ".$this->z01_numcgm;
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         return true;
+       }else{
+         $this->erro_banco = "";
+         $this->erro_sql = "Alteração Efetivada com Sucesso\\n";
+         $this->erro_sql .= "Valores : ".$this->z01_numcgm;
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         return true;
+       } 
+     } 
+   } 
+   // funcao para exclusao 
+   function excluir ($z01_numcgm=null) { 
+     $this->atualizacampos(true);
+     
+     $resaco = $this->sql_record($this->sql_query($this->z01_numcgm));
+     if($this->numrows>0){
+       for($xrecord=0;$xrecord<$this->numrows;$xrecord++){
+          $this->z01_numcgm = pg_result($resaco,$xrecord,'z01_numcgm');
+          $resac = pg_query("select nextval('db_acount_id_acount_seq') as acount");
+          $acount = pg_result($resac,0,0);
+          $resac = pg_query("insert into db_acountkey values($acount,216,'".pg_result($resaco,$iresaco,'z01_numcgm')."','E')");
+          $resac = pg_query("insert into db_acount values($acount,42,216,'','".pg_result($resaco,$xrecord,'z01_numcgm')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,217,'','".pg_result($resaco,$xrecord,'z01_nome')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,218,'','".pg_result($resaco,$xrecord,'z01_ender')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,732,'','".pg_result($resaco,$xrecord,'z01_numero')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,733,'','".pg_result($resaco,$xrecord,'z01_compl')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,227,'','".pg_result($resaco,$xrecord,'z01_bairro')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,219,'','".pg_result($resaco,$xrecord,'z01_munic')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,220,'','".pg_result($resaco,$xrecord,'z01_uf')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,221,'','".pg_result($resaco,$xrecord,'z01_cep')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,738,'','".pg_result($resaco,$xrecord,'z01_cxpostal')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,222,'','".pg_result($resaco,$xrecord,'z01_cadast')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,223,'','".pg_result($resaco,$xrecord,'z01_telef')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,224,'','".pg_result($resaco,$xrecord,'z01_ident')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,226,'','".pg_result($resaco,$xrecord,'z01_login')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,228,'','".pg_result($resaco,$xrecord,'z01_incest')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,229,'','".pg_result($resaco,$xrecord,'z01_telcel')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,230,'','".pg_result($resaco,$xrecord,'z01_email')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,231,'','".pg_result($resaco,$xrecord,'z01_endcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,734,'','".pg_result($resaco,$xrecord,'z01_numcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,735,'','".pg_result($resaco,$xrecord,'z01_comcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,233,'','".pg_result($resaco,$xrecord,'z01_baicon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,232,'','".pg_result($resaco,$xrecord,'z01_muncon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,234,'','".pg_result($resaco,$xrecord,'z01_ufcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,235,'','".pg_result($resaco,$xrecord,'z01_cepcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,739,'','".pg_result($resaco,$xrecord,'z01_cxposcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,236,'','".pg_result($resaco,$xrecord,'z01_telcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,237,'','".pg_result($resaco,$xrecord,'z01_celcon')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,238,'','".pg_result($resaco,$xrecord,'z01_emailc')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,239,'','".pg_result($resaco,$xrecord,'z01_nacion')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,240,'','".pg_result($resaco,$xrecord,'z01_estciv')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,241,'','".pg_result($resaco,$xrecord,'z01_profis')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,242,'','".pg_result($resaco,$xrecord,'z01_tipcre')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+	  $resac = pg_query("insert into db_acount values($acount,42,1126,'','".pg_result($resaco,$xrecord,'z01_cgccpf')."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       }
+     }
+     pg_free_result($resaco);
+     // 
+     $result = @pg_exec(" delete from cgm
+                    where  z01_numcgm = $this->z01_numcgm
+                    ");
+     if($result==false){ 
+       $this->erro_banco = str_replace("\n","",@pg_last_error());
+       $this->erro_sql   = "Cadastro Geral de Contribuinte nao Excluído. Exclusão Abortada.\\n";
+       $this->erro_sql .= "Valores : ".$this->z01_numcgm;
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }else{
+       if(pg_affected_rows($result)==0){
+         $this->erro_banco = "";
+         $this->erro_sql = "Cadastro Geral de Contribuinte nao Encontrado. Exclusão não Efetuada.\\n";
+         $this->erro_sql .= "Valores : ".$this->z01_numcgm;
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         return true;
+       }else{
+         $this->erro_banco = "";
+         $this->erro_sql = "Exclusão Efetivada com Sucesso\\n";
+         $this->erro_sql .= "Valores : ".$this->z01_numcgm;
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         return true;
+       } 
+     } 
+   } 
+   // funcao do recordset 
+   function sql_record($sql) { 
+     $result = @pg_query($sql);
+     if($result==false){
+       $this->numrows    = 0;
+       $this->erro_banco = str_replace("\n","",@pg_last_error());
+       $this->erro_sql   = "Erro ao selecionar os registros.";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     $this->numrows = pg_numrows($result);
+      if($this->numrows==0){
+        $this->erro_banco = "";
+        $this->erro_sql   = "Dados do Grupo nao Encontrado";
+        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+     return $result;
+   }
+   // funcao do sql 
+   function sql_query ( $z01_numcgm=null,$campos="*",$ordem=null,$dbwhere=""){ 
+     $sql = "select ";
+     if($campos != "*" ){
+       $campos_sql = split("#",$campos);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }else{
+       $sql .= $campos;
+     }
+     $sql .= " from cgm ";
+     $sql2 = "";
+     if($dbwhere==""){
+       if($z01_numcgm!=null ){
+         $sql2 .= " where cgm.z01_numcgm = $z01_numcgm "; 
+       } 
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
+   function sqlnome ($nome="",$campos="*"){
+    $nome = strtoupper($nome);
+	$sql = "
+      select $campos
+      from cgm
+	";
+    if ($nome !=""){
+      $sql .= "
+	    where z01_nome like '$nome%'
+                   ";
+	}
+   $sql .= " order by z01_nome";
+	return $sql;
+  }
+   function sqlCodnome ($codnome=0,$campos="*"){
+    $sql = "  select $campos   from cgm";
+    if ($codnome != 0){
+      $sql .= "  where z01_numcgm = $codnome	  ";
+   }
+     $sql .= " order by z01_nome";
+	return $sql;
+}
+}
+?>

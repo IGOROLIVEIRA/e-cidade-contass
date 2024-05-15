@@ -1,0 +1,5 @@
+{
+  "erro_buscar_prontuario" : "Erro ao buscar o prontuário:\n[sErro]",
+  "erro_salvar_prontuario" : "Erro ao salvar o prontuário:\n[sErro]",
+  "erro_buscar_triagens"   : "Erro ao buscar as triagens do prontuário. \n[sErro]"
+}

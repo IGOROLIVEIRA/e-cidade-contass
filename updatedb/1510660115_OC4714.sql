@@ -1,0 +1,64 @@
+--BEGIN;
+--SELECT fc_startsession();
+--
+--insert into db_itensmenu ( id_item ,descricao ,help ,funcao ,itemativo ,manutencao ,desctec ,libcliente ) values ( 10256 ,'Compensação' ,'Compensação' ,'arr4_compensarCredito001.php' ,'1' ,'1' ,'Compensação' ,'true' );
+--insert into db_menu ( id_item ,id_item_filho ,menusequencia ,modulo ) values ( 9625 ,10256 ,5 ,1985522 );
+--insert into db_itensmenu ( id_item ,descricao ,help ,funcao ,itemativo ,manutencao ,desctec ,libcliente ) values ( 10229 ,'Relatório de Créditos' ,'Relatório de Créditos' ,'cai2_relcredito001.php' ,'1' ,'1' ,'Relatório de Créditos' ,'true');
+--insert into db_menu ( id_item ,id_item_filho ,menusequencia ,modulo ) values ( 30 ,10229 ,451 ,1985522 );
+--insert into db_itensmenu ( id_item ,descricao ,help ,funcao ,itemativo ,manutencao ,desctec ,libcliente ) values ( 10263 ,'Relatório de Compensações' ,'Relatório de Compensações' ,'arr2_relatoriocompensacoes001.php' ,'1' ,'1' ,'Relatório de Compensações' ,'true' );
+--insert into db_menu ( id_item ,id_item_filho ,menusequencia ,modulo ) values ( 30 ,10263 ,454 ,1985522 );
+--insert into db_itensmenu ( id_item ,descricao ,help ,funcao ,itemativo ,manutencao ,desctec ,libcliente ) values ( 10264 ,'Relatório de Devoluções' ,'Relatório de Devoluções' ,'arr2_relatoriodevolucoes001.php' ,'1' ,'1' ,'Relatório de Devoluções' ,'true' );
+--insert into db_menu ( id_item ,id_item_filho ,menusequencia ,modulo ) values ( 30 ,10264 ,455 ,1985522 );
+--COMMIT;
+--
+--CREATE TABLE arrecadacao.abatimentocorrecao (
+--    k167_sequencial integer DEFAULT 0 NOT NULL,
+--    k167_valorantigo double precision NOT NULL,
+--    k167_valorcorrigido double precision NOT NULL,
+--    k167_data date NOT NULL,
+--    k167_abatimento integer
+--);
+--
+--ALTER TABLE arrecadacao.abatimentocorrecao OWNER TO ecidade;
+--
+--CREATE SEQUENCE arrecadacao.abatimentocorrecao_k167_sequencial_seq
+--    START WITH 1
+--    INCREMENT BY 1
+--    NO MINVALUE
+--    NO MAXVALUE
+--    CACHE 1;
+--
+--ALTER TABLE arrecadacao.abatimentocorrecao_k167_sequencial_seq OWNER TO ecidade;
+--
+--insert into db_sysarquivo values (3949,'abatimentocorrecao','Correcao de Abatimentos','k167','2008-12-09','Correcao de Abatimentos',0,false,false,false,false);
+--insert into db_sysarquivo values (3859,'abatimentoutilizacaodestino','responsável por conter os destinos dos créditos utilizados','k170','2015-08-20','abatimento utilizacao destino',0,false,false,false,false);
+--alter table abatimentoutilizacao add column k157_observacao text;
+--
+--
+--CREATE TABLE arrecadacao.abatimentoutilizacaodestino (
+--    k170_utilizacao integer NOT NULL,
+--    k170_numpre integer NOT NULL,
+--    k170_numpar integer NOT NULL,
+--    k170_receit integer NOT NULL,
+--    k170_hist integer NOT NULL,
+--    k170_tipo integer NOT NULL,
+--    k170_valor numeric(15,2) DEFAULT 0
+--);
+--
+--
+--ALTER TABLE arrecadacao.abatimentoutilizacaodestino OWNER TO ecidade;
+--
+--REVOKE ALL ON TABLE abatimentoutilizacao FROM PUBLIC;
+--REVOKE ALL ON TABLE abatimentoutilizacao FROM ecidade;
+--GRANT ALL ON TABLE abatimentoutilizacao TO ecidade;
+--GRANT SELECT ON TABLE abatimentoutilizacao TO dbseller;
+--GRANT SELECT ON TABLE abatimentoutilizacao TO plugin;
+--
+--REVOKE ALL ON TABLE abatimentoutilizacaodestino FROM PUBLIC;
+--REVOKE ALL ON TABLE abatimentoutilizacaodestino FROM ecidade;
+--GRANT ALL ON TABLE abatimentoutilizacaodestino TO ecidade;
+--GRANT SELECT ON TABLE abatimentoutilizacaodestino TO dbseller;
+--GRANT SELECT ON TABLE abatimentoutilizacaodestino TO plugin;
+--
+--ALTER TABLE ONLY abatimentoutilizacaodestino
+--    ADD CONSTRAINT abatimentoutilizacaodestino_utilizacao_fk FOREIGN KEY (k170_utilizacao) REFERENCES abatimentoutilizacao(k157_sequencial);

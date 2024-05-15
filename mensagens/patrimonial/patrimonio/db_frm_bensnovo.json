@@ -1,0 +1,14 @@
+{
+  "carregando"                   : "Aguarde, carregando dados...",
+  "buscando"                     : "Buscando...",
+  "informe_placa_bem"            : "Informe a placa do bem!",
+  "buscando_divisao"             : "Buscando Divisão...",
+  "bem_salvo"                    : "Bem Salvo com Sucesso.",
+  "bem_sucesso"                  : "Dados Enviados com Sucesso Para RFID!.",
+  "bem_falha"                    : "Falha ao enviar para o RFID, verifique na rotina de Bens Pendentes (Cadastro > Bens Pendentes).",
+  "bem_placarep"                 : "Bem já enviado ao RFID!",
+  "baixa_falha"                  : "Falha ao enviar para o RFID, verifique na rotina de Bens Pendentes de baixa (Procedimentos > Baixa de Bens > Bens Pendentes de Baixa).",
+  "pedentes_falha"               : "Falha ao enviar bens pendentes para o RFID, entre em contato com o suporte.",
+  "pedentesbaixa_falha"          : "Falha ao enviar, bem não localizado na platoforma, entre em contato com o suporte.",
+  "residual_maior_que_aquisicao" : "Valor Residual não pode ser maior que o Valor da Aquisição."
+}
